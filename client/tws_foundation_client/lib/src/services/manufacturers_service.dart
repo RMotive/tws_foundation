@@ -1,0 +1,19 @@
+import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+
+final class ManufacturersService extends ManufacturersServiceBase {
+  ManufacturersService(
+    CSMUri host, {
+    Client? client,
+  }) : super(
+          host,
+          'Manufacturers',
+          client: client,
+        );
+
+  @override
+  Effect<MigrationView<Manufacturer>> view(MigrationViewOptions options, String auth) async {
+    CSMActEffect actEffect = await post('view', options, auth: auth);
+    return MainResolver<MigrationView<Manufacturer>>(actEffect);
+  }
+}

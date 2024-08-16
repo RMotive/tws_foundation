@@ -1,0 +1,53 @@
+{
+    // Use IntelliSense para saber los atributos posibles.
+    // Mantenga el puntero para ver las descripciones de los existentes atributos.
+    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(Native) Quality",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/"
+        },
+        {
+            "name": "(Browser) Quality",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "args": [
+                "-pchrome",
+            ]
+        },
+        {
+            "name": "(Native) Integration",
+            "request": "launch",
+            "program": "test/integration",
+            "type": "dart"
+        },
+        {
+            "name": "(Browser) Integration",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/integration",
+            "args": [
+                "-pchrome",
+            ]
+        },
+        {
+            "name": "(Native) Definition",
+            "request": "launch",
+            "program": "test/definition",
+            "type": "dart"
+        },
+        {
+            "name": "(Browser) Definition",
+            "request": "launch",
+            "program": "test/definition",
+            "type": "dart",
+            "args": [
+                "-pchrome",
+            ]
+        }
+    ]
+}
