@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
   </ItemGroup>
 
 </Project>
