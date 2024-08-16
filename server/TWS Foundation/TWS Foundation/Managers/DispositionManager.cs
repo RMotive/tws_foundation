@@ -1,10 +1,10 @@
 ﻿using CSM_Foundation.Advisor.Managers;
-using CSM_Foundation.Source.Interfaces;
+using CSM_Foundation.Core.Extensions;
+using CSM_Foundation.Databases.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
-namespace Server.Managers;
+namespace TWS_Foundation.Managers;
 
 public class DispositionManager : IMigrationDisposer {
     private readonly IServiceProvider Servicer;
@@ -57,7 +57,7 @@ public class DispositionManager : IMigrationDisposer {
     }
 
     public void Dispose() {
-        if (DispositionStack.IsNullOrEmpty()) {
+        if (DispositionStack.Empty()) {
             AdvisorManager.Announce($"No records to dispose");
         }
         foreach (KeyValuePair<DbContext, List<ISourceSet>> disposeLine in DispositionStack) {
@@ -70,7 +70,7 @@ public class DispositionManager : IMigrationDisposer {
             }
 
             AdvisorManager.Announce($"Disposing source ({source.GetType()})");
-            if (disposeLine.Value.IsNullOrEmpty()) {
+            if (disposeLine.Value is null || disposeLine.Value.Count == 0) {
                 AdvisorManager.Announce($"No records to dispose");
                 continue;
             }

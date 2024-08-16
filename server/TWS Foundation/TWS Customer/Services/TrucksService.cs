@@ -1,40 +1,19 @@
-﻿using CSM_Foundation.Source.Enumerators;
-using CSM_Foundation.Source.Interfaces;
-using CSM_Foundation.Source.Interfaces.Depot;
-using CSM_Foundation.Source.Models.Options;
-using CSM_Foundation.Source.Models.Out;
+﻿using CSM_Foundation.Databases.Models.Options;
+using CSM_Foundation.Databases.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
 
-using TWS_Customer.Core.Exceptions;
-using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Interfaces;
-using TWS_Customer.Services.Records;
 
 namespace TWS_Customer.Services;
 public class TrucksService : ITrucksService {
     private readonly TruckDepot Trucks;
-    private readonly InsurancesDepot Insurances;
-    private readonly MaintenacesDepot Maintenaces;
-    private readonly ManufacturersDepot Manufacturers;
-    private readonly SctsDepot Sct;
-    private readonly SituationsDepot Situations;
-    private readonly PlatesDepot Plates;
 
-    public TrucksService(
-        TruckDepot Trucks, InsurancesDepot Insurances, MaintenacesDepot Maintenances,
-        ManufacturersDepot Manufacturers, SctsDepot Sct, SituationsDepot Situations, PlatesDepot Plates) {
+    public TrucksService(TruckDepot Trucks) {
         this.Trucks = Trucks;
-        this.Insurances = Insurances;
-        Maintenaces = Maintenances;
-        this.Manufacturers = Manufacturers;
-        this.Sct = Sct;
-        this.Situations = Situations;
-        this.Plates = Plates;
     }
 
     public async Task<SetViewOut<Truck>> View(SetViewOptions options) {
@@ -99,11 +78,7 @@ public class TrucksService : ITrucksService {
     }
 
     public async Task<SourceTransactionOut<Truck>> Create(Truck[] trucks) {
-        return await this.Trucks.Create(trucks);
+        return await Trucks.Create(trucks);
 
     }
-
-
-
-
 }

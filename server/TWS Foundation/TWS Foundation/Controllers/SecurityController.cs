@@ -3,7 +3,7 @@
 using TWS_Customer.Services.Interfaces;
 using TWS_Customer.Services.Records;
 
-namespace Server.Controllers;
+namespace TWS_Foundation.Controllers;
 
 /// <summary>
 ///     Represents the controller to perform secutiry operations.

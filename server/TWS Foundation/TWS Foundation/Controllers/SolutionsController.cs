@@ -1,14 +1,14 @@
-﻿using CSM_Foundation.Source.Models.Options;
+﻿using CSM_Foundation.Databases.Models.Options;
 
 using Microsoft.AspNetCore.Mvc;
 
-using Server.Controllers.Authentication;
+using TWS_Foundation.Controllers.Authentication;
 
 using TWS_Customer.Services.Interfaces;
 
 using TWS_Security.Sets;
 
-namespace Server.Controllers;
+namespace TWS_Foundation.Controllers;
 
 [ApiController, Route("[Controller]/[Action]")]
 public class SolutionsController

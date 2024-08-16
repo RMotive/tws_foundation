@@ -2,7 +2,7 @@
 
 using TWS_Security.Sets;
 
-namespace Server.Models;
+namespace TWS_Foundation.Models;
 
 public class Settings
     : IAdvisingObject {

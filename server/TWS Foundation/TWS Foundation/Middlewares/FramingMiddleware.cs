@@ -7,9 +7,9 @@ using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Http.Extensions;
 
-using Server.Middlewares.Frames;
+using TWS_Foundation.Middlewares.Frames;
 
-namespace Server.Middlewares;
+namespace TWS_Foundation.Middlewares;
 
 public class FramingMiddleware
     : IMiddleware {

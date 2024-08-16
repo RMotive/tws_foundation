@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Core.Constants;
 using CSM_Foundation.Server.Bases;
-using CSM_Foundation.Source.Models;
+using CSM_Foundation.Databases.Models;
 
 namespace TWS_Customer.Core.Exceptions;
 public class XMigrationTransaction

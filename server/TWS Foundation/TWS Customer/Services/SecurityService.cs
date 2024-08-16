@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Source.Enumerators;
-using CSM_Foundation.Source.Models.Out;
+﻿using CSM_Foundation.Databases.Enumerators;
+using CSM_Foundation.Databases.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 

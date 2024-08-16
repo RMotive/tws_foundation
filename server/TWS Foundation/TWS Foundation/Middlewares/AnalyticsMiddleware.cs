@@ -1,5 +1,5 @@
 ﻿
-namespace Server.Middlewares;
+namespace TWS_Foundation.Middlewares;
 
 public class AnalyticsMiddleware
     : IMiddleware {

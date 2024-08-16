@@ -6,13 +6,13 @@ using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Server.Utils;
-using CSM_Foundation.Source.Interfaces;
+using CSM_Foundation.Databases.Interfaces;
 
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
-using Server.Managers;
-using Server.Middlewares;
-using Server.Models;
+using TWS_Foundation.Managers;
+using TWS_Foundation.Middlewares;
+using TWS_Foundation.Models;
 
 using TWS_Business;
 using TWS_Business.Depots;
@@ -23,7 +23,7 @@ using TWS_Customer.Services.Interfaces;
 using TWS_Security;
 using TWS_Security.Depots;
 
-namespace Server;
+namespace TWS_Foundation;
 
 public partial class Program {
     private const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
@@ -39,10 +39,12 @@ public partial class Program {
         try {
             Settings s = Settings;
 
-            AdvisorManager.Success("Server settings retrieved", s);
+            AdvisorManager.Success("TWS_Foundation settings retrieved", s);
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             // Add services and overriding options to the container.
+
+            builder.Logging.ClearProviders();
             builder.Services.AddControllers()
                 .AddJsonOptions(options => {
                     options.JsonSerializerOptions.IncludeFields = true;
@@ -121,7 +123,7 @@ public partial class Program {
             app.UseCors();
 
 
-            AdvisorManager.Announce($"Server ready to listen ??");
+            AdvisorManager.Announce($"TWS_Foundation ready to listen ^_____^");
             app.Run();
         } catch (Exception X) when (X is IAdvisingException AX) {
             AdvisorManager.Exception(AX);

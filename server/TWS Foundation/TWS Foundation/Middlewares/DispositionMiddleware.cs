@@ -1,12 +1,12 @@
 ﻿
 using CSM_Foundation.Server.Exceptions;
-using CSM_Foundation.Source.Interfaces;
+using CSM_Foundation.Databases.Interfaces;
 
 using Microsoft.Extensions.Primitives;
 
-using Server.Managers;
+using TWS_Foundation.Managers;
 
-namespace Server.Middlewares;
+namespace TWS_Foundation.Middlewares;
 
 public class DispositionMiddleware : IMiddleware {
     private const string DISP_HEAD_KEY = "CSMDisposition";

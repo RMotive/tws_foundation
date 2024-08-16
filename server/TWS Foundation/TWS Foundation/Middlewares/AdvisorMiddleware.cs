@@ -5,7 +5,7 @@ using CSM_Foundation.Advisor.Managers;
 
 using JObject = System.Collections.Generic.Dictionary<string, dynamic>;
 
-namespace Server.Middlewares;
+namespace TWS_Foundation.Middlewares;
 
 public class AdvisorMiddleware
     : IMiddleware {

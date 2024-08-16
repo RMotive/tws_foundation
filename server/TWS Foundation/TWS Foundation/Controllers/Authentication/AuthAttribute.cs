@@ -5,7 +5,7 @@ using Microsoft.Extensions.Primitives;
 
 using TWS_Customer.Managers;
 
-namespace Server.Controllers.Authentication;
+namespace TWS_Foundation.Controllers.Authentication;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class AuthAttribute

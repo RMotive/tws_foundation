@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Server.Interfaces;
 
-namespace Server.Middlewares.Frames;
+namespace TWS_Foundation.Middlewares.Frames;
 
 public class SuccessFrame<TSuccess>
     : IServerFrame<TSuccess> {

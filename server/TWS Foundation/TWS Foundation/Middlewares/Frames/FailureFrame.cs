@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Server.Interfaces;
 using CSM_Foundation.Server.Records;
 
-namespace Server.Middlewares.Frames;
+namespace TWS_Foundation.Middlewares.Frames;
 
 public class FailureFrame
     : IServerFrame<ServerExceptionPublish> {

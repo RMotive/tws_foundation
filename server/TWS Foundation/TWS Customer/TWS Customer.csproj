@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
+    <ProjectReference Include="..\TWS Security\TWS Security.csproj" />
+  </ItemGroup>
+
 </Project>

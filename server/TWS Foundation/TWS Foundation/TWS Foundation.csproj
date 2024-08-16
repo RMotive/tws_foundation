@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TWS_Foundation</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
+    <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
+    <ProjectReference Include="..\TWS Security\TWS Security.csproj" />
+  </ItemGroup>
+
+</Project>
