@@ -71,6 +71,10 @@ public partial class Program {
                 });
             });
 
+            // --> Checking Databases Health
+            new TWSSecuritySource().ValidateHealth();
+            new TWSBusinessSource().ValidateHealth();
+
             // --> Adding customer services
             {
                 // --> Application

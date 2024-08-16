@@ -16,21 +16,11 @@ public abstract class BDatabaseSQLS<TSource>
 
     public BDatabaseSQLS([CallerFilePath] string? callerPath = null)
         : base() {
-        AdvisorManager.Announce($"ORM Setting things up...", new() {
-            {"Database", GetType().Name },
-            {"Base", nameof(BDatabaseSQLS<TSource>) },
-        });
         Connection = MigrationUtils.Retrieve(callerPath);
-        ValidateHealth();
     }
     public BDatabaseSQLS(DbContextOptions<TSource> Options, [CallerFilePath] string? callerPath = null)
         : base(Options) {
-        AdvisorManager.Announce($"ORM Setting things up...", new() {
-            {"Database", GetType().Name },
-            {"Base", nameof(BDatabaseSQLS<TSource>) },
-        });
         Connection = MigrationUtils.Retrieve(callerPath);
-        ValidateHealth();
     }
 
     /// <summary>
@@ -57,13 +47,16 @@ public abstract class BDatabaseSQLS<TSource>
     }
 
     /// <summary>
-    /// 
+    ///     Validates database connection health.
     /// </summary>
-    private void ValidateHealth() {
-        AdvisorManager.Announce($"[{GetType().Name}] Running connection checker...");
+    public void ValidateHealth(bool Announce = true) {
+        AdvisorManager.Announce($"ORM Setting up *^____^*", new() {
+            {"Database", GetType().Name },
+            {"Base", nameof(BDatabaseSQLS<TSource>) }
+        });
 
         if (Database.CanConnect()) {
-            AdvisorManager.Success($"[{GetType().Name}] connection successfuly stablished");
-        }
+            AdvisorManager.Success($"[{GetType().Name}] Connection stable");
+        } else throw new Exception($"Connection unstable with datasource ({GetType().Name})");
     }
 }
