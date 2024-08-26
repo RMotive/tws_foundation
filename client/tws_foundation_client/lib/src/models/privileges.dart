@@ -35,7 +35,13 @@ final class Privileges implements CSMEncodeInterface {
 
   @override
   JObject encode() {
-    return <String, dynamic>{'token': token, 'expiration': expiration.toString(), 'identity': identity, 'wildcard': wildcard, 'contact': contact.encode()};
+    return <String, dynamic>{
+      'token': token,
+      'expiration': expiration.toString(),
+      'identity': identity,
+      'wildcard': wildcard,
+      'contact': contact.encode()
+    };
   }
 }
 

@@ -10,7 +10,7 @@ void main() {
   late MigrationView<Solution> viewMock;
   late MigrationTransactionResult<Solution> createMock;
   late MigrationUpdateResult<Solution> updateMock;
-
+  
   late MigrationViewOptions options;
   late List<Solution> solutions;
 
@@ -33,7 +33,7 @@ void main() {
             'update' => SuccessFrame<MigrationUpdateResult<Solution>>('qTracer', updateMock).encode(),
             _ => <String, dynamic>{},
           };
-
+          
           String object = jsonEncode(jObject);
           return Response(object, 200);
         },

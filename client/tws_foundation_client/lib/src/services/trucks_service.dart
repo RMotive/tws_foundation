@@ -10,16 +10,17 @@ final class TrucksService extends TrucksServiceBase {
           'Trucks',
           client: client,
         );
-
+        
   @override
   Effect<MigrationView<Truck>> view(MigrationViewOptions options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<MigrationView<Truck>>(actEffect);
   }
-
+  
   @override
   Effect<MigrationTransactionResult<Truck>> create(List<Truck> trucks, String auth) async {
     CSMActEffect actEffect = await postList('create', trucks, auth: auth);
     return MainResolver<MigrationTransactionResult<Truck>>(actEffect);
   }
 }
+      

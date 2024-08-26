@@ -20,7 +20,4 @@ abstract class SolutionsServiceBase extends CSMServiceBase {
 
   ///
   Effect<MigrationUpdateResult<Solution>> update(Solution solution, String auth);
-
-  ///
-  Effect<Solution> delete(Solution solution, String auth);
 }
