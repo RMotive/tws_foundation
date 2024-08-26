@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TWS Security", "TWS Securit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWS Security.Quality", "TWS Security.Quality\TWS Security.Quality.csproj", "{EF050B99-AC00-44BB-A5C7-0296F1E9ABEF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWS Foundationr.Quality", "Server.Quality\TWS Foundationr.Quality.csproj", "{0AE1A197-DEA7-4BFE-85F1-32354C7C9098}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWS Foundation.Quality", "Server.Quality\TWS Foundation.Quality.csproj", "{0AE1A197-DEA7-4BFE-85F1-32354C7C9098}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{33E22C0E-DE34-43F9-8AFC-5501AE5F6C94}"
 	ProjectSection(SolutionItems) = preProject

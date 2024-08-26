@@ -7,13 +7,13 @@ using TWS_Security.Sets;
 
 namespace TWS_Security;
 
-public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
+public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> {
     
-    public TWSSecuritySource(DbContextOptions<TWSSecuritySource> options)
+    public TWSSecurityDatabases(DbContextOptions<TWSSecurityDatabases> options)
         : base(options) {
     }
 
-    public TWSSecuritySource()
+    public TWSSecurityDatabases()
     : base() {
 
     }
@@ -34,7 +34,7 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
 
     public virtual DbSet<Solution> Solutions { get; set; }
 
-    protected override ISourceSet[] EvaluateFactory() {
+    protected override IDatabasesSet[] EvaluateFactory() {
         return [
             new Solution(),
         ];

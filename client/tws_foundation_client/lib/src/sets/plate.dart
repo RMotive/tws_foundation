@@ -1,6 +1,5 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Plate implements CSMSetInterface {
   static const String kIdentifier = "identifier";

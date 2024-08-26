@@ -14,10 +14,10 @@ namespace CSM_Foundation.Server.Quality.Bases;
 ///     <see cref="BQ_Controller"/> implementations.
 ///     
 ///     <br></br>
-///     <br> A Controller is the server exposition for endpoints and another services. </br>
+///     <br> A Controller is the Server exposition for endpoints and another services. </br>
 /// </summary>
 /// <typeparam name="TEntry">
-///     Entry class that starts your server project.
+///     Entry class that starts your Server project.
 /// </typeparam>
 public abstract class BQ_ServerController<TEntry>(string Service, WebApplicationFactory<TEntry> Factory)
     : IClassFixture<WebApplicationFactory<TEntry>>

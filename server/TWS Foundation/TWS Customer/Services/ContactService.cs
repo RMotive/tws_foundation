@@ -13,7 +13,7 @@ public class ContactService
     public ContactService(ContactsDepot contacts) {
         Contacts = contacts;
     }
-    public async Task<SourceTransactionOut<Contact>> Create(Contact[] contact) {
+    public async Task<DatabasesTransactionOut<Contact>> Create(Contact[] contact) {
         return await Contacts.Create(contact);
     }
 }

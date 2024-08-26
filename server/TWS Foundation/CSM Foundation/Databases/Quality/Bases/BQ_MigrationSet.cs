@@ -11,10 +11,10 @@ namespace CSM_Foundation.Databases.Quality.Bases;
 ///     Defines what quality operations must be performed by a [Q_Entity].
 ///     
 ///     [Q_Entity] concept: determines a quality implementation to qualify 
-///     a [MigrationSource] [Entity] implementation.
+///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
 public abstract class BQ_MigrationSet<TSet>
-    where TSet : ISourceSet, new() {
+    where TSet : IDatabasesSet, new() {
 
     protected abstract Q_MigrationSet_EvaluateRecord<TSet>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TSet>[] Container);
 

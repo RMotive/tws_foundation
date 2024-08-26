@@ -12,7 +12,7 @@ namespace CSM_Foundation.Databases.Interfaces;
 ///     </br>
 /// </summary>
 /// <typeparam name="TMigrationSet">
-///     The datasource object that the implementation handles.
+///     The dataDatabases object that the implementation handles.
 /// </typeparam>
 public interface IMigrationDepot<TMigrationSet>
     : IMigrationDepot_View<TMigrationSet>
@@ -20,4 +20,4 @@ public interface IMigrationDepot<TMigrationSet>
     , IMigrationDepot_Create<TMigrationSet>
     , IMigrationDepot_Update<TMigrationSet>
     , IMigrationDepot_Delete<TMigrationSet>
-    where TMigrationSet : ISourceSet { }
+    where TMigrationSet : IDatabasesSet { }

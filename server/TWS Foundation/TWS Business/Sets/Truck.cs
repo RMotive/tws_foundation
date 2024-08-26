@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Databases.Bases;
+﻿using CSM_Foundation.Core.Bases;
+using CSM_Foundation.Databases.Bases;
 using CSM_Foundation.Databases.Interfaces;
 using CSM_Foundation.Databases.Validators;
 
@@ -7,22 +8,22 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class Truck
-    : BDatabaseSet {
+    : BDatabaseSet  {
     public override int Id { get; set; }
 
-    public string Vin { get; set; } = null!;
+    public int Status { get; set; }
 
-    public int Manufacturer { get; set; }
+    public int Common { get; set; }
 
     public string Motor { get; set; } = null!;
 
-    public int? Sct { get; set; }
+    public int Manufacturer { get; set; }
 
     public int? Maintenance { get; set; }
 
-    public int? Situation { get; set; }
-
     public int? Insurance { get; set; }
+
+    public virtual TruckCommon? TruckCommonNavigation { get; set; }
 
     public virtual Insurance? InsuranceNavigation { get; set; }
 
@@ -30,44 +31,46 @@ public partial class Truck
 
     public virtual Manufacturer? ManufacturerNavigation { get; set; }
 
-    public virtual Sct? SctNavigation { get; set; }
+    public virtual Status? StatusNavigation { get; set; }
 
-    public virtual Situation? SituationNavigation { get; set; }
+    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
-    public virtual ICollection<Plate> Plates { get; set; } = [];
+    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+
+    public virtual ICollection<PlateH> PlatesH { get; set; } = [];
 
     public static void Set(ModelBuilder builder) {
-        builder.Entity<Truck>(entity => {
-            entity.HasKey(e => e.Id);
+        _ = builder.Entity<Truck>(entity => {
+            _ = entity.HasKey(e => e.Id);
 
-            entity.HasIndex(e => e.Vin).IsUnique();
-            entity.HasIndex(e => e.Motor).IsUnique();
+            _ = entity.Property(e => e.Id)
+                .HasColumnName("id");
 
-            entity.Property(e => e.Id);
-            entity.Property(e => e.Motor)
+            _ = entity.Property(e => e.Motor)   
                 .HasMaxLength(16)
                 .IsUnicode(false);
-            entity.Property(e => e.Sct);
-            entity.Property(e => e.Vin)
-                .HasMaxLength(17)
-                .IsUnicode(false);
 
-            entity.HasOne(d => d.InsuranceNavigation)
+            _ = entity.HasOne(d => d.StatusNavigation)
+                .WithMany(p => p.Trucks)
+                .HasForeignKey(d => d.Status)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            _ = entity.HasOne(d => d.InsuranceNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Insurance);
 
-            entity.HasOne(d => d.MaintenanceNavigation)
+            _ = entity.HasOne(d => d.MaintenanceNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Maintenance);
-            entity.HasOne(d => d.ManufacturerNavigation).WithMany(p => p.Trucks)
+
+            _ = entity.HasOne(d => d.ManufacturerNavigation)
+                .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Manufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-            entity.HasOne(d => d.SctNavigation)
+
+            _ = entity.HasOne(d => d.TruckCommonNavigation)
                 .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Sct);
-            entity.HasOne(d => d.SituationNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Situation);
+                .HasForeignKey(d => d.Common);
         });
     }
 
@@ -75,9 +78,9 @@ public partial class Truck
         UniqueValidator Unique = new();
         Container = [
             ..Container,
-            (nameof(Vin), [Unique, new LengthValidator(17, 17)]),
-            (nameof(Motor), [Unique, new LengthValidator(15, 16)]),
-
+            (nameof(Status), [new PointerValidator(true)]),
+            (nameof(Motor), [new LengthValidator(1, 16)]),
+            (nameof(Manufacturer), [new PointerValidator(true)]),
         ];
         return Container;
     }
