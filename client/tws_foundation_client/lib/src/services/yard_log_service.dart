@@ -5,10 +5,12 @@ final class YardLogsService extends YardLogServiceBase {
   YardLogsService(
     CSMUri host, {
     Client? client,
+    CSMHeaders? headers,
   }) : super(
           host,
           'YardLogs',
           client: client,
+          headers: headers,
         );
         
   @override
@@ -18,14 +20,14 @@ final class YardLogsService extends YardLogServiceBase {
   }
   
   @override
-  Effect<MigrationTransactionResult<YardLog>> create(List<YardLog> trucks, String auth) async {
-    CSMActEffect actEffect = await postList('create', trucks, auth: auth);
+  Effect<MigrationTransactionResult<YardLog>> create(List<YardLog> yardlogs, String auth) async {
+    CSMActEffect actEffect = await postList('create', yardlogs, auth: auth);
     return MainResolver<MigrationTransactionResult<YardLog>>(actEffect);
   }
 
   @override
-  Effect<MigrationUpdateResult<YardLog>> update(YardLog solution, String auth) async {
-    CSMActEffect actEffect = await post('update', solution, auth: auth);
+  Effect<MigrationUpdateResult<YardLog>> update(YardLog yardlog, String auth) async {
+    CSMActEffect actEffect = await post('update', yardlog, auth: auth);
     return MainResolver<MigrationUpdateResult<YardLog>>(actEffect);
   }
 }

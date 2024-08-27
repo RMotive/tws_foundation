@@ -269,6 +269,7 @@ void main() {
         'Updates when exist',
         () async {
           YardLog mock = creationMock.clone(gName: 'a new name to test');
+          mock.timestamp = null;
           MainResolver<MigrationUpdateResult<YardLog>> fact = await service.update(mock, auth);
           MigrationUpdateResult<YardLog> actEffect = await fact.act(decoder);
           assert(actEffect.previous != null);

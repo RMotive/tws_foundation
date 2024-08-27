@@ -12,9 +12,9 @@ namespace TWS_Foundation.Controllers;
 [ApiController, Route("[Controller]")]
 public class ContactsController
     : ControllerBase {
-    private readonly IContactService Service;
+    private readonly IContactsService Service;
 
-    public ContactsController(IContactService service) {
+    public ContactsController(IContactsService service) {
         this.Service = service;
     }
 

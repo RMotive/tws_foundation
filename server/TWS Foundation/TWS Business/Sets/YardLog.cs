@@ -60,8 +60,6 @@ public partial class YardLog
     public virtual Section? SectionNavigation { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
         Container = [
                 .. Container,
             (nameof(TTPicture), [new LengthValidator(1, 999)]),

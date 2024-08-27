@@ -133,7 +133,7 @@ public partial class Program {
                 builder.Services.AddScoped<IPlatesService, PlatesServices>();
                 builder.Services.AddScoped<ITrucksService, TrucksService>();
                 builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
-                builder.Services.AddScoped<IContactService, ContactService>();
+                builder.Services.AddScoped<IContactsService, ContactsService>();
                 builder.Services.AddScoped<IDriversService, DriversService>();
                 builder.Services.AddScoped<IDriversExternalsService, DriversExternalsService>();
                 builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
