@@ -80,7 +80,8 @@ public partial class YardLog
             _ = entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            entity.Property(b => b.Timestamp)
+            //this property cannot be modified "manually". Modify this property will result in unexpected exceptions.
+            entity.Property(b => b.Timestamp) 
             .ValueGeneratedOnAddOrUpdate();
 
             _ = entity.Property(e => e.Gname)
