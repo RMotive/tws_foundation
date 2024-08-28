@@ -92,5 +92,5 @@ INSERT INTO Sections([Name], Capacity, Ocupancy, [Status], Yard)
 VALUES('A', 20, 0, 1, 1), ('B', 10, 0, 1, 2), ('C', 25, 0, 1, 3);
 
 INSERT INTO Yard_Logs([Entry], Truck, TruckExternal, Trailer, TrailerExternal, LoadType, Guard, Gname, Section, FromTo, Damage, TTPicture, DmgEvidence, Driver, DriverExternal)
-VALUES(1, 1, null, 1, null, 1, 1,'Guard 1', 1, 'Coca Cola el Florido', 0, 'Truck and trailer picture 1', null, 1, null), (1, 2, null, 2, null, 2, 2,'Guard 2', 2, 'Coca Cola el Florido 2', 1, 'Truck and trailer picture 1', 'Damage picture 1', 2, null), (1, 3, null, 3, null, 3, 3,'Guard 3', 3, 'Coca Cola el Florido 3', 0, 'Truck and trailer picture 1', null, 2, null);
+VALUES(1, 1, null, 1, null, 1, 1,'Guard 1', 2, 'Coca Cola el Florido', 0, 'Truck and trailer picture 1', null, 1, null), (1, 2, null, 2, null, 2, 2,'Guard 2', 2, 'Coca Cola el Florido 2', 1, 'Truck and trailer picture 1', 'Damage picture 1', 2, null), (1, 3, null, 3, null, 3, 3,'Guard 3', 3, 'Coca Cola el Florido 3', 0, 'Truck and trailer picture 1', null, 2, null);
 

@@ -95,7 +95,7 @@ void main() {
           1, //trailerClass 
           1, //carrier 
           1, //situation
-          1, //location
+          null, //location
           "ECT$randomToken", //economic
           null, //statusNavigation
           <Plate>[plateMX2,plateUSA2] //plates
@@ -115,7 +115,7 @@ void main() {
         1, //carrier
         "VINtest-$randomToken", //vin
         "ECO$randomToken", //economic
-        1, //location
+        null, //location
         1, //situation
         null, //statusNavigation
         null,
@@ -137,7 +137,7 @@ void main() {
         );
         YardLog mock = YardLog(
           0, // ID
-          first? true : false, //Entry
+          true, //Entry
           first? 1 : 0, // Truck? Id
           null, // truckExternal
           first? 1 : 0, // trailer

@@ -18,7 +18,7 @@ final class TrailerCommon implements CSMSetInterface {
   int trailerClass = 0;
   int carrier = 0;
   int situation = 0;
-  int location = 0;
+  int? location;
   String economic = "";
   Status? statusNavigation;
   // List default initialization data for clone method.
@@ -33,7 +33,7 @@ final class TrailerCommon implements CSMSetInterface {
     int trailerClass = json.get('class');
     int carrier = json.get('carrier');
     int situation = json.get('situation');
-    int location = json.get('location');
+    int? location = json.getDefault('location', null);
     String economic = json.get('economic');
 
     List<Plate> plates = <Plate>[];
@@ -69,8 +69,6 @@ final class TrailerCommon implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(economic.length < 8 || economic.length > 12) results.add(CSMSetValidationResult(kEconomic, "Economic number length must be between 1 and 16", "strictLength(1,16)"));
     if(trailerClass < 0) results.add(CSMSetValidationResult(kTrailerClass, 'Situation pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(situation < 0) results.add(CSMSetValidationResult(kSituation, 'Situation pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(location < 0) results.add(CSMSetValidationResult(kLocation, 'Situation pointer must be equal or greater than 0', 'pointerHandler()'));
     if(situation < 0) results.add(CSMSetValidationResult(kSituation, 'Situation pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));

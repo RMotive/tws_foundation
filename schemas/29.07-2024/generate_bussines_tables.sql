@@ -11,6 +11,7 @@ DROP TABLE Approaches_H;
 DROP TABLE Maintenances_H;
 DROP TABLE Insurances_H;
 DROP TABLE SCT_H;
+DROP TABLE Trailers_Inventories;
 DROP TABLE Trucks_Inventories;
 DROP TABLE Yard_Logs;
 DROP TABLE Sections;
@@ -158,7 +159,7 @@ id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Name] varchar(30) NOT NULL,
 Quantity int NOT NULL,
 [Description] varchar(100)
-)
+);
 
 create table Trailer_Classes(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
@@ -404,6 +405,18 @@ constraint FK_TrucksInventory_TrucksExternal foreign key(truckExternal) referenc
 constraint FK_TrucksInventory_Trucks foreign key(Truck) references Trucks(id),
 
 constraint FK_TrucksInventory_Sections foreign key(Section) references Sections(id),
+);
+
+create table Trailers_Inventories(
+id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
+EntryDate datetime2 NOT NULL,
+section int NOT NULL,
+trailer int,
+trailerExternal int,
+
+constraint FK_TrailerInventory_TrucksExternal foreign key(trailerExternal) references Trailers_Externals(id),
+constraint FK_TrailerInventory_Trucks foreign key(trailer) references Trailers(id),
+constraint FK_TrailersInventory_Sections foreign key(Section) references Sections(id),
 );
 
 -- Historical Tables --
