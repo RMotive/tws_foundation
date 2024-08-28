@@ -1,6 +1,4 @@
-﻿
-
-using CSM_Foundation.Core.Utils;
+﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Databases.Quality.Bases;
 
 using TWS_Business.Depots;
@@ -11,18 +9,18 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TruckDepot"/>.
 /// </summary>
 public class Q_TruckDepot
-    : BQ_MigrationDepot<Truck, TruckDepot, TWSBusinessSource> {
+    : BQ_MigrationDepot<Truck, TruckDepot, TWSBusinessDatabases> {
     public Q_TruckDepot()
-        : base(nameof(Truck.Vin)) {
+        : base(nameof(Truck.Id)) {
     }
 
     protected override Truck MockFactory() {
 
         return new() {
-            Vin = RandomUtils.String(17),
-            Motor = RandomUtils.String(16),
+            Status = 1,
             Manufacturer = 1,
-
+            Motor = RandomUtils.String(16),
+            Common = 1,
         };
     }
 }

@@ -16,16 +16,16 @@ void main() {
       options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
       viewMock = MigrationView<Situation>(<Situation>[], 1, DateTime.now(), 3, 0, 20);
 
-      createMock = Situation(0, "Situational test", "Description test ", <Truck>[]);
+      createMock = Situation(0, "Situational test", "Description test ");
 
       Client mockClient = MockClient(
         (Request request) async {
-          JObject jObject = switch (request.url.pathSegments.last) {
+         JObject jObject = switch (request.url.pathSegments.last) {
             'view' => SuccessFrame<MigrationView<Situation>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<Situation>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
-
+          
           String object = jsonEncode(jObject);
           return Response(object, 200);
         },

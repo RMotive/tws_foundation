@@ -6,11 +6,11 @@ using TWS_Security.Sets;
 namespace TWS_Security.Depots;
 
 /// <summary>
-///     Implements a <see cref="BDatabaseDepot{TMigrationSource, TMigrationSet}"/>
-///     representing a depot to handle <see cref="Contact"/> datasource entity mirror.
+///     Implements a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/>
+///     representing a depot to handle <see cref="Contact"/> dataDatabases entity mirror.
 /// </summary>
 public class ContactsDepot
-     : BDatabaseDepot<TWSSecuritySource, Contact> {
+     : BDatabaseDepot<TWSSecurityDatabases, Contact> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Contact"/>.
     /// </summary>

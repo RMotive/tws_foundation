@@ -6,8 +6,8 @@ using CSM_Foundation.Server.Records;
 namespace CSM_Foundation.Server.Interfaces;
 /// <summary>
 ///     Defines the behavior for an exception
-///     thrown on server transaction time, this means
-///     an exceptio thrown when a server request was being tried to
+///     thrown on Server transaction time, this means
+///     an exceptio thrown when a Server request was being tried to
 ///     be resolved but there arised an exception.
 /// </summary>
 public interface IServerTransactionException<TSituation>
@@ -26,7 +26,7 @@ public interface IServerTransactionException {
     /// </summary>
     public string Advise { get; }
     /// <summary>
-    ///     The SystemInternal exception thrown that arised this server known exception.
+    ///     The SystemInternal exception thrown that arised this Server known exception.
     /// </summary>
     public Exception? System { get; }
     /// <summary>

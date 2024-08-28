@@ -10,10 +10,12 @@ final class SituationsService extends SituationsServiceBase {
           'Situations',
           client: client,
         );
-
+        
   @override
   Effect<MigrationView<Situation>> view(MigrationViewOptions options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<MigrationView<Situation>>(actEffect);
   }
+
 }
+      

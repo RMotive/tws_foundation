@@ -7,13 +7,13 @@ using TWS_Security.Depots;
 using TWS_Security.Sets;
 
 namespace TWS_Customer.Services;
-public class ContactService
-    : IContactService {
+public class ContactsService
+    : IContactsService {
     private readonly ContactsDepot Contacts;
-    public ContactService(ContactsDepot contacts) {
+    public ContactsService(ContactsDepot contacts) {
         Contacts = contacts;
     }
-    public async Task<SourceTransactionOut<Contact>> Create(Contact[] contact) {
+    public async Task<DatabasesTransactionOut<Contact>> Create(Contact[] contact) {
         return await Contacts.Create(contact);
     }
 }

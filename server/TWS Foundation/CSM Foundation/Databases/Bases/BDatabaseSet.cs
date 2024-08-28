@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CSM_Foundation.Databases.Bases;
 public abstract class BDatabaseSet
-    : BObject<ISourceSet>, ISourceSet {
+    : BObject<IDatabasesSet>, IDatabasesSet {
     public abstract int Id { get; set; }
     private (string Property, IValidator[] Validators)[]? Validators { get; set; }
     private bool Defined { get; set; } = false;

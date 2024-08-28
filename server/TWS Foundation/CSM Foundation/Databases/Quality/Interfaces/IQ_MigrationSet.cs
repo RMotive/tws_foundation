@@ -6,7 +6,7 @@
 ///     Defines what quality operations must be performed by a [Q_Entity].
 ///     
 ///     [Q_Entity] concept: determines a quality implementation to qualify 
-///     a [MigrationSource] [Entity] implementation.
+///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
 public interface IQ_MigrationSet {
     /// <summary>

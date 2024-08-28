@@ -8,8 +8,6 @@ using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Server.Utils;
 using CSM_Foundation.Databases.Interfaces;
 
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-
 using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;
 using TWS_Foundation.Models;
@@ -26,7 +24,7 @@ using TWS_Security.Depots;
 namespace TWS_Foundation;
 
 public partial class Program {
-    private const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
+    private const string SETTINGS_LOCATION = "\\Properties\\Server_properties.json";
     private const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
     private static IMigrationDisposer? Disposer;
     private static Settings? SettingsStore { get; set; }
@@ -39,7 +37,7 @@ public partial class Program {
         try {
             Settings s = Settings;
 
-            AdvisorManager.Success("TWS_Foundation settings retrieved", s);
+            AdvisorManager.Success("Server settings retrieved", s);
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             // Add services and overriding options to the container.
@@ -72,8 +70,8 @@ public partial class Program {
             });
 
             // --> Checking Databases Health
-            new TWSSecuritySource().ValidateHealth();
-            new TWSBusinessSource().ValidateHealth();
+            new TWSSecurityDatabases().ValidateHealth();
+            new TWSBusinessDatabases().ValidateHealth();
 
             // --> Adding customer services
             {
@@ -84,36 +82,70 @@ public partial class Program {
                 builder.Services.AddSingleton<DispositionMiddleware>();
                 builder.Services.AddSingleton<IMigrationDisposer, DispositionManager>();
 
-                // --> Sources contexts
-                builder.Services.AddDbContext<TWSSecuritySource>();
-                builder.Services.AddDbContext<TWSBusinessSource>();
+                // --> Databasess contexts
+                builder.Services.AddDbContext<TWSSecurityDatabases>();
+                builder.Services.AddDbContext<TWSBusinessDatabases>();
 
                 // --> Depots
                 builder.Services.AddScoped<SolutionsDepot>();
                 builder.Services.AddScoped<AccountsDepot>();
+                builder.Services.AddScoped<AddressesDepot>();
+                builder.Services.AddScoped<UsdotsDepot>();
+                builder.Services.AddScoped<CarriersDepot>();
+                builder.Services.AddScoped<ApproachesDepot>();
                 builder.Services.AddScoped<ContactsDepot>();
                 builder.Services.AddScoped<ManufacturersDepot>();
                 builder.Services.AddScoped<SituationsDepot>();
                 builder.Services.AddScoped<PlatesDepot>();
-                builder.Services.AddScoped<ContactsDepot>();
                 builder.Services.AddScoped<TruckDepot>();
                 builder.Services.AddScoped<InsurancesDepot>();
                 builder.Services.AddScoped<SctsDepot>();
                 builder.Services.AddScoped<MaintenacesDepot>();
+                builder.Services.AddScoped<StatusesDepot>();
+                builder.Services.AddScoped<AddressesDepot>();
+                builder.Services.AddScoped<ApproachesDepot>();
+                builder.Services.AddScoped<CarriersDepot>();
+                builder.Services.AddScoped<AxesDepot>();
+                builder.Services.AddScoped<DriversDepot>();
+                builder.Services.AddScoped<DriversCommonsDepot>();
+                builder.Services.AddScoped<DriversExternalsDepot>();
+                builder.Services.AddScoped<EmployeesDepot>();
+                builder.Services.AddScoped<SectionsDepot>();
+                builder.Services.AddScoped<LocationsDepot>();
+                builder.Services.AddScoped<LoadTypesDepot>();
+                builder.Services.AddScoped<LocationsDepot>();
+                builder.Services.AddScoped<TrailerClassesDepot>();
+                builder.Services.AddScoped<TrailersCommonsDepot>();
+                builder.Services.AddScoped<TrailersExternalsDepot>();
+                builder.Services.AddScoped<TrailersDepot>();
+                builder.Services.AddScoped<IdentificationsDepot>();
+                builder.Services.AddScoped<TrucksExternalsDepot>();
+                builder.Services.AddScoped<TrucksCommonsDepot>();
 
+                builder.Services.AddScoped<YardLogsDepot>();
+
+                builder.Services.AddScoped<TrucksHDepot>();
                 // --> Services
                 builder.Services.AddScoped<ISolutionsService, SolutionsService>();
-                builder.Services.AddScoped<ISecurityService, SecurityService>();
                 builder.Services.AddScoped<ISecurityService, SecurityService>();
                 builder.Services.AddScoped<IManufacturersService, ManufacturersService>();
                 builder.Services.AddScoped<ISituationsService, SituationsService>();
                 builder.Services.AddScoped<IPlatesService, PlatesServices>();
                 builder.Services.AddScoped<ITrucksService, TrucksService>();
-                builder.Services.AddScoped<IContactService, ContactService>();
+                builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
+                builder.Services.AddScoped<IContactsService, ContactsService>();
+                builder.Services.AddScoped<IDriversService, DriversService>();
+                builder.Services.AddScoped<IDriversExternalsService, DriversExternalsService>();
+                builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
+                builder.Services.AddScoped<ITrailersService, TrailersService>();
+                builder.Services.AddScoped<ITrailersExternalsService, TrailersExternalsService>();
+                builder.Services.AddScoped<ILoadTypesService, LoadTypesService>();
+                builder.Services.AddScoped<ISectionsService, SectionsService>();
+                builder.Services.AddScoped<IYardLogsService, YardLogsService>();
             }
             WebApplication app = builder.Build();
             app.MapControllers();
-            // --> Injecting middlewares to server
+            // --> Injecting middlewares to Server
             {
                 app.UseMiddleware<AnalyticsMiddleware>();
                 app.UseMiddleware<AdvisorMiddleware>();
@@ -127,7 +159,7 @@ public partial class Program {
             app.UseCors();
 
 
-            AdvisorManager.Announce($"TWS_Foundation ready to listen ^_____^");
+            AdvisorManager.Announce($"Server ready to listen ^_____^");
             app.Run();
         } catch (Exception X) when (X is IAdvisingException AX) {
             AdvisorManager.Exception(AX);
@@ -153,7 +185,7 @@ public partial class Program {
         string ws = Directory.GetCurrentDirectory();
         string sl = FileUtils.FormatLocation(SETTINGS_LOCATION);
         Dictionary<string, dynamic> tempModel = FileUtils.Deserealize<Dictionary<string, dynamic>>($"{ws}{sl}");
-        AdvisorManager.Note("Retrieving server settings", new Dictionary<string, dynamic> {
+        AdvisorManager.Note("Retrieving Server settings", new Dictionary<string, dynamic> {
             {"Workspace", ws },
             {"Settings", sl },
         });

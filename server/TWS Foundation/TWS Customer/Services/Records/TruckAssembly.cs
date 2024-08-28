@@ -16,14 +16,14 @@ public class TruckAssembly {
     public required string Motor { get; set; }
 
     /// <summary>
-    /// Generate a new insert into the Manufacturer table, in the data source.
+    /// Generate a new insert into the Manufacturer table, in the data Databases.
     /// This property has a higher prority level over the [ManufacturerPointer] property.
     /// If [Id] property is set a higher value than 0, then this field will be assingned using that pointer.
     /// </summary>
     public required Manufacturer Manufacturer { get; set; }
 
     /// <summary>
-    /// then generate a new insert into the Plate table, in the data source, based in the list lenght.
+    /// then generate a new insert into the Plate table, in the data Databases, based in the list lenght.
     /// This property has a higher prority level over the [PlatePointer] property.
     /// If [Id] property is set a higher value than 0, then this field will be assingned using that pointer.
     /// </summary>
@@ -45,7 +45,7 @@ public class TruckAssembly {
     public Insurance? Insurance { get; set; }
 
     /// <summary>
-    /// Optional Sct data for the truck.
+    /// Optional SctH data for the truck.
     /// </summary>
     public Sct? Sct { get; set; }
 

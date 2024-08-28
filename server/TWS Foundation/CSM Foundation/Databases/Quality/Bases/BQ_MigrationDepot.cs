@@ -15,17 +15,17 @@ using Xunit;
 
 namespace CSM_Foundation.Databases.Quality.Bases;
 
-public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrationSource>
+public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrationDatabases>
     : IQ_MigrationDepot
-    where TMigrationSet : class, ISourceSet, new()
+    where TMigrationSet : class, IDatabasesSet, new()
     where TMigrationDepot : IMigrationDepot<TMigrationSet>, new()
-    where TMigrationSource : BDatabaseSQLS<TMigrationSource>, new() {
+    where TMigrationDatabases : BDatabaseSQLS<TMigrationDatabases>, new() {
     private readonly string Ordering;
     private readonly TMigrationDepot Depot;
-    private readonly TMigrationSource Source;
+    private readonly TMigrationDatabases Databases;
     private readonly DbSet<TMigrationSet> Set;
     /// <summary>
-    ///     Generates a new behavior base for <see cref="BQ_MigrationDepot{TMigrationSet, TMigrationDepot, TMigrationSource}"/>.
+    ///     Generates a new behavior base for <see cref="BQ_MigrationDepot{TMigrationSet, TMigrationDepot, TMigrationDatabases}"/>.
     /// </summary>
     /// <param name="Ordering">
     ///     Property name to perform <see cref="View"/> qualifications with ordering based on a property.
@@ -33,17 +33,17 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
     public BQ_MigrationDepot(string Ordering) {
         this.Ordering = Ordering;
         Depot = new();
-        Source = new();
-        Set = Source.Set<TMigrationSet>();
+        Databases = new();
+        Set = Databases.Set<TMigrationSet>();
     }
 
-    protected void Restore(ISourceSet Set) {
-        _ = Source.Remove(Set);
-        _ = Source.SaveChanges();
+    protected void Restore(IDatabasesSet Set) {
+        _ = Databases.Remove(Set);
+        _ = Databases.SaveChanges();
     }
-    protected void Restore(ISourceSet[] Sets) {
-        Source.RemoveRange(Sets);
-        _ = Source.SaveChanges();
+    protected void Restore(IDatabasesSet[] Sets) {
+        Databases.RemoveRange(Sets);
+        _ = Databases.SaveChanges();
     }
     /// <summary>
     ///     
@@ -74,7 +74,7 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
                     }
 
                     await Set.AddRangeAsync(firstFactMocks);
-                    _ = await Source.SaveChangesAsync();
+                    _ = await Databases.SaveChangesAsync();
                 }
             } catch { Restore(firstFactMocks); throw; }
         }
@@ -186,7 +186,7 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
             for (int i = 0; i < 3; i++) {
                 mocks = [.. mocks, MockFactory()];
             }
-            SourceTransactionOut<TMigrationSet> fact = await Depot.Create(mocks);
+            DatabasesTransactionOut<TMigrationSet> fact = await Depot.Create(mocks);
 
             Assert.Multiple([
                 () => Assert.Equal(fact.QTransactions, mocks.Length),

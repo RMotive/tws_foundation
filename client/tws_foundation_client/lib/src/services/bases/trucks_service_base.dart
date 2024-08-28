@@ -12,4 +12,5 @@ abstract class TrucksServiceBase extends CSMServiceBase {
   Effect<MigrationView<Truck>> view(MigrationViewOptions options, String auth);
 
   Effect<MigrationTransactionResult<Truck>> create(List<Truck> trucks, String auth);
+
 }
