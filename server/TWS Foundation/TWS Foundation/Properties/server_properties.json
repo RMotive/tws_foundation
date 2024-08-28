@@ -5,5 +5,5 @@
     "Name": "TWS Foundation",
     "Sign": "TWSFT"
   },
-  "CORS": ["192.168.100.31", "localhost"]
+  "CORS": ["192.168.100.32", "localhost"]
 }

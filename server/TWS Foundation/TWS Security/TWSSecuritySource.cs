@@ -41,7 +41,7 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        _ = modelBuilder.Entity<Account>(entity => {
+        modelBuilder.Entity<Account>(entity => {
             _ = entity.HasKey(e => e.Id);
 
             _ = entity.HasIndex(e => e.User).IsUnique();
@@ -59,7 +59,7 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        _ = modelBuilder.Entity<AccountsPermit>(entity => {
+        modelBuilder.Entity<AccountsPermit>(entity => {
             _ = entity.HasNoKey();
 
             _ = entity.Property(e => e.Account);
@@ -74,29 +74,31 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        _ = modelBuilder.Entity<Contact>(entity => {
-            _ = entity.HasKey(e => e.Id);
+        modelBuilder.Entity<Contact>(entity => {
+            entity.HasKey(e => e.Id);
 
-            _ = entity.HasIndex(e => e.Phone, "UQ__Contact__5C7E359EC4E4F9C2").IsUnique();
+            entity.HasIndex(e => e.Phone)
+                .IsUnique();
 
-            _ = entity.HasIndex(e => e.Email, "UQ__Contact__A9D10534DD442408").IsUnique();
+            entity.HasIndex(e => e.Email)
+                .IsUnique();
 
-            _ = entity.Property(e => e.Id);
-            _ = entity.Property(e => e.Email)
+            entity.Property(e => e.Id);
+            entity.Property(e => e.Email)
                 .HasMaxLength(30)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Lastname)
+            entity.Property(e => e.Lastname)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Name)
+            entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Phone)
+            entity.Property(e => e.Phone)
                 .HasMaxLength(14)
                 .IsUnicode(false);
         });
 
-        _ = modelBuilder.Entity<Feature>(entity => {
+        modelBuilder.Entity<Feature>(entity => {
             _ = entity.HasKey(e => e.Id);
 
             _ = entity.HasIndex(e => e.Name, "UQ__Features__737584F6AD8F8134").IsUnique();
@@ -105,7 +107,7 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
             _ = entity.Property(e => e.Name).HasMaxLength(25);
         });
 
-        _ = modelBuilder.Entity<Permit>(entity => {
+        modelBuilder.Entity<Permit>(entity => {
             _ = entity.HasKey(e => e.Id);
 
             _ = entity.HasIndex(e => e.Reference).IsUnique();
@@ -128,7 +130,7 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        _ = modelBuilder.Entity<Profile>(entity => {
+        modelBuilder.Entity<Profile>(entity => {
             _ = entity.HasKey(e => e.Id);
 
             _ = entity.HasIndex(e => e.Name).IsUnique();
@@ -141,7 +143,7 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
                 .IsUnicode(false);
         });
 
-        _ = modelBuilder.Entity<ProfilesPermit>(entity => {
+        modelBuilder.Entity<ProfilesPermit>(entity => {
             _ = entity.HasNoKey();
 
             _ = entity.Property(e => e.Permit);
@@ -156,7 +158,7 @@ public partial class TWSSecuritySource : BDatabaseSQLS<TWSSecuritySource> {
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        _ = modelBuilder.Entity<Solution>(entity => {
+        modelBuilder.Entity<Solution>(entity => {
             _ = entity.HasKey(e => e.Id);
 
             _ = entity.HasIndex(e => e.Sign).IsUnique();
