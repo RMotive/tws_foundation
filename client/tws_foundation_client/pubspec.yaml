@@ -11,6 +11,7 @@ dependencies:
   csm_foundation_services:
     git:
       url: https://github.com/RMotive/csm_foundation_services
+      ref: main
 
 dev_dependencies:
   lints: ^4.0.0
