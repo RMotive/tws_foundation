@@ -35,6 +35,8 @@ public partial class YardLog
 
     public string Gname { get; set; } = null!;
 
+    public string Seal { get; set; } = null!;
+
     public string FromTo { get; set; } = null!;
 
     public bool Damage { get; set; }
@@ -64,6 +66,7 @@ public partial class YardLog
                 .. Container,
             (nameof(TTPicture), [new LengthValidator(1, 999)]),
             (nameof(Gname), [new LengthValidator(1, 100)]),
+            (nameof(Seal), [new LengthValidator(1, 64)]),
             (nameof(FromTo), [new LengthValidator(1, 100)]),
             (nameof(LoadType), [new PointerValidator(true)]),
             (nameof(Section), [new PointerValidator(true)]),
@@ -86,6 +89,10 @@ public partial class YardLog
 
             _ = entity.Property(e => e.Gname)
                 .HasMaxLength(100)
+                .IsUnicode(false);
+
+            _ = entity.Property(e => e.Seal)
+                .HasMaxLength(64)
                 .IsUnicode(false);
 
             _ = entity.Property(e => e.FromTo)

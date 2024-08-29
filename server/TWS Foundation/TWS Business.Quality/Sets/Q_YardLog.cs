@@ -23,6 +23,7 @@ public class Q_YardLog : BQ_MigrationSet<YardLog> {
                 LoadType = 0,
                 Section = 0,
                 Guard = 1,
+                Seal = "",
                 Gname = "",
                 FromTo = ""
             },
@@ -30,6 +31,7 @@ public class Q_YardLog : BQ_MigrationSet<YardLog> {
                 (nameof(YardLog.Id), [(new PointerValidator(), 3)]),
                 (nameof(YardLog.TTPicture), [(new LengthValidator(), 1)]),
                 (nameof(YardLog.Gname), [(new LengthValidator(), 2)]),
+                (nameof(YardLog.Seal), [(new LengthValidator(), 2)]),
                 (nameof(YardLog.FromTo), [(new LengthValidator(), 2)]),
                 (nameof(YardLog.LoadType), [(new PointerValidator(true), 3)]),
                 (nameof(YardLog.Section), [(new PointerValidator(true), 3)]),

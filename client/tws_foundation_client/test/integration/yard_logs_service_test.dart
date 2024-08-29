@@ -150,6 +150,7 @@ void main() {
           1, // guard
           "Guard $randomToken", // gName
           "Los angeles $randomToken", // fromTo
+          "seal $randomToken", //seal
           false, //damage
           "Truck picture $randomToken", //ttPicture
           null, // dmgEvidence
@@ -243,6 +244,7 @@ void main() {
             1, // guard
             "Guard $randomToken", // gName
             "Los angeles $randomToken", // fromTo
+            "seal $randomToken", //seal
             false, //damage
             "Truck picture $randomToken", //ttPicture
             null, // dmgEvidence
