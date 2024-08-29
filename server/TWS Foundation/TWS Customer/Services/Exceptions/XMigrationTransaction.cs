@@ -4,7 +4,7 @@ using CSM_Foundation.Core.Constants;
 using CSM_Foundation.Server.Bases;
 using CSM_Foundation.Databases.Models;
 
-namespace TWS_Customer.Core.Exceptions;
+namespace TWS_Customer.Services.Exceptions;
 public class XMigrationTransaction
     : BServerTransactionException<XTransactionSituation> {
     public XMigrationTransaction(SourceTransactionFailure[] Failures)

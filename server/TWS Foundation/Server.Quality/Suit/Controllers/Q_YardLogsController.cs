@@ -37,6 +37,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
         (HttpStatusCode Status, SuccessFrame<Session> Response) = await XPost<SuccessFrame<Session>, Credentials>("Security/Authenticate", new Credentials {
             Identity = Account.Identity,
             Password = Account.Password,
+            Sign = "TWSMA"
         });
 
         return Status != HttpStatusCode.OK ? throw new ArgumentNullException(nameof(Status)) : Response.Estela.Token.ToString();
@@ -60,8 +61,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
 
     [Fact]
     public async Task Create() {
-        DateOnly date = new(2024, 12, 12);
-        List<YardLog> mockList = new();
+        List<YardLog> mockList = [];
         string testTag = Guid.NewGuid().ToString()[..2];
 
         for (int i = 0; i < 3; i++) {
@@ -83,7 +83,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
             mockList.Add(mock);
         }
 
-        (HttpStatusCode Status, ServerGenericFrame response) = await Post("Create", mockList, true);
+        (HttpStatusCode Status, _) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
 
     }

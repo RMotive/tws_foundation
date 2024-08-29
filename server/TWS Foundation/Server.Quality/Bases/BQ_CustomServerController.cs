@@ -22,6 +22,7 @@ public abstract class BQ_CustomServerController
         (HttpStatusCode Status, ServerGenericFrame Frame) = await XPost<ServerGenericFrame, Credentials>("Security/Authenticate", new Credentials {
             Identity = Account.Identity,
             Password = Account.Password,
+            Sign = "TWSMA",
         });
         Dictionary<string, object> estela = Frame.Estela;
         if (Status != HttpStatusCode.OK) {

@@ -25,6 +25,7 @@ public class Q_TrucksController : BQ_CustomServerController {
         (HttpStatusCode Status, SuccessFrame<Session> Response) = await XPost<SuccessFrame<Session>, Credentials>("Security/Authenticate", new Credentials {
             Identity = Account.Identity,
             Password = Account.Password,
+            Sign = "TWSMA"
         });
 
         return Status != HttpStatusCode.OK ? throw new ArgumentNullException(nameof(Status)) : Response.Estela.Token.ToString();
@@ -47,111 +48,107 @@ public class Q_TrucksController : BQ_CustomServerController {
     }
 
     [Fact]
-    public async Task Create() {
-        DateOnly date = new(2024, 12, 12);
-        List<Truck> mockList = new();
-        string testTag = Guid.NewGuid().ToString()[..2];
+    public void Create() {
+        //DateOnly date = new(2024, 12, 12);
+        //List<Truck> mockList = new();
+        //string testTag = Guid.NewGuid().ToString()[..2];
 
-        for (int i = 0; i < 3; i++) {
-            string iterationTag = testTag + i;
-            Manufacturer manufacturer = new() {
-                Model = "X23",
-                Brand = "SCANIA TEST" + iterationTag,
-                Year = date
-            };
-            Insurance insurance = new() {
-                Status = 1,
-                Policy = "P232Policy" + iterationTag,
-                Expiration = date,
-                Country = "MEX"
-            };
-            Situation situation = new() {
-                Name = "Situational test " + iterationTag,
-                Description = "Description test " + iterationTag
-            };
-            Maintenance maintenance = new() {
-                Status = 1,
-                Anual = date,
-                Trimestral = date,
-            };
-            Sct sct = new() {
-                Status = 1,
-                Type = "TypT14",
-                Number = "NumberSCTTesting value" + iterationTag,
-                Configuration = "Conf" + iterationTag
-            };
-            Address address = new() {
-                Street = "Main street " + iterationTag,
-                Country = "USA"
-            };
+        //for (int i = 0; i < 3; i++) {
+        //    string iterationTag = testTag + i;
+        //    Manufacturer manufacturer = new() {
+        //        Model = "X23",
+        //        Brand = "SCANIA TEST" + iterationTag,
+        //        Year = date
+        //    };
+        //    Insurance insurance = new() {
+        //        Status = 1,
+        //        Policy = "P232Policy" + iterationTag,
+        //        Expiration = date,
+        //        Country = "MEX"
+        //    };
+        //    Situation situation = new() {
+        //        Name = "Situational test " + iterationTag,
+        //        Description = "Description test " + iterationTag
+        //    };
+        //    Maintenance maintenance = new() {
+        //        Status = 1,
+        //        Anual = date,
+        //        Trimestral = date,
+        //    };
+        //    Sct sct = new() {
+        //        Status = 1,
+        //        Type = "TypT14",
+        //        Number = "NumberSCTTesting value" + iterationTag,
+        //        Configuration = "Conf" + iterationTag
+        //    };
+        //    Address address = new() {
+        //        Street = "Main street " + iterationTag,
+        //        Country = "USA"
+        //    };
 
-            Usdot usdot = new() {
-                Status = 1,
-                Mc = "mc- " + iterationTag,
-                Scac = "s" + iterationTag
-            };
+        //    Usdot usdot = new() {
+        //        Status = 1,
+        //        Mc = "mc- " + iterationTag,
+        //        Scac = "s" + iterationTag
+        //    };
 
-            Approach contact = new() {
-                Status = 1,
-                Email = "mail@test.com " + iterationTag
-            };
+        //    Approach contact = new() {
+        //        Status = 1,
+        //        Email = "mail@test.com " + iterationTag
+        //    };
 
-            Carrier carrier = new() {
-                Status = 1,
-                Name = "Carrier test " + iterationTag,
-                Approach = 0,
-                Address = 0,
-                ApproachNavigation = contact,
-                AddressNavigation = address,
-                SctNavigation = sct,
-                UsdotNavigation = usdot
-            };
+        //    Carrier carrier = new() {
+        //        Status = 1,
+        //        Name = "Carrier test " + iterationTag,
+        //        Approach = 0,
+        //        Address = 0,
+        //        ApproachNavigation = contact,
+        //        AddressNavigation = address,
+        //        SctNavigation = sct,
+        //        UsdotNavigation = usdot
+        //    };
 
+        //    Plate plateMX = new() {
+        //        Status = 1,
+        //        Identifier = "mxPlate" + iterationTag,
+        //        State = "BAC",
+        //        Country = "MXN",
+        //        Expiration = date,
+        //        Truck = 2
+        //    };
+        //    Plate plateUSA = new() {
+        //        Status = 1,
+        //        Identifier = "usaPlate" + iterationTag,
+        //        State = "CaA",
+        //        Country = "USA",
+        //        Expiration = date,
+        //        Truck = 2
+        //    };
 
-            string vin = "VINnumber test" + iterationTag;
-            string motor = "Motor number " + iterationTag;
-            string economic = "Economic #n " + iterationTag;
-            Plate plateMX = new() {
-                Status = 1,
-                Identifier = "mxPlate" + iterationTag,
-                State = "BAC",
-                Country = "MXN",
-                Expiration = date,
-                Truck = 2
-            };
-            Plate plateUSA = new() {
-                Status = 1,
-                Identifier = "usaPlate" + iterationTag,
-                State = "CaA",
-                Country = "USA",
-                Expiration = date,
-                Truck = 2
-            };
+        //    List<Plate> plateList = [plateMX, plateUSA];
+        //Truck truck = new() {
+        //    Status = 1,
+        //    Vin = vin,
+        //    Motor = motor,
+        //    Economic = economic,
+        //    Maintenance = 0,
+        //    ManufacturerNavigation = manufacturer,
+        //    InsuranceNavigation = insurance,
+        //    MaintenanceNavigation = maintenance,
+        //    SituationNavigation = situation,
+        //    Carrier = 0,
+        //    CarrierNavigation = carrier,
+        //    Plates = plateList,
+        //};
+        //mockList.Add(truck);
 
-            List<Plate> plateList = [plateMX, plateUSA];
-            //Truck truck = new() {
-            //    Status = 1,
-            //    Vin = vin,
-            //    Motor = motor,
-            //    Economic = economic,
-            //    Maintenance = 0,
-            //    ManufacturerNavigation = manufacturer,
-            //    InsuranceNavigation = insurance,
-            //    MaintenanceNavigation = maintenance,
-            //    SituationNavigation = situation,
-            //    Carrier = 0,
-            //    CarrierNavigation = carrier,
-            //    Plates = plateList,
-            //};
-            //mockList.Add(truck);
-        }
 
         //(HttpStatusCode Status, ServerGenericFrame response) = await Post("Create", mockList, true);
         //Assert.Equal(HttpStatusCode.OK, Status);
-
     }
+
     [Fact]
-    public async Task Update() {
+    public void Update() {
         //#region First (Correctly creates when doesn't exist)
         //{
         //    DateOnly date = new(2024, 12, 12);

@@ -29,13 +29,39 @@ public class AccountsDepot
 
 
     public async Task<Permit[]> GetPermits(int Account) {
-        IQueryable<AccountsPermit> accountPermits = Databases.AccountsPermits
+        IQueryable<AccountsPermit> accountPermits = Database.AccountsPermits
             .Where(i => i.Account == Account)
-            .Include(i => i.PermitNavigation);
+                .Include(i => i.PermitNavigation);
 
         IQueryable<Permit> permits = accountPermits
             .Select(i => i.PermitNavigation);
 
-        return await permits.ToArrayAsync();
+        Permit[] directPermits = await permits.ToArrayAsync();
+
+
+        Profile[] accountProfiles = await Database.AccountProfile
+            .Where(i => i.Account == Account)
+                .Include(i => i.ProfileNavigation)
+            .Select(i => i.ProfileNavigation)
+            .ToArrayAsync();
+
+        Permit[] totalPermits = [..directPermits];
+        foreach (Profile accountProfile in accountProfiles) {
+
+            Permit[] profilePermits = await Database.ProfilesPermits
+                .Where(i => i.Profile == accountProfile.Id)
+                    .Include(i => i.PermitNavigation)
+                .Select(i => i.PermitNavigation)
+                .ToArrayAsync();
+
+            foreach (Permit profilePermit in profilePermits) {
+                if(totalPermits.Any(i => i.Id == profilePermit.Id)) 
+                    continue;
+
+                totalPermits = [..totalPermits, profilePermit];
+            }
+        }
+
+        return totalPermits;
     }
 }

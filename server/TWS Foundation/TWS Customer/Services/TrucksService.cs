@@ -1,49 +1,19 @@
-﻿using CSM_Foundation.Databases.Enumerators;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Interfaces.Depot;
-using CSM_Foundation.Databases.Models.Options;
+﻿using CSM_Foundation.Databases.Models.Options;
 using CSM_Foundation.Databases.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
 
-using TWS_Customer.Core.Exceptions;
-using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Interfaces;
-using TWS_Customer.Services.Records;
-
-using TWS_Security.Depots;
-using TWS_Security.Sets;
-
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TWS_Customer.Services;
 public class TrucksService : ITrucksService {
     private readonly TruckDepot Trucks;
-    private readonly InsurancesDepot Insurances;
-    private readonly MaintenacesDepot Maintenaces;
-    private readonly ManufacturersDepot Manufacturers;
-    private readonly StatusesDepot StatusesDepot;
-    private readonly TrucksHDepot HP_TruckDepot;
-    private readonly SctsDepot Sct;
-    private readonly SituationsDepot Situations;
-    private readonly PlatesDepot Plates;
 
-    public TrucksService(
-        TruckDepot Trucks, InsurancesDepot Insurances, MaintenacesDepot Maintenances,
-        ManufacturersDepot Manufacturers, SctsDepot Scts, SituationsDepot Situations, PlatesDepot Plates, StatusesDepot statusesDepot, TrucksHDepot HP_TrucksDepot) {
+    public TrucksService(TruckDepot Trucks) {
         this.Trucks = Trucks;
-        this.Insurances = Insurances;
-        this.Maintenaces = Maintenances;
-        this.Manufacturers = Manufacturers;
-        this.Sct = Scts;
-        this.Situations = Situations;
-        this.Plates = Plates;
-        this.StatusesDepot = statusesDepot;
-        this.HP_TruckDepot = HP_TrucksDepot;
     }
 
     public async Task<SetViewOut<Truck>> View(SetViewOptions options) {
@@ -63,12 +33,12 @@ public class TrucksService : ITrucksService {
                 Manufacturer = t.Manufacturer,
                 Maintenance = t.Maintenance,
                 Insurance = t.Insurance,
-                StatusNavigation = t.StatusNavigation == null? null : new Status() {
+                StatusNavigation = t.StatusNavigation == null ? null : new Status() {
                     Id = t.StatusNavigation.Id,
                     Name = t.StatusNavigation.Name,
                     Description = t.StatusNavigation.Description,
                 },
-                TruckCommonNavigation = t.TruckCommonNavigation == null? null : new TruckCommon() {
+                TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
                     Id = t.TruckCommonNavigation.Id,
                     Vin = t.TruckCommonNavigation.Vin,
                     Economic = t.TruckCommonNavigation.Economic,
@@ -103,8 +73,8 @@ public class TrucksService : ITrucksService {
                     Expiration = t.InsuranceNavigation.Expiration,
                     Country = t.InsuranceNavigation.Country
                 },
-                 
-             });
+
+            });
         }
 
         return await Trucks.View(options, include);
@@ -114,7 +84,7 @@ public class TrucksService : ITrucksService {
         return await this.Trucks.Create(trucks);
     }
     public async Task<RecordUpdateOut<Truck>> Update(Truck Truck, bool updatePivot = false) {
-        
+
         static IQueryable<Truck> include(IQueryable<Truck> query) {
             return query
             .Include(t => t.InsuranceNavigation)
@@ -195,8 +165,8 @@ public class TrucksService : ITrucksService {
             //        })
             //    });
         }
-        
-        return await Trucks.Update(Truck, include) ;
+
+        return await Trucks.Update(Truck, include);
 
 
     }

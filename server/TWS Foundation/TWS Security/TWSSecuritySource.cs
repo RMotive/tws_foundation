@@ -22,6 +22,8 @@ public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> 
 
     public virtual DbSet<AccountsPermit> AccountsPermits { get; set; }
 
+    public virtual DbSet<AccountProfile> AccountProfile { get; set; }
+
     public virtual DbSet<Contact> Contacts { get; set; }
 
     public virtual DbSet<Feature> Features { get; set; }
@@ -59,23 +61,42 @@ public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> 
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        _ = modelBuilder.Entity<AccountsPermit>(entity => {
-            _ = entity.HasNoKey();
+        modelBuilder.Entity<AccountsPermit>(entity => {
+            entity.HasNoKey();
 
-            _ = entity.Property(e => e.Account);
-            _ = entity.Property(e => e.Permit);
+            entity.Property(e => e.Account);
+            entity.Property(e => e.Permit);
 
-            _ = entity.HasOne(d => d.AccountNavigation).WithMany()
+            entity.HasOne(d => d.AccountNavigation)
+                .WithMany()
                 .HasForeignKey(d => d.Account)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.PermitNavigation).WithMany()
+            entity.HasOne(d => d.PermitNavigation)
+                .WithMany()
                 .HasForeignKey(d => d.Permit)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        _ = modelBuilder.Entity<Contact>(entity => {
-            _ = entity.HasKey(e => e.Id);
+        modelBuilder.Entity<AccountProfile>(entity => { 
+            entity.HasNoKey();
+            
+            entity.Property(e => e.Account);
+            entity.Property(e => e.Profile);
+
+            entity.HasOne(d => d.AccountNavigation)
+                .WithMany()
+                .HasForeignKey()
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.ProfileNavigation)
+                .WithMany()
+                .HasForeignKey()
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<Contact>(entity => {
+            entity.HasKey(e => e.Id);
 
             _ = entity.HasIndex(e => e.Phone, "UQ__Contact__5C7E359EC4E4F9C2").IsUnique();
 
@@ -176,6 +197,6 @@ public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> 
 
         OnModelCreatingPartial(modelBuilder);
     }
-    
+
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

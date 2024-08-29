@@ -7,7 +7,6 @@ using TWS_Business.Sets;
 namespace TWS_Business.Quality.Sets;
 public class Q_Usdot : BQ_MigrationSet<Usdot> {
     protected override Q_MigrationSet_EvaluateRecord<Usdot>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Usdot>[] Container) {
-        PointerValidator pointer = new(true, false);
 
         Q_MigrationSet_EvaluateRecord<Usdot> success = new() {
             Mock = new() {

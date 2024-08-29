@@ -21,7 +21,7 @@ namespace CSM_Foundation.Databases.Bases;
 ///     serve dataDatabases saved transactions for <see cref="TMigrationSet"/>.
 /// </summary>
 /// <typeparam name="TMigrationDatabases">
-///     What Databases implementation belongs this depot.
+///     What Database implementation belongs this depot.
 /// </typeparam>
 /// <typeparam name="TMigrationSet">
 ///     Migration mirror concept that this depot handles.
@@ -35,9 +35,9 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     /// <summary>
     ///     Name to handle direct transactions (not-saved)
     /// </summary>
-    protected readonly TMigrationDatabases Databases;
+    protected readonly TMigrationDatabases Database;
     /// <summary>
-    ///     DBSet handler into <see cref="Databases"/> to handle fastlike transactions related to the <see cref="TMigrationSet"/> 
+    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TMigrationSet"/> 
     /// </summary>
     protected readonly DbSet<TMigrationSet> Set;
     /// <summary>
@@ -47,7 +47,7 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     ///     The <typeparamref name="TMigrationDatabases"/> that stores and handles the transactions for this <see cref="TMigrationSet"/> concept.
     /// </param>
     public BDatabaseDepot(TMigrationDatabases Databases, IMigrationDisposer? Disposer) {
-        this.Databases = Databases;
+        this.Database = Databases;
         this.Disposer = Disposer;
         Set = Databases.Set<TMigrationSet>();
     }
@@ -133,10 +133,10 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
         Set.EvaluateWrite();
 
         _ = await this.Set.AddAsync(Set);
-        _ = await Databases.SaveChangesAsync();
-        Databases.ChangeTracker.Clear();
+        _ = await Database.SaveChangesAsync();
+        Database.ChangeTracker.Clear();
 
-        Disposer?.Push(Databases, [Set]);
+        Disposer?.Push(Database, [Set]);
         return Set;
     }
     /// <summary>
@@ -166,9 +166,9 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
             try {
                 //AttachDate(record);
                 record.EvaluateWrite();
-                Databases.ChangeTracker.Clear();
+                Database.ChangeTracker.Clear();
                 this.Set.Attach(record);
-                await Databases.SaveChangesAsync();
+                await Database.SaveChangesAsync();
                 saved = [.. saved, record];
             } catch (Exception excep) {
                 if (Sync) {
@@ -180,7 +180,7 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
             }
         }
 
-        Disposer?.Push(Databases, Sets);
+        Disposer?.Push(Database, Sets);
         return new(saved, fails);
     }
 
@@ -235,16 +235,16 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     /// <summary>
     /// Perform the navigation changes in a Tmigrationset
     /// </summary>
-    //Databases.Entry(previousList[i]).CurrentValues.SetValues(newitem);
+    //Database.Entry(previousList[i]).CurrentValues.SetValues(newitem);
 
     void UpdateHelper(IDatabasesSet current, IDatabasesSet Record) {
-        EntityEntry previousEntry = Databases.Entry(current);
+        EntityEntry previousEntry = Database.Entry(current);
         if (previousEntry.State == EntityState.Unchanged) {
             //AttachDate(Record, true);
             // Update the non-navigation properties.
             previousEntry.CurrentValues.SetValues(Record);
             foreach (NavigationEntry navigation in previousEntry.Navigations) {
-                object? newNavigationValue = Databases.Entry(Record).Navigation(navigation.Metadata.Name).CurrentValue;
+                object? newNavigationValue = Database.Entry(Record).Navigation(navigation.Metadata.Name).CurrentValue;
                 // Validate if navigation is a collection.
                 if (navigation.CurrentValue is IEnumerable<object> previousCollection && newNavigationValue is IEnumerable<object> newCollection) {
                     List<object> previousList = previousCollection.ToList();
@@ -255,18 +255,15 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
                         IDatabasesSet? newItemSet = (IDatabasesSet)newList[i];
                         if (newItemSet != null && newItemSet.Id <= 0) {
                             //AttachDate(newList[i]);
-                            EntityEntry newNavigationEntry = Databases.Entry(newList[i]);
+                            EntityEntry newNavigationEntry = Database.Entry(newList[i]);
                             newNavigationEntry.State = EntityState.Added;
                         }
                     }
                     for (int i = 0; i < previousList.Count; i++) {
-                        IDatabasesSet? previousItem = previousList[i] as IDatabasesSet;
-
                         // Find items to modify.
                         // For each new item stored in record collection, will search for an ID match and update the record.
                         foreach (object newitem in newList) {
-                            IDatabasesSet? newItemSet = newitem as IDatabasesSet;
-                            if (previousItem != null && newItemSet != null && previousItem.Id == newItemSet.Id)
+                            if (previousList[i] is IDatabasesSet previousItem && newitem is IDatabasesSet newItemSet && previousItem.Id == newItemSet.Id)
                                 UpdateHelper(previousItem, newItemSet);
                         }
                     }
@@ -274,16 +271,14 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
                     // Create a new navigation entity.
                     // Also update the attached navigators.
                     //AttachDate(newNavigationValue);
-                    EntityEntry newNavigationEntry = Databases.Entry(newNavigationValue);
+                    EntityEntry newNavigationEntry = Database.Entry(newNavigationValue);
                     newNavigationEntry.State = EntityState.Added;
                     navigation.CurrentValue = newNavigationValue;
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
                     // Update the existing navigation entity
 
-                    IDatabasesSet? currentItemSet = navigation.CurrentValue as IDatabasesSet;
-                    IDatabasesSet? newItemSet = newNavigationValue as IDatabasesSet;
 
-                    if (currentItemSet != null && newItemSet != null) UpdateHelper(currentItemSet, newItemSet);
+                    if (navigation.CurrentValue is IDatabasesSet currentItemSet && newNavigationValue is IDatabasesSet newItemSet) UpdateHelper(currentItemSet, newItemSet);
                 }
 
             }
@@ -317,9 +312,9 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
             //AttachDate(Record);
             Set.Update(Record);
         }
-        await Databases.SaveChangesAsync();
+        await Database.SaveChangesAsync();
 
-        Disposer?.Push(Databases, Record);
+        Disposer?.Push(Database, Record);
         return new RecordUpdateOut<TMigrationSet> {
             Previous = old,
             Updated = current ?? Record,
@@ -352,8 +347,8 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     public async Task<TMigrationSet> Delete(TMigrationSet Set) {
         Set.EvaluateWrite();
         _ = this.Set.Remove(Set);
-        _ = await Databases.SaveChangesAsync();
-        Databases.ChangeTracker.Clear();
+        _ = await Database.SaveChangesAsync();
+        Database.ChangeTracker.Clear();
         return Set;
     }
 
@@ -365,7 +360,7 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
             ?? throw new Exception("Trying to remove an unexist record");
 
         Set.Remove(record);
-        await Databases.SaveChangesAsync();
+        await Database.SaveChangesAsync();
 
         return record;
     }
