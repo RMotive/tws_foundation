@@ -29,6 +29,7 @@ final class YardLog implements CSMSetInterface {
   static const String kTrailerExternalNavigation = "TrailerExternalNavigation";
   static const String kLoadTypeNavigation = "LoadTypeNavigation";
   static const String kSectionNavigation = "SectionNavigation";
+  static const String kAccount = "AccountNavigation";
 
   @override
   int id = 0;
@@ -57,10 +58,11 @@ final class YardLog implements CSMSetInterface {
   TrailerExternal? trailerExternalNavigation;
   LoadType? loadTypeNavigation;
   Section? sectionNavigation;
+  Account? accountNavigation; //Only for local handle.
 
   YardLog(this.id, this.entry, this.truck, this.truckExternal, this.trailer, this.trailerExternal, this.loadType, this.section, this.driver, this.driverExternal, this.timestamp,
   this.guard, this.gName, this.fromTo, this.seal, this.damage, this.ttPicture, this.dmgEvidence, this.driverNavigation, this.driverExternalNavigation, this.truckNavigation, this.truckExternalNavigation,
-  this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation);
+  this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation, this.accountNavigation);
   factory YardLog.des(JObject json) {
     int id = json.get('id');
     bool entry = json.get('entry');
@@ -123,7 +125,7 @@ final class YardLog implements CSMSetInterface {
     }
 
     return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, timestamp, guard, gName, fromTo, seal, damage,
-    ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation);
+    ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null);
   }
 
   @override
@@ -198,6 +200,7 @@ final class YardLog implements CSMSetInterface {
     TrailerExternal? trailerExternalNavigation,
     LoadType? loadTypeNavigation,
     Section? sectionNavigation,
+    Account? accountNavigation
   }){
     //
     String? dmgEv = dmgEvidence ?? this.dmgEvidence;
@@ -256,7 +259,7 @@ final class YardLog implements CSMSetInterface {
     return YardLog(id ?? this.id, entry ?? this.entry, truckIndex, truckExtIndex, trailerIndex, trailerExtIndex, 
     loadType ?? this.loadType, section ?? this.section, driverIndex,driverExtIndex, timestamp ?? this.timestamp, guard ?? this.guard, 
     gName ?? this.gName, fromTo ?? this.fromTo, seal ?? this.seal, damage ?? this.damage, ttPicture ?? this.ttPicture, dmgEv, driverNav, 
-    driverExtNav, truckNav, truckExtNav, trailerNav, trailerExtNav, load, sect);
+    driverExtNav, truckNav, truckExtNav, trailerNav, trailerExtNav, load, sect, accountNavigation ?? this.accountNavigation);
   }
 
 }
