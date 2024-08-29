@@ -161,7 +161,8 @@ void main() {
           first? null : trailer, //trailerNavigation
           null, //trailerExternalNavigation
           null, //loadTypeNavigation
-          null //sectionNavigation
+          null, //sectionNavigation
+          null
         );
         mocks.add(mock);
       }
@@ -255,7 +256,8 @@ void main() {
             null, //trailerNavigation
             null, //trailerExternalNavigation
             null, //loadTypeNavigation
-            null //sectionNavigation
+            null, //sectionNavigation
+            null
           );
 
           MainResolver<MigrationUpdateResult<YardLog>> fact = await service.update(mock, auth);
