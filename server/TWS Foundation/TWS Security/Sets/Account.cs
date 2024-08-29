@@ -11,6 +11,6 @@ public partial class Account {
 
     public int Contact { get; set; }
 
-    public virtual Contact ContactNavigation { get; set; } = null!;
+    public virtual Contact? ContactNavigation { get; set; } = null!;
 
 }

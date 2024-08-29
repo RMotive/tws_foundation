@@ -23,7 +23,7 @@ public class DriversService : IDriversService {
             return query
             .Include(t => t.DriverCommonNavigation)
             .Include(t => t.EmployeeNavigation)
-                .ThenInclude(i => i.IdentificationNavigation);
+                .ThenInclude(i => i!.IdentificationNavigation);
 
         }
         return await Drivers.View(Options, include);

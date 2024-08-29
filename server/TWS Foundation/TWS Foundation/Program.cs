@@ -127,6 +127,7 @@ public partial class Program {
                 builder.Services.AddScoped<TrucksHDepot>();
                 // --> Services
                 builder.Services.AddScoped<ISolutionsService, SolutionsService>();
+                builder.Services.AddScoped<IAccountsService, AccountsService>();
                 builder.Services.AddScoped<ISecurityService, SecurityService>();
                 builder.Services.AddScoped<IManufacturersService, ManufacturersService>();
                 builder.Services.AddScoped<ISituationsService, SituationsService>();

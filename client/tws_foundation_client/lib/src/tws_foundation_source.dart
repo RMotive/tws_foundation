@@ -1,4 +1,6 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:tws_foundation_client/src/services/account_service.dart';
+import 'package:tws_foundation_client/src/services/bases/accounts_service_base.dart';
 import 'package:tws_foundation_client/src/services/drivers_externals_service.dart';
 import 'package:tws_foundation_client/src/services/drivers_service.dart';
 import 'package:tws_foundation_client/src/services/load_type_service.dart';
@@ -21,6 +23,8 @@ final class TWSAdministrationSource extends CSMSourceBase {
 
   /// Solutions service.
   late final SolutionsServiceBase solutions;
+  /// Accounts service.
+  late final AccountsServiceBase accounts;
   /// Security service.
   late final SecurityServiceBase security;
   /// Trucks Service.
@@ -52,6 +56,7 @@ final class TWSAdministrationSource extends CSMSourceBase {
     bool debug, {
     Client? client,
     SolutionsServiceBase? solutions,
+    AccountsServiceBase? accounts,
     SecurityServiceBase? security,
     CSMHeaders? headers,
     TrucksServiceBase? trucks,
@@ -79,6 +84,7 @@ final class TWSAdministrationSource extends CSMSourceBase {
           headers: headers,
         ) {
     this.solutions = solutions ?? SolutionsService(host, client: client, headers: this.headers);
+    this.accounts = accounts ?? AccountService(host, client: client);
     this.security = security ?? SecurityService(host, client: client);
     this.trucks = trucks ?? TrucksService(host, client: client);
     this.manufacturers = manufacturers ?? ManufacturersService(host, client: client);
