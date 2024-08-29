@@ -88,7 +88,7 @@ final class Driver implements CSMSetInterface {
   @override
   JObject encode() {
     String a = licenseExpiration.toString().substring(0,10);
-    String b = driverCommonNavigation.toString().substring(0,10);
+    String b = drugalcRegistrationDate.toString().substring(0,10);
     String c = pullnoticeRegistrationDate.toString().substring(0,10);
     String? d = twicExpiration?.toString().substring(0,10);
     String? e = visaExpiration?.toString().substring(0,10);

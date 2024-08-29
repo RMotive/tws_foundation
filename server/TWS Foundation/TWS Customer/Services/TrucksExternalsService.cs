@@ -21,7 +21,30 @@ public class TrucksExternalsService : ITrucksExternalsService {
     public async Task<SetViewOut<TruckExternal>> View(SetViewOptions Options) {
         static IQueryable<TruckExternal> include(IQueryable<TruckExternal> query) {
             return query
-            .Include(t => t.TruckCommonNavigation);
+            .Include(t => t.TruckCommonNavigation)
+            .Select(t => new TruckExternal() {
+                Status = t.Status,
+                Common = t.Common,
+                TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
+                    Id = t.TruckCommonNavigation.Id,
+                    Vin = t.TruckCommonNavigation.Vin,
+                    Economic = t.TruckCommonNavigation.Economic,
+                    Carrier = t.TruckCommonNavigation.Carrier,
+                    Location = t.TruckCommonNavigation.Location,
+                    Situation = t.TruckCommonNavigation.Situation,
+                    Plates = (ICollection<Plate>)t.TruckCommonNavigation.Plates.Select(p => new Plate() {
+                        Id = p.Id,
+                        Status = p.Status,
+                        Identifier = p.Identifier,
+                        State = p.State,
+                        Country = p.Country,
+                        Expiration = p.Expiration,
+                        Truck = p.Truck,
+                        Trailer = p.Trailer
+                    })
+                },
+            });
+
         }
         return await TrucksExternals.View(Options, include);
     }

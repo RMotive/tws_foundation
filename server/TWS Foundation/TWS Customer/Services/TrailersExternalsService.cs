@@ -21,9 +21,35 @@ public class TrailersExternalsService : ITrailersExternalsService {
     public async Task<SetViewOut<TrailerExternal>> View(SetViewOptions Options) {
         static IQueryable<TrailerExternal> include(IQueryable<TrailerExternal> query) {
             return query
-            .Include(t => t.TrailerCommonNavigation);
+            .Include(t => t.TrailerCommonNavigation)
+            .Select(p => new TrailerExternal() {
+                Status = p.Status,
+                Common = p.Common,
+                TrailerCommonNavigation = p.TrailerCommonNavigation == null ? null : new TrailerCommon() {
+                    Id = p.TrailerCommonNavigation.Id,
+                    Status = p.TrailerCommonNavigation.Status,
+                    Economic = p.TrailerCommonNavigation.Economic,
+                    Class = p.TrailerCommonNavigation.Class,
+                    Carrier = p.TrailerCommonNavigation.Carrier,
+                    Situation = p.TrailerCommonNavigation.Situation,
+                    Location = p.TrailerCommonNavigation.Location,
+                    CarrierNavigation = p.TrailerCommonNavigation.CarrierNavigation,
+                    SituationNavigation = p.TrailerCommonNavigation.SituationNavigation,
+                    TrailerClassNavigation = p.TrailerCommonNavigation.TrailerClassNavigation,
+                    LocationNavigation = p.TrailerCommonNavigation.LocationNavigation,
+                    Plates = (ICollection<Plate>)p.TrailerCommonNavigation.Plates.Select(p => new Plate() {
+                        Id = p.Id,
+                        Status = p.Status,
+                        Identifier = p.Identifier,
+                        State = p.State,
+                        Country = p.Country,
+                        Expiration = p.Expiration,
+                        Truck = p.Truck,
+                        Trailer = p.Trailer
+                    })
+                },
+            });
         }
-
         return await TrailersExternals.View(Options, include);
     }
 }

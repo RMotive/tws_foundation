@@ -165,7 +165,7 @@ final class YardLog implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Truck and Trailer pickture must be non-empty", "strictLength(1, max)"));
     if(gName.isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "Name must be 100 max lenght and non-empty", "strictLength(1,100)"));
-    if(fromTo.isEmpty || fromTo.length > 25) results.add(CSMSetValidationResult(kFromTo, "FromTo must be 25 max lenght and non-empty", "strictLength(1,25)"));
+    if(fromTo.isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "FromTo must be 25 max lenght and non-empty", "strictLength(1,25)"));
     if(seal.isEmpty || gName.length > 64) results.add(CSMSetValidationResult(kSeal, "Seal must be 100 max lenght and non-empty", "strictLength(1,64)"));
     if(section < 0) results.add(CSMSetValidationResult(kSection, 'Section pointer must be equal or greater than 0', 'pointerHandler()'));
     if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'loadType pointer must be equal or greater than 0', 'pointerHandler()'));

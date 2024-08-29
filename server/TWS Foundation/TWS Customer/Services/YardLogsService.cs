@@ -45,8 +45,6 @@ public class YardLogsService : IYardLogsService {
 
             .Include(t => t.TruckExternalNavigation)
                 .ThenInclude(t => t!.TruckCommonNavigation)
-            .Include(t => t.TruckExternalNavigation)
-                .ThenInclude(t => t!.TruckCommonNavigation)
 
             .Include(t => t.LoadTypeNavigation)
 

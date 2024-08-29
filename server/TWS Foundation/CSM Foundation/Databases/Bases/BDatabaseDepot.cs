@@ -167,7 +167,8 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
                 //AttachDate(record);
                 record.EvaluateWrite();
                 Databases.ChangeTracker.Clear();
-                this.Set.Attach(record);
+                
+                this.Set.Attach(record.DeepCopy());
                 await Databases.SaveChangesAsync();
                 saved = [.. saved, record];
             } catch (Exception excep) {
