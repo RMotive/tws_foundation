@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="MaintenacesDepot"/>.
 /// </summary>
 public class Q_MaintenancesDepot
-    : BQ_MigrationDepot<Maintenance, MaintenacesDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<Maintenance, MaintenacesDepot, TWSBusinessDatabase> {
     public Q_MaintenancesDepot()
         : base(nameof(Maintenance.Trimestral)) {
     }

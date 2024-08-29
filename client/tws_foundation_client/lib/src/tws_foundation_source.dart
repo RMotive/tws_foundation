@@ -66,11 +66,11 @@ final class TWSAdministrationSource extends CSMSourceBase {
     SectionsService? sections,
     YardLogsService? yardLogs,
     CSMUri development = const CSMUri(
-            '192.168.1.90',
-            '',
-            port: 5196,
-            protocol: CSMProtocols.http,
-          ),
+      '127.0.0.1',
+      '',
+      port: 5196,
+      protocol: CSMProtocols.http,
+    ),
     CSMUri? production,
   }) : super(
           debug,

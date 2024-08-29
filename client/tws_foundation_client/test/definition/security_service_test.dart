@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/core/constants/context_constants.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
@@ -14,7 +15,7 @@ void main() {
     () {
       Contact contact = Contact(1, "Enrique", "Segoviano", "Eseg@gmail.com", "+526657141230");
       privilegesMock = Privileges('random-guid', DateTime.now(), 'tws-dev', true, contact);
-      credentialsMock = Credentials('', Uint8List.fromList(<int>[]));
+      credentialsMock = Credentials('', Uint8List.fromList(<int>[]), ContextConstants.sign);
 
       Client mockClient = MockClient(
         (Request request) async {

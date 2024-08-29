@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 
 using TWS_Customer.Managers.Exceptions;
 using TWS_Customer.Managers.Records;
@@ -29,7 +30,7 @@ public sealed class ConfigurationManager {
     /// 
     /// </summary>
     ConfigurationManager() { 
-        WorkingDirectory = Directory.GetCurrentDirectory();   
+        WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;   
         ConfigurationsDirectory = GetConfigurationsDirectory();
     }
 

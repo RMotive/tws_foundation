@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TrucksExternalsDepot"/>.
 /// </summary>
 public class Q_TrucksExternalsDepot
-    : BQ_MigrationDepot<TruckExternal, TrucksExternalsDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<TruckExternal, TrucksExternalsDepot, TWSBusinessDatabase> {
     public Q_TrucksExternalsDepot()
         : base(nameof(TruckExternal.Id)) {
     }
