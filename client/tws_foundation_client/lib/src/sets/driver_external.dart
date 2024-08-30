@@ -12,7 +12,7 @@ final class DriverExternal implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int identification = 0;
   int common = 0;
   DriverCommon? driverCommonNavigation;

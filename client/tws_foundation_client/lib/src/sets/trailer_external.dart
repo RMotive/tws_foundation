@@ -10,7 +10,7 @@ final class TrailerExternal implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int common = 0;
   TrailerCommon? trailerCommonNavigation;
   Status? statusNavigation;

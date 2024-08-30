@@ -24,7 +24,7 @@ final class Driver implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int employee = 0;
   int common = 0;
   String driverType = "";

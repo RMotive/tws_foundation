@@ -14,7 +14,7 @@ final class TruckCommon implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int carrier = 0;
   String vin = "";
   String economic = "";

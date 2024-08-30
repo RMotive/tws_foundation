@@ -16,7 +16,7 @@ final class Truck implements CSMSetInterface {
   
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int manufacturer = 0;
   int common = 0;
   String? motor = '';

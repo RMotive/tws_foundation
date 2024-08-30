@@ -11,7 +11,7 @@ final class Identification implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   String name = "";
   String fatherlastname = "";
   String motherlastname = "";

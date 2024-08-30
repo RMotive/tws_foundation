@@ -14,7 +14,7 @@ final class TrailerCommon implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int trailerClass = 0;
   int carrier = 0;
   int situation = 0;

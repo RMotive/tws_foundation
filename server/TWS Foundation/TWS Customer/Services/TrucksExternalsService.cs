@@ -23,6 +23,7 @@ public class TrucksExternalsService : ITrucksExternalsService {
             return query
             .Include(t => t.TruckCommonNavigation)
             .Select(t => new TruckExternal() {
+                Id = t.Id,
                 Status = t.Status,
                 Common = t.Common,
                 TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {

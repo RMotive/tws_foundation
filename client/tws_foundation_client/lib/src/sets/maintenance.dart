@@ -10,7 +10,7 @@ final class Maintenance implements CSMSetInterface {
   
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   DateTime anual = DateTime.now();
   DateTime trimestral = DateTime.now();
   Status? statusNavigation;

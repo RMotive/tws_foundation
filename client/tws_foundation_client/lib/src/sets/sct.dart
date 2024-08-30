@@ -11,7 +11,7 @@ final class SCT implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   String type = "";
   String number = "";
   String configuration = "";

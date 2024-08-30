@@ -19,7 +19,7 @@ final class Employee implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int identification = 0;
   int address = 0;
   int approach = 0;

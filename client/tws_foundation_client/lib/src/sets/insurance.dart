@@ -11,7 +11,7 @@ final class Insurance implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   String policy = "";
   DateTime expiration = DateTime.now();
   String country = "";

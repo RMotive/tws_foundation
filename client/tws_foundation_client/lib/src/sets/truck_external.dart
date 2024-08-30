@@ -10,7 +10,7 @@ final class TruckExternal implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int common = 0;
   TruckCommon? truckCommonNavigation;
   Status? statusNavigation;

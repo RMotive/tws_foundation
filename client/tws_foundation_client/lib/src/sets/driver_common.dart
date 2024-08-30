@@ -9,7 +9,7 @@ final class DriverCommon implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   String license = "";
   int situation = 0;
   Status? statusNavigation;
