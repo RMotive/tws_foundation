@@ -51,6 +51,7 @@ final class TrailerExternal implements CSMSetInterface {
       'id': id,
       kStatus: status,
       kCommon: common,
+      kCarrier:carrier,
       kMxPlate: mxPlate,
       kUsaPlate: usaPlate,
       kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
