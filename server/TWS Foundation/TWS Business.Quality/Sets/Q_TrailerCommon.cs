@@ -22,14 +22,10 @@ public class Q_TrailerCommon : BQ_MigrationSet<TrailerCommon> {
                 Id = 0,
                 Status = 0,
                 Economic = "",
-                Class = 0,
-                Situation = 0,
             },
             Expectations = [
                 (nameof(TrailerCommon.Id), [(new PointerValidator(), 3)]),
                 (nameof(TrailerCommon.Economic), [(new LengthValidator(),2)]),
-                (nameof(TrailerCommon.Class), [(new PointerValidator(), 3)]),
-                (nameof(TrailerCommon.Situation), [(new PointerValidator(), 3)]),
                 (nameof(DriverCommon.Status), [(new PointerValidator(true), 3) ])
             ],
         };

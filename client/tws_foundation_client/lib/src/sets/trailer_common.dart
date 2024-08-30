@@ -12,8 +12,8 @@ final class TrailerCommon implements CSMSetInterface {
   @override
   int id = 0;
   int status = 1;
-  int trailerClass = 0;
-  int situation = 0;
+  int? trailerClass = 0;
+  int? situation = 0;
   int? location;
   String economic = "";
   Status? statusNavigation;
@@ -22,8 +22,8 @@ final class TrailerCommon implements CSMSetInterface {
   factory TrailerCommon.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
-    int trailerClass = json.get('class');
-    int situation = json.get('situation');
+    int? trailerClass = json.getDefault('class', null);
+    int? situation = json.getDefault('situation', null);
     int? location = json.getDefault('location', null);
     String economic = json.get('economic');
 
@@ -53,8 +53,6 @@ final class TrailerCommon implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(economic.length < 8 || economic.length > 12) results.add(CSMSetValidationResult(kEconomic, "Economic number length must be between 1 and 16", "strictLength(1,16)"));
-    if(trailerClass < 0) results.add(CSMSetValidationResult(kTrailerClass, 'Situation pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(situation < 0) results.add(CSMSetValidationResult(kSituation, 'Situation pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
   
     return results;

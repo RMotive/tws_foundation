@@ -174,8 +174,8 @@ Create table  Trailers_Commons(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Status] int NOT NULL,
 Economic Varchar(16) NOT NULL,
-Class int NOT NULL,
-Situation int NOT NULL,
+Situation int,
+Class int,
 [Location] int,
 
 constraint FK_TrailersCommons_TrailersClass foreign key(Class) references Trailer_Classes(id),

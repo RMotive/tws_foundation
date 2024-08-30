@@ -14,10 +14,10 @@ public partial class TrailerCommon
 
     public string Economic { get; set; } = null!;
 
-    public int Class { get; set; }
+    public int? Class { get; set; }
 
 
-    public int Situation { get; set; }
+    public int? Situation { get; set; }
 
     public int? Location { get; set; }
 
@@ -40,9 +40,7 @@ public partial class TrailerCommon
 
         Container = [
                 .. Container,
-            (nameof(Class), [Required, new PointerValidator(true)]),
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
-            (nameof(Situation), [Required, new PointerValidator(true)]),
             (nameof(Status), [Required, new PointerValidator(true)]),
         ];
 
