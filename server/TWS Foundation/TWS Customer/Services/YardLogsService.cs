@@ -40,8 +40,14 @@ public class YardLogsService : IYardLogsService {
             .Include(t => t.TrailerNavigation)
                 .ThenInclude(d => d!.TrailerCommonNavigation)
 
+            .Include(t => t.TrailerNavigation)
+                .ThenInclude(d => d!.CarrierNavigation)
+
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.TruckCommonNavigation)
+
+            .Include(t => t.TruckNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
 
             .Include(t => t.TruckExternalNavigation)
                 .ThenInclude(t => t!.TruckCommonNavigation)
@@ -139,11 +145,11 @@ public class YardLogsService : IYardLogsService {
                     Common = y.TrailerExternalNavigation.Common,
                     UsaPlate = y.TrailerExternalNavigation.UsaPlate,
                     MxPlate = y.TrailerExternalNavigation.MxPlate,
+                    Carrier = y.TrailerExternalNavigation.Carrier,
                     TrailerCommonNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerExternalNavigation.TrailerCommonNavigation.Id,
                         Economic = y.TrailerExternalNavigation.TrailerCommonNavigation.Economic,
                         Class = y.TrailerExternalNavigation.TrailerCommonNavigation.Class,
-                        Carrier = y.TrailerExternalNavigation.TrailerCommonNavigation.Carrier,
                         Situation = y.TrailerExternalNavigation.TrailerCommonNavigation.Situation,
                         Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location
                     }
@@ -154,11 +160,12 @@ public class YardLogsService : IYardLogsService {
                     Common = y.TrailerNavigation.Common,
                     Manufacturer = y.TrailerNavigation.Manufacturer,
                     Maintenance = y.TrailerNavigation.Maintenance,
+                    Carrier = y.TrailerNavigation.Carrier,
+                    CarrierNavigation = y.TrailerNavigation.CarrierNavigation,
                     TrailerCommonNavigation = y.TrailerNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerNavigation.TrailerCommonNavigation.Id,
                         Economic = y.TrailerNavigation.TrailerCommonNavigation.Economic,
                         Class = y.TrailerNavigation.TrailerCommonNavigation.Class,
-                        Carrier = y.TrailerNavigation.TrailerCommonNavigation.Carrier,
                         Situation = y.TrailerNavigation.TrailerCommonNavigation.Situation,
                         Location = y.TrailerNavigation.TrailerCommonNavigation.Location
                     },
@@ -179,11 +186,11 @@ public class YardLogsService : IYardLogsService {
                     Common = y.TruckExternalNavigation.Common,
                     MxPlate = y.TruckExternalNavigation.MxPlate,
                     UsaPlate = y.TruckExternalNavigation.UsaPlate,
+                    Carrier = y.TruckExternalNavigation.Carrier,
                     TruckCommonNavigation = y.TruckExternalNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckExternalNavigation.TruckCommonNavigation.Id,
                         Vin = y.TruckExternalNavigation.TruckCommonNavigation.Vin,
                         Economic = y.TruckExternalNavigation.TruckCommonNavigation.Economic,
-                        Carrier = y.TruckExternalNavigation.TruckCommonNavigation.Carrier,
                         Location = y.TruckExternalNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckExternalNavigation.TruckCommonNavigation.Situation,
                     }
@@ -196,11 +203,12 @@ public class YardLogsService : IYardLogsService {
                     Manufacturer = y.TruckNavigation.Manufacturer,
                     Maintenance = y.TruckNavigation.Maintenance,
                     Insurance = y.TruckNavigation.Insurance,
+                    Carrier = y.TruckNavigation.Carrier,
+                    CarrierNavigation = y.TruckNavigation.CarrierNavigation,
                     TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckNavigation.TruckCommonNavigation.Id,
                         Vin = y.TruckNavigation.TruckCommonNavigation.Vin,
                         Economic = y.TruckNavigation.TruckCommonNavigation.Economic,
-                        Carrier = y.TruckNavigation.TruckCommonNavigation.Carrier,
                         Location = y.TruckNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckNavigation.TruckCommonNavigation.Situation,
                     },
@@ -364,11 +372,11 @@ public class YardLogsService : IYardLogsService {
                     Id = y.TrailerExternalNavigation.Id,
                     Status = y.TrailerExternalNavigation.Status,
                     Common = y.TrailerExternalNavigation.Common,
+                    Carrier = y.TrailerExternalNavigation.Carrier,
                     TrailerCommonNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() { 
                         Id = y.TrailerExternalNavigation.TrailerCommonNavigation.Id,
                         Economic = y.TrailerExternalNavigation.TrailerCommonNavigation.Economic,
                         Class = y.TrailerExternalNavigation.TrailerCommonNavigation.Class,
-                        Carrier = y.TrailerExternalNavigation.TrailerCommonNavigation.Carrier,
                         Situation = y.TrailerExternalNavigation.TrailerCommonNavigation.Situation,
                         Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location
                     }
@@ -379,11 +387,12 @@ public class YardLogsService : IYardLogsService {
                     Common = y.TrailerNavigation.Common,
                     Manufacturer = y.TrailerNavigation.Manufacturer,
                     Maintenance = y.TrailerNavigation.Maintenance,
+                    Carrier = y.TrailerNavigation.Carrier,
+                    CarrierNavigation = y.TrailerNavigation.CarrierNavigation,
                     TrailerCommonNavigation = y.TrailerNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerNavigation.TrailerCommonNavigation.Id,
                         Economic = y.TrailerNavigation.TrailerCommonNavigation.Economic,
                         Class = y.TrailerNavigation.TrailerCommonNavigation.Class,
-                        Carrier = y.TrailerNavigation.TrailerCommonNavigation.Carrier,
                         Situation = y.TrailerNavigation.TrailerCommonNavigation.Situation,
                         Location = y.TrailerNavigation.TrailerCommonNavigation.Location
                     }
@@ -392,11 +401,11 @@ public class YardLogsService : IYardLogsService {
                     Id = y.TruckExternalNavigation.Id,
                     Status = y.TruckExternalNavigation.Status,
                     Common = y.TruckExternalNavigation.Common,
+                    Carrier = y.TruckExternalNavigation.Carrier,
                     TruckCommonNavigation = y.TruckExternalNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckExternalNavigation.TruckCommonNavigation.Id,
                         Vin = y.TruckExternalNavigation.TruckCommonNavigation.Vin,
                         Economic = y.TruckExternalNavigation.TruckCommonNavigation.Economic,
-                        Carrier = y.TruckExternalNavigation.TruckCommonNavigation.Carrier,
                         Location = y.TruckExternalNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckExternalNavigation.TruckCommonNavigation.Situation
                     }
@@ -409,11 +418,12 @@ public class YardLogsService : IYardLogsService {
                     Manufacturer = y.TruckNavigation.Manufacturer,
                     Maintenance = y.TruckNavigation.Maintenance,
                     Insurance = y.TruckNavigation.Insurance,
+                    Carrier = y.TruckNavigation.Carrier,
+                    CarrierNavigation = y.TruckNavigation.CarrierNavigation,
                     TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckNavigation.TruckCommonNavigation.Id,
                         Vin = y.TruckNavigation.TruckCommonNavigation.Vin,
                         Economic = y.TruckNavigation.TruckCommonNavigation.Economic,
-                        Carrier = y.TruckNavigation.TruckCommonNavigation.Carrier,
                         Location = y.TruckNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckNavigation.TruckCommonNavigation.Situation
                     }

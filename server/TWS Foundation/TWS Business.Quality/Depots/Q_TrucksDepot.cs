@@ -21,6 +21,7 @@ public class Q_TruckDepot
             Manufacturer = 1,
             Motor = RandomUtils.String(16),
             Common = 1,
+            Carrier = 1
         };
     }
 }

@@ -93,7 +93,6 @@ void main() {
           0, //id
           1, //status
           1, //trailerClass 
-          1, //carrier 
           1, //situation
           null, //location
           "ECT$randomToken", //economic
@@ -104,6 +103,7 @@ void main() {
           0, //id
           1, //status
           0, //common
+          1,
           1, //manufactuer
           1, //maintenance
           trailerCommon, //trailerCommonNavigation 
@@ -113,7 +113,6 @@ void main() {
         TruckCommon truckCommon = TruckCommon(
         0, //id
         1, //status
-        1, //carrier
         "VINtest-$randomToken", //vin
         "ECO$randomToken", //economic
         null, //location
@@ -126,6 +125,7 @@ void main() {
           1, //Status
           2,//manufacturer
           0, //common
+          1,
           "Motor $randomToken", //motor
           i, //maintenance
           i, //insurance
@@ -134,6 +134,7 @@ void main() {
           truckCommon, //truckCommonNavigation
           null, //maintenanceNavigation
           null, //insuranceNavigation
+          null, //carrierNavigation
           <Plate>[plateMX,plateUSA] //plates
         );
         YardLog mock = YardLog(

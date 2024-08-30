@@ -14,9 +14,11 @@ public partial class TrailerExternal
 
     public int Common { get; set; }
 
-    public string? UsaPlate { get; set; } = null!;
+    public string Carrier { get; set; } = null!;
 
     public string MxPlate { get; set; } = null!;
+
+    public string? UsaPlate { get; set; } = null!;
 
     public virtual Status? StatusNavigation { get; set; }
 
@@ -32,6 +34,7 @@ public partial class TrailerExternal
             (nameof(Common), [Required, new PointerValidator(true)]),
             (nameof(Status), [Required, new PointerValidator(true)]),
             (nameof(MxPlate), [new LengthValidator(8, 12)]),
+            (nameof(Carrier), [new LengthValidator(1, 100)]),
 
         ];
 
@@ -48,6 +51,10 @@ public partial class TrailerExternal
 
             _ = entity.Property(e => e.UsaPlate)
               .HasMaxLength(12)
+              .IsUnicode(false);
+
+            _ = entity.Property(e => e.Carrier)
+              .HasMaxLength(100)
               .IsUnicode(false);
 
             _ = entity.Property(e => e.MxPlate)

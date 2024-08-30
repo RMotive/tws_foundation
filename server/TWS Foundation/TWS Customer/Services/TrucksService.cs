@@ -54,6 +54,7 @@ public class TrucksService : ITrucksService {
             .Include(t => t.ManufacturerNavigation)
             .Include(t => t.MaintenanceNavigation)
             .Include(t => t.TruckCommonNavigation)
+            .Include(t => t.CarrierNavigation)
             .Include(t => t.StatusNavigation)
             .Select(t => new Truck() {
                 Id = t.Id,
@@ -63,6 +64,7 @@ public class TrucksService : ITrucksService {
                 Manufacturer = t.Manufacturer,
                 Maintenance = t.Maintenance,
                 Insurance = t.Insurance,
+                CarrierNavigation = t.CarrierNavigation,
                 StatusNavigation = t.StatusNavigation == null? null : new Status() {
                     Id = t.StatusNavigation.Id,
                     Name = t.StatusNavigation.Name,
@@ -72,7 +74,6 @@ public class TrucksService : ITrucksService {
                     Id = t.TruckCommonNavigation.Id,
                     Vin = t.TruckCommonNavigation.Vin,
                     Economic = t.TruckCommonNavigation.Economic,
-                    Carrier = t.TruckCommonNavigation.Carrier,
                     Location = t.TruckCommonNavigation.Location,
                     Situation = t.TruckCommonNavigation.Situation,
                 },

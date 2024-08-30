@@ -28,15 +28,14 @@ public class TrailersExternalsService : ITrailersExternalsService {
                 Common = p.Common,
                 UsaPlate = p.UsaPlate,
                 MxPlate = p.MxPlate,
+                Carrier = p.Carrier,
                 TrailerCommonNavigation = p.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                     Id = p.TrailerCommonNavigation.Id,
                     Status = p.TrailerCommonNavigation.Status,
                     Economic = p.TrailerCommonNavigation.Economic,
                     Class = p.TrailerCommonNavigation.Class,
-                    Carrier = p.TrailerCommonNavigation.Carrier,
                     Situation = p.TrailerCommonNavigation.Situation,
                     Location = p.TrailerCommonNavigation.Location,
-                    CarrierNavigation = p.TrailerCommonNavigation.CarrierNavigation,
                     SituationNavigation = p.TrailerCommonNavigation.SituationNavigation,
                     TrailerClassNavigation = p.TrailerCommonNavigation.TrailerClassNavigation,
                     LocationNavigation = p.TrailerCommonNavigation.LocationNavigation

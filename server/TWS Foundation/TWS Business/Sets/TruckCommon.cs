@@ -16,13 +16,9 @@ public partial class TruckCommon
 
     public string Economic { get; set; } = null!;
 
-    public int Carrier { get; set; }
-
     public int? Location { get; set; }
 
     public int? Situation { get; set; }
-
-    public virtual Carrier? CarrierNavigation { get; set; }
 
     public virtual Situation? SituationNavigation { get; set; }
 
@@ -42,7 +38,6 @@ public partial class TruckCommon
                 .. Container,
             (nameof(Vin), [Unique, new LengthValidator(17, 17)]),
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
-            (nameof(Carrier), [new PointerValidator(true)]),
             (nameof(Status), [new PointerValidator(true)])
         ];
 
@@ -65,10 +60,6 @@ public partial class TruckCommon
             _ = entity.Property(e => e.Economic)
                 .HasMaxLength(16)
                 .IsUnicode(false);
-
-            _ = entity.HasOne(d => d.CarrierNavigation)
-              .WithMany(p => p.TrucksCommons)
-              .HasForeignKey(d => d.Carrier);
             
             _ = entity.HasOne(d => d.SituationNavigation)
                .WithMany(p => p.TrucksCommons)

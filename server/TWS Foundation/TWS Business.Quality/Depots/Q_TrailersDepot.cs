@@ -19,7 +19,8 @@ public class Q_TrailersDepot
         return new() {
             Manufacturer = 1,
             Common = 1,
-            Status = 1
+            Status = 1,
+            Carrier = 1
         };
     }
 }

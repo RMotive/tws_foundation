@@ -32,9 +32,9 @@ public partial class Carrier
 
     public virtual Sct? SctNavigation { get; set; }
 
-    public virtual ICollection<TruckCommon> TrucksCommons { get; set; } = [];
+    public virtual ICollection<Truck> Trucks { get; set; } = [];
 
-    public virtual ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
+    public virtual ICollection<Trailer> Trailers { get; set; } = [];
 
     public virtual ICollection<CarrierH> CarriersH { get; set; } = [];
 

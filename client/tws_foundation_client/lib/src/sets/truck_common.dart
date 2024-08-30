@@ -14,7 +14,6 @@ final class TruckCommon implements CSMSetInterface {
   @override
   int id = 0;
   int status = 1;
-  int carrier = 0;
   String vin = "";
   String economic = "";
   int? location = 0;
@@ -23,11 +22,10 @@ final class TruckCommon implements CSMSetInterface {
   Status? statusNavigation;
   
 
-  TruckCommon(this.id, this.status, this.carrier, this.vin, this.economic, this.location, this.situation, this.situationNavigation, this.statusNavigation);
+  TruckCommon(this.id, this.status, this.vin, this.economic, this.location, this.situation, this.situationNavigation, this.statusNavigation);
   factory TruckCommon.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
-    int carrier = json.get('carrier');
     String vin = json.get('vin');
     String economic = json.get('economic');
     int? location = json.getDefault('location', null);
@@ -45,7 +43,7 @@ final class TruckCommon implements CSMSetInterface {
       situationNavigation = deserealize<Situation>(rawNavigation, decode: SituationDecoder());
     }
         
-    return TruckCommon(id, status, carrier, vin, economic, location, situation, situationNavigation, statusNavigation);
+    return TruckCommon(id, status, vin, economic, location, situation, situationNavigation, statusNavigation);
   }
 
   @override
@@ -53,7 +51,6 @@ final class TruckCommon implements CSMSetInterface {
     return <String, dynamic>{
       'id': id,
       kStatus: status,
-      kCarrier: carrier,
       kVin: vin,
       kEconomic: economic,
       kLocation: location,
@@ -68,7 +65,6 @@ final class TruckCommon implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(vin.length != 17) results.add(CSMSetValidationResult(kVin, "VIN number must be 17 length", "strictLength(17)"));
     if(economic.isEmpty || economic.length > 16) results.add(CSMSetValidationResult(kEconomic, "Economic number length must be between 1 and 16", "strictLength(1,16)"));
-    if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     
     // if(carrier  == 0 && carrierNavigation == null) results.add(CSMSetValidationResult("[$kCarrier, $kCarrierNavigation]", 'Required Carrier. Must be one Manufacturer insertion property', 'requiredInsertion()'));
@@ -85,7 +81,6 @@ final class TruckCommon implements CSMSetInterface {
   TruckCommon clone({
     int? id,
     int? status,
-    int? carrier,
     String? vin,
     String? economic,
     int? location,
@@ -100,7 +95,7 @@ final class TruckCommon implements CSMSetInterface {
       situationNav = null; 
     }
 
-    return TruckCommon(id ?? this.id, status ?? this.status, carrier ?? this.carrier, vin ?? this.vin, economic ?? this.economic, location ?? this.location, situation ?? this.situation,
+    return TruckCommon(id ?? this.id, status ?? this.status, vin ?? this.vin, economic ?? this.economic, location ?? this.location, situation ?? this.situation,
     situationNav ,statusNavigation ?? this.statusNavigation);
   }
 }

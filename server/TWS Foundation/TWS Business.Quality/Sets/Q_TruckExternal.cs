@@ -21,6 +21,7 @@ public class Q_TruckExternal : BQ_MigrationSet<TruckExternal> {
                 Id = 0,
                 Status = 0,
                 Common = 0,
+                Carrier = "",
                 MxPlate = ""
             },
             Expectations = [
@@ -28,6 +29,7 @@ public class Q_TruckExternal : BQ_MigrationSet<TruckExternal> {
                 (nameof(TruckExternal.Status), [(new PointerValidator(), 3)]),
                 (nameof(TruckExternal.Common), [(new PointerValidator(), 3)]),
                 (nameof(TruckExternal.MxPlate), [(new LengthValidator(), 2)]),
+                (nameof(TrailerExternal.Carrier), [(new LengthValidator(), 2)])
             ],
         };
 

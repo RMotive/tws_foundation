@@ -21,24 +21,25 @@ public class TrailersService : ITrailersService {
     public async Task<SetViewOut<Trailer>> View(SetViewOptions Options) {
         static IQueryable<Trailer> include(IQueryable<Trailer> query) {
             return query
-            .Include(t => t.TrailerCommonNavigation).AsNoTracking()
+            .Include(t => t.TrailerCommonNavigation)
+            .Include(t => t.CarrierNavigation)
             .Select(p => new Trailer() {
                 Id = p.Id,
                 Status = p.Status,
                 Common = p.Common,
+                Carrier = p.Carrier,
                 Manufacturer = p.Manufacturer,
                 Maintenance = p.Maintenance,
                 ManufacturerNavigation = p.ManufacturerNavigation,
                 MaintenanceNavigation = p.MaintenanceNavigation,
-                TrailerCommonNavigation = p.TrailerCommonNavigation == null? null : new TrailerCommon() {
+                CarrierNavigation = p.CarrierNavigation,
+                TrailerCommonNavigation = p.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                     Id = p.TrailerCommonNavigation.Id,
                     Status = p.TrailerCommonNavigation.Status,
                     Economic = p.TrailerCommonNavigation.Economic,
                     Class = p.TrailerCommonNavigation.Class,
-                    Carrier = p.TrailerCommonNavigation.Carrier,
                     Situation = p.TrailerCommonNavigation.Situation,
                     Location = p.TrailerCommonNavigation.Location,
-                    CarrierNavigation = p.TrailerCommonNavigation.CarrierNavigation,
                     SituationNavigation = p.TrailerCommonNavigation.SituationNavigation,
                     TrailerClassNavigation = p.TrailerCommonNavigation.TrailerClassNavigation,
                     LocationNavigation = p.TrailerCommonNavigation.LocationNavigation,

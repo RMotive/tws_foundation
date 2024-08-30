@@ -4,7 +4,6 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 final class TrailerCommon implements CSMSetInterface {
   static const String kStatus = "status";
   static const String kTrailerClass = "class";
-  static const String kCarrier = "carrier";
   static const String kSituation = "situation";
   static const String kLocation = "location";
   static const String kEconomic = "economic";
@@ -14,18 +13,16 @@ final class TrailerCommon implements CSMSetInterface {
   int id = 0;
   int status = 1;
   int trailerClass = 0;
-  int carrier = 0;
   int situation = 0;
   int? location;
   String economic = "";
   Status? statusNavigation;
   
-  TrailerCommon(this.id, this.status, this.trailerClass, this.carrier, this.situation, this.location, this.economic, this.statusNavigation);
+  TrailerCommon(this.id, this.status, this.trailerClass, this.situation, this.location, this.economic, this.statusNavigation);
   factory TrailerCommon.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     int trailerClass = json.get('class');
-    int carrier = json.get('carrier');
     int situation = json.get('situation');
     int? location = json.getDefault('location', null);
     String economic = json.get('economic');
@@ -36,7 +33,7 @@ final class TrailerCommon implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return TrailerCommon(id, status, trailerClass, carrier, situation, location, economic, statusNavigation);
+    return TrailerCommon(id, status, trailerClass, situation, location, economic, statusNavigation);
   }
 
   @override
@@ -45,7 +42,6 @@ final class TrailerCommon implements CSMSetInterface {
       'id': id,
       kStatus: status,
       kTrailerClass: trailerClass,
-      kCarrier: carrier,
       kSituation: situation,
       kLocation: location,
       kEconomic: economic,
@@ -68,13 +64,12 @@ final class TrailerCommon implements CSMSetInterface {
     int? id,
     int? status,
     int? trailerClass,
-    int? carrier,
     int? situation,
     int? location,
     String? economic,
     Status? statusNavigation,
   }){
-    return TrailerCommon(id ?? this.id, status ?? this.status, trailerClass ?? this.trailerClass, carrier ?? this.carrier, situation ?? this.situation, location ?? this.location,
+    return TrailerCommon(id ?? this.id, status ?? this.status, trailerClass ?? this.trailerClass, situation ?? this.situation, location ?? this.location,
     economic ?? this.economic, statusNavigation ?? this.statusNavigation);
   }
 }

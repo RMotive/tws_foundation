@@ -66,7 +66,6 @@ void main() {
         TruckCommon truckCommon = TruckCommon(
         0, //id
         1, //status
-        1, //carrier
         "VINtest-$randomToken", //vin
         "ECO$randomToken", //economic
         1, //location
@@ -79,6 +78,7 @@ void main() {
           1, //Status
           2,//manufacturer
           0, //common
+          1, //carrier
           "Motor $randomToken", //motor
           1, //maintenance
           1, //insurance
@@ -87,6 +87,7 @@ void main() {
           truckCommon, //truckCommonNavigation
           null, //maintenanceNavigation
           null, //insuranceNavigation
+          null,
           <Plate>[plateMX,plateUSA]
         );
         mocks.add(truck);

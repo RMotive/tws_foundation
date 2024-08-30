@@ -14,6 +14,8 @@ public partial class TruckExternal
 
     public int Common { get; set; }
 
+    public string Carrier { get; set; } = null!;
+
     public string? UsaPlate { get; set; } = null!;
 
     public string MxPlate { get; set; } = null!;
@@ -47,6 +49,10 @@ public partial class TruckExternal
 
             _ = entity.Property(e => e.UsaPlate)
               .HasMaxLength(12)
+              .IsUnicode(false);
+
+            _ = entity.Property(e => e.Carrier)
+              .HasMaxLength(100)
               .IsUnicode(false);
 
             _ = entity.Property(e => e.MxPlate)

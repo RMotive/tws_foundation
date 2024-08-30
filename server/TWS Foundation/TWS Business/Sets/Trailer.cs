@@ -14,11 +14,15 @@ public partial class Trailer
 
     public int Common { get; set; }
 
+    public int Carrier { get; set; }
+
     public int Manufacturer { get; set; }
 
     public int? Maintenance { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
+
+    public virtual Carrier? CarrierNavigation { get; set; }
 
     public virtual TrailerCommon? TrailerCommonNavigation { get; set; }
 
@@ -37,6 +41,7 @@ public partial class Trailer
                 .. Container,
             (nameof(Manufacturer), [Required, pointer]),
             (nameof(Common), [Required, pointer]),
+            (nameof(Carrier), [new PointerValidator(true)]),
             (nameof(Status), [Required, pointer]),
         ];
 
@@ -54,6 +59,11 @@ public partial class Trailer
             _ = entity.HasOne(d => d.TrailerCommonNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Common);
+
+            _ = entity.HasOne(d => d.CarrierNavigation)
+                .WithMany(p => p.Trailers)
+                .HasForeignKey(d => d.Carrier)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             _ = entity.HasOne(d => d.ManufacturerNavigation)
                 .WithMany(p => p.Trailers)

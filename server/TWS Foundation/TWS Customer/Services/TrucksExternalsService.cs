@@ -28,11 +28,11 @@ public class TrucksExternalsService : ITrucksExternalsService {
                 Common = t.Common,
                 UsaPlate = t.UsaPlate,
                 MxPlate = t.MxPlate,
+                Carrier = t.Carrier,
                 TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
                     Id = t.TruckCommonNavigation.Id,
                     Vin = t.TruckCommonNavigation.Vin,
                     Economic = t.TruckCommonNavigation.Economic,
-                    Carrier = t.TruckCommonNavigation.Carrier,
                     Location = t.TruckCommonNavigation.Location,
                     Situation = t.TruckCommonNavigation.Situation,
                 },
