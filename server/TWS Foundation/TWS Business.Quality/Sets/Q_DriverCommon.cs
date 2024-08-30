@@ -20,14 +20,12 @@ public class Q_DriverCommon : BQ_MigrationSet<DriverCommon> {
         Q_MigrationSet_EvaluateRecord<DriverCommon> failAllCases = new() {
             Mock = new() {
                 Id = 0,
-                Situation = 0,
                 License = "",
                 Status = 0
             },
             Expectations = [
                 (nameof(DriverCommon.Id), [(new PointerValidator(), 3)]),
                 (nameof(DriverCommon.License), [(new LengthValidator(),2)]),
-                (nameof(DriverCommon.Situation), [(new PointerValidator(), 3)]),
                 (nameof(DriverCommon.Status), [(new PointerValidator(true), 3) ])
             ],
         };

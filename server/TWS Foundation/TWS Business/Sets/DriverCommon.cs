@@ -14,7 +14,7 @@ public partial class DriverCommon
 
     public string License { get; set; } = null!;
 
-    public int Situation { get; set; }
+    public int? Situation { get; set; }
 
     public virtual Situation? SituationNavigation { get; set; }
 
@@ -30,7 +30,6 @@ public partial class DriverCommon
         Container = [
                 .. Container,
             (nameof(License), [Required, new LengthValidator(8,12)]),
-            (nameof(Situation), [new PointerValidator(true)]),
             (nameof(Status), [Required, new PointerValidator(true)]),
         ];
 
