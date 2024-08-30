@@ -191,6 +191,8 @@ Create table Trailers_Externals(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Status] int NOT NULL,
 Common int NOT NULL,
+MxPlate varchar(12) NOT NULL,
+UsaPlate varchar(12),
 constraint FK_TrailersExternals_TrailersCommons foreign key(Common) references Trailers_Commons(id),
 constraint FK_TrailersExternals_Statuses foreign key([Status]) references Statuses(id),
 
@@ -308,6 +310,8 @@ create table Trucks_Externals(
  id int IDENTITY(1,1) PRIMARY KEY,
  [Status] int NOT NULL,
  Common int NOT NULL,
+ MxPlate varchar(12) NOT NULL,
+ UsaPlate varchar(12),
 
  constraint FK_TrucksExternals_TrucksCommons foreign key(Common) references Trucks_Commons(id),
 );
@@ -338,8 +342,8 @@ Expiration date NOT NULL,
 Truck int,
 Trailer int,
 
- constraint FK_Plates_TrucksCommons foreign key(Truck) references Trucks_Commons(id),
- constraint FK_Plates_TrailersCommons foreign key(Trailer) references Trailers_Commons(id),
+ constraint FK_Plates_Trucks foreign key(Truck) references Trucks(id),
+ constraint FK_Plates_Trailers foreign key(Trailer) references Trailers(id),
  constraint FK_Plates_Statuses foreign key([Status]) references Statuses(id),
 
 );

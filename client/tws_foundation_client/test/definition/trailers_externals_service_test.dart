@@ -15,7 +15,7 @@ void main() {
       List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
       options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
       viewMock = MigrationView<TrailerExternal>(<TrailerExternal>[], 1, DateTime.now(), 3, 0, 20);
-      createMock = TrailerExternal(0, 1, 1, null, null);
+      createMock = TrailerExternal(0, 1, 1, "12345678", "87654321",null, null);
 
       Client mockClient = MockClient(
         (Request request) async {

@@ -14,6 +14,10 @@ public partial class TruckExternal
 
     public int Common { get; set; }
 
+    public string? UsaPlate { get; set; } = null!;
+
+    public string MxPlate { get; set; } = null!;
+
     public virtual Status? StatusNavigation { get; set; }
 
     public virtual TruckCommon? TruckCommonNavigation { get; set; }
@@ -27,6 +31,7 @@ public partial class TruckExternal
                 .. Container,
             (nameof(Common), [Required, new PointerValidator(true)]),
             (nameof(Status), [Required, new PointerValidator(true)]),
+            (nameof(MxPlate), [new LengthValidator(8, 12)]),
         ];
 
         return Container;
@@ -39,6 +44,14 @@ public partial class TruckExternal
 
             _ = entity.Property(e => e.Id)
                  .HasColumnName("id");
+
+            _ = entity.Property(e => e.UsaPlate)
+              .HasMaxLength(12)
+              .IsUnicode(false);
+
+            _ = entity.Property(e => e.MxPlate)
+              .HasMaxLength(12)
+              .IsUnicode(false);
 
             _ = entity.HasOne(d => d.TruckCommonNavigation)
                .WithMany(p => p.TrucksExternals)

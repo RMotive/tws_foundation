@@ -42,17 +42,17 @@ public class TrailersService : ITrailersService {
                     SituationNavigation = p.TrailerCommonNavigation.SituationNavigation,
                     TrailerClassNavigation = p.TrailerCommonNavigation.TrailerClassNavigation,
                     LocationNavigation = p.TrailerCommonNavigation.LocationNavigation,
-                    Plates = (ICollection<Plate>)p.TrailerCommonNavigation.Plates.Select(p => new Plate() {
-                        Id = p.Id,
-                        Status = p.Status,
-                        Identifier = p.Identifier,
-                        State = p.State,
-                        Country = p.Country,
-                        Expiration = p.Expiration,
-                        Truck = p.Truck,
-                        Trailer = p.Trailer
-                    })
                 },
+                Plates = (ICollection<Plate>)p.Plates.Select(p => new Plate() {
+                    Id = p.Id,
+                    Status = p.Status,
+                    Identifier = p.Identifier,
+                    State = p.State,
+                    Country = p.Country,
+                    Expiration = p.Expiration,
+                    Truck = p.Truck,
+                    Trailer = p.Trailer
+                })
 
             });
         }

@@ -137,23 +137,15 @@ public class YardLogsService : IYardLogsService {
                     Id = y.TrailerExternalNavigation.Id,
                     Status = y.TrailerExternalNavigation.Status,
                     Common = y.TrailerExternalNavigation.Common,
+                    UsaPlate = y.TrailerExternalNavigation.UsaPlate,
+                    MxPlate = y.TrailerExternalNavigation.MxPlate,
                     TrailerCommonNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerExternalNavigation.TrailerCommonNavigation.Id,
                         Economic = y.TrailerExternalNavigation.TrailerCommonNavigation.Economic,
                         Class = y.TrailerExternalNavigation.TrailerCommonNavigation.Class,
                         Carrier = y.TrailerExternalNavigation.TrailerCommonNavigation.Carrier,
                         Situation = y.TrailerExternalNavigation.TrailerCommonNavigation.Situation,
-                        Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location,
-                        Plates = (ICollection<Plate>)y.TrailerExternalNavigation.TrailerCommonNavigation.Plates.Select(p => new Plate() {
-                            Id = p.Id,
-                            Status = p.Status,
-                            Identifier = p.Identifier,
-                            State = p.State,
-                            Country = p.Country,
-                            Expiration = p.Expiration,
-                            Truck = p.Truck,
-                            Trailer = p.Trailer
-                        })
+                        Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location
                     }
                 },
                 TrailerNavigation = y.TrailerNavigation == null ? null : new Trailer() {
@@ -168,23 +160,25 @@ public class YardLogsService : IYardLogsService {
                         Class = y.TrailerNavigation.TrailerCommonNavigation.Class,
                         Carrier = y.TrailerNavigation.TrailerCommonNavigation.Carrier,
                         Situation = y.TrailerNavigation.TrailerCommonNavigation.Situation,
-                        Location = y.TrailerNavigation.TrailerCommonNavigation.Location,
-                        Plates = (ICollection<Plate>)y.TrailerNavigation.TrailerCommonNavigation.Plates.Select(p => new Plate() {
-                            Id = p.Id,
-                            Status = p.Status,
-                            Identifier = p.Identifier,
-                            State = p.State,
-                            Country = p.Country,
-                            Expiration = p.Expiration,
-                            Truck = p.Truck,
-                            Trailer = p.Trailer
-                        })
-                    }
+                        Location = y.TrailerNavigation.TrailerCommonNavigation.Location
+                    },
+                    Plates = (ICollection<Plate>)y.TrailerNavigation.Plates.Select(p => new Plate() {
+                        Id = p.Id,
+                        Status = p.Status,
+                        Identifier = p.Identifier,
+                        State = p.State,
+                        Country = p.Country,
+                        Expiration = p.Expiration,
+                        Truck = p.Truck,
+                        Trailer = p.Trailer
+                    })
                 },
                 TruckExternalNavigation = y.TruckExternalNavigation == null ? null : new TruckExternal() {
                     Id = y.TruckExternalNavigation.Id,
                     Status = y.TruckExternalNavigation.Status,
                     Common = y.TruckExternalNavigation.Common,
+                    MxPlate = y.TruckExternalNavigation.MxPlate,
+                    UsaPlate = y.TruckExternalNavigation.UsaPlate,
                     TruckCommonNavigation = y.TruckExternalNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckExternalNavigation.TruckCommonNavigation.Id,
                         Vin = y.TruckExternalNavigation.TruckCommonNavigation.Vin,
@@ -192,16 +186,6 @@ public class YardLogsService : IYardLogsService {
                         Carrier = y.TruckExternalNavigation.TruckCommonNavigation.Carrier,
                         Location = y.TruckExternalNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckExternalNavigation.TruckCommonNavigation.Situation,
-                        Plates = (ICollection<Plate>)y.TruckExternalNavigation.TruckCommonNavigation.Plates.Select(p => new Plate() {
-                            Id = p.Id,
-                            Status = p.Status,
-                            Identifier = p.Identifier,
-                            State = p.State,
-                            Country = p.Country,
-                            Expiration = p.Expiration,
-                            Truck = p.Truck,
-                            Trailer = p.Trailer
-                        })
                     }
                 },
                 TruckNavigation = y.TruckNavigation == null ? null : new Truck() {
@@ -219,17 +203,17 @@ public class YardLogsService : IYardLogsService {
                         Carrier = y.TruckNavigation.TruckCommonNavigation.Carrier,
                         Location = y.TruckNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckNavigation.TruckCommonNavigation.Situation,
-                        Plates = (ICollection<Plate>)y.TruckNavigation.TruckCommonNavigation.Plates.Select(p => new Plate() {
-                            Id = p.Id,
-                            Status = p.Status,
-                            Identifier = p.Identifier,
-                            State = p.State,
-                            Country = p.Country,
-                            Expiration = p.Expiration,
-                            Truck = p.Truck,
-                            Trailer = p.Trailer
-                        })
-                    }
+                    },
+                    Plates = (ICollection<Plate>)y.TruckNavigation.Plates.Select(p => new Plate() {
+                        Id = p.Id,
+                        Status = p.Status,
+                        Identifier = p.Identifier,
+                        State = p.State,
+                        Country = p.Country,
+                        Expiration = p.Expiration,
+                        Truck = p.Truck,
+                        Trailer = p.Trailer
+                    })
                 },
                 LoadTypeNavigation = y.LoadTypeNavigation == null ? null : new LoadType() {
                     Id = y.LoadTypeNavigation.Id,

@@ -75,16 +75,6 @@ public class TrucksService : ITrucksService {
                     Carrier = t.TruckCommonNavigation.Carrier,
                     Location = t.TruckCommonNavigation.Location,
                     Situation = t.TruckCommonNavigation.Situation,
-                    Plates = (ICollection<Plate>)t.TruckCommonNavigation.Plates.Select(p => new Plate() {
-                        Id = p.Id,
-                        Status = p.Status,
-                        Identifier = p.Identifier,
-                        State = p.State,
-                        Country = p.Country,
-                        Expiration = p.Expiration,
-                        Truck = p.Truck,
-                        Trailer = p.Trailer
-                    })
                 },
                 MaintenanceNavigation = t.MaintenanceNavigation == null ? null : new Maintenance() {
                     Id = t.MaintenanceNavigation.Id,
@@ -103,8 +93,18 @@ public class TrucksService : ITrucksService {
                     Expiration = t.InsuranceNavigation.Expiration,
                     Country = t.InsuranceNavigation.Country
                 },
-                 
-             });
+                Plates = (ICollection<Plate>)t.Plates.Select(p => new Plate() {
+                    Id = p.Id,
+                    Status = p.Status,
+                    Identifier = p.Identifier,
+                    State = p.State,
+                    Country = p.Country,
+                    Expiration = p.Expiration,
+                    Truck = p.Truck,
+                    Trailer = p.Trailer
+                })
+
+            });
         }
 
         return await Trucks.View(options, include);

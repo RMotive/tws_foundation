@@ -26,6 +26,8 @@ public class TrailersExternalsService : ITrailersExternalsService {
                 Id = p.Id,
                 Status = p.Status,
                 Common = p.Common,
+                UsaPlate = p.UsaPlate,
+                MxPlate = p.MxPlate,
                 TrailerCommonNavigation = p.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                     Id = p.TrailerCommonNavigation.Id,
                     Status = p.TrailerCommonNavigation.Status,
@@ -37,17 +39,7 @@ public class TrailersExternalsService : ITrailersExternalsService {
                     CarrierNavigation = p.TrailerCommonNavigation.CarrierNavigation,
                     SituationNavigation = p.TrailerCommonNavigation.SituationNavigation,
                     TrailerClassNavigation = p.TrailerCommonNavigation.TrailerClassNavigation,
-                    LocationNavigation = p.TrailerCommonNavigation.LocationNavigation,
-                    Plates = (ICollection<Plate>)p.TrailerCommonNavigation.Plates.Select(p => new Plate() {
-                        Id = p.Id,
-                        Status = p.Status,
-                        Identifier = p.Identifier,
-                        State = p.State,
-                        Country = p.Country,
-                        Expiration = p.Expiration,
-                        Truck = p.Truck,
-                        Trailer = p.Trailer
-                    })
+                    LocationNavigation = p.TrailerCommonNavigation.LocationNavigation
                 },
             });
         }

@@ -19,6 +19,7 @@ public class Q_TrailersExternalsDepot
         return new() {
             Common = 1,
             Status = 1,
+            MxPlate = "12345678"
         };
     }
 }

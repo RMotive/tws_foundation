@@ -33,6 +33,8 @@ public partial class Truck
 
     public virtual Status? StatusNavigation { get; set; }
 
+    public virtual ICollection<Plate> Plates { get; set; } = [];
+
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];

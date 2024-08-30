@@ -46,8 +46,8 @@ VALUES('Dry van', 'Full closed trailer, ideal for dry load.', 1),('Reefer', 'Ref
 INSERT INTO Trailers_Commons([Status],Class, Carrier, Situation, [Location], Economic)
 VALUES (1,1,1,1,1, 'Economic 1'), (1,2,2,2,2, 'Economic 2'), (1,3,3,3,3, 'Economic 3');
  
-INSERT INTO Trailers_Externals([Status], Common)
-VALUES (1, 1), (1, 2), (1, 3);
+INSERT INTO Trailers_Externals([Status], Common, MxPlate, UsaPlate)
+VALUES (1, 1, 'MXexternal1', 'USAexternal1'), (1, 2, 'MXexternal2', 'USAexternal3'), (1, 3,'MXexternal3', null);
 
 INSERT INTO Trailers([Status], Common, Manufacturer, Maintenance)
 VALUES (1,1,1,1), (1,2,2,2), (1,3,3,3);
@@ -70,8 +70,8 @@ VALUES(1, 1, 'Binational', 1, SYSDATETIME(), '28250230', SYSDATETIME(), 'TJT0053
 INSERT INTO Trucks_Commons([Status], VIN, Economic, Carrier, Situation)
 VALUES (1, 'VINtest1-13324231',  'Economic 1', 1, 1), (1, 'VINtest2-63324231', 'Economic 2', 2, 2), (1, 'VINtest3-93324231', 'Economic 3', 2, 2);
 
-INSERT INTO Trucks_Externals([Status], Common)
-VALUES (1,1),(1,2),(1,3);
+INSERT INTO Trucks_Externals([Status], Common, MxPlate, UsaPlate)
+VALUES (1, 1, 'MXexternal1', 'USAexternal1'), (1, 2, 'MXexternal2', 'USAexternal3'), (1, 3,'MXexternal3', null);
 
 INSERT INTO Trucks(Common, Manufacturer, Motor, Maintenance, Insurance, [Status])
 VALUES(1,1,'Motortestnumber1',1,1,1),(2,2,'Motortestnumber2',2,2,1),(3,3,'Motortestnumber3',3,3,1);

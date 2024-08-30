@@ -36,7 +36,6 @@ public partial class TrailerCommon
 
     public virtual ICollection<TrailerExternal> TrailersExternals { get; set; } = [];
 
-    public virtual ICollection<Plate> Plates { get; set; } = [];
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {

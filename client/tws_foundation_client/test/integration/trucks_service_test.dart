@@ -73,7 +73,6 @@ void main() {
         1, //situation
         null,
         null, //statusNavigation
-        <Plate>[plateMX,plateUSA]
         );
         Truck truck = Truck(
           0, // id 
@@ -87,7 +86,8 @@ void main() {
           null, //manufacturerNavigation
           truckCommon, //truckCommonNavigation
           null, //maintenanceNavigation
-          null //insuranceNavigation
+          null, //insuranceNavigation
+          <Plate>[plateMX,plateUSA]
         );
         mocks.add(truck);
       }

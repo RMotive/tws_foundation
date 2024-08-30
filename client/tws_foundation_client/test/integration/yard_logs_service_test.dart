@@ -97,8 +97,8 @@ void main() {
           1, //situation
           null, //location
           "ECT$randomToken", //economic
-          null, //statusNavigation
-          <Plate>[plateMX2,plateUSA2] //plates
+          null //statusNavigation
+          
         );
         Trailer trailer = Trailer(
           0, //id
@@ -107,7 +107,8 @@ void main() {
           1, //manufactuer
           1, //maintenance
           trailerCommon, //trailerCommonNavigation 
-          null //statusNavigation
+          null, //statusNavigation
+          <Plate>[plateMX2,plateUSA2] //plates
         );
         TruckCommon truckCommon = TruckCommon(
         0, //id
@@ -118,8 +119,7 @@ void main() {
         null, //location
         1, //situation
         null, //statusNavigation
-        null,
-        <Plate>[plateMX,plateUSA] //plates
+        null
         );
         Truck truck = Truck(
           0, // id 
@@ -133,7 +133,8 @@ void main() {
           null, //manufacturerNavigation
           truckCommon, //truckCommonNavigation
           null, //maintenanceNavigation
-          null //insuranceNavigation
+          null, //insuranceNavigation
+          <Plate>[plateMX,plateUSA] //plates
         );
         YardLog mock = YardLog(
           0, // ID

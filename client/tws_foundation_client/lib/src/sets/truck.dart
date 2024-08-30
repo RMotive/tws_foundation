@@ -13,7 +13,8 @@ final class Truck implements CSMSetInterface {
   static const String kTruckCommonNavigation = 'TruckCommonNavigation';
   static const String kMaintenanceNavigation = 'MaintenanceNavigation';
   static const String kInsuranceNavigation = 'InsuranceNavigation';
-  
+  static const String kPlates = 'plates';
+
   @override
   int id = 0;
   int status = 1;
@@ -27,12 +28,16 @@ final class Truck implements CSMSetInterface {
   Manufacturer? manufacturerNavigation;
   Maintenance? maintenanceNavigation;
   Insurance? insuranceNavigation;
-  
+  // List default initialization data for clone method.
+  List<Plate> plates = <Plate>[
+    Plate.def(),
+    Plate.def()
+  ];
 
   Truck.def();
 
   Truck(this.id, this.status, this.manufacturer, this.common, this.motor, this.maintenance, this.insurance, this.statusNavigation, this.manufacturerNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
-    this.insuranceNavigation);
+    this.insuranceNavigation, this.plates);
   factory Truck.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -46,6 +51,11 @@ final class Truck implements CSMSetInterface {
     Manufacturer? manufacturerNavigation;
     Maintenance? maintenanceNavigation;
     Insurance? insuranceNavigation;
+
+    List<Plate> plates = <Plate>[];
+    List<JObject> rawPlateArray = json.getList('Plates');
+    plates = rawPlateArray.map<Plate>((JObject e) => deserealize(e, decode: PlateDecoder())).toList();
+
     //Optional parameters validation.
     if (json['StatusNavigation'] != null) {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
@@ -71,7 +81,7 @@ final class Truck implements CSMSetInterface {
       JObject rawNavigation = json.getDefault('InsuranceNavigation', <String, dynamic>{});
       insuranceNavigation = deserealize<Insurance>(rawNavigation, decode: InsuranceDecoder());
     }
-    return Truck(id, status, manufacturer, common, motor, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation);
+    return Truck(id, status, manufacturer, common, motor, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, plates);
   }
   Truck clone({
     int? id,
@@ -86,6 +96,7 @@ final class Truck implements CSMSetInterface {
     TruckCommon? truckCommonNavigation,
     Maintenance? maintenanceNavigation,
     Insurance? insuranceNavigation,
+    List<Plate>? plates
   }){
     
     // If the field is setted via catalogs, then the pointers must be setted null when index is 0
@@ -93,7 +104,8 @@ final class Truck implements CSMSetInterface {
     if(manufacturer == 0) manufacturerNav = null;
     
     return Truck(id ?? this.id, status ?? this.status, manufacturer ?? this.manufacturer, common ?? this.common, motor ?? this.motor, maintenance ?? this.maintenance, 
-    insurance ?? this.insurance, statusNavigation ?? this.statusNavigation, manufacturerNav, truckCommonNavigation ?? this.truckCommonNavigation, maintenanceNavigation ?? this.maintenanceNavigation, insuranceNavigation ?? this.insuranceNavigation);
+    insurance ?? this.insurance, statusNavigation ?? this.statusNavigation, manufacturerNav, truckCommonNavigation ?? this.truckCommonNavigation, 
+    maintenanceNavigation ?? this.maintenanceNavigation, insuranceNavigation ?? this.insuranceNavigation, plates ?? this.plates);
   }
   @override
   JObject encode() {
@@ -110,6 +122,7 @@ final class Truck implements CSMSetInterface {
       kTruckCommonNavigation: truckCommonNavigation?.encode(),
       kMaintenanceNavigation: maintenanceNavigation?.encode(),
       kInsuranceNavigation: insuranceNavigation?.encode(),
+      kPlates: plates.map((Plate i) => i.encode()).toList()
     };
   }
 
@@ -143,7 +156,10 @@ final class Truck implements CSMSetInterface {
     if(maintenanceNavigation != null) results = <CSMSetValidationResult>[...results, ...maintenanceNavigation!.evaluate()];
     if(insuranceNavigation != null) results = <CSMSetValidationResult>[...results, ...insuranceNavigation!.evaluate()];
     
-
+    if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));
+    for(Plate plate in plates){
+      results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
+    }
     return results;
   }
 }

@@ -26,6 +26,8 @@ public class TrucksExternalsService : ITrucksExternalsService {
                 Id = t.Id,
                 Status = t.Status,
                 Common = t.Common,
+                UsaPlate = t.UsaPlate,
+                MxPlate = t.MxPlate,
                 TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
                     Id = t.TruckCommonNavigation.Id,
                     Vin = t.TruckCommonNavigation.Vin,
@@ -33,16 +35,6 @@ public class TrucksExternalsService : ITrucksExternalsService {
                     Carrier = t.TruckCommonNavigation.Carrier,
                     Location = t.TruckCommonNavigation.Location,
                     Situation = t.TruckCommonNavigation.Situation,
-                    Plates = (ICollection<Plate>)t.TruckCommonNavigation.Plates.Select(p => new Plate() {
-                        Id = p.Id,
-                        Status = p.Status,
-                        Identifier = p.Identifier,
-                        State = p.State,
-                        Country = p.Country,
-                        Expiration = p.Expiration,
-                        Truck = p.Truck,
-                        Trailer = p.Trailer
-                    })
                 },
             });
 

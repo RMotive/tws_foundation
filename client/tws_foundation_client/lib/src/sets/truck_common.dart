@@ -10,7 +10,6 @@ final class TruckCommon implements CSMSetInterface {
   static const String kSituation = "situation";
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kSituationNavigation = 'SituationNavigation';
-  static const String kPlates = 'plates';
 
   @override
   int id = 0;
@@ -22,13 +21,9 @@ final class TruckCommon implements CSMSetInterface {
   int? situation = 0;
   Situation? situationNavigation;
   Status? statusNavigation;
-  // List default initialization data for clone method.
-  List<Plate> plates = <Plate>[
-    Plate.def(),
-    Plate.def()
-  ];
+  
 
-  TruckCommon(this.id, this.status, this.carrier, this.vin, this.economic, this.location, this.situation, this.situationNavigation, this.statusNavigation, this.plates);
+  TruckCommon(this.id, this.status, this.carrier, this.vin, this.economic, this.location, this.situation, this.situationNavigation, this.statusNavigation);
   factory TruckCommon.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -37,10 +32,6 @@ final class TruckCommon implements CSMSetInterface {
     String economic = json.get('economic');
     int? location = json.getDefault('location', null);
     int? situation = json.getDefault('situation', null);
-
-    List<Plate> plates = <Plate>[];
-    List<JObject> rawPlateArray = json.getList('Plates');
-    plates = rawPlateArray.map<Plate>((JObject e) => deserealize(e, decode: PlateDecoder())).toList();
     
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
@@ -54,7 +45,7 @@ final class TruckCommon implements CSMSetInterface {
       situationNavigation = deserealize<Situation>(rawNavigation, decode: SituationDecoder());
     }
         
-    return TruckCommon(id, status, carrier, vin, economic, location, situation, situationNavigation, statusNavigation, plates);
+    return TruckCommon(id, status, carrier, vin, economic, location, situation, situationNavigation, statusNavigation);
   }
 
   @override
@@ -68,8 +59,7 @@ final class TruckCommon implements CSMSetInterface {
       kLocation: location,
       kSituation: situation,
       kSituationNavigation: situationNavigation?.encode(),
-      kstatusNavigation: statusNavigation?.encode(),
-      kPlates: plates.map((Plate i) => i.encode()).toList(),
+      kstatusNavigation: statusNavigation?.encode()
     };
   }
   
@@ -80,10 +70,7 @@ final class TruckCommon implements CSMSetInterface {
     if(economic.isEmpty || economic.length > 16) results.add(CSMSetValidationResult(kEconomic, "Economic number length must be between 1 and 16", "strictLength(1,16)"));
     if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));
-    for(Plate plate in plates){
-      results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
-    }
+    
     // if(carrier  == 0 && carrierNavigation == null) results.add(CSMSetValidationResult("[$kCarrier, $kCarrierNavigation]", 'Required Carrier. Must be one Manufacturer insertion property', 'requiredInsertion()'));
     // if((carrier != 0 && carrierNavigation != null) && (carrierNavigation!.id != carrier)) results.add(CSMSetValidationResult("[$kCarrier, $kCarrierNavigation]", 'if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.', 'insertionConflict()'));
     // if(situation != null && situationNavigation != null){
@@ -105,7 +92,6 @@ final class TruckCommon implements CSMSetInterface {
     int? situation,
     Situation? situationNavigation,
     Status? statusNavigation,
-    List<Plate>? plates
   }){
     int? situationIndex = situation ?? this.situation;
     Situation? situationNav = situationNavigation ?? this.situationNavigation;
@@ -115,7 +101,7 @@ final class TruckCommon implements CSMSetInterface {
     }
 
     return TruckCommon(id ?? this.id, status ?? this.status, carrier ?? this.carrier, vin ?? this.vin, economic ?? this.economic, location ?? this.location, situation ?? this.situation,
-    situationNav ,statusNavigation ?? this.statusNavigation, plates ?? this.plates);
+    situationNav ,statusNavigation ?? this.statusNavigation);
   }
 }
 

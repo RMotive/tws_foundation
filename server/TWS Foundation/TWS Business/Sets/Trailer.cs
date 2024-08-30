@@ -28,6 +28,8 @@ public partial class Trailer
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
+    public virtual ICollection<Plate> Plates { get; set; } = [];
+
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
         PointerValidator pointer = new(true);
