@@ -225,7 +225,7 @@ final class YardLog implements CSMSetInterface {
     DriverExternal? driverExtNav = driverExternalNavigation ?? this.driverExternalNavigation;
     if(driverExtIndex == 0){
       driverExtIndex = null;
-      driverNav = null; 
+      driverExtNav = null; 
     }
 
     int? truckIndex = truck ?? this.truck;
