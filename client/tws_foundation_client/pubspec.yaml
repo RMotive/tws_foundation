@@ -1,6 +1,6 @@
 name: tws_foundation_client
 description: A client package for [TWS Foundation] server.
-version: 2.0.0
+version: 3.0.0
 publish_to: none
 
 environment:
@@ -11,6 +11,7 @@ dependencies:
   csm_foundation_services:
     git:
       url: https://github.com/RMotive/csm_foundation_services
+      ref: main
 
   dotenv: ^4.2.0
 
