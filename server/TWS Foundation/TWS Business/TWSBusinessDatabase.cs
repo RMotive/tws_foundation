@@ -18,7 +18,7 @@ public partial class TWSBusinessDatabases : BDatabaseSQLS<TWSBusinessDatabases> 
         : base() {
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-        optionsBuilder.UseSqlServer("Server=DESKTOP-M2SPTNQ;Database=TWS Business; Trusted_Connection=True; Encrypt=False");
+        optionsBuilder.UseSqlServer(Connection.GenerateConnectionString());
 
         optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()))
                              .EnableSensitiveDataLogging();

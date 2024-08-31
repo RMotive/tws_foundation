@@ -86,12 +86,12 @@ public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> 
 
             entity.HasOne(d => d.AccountNavigation)
                 .WithMany()
-                .HasForeignKey()
+                .HasForeignKey(d => d.Account)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.ProfileNavigation)
                 .WithMany()
-                .HasForeignKey()
+                .HasForeignKey(d => d.Profile)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 

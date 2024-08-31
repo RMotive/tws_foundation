@@ -77,8 +77,8 @@ public partial class Program {
             {
                 // --> Application
                 builder.Services.AddSingleton<AnalyticsMiddleware>();
-                builder.Services.AddSingleton<FramingMiddleware>();
                 builder.Services.AddSingleton<AdvisorMiddleware>();
+                builder.Services.AddSingleton<FramingMiddleware>();
                 builder.Services.AddSingleton<DispositionMiddleware>();
                 builder.Services.AddSingleton<IMigrationDisposer, DispositionManager>();
 

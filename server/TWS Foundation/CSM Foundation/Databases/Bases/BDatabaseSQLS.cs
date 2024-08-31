@@ -12,7 +12,7 @@ public abstract class BDatabaseSQLS<TDatabases>
     : DbContext, IMigrationDatabases
     where TDatabases : DbContext {
 
-    private readonly DatabasesLinkOptions Connection;
+    protected readonly DatabasesLinkOptions Connection;
 
     public BDatabaseSQLS([CallerFilePath] string? callerPath = null)
         : base() {

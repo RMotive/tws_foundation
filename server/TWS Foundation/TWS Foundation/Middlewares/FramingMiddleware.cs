@@ -26,6 +26,8 @@ public class FramingMiddleware
         using MemoryStream bufferingStream = new();
 
         IServerTransactionException? failure = null;
+        string ContentType = "application/json";
+
         try {
             context.Response.Body = bufferingStream;
             await next.Invoke(context);
@@ -35,9 +37,10 @@ public class FramingMiddleware
             XSystem systemEx = new(ex);
             failure = systemEx;
         } finally {
-            HttpResponse Response = context.Response;
+            HttpResponse response = context.Response;
+            Stream responseStream = response.Body;
 
-            if (!Response.HasStarted) {
+            if (!response.HasStarted) {
                 _ = bufferingStream.Seek(0, SeekOrigin.Begin);
                 string encodedContent = "";
                 if (failure is not null) {
@@ -48,12 +51,11 @@ public class FramingMiddleware
                         Estela = exPublish,
                     };
 
-                    Response.StatusCode = (int)failure.Status;
+                    response.StatusCode = (int)failure.Status;
                     encodedContent = JsonSerializer.Serialize(frame);
-                } else if (Response.StatusCode != 200) {
-                    Stream resolutionStream = Response.Body;
+                } else if (response.StatusCode != 200) {
 
-                    switch (Response.StatusCode) {
+                    switch (response.StatusCode) {
                         case 204:
                             encodedContent = "{}";
                             break;
@@ -77,30 +79,34 @@ public class FramingMiddleware
                             }
                             break;
                         default:
-                            encodedContent = JsonSerializer.Serialize(resolutionStream);
+                            Dictionary<string, object> jObject = JsonSerializer.Deserialize<Dictionary<string, object>>(responseStream)!;
+
+                            encodedContent = JsonSerializer.Serialize(jObject);
                             break;
                     }
                 } else {
-                    Stream resolutionStream = Response.Body;
-                    Dictionary<string, dynamic> resolution = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(resolutionStream)!;
+                    Dictionary<string, dynamic> resolution = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(responseStream)!;
 
                     SuccessFrame<Dictionary<string, dynamic>> frame = new() {
                         Tracer = Tracer,
                         Estela = resolution,
                     };
 
-                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    response.StatusCode = (int)HttpStatusCode.OK;
                     encodedContent = JsonSerializer.Serialize(frame);
                 }
 
+                response.ContentType = ContentType;
 
-                Response.ContentType = "application/json";
+
                 MemoryStream swapperBuffer = new();
                 StreamWriter writer = new(swapperBuffer);
+                
                 await writer.WriteAsync(encodedContent);
                 await writer.FlushAsync();
-                _ = swapperBuffer.Seek(0, SeekOrigin.Begin);
-                Response.Body = swapperBuffer;
+
+                swapperBuffer.Seek(0, SeekOrigin.Begin);
+                response.Body = swapperBuffer;
             }
         }
     }
