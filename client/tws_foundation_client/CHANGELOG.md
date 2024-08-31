@@ -1,13 +1,25 @@
 # CHANGELOG
 
+## CURRENT
+
+- Notes:
+
+    1. Changed the test screts management to [CI/CD].
+
+- Dependencies Upgrade:
+
+    1. dotenv ([4.2.0])
+
 ## 2.0.0 [09/07/2024]
 
-- Changed the naming convention from concept [Migration] to [Source]
-- Changed the naming from [MigrationView] to [SetView]
-- Separated concepts above [options] classes and [out] classes
+- Notes:
 
-    1. [options] classes define data to perform correctly actions or operations.
-    2. [out] classes define data resulted by operations or actions.
+    1. Changed the naming convention from concept [Migration] to [Source]
+    2. Changed the naming from [MigrationView] to [SetView]
+    3. Separated concepts above [options] classes and [out] classes
+
+        1. [options] classes define data to perform correctly actions or operations.
+        2. [out] classes define data resulted by operations or actions.
 
 - Dependencies upgrade:
 
