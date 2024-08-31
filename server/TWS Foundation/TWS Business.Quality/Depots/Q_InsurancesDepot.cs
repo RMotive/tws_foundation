@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="InsurancesDepot"/>.
 /// </summary>
 public class Q_InsurancesDepot
-    : BQ_MigrationDepot<Insurance, InsurancesDepot, TWSBusinessSource> {
+    : BQ_MigrationDepot<Insurance, InsurancesDepot, TWSBusinessDatabase> {
     public Q_InsurancesDepot()
         : base(nameof(Insurance.Policy)) {
     }
@@ -20,6 +20,7 @@ public class Q_InsurancesDepot
         return new() {
             Policy = RandomUtils.String(5),
             Country = RandomUtils.String(3),
+            Status = 1,
             Expiration = date
         };
     }

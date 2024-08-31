@@ -4,15 +4,17 @@ using TWS_Customer.Services.Records;
 using TWS_Security.Sets;
 
 namespace TWS_Customer.Managers;
+/// <summary>
+/// 
+/// </summary>
 public sealed class SessionsManager {
     private static SessionsManager? Instance;
     public static SessionsManager Manager => Instance ??= new SessionsManager();
 
     private readonly TimeSpan EXPIRATION_RANGE = TimeSpan.FromHours(2);
     private readonly List<Session> Sessions = [];
-    private SessionsManager() {
-
-    }
+    
+    SessionsManager() { }
 
     private static bool EvaluateAlive(DateTime Expiration) {
         return DateTime.Compare(DateTime.Now, Expiration) >= 0;

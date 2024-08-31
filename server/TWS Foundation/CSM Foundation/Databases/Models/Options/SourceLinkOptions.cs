@@ -1,5 +1,5 @@
 ﻿namespace CSM_Foundation.Databases.Models.Options;
-public class SourceLinkOptions {
+public class DatabasesLinkOptions {
     public required string Host { get; init; }
     public required string Name { get; init; }
     public required string User { get; init; }

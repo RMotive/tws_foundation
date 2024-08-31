@@ -1,6 +1,11 @@
-﻿namespace TWS_Security.Sets;
+﻿using CSM_Foundation.Databases.Bases;
+using CSM_Foundation.Databases.Interfaces;
+using CSM_Foundation.Databases.Validators;
 
-public partial class Solution {
+namespace TWS_Security.Sets;
+
+public partial class Solution 
+    : BDatabaseSet {
     public override int Id { get; set; }
 
     public string Name { get; set; } = null!;
@@ -10,4 +15,13 @@ public partial class Solution {
     public string? Description { get; set; }
 
     public virtual ICollection<Permit> Permits { get; set; } = [];
+
+    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        Container = [
+            ..Container,
+            (nameof(Name), [new UniqueValidator(), new LengthValidator(1, 40)]),
+            (nameof(Sign), [new UniqueValidator(), new LengthValidator(5, 5)]),
+        ];
+        return Container;
+    }
 }

@@ -1,7 +1,10 @@
+
+import 'dart:math';
+
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../secrets/credentials.dart';
+import '../integration_credentials.dart';
 
 void main() {
   late String auth;
@@ -11,14 +14,15 @@ void main() {
 
   setUp(
     () async {
-      final TWSAdministrationSource source = TWSAdministrationSource(
+      final TWSFoundationSource source = TWSFoundationSource(
         false,
         headers: <String, String>{
           'CSMDisposition': 'Quality',
         },
       );
 
-      MainResolver<Privileges> resolver = await source.security.authenticate(qualityCredentials);
+
+      MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),
         onConnectionFailure: () {
@@ -48,6 +52,7 @@ void main() {
   test(
     'View',
     () async {
+
       MainResolver<MigrationView<Solution>> fact = await service.view(
         MigrationViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
         auth,
@@ -104,7 +109,8 @@ void main() {
       test(
         'Creates when unexist',
         () async {
-          Solution mock = Solution.b('QualityTLMW', 'QTLMW');
+          int rnd = Random().nextInt(900)  + 99;
+          Solution mock = Solution.b('QualityT$rnd', 'QT$rnd');
 
           MainResolver<MigrationUpdateResult<Solution>> fact = await service.update(mock, auth);
           MigrationUpdateResult<Solution> actEffect = await fact.act(decoder);
@@ -118,7 +124,8 @@ void main() {
       test(
         'Updates when exist',
         () async {
-          Solution mock = creationMock.clone(name: 'a new name to test');
+          int rnd = Random().nextInt(900)  + 99;
+          Solution mock = creationMock.clone(name: 'a new name to test: $rnd');
           MainResolver<MigrationUpdateResult<Solution>> fact = await service.update(mock, auth);
           MigrationUpdateResult<Solution> actEffect = await fact.act(decoder);
           assert(actEffect.previous != null);

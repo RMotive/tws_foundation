@@ -8,15 +8,15 @@ public interface IMigrationDisposer {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="Source"></param>
+    /// <param name="Databases"></param>
     /// <param name="Set"></param>
-    void Push(DbContext Source, ISourceSet Set);
+    void Push(DbContext Databases, IDatabasesSet Set);
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="Source"></param>
+    /// <param name="Databases"></param>
     /// <param name="Sets"></param>
-    void Push(DbContext Source, ISourceSet[] Sets);
+    void Push(DbContext Databases, IDatabasesSet[] Sets);
     /// <summary>
     /// 
     /// </summary>

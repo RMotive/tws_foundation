@@ -6,39 +6,39 @@ using Xunit;
 namespace CSM_Foundation.Databases.Quality.Bases;
 
 /// <summary>
-///     Base Quality for [MigrationSource].
+///     Base Quality for [MigrationDatabases].
 ///     
-///     Define standard behaviors and quality checks for [MigrationSource] concept.
+///     Define standard behaviors and quality checks for [MigrationDatabases] concept.
 ///     
-///     [MigrationSource] concept: determines a datasource class mirrored by an Entity Framework
+///     [MigrationDatabases] concept: determines a dataDatabases class mirrored by an Entity Framework
 ///     migration implementation.
 /// </summary>
-/// <typeparam name="TSource">
-///     Type of the [MigrationSource] implementation class.
+/// <typeparam name="TDatabases">
+///     Type of the [MigrationDatabases] implementation class.
 /// </typeparam>
-public abstract class BQ_MigrationSource<TSource>
-    : IQ_MigrationSource
-    where TSource : BDatabaseSQLS<TSource> {
+public abstract class BQ_MigrationDatabases<TDatabases>
+    : IQ_MigrationDatabases
+    where TDatabases : BDatabaseSQLS<TDatabases> {
     /// <summary>
-    ///     EF [MigrationSource]. 
+    ///     EF [MigrationDatabases]. 
     /// </summary>
-    protected readonly TSource Source;
+    protected readonly TDatabases Databases;
 
     /// <summary>
-    ///     Generates a new base quality class for [MigrationSource].
+    ///     Generates a new base quality class for [MigrationDatabases].
     /// </summary>
-    /// <param name="Source"></param>
-    public BQ_MigrationSource(TSource Source) {
-        this.Source = Source;
+    /// <param name="Databases"></param>
+    public BQ_MigrationDatabases(TDatabases Databases) {
+        this.Databases = Databases;
     }
 
     [Fact]
     public void Communication() {
-        Assert.True(Source.Database.CanConnect(), $"{GetType()} cannot connect, check your connection credentials");
+        Assert.True(Databases.Database.CanConnect(), $"{GetType()} cannot connect, check your connection credentials");
     }
 
     [Fact]
     public void Evaluate() {
-        Source.Evaluate();
+        Databases.Evaluate();
     }
 }

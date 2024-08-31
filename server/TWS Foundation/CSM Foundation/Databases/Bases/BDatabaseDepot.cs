@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Databases.Enumerators;
 using CSM_Foundation.Databases.Interfaces;
 using CSM_Foundation.Databases.Models;
@@ -8,46 +9,47 @@ using CSM_Foundation.Databases.Models.Options;
 using CSM_Foundation.Databases.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CSM_Foundation.Databases.Bases;
 /// <summary>
 ///     Defines base behaviors for a <see cref="IMigrationDepot{TMigrationSet}"/>
-///     implementation describing <see cref="BDatabaseDepot{TMigrationSource, TMigrationSet}"/>
+///     implementation describing <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     shared behaviors.
 ///     
-///     A <see cref="BDatabaseDepot{TMigrationSource, TMigrationSet}"/> provides methods to 
-///     serve datasource saved transactions for <see cref="TMigrationSet"/>.
+///     A <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/> provides methods to 
+///     serve dataDatabases saved transactions for <see cref="TMigrationSet"/>.
 /// </summary>
-/// <typeparam name="TMigrationSource">
-///     What source implementation belongs this depot.
+/// <typeparam name="TMigrationDatabases">
+///     What Database implementation belongs this depot.
 /// </typeparam>
 /// <typeparam name="TMigrationSet">
 ///     Migration mirror concept that this depot handles.
 /// </typeparam>
-public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
+public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     : IMigrationDepot<TMigrationSet>
-    where TMigrationSource : BDatabaseSQLS<TMigrationSource>
-    where TMigrationSet : class, ISourceSet {
+    where TMigrationDatabases : BDatabaseSQLS<TMigrationDatabases>
+    where TMigrationSet : class, IDatabasesSet {
 
     protected readonly IMigrationDisposer? Disposer;
     /// <summary>
     ///     Name to handle direct transactions (not-saved)
     /// </summary>
-    protected readonly TMigrationSource Source;
+    protected readonly TMigrationDatabases Database;
     /// <summary>
-    ///     DBSet handler into <see cref="Source"/> to handle fastlike transactions related to the <see cref="TMigrationSet"/> 
+    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TMigrationSet"/> 
     /// </summary>
     protected readonly DbSet<TMigrationSet> Set;
     /// <summary>
-    ///     Generates a new instance of a <see cref="BDatabaseDepot{TMigrationSource, TMigrationSet}"/> base.
+    ///     Generates a new instance of a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/> base.
     /// </summary>
-    /// <param name="source">
-    ///     The <typeparamref name="TMigrationSource"/> that stores and handles the transactions for this <see cref="TMigrationSet"/> concept.
+    /// <param name="Databases">
+    ///     The <typeparamref name="TMigrationDatabases"/> that stores and handles the transactions for this <see cref="TMigrationSet"/> concept.
     /// </param>
-    public BDatabaseDepot(TMigrationSource source, IMigrationDisposer? Disposer) {
-        Source = source;
+    public BDatabaseDepot(TMigrationDatabases Databases, IMigrationDisposer? Disposer) {
+        this.Database = Databases;
         this.Disposer = Disposer;
-        Set = Source.Set<TMigrationSet>();
+        Set = Databases.Set<TMigrationSet>();
     }
 
     #region View 
@@ -56,7 +58,6 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
         int range = Options.Range;
         int page = Options.Page;
         int amount = Set.Count();
-
         (int pages, int left) = Math.DivRem(amount, range);
         if (left > 0) {
             pages++;
@@ -71,6 +72,7 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
         if (include != null) {
             query = include(query);
         }
+
         int orderActions = Options.Orderings.Length;
         if (orderActions > 0) {
             Type setType = typeof(TMigrationSet);
@@ -115,10 +117,11 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
 
     #endregion
 
+
     #region Create
 
     /// <summary>
-    ///     Creates a new record into the datasource.
+    ///     Creates a new record into the dataDatabases.
     /// </summary>
     /// <param name="Set">
     ///     <see cref="TMigrationSet"/> to store.
@@ -130,14 +133,14 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
         Set.EvaluateWrite();
 
         _ = await this.Set.AddAsync(Set);
-        _ = await Source.SaveChangesAsync();
-        Source.ChangeTracker.Clear();
+        _ = await Database.SaveChangesAsync();
+        Database.ChangeTracker.Clear();
 
-        Disposer?.Push(Source, [Set]);
+        Disposer?.Push(Database, [Set]);
         return Set;
     }
     /// <summary>
-    ///     Creates a collection of records into the datasource. 
+    ///     Creates a collection of records into the dataDatabases. 
     ///     <br>
     ///         Depending on <paramref name="Sync"/> the transaction performs different,
     ///         the operation iterates the desire collection to store and collects all the 
@@ -153,18 +156,19 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
     ///     to be stored won't continue, the operation will throw new exception.
     /// </param>
     /// <returns>
-    ///     A <see cref="SourceTransactionOut{TSet}"/> that stores a collection of failures, and successes caught.
+    ///     A <see cref="DatabasesTransactionOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public async Task<SourceTransactionOut<TMigrationSet>> Create(TMigrationSet[] Sets, bool Sync = false) {
+    public async Task<DatabasesTransactionOut<TMigrationSet>> Create(TMigrationSet[] Sets, bool Sync = false) {
         TMigrationSet[] saved = [];
         SourceTransactionFailure[] fails = [];
 
         foreach (TMigrationSet record in Sets) {
             try {
+                //AttachDate(record);
                 record.EvaluateWrite();
-                Source.ChangeTracker.Clear();
+                Database.ChangeTracker.Clear();
                 this.Set.Attach(record);
-                await Source.SaveChangesAsync();
+                await Database.SaveChangesAsync();
                 saved = [.. saved, record];
             } catch (Exception excep) {
                 if (Sync) {
@@ -176,14 +180,14 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
             }
         }
 
-        Disposer?.Push(Source, Sets);
+        Disposer?.Push(Database, Sets);
         return new(saved, fails);
     }
 
     #endregion
 
     #region Read
-    public async Task<SourceTransactionOut<TMigrationSet>> Read(Expression<Func<TMigrationSet, bool>> Predicate, MigrationReadBehavior Behavior, Func<IQueryable<TMigrationSet>, IQueryable<TMigrationSet>>? Include = null) {
+    public async Task<DatabasesTransactionOut<TMigrationSet>> Read(Expression<Func<TMigrationSet, bool>> Predicate, MigrationReadBehavior Behavior, Func<IQueryable<TMigrationSet>, IQueryable<TMigrationSet>>? Include = null) {
         IQueryable<TMigrationSet> query = Set.Where(Predicate);
 
         if (Include != null) {
@@ -191,7 +195,7 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
         }
 
         if (!query.Any()) {
-            return new SourceTransactionOut<TMigrationSet>([], []);
+            return new DatabasesTransactionOut<TMigrationSet>([], []);
         }
 
         TMigrationSet[] items = Behavior switch {
@@ -221,25 +225,99 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
 
     #region Update 
 
+    //void AttachDate(object entity, bool excluideCreation = false) {
+    //    IHistoryDatabasesSet? historyDatabasesSet = entity as IHistoryDatabasesSet;
+    //    IPivotDatabasesSet? pivotDatabasesSet = entity as IPivotDatabasesSet;
+    //    if (historyDatabasesSet != null) historyDatabasesSet.Timemark = DateTime.Now;
+    //    if (pivotDatabasesSet != null && !excluideCreation) pivotDatabasesSet.Creation = DateTime.Now;
+    //}
+
+    /// <summary>
+    /// Perform the navigation changes in a Tmigrationset
+    /// </summary>
+    //Database.Entry(previousList[i]).CurrentValues.SetValues(newitem);
+
+    void UpdateHelper(IDatabasesSet current, IDatabasesSet Record) {
+        EntityEntry previousEntry = Database.Entry(current);
+        if (previousEntry.State == EntityState.Unchanged) {
+            //AttachDate(Record, true);
+            // Update the non-navigation properties.
+            previousEntry.CurrentValues.SetValues(Record);
+            foreach (NavigationEntry navigation in previousEntry.Navigations) {
+                object? newNavigationValue = Database.Entry(Record).Navigation(navigation.Metadata.Name).CurrentValue;
+                // Validate if navigation is a collection.
+                if (navigation.CurrentValue is IEnumerable<object> previousCollection && newNavigationValue is IEnumerable<object> newCollection) {
+                    List<object> previousList = previousCollection.ToList();
+                    List<object> newList = newCollection.ToList();
+                    // Perform a search for new items to add in the collection.
+                    // NOTE: the followings iterations must be performed in diferent code segments to avoid index length conflicts.
+                    for (int i = 0; i < newList.Count; i++) {
+                        IDatabasesSet? newItemSet = (IDatabasesSet)newList[i];
+                        if (newItemSet != null && newItemSet.Id <= 0) {
+                            //AttachDate(newList[i]);
+                            EntityEntry newNavigationEntry = Database.Entry(newList[i]);
+                            newNavigationEntry.State = EntityState.Added;
+                        }
+                    }
+                    for (int i = 0; i < previousList.Count; i++) {
+                        // Find items to modify.
+                        // For each new item stored in record collection, will search for an ID match and update the record.
+                        foreach (object newitem in newList) {
+                            if (previousList[i] is IDatabasesSet previousItem && newitem is IDatabasesSet newItemSet && previousItem.Id == newItemSet.Id)
+                                UpdateHelper(previousItem, newItemSet);
+                        }
+                    }
+                } else if (navigation.CurrentValue == null && newNavigationValue != null) {
+                    // Create a new navigation entity.
+                    // Also update the attached navigators.
+                    //AttachDate(newNavigationValue);
+                    EntityEntry newNavigationEntry = Database.Entry(newNavigationValue);
+                    newNavigationEntry.State = EntityState.Added;
+                    navigation.CurrentValue = newNavigationValue;
+                } else if (navigation.CurrentValue != null && newNavigationValue != null) {
+                    // Update the existing navigation entity
+
+
+                    if (navigation.CurrentValue is IDatabasesSet currentItemSet && newNavigationValue is IDatabasesSet newItemSet) UpdateHelper(currentItemSet, newItemSet);
+                }
+
+            }
+        }
+
+    }
+   
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Set"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<RecordUpdateOut<TMigrationSet>> Update(TMigrationSet Record) {
-        TMigrationSet? previous = await Set
+    public async Task<RecordUpdateOut<TMigrationSet>> Update(TMigrationSet Record, Func<IQueryable<TMigrationSet>, IQueryable<TMigrationSet>>? Include = null) {
+        IQueryable<TMigrationSet> query = Set;
+        TMigrationSet? old = null;
+        TMigrationSet? current;
+        if (Include != null) {
+            query = Include(query);
+        }
+        current = await query
             .Where(i => i.Id == Record.Id)
-            .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        _ = Set.Update(Record);
-        _ = await Source.SaveChangesAsync();
+        if (current != null) {
+            Set.Attach(current);
+            old = current.DeepCopy();
+            UpdateHelper(current, Record);
+        } else {
+            //Generate a new insert if the given record data not exist.
+            //AttachDate(Record);
+            Set.Update(Record);
+        }
+        await Database.SaveChangesAsync();
 
-        Disposer?.Push(Source, Record);
+        Disposer?.Push(Database, Record);
         return new RecordUpdateOut<TMigrationSet> {
-            Previous = previous,
-            Updated = Record,
+            Previous = old,
+            Updated = current ?? Record,
         };
     }
 
@@ -247,7 +325,7 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
 
     #region Delete
 
-    public Task<SourceTransactionOut<TMigrationSet>> Delete(TMigrationSet[] Sets) {
+    public Task<DatabasesTransactionOut<TMigrationSet>> Delete(TMigrationSet[] Sets) {
 
         TMigrationSet[] safe = [];
         SourceTransactionFailure[] fails = [];
@@ -263,15 +341,28 @@ public abstract class BDatabaseDepot<TMigrationSource, TMigrationSet>
         }
 
         Set.RemoveRange(safe);
-        return Task.FromResult<SourceTransactionOut<TMigrationSet>>(new(safe, []));
+        return Task.FromResult<DatabasesTransactionOut<TMigrationSet>>(new(safe, []));
     }
 
     public async Task<TMigrationSet> Delete(TMigrationSet Set) {
         Set.EvaluateWrite();
         _ = this.Set.Remove(Set);
-        _ = await Source.SaveChangesAsync();
-        Source.ChangeTracker.Clear();
+        _ = await Database.SaveChangesAsync();
+        Database.ChangeTracker.Clear();
         return Set;
+    }
+
+    public async Task<TMigrationSet> Delete(int Id) {
+        TMigrationSet record = await Set
+            .AsNoTracking()
+            .Where(r => r.Id == Id)
+            .FirstOrDefaultAsync()
+            ?? throw new Exception("Trying to remove an unexist record");
+
+        Set.Remove(record);
+        await Database.SaveChangesAsync();
+
+        return record;
     }
 
     #endregion

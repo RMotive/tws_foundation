@@ -26,7 +26,6 @@ class MainResolver<TSuccess extends CSMEncodeInterface> extends CSMServiceResolv
     );
     return actResult;
   }
-
   void resolve({
     required void Function() onConnectionFailure,
     required void Function(Object exception, StackTrace trace) onException,

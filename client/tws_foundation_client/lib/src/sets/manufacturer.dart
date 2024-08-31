@@ -2,12 +2,17 @@ import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Manufacturer implements CSMSetInterface {
+  static const String kModel = "model";
+  static const String kBrand = "brand";
+  static const String kYear = "year";
+  static const String kTrucks = "trucks";
+
   @override
   int id;
-  final String model;
-  final String brand;
-  final DateTime year;
-  final List<Truck>? trucks;
+  String model;
+  String brand;
+  DateTime year;
+  List<Truck>? trucks;
 
   Manufacturer(this.id, this.model, this.brand, this.year, this.trucks);
   factory Manufacturer.des(JObject json) {
@@ -17,30 +22,46 @@ final class Manufacturer implements CSMSetInterface {
     String brand = json.get('brand');
     DateTime year = json.get('year');
 
-    //Validate if the first position is not null for non-empty Truck lists.
+   //Validate if the first position is not null for non-empty Truck lists.
     List<JObject> rawTrucksArray = json.getList('Trucks');
     trucks = rawTrucksArray.map<Truck>((JObject e) => deserealize(e, decode: TruckDecoder())).toList();
-
+    
+   
+   
     return Manufacturer(id, model, brand, year, trucks);
   }
 
   @override
   JObject encode() {
-    String y = year.toString().substring(0, 10);
+
+    String y = year.toString().substring(0,10);
     return <String, dynamic>{
       'id': id,
-      'model': model,
-      'brand': brand,
-      'year': y,
-      'Trucks': trucks?.map((Truck i) => i.encode()).toList(),
+      kModel: model,
+      kBrand: brand,
+      kYear: y,
+      kTrucks: trucks?.map((Truck i) => i.encode()).toList(),
     };
   }
-
+  
   @override
   List<CSMSetValidationResult> evaluate() {
-    // TODO: implement evaluate
-    throw UnimplementedError();
+    List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
+    if(kModel.length > 30) results.add(CSMSetValidationResult(kModel, "Model length must be a max lenght of 30", "strictLength(1,30)"));
+    if(kModel.length > 15) results.add(CSMSetValidationResult(kBrand, "Brand length must be a max lenght of 15", "strictLength(1,15)"));
+
+    return results;
   }
+
+  Manufacturer clone({
+    int? id,
+    String? model,
+    String? brand,
+    DateTime? year
+  }){
+    return Manufacturer(id ?? this.id, model ?? this.model, brand ?? this.brand, year ?? this.year, trucks);
+  }
+
 }
 
 final class ManufacturerDecoder implements CSMDecodeInterface<Manufacturer> {

@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="SctsDepot"/>.
 /// </summary>
 public class Q_SctsDepot
-    : BQ_MigrationDepot<Sct, SctsDepot, TWSBusinessSource> {
+    : BQ_MigrationDepot<Sct, SctsDepot, TWSBusinessDatabase> {
     public Q_SctsDepot()
         : base(nameof(Sct.Type)) {
     }
@@ -18,7 +18,8 @@ public class Q_SctsDepot
         return new() {
             Type = RandomUtils.String(6),
             Number = RandomUtils.String(25),
-            Configuration = RandomUtils.String(10)
+            Configuration = RandomUtils.String(10),
+            Status = 1
         };
     }
 }

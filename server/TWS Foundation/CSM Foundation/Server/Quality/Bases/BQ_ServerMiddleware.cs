@@ -3,7 +3,7 @@
 namespace CSM_Foundation.Server.Quality.Bases;
 /// <summary>
 ///     Defines base behavior for <see cref="BQ_ServerMiddleware"/> implementations
-///     that qualifies server [Middleware] operations and configurations.
+///     that qualifies Server [Middleware] operations and configurations.
 /// </summary>
 public abstract class BQ_ServerMiddleware {
     /// <summary>

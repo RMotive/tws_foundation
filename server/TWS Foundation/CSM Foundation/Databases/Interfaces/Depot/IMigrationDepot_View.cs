@@ -8,10 +8,10 @@ namespace CSM_Foundation.Databases.Interfaces.Depot;
 ///     indexed, paged and handled TableViews based on the data.
 /// </summary>
 /// <typeparam name="TMigrationSet">
-///     The datasource object that the implementation handles.
+///     The dataDatabases object that the implementation handles.
 /// </typeparam>
 public interface IMigrationDepot_View<TMigrationSet>
-    where TMigrationSet : ISourceSet {
+    where TMigrationSet : IDatabasesSet {
     /// <summary>
     /// 
     /// </summary>
