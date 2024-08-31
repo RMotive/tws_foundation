@@ -10,11 +10,11 @@ namespace TWS_Security.Depots;
 ///     representing a depot to handle <see cref="Solution"/> dataDatabases entity mirror.
 /// </summary>
 public class SolutionsDepot
-    : BDatabaseDepot<TWSSecurityDatabases, Solution> {
+    : BDatabaseDepot<TWSSecurityDatabase, Solution> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Solution"/>.
     /// </summary>
-    public SolutionsDepot(TWSSecurityDatabases Databases, IMigrationDisposer? Disposer = null)
+    public SolutionsDepot(TWSSecurityDatabase Databases, IMigrationDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     /// <summary>

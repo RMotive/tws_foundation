@@ -11,7 +11,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="SituationsDepot"/>.
 /// </summary>
 public class Q_SituationsDepot
-    : BQ_MigrationDepot<Situation, SituationsDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<Situation, SituationsDepot, TWSBusinessDatabase> {
     public Q_SituationsDepot()
         : base(nameof(Situation.Name)) {
     }

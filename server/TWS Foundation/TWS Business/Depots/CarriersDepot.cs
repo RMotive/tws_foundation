@@ -7,7 +7,7 @@ namespace TWS_Business.Depots;
 ///     Implements a <see cref="BDatabasesDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Carrier"/> dataDatabases entity mirror.
 /// </summary>
-public class CarriersDepot : BDatabaseDepot<TWSBusinessDatabases, Carrier> {
+public class CarriersDepot : BDatabaseDepot<TWSBusinessDatabase, Carrier> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Carrier"/>.
     /// </summary>

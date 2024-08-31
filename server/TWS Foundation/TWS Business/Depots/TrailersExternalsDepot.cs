@@ -7,7 +7,7 @@ namespace TWS_Business.Depots;
 ///     Implements a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="TrailerExternal"/> dataDatabases entity mirror.
 /// </summary>
-public class TrailersExternalsDepot : BDatabaseDepot<TWSBusinessDatabases, TrailerExternal> {
+public class TrailersExternalsDepot : BDatabaseDepot<TWSBusinessDatabase, TrailerExternal> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="TrailerExternal"/>.
     /// </summary>

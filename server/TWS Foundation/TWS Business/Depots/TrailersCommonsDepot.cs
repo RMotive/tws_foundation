@@ -7,7 +7,7 @@ namespace TWS_Business.Depots;
 ///     Implements a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="TrailerCommon"/> dataDatabases entity mirror.
 /// </summary>
-public class TrailersCommonsDepot : BDatabaseDepot<TWSBusinessDatabases, TrailerCommon> {
+public class TrailersCommonsDepot : BDatabaseDepot<TWSBusinessDatabase, TrailerCommon> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="TrailerCommon"/>.
     /// </summary>

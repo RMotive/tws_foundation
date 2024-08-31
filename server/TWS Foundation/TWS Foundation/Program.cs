@@ -70,8 +70,8 @@ public partial class Program {
             });
 
             // --> Checking Database Health
-            new TWSSecurityDatabases().ValidateHealth();
-            new TWSBusinessDatabases().ValidateHealth();
+            new TWSSecurityDatabase().ValidateHealth();
+            new TWSBusinessDatabase().ValidateHealth();
 
             // --> Adding customer services
             {
@@ -83,8 +83,8 @@ public partial class Program {
                 builder.Services.AddSingleton<IMigrationDisposer, DispositionManager>();
 
                 // --> Databasess contexts
-                builder.Services.AddDbContext<TWSSecurityDatabases>();
-                builder.Services.AddDbContext<TWSBusinessDatabases>();
+                builder.Services.AddDbContext<TWSSecurityDatabase>();
+                builder.Services.AddDbContext<TWSBusinessDatabase>();
 
                 // --> Depots
                 builder.Services.AddScoped<SolutionsDepot>();

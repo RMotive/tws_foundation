@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="ManufacturersDepot"/>.
 /// </summary>
 public class Q_ManufacturersDepot
-    : BQ_MigrationDepot<Manufacturer, ManufacturersDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<Manufacturer, ManufacturersDepot, TWSBusinessDatabase> {
     public Q_ManufacturersDepot()
         : base(nameof(Manufacturer.Model)) {
     }

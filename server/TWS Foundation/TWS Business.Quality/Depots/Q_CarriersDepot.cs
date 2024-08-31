@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="CarriersDepot"/>.
 /// </summary>
 public class Q_CarriersDepot
-    : BQ_MigrationDepot<Carrier, CarriersDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<Carrier, CarriersDepot, TWSBusinessDatabase> {
     public Q_CarriersDepot()
         : base(nameof(Carrier.Id)) {
     }

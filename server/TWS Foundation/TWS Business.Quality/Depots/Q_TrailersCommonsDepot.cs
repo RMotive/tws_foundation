@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TrailersCommonsDepot"/>.
 /// </summary>
 public class Q_TrailersCommonsDepot
-    : BQ_MigrationDepot<TrailerCommon, TrailersCommonsDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<TrailerCommon, TrailersCommonsDepot, TWSBusinessDatabase> {
     public Q_TrailersCommonsDepot()
         : base(nameof(TrailerCommon.Id)) {
     }

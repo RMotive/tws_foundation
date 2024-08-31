@@ -7,22 +7,22 @@ using TWS_Security.Sets;
 
 namespace TWS_Security;
 
-public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> {
-    
-    public TWSSecurityDatabases(DbContextOptions<TWSSecurityDatabases> options)
+public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
+
+    public TWSSecurityDatabase(DbContextOptions<TWSSecurityDatabase> options)
         : base(options) {
     }
 
-    public TWSSecurityDatabases()
+    public TWSSecurityDatabase()
     : base() {
 
     }
 
     public virtual DbSet<Account> Accounts { get; set; }
 
-    public virtual DbSet<AccountsPermit> AccountsPermits { get; set; }
+    public virtual DbSet<AccountPermit> AccountsPermits { get; set; }
 
-    public virtual DbSet<AccountProfile> AccountProfile { get; set; }
+    public virtual DbSet<AccountProfile> AccountsProfiles { get; set; }
 
     public virtual DbSet<Contact> Contacts { get; set; }
 
@@ -61,41 +61,10 @@ public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> 
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        modelBuilder.Entity<AccountsPermit>(entity => {
-            entity.HasNoKey();
-            entity.ToTable("Accounts_Permits");
 
-            entity.Property(e => e.Account);
-            entity.Property(e => e.Permit);
+        AccountPermit.CreateModel(modelBuilder);
+        AccountProfile.CreateModel(modelBuilder);   
 
-            entity.HasOne(d => d.AccountNavigation)
-                .WithMany()
-                .HasForeignKey(d => d.Account)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.PermitNavigation)
-                .WithMany()
-                .HasForeignKey(d => d.Permit)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<AccountProfile>(entity => { 
-            entity.HasNoKey();
-            entity.ToTable("Accounts_Profiles");
-            
-            entity.Property(e => e.Account);
-            entity.Property(e => e.Profile);
-
-            entity.HasOne(d => d.AccountNavigation)
-                .WithMany()
-                .HasForeignKey(d => d.Account)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            entity.HasOne(d => d.ProfileNavigation)
-                .WithMany()
-                .HasForeignKey(d => d.Profile)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
 
         modelBuilder.Entity<Contact>(entity => {
             entity.HasKey(e => e.Id);

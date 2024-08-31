@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="UsdotsDepot"/>.
 /// </summary>
 public class Q_UsdotsDepot
-    : BQ_MigrationDepot<Usdot, UsdotsDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<Usdot, UsdotsDepot, TWSBusinessDatabase> {
     public Q_UsdotsDepot()
         : base(nameof(Usdot.Mc)) {
     }

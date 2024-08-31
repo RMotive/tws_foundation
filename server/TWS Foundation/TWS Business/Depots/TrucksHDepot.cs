@@ -8,7 +8,7 @@ namespace TWS_Business.Depots;
 ///     representing a depot to handle <see cref="TruckH"/> dataDatabases entity mirror.
 /// </summary>
 public class TrucksHDepot
-: BDatabaseDepot<TWSBusinessDatabases, TruckH> {
+: BDatabaseDepot<TWSBusinessDatabase, TruckH> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="TruckH"/>.
     /// </summary>

@@ -10,7 +10,7 @@ namespace TWS_Security.Depots;
 ///     representing a depot to handle <see cref="Contact"/> dataDatabases entity mirror.
 /// </summary>
 public class ContactsDepot
-     : BDatabaseDepot<TWSSecurityDatabases, Contact> {
+     : BDatabaseDepot<TWSSecurityDatabase, Contact> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Contact"/>.
     /// </summary>
