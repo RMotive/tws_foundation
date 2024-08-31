@@ -37,7 +37,7 @@ public class SecurityService
                     Wildcard = a.Wildcard,
                     Contact = a.Contact,
                     ContactNavigation = new Contact() {
-                        Id = a.ContactNavigation.Id,
+                        Id = a.ContactNavigation!.Id,
                         Name = a.ContactNavigation.Name,
                         Lastname = a.ContactNavigation.Lastname,
                         Email = a.ContactNavigation.Email,
@@ -61,7 +61,7 @@ public class SecurityService
         }
 
         Permit[] permits = await Accounts.GetPermits(account.Id);
-        Session session = Sessions.Subscribe(Credentials, account.Wildcard, permits, account.ContactNavigation);
+        Session session = Sessions.Subscribe(Credentials, account.Wildcard, permits, account.ContactNavigation!);
 
         if(session.Wildcard) 
             return session;
