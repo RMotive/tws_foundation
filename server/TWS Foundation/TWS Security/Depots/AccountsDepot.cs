@@ -12,12 +12,12 @@ namespace TWS_Security.Depots;
 ///     transactions. 
 /// </summary>
 public class AccountsDepot
-    : BDatabaseDepot<TWSSecurityDatabases, Account>
+    : BDatabaseDepot<TWSSecurityDatabase, Account>
     , IAccountsDepot {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Account"/>.
     /// </summary>
-    public AccountsDepot(TWSSecurityDatabases Databases, IMigrationDisposer? Disposer = null)
+    public AccountsDepot(TWSSecurityDatabase Databases, IMigrationDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     /// <summary>
@@ -29,7 +29,7 @@ public class AccountsDepot
 
 
     public async Task<Permit[]> GetPermits(int Account) {
-        IQueryable<AccountsPermit> accountPermits = Database.AccountsPermits
+        IQueryable<AccountPermit> accountPermits = Database.AccountsPermits
             .Where(i => i.Account == Account)
                 .Include(i => i.PermitNavigation);
 
@@ -39,7 +39,7 @@ public class AccountsDepot
         Permit[] directPermits = await permits.ToArrayAsync();
 
 
-        Profile[] accountProfiles = await Database.AccountProfile
+        Profile[] accountProfiles = await Database.AccountsProfiles
             .Where(i => i.Account == Account)
                 .Include(i => i.ProfileNavigation)
             .Select(i => i.ProfileNavigation)

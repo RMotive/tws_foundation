@@ -11,7 +11,7 @@ namespace TWS_Security.Quality.Depots;
 ///     Qualifies the <see cref="ContactsDepot"/>.
 /// </summary>
 public class Q_ContactsDepot
-    : BQ_MigrationDepot<Contact, ContactsDepot, TWSSecurityDatabases> {
+    : BQ_MigrationDepot<Contact, ContactsDepot, TWSSecurityDatabase> {
     public Q_ContactsDepot()
         : base(nameof(Contact.Name)) {
     }

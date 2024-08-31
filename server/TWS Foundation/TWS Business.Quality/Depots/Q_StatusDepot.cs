@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="StatusesDepot"/>.
 /// </summary>
 public class Q_StatusDepot
-    : BQ_MigrationDepot<Status, StatusesDepot, TWSBusinessDatabases> {
+    : BQ_MigrationDepot<Status, StatusesDepot, TWSBusinessDatabase> {
     public Q_StatusDepot()
         : base(nameof(Status.Name)) {
     }
