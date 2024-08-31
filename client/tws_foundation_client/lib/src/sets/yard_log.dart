@@ -170,7 +170,11 @@ final class YardLog implements CSMSetInterface {
     if(section < 0) results.add(CSMSetValidationResult(kSection, 'Section pointer must be equal or greater than 0', 'pointerHandler()'));
     if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'loadType pointer must be equal or greater than 0', 'pointerHandler()'));
 
-    if((truckExternalNavigation == null && truckNavigation == null) || (truck == null && truckExternal == null)){
+    if(driverExternalNavigation == null && driverNavigation == null){
+      results.add(CSMSetValidationResult(kDriver, 'There is not driver or external driver pointer setted', 'pointerHandler()'));
+    }
+
+    if(truckExternalNavigation == null && truckNavigation == null){
       results.add(CSMSetValidationResult(kTruckExternalNavigation, 'There is not truck or external truck pointer setted', 'pointerHandler()'));
     }
 
