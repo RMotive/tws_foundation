@@ -12,7 +12,7 @@ final class Section implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int yard = 0;
   String name = "";
   int capacity = 0;

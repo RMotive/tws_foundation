@@ -22,6 +22,8 @@ public class Q_YardLogsDepot
             Section = 1,
             Timestamp = DateTime.Now,
             Guard = 1,
+            Truck = 1,
+            Seal = " seal",
             Gname = RandomUtils.String(30),
             FromTo = RandomUtils.String(30),
             Damage = false,

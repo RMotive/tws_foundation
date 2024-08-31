@@ -43,14 +43,14 @@ VALUES('Single axle', 'Single axle. For small trailers boxes', 1), ('Tandem axle
 INSERT INTO Trailer_Classes([Name], [Description], Axis)
 VALUES('Dry van', 'Full closed trailer, ideal for dry load.', 1),('Reefer', 'Refrigerated closed trailer', 2),('Flatbed', 'Open flat platform. ideal for big vehicules or materials transport.', 1);
 
-INSERT INTO Trailers_Commons([Status],Class, Carrier, Situation, [Location], Economic)
-VALUES (1,1,1,1,1, 'Economic 1'), (1,2,2,2,2, 'Economic 2'), (1,3,3,3,3, 'Economic 3');
+INSERT INTO Trailers_Commons([Status],Class, Situation, [Location], Economic)
+VALUES (1,1,1,1, 'Economic 1'), (1,2,2,2, 'Economic 2'), (1,3,3,3, 'Economic 3');
  
-INSERT INTO Trailers_Externals([Status], Common)
-VALUES (1, 1), (1, 2), (1, 3);
+INSERT INTO Trailers_Externals([Status], Common, MxPlate, UsaPlate, Carrier)
+VALUES (1, 1, 'MXexternal1', 'USAexternal1', 'Trailer Carrier 1'), (1, 2, 'MXexternal2', 'USAexternal3', 'Trailer Carrier 2'), (1, 3,'MXexternal3', null, 'Trailer Carrier 3');
 
-INSERT INTO Trailers([Status], Common, Manufacturer, Maintenance)
-VALUES (1,1,1,1), (1,2,2,2), (1,3,3,3);
+INSERT INTO Trailers([Status], Common, Manufacturer, Maintenance, Carrier)
+VALUES (1,1,1,1,1), (1,2,2,2,2), (1,3,3,3,3);
 
 INSERT INTO Identifications([Status], [Name], FatherLastname, MotherLastName, Birthday)
 VALUES(1, 'ARTURO', 'RAMIREZ', 'MANCILLAS', SYSDATETIME()), (1, 'CARLOS JAVIER', 'SANCHEZ', 'GUZMAN', SYSDATETIME()), (1, 'URIAS', 'ARMENTA', 'CESAR', null);
@@ -67,14 +67,14 @@ VALUES(1, 1, 1),(1, 2, 2),(1, 3, 3);
 INSERT INTO Drivers([Status], Employee, DriverType, Common, LicenseExpiration, TWIC,TWICExpiration, VISA, VISAExpiration, [FAST], FASTExpiration, ANAM, ANAMExpiration, DrugalcRegistrationDate, PullnoticeRegistrationDate)
 VALUES(1, 1, 'Binational', 1, SYSDATETIME(), '28250230', SYSDATETIME(), 'TJT005336269', SYSDATETIME(), '411000013467', SYSDATETIME(), 'SATGN2017091940000001885', SYSDATETIME(), SYSDATETIME(), SYSDATETIME()), (1, 2, 'Mexican', 2, SYSDATETIME(), '28237819', SYSDATETIME(), 'TJT005044433', SYSDATETIME(), '41100103485400', SYSDATETIME(), 'SATGN2018060440000020884', SYSDATETIME(), SYSDATETIME(), SYSDATETIME()), (1, 3, 'Mexican', 3, SYSDATETIME(), '28247760', SYSDATETIME(), 'MEX041410210', SYSDATETIME(), '41100220935700', SYSDATETIME(), 'SATGN2022032740000116226', SYSDATETIME(), SYSDATETIME(), SYSDATETIME());
 
-INSERT INTO Trucks_Commons([Status], VIN, Economic, Carrier, Situation)
-VALUES (1, 'VINtest1-13324231',  'Economic 1', 1, 1), (1, 'VINtest2-63324231', 'Economic 2', 2, 2), (1, 'VINtest3-93324231', 'Economic 3', 2, 2);
+INSERT INTO Trucks_Commons([Status], VIN, Economic, Situation)
+VALUES (1, 'VINtest1-13324231',  'Economic 1', 1), (1, 'VINtest2-63324231', 'Economic 2', 2), (1, 'VINtest3-93324231', 'Economic 3', 2);
 
-INSERT INTO Trucks_Externals([Status], Common)
-VALUES (1,1),(1,2),(1,3);
+INSERT INTO Trucks_Externals([Status], Common, MxPlate, UsaPlate, Carrier)
+VALUES (1, 1, 'MXexternal1', 'USAexternal1', 'Carrier 1'), (1, 2, 'MXexternal2', 'USAexternal3', 'Carrier 1'), (1, 3,'MXexternal3', null, 'Carrier 1');
 
-INSERT INTO Trucks(Common, Manufacturer, Motor, Maintenance, Insurance, [Status])
-VALUES(1,1,'Motortestnumber1',1,1,1),(2,2,'Motortestnumber2',2,2,1),(3,3,'Motortestnumber3',3,3,1);
+INSERT INTO Trucks(Common, Manufacturer, Motor, Maintenance, Insurance, [Status], Carrier)
+VALUES(1,1,'Motortestnumber1',1,1,1,1),(2,2,'Motortestnumber2',2,2,1,2),(3,3,'Motortestnumber3',3,3,1,3);
 
 INSERT INTO Plates(Identifier,[State],Country,Expiration, Truck, Trailer, [Status])
 VALUES
@@ -91,6 +91,6 @@ VALUES('Loaded', 'DESCRIPTION 1'), ('Empty', 'DESCRIPTION 2'), ('Botado', 'DESCR
 INSERT INTO Sections([Name], Capacity, Ocupancy, [Status], Yard)
 VALUES('A', 20, 0, 1, 1), ('B', 10, 0, 1, 2), ('C', 25, 0, 1, 3);
 
-INSERT INTO Yard_Logs([Entry], Truck, TruckExternal, Trailer, TrailerExternal, LoadType, Guard, Gname, Section, FromTo, Damage, TTPicture, DmgEvidence, Driver, DriverExternal)
-VALUES(1, 1, null, 1, null, 1, 1,'Guard 1', 1, 'Coca Cola el Florido', 0, 'Truck and trailer picture 1', null, 1, null), (1, 2, null, 2, null, 2, 2,'Guard 2', 2, 'Coca Cola el Florido 2', 1, 'Truck and trailer picture 1', 'Damage picture 1', 2, null), (1, 3, null, 3, null, 3, 3,'Guard 3', 3, 'Coca Cola el Florido 3', 0, 'Truck and trailer picture 1', null, 2, null);
+INSERT INTO Yard_Logs([Entry], Truck, TruckExternal, Trailer, TrailerExternal, LoadType, Guard, Gname, Section, FromTo, Damage, TTPicture, DmgEvidence, Driver, DriverExternal, Seal)
+VALUES(1, 1, null, 1, null, 1, 1,'Guard 1', 2, 'Coca Cola el Florido', 0, 'Truck and trailer picture 1', null, 1, null, '12133413'), (1, 2, null, 2, null, 2, 2,'Guard 2', 2, 'Coca Cola el Florido 2', 1, 'Truck and trailer picture 1', 'Damage picture 1', 2, null, '2321412'), (1, 3, null, 3, null, 3, 3,'Guard 3', 3, 'Coca Cola el Florido 3', 0, 'Truck and trailer picture 1', null, 2, null, '32183712');
 

@@ -20,7 +20,6 @@ public class PlatesServices
 
     public async Task<SetViewOut<Plate>> View(SetViewOptions options) {
         return await Plates.View(options, query => query
-            .Include(p => p.TruckCommonNavigation)
             .Select(p => new Plate() {
                 Id = p.Id,
                 Identifier = p.Identifier,
@@ -28,12 +27,6 @@ public class PlatesServices
                 Country = p.Country,
                 Expiration = p.Expiration,
                 Truck = p.Truck,
-                TruckCommonNavigation = p.TruckCommonNavigation == null ? null : new TruckCommon() {
-                    Id = p.TruckCommonNavigation.Id,
-                    Vin = p.TruckCommonNavigation.Vin,
-                    Situation = p.TruckCommonNavigation.Situation,
-                },
-
             }));
     }
 

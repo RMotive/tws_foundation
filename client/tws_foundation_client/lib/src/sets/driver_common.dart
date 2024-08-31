@@ -9,9 +9,9 @@ final class DriverCommon implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   String license = "";
-  int situation = 0;
+  int? situation;
   Status? statusNavigation;
 
   DriverCommon(this.id, this.status, this.license, this.situation, this.statusNavigation);
@@ -19,7 +19,7 @@ final class DriverCommon implements CSMSetInterface {
     int id = json.get('id');
     int status = json.get('status');
     String license = json.get('license');
-    int situation = json.get('situation');
+    int? situation = json.getDefault('situation', null);
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
@@ -44,7 +44,6 @@ final class DriverCommon implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(license.length < 8 || license.length > 12) results.add(CSMSetValidationResult(kLicense, "license number length must be between 8 and 12", "strictLength(8,12)"));
-    if(situation < 0) results.add(CSMSetValidationResult(kSituation, 'Situation pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
 
     return results;
@@ -57,7 +56,11 @@ final class DriverCommon implements CSMSetInterface {
     int? situation,
     Status? statusNavigation,
   }){
-    return DriverCommon(id ?? this.id, status ?? this.status, license ?? this.license, situation ?? this.situation, statusNavigation ?? this.statusNavigation);
+    int? sit = situation ?? this.situation;
+    if(sit == 0){
+      sit = null;
+    }
+    return DriverCommon(id ?? this.id, status ?? this.status, license ?? this.license, sit, statusNavigation ?? this.statusNavigation);
   }
 }
 

@@ -17,11 +17,16 @@ public partial class Truck
 
     public string Motor { get; set; } = null!;
 
+    public int Carrier { get; set; }
+
     public int Manufacturer { get; set; }
+
 
     public int? Maintenance { get; set; }
 
     public int? Insurance { get; set; }
+
+    public virtual Carrier? CarrierNavigation { get; set; }
 
     public virtual TruckCommon? TruckCommonNavigation { get; set; }
 
@@ -32,6 +37,8 @@ public partial class Truck
     public virtual Manufacturer? ManufacturerNavigation { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
+
+    public virtual ICollection<Plate> Plates { get; set; } = [];
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
@@ -49,6 +56,11 @@ public partial class Truck
             _ = entity.Property(e => e.Motor)   
                 .HasMaxLength(16)
                 .IsUnicode(false);
+
+            _ = entity.HasOne(d => d.CarrierNavigation)
+             .WithMany(p => p.Trucks)
+             .HasForeignKey(d => d.Carrier)
+             .OnDelete(DeleteBehavior.ClientSetNull);
 
             _ = entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Trucks)
@@ -79,6 +91,7 @@ public partial class Truck
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
             (nameof(Motor), [new LengthValidator(1, 16)]),
+            (nameof(Carrier), [new PointerValidator(true)]),
             (nameof(Manufacturer), [new PointerValidator(true)]),
         ];
         return Container;

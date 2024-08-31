@@ -19,7 +19,7 @@ final class Carrier implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int approach = 0;
   int address = 0;
   String name = "";

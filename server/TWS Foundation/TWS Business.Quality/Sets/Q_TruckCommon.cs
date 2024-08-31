@@ -13,7 +13,6 @@ public class Q_TruckCommon : BQ_MigrationSet<TruckCommon> {
                 Id = 1,
                 Vin = "",
                 Economic = "",
-                Carrier = 1,
                 Situation = 1,
 
             },
@@ -22,7 +21,6 @@ public class Q_TruckCommon : BQ_MigrationSet<TruckCommon> {
         Q_MigrationSet_EvaluateRecord<TruckCommon> failAllCases = new() {
             Mock = new() {
                 Id = 0,
-                Carrier = 0,
                 Status = 0,
                 Situation = 0,
                 Vin = "",
@@ -32,7 +30,6 @@ public class Q_TruckCommon : BQ_MigrationSet<TruckCommon> {
                 (nameof(TruckCommon.Id), [(new PointerValidator(), 3)]),
                 (nameof(TruckCommon.Vin), [(new LengthValidator(),2)]),
                 (nameof(TruckCommon.Economic), [(new LengthValidator(),2)]),
-                (nameof(TruckCommon.Carrier), [(new PointerValidator(), 3)]),
                 (nameof(TruckCommon.Status), [(new PointerValidator(), 3)]),
 
             ],

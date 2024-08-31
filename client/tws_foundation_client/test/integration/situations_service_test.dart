@@ -10,7 +10,7 @@ void main() {
 
   setUp(
     () async {
-      final TWSAdministrationSource source = TWSAdministrationSource(false);
+      final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),

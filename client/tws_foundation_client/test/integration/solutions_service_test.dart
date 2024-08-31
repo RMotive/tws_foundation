@@ -14,7 +14,7 @@ void main() {
 
   setUp(
     () async {
-      final TWSAdministrationSource source = TWSAdministrationSource(
+      final TWSFoundationSource source = TWSFoundationSource(
         false,
         headers: <String, String>{
           'CSMDisposition': 'Quality',

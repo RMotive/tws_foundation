@@ -21,9 +21,27 @@ public class TrailersExternalsService : ITrailersExternalsService {
     public async Task<SetViewOut<TrailerExternal>> View(SetViewOptions Options) {
         static IQueryable<TrailerExternal> include(IQueryable<TrailerExternal> query) {
             return query
-            .Include(t => t.TrailerCommonNavigation);
+            .Include(t => t.TrailerCommonNavigation)
+            .Select(p => new TrailerExternal() {
+                Id = p.Id,
+                Status = p.Status,
+                Common = p.Common,
+                UsaPlate = p.UsaPlate,
+                MxPlate = p.MxPlate,
+                Carrier = p.Carrier,
+                TrailerCommonNavigation = p.TrailerCommonNavigation == null ? null : new TrailerCommon() {
+                    Id = p.TrailerCommonNavigation.Id,
+                    Status = p.TrailerCommonNavigation.Status,
+                    Economic = p.TrailerCommonNavigation.Economic,
+                    Class = p.TrailerCommonNavigation.Class,
+                    Situation = p.TrailerCommonNavigation.Situation,
+                    Location = p.TrailerCommonNavigation.Location,
+                    SituationNavigation = p.TrailerCommonNavigation.SituationNavigation,
+                    TrailerClassNavigation = p.TrailerCommonNavigation.TrailerClassNavigation,
+                    LocationNavigation = p.TrailerCommonNavigation.LocationNavigation
+                },
+            });
         }
-
         return await TrailersExternals.View(Options, include);
     }
 }

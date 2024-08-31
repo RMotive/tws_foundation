@@ -18,7 +18,6 @@ public class Q_DriversCommons
 
         return new() {
             License = RandomUtils.String(12),
-            Situation = 1,
             Status = 1
         };
     }

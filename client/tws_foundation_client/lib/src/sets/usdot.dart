@@ -9,7 +9,7 @@ final class USDOT implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   String mc = "";
   String scac = "";
   Status? statusNavigation;

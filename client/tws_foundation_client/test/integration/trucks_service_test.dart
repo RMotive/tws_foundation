@@ -14,7 +14,7 @@ void main() {
 
   setUp(
     () async {
-      final TWSAdministrationSource source = TWSAdministrationSource(false);
+      final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),
@@ -66,20 +66,19 @@ void main() {
         TruckCommon truckCommon = TruckCommon(
         0, //id
         1, //status
-        1, //carrier
         "VINtest-$randomToken", //vin
         "ECO$randomToken", //economic
         1, //location
         1, //situation
         null,
         null, //statusNavigation
-        <Plate>[plateMX,plateUSA]
         );
         Truck truck = Truck(
           0, // id 
           1, //Status
           2,//manufacturer
           0, //common
+          1, //carrier
           "Motor $randomToken", //motor
           1, //maintenance
           1, //insurance
@@ -87,7 +86,9 @@ void main() {
           null, //manufacturerNavigation
           truckCommon, //truckCommonNavigation
           null, //maintenanceNavigation
-          null //insuranceNavigation
+          null, //insuranceNavigation
+          null,
+          <Plate>[plateMX,plateUSA]
         );
         mocks.add(truck);
       }

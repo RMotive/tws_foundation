@@ -24,9 +24,9 @@ public partial class Plate
 
     public int? Trailer { get; set; }
 
-    public virtual TruckCommon? TruckCommonNavigation { get; set; }
+    public virtual Truck? TruckNavigation { get; set; }
 
-    public virtual TrailerCommon? TrailerCommonNavigation { get; set; }
+    public virtual Trailer? TrailerNavigation { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
 
@@ -48,12 +48,12 @@ public partial class Plate
                 .HasMaxLength(3)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.TruckCommonNavigation)
+            _ = entity.HasOne(d => d.TruckNavigation)
                 .WithMany(p => p.Plates)
                 .HasForeignKey(d => d.Truck)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.TrailerCommonNavigation)
+            _ = entity.HasOne(d => d.TrailerNavigation)
                 .WithMany(p => p.Plates)
                 .HasForeignKey(d => d.Trailer)
                 .OnDelete(DeleteBehavior.ClientSetNull);

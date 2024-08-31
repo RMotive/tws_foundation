@@ -17,6 +17,7 @@ final class YardLog implements CSMSetInterface {
   static const String kGuard = "guard";
   static const String kGName = "gname";
   static const String kFromTo = "fromTo";
+  static const String kSeal = "seal";
   static const String kDamage = "damage";
   static const String kTtPicture = "ttPicture";
   static const String kDmgEvidence = "dmgEvidence";
@@ -28,6 +29,7 @@ final class YardLog implements CSMSetInterface {
   static const String kTrailerExternalNavigation = "TrailerExternalNavigation";
   static const String kLoadTypeNavigation = "LoadTypeNavigation";
   static const String kSectionNavigation = "SectionNavigation";
+  static const String kAccount = "AccountNavigation";
 
   @override
   int id = 0;
@@ -44,6 +46,7 @@ final class YardLog implements CSMSetInterface {
   int guard = 0;
   String gName = "";
   String fromTo = "";
+  String seal = "";
   bool damage = false;
   String ttPicture = "";
   String? dmgEvidence;
@@ -55,10 +58,11 @@ final class YardLog implements CSMSetInterface {
   TrailerExternal? trailerExternalNavigation;
   LoadType? loadTypeNavigation;
   Section? sectionNavigation;
+  Account? accountNavigation; //Only for local handle.
 
   YardLog(this.id, this.entry, this.truck, this.truckExternal, this.trailer, this.trailerExternal, this.loadType, this.section, this.driver, this.driverExternal, this.timestamp,
-  this.guard, this.gName, this.fromTo, this.damage, this.ttPicture, this.dmgEvidence, this.driverNavigation, this.driverExternalNavigation, this.truckNavigation, this.truckExternalNavigation,
-  this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation);
+  this.guard, this.gName, this.fromTo, this.seal, this.damage, this.ttPicture, this.dmgEvidence, this.driverNavigation, this.driverExternalNavigation, this.truckNavigation, this.truckExternalNavigation,
+  this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation, this.accountNavigation);
   factory YardLog.des(JObject json) {
     int id = json.get('id');
     bool entry = json.get('entry');
@@ -74,6 +78,7 @@ final class YardLog implements CSMSetInterface {
     int guard = json.get('guard');
     String gName = json.get('gName');
     String fromTo = json.get('fromTo');
+    String seal = json.get('seal');
     bool damage = json.get('entry');
     String ttPicture = json.get('ttPicture');
     String? dmgEvidence = json.getDefault('dmgEvidence', null);
@@ -119,8 +124,8 @@ final class YardLog implements CSMSetInterface {
       sectionNavigation = deserealize<Section>(rawNavigation, decode: SectionDecoder());
     }
 
-    return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, timestamp, guard, gName, fromTo, damage,
-    ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation);
+    return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, timestamp, guard, gName, fromTo, seal, damage,
+    ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null);
   }
 
   @override
@@ -140,6 +145,7 @@ final class YardLog implements CSMSetInterface {
       kGuard: guard,
       kGName: gName,
       kFromTo: fromTo,
+      kSeal: seal,
       kDamage: damage,
       kTtPicture: ttPicture,
       kDmgEvidence: dmgEvidence,
@@ -159,9 +165,30 @@ final class YardLog implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Truck and Trailer pickture must be non-empty", "strictLength(1, max)"));
     if(gName.isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "Name must be 100 max lenght and non-empty", "strictLength(1,100)"));
-    if(fromTo.isEmpty || fromTo.length > 25) results.add(CSMSetValidationResult(kFromTo, "FromTo must be 25 max lenght and non-empty", "strictLength(1,25)"));
+    if(fromTo.isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "FromTo must be 25 max lenght and non-empty", "strictLength(1,25)"));
+    if(seal.isEmpty || gName.length > 64) results.add(CSMSetValidationResult(kSeal, "Seal must be 100 max lenght and non-empty", "strictLength(1,64)"));
     if(section < 0) results.add(CSMSetValidationResult(kSection, 'Section pointer must be equal or greater than 0', 'pointerHandler()'));
     if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'loadType pointer must be equal or greater than 0', 'pointerHandler()'));
+
+    if(driverExternalNavigation == null && driverNavigation == null){
+      results.add(CSMSetValidationResult(kDriver, 'There is not driver or external driver pointer setted', 'pointerHandler()'));
+    }
+
+    if(truckExternalNavigation == null && truckNavigation == null){
+      results.add(CSMSetValidationResult(kTruckExternalNavigation, 'There is not truck or external truck pointer setted', 'pointerHandler()'));
+    }
+
+    if(loadTypeNavigation?.name == "Botado" && (trailerExternalNavigation != null || trailerNavigation != null)){
+      results.add(CSMSetValidationResult(kLoadType, 'If Botado load type is selected, cannot be any trailer data setted.', 'FieldConflic()'));
+    }
+
+    if(damage && dmgEvidence == null){
+      results.add(CSMSetValidationResult(kDamage, 'If damage is true, then dmgEvidence field mus be provided', 'FieldConflic()'));
+    }
+
+    if(dmgEvidence != null && damage == false){
+      results.add(CSMSetValidationResult(kDmgEvidence, 'dmg evidence is provided but damage field is set to false', 'FieldConflic()'));
+    }
 
     return results;
   }
@@ -181,6 +208,7 @@ final class YardLog implements CSMSetInterface {
     int? guard,
     String? gName,
     String? fromTo,
+    String? seal,
     bool? damage,
     String? ttPicture,
     String? dmgEvidence,
@@ -192,6 +220,7 @@ final class YardLog implements CSMSetInterface {
     TrailerExternal? trailerExternalNavigation,
     LoadType? loadTypeNavigation,
     Section? sectionNavigation,
+    Account? accountNavigation
   }){
     //
     String? dmgEv = dmgEvidence ?? this.dmgEvidence;
@@ -216,7 +245,7 @@ final class YardLog implements CSMSetInterface {
     DriverExternal? driverExtNav = driverExternalNavigation ?? this.driverExternalNavigation;
     if(driverExtIndex == 0){
       driverExtIndex = null;
-      driverNav = null; 
+      driverExtNav = null; 
     }
 
     int? truckIndex = truck ?? this.truck;
@@ -249,8 +278,8 @@ final class YardLog implements CSMSetInterface {
     
     return YardLog(id ?? this.id, entry ?? this.entry, truckIndex, truckExtIndex, trailerIndex, trailerExtIndex, 
     loadType ?? this.loadType, section ?? this.section, driverIndex,driverExtIndex, timestamp ?? this.timestamp, guard ?? this.guard, 
-    gName ?? this.gName, fromTo ?? this.fromTo, damage ?? this.damage, ttPicture ?? this.ttPicture, dmgEv, driverNav, 
-    driverExtNav, truckNav, truckExtNav, trailerNav, trailerExtNav, load, sect);
+    gName ?? this.gName, fromTo ?? this.fromTo, seal ?? this.seal, damage ?? this.damage, ttPicture ?? this.ttPicture, dmgEv, driverNav, 
+    driverExtNav, truckNav, truckExtNav, trailerNav, trailerExtNav, load, sect, accountNavigation ?? this.accountNavigation);
   }
 
 }

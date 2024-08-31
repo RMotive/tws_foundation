@@ -23,6 +23,7 @@ public class Q_Trailer : BQ_MigrationSet<Trailer> {
                 Id = 0,
                 Common = 0,
                 Manufacturer = 0,
+                Carrier = 0,
                 Status = 0
 
             },
@@ -30,6 +31,7 @@ public class Q_Trailer : BQ_MigrationSet<Trailer> {
                 (nameof(Trailer.Id), [(new PointerValidator(), 3)]),
                 (nameof(Trailer.Common), [(new PointerValidator(true), 3)]),
                 (nameof(Trailer.Manufacturer), [(new PointerValidator(true), 3)]),
+                (nameof(Trailer.Carrier), [(new PointerValidator(), 3)]),
                 (nameof(Trailer.Status), [(new PointerValidator(true), 3)]),
             ],
         };

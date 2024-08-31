@@ -15,7 +15,7 @@ final class Plate implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   String identifier = "";
   String state = "";
   String country = "";

@@ -12,7 +12,7 @@ void main() {
 
   setUp(
     () async {
-      final TWSAdministrationSource source = TWSAdministrationSource(false);
+      final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),
@@ -93,39 +93,39 @@ void main() {
           0, //id
           1, //status
           1, //trailerClass 
-          1, //carrier 
           1, //situation
-          1, //location
+          null, //location
           "ECT$randomToken", //economic
-          null, //statusNavigation
-          <Plate>[plateMX2,plateUSA2] //plates
+          null //statusNavigation
+          
         );
         Trailer trailer = Trailer(
           0, //id
           1, //status
           0, //common
+          1,
           1, //manufactuer
           1, //maintenance
           trailerCommon, //trailerCommonNavigation 
-          null //statusNavigation
+          null, //statusNavigation
+          <Plate>[plateMX2,plateUSA2] //plates
         );
         TruckCommon truckCommon = TruckCommon(
         0, //id
         1, //status
-        1, //carrier
         "VINtest-$randomToken", //vin
         "ECO$randomToken", //economic
-        1, //location
+        null, //location
         1, //situation
         null, //statusNavigation
-        null,
-        <Plate>[plateMX,plateUSA] //plates
+        null
         );
         Truck truck = Truck(
           0, // id 
           1, //Status
           2,//manufacturer
           0, //common
+          1,
           "Motor $randomToken", //motor
           i, //maintenance
           i, //insurance
@@ -133,11 +133,13 @@ void main() {
           null, //manufacturerNavigation
           truckCommon, //truckCommonNavigation
           null, //maintenanceNavigation
-          null //insuranceNavigation
+          null, //insuranceNavigation
+          null, //carrierNavigation
+          <Plate>[plateMX,plateUSA] //plates
         );
         YardLog mock = YardLog(
           0, // ID
-          first? true : false, //Entry
+          true, //Entry
           first? 1 : 0, // Truck? Id
           null, // truckExternal
           first? 1 : 0, // trailer
@@ -150,6 +152,7 @@ void main() {
           1, // guard
           "Guard $randomToken", // gName
           "Los angeles $randomToken", // fromTo
+          "seal $randomToken", //seal
           false, //damage
           "Truck picture $randomToken", //ttPicture
           null, // dmgEvidence
@@ -160,7 +163,8 @@ void main() {
           first? null : trailer, //trailerNavigation
           null, //trailerExternalNavigation
           null, //loadTypeNavigation
-          null //sectionNavigation
+          null, //sectionNavigation
+          null
         );
         mocks.add(mock);
       }
@@ -243,6 +247,7 @@ void main() {
             1, // guard
             "Guard $randomToken", // gName
             "Los angeles $randomToken", // fromTo
+            "seal $randomToken", //seal
             false, //damage
             "Truck picture $randomToken", //ttPicture
             null, // dmgEvidence
@@ -253,7 +258,8 @@ void main() {
             null, //trailerNavigation
             null, //trailerExternalNavigation
             null, //loadTypeNavigation
-            null //sectionNavigation
+            null, //sectionNavigation
+            null
           );
 
           MainResolver<MigrationUpdateResult<YardLog>> fact = await service.update(mock, auth);

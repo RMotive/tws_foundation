@@ -8,7 +8,7 @@ void main() {
 
   setUp(
     () {
-      service = TWSAdministrationSource(true).security;
+      service = TWSFoundationSource(true).security;
     },
   );
 

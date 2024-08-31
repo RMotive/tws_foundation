@@ -5,6 +5,10 @@
 - Notes:
 
     1. Changed the test screts management to [CI/CD].
+    2. Changes in Bussines sets to refactor [Plates] realtionships.
+    3. [Trailers] and [Trucks] inventory database implementation.
+    4. [Yardlogs] client validations implementations.
+    5. [Commons] bussines tables relationships refactor.
 
 - Dependencies Upgrade:
 

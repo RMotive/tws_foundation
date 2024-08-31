@@ -24,6 +24,7 @@ public class Q_Truck : BQ_MigrationSet<Truck> {
                 Id = -1,
                 Common = 0,
                 Manufacturer = 0,
+                Carrier = 0,
                 Motor = "",
                 Status = 0
             },
@@ -32,6 +33,7 @@ public class Q_Truck : BQ_MigrationSet<Truck> {
                 (nameof(Truck.Motor), [(new LengthValidator(),2)]),
                 (nameof(Truck.Manufacturer), [(new PointerValidator(), 3) ]),
                 (nameof(Truck.Status), [(new PointerValidator(), 3) ]),
+                (nameof(Truck.Carrier), [(new PointerValidator(), 3)]),
 
             ],
         };

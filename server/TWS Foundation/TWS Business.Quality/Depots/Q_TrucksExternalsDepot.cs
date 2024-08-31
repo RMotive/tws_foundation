@@ -19,6 +19,8 @@ public class Q_TrucksExternalsDepot
         return new() {
             Status = 1,
             Common = 1,
+            MxPlate = "12345678",
+            Carrier = "truck carrier qlty"
         };
     }
 }

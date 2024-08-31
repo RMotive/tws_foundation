@@ -20,12 +20,16 @@ public class Q_TrailerExternal : BQ_MigrationSet<TrailerExternal> {
             Mock = new() {
                 Id = 0,
                 Status = 0,
-                Common = 0
+                Common = 0,
+                Carrier = "",
+                MxPlate = ""
             },
             Expectations = [
                 (nameof(TrailerExternal.Id), [(new PointerValidator(), 3)]),
                 (nameof(TrailerExternal.Status), [(new PointerValidator(), 3)]),
                 (nameof(TrailerExternal.Common), [(new PointerValidator(), 3)]),
+                (nameof(TrailerExternal.MxPlate), [(new LengthValidator(), 2)]),
+                (nameof(TrailerExternal.Carrier), [(new LengthValidator(), 2)]),
             ],
         };
 

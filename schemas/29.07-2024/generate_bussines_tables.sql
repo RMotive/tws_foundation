@@ -11,6 +11,7 @@ DROP TABLE Approaches_H;
 DROP TABLE Maintenances_H;
 DROP TABLE Insurances_H;
 DROP TABLE SCT_H;
+DROP TABLE Trailers_Inventories;
 DROP TABLE Trucks_Inventories;
 DROP TABLE Yard_Logs;
 DROP TABLE Sections;
@@ -158,7 +159,7 @@ id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Name] varchar(30) NOT NULL,
 Quantity int NOT NULL,
 [Description] varchar(100)
-)
+);
 
 create table Trailer_Classes(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
@@ -173,13 +174,11 @@ Create table  Trailers_Commons(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Status] int NOT NULL,
 Economic Varchar(16) NOT NULL,
-Class int NOT NULL,
-Carrier int NOT NULL,
-Situation int NOT NULL,
+Situation int,
+Class int,
 [Location] int,
 
 constraint FK_TrailersCommons_TrailersClass foreign key(Class) references Trailer_Classes(id),
-constraint FK_TrailersCommons_Carriers foreign key(Carrier) references Carriers(id),
 constraint FK_TrailersCommons_Situations foreign key(Situation) references Situations(id),
 constraint FK_TrailersCommons_Locations foreign key([Location]) references Locations(id),
 constraint FK_TrailersCommons_Statuses foreign key([Status]) references Statuses(id),
@@ -190,6 +189,9 @@ Create table Trailers_Externals(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Status] int NOT NULL,
 Common int NOT NULL,
+Carrier varchar(100) NOT NULL,
+MxPlate varchar(12) NOT NULL,
+UsaPlate varchar(12),
 constraint FK_TrailersExternals_TrailersCommons foreign key(Common) references Trailers_Commons(id),
 constraint FK_TrailersExternals_Statuses foreign key([Status]) references Statuses(id),
 
@@ -200,8 +202,9 @@ id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Status] int NOT NULL,
 Common int NOT NULL,
 Manufacturer int NOT NULL,
+Carrier int NOT NULL,
 Maintenance int,
-
+constraint FK_Trailers_Carriers foreign key(Carrier) references Carriers(id),
 constraint FK_Trailers_Manufacturers foreign key(Manufacturer) references Manufacturers(id),
 constraint FK_Trailers_Maintenances foreign key(Maintenance) references Maintenances(id),
 constraint FK_Trailers_TrailersCommons foreign key(Common) references Trailers_Commons(id),
@@ -291,12 +294,10 @@ create table Trucks_Commons(
  [Status] int NOT NULL,
  VIN varchar(17) UNIQUE NOT NULL,
  Economic varchar(16) NOT NULL,
- Carrier int NOT NULL,
  Situation int,
  [Location] int,
 
  constraint FK_TrucksCommons_Situations foreign key(Situation) references Situations(id),
- constraint FK_TrucksCommons_Carriers foreign key(Carrier) references Carriers(id),
  constraint FK_TrucksCommons_Locations foreign key([Location]) references Locations(id),
  constraint FK_TrucksCommons_Statuses foreign key([Status]) references Statuses(id),
 
@@ -307,7 +308,9 @@ create table Trucks_Externals(
  id int IDENTITY(1,1) PRIMARY KEY,
  [Status] int NOT NULL,
  Common int NOT NULL,
-
+ Carrier varchar(100) NOT NULL,
+ MxPlate varchar(12) NOT NULL,
+ UsaPlate varchar(12),
  constraint FK_TrucksExternals_TrucksCommons foreign key(Common) references Trucks_Commons(id),
 );
 
@@ -317,9 +320,10 @@ create table Trucks(
  Common int NOT NULL,
  Manufacturer int NOT NULL,
  Motor varchar(16) UNIQUE NOT NULL,
+ Carrier int NOT NULL,
  Maintenance int,
  Insurance int,
-
+ constraint FK_Trucks_Carriers foreign key(Carrier) references Carriers(id),
  constraint FK_Trucks_TrucksCommons foreign key(Common) references Trucks_Commons(id),
  constraint FK_Trucks_Manufacturers foreign key(Manufacturer) references Manufacturers(id),
  constraint FK_Trucks_Maintenances foreign key(Maintenance) references Maintenances(id),
@@ -337,8 +341,8 @@ Expiration date NOT NULL,
 Truck int,
 Trailer int,
 
- constraint FK_Plates_TrucksCommons foreign key(Truck) references Trucks_Commons(id),
- constraint FK_Plates_TrailersCommons foreign key(Trailer) references Trailers_Commons(id),
+ constraint FK_Plates_Trucks foreign key(Truck) references Trucks(id),
+ constraint FK_Plates_Trailers foreign key(Trailer) references Trailers(id),
  constraint FK_Plates_Statuses foreign key([Status]) references Statuses(id),
 
 );
@@ -374,6 +378,7 @@ LoadType int NOT NULL,
 Guard int NOT NULL,
 Gname varchar(100) NOT NULL,
 Section int NOT NULL,
+Seal varchar(64) NOT NULL,
 FromTo varchar(100) NOT NULL,
 Damage bit NOT NULL,
 TTPicture varchar(MAX) NOT NULL,
@@ -404,6 +409,18 @@ constraint FK_TrucksInventory_TrucksExternal foreign key(truckExternal) referenc
 constraint FK_TrucksInventory_Trucks foreign key(Truck) references Trucks(id),
 
 constraint FK_TrucksInventory_Sections foreign key(Section) references Sections(id),
+);
+
+create table Trailers_Inventories(
+id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
+EntryDate datetime2 NOT NULL,
+section int NOT NULL,
+trailer int,
+trailerExternal int,
+
+constraint FK_TrailerInventory_TrucksExternal foreign key(trailerExternal) references Trailers_Externals(id),
+constraint FK_TrailerInventory_Trucks foreign key(trailer) references Trailers(id),
+constraint FK_TrailersInventory_Sections foreign key(Section) references Sections(id),
 );
 
 -- Historical Tables --

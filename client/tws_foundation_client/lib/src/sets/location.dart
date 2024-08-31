@@ -9,7 +9,7 @@ final class Location implements CSMSetInterface {
 
   @override
   int id = 0;
-  int status = 0;
+  int status = 1;
   int address = 0;
   String name = "";
   Status? statusNavigation;
