@@ -3,7 +3,7 @@
 ## CURRENT
 
 - Notes:
-    
+
     1. Changed the test screts management to [CI/CD].
     2. Changes in Bussines sets to refactor [Plates] realtionships.
     3. [Trailers] and [Trucks] inventory database implementation.
