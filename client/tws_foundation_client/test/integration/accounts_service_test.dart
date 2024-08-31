@@ -2,15 +2,14 @@ import 'package:test/test.dart';
 import 'package:tws_foundation_client/src/services/bases/accounts_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../secrets/credentials.dart';
-
+import '../integration_credentials.dart';
 void main() {
   late String auth;
   late AccountsServiceBase service;
   setUp(
     () async {
       final TWSFoundationSource source = TWSFoundationSource(false);
-      MainResolver<Privileges> resolver = await source.security.authenticate(qualityCredentials);
+      MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),
         onConnectionFailure: () {
