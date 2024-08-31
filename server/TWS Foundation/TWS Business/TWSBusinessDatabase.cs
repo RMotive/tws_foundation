@@ -19,6 +19,7 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         optionsBuilder.UseSqlServer(Connection.GenerateConnectionString());
+    }
 
     public virtual DbSet<Insurance> Insurances { get; set; }
 

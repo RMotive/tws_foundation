@@ -170,6 +170,22 @@ final class YardLog implements CSMSetInterface {
     if(section < 0) results.add(CSMSetValidationResult(kSection, 'Section pointer must be equal or greater than 0', 'pointerHandler()'));
     if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'loadType pointer must be equal or greater than 0', 'pointerHandler()'));
 
+    if((truckExternalNavigation == null && truckNavigation == null) || (truck == null && truckExternal == null)){
+      results.add(CSMSetValidationResult(kTruckExternalNavigation, 'There is not truck or external truck pointer setted', 'pointerHandler()'));
+    }
+
+    if(loadTypeNavigation?.name == "Botado" && (trailerExternalNavigation != null || trailerNavigation != null)){
+      results.add(CSMSetValidationResult(kLoadType, 'If Botado load type is selected, cannot be any trailer data setted.', 'FieldConflic()'));
+    }
+
+    if(damage && dmgEvidence == null){
+      results.add(CSMSetValidationResult(kDamage, 'If damage is true, then dmgEvidence field mus be provided', 'FieldConflic()'));
+    }
+
+    if(dmgEvidence != null && damage == false){
+      results.add(CSMSetValidationResult(kDmgEvidence, 'dmg evidence is provided but damage field is set to false', 'FieldConflic()'));
+    }
+
     return results;
   }
   YardLog.def();
