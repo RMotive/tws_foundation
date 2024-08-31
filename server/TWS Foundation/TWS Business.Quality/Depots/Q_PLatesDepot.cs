@@ -9,9 +9,9 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="PlatesDepot"/>.
 /// </summary>
 public class Q_PlatesDepot
-    : BQ_MigrationDepot<Plate, PlatesDepot, TWSBusinessSource> {
+    : BQ_MigrationDepot<Plate, PlatesDepot, TWSBusinessDatabase> {
     public Q_PlatesDepot()
-        : base(nameof(Plate.Truck)) {
+        : base(nameof(Plate.Identifier)) {
     }
 
     protected override Plate MockFactory() {
@@ -23,6 +23,7 @@ public class Q_PlatesDepot
             Country = RandomUtils.String(3),
             Expiration = date,
             Truck = 3,
+            Status = 1
         };
     }
 }

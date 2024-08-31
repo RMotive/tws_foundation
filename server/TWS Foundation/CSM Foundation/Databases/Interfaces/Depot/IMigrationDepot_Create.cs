@@ -10,7 +10,7 @@ namespace CSM_Foundation.Databases.Interfaces.Depot;
 ///     Specific migration set that tthe implemented depot handles.
 /// </typeparam>
 public interface IMigrationDepot_Create<TMigrationSet>
-    where TMigrationSet : ISourceSet {
+    where TMigrationSet : IDatabasesSet {
     /// <summary>
     ///     Creates a single <paramref name="Set"/> record into the live migration.
     ///     <br>
@@ -42,5 +42,5 @@ public interface IMigrationDepot_Create<TMigrationSet>
     /// <returns>
     ///     A record that stores the transaction result, with successes and failures collected.
     /// </returns>
-    Task<SourceTransactionOut<TMigrationSet>> Create(TMigrationSet[] Sets, bool Sync = false);
+    Task<DatabasesTransactionOut<TMigrationSet>> Create(TMigrationSet[] Sets, bool Sync = false);
 }

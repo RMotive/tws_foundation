@@ -1,5 +1,5 @@
 ﻿namespace CSM_Foundation.Databases.Interfaces;
-public interface ISourceSet {
+public interface IDatabasesSet {
     public int Id { get; set; }
 
     public void EvaluateRead();

@@ -8,17 +8,17 @@ using CSM_Foundation.Databases.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace CSM_Foundation.Databases.Bases;
-public abstract class BDatabaseSQLS<TSource>
-    : DbContext, IMigrationSource
-    where TSource : DbContext {
+public abstract class BDatabaseSQLS<TDatabases>
+    : DbContext, IMigrationDatabases
+    where TDatabases : DbContext {
 
-    private readonly SourceLinkOptions Connection;
+    protected readonly DatabasesLinkOptions Connection;
 
     public BDatabaseSQLS([CallerFilePath] string? callerPath = null)
         : base() {
         Connection = MigrationUtils.Retrieve(callerPath);
     }
-    public BDatabaseSQLS(DbContextOptions<TSource> Options, [CallerFilePath] string? callerPath = null)
+    public BDatabaseSQLS(DbContextOptions<TDatabases> Options, [CallerFilePath] string? callerPath = null)
         : base(Options) {
         Connection = MigrationUtils.Retrieve(callerPath);
     }
@@ -27,14 +27,14 @@ public abstract class BDatabaseSQLS<TSource>
     /// 
     /// </summary>
     /// <returns></returns>
-    protected abstract ISourceSet[] EvaluateFactory();
+    protected abstract IDatabasesSet[] EvaluateFactory();
     /// <summary>
     /// 
     /// </summary>
     public void Evaluate() {
-        ISourceSet[] sets = EvaluateFactory();
+        IDatabasesSet[] sets = EvaluateFactory();
 
-        foreach (ISourceSet set in sets) {
+        foreach (IDatabasesSet set in sets) {
             _ = set.EvaluateDefinition();
         }
     }
@@ -49,14 +49,14 @@ public abstract class BDatabaseSQLS<TSource>
     /// <summary>
     ///     Validates database connection health.
     /// </summary>
-    public void ValidateHealth(bool Announce = true) {
+    public void ValidateHealth() {
         AdvisorManager.Announce($"ORM Setting up *^____^*", new() {
             {"Database", GetType().Name },
-            {"Base", nameof(BDatabaseSQLS<TSource>) }
+            {"Base", nameof(BDatabaseSQLS<TDatabases>) }
         });
 
         if (Database.CanConnect()) {
             AdvisorManager.Success($"[{GetType().Name}] Connection stable");
-        } else throw new Exception($"Connection unstable with datasource ({GetType().Name})");
+        } else throw new Exception($"Connection unstable with dataDatabases ({GetType().Name})");
     }
 }

@@ -14,19 +14,26 @@ public partial class Situation
 
     public string? Description { get; set; }
 
-    public virtual ICollection<Truck>? Trucks { get; set; } = [];
+    public virtual ICollection<DriverCommon>? DriversCommons { get; set; } = [];
+
+    public virtual ICollection<TruckCommon>? TrucksCommons { get; set; } = [];
+
+    public virtual ICollection<TrailerCommon>? TrailersCommons { get; set; } = [];
+
+    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
     public static void Set(ModelBuilder builder) {
-        builder.Entity<Situation>(entity => {
-            entity.HasKey(e => e.Id);
+        _ = builder.Entity<Situation>(entity => {
+            _ = entity.HasKey(e => e.Id);
 
-            entity.HasIndex(e => e.Name)
+            _ = entity.HasIndex(e => e.Name)
                 .IsUnique();
 
-            entity.Property(e => e.Id);
-            entity.Property(e => e.Description)
+            _ = entity.Property(e => e.Id)
+                .HasColumnName("id");
+            _ = entity.Property(e => e.Description)
                 .HasMaxLength(100);
-            entity.Property(e => e.Name)
+            _ = entity.Property(e => e.Name)
                 .HasMaxLength(25);
         });
     }
@@ -36,7 +43,6 @@ public partial class Situation
         Container = [
             ..Container,
             (nameof(Name), [Required, new LengthValidator(1, 25)]),
-            (nameof(Description), [new LengthValidator(1, 100)]),
         ];
         return Container;
     }

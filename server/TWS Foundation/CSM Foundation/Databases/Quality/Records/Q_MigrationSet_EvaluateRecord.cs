@@ -2,7 +2,7 @@
 
 namespace CSM_Foundation.Databases.Quality.Records;
 public record Q_MigrationSet_EvaluateRecord<TSet>
-    where TSet : ISourceSet {
+    where TSet : IDatabasesSet {
 
     public (string, (IValidator, int)[])[] Expectations { get; init; } = [];
     public TSet Mock { get; init; } = default!;

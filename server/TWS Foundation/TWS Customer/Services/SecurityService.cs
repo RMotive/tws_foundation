@@ -3,7 +3,6 @@ using CSM_Foundation.Databases.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Customer.Core.Exceptions;
 using TWS_Customer.Managers;
 using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Exceptions;
@@ -16,35 +15,38 @@ using TWS_Security.Sets;
 namespace TWS_Customer.Services;
 public class SecurityService
     : ISecurityService {
-    private readonly AccountsDepot Accounts;
-    private readonly SessionsManager Sessions;
+
+    readonly ConfigurationManager Configurations = ConfigurationManager.Manager;
+    readonly SessionsManager Sessions = SessionsManager.Manager; 
+
+    readonly AccountsDepot Accounts;
 
     public SecurityService(AccountsDepot Accounts) {
         this.Accounts = Accounts;
-        Sessions = SessionsManager.Manager;
     }
 
     public async Task<Session> Authenticate(Credentials Credentials) {
+
         static IQueryable<Account> include(IQueryable<Account> query) {
             return query
-        .Include(c => c.ContactNavigation)
-        .Select(a => new Account() {
-            Id = a.Id,
-            User = a.User,
-            Password = a.Password,
-            Wildcard = a.Wildcard,
-            Contact = a.Contact,
-            ContactNavigation = new Contact() {
-                Id = a.ContactNavigation.Id,
-                Name = a.ContactNavigation.Name,
-                Lastname = a.ContactNavigation.Lastname,
-                Email = a.ContactNavigation.Email,
-                Phone = a.ContactNavigation.Phone
-            },
-        });
+                .Include(c => c.ContactNavigation)
+                .Select(a => new Account() {
+                    Id = a.Id,
+                    User = a.User,
+                    Password = a.Password,
+                    Wildcard = a.Wildcard,
+                    Contact = a.Contact,
+                    ContactNavigation = new Contact() {
+                        Id = a.ContactNavigation!.Id,
+                        Name = a.ContactNavigation.Name,
+                        Lastname = a.ContactNavigation.Lastname,
+                        Email = a.ContactNavigation.Email,
+                        Phone = a.ContactNavigation.Phone
+                    },
+                });
         }
 
-        SourceTransactionOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, MigrationReadBehavior.First, include);
+        DatabasesTransactionOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, MigrationReadBehavior.First, include);
         if (result.Failed) {
             throw new XMigrationTransaction(result.Failures);
         }
@@ -59,8 +61,20 @@ public class SecurityService
         }
 
         Permit[] permits = await Accounts.GetPermits(account.Id);
-        Session session = Sessions.Subscribe(Credentials, account.Wildcard, permits, account.ContactNavigation);
+        Session session = Sessions.Subscribe(Credentials, account.Wildcard, permits, account.ContactNavigation!);
 
-        return session;
+        if(session.Wildcard) 
+            return session;
+
+        SolutionConfiguration solutionConfiguration = Configurations.GetSolution(Credentials.Sign);
+
+        if(!solutionConfiguration.Enabled) 
+            throw new XAuthenticate(XAuthenticateSituation.SolutionDisabled);
+
+
+        if(session.Permits.Any(i => i.Reference == solutionConfiguration.Login))
+            return session;
+
+        throw new XAuthenticate(XAuthenticateSituation.UnauthorizedSolution);
     }
 }

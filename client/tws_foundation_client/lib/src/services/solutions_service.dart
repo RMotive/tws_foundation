@@ -1,6 +1,7 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
+
 final class SolutionsService extends SolutionsServiceBase {
   SolutionsService(
     CSMUri host, {
@@ -29,11 +30,5 @@ final class SolutionsService extends SolutionsServiceBase {
   Effect<MigrationUpdateResult<Solution>> update(Solution solution, String auth) async {
     CSMActEffect actEffect = await post('update', solution, auth: auth);
     return MainResolver<MigrationUpdateResult<Solution>>(actEffect);
-  }
-
-  @override
-  Effect<Solution> delete(Solution solution, String auth) async {
-    CSMActEffect actEffect = await post('delete', solution, auth: auth);
-    return MainResolver<Solution>(actEffect);
   }
 }

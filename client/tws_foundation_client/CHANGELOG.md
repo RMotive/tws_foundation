@@ -1,13 +1,39 @@
 # CHANGELOG
 
+## CURRENT
+
+- Notes:
+
+    1. Template
+
+- Dependencies Upgrade:
+
+    1. Template
+
+## 3.0.0
+
+- Notes:
+
+    1. Changed the test screts management to [CI/CD].
+    2. Changes in Bussines sets to refactor [Plates] realtionships.
+    3. [Trailers] and [Trucks] inventory database implementation.
+    4. [Yardlogs] client validations implementations.
+    5. [Commons] bussines tables relationships refactor.
+
+- Dependencies Upgrade:
+
+    1. dotenv ([4.2.0])
+
 ## 2.0.0 [09/07/2024]
 
-- Changed the naming convention from concept [Migration] to [Source]
-- Changed the naming from [MigrationView] to [SetView]
-- Separated concepts above [options] classes and [out] classes
+- Notes:
 
-    1. [options] classes define data to perform correctly actions or operations.
-    2. [out] classes define data resulted by operations or actions.
+    1. Changed the naming convention from concept [Migration] to [Source]
+    2. Changed the naming from [MigrationView] to [SetView]
+    3. Separated concepts above [options] classes and [out] classes
+
+        1. [options] classes define data to perform correctly actions or operations.
+        2. [out] classes define data resulted by operations or actions.
 
 - Dependencies upgrade:
 

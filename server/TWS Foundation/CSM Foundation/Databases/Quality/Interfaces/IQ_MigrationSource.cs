@@ -1,15 +1,15 @@
 ﻿namespace CSM_Foundation.Databases.Quality.Interfaces;
 /// <summary>
-///     Interface Quality for [MigrationSource].
+///     Interface Quality for [MigrationDatabases].
 ///     
-///     Defines what quality operations must be performed by a [MigrationSource].
+///     Defines what quality operations must be performed by a [MigrationDatabases].
 ///     
-///     [MigrationSource] concept: determines a datasource class mirrored by an Entity Framework
+///     [MigrationDatabases] concept: determines a dataDatabases class mirrored by an Entity Framework
 ///     migration implementation.
 /// </summary>
-public interface IQ_MigrationSource {
+public interface IQ_MigrationDatabases {
     /// <summary>
-    ///     Qualify if the [MigrationSource] can communicate at runtime.
+    ///     Qualify if the [MigrationDatabases] can communicate at runtime.
     /// </summary>
     public void Communication();
 }

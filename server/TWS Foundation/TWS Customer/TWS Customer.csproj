@@ -5,12 +5,23 @@
     <RootNamespace>TWS_Customer</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AppDesignerFolder>Configurations</AppDesignerFolder>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
     <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
     <ProjectReference Include="..\TWS Security\TWS Security.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Configurations\solutions_configuration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

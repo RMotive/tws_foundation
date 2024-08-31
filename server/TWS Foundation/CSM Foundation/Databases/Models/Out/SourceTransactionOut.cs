@@ -1,8 +1,8 @@
 ﻿using CSM_Foundation.Databases.Interfaces;
 
 namespace CSM_Foundation.Databases.Models.Out;
-public record SourceTransactionOut<TSet>
-    where TSet : ISourceSet {
+public record DatabasesTransactionOut<TSet>
+    where TSet : IDatabasesSet {
     public TSet[] Successes { get; init; }
     public SourceTransactionFailure[] Failures { get; init; }
     public int QTransactions { get; private set; }
@@ -10,7 +10,7 @@ public record SourceTransactionOut<TSet>
     public int QFailures { get; private set; }
     public bool Failed { get; private set; }
 
-    public SourceTransactionOut(TSet[] Successes, SourceTransactionFailure[] Failures) {
+    public DatabasesTransactionOut(TSet[] Successes, SourceTransactionFailure[] Failures) {
         this.Successes = Successes;
         this.Failures = Failures;
         QSuccesses = this.Successes.Length;

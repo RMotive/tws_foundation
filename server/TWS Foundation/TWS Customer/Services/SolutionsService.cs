@@ -36,7 +36,7 @@ public class SolutionsService
     /// </summary>
     /// <param name="Solutions"></param>
     /// <returns></returns>
-    public async Task<SourceTransactionOut<Solution>> Create(Solution[] Solutions) {
+    public async Task<DatabasesTransactionOut<Solution>> Create(Solution[] Solutions) {
         return await SolutionsDepot.Create(Solutions);
     }
     /// <summary>
@@ -46,5 +46,9 @@ public class SolutionsService
     /// <returns></returns>
     public async Task<RecordUpdateOut<Solution>> Update(Solution Solution) {
         return await SolutionsDepot.Update(Solution);
+    }
+
+    public async Task<Solution> Delete(int Id) {
+        return await SolutionsDepot.Delete(Id);
     }
 }
