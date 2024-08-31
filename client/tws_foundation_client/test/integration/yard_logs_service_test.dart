@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../secrets/credentials.dart';
+import '../integration_credentials.dart';
 
 void main() {
   late String auth;
@@ -13,7 +13,7 @@ void main() {
   setUp(
     () async {
       final TWSAdministrationSource source = TWSAdministrationSource(false);
-      MainResolver<Privileges> resolver = await source.security.authenticate(qualityCredentials);
+      MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),
         onConnectionFailure: () {
