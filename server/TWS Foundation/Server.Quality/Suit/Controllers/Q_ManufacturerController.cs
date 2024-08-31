@@ -33,6 +33,7 @@ public class Q_ManufacturerController
         (HttpStatusCode Status, SuccessFrame<Session> Response) = await XPost<SuccessFrame<Session>, Credentials>("Security/Authenticate", new Credentials {
             Identity = Account.Identity,
             Password = Account.Password,
+            Sign = "TWSMA"
         });
 
         return Status != HttpStatusCode.OK ? throw new ArgumentNullException(nameof(Status)) : Response.Estela.Token.ToString();

@@ -6,7 +6,7 @@ namespace TWS_Customer.Services.Exceptions;
 public class XAuthenticate
     : BServerTransactionException<XAuthenticateSituation> {
     public XAuthenticate(XAuthenticateSituation Situation)
-        : base($"Authentication request has failed", HttpStatusCode.BadRequest, null) {
+        : base($"Authentication request has failed", HttpStatusCode.Unauthorized, null) {
 
         this.Situation = Situation;
         Advise = Situation switch {
@@ -20,4 +20,6 @@ public class XAuthenticate
 public enum XAuthenticateSituation {
     Identity,
     Password,
+    SolutionDisabled,
+    UnauthorizedSolution,
 }

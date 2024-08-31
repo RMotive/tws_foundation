@@ -69,7 +69,7 @@ public partial class Program {
                 });
             });
 
-            // --> Checking Databases Health
+            // --> Checking Database Health
             new TWSSecurityDatabases().ValidateHealth();
             new TWSBusinessDatabases().ValidateHealth();
 

@@ -7,7 +7,7 @@ using TWS_Business.Sets;
 namespace TWS_Business.Quality.Sets;
 public class Q_Carrier : BQ_MigrationSet<Carrier> {
     protected override Q_MigrationSet_EvaluateRecord<Carrier>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Carrier>[] Container) {
-        PointerValidator pointer = new(true, false);
+        PointerValidator pointer = new(true);
 
         Q_MigrationSet_EvaluateRecord<Carrier> success = new() {
             Mock = new() {
@@ -31,9 +31,9 @@ public class Q_Carrier : BQ_MigrationSet<Carrier> {
             Expectations = [
                 (nameof(Carrier.Id), [(new PointerValidator(), 3) ]),
                 (nameof(Carrier.Name), [(new LengthValidator(),2)]),
-                (nameof(Carrier.Approach), [(new PointerValidator(true), 3)]),
-                (nameof(Carrier.Address), [(new PointerValidator(true), 3) ]),
-                (nameof(Carrier.Status), [(new PointerValidator(true), 3) ])
+                (nameof(Carrier.Approach), [(pointer, 3)]),
+                (nameof(Carrier.Address), [(pointer, 3) ]),
+                (nameof(Carrier.Status), [(pointer, 3) ])
             ],
         };
 

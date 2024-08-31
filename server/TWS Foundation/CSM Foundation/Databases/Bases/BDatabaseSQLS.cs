@@ -49,7 +49,7 @@ public abstract class BDatabaseSQLS<TDatabases>
     /// <summary>
     ///     Validates database connection health.
     /// </summary>
-    public void ValidateHealth(bool Announce = true) {
+    public void ValidateHealth() {
         AdvisorManager.Announce($"ORM Setting up *^____^*", new() {
             {"Database", GetType().Name },
             {"Base", nameof(BDatabaseSQLS<TDatabases>) }

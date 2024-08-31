@@ -12,9 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using TWS_Foundation.Middlewares;
-using TWS_Foundation.Quality.Suit.Middlewares.ReDatabasess.Exceptions;
-
-using Xunit;
+using TWS_Foundation.Quality.Suit.Middlewares.Resources.Exceptions;
 
 namespace TWS_Foundation.Quality.Suit.Middlewares;
 /// <summary>

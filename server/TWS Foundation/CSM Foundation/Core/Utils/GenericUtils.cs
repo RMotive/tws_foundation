@@ -5,7 +5,7 @@ using System.Reflection;
 namespace CSM_Foundation.Core.Utils;
 public static class GenericUtils {
     public static TObject DeepCopy<TObject>(this TObject target, bool isParentProperty = true, Dictionary<object, object>? visited = null) {
-        visited ??= new Dictionary<object, object>();
+        visited ??= [];
 
         if (target == null)
             return default!;

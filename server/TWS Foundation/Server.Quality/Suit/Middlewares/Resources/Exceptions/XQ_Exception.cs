@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Server.Bases;
 
-namespace TWS_Foundation.Quality.Suit.Middlewares.ReDatabasess.Exceptions;
+namespace TWS_Foundation.Quality.Suit.Middlewares.Resources.Exceptions;
 public class XQ_Exception
     : BServerTransactionException<XQ_ExceptionSituation> {
     public XQ_Exception()

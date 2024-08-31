@@ -5,7 +5,7 @@ public partial class AccountsPermit {
 
     public int Permit { get; set; }
 
-    public virtual Account AccountNavigation { get; set; } = null!;
+    public virtual Account AccountNavigation { get; init; } = null!;
 
-    public virtual Permit PermitNavigation { get; set; } = null!;
+    public virtual Permit PermitNavigation { get; init; } = null!;
 }
