@@ -8,7 +8,7 @@ void main() {
   late TrucksExternalsServiceBase service;
   setUp(
     () async {
-      final TWSAdministrationSource source = TWSAdministrationSource(false);
+      final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(qualityCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),

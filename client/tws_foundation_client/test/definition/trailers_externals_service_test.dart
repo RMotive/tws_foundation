@@ -29,7 +29,7 @@ void main() {
           return Response(object, 200);
         },
       );
-      service = TWSAdministrationSource(
+      service = TWSFoundationSource(
         true,
         client: mockClient,
       ).trailersExternals;

@@ -63,6 +63,7 @@ public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> 
 
         modelBuilder.Entity<AccountsPermit>(entity => {
             entity.HasNoKey();
+            entity.ToTable("Accounts_Permits");
 
             entity.Property(e => e.Account);
             entity.Property(e => e.Permit);
@@ -80,6 +81,7 @@ public partial class TWSSecurityDatabases : BDatabaseSQLS<TWSSecurityDatabases> 
 
         modelBuilder.Entity<AccountProfile>(entity => { 
             entity.HasNoKey();
+            entity.ToTable("Accounts_Profiles");
             
             entity.Property(e => e.Account);
             entity.Property(e => e.Profile);
