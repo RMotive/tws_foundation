@@ -15,4 +15,16 @@
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TWSS.Connection\development_connection.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TWSS.Connection\production_connection.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TWSS.Connection\quality_connection.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -10,11 +10,11 @@ namespace TWS_Security;
 public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
     public TWSSecurityDatabase(DbContextOptions<TWSSecurityDatabase> options)
-        : base(options) {
+        : base("TWSS", options) {
     }
 
     public TWSSecurityDatabase()
-    : base() {
+    : base("TWSS") {
 
     }
 

@@ -6,11 +6,14 @@ public class DatabasesLinkOptions {
     public required string Password { get; init; }
     public bool Encrypt { get; init; } = false;
 
+    public bool Trust { get; init; } = false;
+
     public string GenerateConnectionString() {
         return $"Server={Host};" +
             $"Database={Name};" +
             $"User={User};" +
             $"Password={Password};" +
-            $"Encrypt={Encrypt};";
+            $"Encrypt={Encrypt};" +
+            $"TrustServerCertificate={Trust}";
     }
 }

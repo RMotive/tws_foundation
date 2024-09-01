@@ -11,11 +11,11 @@ namespace TWS_Business;
 
 public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     public TWSBusinessDatabase(DbContextOptions<TWSBusinessDatabase> options)
-        : base(options) {
+        : base("TWSB", options) {
     }
 
     public TWSBusinessDatabase()
-        : base() {
+        : base("TWSB") {
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         optionsBuilder.UseSqlServer(Connection.GenerateConnectionString());

@@ -52,7 +52,7 @@ public class AdvisorManager {
     }
 
     public static void Note(string Subject, Details? Details = null) {
-        Write("Note", ConsoleColor.Blue, Subject, Details);
+        Write("Note", ConsoleColor.White, Subject, Details);
     }
 
     public static void Success(string Subject, Details? Details = null) {
@@ -68,7 +68,7 @@ public class AdvisorManager {
         {"Message", Exception.Message },
         {"Thrower", Exception.GetType() },
         {"Details", Exception.Details },
-        {"Trace", Exception.Trace[0..20] },
+        {"Trace", Exception.Trace },
     });
     }
 

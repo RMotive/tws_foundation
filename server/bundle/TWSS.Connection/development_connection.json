@@ -1,0 +1,8 @@
+﻿{
+  "Host": "NOVAWL",
+  "Name": "TWS Security",
+  "User": "tws_admin",
+  "Password": "twsadmin2024$",
+  "Encrypt": false,
+  "Trust":  false
+}

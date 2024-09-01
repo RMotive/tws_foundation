@@ -1,15 +1,16 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection;
 using System.Text.Json;
 
+using CSM_Foundation.Databases.Models.Options;
 using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
-using CSM_Foundation.Databases.Models.Options;
 
 namespace CSM_Foundation.Databases.Utils;
 public class MigrationUtils {
-    private const string DirectoryName = "Connection";
+    private const string DirectoryName = ".Connection";
     private const string QualityPrefix = "quality_";
     private const string DevelopmentPrefix = "development_";
+    private const string ProductionPrefix = "production_";
 
     /// <summary>
     ///     Fetches and loads through IO functionallities for private file based secret
@@ -33,30 +34,36 @@ public class MigrationUtils {
     /// <exception cref="XDataDatabasesConnectionLoad">
     ///     When something gone wrong during the IO connection properties gather operation.
     /// </exception>
-    public static DatabasesLinkOptions Retrieve([CallerFilePath] string? cp = null) {
+    public static DatabasesLinkOptions Retrieve(string DatabaseSign) {
+        string wd = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+
         string prefix = EnvironmentManager.Mode switch {
             ServerEnvironments.development => DevelopmentPrefix,
             ServerEnvironments.quality => QualityPrefix,
+            ServerEnvironments.production => ProductionPrefix,
             _ => DevelopmentPrefix,
         };
         string fn = $"{prefix}connection.json";
 
-        if (cp is null) {
-            throw new ArgumentNullException(cp);
+        if (wd is null) {
+            throw new ArgumentNullException(wd);
         }
-
-        DirectoryInfo? parent = Directory.GetParent(cp)
-            ?? throw new DirectoryNotFoundException();
-        IEnumerable<DirectoryInfo> pds = parent.EnumerateDirectories();
-        DirectoryInfo? cpd = pds
-            .Where(i => i.Name == DirectoryName)
+        
+        string tp = $"{wd}\\{DatabaseSign.ToUpper()}{DirectoryName}";
+        string? cpd = Directory.GetDirectories(wd)
+            .Where(i => i == tp)
             .FirstOrDefault()
-            ?? throw new DirectoryNotFoundException($"{parent.FullName}\\{DirectoryName} not found in the system");
-        FileInfo? cpfi = cpd.GetFiles()
-            .Where(i => i.Name == fn)
+            ?? throw new DirectoryNotFoundException($"{tp} not found in the system");
+        
+        string tfn = $"{tp}\\{fn}";
+
+        string[] cfs = Directory.GetFiles(cpd);
+        string cpfi = cfs
+            .Where(i => i == tfn)
             .FirstOrDefault()
             ?? throw new FileNotFoundException();
-        using FileStream pfs = new(cpfi.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+        using FileStream pfs = new(cpfi, FileMode.Open, FileAccess.Read, FileShare.Read);
         DatabasesLinkOptions? m = JsonSerializer.Deserialize<DatabasesLinkOptions>(pfs);
         pfs.Dispose();
 

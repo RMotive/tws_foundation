@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using CSM_Foundation.Advisor.Interfaces;
@@ -20,11 +20,12 @@ using TWS_Customer.Services.Interfaces;
 
 using TWS_Security;
 using TWS_Security.Depots;
+using CSM_Foundation.Server.Managers;
 
 namespace TWS_Foundation;
 
 public partial class Program {
-    private const string SETTINGS_LOCATION = "\\Properties\\Server_properties.json";
+    private const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
     private const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
     private static IMigrationDisposer? Disposer;
     private static Settings? SettingsStore { get; set; }
@@ -32,7 +33,7 @@ public partial class Program {
 
     private static void Main(string[] args) {
         Configure();
-        AdvisorManager.Announce("Running engines (??_?)");
+        AdvisorManager.Announce("Running engines 🚀🚀🚀");
 
         try {
             Settings s = Settings;
@@ -189,6 +190,7 @@ public partial class Program {
         AdvisorManager.Note("Retrieving Server settings", new Dictionary<string, dynamic> {
             {"Workspace", ws },
             {"Settings", sl },
+            {"Environment", EnvironmentManager.Mode }
         });
         string host = ServerUtils.GetHost();
         string[] listeners = Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Split(";") ?? [];

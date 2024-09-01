@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 
 using CSM_Foundation.Server.Enumerators;
 
@@ -47,6 +48,11 @@ public class EnvironmentManager {
             return;
         }
 
-        _Mode = ServerEnvironments.development;
+
+        if (Debugger.IsAttached) {
+            _Mode = ServerEnvironments.development;
+        } else {
+            _Mode = ServerEnvironments.production;
+        }
     }
 }

@@ -14,13 +14,19 @@ public abstract class BDatabaseSQLS<TDatabases>
 
     protected readonly DatabasesLinkOptions Connection;
 
-    public BDatabaseSQLS([CallerFilePath] string? callerPath = null)
+    protected string Sign;
+
+    public BDatabaseSQLS(string Sign)
         : base() {
-        Connection = MigrationUtils.Retrieve(callerPath);
+
+        this.Sign = Sign.ToUpper();
+        Connection = MigrationUtils.Retrieve(this.Sign);
     }
-    public BDatabaseSQLS(DbContextOptions<TDatabases> Options, [CallerFilePath] string? callerPath = null)
+    public BDatabaseSQLS(string Sign, DbContextOptions<TDatabases> Options)
         : base(Options) {
-        Connection = MigrationUtils.Retrieve(callerPath);
+
+        this.Sign = Sign;
+        Connection = MigrationUtils.Retrieve(this.Sign);
     }
 
     /// <summary>
@@ -55,8 +61,18 @@ public abstract class BDatabaseSQLS<TDatabases>
             {"Base", nameof(BDatabaseSQLS<TDatabases>) }
         });
 
+
+        
         if (Database.CanConnect()) {
             AdvisorManager.Success($"[{GetType().Name}] Connection stable");
-        } else throw new Exception($"Connection unstable with dataDatabases ({GetType().Name})");
+
+        } else {
+            try {
+                Database.OpenConnection();
+            } catch (Exception ex) {
+                
+                throw new Exception($"Invalid connection with Database ({GetType().Name}) | {ex.InnerException?.Message}");
+            }
+        }
     }
 }
