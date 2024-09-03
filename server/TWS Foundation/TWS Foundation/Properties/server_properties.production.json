@@ -5,5 +5,5 @@
     "Name": "TWS Foundation",
     "Sign": "TWSFT"
   },
-  "CORS": ["guard.twtms.com.x"]
+  "CORS": ["guard.twtms.com.mx"]
 }
