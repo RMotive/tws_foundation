@@ -2,23 +2,21 @@
 using System.Net;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Server.Quality.Bases;
-using CSM_Foundation.Server.Records;
 using CSM_Foundation.Databases.Models.Options;
 using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Server.Quality.Bases;
+using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
-
-using TWS_Foundation.Middlewares.Frames;
 
 using TWS_Business.Sets;
 
 using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
-using TWS_Security.Sets;
+using TWS_Foundation.Middlewares.Frames;
 
-using Xunit;
+using TWS_Security.Sets;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Databases.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
@@ -69,7 +67,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
 
             YardLog mock = new() {
                 Entry = true,
-                Truck = i,
+                Truck = -1,
                 Trailer = i,
                 LoadType = i,
                 Guard = i,
@@ -84,7 +82,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
             mockList.Add(mock);
         }
 
-        (HttpStatusCode Status, _) = await Post("Create", mockList, true);
+        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
 
     }
@@ -111,7 +109,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
 
             (HttpStatusCode Status, ServerGenericFrame Respone) = await Post("Update", mock, true);
 
-            Assert.Equal(HttpStatusCode.OK, Status);
+            Assert.True(HttpStatusCode.OK.Equals(Status));
             RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
@@ -123,7 +121,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
 
         #region Second (Updates an exist record)
         {
-            tag = "UPT " + RandomUtils.String(3) ;
+            tag = "UPT " + RandomUtils.String(3);
             Section section = new() {
                 Status = 1,
                 Yard = 1,
