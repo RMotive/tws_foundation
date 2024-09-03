@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Content Remove="Properties\server_properties.json" />
+    <Content Remove="Properties\server_properties.production.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Properties\server_properties.production.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\server_properties.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -21,6 +21,7 @@ using TWS_Customer.Services.Interfaces;
 using TWS_Security;
 using TWS_Security.Depots;
 using CSM_Foundation.Server.Managers;
+using CSM_Foundation.Server.Enumerators;
 
 namespace TWS_Foundation;
 
@@ -185,7 +186,16 @@ public partial class Program {
 
     private static Settings RetrieveSettings() {
         string ws = Directory.GetCurrentDirectory();
-        string sl = FileUtils.FormatLocation(SETTINGS_LOCATION);
+        string fp = SETTINGS_LOCATION;
+        switch (EnvironmentManager.Mode) {
+            case ServerEnvironments.production:
+                fp = fp.Split(".json")[0] + ".production.json";
+                break;
+            default:
+                break;
+        }
+
+        string sl = FileUtils.FormatLocation(fp);
         Dictionary<string, dynamic> tempModel = FileUtils.Deserealize<Dictionary<string, dynamic>>($"{ws}{sl}");
         AdvisorManager.Note("Retrieving Server settings", new Dictionary<string, dynamic> {
             {"Workspace", ws },
