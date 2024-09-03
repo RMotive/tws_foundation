@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## CURRENT
+
+- Notes:
+
+    1. Template.  
+
+- Dependencies Upgrade:
+
+    1. TWS Security
+
+        - TWS Security.Quality
+
+    2. TWS Business
+
+        - TWS Business.Quality
+
+    3. TWS Customer
+
+        - TWS Customer.Quality
+
+    4. TWS Foundation
+
+        - TWS Foundation.Quality
+
 ## 2.0.1 - 03.09-2024
 
 - Notes:
