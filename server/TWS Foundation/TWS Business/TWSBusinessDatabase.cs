@@ -18,7 +18,10 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
         : base("TWSB") {
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-        optionsBuilder.UseSqlServer(Connection.GenerateConnectionString());
+        optionsBuilder.UseSqlServer("Server=DESKTOP-M2SPTNQ;Database=TWS Business; Trusted_Connection=True; Encrypt=False");
+
+        optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()))
+                             .EnableSensitiveDataLogging();
     }
 
     public virtual DbSet<Insurance> Insurances { get; set; }

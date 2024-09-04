@@ -118,9 +118,9 @@ Colonia varchar(30),
 
 create table USDOT(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
-[Status] int not null,
-MC varchar(7),
-SCAC varchar(4)
+[Status] int NOT NULL,
+MC varchar(7) NOT NULL,
+SCAC varchar(4) NOT NULL
 
 constraint FK_USDOT_Statuses foreign key([Status]) references Statuses(id),
 
@@ -188,7 +188,7 @@ constraint FK_TrailersCommons_Statuses foreign key([Status]) references Statuses
 Create table Trailers_Externals(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Status] int NOT NULL,
-Common int NOT NULL,
+Common int UNIQUE NOT NULL,
 Carrier varchar(100) NOT NULL,
 MxPlate varchar(12) NOT NULL,
 UsaPlate varchar(12),
@@ -200,7 +200,7 @@ constraint FK_TrailersExternals_Statuses foreign key([Status]) references Status
 create table Trailers(
 id int IDENTITY (1,1) PRIMARY KEY NOT NULL,
 [Status] int NOT NULL,
-Common int NOT NULL,
+Common int UNIQUE NOT NULL,
 Manufacturer int NOT NULL,
 Carrier int NOT NULL,
 Maintenance int,
@@ -269,7 +269,7 @@ create table Drivers(
 id int IDENTITY(1,1) PRIMARY KEY,
 [Status] int NOT NULL,
 Employee int NOT  NULL,
-Common int NOT NULL,
+Common int UNIQUE NOT NULL,
 DriverType varchar(12) NOT NULL,
 LicenseExpiration date NOT NULL,
 DrugalcRegistrationDate date NOT NULL,
@@ -307,7 +307,7 @@ create table Trucks_Commons(
 create table Trucks_Externals(
  id int IDENTITY(1,1) PRIMARY KEY,
  [Status] int NOT NULL,
- Common int NOT NULL,
+ Common int UNIQUE NOT NULL,
  Carrier varchar(100) NOT NULL,
  MxPlate varchar(12) NOT NULL,
  UsaPlate varchar(12),
@@ -317,7 +317,7 @@ create table Trucks_Externals(
 create table Trucks(
  id int IDENTITY(1,1) PRIMARY KEY,
  [Status] int NOT NULL,
- Common int NOT NULL,
+ Common int UNIQUE  NOT NULL,
  Manufacturer int NOT NULL,
  Motor varchar(16) UNIQUE NOT NULL,
  Carrier int NOT NULL,

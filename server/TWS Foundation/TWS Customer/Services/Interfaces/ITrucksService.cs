@@ -7,7 +7,7 @@ namespace TWS_Customer.Services.Interfaces;
 public interface ITrucksService {
     Task<SetViewOut<Truck>> View(SetViewOptions options);
     Task<DatabasesTransactionOut<Truck>> Create(Truck[] trucks);
-    Task<RecordUpdateOut<Truck>> Update(Truck Truck, bool updatePivot);
+    Task<RecordUpdateOut<Truck>> Update(Truck Truck);
 
 
 }

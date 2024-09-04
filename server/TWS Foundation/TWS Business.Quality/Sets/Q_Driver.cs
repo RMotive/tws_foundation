@@ -24,13 +24,11 @@ public class Q_Driver : BQ_MigrationSet<Driver> {
                 Status = 0,
                 Employee = 0,
                 DriverType = "",
-                Common = 0
             },
             Expectations = [
                 (nameof(Driver.Id), [(new PointerValidator(), 3)]),
                 (nameof(Driver.DriverType), [(new LengthValidator(), 2)]),
                 (nameof(Driver.Employee), [(new PointerValidator(true), 3)]),
-                (nameof(Driver.Common), [(new PointerValidator(true), 3)]),
                 (nameof(Driver.Status), [(new PointerValidator(true), 3)]),
             ],
         };

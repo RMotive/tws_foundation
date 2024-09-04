@@ -31,7 +31,7 @@ public partial class TruckExternal
 
         Container = [
                 .. Container,
-            (nameof(Common), [Required, new PointerValidator(true)]),
+            (nameof(Common), [new UniqueValidator()]),
             (nameof(Status), [Required, new PointerValidator(true)]),
             (nameof(MxPlate), [new LengthValidator(8, 12)]),
         ];

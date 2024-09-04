@@ -20,7 +20,12 @@ public class Q_TruckDepot
             Status = 1,
             Manufacturer = 1,
             Motor = RandomUtils.String(16),
-            Common = 1,
+            Common = 0,
+            TruckCommonNavigation = new() {
+                Status = 1,
+                Vin = RandomUtils.String(17),
+                Economic = RandomUtils.String(16),
+            },
             Carrier = 1
         };
     }

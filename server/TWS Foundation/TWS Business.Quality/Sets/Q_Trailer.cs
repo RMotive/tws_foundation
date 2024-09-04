@@ -29,7 +29,6 @@ public class Q_Trailer : BQ_MigrationSet<Trailer> {
             },
             Expectations = [
                 (nameof(Trailer.Id), [(new PointerValidator(), 3)]),
-                (nameof(Trailer.Common), [(new PointerValidator(true), 3)]),
                 (nameof(Trailer.Manufacturer), [(new PointerValidator(true), 3)]),
                 (nameof(Trailer.Carrier), [(new PointerValidator(), 3)]),
                 (nameof(Trailer.Status), [(new PointerValidator(true), 3)]),

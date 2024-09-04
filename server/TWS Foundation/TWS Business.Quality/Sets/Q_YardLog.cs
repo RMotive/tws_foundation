@@ -22,7 +22,6 @@ public class Q_YardLog : BQ_MigrationSet<YardLog> {
                 Id = 0,
                 LoadType = 0,
                 Section = 0,
-                Guard = 1,
                 Seal = "",
                 Gname = "",
                 FromTo = ""

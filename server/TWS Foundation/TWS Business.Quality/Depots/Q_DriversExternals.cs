@@ -18,8 +18,12 @@ public class Q_DriversExternals
 
         return new() {
             Status = 1,
-            Common = 1,
-            Identification = 1
+            Common = 0,
+            Identification = 1,
+            DriverCommonNavigation = new() {
+                Status = 1,
+                License = RandomUtils.String(12)
+            }
         };
     }
 }

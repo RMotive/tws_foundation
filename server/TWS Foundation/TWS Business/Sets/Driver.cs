@@ -50,14 +50,11 @@ public partial class Driver
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
         Container = [
                 .. Container,
             (nameof(Status), [new PointerValidator(true)]),
             (nameof(Employee), [new PointerValidator(true)]),
-            (nameof(DriverType), [Required, new LengthValidator(1,12)]),
-            (nameof(Common), [new PointerValidator(true)]),
+            (nameof(DriverType), [new UniqueValidator(), new LengthValidator(1,12)]),
         ];
 
         return Container;
@@ -102,6 +99,9 @@ public partial class Driver
             _ = entity.HasOne(d => d.DriverCommonNavigation)
                 .WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.Common);
+
+            _ = entity.HasIndex(e => e.Common)
+               .IsUnique();
 
             _ = entity.HasOne(d => d.EmployeeNavigation)
                 .WithMany(p => p.Drivers)

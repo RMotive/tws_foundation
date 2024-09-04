@@ -18,7 +18,12 @@ public class Q_TrucksExternalsDepot
 
         return new() {
             Status = 1,
-            Common = 1,
+            Common = 0,
+            TruckCommonNavigation = new() {
+                Status = 1,
+                Vin = RandomUtils.String(17),
+                Economic = RandomUtils.String(16),
+            },
             MxPlate = "12345678",
             Carrier = "truck carrier qlty"
         };

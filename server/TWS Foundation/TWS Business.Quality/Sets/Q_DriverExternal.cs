@@ -27,7 +27,6 @@ public class Q_DriverExternal : BQ_MigrationSet<DriverExternal> {
             Expectations = [
                 (nameof(DriverExternal.Id), [(new PointerValidator(), 3)]),
                 (nameof(DriverExternal.Status), [(new PointerValidator(), 3)]),
-                (nameof(DriverExternal.Common), [(new PointerValidator(), 3)]),
                 (nameof(DriverExternal.Identification), [(new PointerValidator(), 3)]),
             ],
         };

@@ -40,8 +40,8 @@ public partial class Trailer
         Container = [
                 .. Container,
             (nameof(Manufacturer), [Required, pointer]),
-            (nameof(Common), [Required, pointer]),
-            (nameof(Carrier), [new PointerValidator(true)]),
+            (nameof(Common), [new UniqueValidator()]),
+            (nameof(Carrier), [new UniqueValidator(),new PointerValidator(true)]),
             (nameof(Status), [Required, pointer]),
         ];
 
@@ -59,6 +59,9 @@ public partial class Trailer
             _ = entity.HasOne(d => d.TrailerCommonNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Common);
+
+            _ = entity.HasIndex(e => e.Common)
+               .IsUnique();
 
             _ = entity.HasOne(d => d.CarrierNavigation)
                 .WithMany(p => p.Trailers)

@@ -22,6 +22,7 @@ public partial class DriverExternal
 
     public virtual DriverCommon? DriverCommonNavigation { get; set; }
 
+
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
@@ -30,7 +31,6 @@ public partial class DriverExternal
                 .. Container,
             (nameof(Status), [new PointerValidator(true)]),
             (nameof(Identification), [new PointerValidator(true)]),
-            (nameof(Common), [new PointerValidator(true)]),
         ];
 
         return Container;
@@ -47,6 +47,9 @@ public partial class DriverExternal
             _ = entity.HasOne(d => d.DriverCommonNavigation)
                .WithMany(p => p.DriversExternals)
                .HasForeignKey(d => d.Common);
+
+            _ = entity.HasIndex(e => e.Common)
+               .IsUnique();
 
             _ = entity.HasOne(d => d.IdentificationNavigation)
                 .WithMany(p => p.DriversExternals)

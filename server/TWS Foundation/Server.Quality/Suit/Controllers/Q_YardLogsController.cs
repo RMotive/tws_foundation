@@ -84,7 +84,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
             mockList.Add(mock);
         }
 
-        (HttpStatusCode Status, _) = await Post("Create", mockList, true);
+        (HttpStatusCode Status, ServerGenericFrame response) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
 
     }

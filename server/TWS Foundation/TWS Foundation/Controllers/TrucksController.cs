@@ -6,9 +6,6 @@ using TWS_Foundation.Controllers.Authentication;
 using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
-using TWS_Customer.Services.Records;
-
-using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers;
 /// <summary>
@@ -31,7 +28,7 @@ public class TrucksController : ControllerBase {
         => Ok(await Service.Create(trucks));
 
     [HttpPost(), Auth([])]
-    public async Task<IActionResult> Update(Truck Truck, bool updatePivot = false) {
-        return Ok(await Service.Update(Truck, updatePivot));
+    public async Task<IActionResult> Update(Truck Truck) {
+        return Ok(await Service.Update(Truck));
     }
 }

@@ -31,7 +31,7 @@ public partial class TrailerExternal
 
         Container = [
                 .. Container,
-            (nameof(Common), [Required, new PointerValidator(true)]),
+            (nameof(Common), [new UniqueValidator()]),
             (nameof(Status), [Required, new PointerValidator(true)]),
             (nameof(MxPlate), [new LengthValidator(8, 12)]),
             (nameof(Carrier), [new LengthValidator(1, 100)]),
@@ -64,6 +64,8 @@ public partial class TrailerExternal
             _ = entity.HasOne(d => d.TrailerCommonNavigation)
                .WithMany(p => p.TrailersExternals)
                .HasForeignKey(d => d.Common);
+            _ = entity.HasIndex(e => e.Common)
+               .IsUnique();
 
             _ = entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrailersExternals)

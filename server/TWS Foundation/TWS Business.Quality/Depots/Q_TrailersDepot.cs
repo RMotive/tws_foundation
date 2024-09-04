@@ -18,9 +18,14 @@ public class Q_TrailersDepot
 
         return new() {
             Manufacturer = 1,
-            Common = 1,
+            Common = 0,
             Status = 1,
-            Carrier = 1
+            Carrier = 1,
+            TrailerCommonNavigation = new() {
+                Status = 1,
+                Economic = RandomUtils.String(16),
+            }
+
         };
     }
 }

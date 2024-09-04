@@ -21,7 +21,6 @@ public partial class Truck
 
     public int Manufacturer { get; set; }
 
-
     public int? Maintenance { get; set; }
 
     public int? Insurance { get; set; }
@@ -49,6 +48,8 @@ public partial class Truck
     public static void Set(ModelBuilder builder) {
         _ = builder.Entity<Truck>(entity => {
             _ = entity.HasKey(e => e.Id);
+            _ = entity.ToTable("Trucks");
+
 
             _ = entity.Property(e => e.Id)
                 .HasColumnName("id");
@@ -83,6 +84,8 @@ public partial class Truck
             _ = entity.HasOne(d => d.TruckCommonNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Common);
+            _ = entity.HasIndex(e => e.Common)
+               .IsUnique();
         });
     }
 
@@ -91,8 +94,6 @@ public partial class Truck
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
             (nameof(Motor), [new LengthValidator(1, 16)]),
-            (nameof(Carrier), [new PointerValidator(true)]),
-            (nameof(Manufacturer), [new PointerValidator(true)]),
         ];
         return Container;
     }

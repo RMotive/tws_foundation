@@ -25,6 +25,7 @@ public partial class Manufacturer
     public static void Set(ModelBuilder builder) {
         _ = builder.Entity<Manufacturer>(entity => {
             _ = entity.HasKey(e => e.Id);
+            _ = entity.ToTable("Manufacturers");
 
             _ = entity.Property(e => e.Id)
                 .HasColumnName("id");
@@ -45,9 +46,8 @@ public partial class Manufacturer
 
         Container = [
                 .. Container,
-            (nameof(Model), [Required, new LengthValidator(1, 30)]),
-            (nameof(Brand), [Required, new LengthValidator(1, 15)]),
-            (nameof(Year), [Required]),
+            (nameof(Model), [new LengthValidator(1, 30)]),
+            (nameof(Brand), [new LengthValidator(1, 15)]),
         ];
 
         return Container;
