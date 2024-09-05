@@ -43,13 +43,13 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     /// <summary>
     ///     Generates a new instance of a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/> base.
     /// </summary>
-    /// <param name="Databases">
+    /// <param name="Database">
     ///     The <typeparamref name="TMigrationDatabases"/> that stores and handles the transactions for this <see cref="TMigrationSet"/> concept.
     /// </param>
-    public BDatabaseDepot(TMigrationDatabases Databases, IMigrationDisposer? Disposer) {
-        this.Database = Databases;
+    public BDatabaseDepot(TMigrationDatabases Database, IMigrationDisposer? Disposer) {
+        this.Database = Database;
         this.Disposer = Disposer;
-        Set = Databases.Set<TMigrationSet>();
+        Set = Database.Set<TMigrationSet>();
     }
 
     #region View 
@@ -237,7 +237,7 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     /// </summary>
     //Database.Entry(previousList[i]).CurrentValues.SetValues(newitem);
 
-    void UpdateHelper(IDatabasesSet current, IDatabasesSet Record) {
+    private void UpdateHelper(IDatabasesSet current, IDatabasesSet Record) {
         EntityEntry previousEntry = Database.Entry(current);
         if (previousEntry.State == EntityState.Unchanged) {
             //AttachDate(Record, true);
@@ -263,8 +263,9 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
                         // Find items to modify.
                         // For each new item stored in record collection, will search for an ID match and update the record.
                         foreach (object newitem in newList) {
-                            if (previousList[i] is IDatabasesSet previousItem && newitem is IDatabasesSet newItemSet && previousItem.Id == newItemSet.Id)
+                            if (previousList[i] is IDatabasesSet previousItem && newitem is IDatabasesSet newItemSet && previousItem.Id == newItemSet.Id) {
                                 UpdateHelper(previousItem, newItemSet);
+                            }
                         }
                     }
                 } else if (navigation.CurrentValue == null && newNavigationValue != null) {
@@ -278,14 +279,16 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
                     // Update the existing navigation entity
 
 
-                    if (navigation.CurrentValue is IDatabasesSet currentItemSet && newNavigationValue is IDatabasesSet newItemSet) UpdateHelper(currentItemSet, newItemSet);
+                    if (navigation.CurrentValue is IDatabasesSet currentItemSet && newNavigationValue is IDatabasesSet newItemSet) {
+                        UpdateHelper(currentItemSet, newItemSet);
+                    }
                 }
 
             }
         }
 
     }
-   
+
     /// <summary>
     /// 
     /// </summary>

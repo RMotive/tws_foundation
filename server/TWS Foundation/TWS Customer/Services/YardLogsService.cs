@@ -19,7 +19,6 @@ public class YardLogsService : IYardLogsService {
     }
 
     public async Task<SetViewOut<YardLog>> View(SetViewOptions options) {
-
         static IQueryable<YardLog> include(IQueryable<YardLog> query) {
             return query
             .Include(t => t.DriverExternalNavigation)
