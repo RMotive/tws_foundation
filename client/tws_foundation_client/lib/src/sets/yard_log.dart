@@ -163,7 +163,7 @@ final class YardLog implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Debe seleccionar seleccionar una foto del camión con el remolque.", "strictLength(1, max)"));
+    if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Debe tomar una foto del camión con el remolque.", "strictLength(1, max)"));
     if(gName.isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "El nombre del guardia no debe exeder los 100 caracteres y no debe estar vacio.", "strictLength(1,100)"));
     if(fromTo.isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "Debe indicar de donde viene (o a donde va el camión). Maximo 25 caracteres.", "strictLength(1,25)"));
     if(seal.isEmpty || gName.length > 64) results.add(CSMSetValidationResult(kSeal, "El campo del sello no debe estar vacio. Maximo 100 caracteres.", "strictLength(1,64)"));
