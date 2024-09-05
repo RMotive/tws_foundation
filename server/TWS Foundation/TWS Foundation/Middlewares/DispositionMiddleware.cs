@@ -1,6 +1,6 @@
 ﻿
 using CSM_Foundation.Server.Exceptions;
-using CSM_Foundation.Databases.Interfaces;
+using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.Extensions.Primitives;
 

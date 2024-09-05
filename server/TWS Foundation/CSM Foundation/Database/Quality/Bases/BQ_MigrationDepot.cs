@@ -2,28 +2,40 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Enumerators;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
-using CSM_Foundation.Databases.Quality.Interfaces;
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Enumerators;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Database.Quality.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
 using Xunit;
 
-namespace CSM_Foundation.Databases.Quality.Bases;
+namespace CSM_Foundation.Database.Quality.Bases;
 
-public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrationDatabases>
+public abstract class BQ_MigrationDepot<TSet, TDepot, TDatabase>
     : IQ_MigrationDepot
-    where TMigrationSet : class, IDatabasesSet, new()
-    where TMigrationDepot : IMigrationDepot<TMigrationSet>, new()
-    where TMigrationDatabases : BDatabaseSQLS<TMigrationDatabases>, new() {
+    where TSet : class, IDatabasesSet, new()
+    where TDepot : IMigrationDepot<TSet>, new()
+    where TDatabase : BDatabaseSQLS<TDatabase>, new() {
     private readonly string Ordering;
-    private readonly TMigrationDepot Depot;
-    private readonly TMigrationDatabases Databases;
-    private readonly DbSet<TMigrationSet> Set;
+
+
+    protected TDepot Depot { 
+        get {
+            return new TDepot();
+        }
+    }
+
+    private static TDatabase Database { 
+        get {
+            return new TDatabase();
+        }    
+    }
+
+
     /// <summary>
     ///     Generates a new behavior base for <see cref="BQ_MigrationDepot{TMigrationSet, TMigrationDepot, TMigrationDatabases}"/>.
     /// </summary>
@@ -32,31 +44,31 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
     /// </param>
     public BQ_MigrationDepot(string Ordering) {
         this.Ordering = Ordering;
-        Depot = new();
-        Databases = new();
-        Set = Databases.Set<TMigrationSet>();
     }
 
     protected void Restore(IDatabasesSet Set) {
-        _ = Databases.Remove(Set);
-        _ = Databases.SaveChanges();
+        Database.Remove(Set);
+        Database.SaveChanges();
     }
     protected void Restore(IDatabasesSet[] Sets) {
-        Databases.RemoveRange(Sets);
-        _ = Databases.SaveChanges();
+        Database.RemoveRange(Sets);
+        Database.SaveChanges();
     }
     /// <summary>
     ///     
     /// </summary>
     /// <returns></returns>
-    protected abstract TMigrationSet MockFactory();
+    protected abstract TSet MockFactory();
 
     #region Q_Base
 
     [Fact]
     public async Task View() {
+        TDatabase Database = BQ_MigrationDepot<TSet, TDepot, TDatabase>.Database;
+        DbSet<TSet> Set = Database.Set<TSet>();
+
         #region Preparation (First-Fact) 
-        TMigrationSet[] firstFactMocks = [];
+        TSet[] firstFactMocks = [];
         SetViewOptions firstFactOptions;
         {
             try {
@@ -69,12 +81,13 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
                 if (stored < 21) {
                     int left = 21 - stored;
                     for (int i = 0; i < left; i++) {
-                        TMigrationSet mock = MockFactory();
+                        TSet mock = MockFactory();
+                        mock.Timestamp = DateTime.UtcNow;
                         firstFactMocks = [.. firstFactMocks, mock];
                     }
 
                     await Set.AddRangeAsync(firstFactMocks);
-                    _ = await Databases.SaveChangesAsync();
+                    await Database.SaveChangesAsync();
                 }
             } catch { Restore(firstFactMocks); throw; }
         }
@@ -99,16 +112,16 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
                 Orderings = [
                     new SetViewOrderOptions {
                         Property = Ordering,
-                        Behavior = MIgrationViewOrderBehaviors.UpDown,
+                        Behavior = MIgrationViewOrderBehaviors.Descending,
                     },
                 ],
             };
         }
         #endregion
 
-        SetViewOut<TMigrationSet> firstFact = await Depot.View(firstFactOptions);
-        SetViewOut<TMigrationSet> secondFact = await Depot.View(secondFactOptions);
-        SetViewOut<TMigrationSet> thirdFact = await Depot.View(thirdFactOptions);
+        SetViewOut<TSet> firstFact = await Depot.View(firstFactOptions);
+        SetViewOut<TSet> secondFact = await Depot.View(secondFactOptions);
+        SetViewOut<TSet> thirdFact = await Depot.View(thirdFactOptions);
 
         try {
             #region First-Fact (View successfully page 1)
@@ -133,28 +146,29 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
             #endregion
             #region Third-Fact (View successfuly orders by Name)
             {
-                TMigrationSet[] factRecords = thirdFact.Sets;
-                TMigrationSet[] sortedRecords = firstFact.Sets;
+                TSet[] factRecords = thirdFact.Sets;
+                TSet[] sortedRecords = firstFact.Sets;
 
                 // --> Sorting unsorted.
                 {
-                    Type setType = typeof(TMigrationSet);
-                    ParameterExpression parameterExpression = Expression.Parameter(setType, $"X");
+                    Type setType = typeof(TSet);
+                    ParameterExpression parameterExpression = Expression.Parameter(setType, $"X0");
                     PropertyInfo property = setType.GetProperty(Ordering)
                         ?? throw new Exception($"Unexisted property ({Ordering}) on ({setType})");
                     MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
                     UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
-                    Expression<Func<TMigrationSet, object>> orderingExpression = Expression.Lambda<Func<TMigrationSet, object>>(translationExpression, parameterExpression);
-                    IQueryable<TMigrationSet> sorted = sortedRecords.AsQueryable();
+                    Expression<Func<TSet, object>> orderingExpression = Expression.Lambda<Func<TSet, object>>(translationExpression, parameterExpression);
+                    IQueryable<TSet> sorted = sortedRecords.AsQueryable();
                     sorted = sorted.OrderByDescending(orderingExpression);
-                    sortedRecords = [.. sorted];
+                    sortedRecords = [..sorted];
                 }
 
                 for (int i = 0; i < sortedRecords.Length; i++) {
-                    TMigrationSet expected = sortedRecords[i];
-                    TMigrationSet actual = factRecords[i];
+                    TSet expected = sortedRecords[i];
+                    TSet actual = factRecords[i];
 
-                    Assert.Equal(expected.Id, actual.Id);
+                    PropertyInfo property = typeof(TSet).GetProperty(Ordering)!;
+                    Assert.Equal(property.GetValue(expected), property.GetValue(actual));
                 }
             }
             #endregion
@@ -167,8 +181,8 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
     public async Task Create() {
         #region First-Fact (Set successfuly saved and generated)
         {
-            TMigrationSet mock = MockFactory();
-            TMigrationSet fact = await Depot.Create(mock);
+            TSet mock = MockFactory();
+            TSet fact = await Depot.Create(mock);
             Assert.Multiple([
                 () => Assert.True(fact.Id > 0),
                 async () => await Assert.ThrowsAnyAsync<Exception>(async () => await Depot.Create(mock)),
@@ -182,16 +196,17 @@ public abstract class BQ_MigrationDepot<TMigrationSet, TMigrationDepot, TMigrati
 
         #region Second-Fact (Sets successfuly saved and generated)
         {
-            TMigrationSet[] mocks = [];
+            TSet[] mocks = [];
             for (int i = 0; i < 3; i++) {
                 mocks = [.. mocks, MockFactory()];
             }
-            DatabasesTransactionOut<TMigrationSet> fact = await Depot.Create(mocks);
+
+            DatabasesTransactionOut<TSet> fact = await Depot.Create(mocks);
 
             Assert.Multiple([
                 () => Assert.Equal(fact.QTransactions, mocks.Length),
-                () => Assert.Equal(fact.QSuccesses, mocks.Length),
-                () => Assert.All(mocks, i => {
+                () => Assert.True(fact.QSuccesses.Equals(mocks.Length), fact.QFailures > 0 ? fact.Failures[0].System : ""),
+                () => Assert.All(fact.Successes, i => {
                     Assert.True(i.Id > 0);
                 }),
                 () => {

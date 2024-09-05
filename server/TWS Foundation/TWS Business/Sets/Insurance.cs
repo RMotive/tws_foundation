@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class Insurance
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -28,7 +29,7 @@ public partial class Insurance
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Policy), [new UniqueValidator(), new LengthValidator(1, 20),]),
             (nameof(Expiration), [Required, new UniqueValidator()]),
             (nameof(Country), [new LengthValidator(2, 3)]),
@@ -39,21 +40,21 @@ public partial class Insurance
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Insurance>(entity => {
-            _ = entity.HasKey(e => e.Id);
+        builder.Entity<Insurance>(entity => {
+            entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            _ = entity.Property(e => e.Country)
+            entity.Property(e => e.Country)
                 .HasMaxLength(3)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Policy)
+            entity.Property(e => e.Policy)
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Insurances)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

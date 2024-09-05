@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class LoadType
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -17,18 +18,18 @@ public partial class LoadType
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<LoadType>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Load_Types");
+        builder.Entity<LoadType>(entity => {
+            entity.ToTable("Load_Types");
+            entity.HasKey(e => e.Id);
 
-            _ = entity.HasIndex(e => e.Name)
+            entity.HasIndex(e => e.Name)
                 .IsUnique();
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                 .HasColumnName("id");
-            _ = entity.Property(e => e.Description)
+            entity.Property(e => e.Description)
                 .HasMaxLength(100);
-            _ = entity.Property(e => e.Name)
+            entity.Property(e => e.Name)
                 .HasMaxLength(32);
         });
     }

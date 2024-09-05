@@ -1,10 +1,10 @@
-﻿using CSM_Foundation.Databases.Exceptions;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Quality.Records;
+﻿using CSM_Foundation.Database.Exceptions;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Quality.Records;
 
 using Xunit;
 
-namespace CSM_Foundation.Databases.Quality.Bases;
+namespace CSM_Foundation.Database.Quality.Bases;
 /// <summary>
 ///     Base Quality for [Q_Entity].
 ///     

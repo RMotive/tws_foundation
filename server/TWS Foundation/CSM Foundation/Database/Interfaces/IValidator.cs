@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace CSM_Foundation.Databases.Interfaces;
+namespace CSM_Foundation.Database.Interfaces;
 /// <summary>
 /// TODO
 /// </summary>

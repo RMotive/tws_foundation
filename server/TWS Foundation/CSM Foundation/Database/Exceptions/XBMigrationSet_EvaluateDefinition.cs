@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Interfaces;
+﻿using CSM_Foundation.Database.Interfaces;
 
-namespace CSM_Foundation.Databases.Exceptions;
+namespace CSM_Foundation.Database.Exceptions;
 public class XBMigrationSet_EvaluateDefinition
     : Exception {
     public enum Reasons {

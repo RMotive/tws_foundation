@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Interfaces;
+﻿using CSM_Foundation.Database.Interfaces;
 
-namespace CSM_Foundation.Databases.Quality.Records;
+namespace CSM_Foundation.Database.Quality.Records;
 public record Q_MigrationSet_EvaluateRecord<TSet>
     where TSet : IDatabasesSet {
 

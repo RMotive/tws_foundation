@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
+﻿using CSM_Foundation.Database.Quality.Bases;
 
 namespace TWS_Security.Quality;
 public class Q_TWSSecurityDatabases

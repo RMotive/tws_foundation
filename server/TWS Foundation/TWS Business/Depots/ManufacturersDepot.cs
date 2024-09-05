@@ -1,5 +1,5 @@
 ﻿
-using CSM_Foundation.Databases.Bases;
+using CSM_Foundation.Database.Bases;
 
 using TWS_Business.Sets;
 

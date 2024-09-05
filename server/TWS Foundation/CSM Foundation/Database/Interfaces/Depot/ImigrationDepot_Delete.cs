@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Out;
 
-namespace CSM_Foundation.Databases.Interfaces.Depot;
+namespace CSM_Foundation.Database.Interfaces.Depot;
 public interface IMigrationDepot_Delete<TMigrationSet>
     where TMigrationSet : IDatabasesSet {
 

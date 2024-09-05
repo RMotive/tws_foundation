@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class Identification
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -28,28 +29,29 @@ public partial class Identification
 
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Identification>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
-               .HasColumnName("id");
-            _ = entity.ToTable("Identifications");
+        builder.Entity<Identification>(entity => {
+            entity.ToTable("Identifications");
+            entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Name)
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            entity.Property(e => e.Name)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.FatherLastname)
+            entity.Property(e => e.FatherLastname)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.MotherLastName)
+            entity.Property(e => e.MotherLastName)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Identifications)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.StatusNavigation)
+               .WithMany(p => p.Identifications)
+               .HasForeignKey(d => d.Status)
+               .OnDelete(DeleteBehavior.ClientSetNull);
         });
     }
 

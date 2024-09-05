@@ -4,7 +4,7 @@ using System.Net;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Server.Quality.Bases;
 using CSM_Foundation.Server.Records;
-using CSM_Foundation.Databases.Models.Options;
+using CSM_Foundation.Database.Models.Options;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -18,7 +18,7 @@ using TWS_Customer.Services.Records;
 using Xunit;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Databases.Models.Out.SetViewOut<TWS_Business.Sets.Plate>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Plate>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers;

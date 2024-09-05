@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class TrailerExternal
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -42,34 +43,33 @@ public partial class TrailerExternal
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<TrailerExternal>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Trailers_Externals");
+        builder.Entity<TrailerExternal>(entity => {
+            entity.ToTable("Trailers_Externals");
+            entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
-                 .HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
 
-            _ = entity.Property(e => e.UsaPlate)
-              .HasMaxLength(12)
-              .IsUnicode(false);
+            entity.Property(e => e.UsaPlate)
+                .HasMaxLength(12)
+                .IsUnicode(false);
 
-            _ = entity.Property(e => e.Carrier)
-              .HasMaxLength(100)
-              .IsUnicode(false);
+            entity.Property(e => e.Carrier)
+                .HasMaxLength(100)
+                .IsUnicode(false);
 
-            _ = entity.Property(e => e.MxPlate)
-              .HasMaxLength(12)
-              .IsUnicode(false);
+            entity.Property(e => e.MxPlate)
+                .HasMaxLength(12)
+                .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.TrailerCommonNavigation)
-               .WithMany(p => p.TrailersExternals)
-               .HasForeignKey(d => d.Common);
+            entity.HasOne(d => d.TrailerCommonNavigation)
+                .WithMany(p => p.TrailersExternals)
+                .HasForeignKey(d => d.Common);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrailersExternals)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-
         });
     }
 }

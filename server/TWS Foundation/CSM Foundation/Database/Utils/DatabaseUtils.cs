@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 
-using CSM_Foundation.Databases.Models.Options;
+using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
 
-namespace CSM_Foundation.Databases.Utils;
+namespace CSM_Foundation.Database.Utils;
 public class MigrationUtils {
     private const string DirectoryName = ".Connection";
     private const string QualityPrefix = "quality_";

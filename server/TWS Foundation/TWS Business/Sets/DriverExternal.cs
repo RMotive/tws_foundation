@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class DriverExternal
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -37,22 +38,22 @@ public partial class DriverExternal
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<DriverExternal>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Drivers_Externals");
+        builder.Entity<DriverExternal>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("Drivers_Externals");
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.HasOne(d => d.DriverCommonNavigation)
+            entity.HasOne(d => d.DriverCommonNavigation)
                .WithMany(p => p.DriversExternals)
                .HasForeignKey(d => d.Common);
 
-            _ = entity.HasOne(d => d.IdentificationNavigation)
+            entity.HasOne(d => d.IdentificationNavigation)
                 .WithMany(p => p.DriversExternals)
                 .HasForeignKey(d => d.Identification);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.DriversExternals)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

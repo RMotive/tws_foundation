@@ -1,4 +1,4 @@
-﻿namespace CSM_Foundation.Databases.Models.Options;
+﻿namespace CSM_Foundation.Database.Models.Options;
 public class DatabasesLinkOptions {
     public required string Host { get; init; }
     public required string Name { get; init; }

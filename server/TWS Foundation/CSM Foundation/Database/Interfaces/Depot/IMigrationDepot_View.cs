@@ -1,7 +1,7 @@
-﻿using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
-namespace CSM_Foundation.Databases.Interfaces.Depot;
+namespace CSM_Foundation.Database.Interfaces.Depot;
 /// <summary>
 ///     Describes how a <see cref="IMigrationDepot_View{TMigrationSet}"/> implementation should
 ///     behave, providing {View} operations, a View operation is the creation of complex 

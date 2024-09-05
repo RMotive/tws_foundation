@@ -2,8 +2,8 @@
 
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Server.Records;
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -14,7 +14,7 @@ using TWS_Security.Sets;
 
 using Xunit;
 
-using View = CSM_Foundation.Databases.Models.Out.SetViewOut<TWS_Security.Sets.Solution>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Sets.Solution>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers;
 

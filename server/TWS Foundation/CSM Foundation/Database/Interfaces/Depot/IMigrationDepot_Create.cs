@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Out;
 
-namespace CSM_Foundation.Databases.Interfaces.Depot;
+namespace CSM_Foundation.Database.Interfaces.Depot;
 /// <summary>
 ///     Describes the behavior for a <see cref="IMigrationDepot_Create{TMigrationSet}"/>,
 ///     this means is able to handle a <see cref="TMigrationSet"/> live migration entity mirror between

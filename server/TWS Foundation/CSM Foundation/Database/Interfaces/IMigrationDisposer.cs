@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace CSM_Foundation.Databases.Interfaces;
+namespace CSM_Foundation.Database.Interfaces;
 /// <summary>
 /// 
 /// </summary>

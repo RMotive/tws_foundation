@@ -1,8 +1,6 @@
-﻿using System.Diagnostics.Metrics;
-
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +9,11 @@ namespace TWS_Business.Sets;
 public partial class Usdot
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
-    public string Mc {  get; set; } = null!;
+    public string Mc { get; set; } = null!;
 
     public string Scac { get; set; } = null!;
 
@@ -39,25 +38,25 @@ public partial class Usdot
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Usdot>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("USDOT");
+        builder.Entity<Usdot>(entity => {
+            entity.ToTable("USDOT");
+            entity.HasKey(e => e.Id);
 
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id)
                .HasColumnName("id");
 
-            _ = entity.Property(e => e.Mc)
+            entity.Property(e => e.Mc)
                 .HasMaxLength(7)
                 .IsUnicode(false)
                 .HasColumnName("MC");
 
-            _ = entity.Property(e => e.Scac)
+            entity.Property(e => e.Scac)
                 .HasMaxLength(4)
                 .IsUnicode(false)
                 .HasColumnName("SCAC");
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Usdots)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

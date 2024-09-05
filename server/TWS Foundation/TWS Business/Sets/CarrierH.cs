@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +10,7 @@ namespace TWS_Business.Sets;
 public partial class CarrierH
     : BDatabaseSet {
     public override int Id { get; set; }
-
-    //public override DateTime Timemark { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Sequence { get; set; }
 
@@ -61,47 +60,47 @@ public partial class CarrierH
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<CarrierH>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
+        builder.Entity<CarrierH>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id)
                .HasColumnName("id");
-            _ = entity.ToTable("Carriers_H");
+            entity.ToTable("Carriers_H");
 
-            _ = entity.Property(e => e.Name)
+            entity.Property(e => e.Name)
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.ApproachH)
+            entity.Property(e => e.ApproachH)
                 .HasColumnName("ApproachH");
 
-            _ = entity.HasOne(d => d.ContactHNavigation)
+            entity.HasOne(d => d.ContactHNavigation)
               .WithMany(p => p.CarriersH)
               .HasForeignKey(d => d.ApproachH);
 
-            _ = entity.HasOne(d => d.CarrierNavigation)
+            entity.HasOne(d => d.CarrierNavigation)
               .WithMany(p => p.CarriersH)
               .HasForeignKey(d => d.Entity);
 
-            _ = entity.HasOne(d => d.AddressNavigation)
+            entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.CarriersH)
                 .HasForeignKey(d => d.Address)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.Property(e => e.UsdotH)
+            entity.Property(e => e.UsdotH)
                 .HasColumnName("USDOTH");
 
-            _ = entity.HasOne(d => d.UsdotHNavigation)
+            entity.HasOne(d => d.UsdotHNavigation)
                .WithMany(p => p.CarriersH)
                .HasForeignKey(d => d.UsdotH);
 
-            _ = entity.Property(e => e.SctH)
+            entity.Property(e => e.SctH)
                 .HasColumnName("SCTH");
 
-            _ = entity.HasOne(d => d.SctHNavigation)
+            entity.HasOne(d => d.SctHNavigation)
                .WithMany(p => p.CarriersH)
                .HasForeignKey(d => d.SctH);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.CarriersH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

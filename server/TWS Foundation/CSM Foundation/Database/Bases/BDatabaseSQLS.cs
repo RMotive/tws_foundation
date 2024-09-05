@@ -1,13 +1,13 @@
 ﻿using System.Runtime.CompilerServices;
 
 using CSM_Foundation.Advisor.Managers;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Utils;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Utils;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace CSM_Foundation.Databases.Bases;
+namespace CSM_Foundation.Database.Bases;
 public abstract class BDatabaseSQLS<TDatabases>
     : DbContext, IMigrationDatabases
     where TDatabases : DbContext {

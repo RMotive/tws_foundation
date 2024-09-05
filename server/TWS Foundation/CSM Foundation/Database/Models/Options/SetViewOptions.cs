@@ -1,4 +1,4 @@
-﻿namespace CSM_Foundation.Databases.Models.Options;
+﻿namespace CSM_Foundation.Database.Models.Options;
 /// <summary>
 ///     Defines options to build a <see cref="MigrationView"/> 
 ///     specifing the behavior to the builder.

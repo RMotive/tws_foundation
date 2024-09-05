@@ -2,8 +2,8 @@
 using System.Net;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Quality.Bases;
 using CSM_Foundation.Server.Records;
 
@@ -15,30 +15,21 @@ using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Middlewares.Frames;
+using TWS_Foundation.Quality.Bases;
 
 using TWS_Security.Sets;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Databases.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers;
-public class Q_YardLogsController : BQ_ServerController<Program> {
+public class Q_YardLogsController : BQ_CustomServerController {
     private class Frame : SuccessFrame<View> { }
 
 
     public Q_YardLogsController(WebApplicationFactory<Program> hostFactory)
         : base("YardLogs", hostFactory) {
-    }
-
-    protected override async Task<string> Authentication() {
-        (HttpStatusCode Status, SuccessFrame<Session> Response) = await XPost<SuccessFrame<Session>, Credentials>("Security/Authenticate", new Credentials {
-            Identity = Account.Identity,
-            Password = Account.Password,
-            Sign = "TWSMA"
-        });
-
-        return Status != HttpStatusCode.OK ? throw new ArgumentNullException(nameof(Status)) : Response.Estela.Token.ToString();
     }
 
     [Fact]
@@ -82,7 +73,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
             mockList.Add(mock);
         }
 
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("Create", mockList, true);
+        (HttpStatusCode Status, _) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
 
     }
@@ -105,6 +96,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
                 Damage = false,
                 TTPicture = "Foto " + tag,
                 Driver = 1,
+                Timestamp = DateTime.Now,
             };
 
             (HttpStatusCode Status, ServerGenericFrame Respone) = await Post("Update", mock, true);
@@ -127,8 +119,10 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
                 Yard = 1,
                 Name = RandomUtils.String(10),
                 Capacity = 30,
-                Ocupancy = 1
+                Ocupancy = 1,
+                Timestamp = DateTime.UtcNow,
             };
+
             YardLog mock = new() {
                 Entry = true,
                 Truck = 1,
@@ -142,6 +136,7 @@ public class Q_YardLogsController : BQ_ServerController<Program> {
                 Damage = false,
                 TTPicture = "Foto " + tag,
                 Driver = 1,
+                Timestamp = DateTime.Now,
             };
             (HttpStatusCode Status, ServerGenericFrame Response) = await Post("Update", mock, true);
 

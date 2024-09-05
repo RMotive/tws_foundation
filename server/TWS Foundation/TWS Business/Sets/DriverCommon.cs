@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class DriverCommon
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -37,23 +38,23 @@ public partial class DriverCommon
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<DriverCommon>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Drivers_Commons");
+        builder.Entity<DriverCommon>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("Drivers_Commons");
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.License)
+            entity.Property(e => e.License)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.DriversCommons)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.SituationNavigation)
+            entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.DriversCommons)
                 .HasForeignKey(d => d.Situation)
                 .OnDelete(DeleteBehavior.ClientSetNull);

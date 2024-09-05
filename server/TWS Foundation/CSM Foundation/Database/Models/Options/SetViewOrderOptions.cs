@@ -1,7 +1,7 @@
-﻿using CSM_Foundation.Databases.Enumerators;
-using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Enumerators;
+using CSM_Foundation.Database.Models.Out;
 
-namespace CSM_Foundation.Databases.Models.Options;
+namespace CSM_Foundation.Database.Models.Options;
 /// <summary>
 ///     Stores a ordering step options for the <see cref="SetViewOut{TMigrationSet}"/>
 ///     builder, indicating how the current ordering step should behave.

@@ -1,3 +1,3 @@
-﻿namespace CSM_Foundation.Databases.Interfaces;
+﻿namespace CSM_Foundation.Database.Interfaces;
 public interface IMigrationDatabases {
 }

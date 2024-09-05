@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +8,7 @@ namespace TWS_Business.Sets;
 public partial class Status
 : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -73,7 +74,7 @@ public partial class Status
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Name), [Required, new LengthValidator(1, 25)]),
         ];
 
@@ -81,22 +82,20 @@ public partial class Status
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Status>(entity => {
-            _ = builder.Entity<Status>(entity => {
-                _ = entity.HasKey(e => e.Id);
-                _ = entity.Property(e => e.Id)
-                    .HasColumnName("id");
+        builder.Entity<Status>(entity => {
+            entity.HasKey(e => e.Id);
 
-                _ = entity.HasIndex(e => e.Name)
-                    .IsUnique();
-                _ = entity.Property(e => e.Name)
-                    .HasMaxLength(25);
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
 
-                _ = entity.Property(e => e.Description)
-                    .HasMaxLength(150);
-                
-            });
+            entity.HasIndex(e => e.Name)
+                .IsUnique();
 
+            entity.Property(e => e.Name)
+                .HasMaxLength(25);
+
+            entity.Property(e => e.Description)
+                .HasMaxLength(150);
         });
     }
 }

@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class Address
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string? State { get; set; }
 
@@ -43,35 +44,35 @@ public partial class Address
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Address>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Addresses");
+        builder.Entity<Address>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("Addresses");
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.Street)
+            entity.Property(e => e.Street)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.AltStreet)
+            entity.Property(e => e.AltStreet)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.City)
+            entity.Property(e => e.City)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Zip)
+            entity.Property(e => e.Zip)
                 .HasMaxLength(30)
                 .IsUnicode(false)
                 .HasColumnName("ZIP");
 
-            _ = entity.Property(e => e.Country)
+            entity.Property(e => e.Country)
                 .HasMaxLength(3)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Colonia)
+            entity.Property(e => e.Colonia)
                 .HasMaxLength(30)
                 .IsUnicode(false);
         });

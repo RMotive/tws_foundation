@@ -6,7 +6,7 @@ using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Server.Utils;
-using CSM_Foundation.Databases.Interfaces;
+using CSM_Foundation.Database.Interfaces;
 
 using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;

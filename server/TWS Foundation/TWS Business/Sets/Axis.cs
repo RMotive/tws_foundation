@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class Axis
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -30,18 +31,18 @@ public partial class Axis
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Axis>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Axes");
+        builder.Entity<Axis>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("Axes");
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.Name)
+            entity.Property(e => e.Name)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Description)
+            entity.Property(e => e.Description)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 

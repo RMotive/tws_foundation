@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class TruckCommon
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -45,32 +46,32 @@ public partial class TruckCommon
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<TruckCommon>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Trucks_Commons");
+        builder.Entity<TruckCommon>(entity => {
+            entity.ToTable("Trucks_Commons");
+            entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.Vin)
+            entity.Property(e => e.Vin)
                .HasMaxLength(17)
                .IsUnicode(false)
                .HasColumnName("VIN");
 
-            _ = entity.Property(e => e.Economic)
+            entity.Property(e => e.Economic)
                 .HasMaxLength(16)
                 .IsUnicode(false);
-            
-            _ = entity.HasOne(d => d.SituationNavigation)
+
+            entity.HasOne(d => d.SituationNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Situation);
 
-            _ = entity.HasOne(d => d.LocationNavigation)
+            entity.HasOne(d => d.LocationNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Location)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Status)
                .OnDelete(DeleteBehavior.ClientSetNull);

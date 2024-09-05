@@ -2,18 +2,18 @@
 
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Extensions;
-using CSM_Foundation.Databases.Exceptions;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+using CSM_Foundation.Database.Exceptions;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
-using Microsoft.IdentityModel.Tokens;
-
-namespace CSM_Foundation.Databases.Bases;
+namespace CSM_Foundation.Database.Bases;
 public abstract class BDatabaseSet
     : BObject<IDatabasesSet>, IDatabasesSet {
     public abstract int Id { get; set; }
-    private (string Property, IValidator[] Validators)[]? Validators { get; set; }
-    private bool Defined { get; set; } = false;
+    public abstract DateTime Timestamp { get; set; }
+
+    private bool Defined = false;
+    private (string Property, IValidator[] Validators)[]? Validators;
 
     protected abstract (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container);
     protected void Evaluate((string Propety, IValidator[] Validators)[] Custom) {

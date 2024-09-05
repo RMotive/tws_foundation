@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class Driver
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -64,50 +65,50 @@ public partial class Driver
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Driver>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Drivers");
+        builder.Entity<Driver>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("Drivers");
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.DriverType)
+            entity.Property(e => e.DriverType)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Twic)
+            entity.Property(e => e.Twic)
                .HasColumnName("TWIC");
-            _ = entity.Property(e => e.Twic)
+            entity.Property(e => e.Twic)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Visa)
+            entity.Property(e => e.Visa)
                .HasColumnName("VISA");
-            _ = entity.Property(e => e.Visa)
+            entity.Property(e => e.Visa)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Fast)
+            entity.Property(e => e.Fast)
                .HasColumnName("FAST");
-            _ = entity.Property(e => e.Fast)
+            entity.Property(e => e.Fast)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Anam)
+            entity.Property(e => e.Anam)
                .HasColumnName("ANAM");
-            _ = entity.Property(e => e.Anam)
+            entity.Property(e => e.Anam)
                 .HasMaxLength(24)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.DriverCommonNavigation)
+            entity.HasOne(d => d.DriverCommonNavigation)
                 .WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.Common);
 
-            _ = entity.HasOne(d => d.EmployeeNavigation)
+            entity.HasOne(d => d.EmployeeNavigation)
                 .WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.Employee);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Interfaces;
+﻿using CSM_Foundation.Database.Interfaces;
 
-namespace CSM_Foundation.Databases.Models.Out;
+namespace CSM_Foundation.Database.Models.Out;
 
 /// <summary>
 ///     Stores a result <see cref="SetViewOut{TMigrationSet}"/> 

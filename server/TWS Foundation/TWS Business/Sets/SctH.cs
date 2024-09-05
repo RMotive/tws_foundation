@@ -1,7 +1,6 @@
-﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +9,7 @@ namespace TWS_Business.Sets;
 public partial class SctH
     : BDatabaseSet {
     public override int Id { get; set; }
-
-    //public override DateTime Timemark { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Sequence { get; set; }
 
@@ -49,29 +47,29 @@ public partial class SctH
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<SctH>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
+        builder.Entity<SctH>(entity => {
+            entity.ToTable("SCT_H");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id)
                .HasColumnName("id");
-            _ = entity.ToTable("SCT_H");
 
-
-            _ = entity.Property(e => e.Configuration)
+            entity.Property(e => e.Configuration)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Number)
+            entity.Property(e => e.Number)
                 .HasMaxLength(25)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Type)
+            entity.Property(e => e.Type)
                 .HasMaxLength(6)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.SctsH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.SctNavigation)
+            entity.HasOne(d => d.SctNavigation)
                 .WithMany(p => p.SctsH)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);

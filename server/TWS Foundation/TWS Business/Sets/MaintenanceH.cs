@@ -1,7 +1,6 @@
-﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +9,8 @@ namespace TWS_Business.Sets;
 public partial class MaintenanceH
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
-    //public override DateTime Timemark { get; set; }
 
     public int Sequence { get; set; }
 
@@ -19,7 +18,7 @@ public partial class MaintenanceH
 
     public int Entity { get; set; }
 
-    public DateTime Anual {  get; set; }
+    public DateTime Anual { get; set; }
 
     public DateTime Trimestral { get; set; }
 
@@ -33,7 +32,7 @@ public partial class MaintenanceH
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Anual), [Required]),
             (nameof(Trimestral), [Required]),
             (nameof(Status), [Required, new PointerValidator(true)]),
@@ -44,18 +43,19 @@ public partial class MaintenanceH
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<MaintenanceH>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
-                .HasColumnName("id");
-            _ = entity.ToTable("Maintenances_H");
+        builder.Entity<MaintenanceH>(entity => {
+            entity.ToTable("Maintenances_H");
+            entity.HasKey(e => e.Id);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.MaintenancesH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.MaintenanceNavigation)
+            entity.HasOne(d => d.MaintenanceNavigation)
                 .WithMany(p => p.MaintenancesH)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);

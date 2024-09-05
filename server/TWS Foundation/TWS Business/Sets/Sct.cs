@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class Sct
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -25,24 +26,25 @@ public partial class Sct
 
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Sct>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
-               .HasColumnName("id");
-            _ = entity.ToTable("SCT");
+        builder.Entity<Sct>(entity => {
+            entity.ToTable("SCT");
+            entity.HasKey(e => e.Id);
 
-           
-            _ = entity.Property(e => e.Configuration)
+            entity.Property(e => e.Id)
+               .HasColumnName("id");
+
+
+            entity.Property(e => e.Configuration)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Number)
+            entity.Property(e => e.Number)
                 .HasMaxLength(25)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Type)
+            entity.Property(e => e.Type)
                 .HasMaxLength(6)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Scts)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

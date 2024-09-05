@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +10,7 @@ namespace TWS_Business.Sets;
 public partial class ApproachesH
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     //public override DateTime Timemark { get; set; }
 
@@ -48,34 +49,34 @@ public partial class ApproachesH
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<ApproachesH>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
+        builder.Entity<ApproachesH>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id)
                .HasColumnName("id");
-            _ = entity.ToTable("Approaches_H");
+            entity.ToTable("Approaches_H");
 
-            _ = entity.Property(e => e.Enterprise)
+            entity.Property(e => e.Enterprise)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Personal)
+            entity.Property(e => e.Personal)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Alternative)
+            entity.Property(e => e.Alternative)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Email)
+            entity.Property(e => e.Email)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.ApproachNavigation)
+            entity.HasOne(d => d.ApproachNavigation)
                 .WithMany(p => p.ContactsH)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.ContactsH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ namespace TWS_Business.Sets;
 public partial class Situation
     : BDatabaseSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -23,17 +24,17 @@ public partial class Situation
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Situation>(entity => {
-            _ = entity.HasKey(e => e.Id);
+        builder.Entity<Situation>(entity => {
+            entity.HasKey(e => e.Id);
 
-            _ = entity.HasIndex(e => e.Name)
+            entity.HasIndex(e => e.Name)
                 .IsUnique();
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                 .HasColumnName("id");
-            _ = entity.Property(e => e.Description)
+            entity.Property(e => e.Description)
                 .HasMaxLength(100);
-            _ = entity.Property(e => e.Name)
+            entity.Property(e => e.Name)
                 .HasMaxLength(25);
         });
     }

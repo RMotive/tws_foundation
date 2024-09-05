@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Extensions;
-using CSM_Foundation.Databases.Interfaces;
+using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 

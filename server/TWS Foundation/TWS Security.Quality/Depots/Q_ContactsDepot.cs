@@ -1,6 +1,6 @@
 ﻿
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Security.Depots;
 using TWS_Security.Sets;

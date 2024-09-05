@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 
-using CSM_Foundation.Databases.Exceptions;
-using CSM_Foundation.Databases.Interfaces;
+using CSM_Foundation.Database.Exceptions;
+using CSM_Foundation.Database.Interfaces;
 
-namespace CSM_Foundation.Databases.Validators;
+namespace CSM_Foundation.Database.Validators;
 /// <summary>
 ///     <list type="number">
 ///         <listheader> <term> Coding: </term> </listheader>
