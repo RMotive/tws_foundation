@@ -47,7 +47,7 @@ final class YardLog implements CSMSetInterface {
   String gName = "";
   String fromTo = "";
   String seal = "";
-  bool damage = false;
+  bool? damage; //Optional only for client porpuses.
   String ttPicture = "";
   String? dmgEvidence;
   Driver? driverNavigation;
@@ -79,7 +79,7 @@ final class YardLog implements CSMSetInterface {
     String gName = json.get('gName');
     String fromTo = json.get('fromTo');
     String seal = json.get('seal');
-    bool damage = json.get('entry');
+    bool? damage = json.getDefault('damage', null);
     String ttPicture = json.get('ttPicture');
     String? dmgEvidence = json.getDefault('dmgEvidence', null);
 
@@ -186,9 +186,14 @@ final class YardLog implements CSMSetInterface {
       results.add(CSMSetValidationResult(kLoadType, 'Si el tipo de carga es Botado, no puede seleccionar datos del remolque', 'FieldConflic()'));
     }
 
-    if(damage && dmgEvidence == null){
-      results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));
+    if(damage == null){
+      results.add(CSMSetValidationResult(kEntry, 'Debe indicar si la carga tiene algun daño o no.', 'pointerHandler()'));
+    }else{
+      if( damage! && dmgEvidence == null){
+        results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));
+      }
     }
+    
 
     if(dmgEvidence != null && damage == false){
       results.add(CSMSetValidationResult(kDmgEvidence, 'Se registro una foto del daño, pero no se ha seleccionado la carga como dañada.', 'FieldConflic()'));
