@@ -16,7 +16,7 @@ public class LoadTypesService : ILoadTypesService {
         LoadTypes = loadTypes;
     }
 
-    public async Task<SetViewOut<LoadType>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<LoadType>> View(SetViewOptions<LoadType> Options) {
         return await LoadTypes.View(Options);
     }
 }

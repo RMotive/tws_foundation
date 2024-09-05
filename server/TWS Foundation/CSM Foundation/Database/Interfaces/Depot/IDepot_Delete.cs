@@ -1,8 +1,8 @@
 ﻿using CSM_Foundation.Database.Models.Out;
 
 namespace CSM_Foundation.Database.Interfaces.Depot;
-public interface IMigrationDepot_Delete<TMigrationSet>
-    where TMigrationSet : IDatabasesSet {
+public interface IDepot_Delete<TMigrationSet>
+    where TMigrationSet : ISet {
 
     public Task<DatabasesTransactionOut<TMigrationSet>> Delete(TMigrationSet[] migrations);
 

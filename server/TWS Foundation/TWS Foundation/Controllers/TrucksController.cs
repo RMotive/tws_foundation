@@ -22,7 +22,7 @@ public class TrucksController : ControllerBase {
     }
 
     [HttpPost(), Auth([])]
-    public async Task<IActionResult> View(SetViewOptions Options) {
+    public async Task<IActionResult> View(SetViewOptions<Truck> Options) {
         return Ok(await Service.View(Options));
     }
 

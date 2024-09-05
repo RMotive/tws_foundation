@@ -5,5 +5,5 @@ using TWS_Business.Sets;
 
 namespace TWS_Customer.Services.Interfaces;
 public interface IDriversExternalsService {
-    Task<SetViewOut<DriverExternal>> View(SetViewOptions Options);
+    Task<SetViewOut<DriverExternal>> View(SetViewOptions<DriverExternal> Options);
 }

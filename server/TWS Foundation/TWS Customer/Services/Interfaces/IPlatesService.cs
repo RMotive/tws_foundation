@@ -6,7 +6,7 @@ using TWS_Business.Sets;
 namespace TWS_Customer.Services.Interfaces;
 public interface IPlatesService {
 
-    Task<SetViewOut<Plate>> View(SetViewOptions options);
+    Task<SetViewOut<Plate>> View(SetViewOptions<Plate> options);
 
     Task<Plate> Create(Plate plate);
 }

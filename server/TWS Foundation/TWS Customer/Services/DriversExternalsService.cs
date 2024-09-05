@@ -18,7 +18,7 @@ public class DriversExternalsService : IDriversExternalsService {
         DriversExternals = driversExternals;
     }
 
-    public async Task<SetViewOut<DriverExternal>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<DriverExternal>> View(SetViewOptions<DriverExternal> Options) {
         static IQueryable<DriverExternal> include(IQueryable<DriverExternal> query) {
             return query
             .Include(t => t.DriverCommonNavigation)

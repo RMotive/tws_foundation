@@ -36,7 +36,7 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
     public virtual DbSet<Solution> Solutions { get; set; }
 
-    protected override IDatabasesSet[] EvaluateFactory() {
+    protected override ISet[] EvaluateFactory() {
         return [
             new Solution(),
         ];

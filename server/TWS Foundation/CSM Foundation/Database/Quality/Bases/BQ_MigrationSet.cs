@@ -14,7 +14,7 @@ namespace CSM_Foundation.Database.Quality.Bases;
 ///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
 public abstract class BQ_MigrationSet<TSet>
-    where TSet : IDatabasesSet, new() {
+    where TSet : ISet, new() {
 
     protected abstract Q_MigrationSet_EvaluateRecord<TSet>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TSet>[] Container);
 

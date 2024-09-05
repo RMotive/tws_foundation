@@ -16,7 +16,7 @@ public class TrucksService : ITrucksService {
         this.Trucks = Trucks;
     }
 
-    public async Task<SetViewOut<Truck>> View(SetViewOptions options) {
+    public async Task<SetViewOut<Truck>> View(SetViewOptions<Truck> options) {
 
         static IQueryable<Truck> include(IQueryable<Truck> query) {
             return query

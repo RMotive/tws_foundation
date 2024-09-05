@@ -18,7 +18,7 @@ public class TrailersExternalsService : ITrailersExternalsService {
         TrailersExternals = trailersExternals;
     }
 
-    public async Task<SetViewOut<TrailerExternal>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<TrailerExternal>> View(SetViewOptions<TrailerExternal> Options) {
         static IQueryable<TrailerExternal> include(IQueryable<TrailerExternal> query) {
             return query
             .Include(t => t.TrailerCommonNavigation)

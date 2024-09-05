@@ -17,8 +17,8 @@ namespace CSM_Foundation.Database.Quality.Bases;
 
 public abstract class BQ_MigrationDepot<TSet, TDepot, TDatabase>
     : IQ_MigrationDepot
-    where TSet : class, IDatabasesSet, new()
-    where TDepot : IMigrationDepot<TSet>, new()
+    where TSet : class, ISet, new()
+    where TDepot : IDepot<TSet>, new()
     where TDatabase : BDatabaseSQLS<TDatabase>, new() {
     private readonly string Ordering;
 
@@ -46,11 +46,11 @@ public abstract class BQ_MigrationDepot<TSet, TDepot, TDatabase>
         this.Ordering = Ordering;
     }
 
-    protected void Restore(IDatabasesSet Set) {
+    protected void Restore(ISet Set) {
         Database.Remove(Set);
         Database.SaveChanges();
     }
-    protected void Restore(IDatabasesSet[] Sets) {
+    protected void Restore(ISet[] Sets) {
         Database.RemoveRange(Sets);
         Database.SaveChanges();
     }
@@ -69,7 +69,7 @@ public abstract class BQ_MigrationDepot<TSet, TDepot, TDatabase>
 
         #region Preparation (First-Fact) 
         TSet[] firstFactMocks = [];
-        SetViewOptions firstFactOptions;
+        SetViewOptions<TSet> firstFactOptions;
         {
             try {
                 firstFactOptions = new() {
@@ -93,7 +93,7 @@ public abstract class BQ_MigrationDepot<TSet, TDepot, TDatabase>
         }
         #endregion
         #region Preparation (Second-Fact)
-        SetViewOptions secondFactOptions;
+        SetViewOptions<TSet> secondFactOptions;
         {
             secondFactOptions = new() {
                 Page = 2,
@@ -103,7 +103,7 @@ public abstract class BQ_MigrationDepot<TSet, TDepot, TDatabase>
         }
         #endregion
         #region Preparation (Third-Fact)
-        SetViewOptions thirdFactOptions;
+        SetViewOptions<TSet> thirdFactOptions;
         {
             thirdFactOptions = new() {
                 Page = 1,

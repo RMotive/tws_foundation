@@ -28,7 +28,7 @@ public class SolutionsService
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    public async Task<SetViewOut<Solution>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Solution>> View(SetViewOptions<Solution> Options) {
         return await SolutionsDepot.View(Options);
     }
     /// <summary>

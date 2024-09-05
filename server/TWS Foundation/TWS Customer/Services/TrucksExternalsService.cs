@@ -18,7 +18,7 @@ public class TrucksExternalsService : ITrucksExternalsService {
         TrucksExternals = trucksExternals;
     }
 
-    public async Task<SetViewOut<TruckExternal>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<TruckExternal>> View(SetViewOptions<TruckExternal> Options) {
         static IQueryable<TruckExternal> include(IQueryable<TruckExternal> query) {
             return query
             .Include(t => t.TruckCommonNavigation)

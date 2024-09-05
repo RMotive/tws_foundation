@@ -14,7 +14,7 @@ public class SituationsService : ISituationsService {
         Situations = situations;
     }
 
-    public async Task<SetViewOut<Situation>> View(SetViewOptions options) {
+    public async Task<SetViewOut<Situation>> View(SetViewOptions<Situation> options) {
         return await Situations.View(options);
     }
 

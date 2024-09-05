@@ -2,7 +2,7 @@
 
 namespace CSM_Foundation.Database.Models.Out;
 public record DatabasesTransactionOut<TSet>
-    where TSet : IDatabasesSet {
+    where TSet : ISet {
     public TSet[] Successes { get; init; }
     public SourceTransactionFailure[] Failures { get; init; }
     public int QTransactions { get; private set; }

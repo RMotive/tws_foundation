@@ -112,7 +112,7 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
         OnModelCreatingPartial(builder);
     }
 
-    protected override IDatabasesSet[] EvaluateFactory() {
+    protected override ISet[] EvaluateFactory() {
         return [
             new Plate(),
             new Manufacturer(),

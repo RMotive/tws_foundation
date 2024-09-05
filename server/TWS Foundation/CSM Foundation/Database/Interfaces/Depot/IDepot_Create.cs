@@ -2,15 +2,15 @@
 
 namespace CSM_Foundation.Database.Interfaces.Depot;
 /// <summary>
-///     Describes the behavior for a <see cref="IMigrationDepot_Create{TMigrationSet}"/>,
+///     Describes the behavior for a <see cref="IDepot_Create{TMigrationSet}"/>,
 ///     this means is able to handle a <see cref="TMigrationSet"/> live migration entity mirror between
 ///     standard creation transactions.
 /// </summary>
 /// <typeparam name="TMigrationSet">
 ///     Specific migration set that tthe implemented depot handles.
 /// </typeparam>
-public interface IMigrationDepot_Create<TMigrationSet>
-    where TMigrationSet : IDatabasesSet {
+public interface IDepot_Create<TMigrationSet>
+    where TMigrationSet : ISet {
     /// <summary>
     ///     Creates a single <paramref name="Set"/> record into the live migration.
     ///     <br>

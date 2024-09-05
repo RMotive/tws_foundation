@@ -5,5 +5,5 @@ using TWS_Business.Sets;
 
 namespace TWS_Customer.Services.Interfaces;
 public interface ISectionsService {
-    Task<SetViewOut<Section>> View(SetViewOptions Options);
+    Task<SetViewOut<Section>> View(SetViewOptions<Section> Options);
 }

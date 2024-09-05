@@ -33,14 +33,14 @@ public abstract class BDatabaseSQLS<TDatabases>
     /// 
     /// </summary>
     /// <returns></returns>
-    protected abstract IDatabasesSet[] EvaluateFactory();
+    protected abstract ISet[] EvaluateFactory();
     /// <summary>
     /// 
     /// </summary>
     public void Evaluate() {
-        IDatabasesSet[] sets = EvaluateFactory();
+        ISet[] sets = EvaluateFactory();
 
-        foreach (IDatabasesSet set in sets) {
+        foreach (ISet set in sets) {
             _ = set.EvaluateDefinition();
         }
     }

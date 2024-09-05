@@ -32,7 +32,7 @@ public class AccountsService
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    public async Task<SetViewOut<Account>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Account>> View(SetViewOptions<Account> Options) {
 
         static IQueryable<Account> include(IQueryable<Account> query) {
             return query

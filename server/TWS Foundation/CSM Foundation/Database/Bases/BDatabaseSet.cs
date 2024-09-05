@@ -8,7 +8,7 @@ using CSM_Foundation.Database.Validators;
 
 namespace CSM_Foundation.Database.Bases;
 public abstract class BDatabaseSet
-    : BObject<IDatabasesSet>, IDatabasesSet {
+    : BObject<ISet>, ISet {
     public abstract int Id { get; set; }
     public abstract DateTime Timestamp { get; set; }
 

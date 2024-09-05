@@ -8,14 +8,14 @@ namespace TWS_Foundation.Managers;
 
 public class DispositionManager : IMigrationDisposer {
     private readonly IServiceProvider Servicer;
-    private readonly Dictionary<DbContext, List<IDatabasesSet>> DispositionStack = [];
+    private readonly Dictionary<DbContext, List<ISet>> DispositionStack = [];
     private bool Active = false;
 
     public DispositionManager(IServiceProvider Servicer) {
         this.Servicer = Servicer;
     }
 
-    public void Push(DbContext Databases, IDatabasesSet Record) {
+    public void Push(DbContext Databases, ISet Record) {
         if (!Active) {
             return;
         }
@@ -30,10 +30,10 @@ public class DispositionManager : IMigrationDisposer {
             DispositionStack[db].Add(Record);
             return;
         }
-        List<IDatabasesSet> recordsListed = [Record];
+        List<ISet> recordsListed = [Record];
         DispositionStack.Add(Databases, recordsListed);
     }
-    public void Push(DbContext Databases, IDatabasesSet[] Records) {
+    public void Push(DbContext Databases, ISet[] Records) {
         if (!Active) {
             return;
         }
@@ -48,7 +48,7 @@ public class DispositionManager : IMigrationDisposer {
             DispositionStack[db].AddRange(Records);
             return;
         }
-        List<IDatabasesSet> recordsListed = [.. Records.ToList()];
+        List<ISet> recordsListed = [.. Records.ToList()];
         DispositionStack.Add(Databases, recordsListed);
     }
 
@@ -60,7 +60,7 @@ public class DispositionManager : IMigrationDisposer {
         if (DispositionStack.Empty()) {
             AdvisorManager.Announce($"No records to dispose");
         }
-        foreach (KeyValuePair<DbContext, List<IDatabasesSet>> disposeLine in DispositionStack) {
+        foreach (KeyValuePair<DbContext, List<ISet>> disposeLine in DispositionStack) {
             using IServiceScope servicerScope = Servicer.CreateScope();
             DbContext Databases = disposeLine.Key;
             try {
@@ -76,7 +76,7 @@ public class DispositionManager : IMigrationDisposer {
             }
             int corrects = 0;
             int incorrects = 0;
-            foreach (IDatabasesSet record in disposeLine.Value) {
+            foreach (ISet record in disposeLine.Value) {
                 try {
                     _ = Databases.Remove(record);
                     _ = Databases.SaveChanges();

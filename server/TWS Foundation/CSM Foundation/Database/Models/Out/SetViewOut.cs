@@ -10,7 +10,7 @@ namespace CSM_Foundation.Database.Models.Out;
 ///     <typeparamref name="TMigrationSet"/> that this view handles results.
 /// </typeparam>
 public class SetViewOut<TMigrationSet>
-    where TMigrationSet : IDatabasesSet {
+    where TMigrationSet : ISet {
 
     private TMigrationSet[] _Sets = [];
     /// <summary>

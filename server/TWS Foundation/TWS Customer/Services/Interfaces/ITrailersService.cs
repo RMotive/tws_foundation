@@ -5,5 +5,5 @@ using TWS_Business.Sets;
 
 namespace TWS_Customer.Services.Interfaces;
 public interface ITrailersService {
-    Task<SetViewOut<Trailer>> View(SetViewOptions Options);
+    Task<SetViewOut<Trailer>> View(SetViewOptions<Trailer> Options);
 }

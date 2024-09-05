@@ -16,7 +16,7 @@ public class ManufacturersService : IManufacturersService {
         Manufacturers = manufacturers;
     }
 
-    public async Task<SetViewOut<Manufacturer>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Manufacturer>> View(SetViewOptions<Manufacturer> Options) {
         return await Manufacturers.View(Options);
     }
 

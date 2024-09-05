@@ -10,7 +10,7 @@ public record SourceTransactionFailure {
     /// <summary>
     /// 
     /// </summary>
-    public IDatabasesSet Set { get; init; }
+    public ISet Set { get; init; }
     /// <summary>
     /// 
     /// </summary>
@@ -25,7 +25,7 @@ public record SourceTransactionFailure {
     /// </summary>
     /// <param name="Set"></param>
     /// <param name="SystemInternal"></param>
-    public SourceTransactionFailure(IDatabasesSet Set, Exception SystemInternal) {
+    public SourceTransactionFailure(ISet Set, Exception SystemInternal) {
         this.Set = Set;
         this.SystemInternal = SystemInternal;
         System = SystemInternal.Message;

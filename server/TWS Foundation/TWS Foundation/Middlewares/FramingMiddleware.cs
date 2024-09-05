@@ -101,7 +101,7 @@ public class FramingMiddleware
 
                 MemoryStream swapperBuffer = new();
                 StreamWriter writer = new(swapperBuffer);
-                
+
                 await writer.WriteAsync(encodedContent);
                 await writer.FlushAsync();
 

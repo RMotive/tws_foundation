@@ -17,7 +17,7 @@ public class YardLogsController : ControllerBase {
     }
 
     [HttpPost(), Auth([])]
-    public async Task<IActionResult> View(SetViewOptions Options) {
+    public async Task<IActionResult> View(SetViewOptions<YardLog> Options) {
         return Ok(await Service.View(Options));
     }
 

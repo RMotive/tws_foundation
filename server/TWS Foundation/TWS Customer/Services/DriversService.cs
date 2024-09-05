@@ -18,7 +18,7 @@ public class DriversService : IDriversService {
         Drivers = drivers;
     }
 
-    public async Task<SetViewOut<Driver>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Driver>> View(SetViewOptions<Driver> Options) {
         static IQueryable<Driver> include(IQueryable<Driver> query) {
             return query
             .Include(t => t.DriverCommonNavigation)

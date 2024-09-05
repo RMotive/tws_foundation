@@ -19,7 +19,7 @@ public class PlatesController : ControllerBase {
     }
 
     [HttpPost("[Action]"), Auth(["ABC1", "ABC2"])]
-    public async Task<IActionResult> View(SetViewOptions Options) {
+    public async Task<IActionResult> View(SetViewOptions<Plate> Options) {
         return Ok(await Service.View(Options));
     }
 

@@ -6,7 +6,7 @@ using TWS_Business.Sets;
 namespace TWS_Customer.Services.Interfaces;
 public interface ISituationsService {
 
-    Task<SetViewOut<Situation>> View(SetViewOptions options);
+    Task<SetViewOut<Situation>> View(SetViewOptions<Situation> options);
     Task<Situation> Create(Situation situation);
 
 }

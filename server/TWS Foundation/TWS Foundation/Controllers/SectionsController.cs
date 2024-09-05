@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TWS_Foundation.Controllers.Authentication;
 
 using TWS_Customer.Services.Interfaces;
+using TWS_Business.Sets;
 
 namespace TWS_Foundation.Controllers;
 
@@ -16,7 +17,7 @@ public class SectionsController : ControllerBase {
     }
 
     [HttpPost(), Auth([])]
-    public async Task<IActionResult> View(SetViewOptions Options) {
+    public async Task<IActionResult> View(SetViewOptions<Section> Options) {
         return Ok(await Service.View(Options));
     }
 }

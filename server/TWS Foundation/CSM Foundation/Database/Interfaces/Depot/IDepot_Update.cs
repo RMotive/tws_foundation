@@ -6,8 +6,8 @@ namespace CSM_Foundation.Database.Interfaces.Depot;
 /// 
 /// </summary>
 /// <typeparam name="TMigrationSet"></typeparam>
-public interface IMigrationDepot_Update<TMigrationSet>
-    where TMigrationSet : IDatabasesSet {
+public interface IDepot_Update<TMigrationSet>
+    where TMigrationSet : ISet {
     /// <summary>
     /// 
     /// </summary>

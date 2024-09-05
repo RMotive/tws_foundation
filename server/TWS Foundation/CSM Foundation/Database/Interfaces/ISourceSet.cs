@@ -1,5 +1,5 @@
 ﻿namespace CSM_Foundation.Database.Interfaces;
-public interface IDatabasesSet {
+public interface ISet {
     public int Id { get; set; }
     public DateTime Timestamp { get; set; }
 

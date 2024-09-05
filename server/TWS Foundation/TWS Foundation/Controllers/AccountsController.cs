@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TWS_Foundation.Controllers.Authentication;
 
 using TWS_Customer.Services.Interfaces;
+using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers;
 
@@ -17,7 +18,7 @@ public class AccountsController
     }
 
     [HttpPost(), Auth([])]
-    public async Task<IActionResult> View(SetViewOptions Options) {
+    public async Task<IActionResult> View(SetViewOptions<Account> Options) {
         return Ok(await Service.View(Options));
     }
 }

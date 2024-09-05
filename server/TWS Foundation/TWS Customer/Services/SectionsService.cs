@@ -18,7 +18,7 @@ public class SectionsService : ISectionsService {
         Sections = sections;
     }
 
-    public async Task<SetViewOut<Section>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Section>> View(SetViewOptions<Section> Options) {
         static IQueryable<Section> include(IQueryable<Section> query) {
             return query
             .Include(t => t.LocationNavigation);

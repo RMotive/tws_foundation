@@ -7,7 +7,7 @@ namespace CSM_Foundation.Database.Models.Out;
 /// </summary>
 /// <typeparam name="TMigrationSet"></typeparam>
 public class RecordUpdateOut<TMigrationSet>
-    where TMigrationSet : IDatabasesSet {
+    where TMigrationSet : ISet {
     /// <summary>
     /// 
     /// </summary>

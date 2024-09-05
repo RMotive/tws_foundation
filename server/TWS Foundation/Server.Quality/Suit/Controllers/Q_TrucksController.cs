@@ -1,16 +1,15 @@
 ﻿using System.Net;
-using CSM_Foundation.Server.Records;
+
 using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Foundation.Middlewares.Frames;
-using TWS_Foundation.Quality.Bases;
-
-using TWS_Business.Sets;
-
 using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
+
+using TWS_Foundation.Middlewares.Frames;
+using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Truck>;
@@ -33,7 +32,7 @@ public class Q_TrucksController : BQ_CustomServerController {
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("View", new SetViewOptions {
+        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -275,7 +274,7 @@ public class Q_TrucksController : BQ_CustomServerController {
         //        Number = "NumberSCTTesting value" + testTag,
         //        Configuration = "Conf" + testTag
         //    };
-          
+
         //    Plate plateMX = new() {
         //        Status = 1,
         //        Identifier = "mxPlate" + testTag,
@@ -353,7 +352,7 @@ public class Q_TrucksController : BQ_CustomServerController {
         //    string modifiedVin = testKey + RandomUtils.String(12);
         //    string modifiedMotor = testKey + RandomUtils.String(11);
         //    mock = creationRecord;
-         
+
         //    mock.Vin = modifiedVin;
         //    mock.Motor = modifiedMotor;
 
