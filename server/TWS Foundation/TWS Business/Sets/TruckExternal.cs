@@ -40,31 +40,34 @@ public partial class TruckExternal
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<TruckExternal>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.ToTable("Trucks_Externals");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<TruckExternal>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Trucks_Externals");
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            entity.Property(e => e.UsaPlate)
+            Entity.Property(e => e.UsaPlate)
               .HasMaxLength(12)
               .IsUnicode(false);
 
-            entity.Property(e => e.Carrier)
+            Entity.Property(e => e.Carrier)
               .HasMaxLength(100)
               .IsUnicode(false);
 
-            entity.Property(e => e.MxPlate)
+            Entity.Property(e => e.MxPlate)
               .HasMaxLength(12)
               .IsUnicode(false);
 
-            entity.HasOne(d => d.TruckCommonNavigation)
+            Entity.HasOne(d => d.TruckCommonNavigation)
                .WithMany(p => p.TrucksExternals)
                .HasForeignKey(d => d.Common);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrucksExternals)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

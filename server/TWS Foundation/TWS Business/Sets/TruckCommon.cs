@@ -36,7 +36,7 @@ public partial class TruckCommon
         UniqueValidator Unique = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Vin), [Unique, new LengthValidator(17, 17)]),
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
             (nameof(Status), [new PointerValidator(true)])
@@ -45,33 +45,36 @@ public partial class TruckCommon
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<TruckCommon>(entity => {
-            entity.ToTable("Trucks_Commons");
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<TruckCommon>(Entity => {
+            Entity.ToTable("Trucks_Commons");
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            entity.Property(e => e.Vin)
+            Entity.Property(e => e.Vin)
                .HasMaxLength(17)
                .IsUnicode(false)
                .HasColumnName("VIN");
 
-            entity.Property(e => e.Economic)
+            Entity.Property(e => e.Economic)
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.SituationNavigation)
+            Entity.HasOne(d => d.SituationNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Situation);
 
-            entity.HasOne(d => d.LocationNavigation)
+            Entity.HasOne(d => d.LocationNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Location)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Status)
                .OnDelete(DeleteBehavior.ClientSetNull);

@@ -26,14 +26,17 @@ public partial class Maintenance
     public virtual ICollection<MaintenanceH> MaintenancesH { get; set; } = [];
 
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Maintenance>(entity => {
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Maintenance>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Maintenances)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

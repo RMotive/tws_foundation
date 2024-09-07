@@ -59,48 +59,51 @@ public partial class CarrierH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<CarrierH>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id)
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<CarrierH>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.Property(e => e.Id)
                .HasColumnName("id");
-            entity.ToTable("Carriers_H");
+            Entity.ToTable("Carriers_H");
 
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            entity.Property(e => e.ApproachH)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.ApproachH)
                 .HasColumnName("ApproachH");
 
-            entity.HasOne(d => d.ContactHNavigation)
+            Entity.HasOne(d => d.ContactHNavigation)
               .WithMany(p => p.CarriersH)
               .HasForeignKey(d => d.ApproachH);
 
-            entity.HasOne(d => d.CarrierNavigation)
+            Entity.HasOne(d => d.CarrierNavigation)
               .WithMany(p => p.CarriersH)
               .HasForeignKey(d => d.Entity);
 
-            entity.HasOne(d => d.AddressNavigation)
+            Entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.CarriersH)
                 .HasForeignKey(d => d.Address)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.Property(e => e.UsdotH)
+            Entity.Property(e => e.UsdotH)
                 .HasColumnName("USDOTH");
 
-            entity.HasOne(d => d.UsdotHNavigation)
+            Entity.HasOne(d => d.UsdotHNavigation)
                .WithMany(p => p.CarriersH)
                .HasForeignKey(d => d.UsdotH);
 
-            entity.Property(e => e.SctH)
+            Entity.Property(e => e.SctH)
                 .HasColumnName("SCTH");
 
-            entity.HasOne(d => d.SctHNavigation)
+            Entity.HasOne(d => d.SctHNavigation)
                .WithMany(p => p.CarriersH)
                .HasForeignKey(d => d.SctH);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.CarriersH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

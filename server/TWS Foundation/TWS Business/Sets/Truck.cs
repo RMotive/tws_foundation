@@ -46,41 +46,44 @@ public partial class Truck
 
     public virtual ICollection<PlateH> PlatesH { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Truck>(entity => {
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Truck>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.Motor)
+            Entity.Property(e => e.Motor)
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.CarrierNavigation)
+            Entity.HasOne(d => d.CarrierNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Carrier)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.InsuranceNavigation)
+            Entity.HasOne(d => d.InsuranceNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Insurance);
 
-            entity.HasOne(d => d.MaintenanceNavigation)
+            Entity.HasOne(d => d.MaintenanceNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Maintenance);
 
-            entity.HasOne(d => d.ManufacturerNavigation)
+            Entity.HasOne(d => d.ManufacturerNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Manufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.TruckCommonNavigation)
+            Entity.HasOne(d => d.TruckCommonNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Common);
         });

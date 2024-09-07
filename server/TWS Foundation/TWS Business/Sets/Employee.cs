@@ -60,45 +60,48 @@ public partial class Employee
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Employee>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.ToTable("Employees");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Employee>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Employees");
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            entity.Property(e => e.Curp)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Curp)
                .HasColumnName("CURP");
-            entity.Property(e => e.Curp)
+            Entity.Property(e => e.Curp)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Rfc)
+            Entity.Property(e => e.Rfc)
                .HasColumnName("RFC");
-            entity.Property(e => e.Rfc)
+            Entity.Property(e => e.Rfc)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Nss)
+            Entity.Property(e => e.Nss)
                .HasColumnName("NSS");
-            entity.Property(e => e.Nss)
+            Entity.Property(e => e.Nss)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.IdentificationNavigation)
+            Entity.HasOne(d => d.IdentificationNavigation)
              .WithMany(p => p.Employees)
              .HasForeignKey(d => d.Identification);
 
-            entity.HasOne(d => d.ApproachNavigation)
+            Entity.HasOne(d => d.ApproachNavigation)
               .WithMany(p => p.Employees)
               .HasForeignKey(d => d.Approach);
 
-            entity.HasOne(d => d.AddressNavigation)
+            Entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.Employees)
                 .HasForeignKey(d => d.Address);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Employees)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

@@ -23,18 +23,22 @@ public partial class Situation
 
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Situation>(entity => {
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Situation>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            entity.HasIndex(e => e.Name)
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.HasIndex(e => e.Name)
                 .IsUnique();
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
-            entity.Property(e => e.Description)
+            Entity.Property(e => e.Description)
                 .HasMaxLength(100);
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(25);
         });
     }

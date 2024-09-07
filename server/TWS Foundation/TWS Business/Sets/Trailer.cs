@@ -49,33 +49,36 @@ public partial class Trailer
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Trailer>(entity => {
-            entity.ToTable("Trailers");
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Trailer>(Entity => {
+            Entity.ToTable("Trailers");
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.HasOne(d => d.TrailerCommonNavigation)
+            Entity.HasOne(d => d.TrailerCommonNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Common);
 
-            entity.HasOne(d => d.CarrierNavigation)
+            Entity.HasOne(d => d.CarrierNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Carrier)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.ManufacturerNavigation)
+            Entity.HasOne(d => d.ManufacturerNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Manufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.MaintenanceNavigation)
+            Entity.HasOne(d => d.MaintenanceNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Maintenance);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Trailers)
                .HasForeignKey(d => d.Status)
                .OnDelete(DeleteBehavior.ClientSetNull);

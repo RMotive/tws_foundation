@@ -81,20 +81,24 @@ public partial class Status
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Status>(entity => {
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Status>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.HasIndex(e => e.Name)
+            Entity.HasIndex(e => e.Name)
                 .IsUnique();
 
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(25);
 
-            entity.Property(e => e.Description)
+            Entity.Property(e => e.Description)
                 .HasMaxLength(150);
         });
     }

@@ -28,27 +28,30 @@ public partial class Identification
     public virtual ICollection<Employee> Employees { get; set; } = [];
 
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Identification>(entity => {
-            entity.ToTable("Identifications");
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Identification>(Entity => {
+            Entity.ToTable("Identifications");
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Name)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            entity.Property(e => e.FatherLastname)
+            Entity.Property(e => e.FatherLastname)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            entity.Property(e => e.MotherLastName)
+            Entity.Property(e => e.MotherLastName)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Identifications)
                .HasForeignKey(d => d.Status)
                .OnDelete(DeleteBehavior.ClientSetNull);

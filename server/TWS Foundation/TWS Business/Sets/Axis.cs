@@ -23,29 +23,31 @@ public partial class Axis
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Name), [Required, new LengthValidator(1, 30)]),
         ];
 
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Axis>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.ToTable("Axes");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Axis>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Axes");
 
-            entity.Property(e => e.Id)
-                 .HasColumnName("id");
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
 
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Name)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Description)
+            Entity.Property(e => e.Description)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-
         });
     }
 }

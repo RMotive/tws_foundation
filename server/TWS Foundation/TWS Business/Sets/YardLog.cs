@@ -87,6 +87,10 @@ public partial class YardLog
             entity.Property(b => b.Timestamp) 
             .ValueGeneratedOnAddOrUpdate();
 
+
+            entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
             entity.Property(e => e.Gname)
                 .HasMaxLength(100)
                 .IsUnicode(false);

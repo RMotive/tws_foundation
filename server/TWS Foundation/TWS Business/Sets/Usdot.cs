@@ -37,7 +37,7 @@ public partial class Usdot
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
+    public static void CreateModel(ModelBuilder builder) {
         builder.Entity<Usdot>(entity => {
             entity.ToTable("USDOT");
             entity.HasKey(e => e.Id);
@@ -45,6 +45,9 @@ public partial class Usdot
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                .HasColumnName("id");
+
+            entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
 
             entity.Property(e => e.Mc)
                 .HasMaxLength(7)

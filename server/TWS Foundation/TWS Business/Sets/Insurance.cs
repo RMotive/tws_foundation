@@ -39,22 +39,25 @@ public partial class Insurance
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Insurance>(entity => {
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Insurance>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.Country)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Country)
                 .HasMaxLength(3)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Policy)
+            Entity.Property(e => e.Policy)
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Insurances)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

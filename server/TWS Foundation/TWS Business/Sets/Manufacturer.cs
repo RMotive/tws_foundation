@@ -23,18 +23,21 @@ public partial class Manufacturer
 
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Manufacturer>(entity => {
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Manufacturer>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.Brand)
+            Entity.Property(e => e.Brand)
                 .HasMaxLength(15)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Model)
+            Entity.Property(e => e.Model)
                 .HasMaxLength(30)
                 .IsUnicode(false);
         });

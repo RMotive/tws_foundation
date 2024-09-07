@@ -17,19 +17,22 @@ public partial class LoadType
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<LoadType>(entity => {
-            entity.ToTable("Load_Types");
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<LoadType>(Entity => {
+            Entity.ToTable("Load_Types");
+            Entity.HasKey(e => e.Id);
 
-            entity.HasIndex(e => e.Name)
+            Entity.HasIndex(e => e.Name)
                 .IsUnique();
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
-            entity.Property(e => e.Description)
+            Entity.Property(e => e.Description)
                 .HasMaxLength(100);
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(32);
         });
     }

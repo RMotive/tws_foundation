@@ -41,23 +41,26 @@ public partial class Location
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Location>(entity => {
-            entity.ToTable("Locations");
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Location>(Entity => {
+            Entity.ToTable("Locations");
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.AddressNavigation)
+            Entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.Locations)
                 .HasForeignKey(d => d.Address);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Locations)
                .HasForeignKey(d => d.Status)
                .OnDelete(DeleteBehavior.ClientSetNull);

@@ -40,23 +40,27 @@ public partial class Section
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Section>(entity => {
-            entity.ToTable("Sections");
-            entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Section>(Entity => {
+            Entity.ToTable("Sections");
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.LocationNavigation)
+            Entity.HasOne(d => d.LocationNavigation)
                 .WithMany(p => p.Sections)
                 .HasForeignKey(d => d.Yard);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Sections)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

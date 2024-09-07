@@ -37,24 +37,27 @@ public partial class DriverCommon
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<DriverCommon>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.ToTable("Drivers_Commons");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<DriverCommon>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Drivers_Commons");
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            entity.Property(e => e.License)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.License)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.DriversCommons)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.SituationNavigation)
+            Entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.DriversCommons)
                 .HasForeignKey(d => d.Situation)
                 .OnDelete(DeleteBehavior.ClientSetNull);

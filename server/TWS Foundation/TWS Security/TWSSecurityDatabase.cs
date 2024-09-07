@@ -65,31 +65,7 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
         AccountPermit.CreateModel(modelBuilder);
         AccountProfile.CreateModel(modelBuilder);   
         Solution.CreateModel(modelBuilder);
-
-
-        modelBuilder.Entity<Contact>(entity => {
-            entity.HasKey(e => e.Id);
-
-            entity.HasIndex(e => e.Phone)
-                .IsUnique();
-
-            entity.HasIndex(e => e.Email)
-                .IsUnique();
-
-            entity.Property(e => e.Id);
-            entity.Property(e => e.Email)
-                .HasMaxLength(30)
-                .IsUnicode(false);
-            entity.Property(e => e.Lastname)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Phone)
-                .HasMaxLength(14)
-                .IsUnicode(false);
-        });
+        Contact.CreateModel(modelBuilder);
 
         modelBuilder.Entity<Feature>(entity => {
             _ = entity.HasKey(e => e.Id);

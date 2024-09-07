@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -39,7 +38,7 @@ public partial class ApproachesH
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Email), [Required, new LengthValidator(1, 30)]),
             (nameof(Status), [Required, new PointerValidator(true)]),
             (nameof(Entity), [Required, new PointerValidator(true)])
@@ -48,35 +47,39 @@ public partial class ApproachesH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<ApproachesH>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id)
-               .HasColumnName("id");
-            entity.ToTable("Approaches_H");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<ApproachesH>(Entity => {
+            Entity.ToTable("Approaches_H");
+            Entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Enterprise)
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Enterprise)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Personal)
+            Entity.Property(e => e.Personal)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Alternative)
+            Entity.Property(e => e.Alternative)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Email)
+            Entity.Property(e => e.Email)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.ApproachNavigation)
+            Entity.HasOne(d => d.ApproachNavigation)
                 .WithMany(p => p.ContactsH)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.ContactsH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

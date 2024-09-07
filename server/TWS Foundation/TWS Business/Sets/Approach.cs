@@ -33,7 +33,7 @@ public partial class Approach
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Email), [Required, new LengthValidator(1, 30)]),
             (nameof(Status), [Required, new PointerValidator(true)]),
         ];
@@ -41,31 +41,34 @@ public partial class Approach
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<Approach>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.ToTable("Approaches");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Approach>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Approaches");
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            entity.Property(e => e.Enterprise)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Enterprise)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Personal)
+            Entity.Property(e => e.Personal)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Alternative)
+            Entity.Property(e => e.Alternative)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Email)
+            Entity.Property(e => e.Email)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Contacts)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality.Bases;
+﻿using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -19,5 +18,9 @@ public class Q_ApproachesDepot
             Status = 1,
             Email = "mail@test.com"
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Approach Mock) {
+        return (nameof(Approach.Personal), Mock.Personal);
     }
 }

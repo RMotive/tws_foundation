@@ -45,29 +45,32 @@ public partial class UsdotH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<UsdotH>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id)
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<UsdotH>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.Property(e => e.Id)
                .HasColumnName("id");
-            entity.ToTable("USDOT_H");
+            Entity.ToTable("USDOT_H");
 
-            entity.Property(e => e.Mc)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Mc)
                 .HasMaxLength(7)
                 .IsUnicode(false)
                 .HasColumnName("MC");
 
-            entity.Property(e => e.Scac)
+            Entity.Property(e => e.Scac)
                 .HasMaxLength(4)
                 .IsUnicode(false)
                 .HasColumnName("SCAC");
 
-            entity.HasOne(d => d.UsdotNavigation)
+            Entity.HasOne(d => d.UsdotNavigation)
                 .WithMany(p => p.UsdotsH)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.UsdotsH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

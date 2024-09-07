@@ -52,12 +52,11 @@ public partial class TruckH
         UniqueValidator Unique = new();
         PointerValidator Pointer = new(true);
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Vin), [Unique, new LengthValidator(17, 17)]),
             (nameof(Economic), [new LengthValidator(1, 16)]),
             (nameof(Sequence), [new RequiredValidator()]),
             (nameof(Manufacturer), [Pointer]),
-            //(nameof(CarrierH), [Pointer]),
             (nameof(Status), [Pointer]),
             (nameof(Entity), [Pointer])
         ];
@@ -65,61 +64,64 @@ public partial class TruckH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<TruckH>(entity => {
-            entity.HasKey(e => e.Id);
-            entity.ToTable("Trucks_H");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<TruckH>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Trucks_H");
 
-            entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.Motor)
+            Entity.Property(e => e.Motor)
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
-            entity.Property(e => e.Vin)
+            Entity.Property(e => e.Vin)
                 .HasMaxLength(17)
                 .IsUnicode(false)
                 .HasColumnName("VIN");
 
-            entity.Property(e => e.Economic)
+            Entity.Property(e => e.Economic)
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
-            entity.Property(e => e.MaintenanceH)
+            Entity.Property(e => e.MaintenanceH)
                .HasColumnName("MaintenanceH");
-            entity.Property(e => e.InsuranceH)
+            Entity.Property(e => e.InsuranceH)
                .HasColumnName("InsuranceH");
-            entity.Property(e => e.CarrierH)
+            Entity.Property(e => e.CarrierH)
               .HasColumnName("CarrierH");
 
-            entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.TrucksH)
                .HasForeignKey(d => d.Status);
 
-            entity.HasOne(d => d.TruckNavigation)
+            Entity.HasOne(d => d.TruckNavigation)
                .WithMany(p => p.TrucksH)
                .HasForeignKey(d => d.Entity);
 
-            entity.HasOne(d => d.CarrierHNavigation)
+            Entity.HasOne(d => d.CarrierHNavigation)
                  .WithMany(p => p.TrucksH)
                  .HasForeignKey(d => d.CarrierH);
 
-            entity.HasOne(d => d.ManufacturerNavigation)
+            Entity.HasOne(d => d.ManufacturerNavigation)
                 .WithMany(p => p.TrucksH)
                 .HasForeignKey(d => d.Manufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.SituationNavigation)
+            Entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.TrucksH)
                 .HasForeignKey(d => d.Situation)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.InsuranceHNavigation)
+            Entity.HasOne(d => d.InsuranceHNavigation)
                 .WithMany(p => p.TrucksH)
                 .HasForeignKey(d => d.InsuranceH);
 
-            entity.HasOne(d => d.MaintenanceHNavigation)
+            Entity.HasOne(d => d.MaintenanceHNavigation)
                 .WithMany(p => p.TrucksH)
                 .HasForeignKey(d => d.MaintenanceH);
         });
