@@ -104,16 +104,16 @@ public abstract class BDepot<TDatabase, TSet>
                 Expression<Func<TSet, object>> orderingExpression = Expression.Lambda<Func<TSet, object>>(translationExpression, parameterExpression);
                 if (i == 0) {
                     orderingQuery = ordering.Behavior switch {
-                        MIgrationViewOrderBehaviors.Ascending => query.OrderBy(orderingExpression),
-                        MIgrationViewOrderBehaviors.Descending => query.OrderByDescending(orderingExpression),
+                        SetViewOrders.Ascending => query.OrderBy(orderingExpression),
+                        SetViewOrders.Descending => query.OrderByDescending(orderingExpression),
                         _ => query.OrderBy(orderingExpression),
                     };
                     continue;
                 }
 
                 orderingQuery = ordering.Behavior switch {
-                    MIgrationViewOrderBehaviors.Ascending => orderingQuery.ThenBy(orderingExpression),
-                    MIgrationViewOrderBehaviors.Descending => orderingQuery.ThenByDescending(orderingExpression),
+                    SetViewOrders.Ascending => orderingQuery.ThenBy(orderingExpression),
+                    SetViewOrders.Descending => orderingQuery.ThenByDescending(orderingExpression),
                     _ => orderingQuery.ThenBy(orderingExpression),
                 };
             }
@@ -206,7 +206,7 @@ public abstract class BDepot<TDatabase, TSet>
     #endregion
 
     #region Read
-    public async Task<DatabasesTransactionOut<TSet>> Read(Expression<Func<TSet, bool>> Predicate, MigrationReadBehavior Behavior, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
+    public async Task<DatabasesTransactionOut<TSet>> Read(Expression<Func<TSet, bool>> Predicate, SetReadBehaviors Behavior, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
         IQueryable<TSet> query = Set.Where(Predicate);
 
         if (Include != null) {
@@ -218,9 +218,9 @@ public abstract class BDepot<TDatabase, TSet>
         }
 
         TSet[] items = Behavior switch {
-            MigrationReadBehavior.First => [await query.FirstAsync()],
-            MigrationReadBehavior.Last => [await query.LastAsync()],
-            MigrationReadBehavior.All => await query.ToArrayAsync(),
+            SetReadBehaviors.First => [await query.FirstAsync()],
+            SetReadBehaviors.Last => [await query.LastAsync()],
+            SetReadBehaviors.All => await query.ToArrayAsync(),
             _ => throw new NotImplementedException()
         };
 

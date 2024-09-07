@@ -168,7 +168,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
             Orderings = [
                 new SetViewOrderOptions {
                         Property = Ordering,
-                        Behavior = MIgrationViewOrderBehaviors.Descending,
+                        Behavior = SetViewOrders.Descending,
                 },
             ],
         };

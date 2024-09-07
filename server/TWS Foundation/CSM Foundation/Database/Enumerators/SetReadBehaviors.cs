@@ -1,5 +1,5 @@
 ﻿namespace CSM_Foundation.Database.Enumerators;
-public enum MigrationReadBehavior {
+public enum SetReadBehaviors {
     First,
     Last,
     All,

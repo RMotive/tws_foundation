@@ -14,5 +14,5 @@ public class SetViewOrderOptions {
     /// <summary>
     ///     Ordering behavior to apply.
     /// </summary>
-    public required MIgrationViewOrderBehaviors Behavior;
+    public required SetViewOrders Behavior;
 }

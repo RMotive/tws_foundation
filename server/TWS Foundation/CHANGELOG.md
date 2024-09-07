@@ -4,7 +4,18 @@
 
 - Notes:
 
-    1. Template.  
+    1. All sets got updated adding [Timestamp] new property to the [ISet] interface, representing the timestamp when the record got created.
+
+    2. Renamed items:
+
+        - Folders
+
+            1. [CSM Foundation/Databases] -> [CSM Foundation/Database]
+
+        - Bases
+
+            1. [BDatabaseDepot] -> [BDepot]
+            2. [BDatabaseSet] -> [BSet]
 
 - Dependencies Upgrade:
 

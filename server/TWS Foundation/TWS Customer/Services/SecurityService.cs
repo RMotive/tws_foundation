@@ -46,7 +46,7 @@ public class SecurityService
                 });
         }
 
-        DatabasesTransactionOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, MigrationReadBehavior.First, include);
+        DatabasesTransactionOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, SetReadBehaviors.First, include);
         if (result.Failed) {
             throw new XMigrationTransaction(result.Failures);
         }

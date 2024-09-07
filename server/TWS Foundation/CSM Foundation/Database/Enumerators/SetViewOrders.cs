@@ -1,5 +1,5 @@
 ﻿namespace CSM_Foundation.Database.Enumerators;
-public enum MIgrationViewOrderBehaviors {
+public enum SetViewOrders {
     Ascending,
     Descending,
 }
