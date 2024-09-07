@@ -28,7 +28,7 @@ namespace TWS_Foundation;
 public partial class Program {
     private const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
     private const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
-    private static IMigrationDisposer? Disposer;
+    private static IDisposer? Disposer;
     private static Settings? SettingsStore { get; set; }
     public static Settings Settings => SettingsStore ??= RetrieveSettings();
 
@@ -82,7 +82,7 @@ public partial class Program {
                 builder.Services.AddSingleton<AdvisorMiddleware>();
                 builder.Services.AddSingleton<FramingMiddleware>();
                 builder.Services.AddSingleton<DispositionMiddleware>();
-                builder.Services.AddSingleton<IMigrationDisposer, DispositionManager>();
+                builder.Services.AddSingleton<IDisposer, DispositionManager>();
 
                 // --> Databasess contexts
                 builder.Services.AddDbContext<TWSSecurityDatabase>();
@@ -156,7 +156,7 @@ public partial class Program {
                 app.UseMiddleware<DispositionMiddleware>();
             }
 
-            Disposer = app.Services.GetService<IMigrationDisposer>()
+            Disposer = app.Services.GetService<IDisposer>()
                 ?? throw new Exception("Required disposer service");
             app.Lifetime.ApplicationStopping.Register(OnProcessExit);
             app.UseCors();

@@ -7,7 +7,7 @@ using TWS_Security.Sets;
 
 namespace TWS_Security.Quality.Sets;
 public class Q_Solution
-    : BQ_MigrationSet<Solution> {
+    : BQ_Set<Solution> {
     protected override Q_MigrationSet_EvaluateRecord<Solution>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Solution>[] Container) {
         const string successName = "TWS Quality";
         const string successSign = "TWSMQ";

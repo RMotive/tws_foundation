@@ -13,7 +13,7 @@ namespace CSM_Foundation.Database.Quality.Bases;
 ///     [Q_Entity] concept: determines a quality implementation to qualify 
 ///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
-public abstract class BQ_MigrationSet<TSet>
+public abstract class BQ_Set<TSet>
     where TSet : ISet, new() {
 
     protected abstract Q_MigrationSet_EvaluateRecord<TSet>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TSet>[] Container);

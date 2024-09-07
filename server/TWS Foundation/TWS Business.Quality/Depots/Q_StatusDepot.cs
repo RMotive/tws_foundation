@@ -9,16 +9,20 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="StatusesDepot"/>.
 /// </summary>
 public class Q_StatusDepot
-    : BQ_MigrationDepot<Status, StatusesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Status, StatusesDepot, TWSBusinessDatabase> {
     public Q_StatusDepot()
         : base(nameof(Status.Name)) {
     }
 
-    protected override Status MockFactory() {
+    protected override Status MockFactory(string RandomSeed) {
 
         return new() {
             Name = RandomUtils.String(25),
             Description = RandomUtils.String(100)
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Status Mock) {
+        return (nameof(Status.Name), Mock.Name);
     }
 }

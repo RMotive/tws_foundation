@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class CarrierH
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
     public override DateTime Timestamp { get; set; }
 

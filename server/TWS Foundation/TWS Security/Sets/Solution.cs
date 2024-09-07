@@ -2,10 +2,12 @@
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace TWS_Security.Sets;
 
 public partial class Solution 
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
     public override DateTime Timestamp { get; set; }
 
@@ -24,5 +26,32 @@ public partial class Solution
             (nameof(Sign), [new UniqueValidator(), new LengthValidator(5, 5)]),
         ];
         return Container;
+    }
+
+
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Solution>(entity => {
+            entity.HasKey(e => e.Id);
+
+            entity.HasIndex(e => e.Sign)
+            .IsUnique();
+
+            entity.HasIndex(e => e.Name)
+            .IsUnique();
+
+            entity.Property(e => e.Description)
+            .IsUnicode(false);
+            
+            entity.Property(e => e.Name)
+            .HasMaxLength(25)
+            .IsUnicode(false);
+            
+            entity.Property(e => e.Sign)
+            .HasMaxLength(5)
+            .IsUnicode(false);
+
+            entity.Property(e => e.Timestamp)
+            .HasColumnType("datetime");
+        });
     }
 }

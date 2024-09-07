@@ -5,8 +5,8 @@ using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
 
-namespace CSM_Foundation.Database.Utils;
-public class MigrationUtils {
+namespace CSM_Foundation.Database.Utilitites;
+public class DatabaseUtilities {
     private const string DirectoryName = ".Connection";
     private const string QualityPrefix = "quality_";
     private const string DevelopmentPrefix = "development_";
@@ -48,13 +48,13 @@ public class MigrationUtils {
         if (wd is null) {
             throw new ArgumentNullException(wd);
         }
-        
+
         string tp = $"{wd}\\{DatabaseSign.ToUpper()}{DirectoryName}";
         string? cpd = Directory.GetDirectories(wd)
             .Where(i => i == tp)
             .FirstOrDefault()
             ?? throw new DirectoryNotFoundException($"{tp} not found in the system");
-        
+
         string tfn = $"{tp}\\{fn}";
 
         string[] cfs = Directory.GetFiles(cpd);

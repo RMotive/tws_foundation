@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TrucksHDepot"/>.
 /// </summary>
 public class Q_TrucksHDepot
-    : BQ_MigrationDepot<TruckH, TrucksHDepot, TWSBusinessDatabase> {
+    : BQ_Depot<TruckH, TrucksHDepot, TWSBusinessDatabase> {
     public Q_TrucksHDepot()
         : base(nameof(TruckH.Vin)) {
     }
 
-    protected override TruckH MockFactory() {
+    protected override TruckH MockFactory(string RandomSeed) {
 
         return new() {
             Vin = RandomUtils.String(17),
@@ -25,5 +25,9 @@ public class Q_TrucksHDepot
             Manufacturer = 1,
             Entity = 1
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(TruckH Mock) {
+        return null;
     }
 }

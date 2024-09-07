@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="UsdotHDepot"/>.
 /// </summary>
 public class Q_UsdotsHDepot
-    : BQ_MigrationDepot<UsdotH, UsdotHDepot, TWSBusinessDatabase> {
+    : BQ_Depot<UsdotH, UsdotHDepot, TWSBusinessDatabase> {
     public Q_UsdotsHDepot()
         : base(nameof(UsdotH.Mc)) {
     }
 
-    protected override UsdotH MockFactory() {
+    protected override UsdotH MockFactory(string RandomSeed) {
 
         return new() {
             Entity = 1,
@@ -25,5 +25,9 @@ public class Q_UsdotsHDepot
             Mc = RandomUtils.String(7),
             Scac = RandomUtils.String(4),
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(UsdotH Mock) {
+        return null;
     }
 }

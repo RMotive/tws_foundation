@@ -13,7 +13,7 @@ public class DispositionMiddleware : IMiddleware {
     private const string DISP_HEAD_VALUE = "Quality";
     private readonly DispositionManager Disposer;
 
-    public DispositionMiddleware(IMigrationDisposer Disposer) {
+    public DispositionMiddleware(IDisposer Disposer) {
         this.Disposer = (DispositionManager)Disposer;
     }
 

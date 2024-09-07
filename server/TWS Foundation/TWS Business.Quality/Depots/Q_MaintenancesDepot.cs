@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="MaintenacesDepot"/>.
 /// </summary>
 public class Q_MaintenancesDepot
-    : BQ_MigrationDepot<Maintenance, MaintenacesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Maintenance, MaintenacesDepot, TWSBusinessDatabase> {
     public Q_MaintenancesDepot()
         : base(nameof(Maintenance.Trimestral)) {
     }
 
-    protected override Maintenance MockFactory() {
+    protected override Maintenance MockFactory(string RandomSeed) {
         DateOnly date = new(2024, 12, 12);
 
         return new() {
@@ -22,5 +22,9 @@ public class Q_MaintenancesDepot
             Anual = date,
             Status = 1
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Maintenance Mock) {
+        return null;
     }
 }

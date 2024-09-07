@@ -4,7 +4,7 @@ namespace CSM_Foundation.Database.Interfaces;
 /// <summary>
 /// 
 /// </summary>
-public interface IMigrationDisposer {
+public interface IDisposer {
     /// <summary>
     /// 
     /// </summary>

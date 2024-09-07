@@ -5,7 +5,7 @@ using CSM_Foundation.Database.Validators;
 namespace TWS_Security.Sets;
 
 public partial class Account
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
     public override DateTime Timestamp { get; set; }
 

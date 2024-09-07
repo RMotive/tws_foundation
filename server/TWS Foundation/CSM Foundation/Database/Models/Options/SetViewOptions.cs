@@ -43,5 +43,5 @@ public class SetViewOptions<TSet>
     /// <summary>
     /// 
     /// </summary>
-    public ISetViewFilter<TSet>[] Filters { get; init; } = [];
+    public ISetViewFilterNode<TSet>[] Filters { get; init; } = [];
 }

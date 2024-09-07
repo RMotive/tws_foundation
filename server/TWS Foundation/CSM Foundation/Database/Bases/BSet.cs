@@ -7,7 +7,7 @@ using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 namespace CSM_Foundation.Database.Bases;
-public abstract class BDatabaseSet
+public abstract class BSet
     : BObject<ISet>, ISet {
     public abstract int Id { get; set; }
     public abstract DateTime Timestamp { get; set; }

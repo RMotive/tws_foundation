@@ -6,7 +6,7 @@ using TWS_Security.Sets;
 
 namespace TWS_Security.Quality.Sets;
 public class Q_Contact
-    : BQ_MigrationSet<Contact> {
+    : BQ_Set<Contact> {
     protected override Q_MigrationSet_EvaluateRecord<Contact>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Contact>[] Container) {
         Q_MigrationSet_EvaluateRecord<Contact> success = new() {
             Mock = new() {

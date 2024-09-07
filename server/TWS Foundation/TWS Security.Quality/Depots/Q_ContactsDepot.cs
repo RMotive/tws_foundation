@@ -11,12 +11,12 @@ namespace TWS_Security.Quality.Depots;
 ///     Qualifies the <see cref="ContactsDepot"/>.
 /// </summary>
 public class Q_ContactsDepot
-    : BQ_MigrationDepot<Contact, ContactsDepot, TWSSecurityDatabase> {
+    : BQ_Depot<Contact, ContactsDepot, TWSSecurityDatabase> {
     public Q_ContactsDepot()
         : base(nameof(Contact.Name)) {
     }
 
-    protected override Contact MockFactory() {
+    protected override Contact MockFactory(string RandomSeed) {
         return new() {
             Name = RandomUtils.String(50),
             Lastname = RandomUtils.String(50),
@@ -24,4 +24,7 @@ public class Q_ContactsDepot
             Phone = RandomUtils.String(14),
         };
     }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Contact Mock) 
+    => (nameof(Contact.Name), Mock.Name);
 }

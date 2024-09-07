@@ -15,10 +15,10 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace CSM_Foundation.Database.Bases;
 /// <summary>
 ///     Defines base behaviors for a <see cref="IDepot{TMigrationSet}"/>
-///     implementation describing <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/>
+///     implementation describing <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     shared behaviors.
 ///     
-///     A <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/> provides methods to 
+///     A <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> provides methods to 
 ///     serve dataDatabases saved transactions for <see cref="TSet"/>.
 /// </summary>
 /// <typeparam name="TDatabase">
@@ -27,7 +27,7 @@ namespace CSM_Foundation.Database.Bases;
 /// <typeparam name="TSet">
 ///     Migration mirror concept that this depot handles.
 /// </typeparam>
-public abstract class BDatabaseDepot<TDatabase, TSet>
+public abstract class BDepot<TDatabase, TSet>
     : IDepot<TSet>
     where TDatabase : BDatabaseSQLS<TDatabase>
     where TSet : class, ISet {
@@ -35,25 +35,25 @@ public abstract class BDatabaseDepot<TDatabase, TSet>
     /// <summary>
     /// 
     /// </summary>
-    protected readonly IMigrationDisposer? Disposer;
-    
+    protected readonly IDisposer? Disposer;
+
     /// <summary>
     ///     Name to handle direct transactions (not-saved)
     /// </summary>
     protected readonly TDatabase Database;
-    
+
     /// <summary>
     ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TSet"/> 
     /// </summary>
     protected readonly DbSet<TSet> Set;
-    
+
     /// <summary>
-    ///     Generates a new instance of a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/> base.
+    ///     Generates a new instance of a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> base.
     /// </summary>
     /// <param name="Database">
     ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TSet"/> concept.
     /// </param>
-    public BDatabaseDepot(TDatabase Database, IMigrationDisposer? Disposer) {
+    public BDepot(TDatabase Database, IDisposer? Disposer) {
         this.Database = Database;
         this.Disposer = Disposer;
         Set = Database.Set<TSet>();
@@ -72,19 +72,21 @@ public abstract class BDatabaseDepot<TDatabase, TSet>
 
         int start = (page - 1) * range;
         int records = page == pages ? left : range;
-        IQueryable<TSet> query = Set
+
+        IQueryable<TSet> query = Set;
+        ISetViewFilterNode<TSet>[] filters = Options.Filters;
+        if (filters.Length > 0) {
+            filters = [.. filters.OrderBy(x => x.Order)];
+
+            foreach (ISetViewFilterNode<TSet> filter in filters) {
+                query = query.Where(filter.Compose());
+            }
+        }
+
+
+        query = query
             .Skip(start)
             .Take(records);
-
-        if (include != null) {
-            query = include(query);
-
-            var Filter = new SetViewDateFilter<TSet> {
-                From = DateTime.UtcNow,
-            };
-
-            query.Where(Filter.Compose());
-        }
 
         int orderActions = Options.Orderings.Length;
         if (orderActions > 0) {
@@ -118,6 +120,8 @@ public abstract class BDatabaseDepot<TDatabase, TSet>
             query = orderingQuery;
         }
 
+
+        query = include?.Invoke(query) ?? query;
         TSet[] sets = [.. query];
 
         return Task.FromResult(new SetViewOut<TSet>() {
@@ -184,7 +188,7 @@ public abstract class BDatabaseDepot<TDatabase, TSet>
                 Database.ChangeTracker.Clear();
                 Set.Attach(record);
                 await Database.SaveChangesAsync();
-                saved = [..saved, record];
+                saved = [.. saved, record];
             } catch (Exception excep) {
                 if (Sync) {
                     throw;

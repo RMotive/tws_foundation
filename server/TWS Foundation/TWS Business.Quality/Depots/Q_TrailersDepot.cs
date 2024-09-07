@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TrailersDepot"/>.
 /// </summary>
 public class Q_TrailersDepot
-    : BQ_MigrationDepot<Trailer, TrailersDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Trailer, TrailersDepot, TWSBusinessDatabase> {
     public Q_TrailersDepot()
         : base(nameof(Trailer.Id)) {
     }
 
-    protected override Trailer MockFactory() {
+    protected override Trailer MockFactory(string RandomSeed) {
 
         return new() {
             Manufacturer = 1,
@@ -22,5 +22,9 @@ public class Q_TrailersDepot
             Status = 1,
             Carrier = 1
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Trailer Mock) {
+        return null;
     }
 }

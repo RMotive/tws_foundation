@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="ApproachesDepot"/>.
 /// </summary>
 public class Q_ApproachesDepot
-    : BQ_MigrationDepot<Approach, ApproachesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Approach, ApproachesDepot, TWSBusinessDatabase> {
     public Q_ApproachesDepot()
         : base(nameof(Approach.Email)) {
     }
 
-    protected override Approach MockFactory() {
+    protected override Approach MockFactory(string RandomSeed) {
         return new() {
             Status = 1,
             Email = "mail@test.com"

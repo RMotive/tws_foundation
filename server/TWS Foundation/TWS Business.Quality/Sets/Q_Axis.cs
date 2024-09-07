@@ -5,7 +5,7 @@ using CSM_Foundation.Database.Validators;
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_Axis : BQ_MigrationSet<Axis> {
+public class Q_Axis : BQ_Set<Axis> {
     protected override Q_MigrationSet_EvaluateRecord<Axis>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Axis>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Axis> success = new() {

@@ -9,10 +9,11 @@ namespace CSM_Foundation.Database.Models.Options.Filters;
 /// </summary>
 /// <typeparam name="TSet"></typeparam>
 public class SetViewDateFilter<TSet>
-   : ISetViewFilter<TSet> 
+   : ISetViewFilter<TSet>
     where TSet : ISet {
-    public int Order { get; set; }
+    public string Discrimination { get; init; } = typeof(SetViewDateFilter<TSet>).ToString();
     public string Property { get; set; } = "Timestamp";
+    public int Order { get; set; }
 
 
     public required DateTime From { get; set; }
@@ -22,13 +23,13 @@ public class SetViewDateFilter<TSet>
         ParameterExpression param = Expression.Parameter(typeof(TSet), "X");
         MemberExpression prop = Expression.PropertyOrField(param, Property);
 
-        ConstantExpression fromConstant = Expression.Constant(From);
+        ConstantExpression fromConstant = Expression.Constant(From, typeof(DateTime));
         BinaryExpression fromEvaluation = Expression.GreaterThanOrEqual(prop, fromConstant);
 
         BinaryExpression expression = fromEvaluation;
-        
-        if(To != null) {
-            ConstantExpression toConstant = Expression.Constant(To);
+
+        if (To != null) {
+            ConstantExpression toConstant = Expression.Constant(To, typeof(DateTime));
             BinaryExpression toEvaluation = Expression.LessThanOrEqual(prop, toConstant);
             expression = Expression.AndAlso(fromEvaluation, toEvaluation);
         }

@@ -5,7 +5,7 @@ using CSM_Foundation.Database.Validators;
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_TrailerExternal : BQ_MigrationSet<TrailerExternal> {
+public class Q_TrailerExternal : BQ_Set<TrailerExternal> {
     protected override Q_MigrationSet_EvaluateRecord<TrailerExternal>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TrailerExternal>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<TrailerExternal> success = new() {

@@ -64,6 +64,7 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
         AccountPermit.CreateModel(modelBuilder);
         AccountProfile.CreateModel(modelBuilder);   
+        Solution.CreateModel(modelBuilder);
 
 
         modelBuilder.Entity<Contact>(entity => {
@@ -148,24 +149,6 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
             _ = entity.HasOne(d => d.ProfileNavigation).WithMany()
                 .HasForeignKey(d => d.Profile)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<Solution>(entity => {
-            _ = entity.HasKey(e => e.Id);
-
-            _ = entity.HasIndex(e => e.Sign).IsUnique();
-
-            _ = entity.HasIndex(e => e.Name).IsUnique();
-
-            _ = entity.Property(e => e.Id);
-            _ = entity.Property(e => e.Description)
-                .IsUnicode(false);
-            _ = entity.Property(e => e.Name)
-                .HasMaxLength(25)
-                .IsUnicode(false);
-            _ = entity.Property(e => e.Sign)
-                .HasMaxLength(5)
-                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -5,7 +5,7 @@ using CSM_Foundation.Database.Validators;
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_Manufacturer : BQ_MigrationSet<Manufacturer> {
+public class Q_Manufacturer : BQ_Set<Manufacturer> {
     protected override Q_MigrationSet_EvaluateRecord<Manufacturer>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Manufacturer>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Manufacturer> success = new() {

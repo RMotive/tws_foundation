@@ -1,9 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-
-using CSM_Foundation.Advisor.Managers;
+﻿using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models.Options;
-using CSM_Foundation.Database.Utils;
+using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -20,13 +18,13 @@ public abstract class BDatabaseSQLS<TDatabases>
         : base() {
 
         this.Sign = Sign.ToUpper();
-        Connection = MigrationUtils.Retrieve(this.Sign);
+        Connection = DatabaseUtilities.Retrieve(this.Sign);
     }
     public BDatabaseSQLS(string Sign, DbContextOptions<TDatabases> Options)
         : base(Options) {
 
         this.Sign = Sign;
-        Connection = MigrationUtils.Retrieve(this.Sign);
+        Connection = DatabaseUtilities.Retrieve(this.Sign);
     }
 
     /// <summary>
@@ -62,7 +60,7 @@ public abstract class BDatabaseSQLS<TDatabases>
         });
 
 
-        
+
         if (Database.CanConnect()) {
             AdvisorManager.Success($"[{GetType().Name}] Connection stable");
 
@@ -70,7 +68,7 @@ public abstract class BDatabaseSQLS<TDatabases>
             try {
                 Database.OpenConnection();
             } catch (Exception ex) {
-                
+
                 throw new Exception($"Invalid connection with Database ({GetType().Name}) | {ex.InnerException?.Message}");
             }
         }

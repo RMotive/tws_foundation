@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="InsurancesDepot"/>.
 /// </summary>
 public class Q_InsurancesDepot
-    : BQ_MigrationDepot<Insurance, InsurancesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Insurance, InsurancesDepot, TWSBusinessDatabase> {
     public Q_InsurancesDepot()
         : base(nameof(Insurance.Policy)) {
     }
 
-    protected override Insurance MockFactory() {
+    protected override Insurance MockFactory(string RandomSeed) {
         DateOnly date = new(2024, 12, 12);
 
         return new() {
@@ -23,5 +23,9 @@ public class Q_InsurancesDepot
             Status = 1,
             Expiration = date
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Insurance Mock) {
+        return (nameof(Insurance.Policy), Mock.Policy);
     }
 }

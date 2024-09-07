@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Foundation.Managers;
 
-public class DispositionManager : IMigrationDisposer {
+public class DispositionManager 
+    : IDisposer {
+
     private readonly IServiceProvider Servicer;
     private readonly Dictionary<DbContext, List<ISet>> DispositionStack = [];
     private bool Active = false;

@@ -9,15 +9,18 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="AddressesDepot"/>.
 /// </summary>
 public class Q_AddressesDepot
-    : BQ_MigrationDepot<Address, AddressesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Address, AddressesDepot, TWSBusinessDatabase> {
     public Q_AddressesDepot()
         : base(nameof(Address.Id)) {
     }
 
-    protected override Address MockFactory() {
+    protected override Address MockFactory(string RandomSeed) {
 
         return new() {
             Country = "USA"
         };
     }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Address Mock)
+    => (nameof(Address.Street), Mock.Street);
 }

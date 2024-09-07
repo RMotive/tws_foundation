@@ -8,7 +8,7 @@
 ///     [Q_Entity] concept: determines a quality implementation to qualify 
 ///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
-public interface IQ_MigrationSet {
+public interface IQ_Set {
     /// <summary>
     ///     Qualifies:
     ///         - [Entity] EvaluateRead success.

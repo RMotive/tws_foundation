@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace TWS_Security.Sets;
 
 public partial class Permit 
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
     public override DateTime Timestamp { get; set; }
 

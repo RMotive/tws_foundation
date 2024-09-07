@@ -5,7 +5,7 @@ using CSM_Foundation.Database.Validators;
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_Usdot : BQ_MigrationSet<Usdot> {
+public class Q_Usdot : BQ_Set<Usdot> {
     protected override Q_MigrationSet_EvaluateRecord<Usdot>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Usdot>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Usdot> success = new() {

@@ -5,7 +5,7 @@ using CSM_Foundation.Database.Validators;
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_DriverCommon : BQ_MigrationSet<DriverCommon> {
+public class Q_DriverCommon : BQ_Set<DriverCommon> {
     protected override Q_MigrationSet_EvaluateRecord<DriverCommon>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<DriverCommon>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<DriverCommon> success = new() {

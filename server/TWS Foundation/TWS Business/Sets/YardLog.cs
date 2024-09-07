@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class YardLog
-    : BDatabaseSet {
+    : BSet {
 
     public override int Id { get; set; }
     public override DateTime Timestamp { get; set; }
@@ -63,7 +63,7 @@ public partial class YardLog
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
-                .. Container,
+            ..Container,
             (nameof(TTPicture), [new RequiredValidator()]),
             (nameof(Gname), [new LengthValidator(1, 100)]),
             (nameof(Seal), [new LengthValidator(1, 64)]),

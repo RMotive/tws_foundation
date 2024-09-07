@@ -12,12 +12,12 @@ namespace TWS_Security.Depots;
 ///     transactions. 
 /// </summary>
 public class AccountsDepot
-    : BDatabaseDepot<TWSSecurityDatabase, Account>
+    : BDepot<TWSSecurityDatabase, Account>
     , IAccountsDepot {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Account"/>.
     /// </summary>
-    public AccountsDepot(TWSSecurityDatabase Databases, IMigrationDisposer? Disposer = null)
+    public AccountsDepot(TWSSecurityDatabase Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     /// <summary>
