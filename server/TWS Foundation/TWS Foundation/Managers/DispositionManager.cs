@@ -1,16 +1,19 @@
-﻿using CSM_Foundation.Advisor.Managers;
+﻿using System.Collections.Concurrent;
+
+using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TWS_Foundation.Managers;
 
-public class DispositionManager 
+public class DispositionManager
     : IDisposer {
 
     private readonly IServiceProvider Servicer;
-    private readonly Dictionary<DbContext, List<ISet>> DispositionStack = [];
+    private readonly ConcurrentDictionary<DbContext, List<ISet>> DispositionStack = [];
     private bool Active = false;
 
     public DispositionManager(IServiceProvider Servicer) {
@@ -33,7 +36,7 @@ public class DispositionManager
             return;
         }
         List<ISet> recordsListed = [Record];
-        DispositionStack.Add(Databases, recordsListed);
+        DispositionStack.TryAdd(Databases, recordsListed);
     }
     public void Push(DbContext Databases, ISet[] Records) {
         if (!Active) {
@@ -51,7 +54,7 @@ public class DispositionManager
             return;
         }
         List<ISet> recordsListed = [.. Records.ToList()];
-        DispositionStack.Add(Databases, recordsListed);
+        DispositionStack.TryAdd(Databases, recordsListed);
     }
 
     public void Status(bool Active) {
@@ -64,14 +67,14 @@ public class DispositionManager
         }
         foreach (KeyValuePair<DbContext, List<ISet>> disposeLine in DispositionStack) {
             using IServiceScope servicerScope = Servicer.CreateScope();
-            DbContext Databases = disposeLine.Key;
+            DbContext Database = disposeLine.Key;
             try {
-                _ = Databases.Database.CanConnect();
+                Database.Database.CanConnect();
             } catch (ObjectDisposedException) {
-                Databases = (DbContext)servicerScope.ServiceProvider.GetRequiredService(Databases.GetType());
+                Database = (DbContext)servicerScope.ServiceProvider.GetRequiredService(Database.GetType());
             }
 
-            AdvisorManager.Announce($"Disposing db ({Databases.GetType()})");
+            AdvisorManager.Announce($"Disposing db ({Database.GetType()})");
             if (disposeLine.Value is null || disposeLine.Value.Count == 0) {
                 AdvisorManager.Announce($"No records to dispose");
                 continue;
@@ -80,20 +83,29 @@ public class DispositionManager
             int incorrects = 0;
             foreach (ISet record in disposeLine.Value) {
                 try {
-                    _ = Databases.Remove(record);
-                    _ = Databases.SaveChanges();
+                    Database.Remove(record);
+                    Database.SaveChanges();
+                    
                     corrects++;
                     AdvisorManager.Success($"Disposed: ({record.GetType()}) | ({record.Id})");
-                } catch (Exception Exep) {
+                } catch (DbUpdateConcurrencyException ex) {
+                    foreach (EntityEntry entry in ex.Entries) {
+                        if (entry.Entity.GetType() == record.GetType()) {
+                            // Detach the failed entity to prevent retrying
+                            entry.State = EntityState.Detached;
+                        }
+                    }
+
+                } catch (Exception ex) {
                     incorrects++;
-                    AdvisorManager.Warning($"No disposed: ({record.GetType()}) | ({record.Id}) |> ({Exep.Message})");
+                    AdvisorManager.Warning($"No disposed: ({record.GetType()}) | ({record.Id}) |> ({ex.Message})");
                 }
             }
 
             if (incorrects > 0) {
                 AdvisorManager.Warning($"Disposed with errors: (Errors: ({incorrects}) Successes: {corrects})");
             } else {
-                AdvisorManager.Success($"Disposed: ({corrects} elements) at ({Databases.GetType()})");
+                AdvisorManager.Success($"Disposed: ({corrects} elements) at ({Database.GetType()})");
             }
         }
     }

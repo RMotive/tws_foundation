@@ -22,6 +22,7 @@ using TWS_Security;
 using TWS_Security.Depots;
 using CSM_Foundation.Server.Managers;
 using CSM_Foundation.Server.Enumerators;
+using TWS_Security.Sets;
 
 namespace TWS_Foundation;
 
@@ -50,6 +51,9 @@ public partial class Program {
                     options.JsonSerializerOptions.IncludeFields = true;
                     options.JsonSerializerOptions.PropertyNamingPolicy = null;
                     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
+                    options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
+                    options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
                 });
             builder.Services.AddCors(setup => {
                 setup.AddDefaultPolicy(builder => {

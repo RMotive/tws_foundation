@@ -81,7 +81,7 @@ public class TrucksService : ITrucksService {
         return await Trucks.View(options, include);
     }
 
-    public async Task<DatabasesTransactionOut<Truck>> Create(Truck[] trucks) {
+    public async Task<SetComplexOut<Truck>> Create(Truck[] trucks) {
         return await this.Trucks.Create(trucks);
     }
     public async Task<RecordUpdateOut<Truck>> Update(Truck Truck, bool updatePivot = false) {

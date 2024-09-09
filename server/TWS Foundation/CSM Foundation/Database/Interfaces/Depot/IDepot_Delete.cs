@@ -4,7 +4,7 @@ namespace CSM_Foundation.Database.Interfaces.Depot;
 public interface IDepot_Delete<TMigrationSet>
     where TMigrationSet : ISet {
 
-    public Task<DatabasesTransactionOut<TMigrationSet>> Delete(TMigrationSet[] migrations);
+    public Task<SetComplexOut<TMigrationSet>> Delete(TMigrationSet[] migrations);
 
     public Task<TMigrationSet> Delete(TMigrationSet Set);
 }

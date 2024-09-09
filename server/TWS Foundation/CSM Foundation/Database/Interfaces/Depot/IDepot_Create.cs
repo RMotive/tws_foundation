@@ -42,5 +42,5 @@ public interface IDepot_Create<TMigrationSet>
     /// <returns>
     ///     A record that stores the transaction result, with successes and failures collected.
     /// </returns>
-    Task<DatabasesTransactionOut<TMigrationSet>> Create(TMigrationSet[] Sets, bool Sync = false);
+    Task<SetComplexOut<TMigrationSet>> Create(TMigrationSet[] Sets, bool Sync = false);
 }

@@ -7,5 +7,5 @@ namespace CSM_Foundation.Database.Interfaces.Depot;
 public interface IDepot_Read<TMigrationSet>
     where TMigrationSet : ISet {
 
-    public Task<DatabasesTransactionOut<TMigrationSet>> Read(Expression<Func<TMigrationSet, bool>> Predicate, SetReadBehaviors Behavior, Func<IQueryable<TMigrationSet>, IQueryable<TMigrationSet>>? Incluide = null);
+    public Task<SetComplexOut<TMigrationSet>> Read(Expression<Func<TMigrationSet, bool>> Predicate, SetReadBehaviors Behavior, Func<IQueryable<TMigrationSet>, IQueryable<TMigrationSet>>? Incluide = null);
 }

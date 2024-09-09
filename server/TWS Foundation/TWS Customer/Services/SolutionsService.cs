@@ -36,7 +36,7 @@ public class SolutionsService
     /// </summary>
     /// <param name="Solutions"></param>
     /// <returns></returns>
-    public async Task<DatabasesTransactionOut<Solution>> Create(Solution[] Solutions) {
+    public async Task<SetComplexOut<Solution>> Create(Solution[] Solutions) {
         return await SolutionsDepot.Create(Solutions);
     }
     /// <summary>

@@ -255,7 +255,7 @@ public class YardLogsService : IYardLogsService {
         return await YardLogs.View(options, include);
     }
 
-    public async Task<DatabasesTransactionOut<YardLog>> Create(YardLog[] yardLog) {
+    public async Task<SetComplexOut<YardLog>> Create(YardLog[] yardLog) {
         return await this.YardLogs.Create(yardLog);
     }
     public async Task<RecordUpdateOut<YardLog>> Update(YardLog yardLog, bool updatePivot = false) {

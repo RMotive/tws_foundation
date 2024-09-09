@@ -334,7 +334,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     public async Task CreateB() {
         TSet[] mocks = GenerateMocks(3);
 
-        DatabasesTransactionOut<TSet> qOut = await Depot.Create(mocks);
+        SetComplexOut<TSet> qOut = await Depot.Create(mocks);
         Disposer.Push(qOut.Successes);
 
         Assert.Multiple([
