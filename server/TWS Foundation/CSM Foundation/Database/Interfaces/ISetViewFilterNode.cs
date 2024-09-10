@@ -33,16 +33,17 @@ public interface ISetViewFilterNode<TSet>
 
 public class ISetViewFilterNodeConverterFactory : JsonConverterFactory {
     public override bool CanConvert(Type typeToConvert) {
-        if (!typeToConvert.IsGenericType)
+        if (!typeToConvert.IsGenericType) {
             return false;
+        }
 
-        var genericType = typeToConvert.GetGenericTypeDefinition();
+        Type genericType = typeToConvert.GetGenericTypeDefinition();
         return genericType == typeof(ISetViewFilterNode<>);
     }
 
     public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
-        var itemType = typeToConvert.GetGenericArguments()[0];
-        var converterType = typeof(ISetViewFilterNodeConverter<>).MakeGenericType(itemType);
+        Type itemType = typeToConvert.GetGenericArguments()[0];
+        Type converterType = typeof(ISetViewFilterNodeConverter<>).MakeGenericType(itemType);
 
         return (JsonConverter?)Activator.CreateInstance(converterType);
     }
@@ -50,17 +51,22 @@ public class ISetViewFilterNodeConverterFactory : JsonConverterFactory {
 
 public class ISetViewFilterNodeConverter<TSet> : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
     public override ISetViewFilterNode<TSet>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-        var jsonObject = JsonDocument.ParseValue(ref reader);
-        var json = jsonObject.RootElement.GetRawText();
+        JsonDocument jsonObject = JsonDocument.ParseValue(ref reader);
+        string json = jsonObject.RootElement.GetRawText();
 
         // Determine the type from the Discriminator property
-        var discriminator = jsonObject.RootElement.GetProperty("Discrimination").GetString();
+        string? discriminator = jsonObject.RootElement.GetProperty("Discrimination").GetString();
 
         if (discriminator == typeof(SetViewFilterLinearEvaluation<TSet>).ToString()) {
             return JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options);
-        } else {
+        } else if (discriminator == typeof(SetViewPropertyFilter<TSet>).ToString()) {
             return JsonSerializer.Deserialize<SetViewPropertyFilter<TSet>>(json, options);
+        } else if (discriminator == typeof(SetViewDateFilter<TSet>).ToString()) {
+            return JsonSerializer.Deserialize<SetViewDateFilter<TSet>>(json, options);
         }
+
+
+        throw new Exception("Unsupported derived type");
     }
 
     public override void Write(Utf8JsonWriter writer, ISetViewFilterNode<TSet> value, JsonSerializerOptions options) {
@@ -70,6 +76,9 @@ public class ISetViewFilterNodeConverter<TSet> : JsonConverter<ISetViewFilterNod
                 break;
             case SetViewFilterLinearEvaluation<TSet> linearEvaluation:
                 JsonSerializer.Serialize(writer, linearEvaluation, options);
+                break;
+            case SetViewDateFilter<TSet> dateFilter:
+                JsonSerializer.Serialize(writer, dateFilter, options);
                 break;
             default:
                 throw new NotSupportedException($"Type {value.GetType()} is not supported by this converter.");

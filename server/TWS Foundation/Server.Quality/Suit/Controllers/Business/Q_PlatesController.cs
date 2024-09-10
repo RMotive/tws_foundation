@@ -40,7 +40,7 @@ public class Q_PlatesController : BQ_ServerController<Program> {
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -58,7 +58,7 @@ public class Q_PlatesController : BQ_ServerController<Program> {
     public async Task Create() {
         DateOnly year = new(2024, 11, 11);
 
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("Create", new Plate() {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("Create", new Plate() {
             Identifier = RandomUtils.String(10),
             Status = 1,
             State = "ABC",

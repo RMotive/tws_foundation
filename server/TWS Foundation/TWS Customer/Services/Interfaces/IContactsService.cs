@@ -4,5 +4,5 @@ using TWS_Security.Sets;
 
 namespace TWS_Customer.Services.Interfaces;
 public interface IContactsService {
-    Task<SetComplexOut<Contact>> Create(Contact[] contact);
+    Task<SetBatchOut<Contact>> Create(Contact[] contact);
 }

@@ -46,7 +46,7 @@ public class SecurityService
                 });
         }
 
-        SetComplexOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, SetReadBehaviors.First, include);
+        SetBatchOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, SetReadBehaviors.First, include);
         if (result.Failed) {
             throw new XMigrationTransaction(result.Failures);
         }

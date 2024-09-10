@@ -14,6 +14,8 @@ public class QM_ServerHost(HttpClient host) {
     public async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string Location, TRequest Request, JsonSerializerOptions? Options = null) {
         HttpResponseMessage Response = await Host.PostAsJsonAsync(Location, Request, options: Options);
         HttpStatusCode resolutionCode = Response.StatusCode;
+
+        string contentRaw = await Response.Content.ReadAsStringAsync();
         TResponse resolution = await Response.Content.ReadFromJsonAsync<TResponse>()
             ?? throw new Exception("Nullified deserealization");
 

@@ -178,11 +178,11 @@ public abstract class BDepot<TDatabase, TSet>
     ///     to be stored won't continue, the operation will throw new exception.
     /// </param>
     /// <returns>
-    ///     A <see cref="SetComplexOut{TSet}"/> that stores a collection of failures, and successes caught.
+    ///     A <see cref="SetBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public async Task<SetComplexOut<TSet>> Create(TSet[] Sets, bool Sync = false) {
+    public async Task<SetBatchOut<TSet>> Create(TSet[] Sets, bool Sync = false) {
         TSet[] saved = [];
-        SetComplexFailure[] fails = [];
+        SetOperationFailure[] fails = [];
 
         foreach (TSet record in Sets) {
             try {
@@ -197,7 +197,7 @@ public abstract class BDepot<TDatabase, TSet>
                     throw;
                 }
 
-                SetComplexFailure fail = new(record, excep);
+                SetOperationFailure fail = new(record, excep);
                 fails = [.. fails, fail];
             }
         }
@@ -209,7 +209,7 @@ public abstract class BDepot<TDatabase, TSet>
     #endregion
 
     #region Read
-    public async Task<SetComplexOut<TSet>> Read(Expression<Func<TSet, bool>> Predicate, SetReadBehaviors Behavior, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
+    public async Task<SetBatchOut<TSet>> Read(Expression<Func<TSet, bool>> Predicate, SetReadBehaviors Behavior, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
         IQueryable<TSet> query = Set.Where(Predicate);
 
         if (Include != null) {
@@ -217,7 +217,7 @@ public abstract class BDepot<TDatabase, TSet>
         }
 
         if (!query.Any()) {
-            return new SetComplexOut<TSet>([], []);
+            return new SetBatchOut<TSet>([], []);
         }
 
         TSet[] items = Behavior switch {
@@ -229,14 +229,14 @@ public abstract class BDepot<TDatabase, TSet>
 
 
         TSet[] successes = [];
-        SetComplexFailure[] failures = [];
+        SetOperationFailure[] failures = [];
         foreach (TSet item in items) {
             try {
                 item.EvaluateRead();
 
                 successes = [.. successes, item];
             } catch (Exception excep) {
-                SetComplexFailure failure = new(item, excep);
+                SetOperationFailure failure = new(item, excep);
                 failures = [.. failures, failure];
             }
         }
@@ -342,23 +342,23 @@ public abstract class BDepot<TDatabase, TSet>
 
     #region Delete
 
-    public Task<SetComplexOut<TSet>> Delete(TSet[] Sets) {
+    public Task<SetBatchOut<TSet>> Delete(TSet[] Sets) {
 
         TSet[] safe = [];
-        SetComplexFailure[] fails = [];
+        SetOperationFailure[] fails = [];
 
         foreach (TSet set in Sets) {
             try {
                 set.EvaluateWrite();
                 safe = [.. safe, set];
             } catch (Exception excep) {
-                SetComplexFailure fail = new(set, excep);
+                SetOperationFailure fail = new(set, excep);
                 fails = [.. fails, fail];
             }
         }
 
         Set.RemoveRange(safe);
-        return Task.FromResult<SetComplexOut<TSet>>(new(safe, []));
+        return Task.FromResult<SetBatchOut<TSet>>(new(safe, []));
     }
 
     public async Task<TSet> Delete(TSet Set) {

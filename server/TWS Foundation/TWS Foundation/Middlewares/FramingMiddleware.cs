@@ -81,7 +81,11 @@ public class FramingMiddleware
                         default:
                             Dictionary<string, object> jObject = JsonSerializer.Deserialize<Dictionary<string, object>>(responseStream)!;
 
-                            encodedContent = JsonSerializer.Serialize(jObject);
+                            SuccessFrame<Dictionary<string, dynamic>> defFrame = new() {
+                                Tracer = Tracer,
+                                Estela = jObject,
+                            };
+                            encodedContent = JsonSerializer.Serialize(defFrame);
                             break;
                     }
                 } else {

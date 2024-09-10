@@ -23,7 +23,7 @@ public abstract class BQ_CustomServerController
     }
 
     protected override async Task<string> Authentication() {
-        (HttpStatusCode Status, ServerGenericFrame Frame) = await XPost<ServerGenericFrame, Credentials>("Security/Authenticate", new Credentials {
+        (HttpStatusCode Status, GenericFrame Frame) = await XPost<GenericFrame, Credentials>("Security/Authenticate", new Credentials {
             Identity = Account.Identity,
             Password = Account.Password,
             Sign = "TWSMA",

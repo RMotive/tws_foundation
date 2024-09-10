@@ -38,7 +38,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -148,7 +148,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         //mockList.Add(truck);
 
 
-        //(HttpStatusCode Status, ServerGenericFrame response) = await Post("Create", mockList, true);
+        //(HttpStatusCode Status, GenericFrame response) = await Post("Create", mockList, true);
         //Assert.Equal(HttpStatusCode.OK, Status);
     }
 
@@ -242,7 +242,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         //        CarrierNavigation = carrier,
         //    };
 
-        //    (HttpStatusCode Status, ServerGenericFrame Respone) = await Post("Update", mock, true);
+        //    (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
         //    Assert.Equal(HttpStatusCode.OK, Status);
         //    RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Respone).Estela;
@@ -337,7 +337,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         //        CarrierNavigation = carrier,
         //    };
 
-        //    (HttpStatusCode Status, ServerGenericFrame Response) = await Post("Update", mock, true);
+        //    (HttpStatusCode Status, GenericFrame Response) = await Post("Update", mock, true);
 
         //    Assert.Equal(HttpStatusCode.OK, Status);
 
@@ -362,7 +362,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         //    mock.Vin = modifiedVin;
         //    mock.Motor = modifiedMotor;
 
-        //    (HttpStatusCode Status, ServerGenericFrame Response) updateResponse = await Post("Update", mock, true);
+        //    (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
         //    Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
         //    RecordUpdateOut<Truck> updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;

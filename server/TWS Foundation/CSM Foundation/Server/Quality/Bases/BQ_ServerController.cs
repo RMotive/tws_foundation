@@ -23,7 +23,7 @@ namespace CSM_Foundation.Server.Quality.Bases;
 public abstract class BQ_ServerController<TEntry>
     : IClassFixture<WebApplicationFactory<TEntry>>
     where TEntry : class {
-    private static JsonSerializerOptions SOptions = new();
+    private readonly JsonSerializerOptions SOptions = new();
     private readonly string Service;
     private readonly QM_ServerHost Host;
     
@@ -44,14 +44,14 @@ public abstract class BQ_ServerController<TEntry>
 
     #region Protected Methods 
 
-    protected TFrame Framing<TFrame>(ServerGenericFrame Generic) {
+    protected TFrame Framing<TFrame>(GenericFrame Generic) {
         string desContent = JsonSerializer.Serialize(Generic);
 
         TFrame frame = JsonSerializer.Deserialize<TFrame>(desContent)!;
         return frame;
     }
-    protected async Task<(HttpStatusCode, ServerGenericFrame)> Post<TRequest>(string Action, TRequest Request, bool Authenticate = false) {
-        return await Post<ServerGenericFrame, TRequest>(Action, Request, false, Authenticate);
+    protected async Task<(HttpStatusCode, GenericFrame)> Post<TRequest>(string Action, TRequest Request, bool Authenticate = false) {
+        return await Post<GenericFrame, TRequest>(Action, Request, false, Authenticate);
     }
 
     protected async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string Action, TRequest Request, bool Authenticate = false) {
@@ -64,11 +64,11 @@ public abstract class BQ_ServerController<TEntry>
 
     #endregion
 
-    protected static string Serialize<T>(T value) {
+    protected string Serialize<T>(T value) {
         return JsonSerializer.Serialize(value, SOptions);
     }
 
-    protected static T Deserialize<T>(string json) {
+    protected T Deserialize<T>(string json) {
         return JsonSerializer.Deserialize<T>(json, SOptions)
             ?? throw new Exception("Unable to deserealize object");
     }

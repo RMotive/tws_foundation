@@ -1,9 +1,8 @@
 ﻿using System.Net;
-using System.Text.Json;
 
+using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Enumerators;
-using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Options.Filters;
 using CSM_Foundation.Database.Models.Out;
@@ -39,7 +38,7 @@ public class Q_SolutionsController
 
     [Fact(DisplayName = "[View]: Simple page and size request")]
     public async Task ViewA() {
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("View", new SetViewOptions<Solution> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Solution> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -53,24 +52,83 @@ public class Q_SolutionsController
         Assert.True(Estela.Pages > 0);
     }
 
-    [Fact(DisplayName = "[View]: Specific date filter")]
-    public async Task ViewC() {
-
-
-    }
-
-    [Fact(DisplayName = "[View]: Specific linear evaluation filter (OR)")]
+    [Fact(DisplayName = "[View]: Specific property filter")]
     public async Task ViewB() {
         Solution[] mocks = MockFactory(10);
 
-        (HttpStatusCode Status, ServerGenericFrame Response) creationOut = await Post("Create", mocks, true);
+        (HttpStatusCode createStatus, GenericFrame createResponse) = await Post("Create", mocks, true);
+
+        Assert.Equal(HttpStatusCode.OK, createStatus);
+
+        Solution refMock = mocks[0];
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Solution> {
+            Retroactive = false,
+            Range = 10,
+            Page = 1,
+            Filters = [
+                new SetViewPropertyFilter<Solution> {
+                    Evaluation = SetViewFilterEvaluations.CONTAINS,
+                    Property = nameof(Solution.Name),
+                    Value = refMock.Name,
+                },    
+            ],
+        }, true);
+
+        Assert.Equal(HttpStatusCode.OK, Status);
+
+        View view = Framing<SuccessFrame<View>>(Response).Estela;
+        Assert.NotEmpty(view.Sets);
+        Assert.All(view.Sets, i => {
+            Assert.Contains(refMock.Name, i.Name);
+        });
+    }
+
+    [Fact(DisplayName = "[View]: Specific date filter")]
+    public async Task ViewC() {
+        Solution[] mocks = MockFactory(10);
+
+        (HttpStatusCode createStatus, GenericFrame createResponse) = await Post("Create", mocks, true);
+        Assert.Equal(HttpStatusCode.OK, createStatus);
+        Solution refMock = Framing<SuccessFrame<SetBatchOut<Solution>>>(createResponse).Estela.Successes[0];
+        DateTime refTimestamp = refMock.Timestamp;
+
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Solution> {
+            Retroactive = false,
+            Range = 10,
+            Page = 1,
+            Filters = [
+                new SetViewDateFilter<Solution> {
+                    From = refTimestamp,
+                },
+            ]
+        }, true);
+
+        Assert.Equal(HttpStatusCode.OK, Status);
+
+        View view = Framing<SuccessFrame<View>>(Response).Estela;
+
+        Assert.NotEmpty(view.Sets);
+        Assert.All(view.Sets, i => {
+            DateTime refTime = refMock.Timestamp.Trim();
+            DateTime actTime = i.Timestamp.Trim();
+
+            int timeCompare = actTime.CompareTo(refTime);
+            Assert.True(timeCompare >= 0);
+        });
+    }
+
+    [Fact(DisplayName = "[View]: Specific linear evaluation filter (OR)")]
+    public async Task ViewD() {
+        Solution[] mocks = MockFactory(10);
+
+        (HttpStatusCode Status, GenericFrame Response) creationOut = await Post("Create", mocks, true);
         Assert.Equal(HttpStatusCode.OK, creationOut.Status);
 
-        SuccessFrame<SetComplexOut<Solution>> creationFrame = Framing<SuccessFrame<SetComplexOut<Solution>>>(creationOut.Response);
+        SuccessFrame<SetBatchOut<Solution>> creationFrame = Framing<SuccessFrame<SetBatchOut<Solution>>>(creationOut.Response);
         Assert.Equal(creationFrame.Estela.QSuccesses, mocks.Length);
 
 
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("View", new SetViewOptions<Solution> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Solution> {
             Retroactive = false,
             Range = 10,
             Page = 1,
@@ -94,15 +152,14 @@ public class Q_SolutionsController
         }, true);
 
         Assert.Equal(HttpStatusCode.OK, Status);
-        View Estela = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(Estela.Sets.Length >= 2);
-        Assert.Equal(1, Estela.Page);
-        Assert.True(Estela.Pages > 0);
+        View view = Framing<SuccessFrame<View>>(Response).Estela;
+        Assert.True(view.Sets.Length >= 2);
+        Assert.Equal(1, view.Page);
+        Assert.True(view.Pages > 0);
 
-        foreach(Solution record in Estela.Sets) {
-
-            Assert.True(record.Name == mocks[0].Name || record.Name == mocks[1].Name);
-        }
+        Assert.All(view.Sets, i => {
+            Assert.True(i.Name == mocks[0].Name || i.Name == mocks[1].Name);
+        });
     }
 
     [Fact]
@@ -133,7 +190,7 @@ public class Q_SolutionsController
     public async Task Update() {
         #region First (Correctly creates when doesn't exist)
         {
-            (HttpStatusCode Status, ServerGenericFrame Respone) = await Post("Update", new Solution {
+            (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", new Solution {
                 Id = 0,
                 Name = RandomUtils.String(10),
                 Sign = RandomUtils.String(5),
@@ -157,7 +214,7 @@ public class Q_SolutionsController
                 Sign = RandomUtils.String(5),
                 Description = RandomUtils.String(10),
             };
-            (HttpStatusCode Status, ServerGenericFrame Response) = await Post("Update", mock, true);
+            (HttpStatusCode Status, GenericFrame Response) = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
@@ -174,7 +231,7 @@ public class Q_SolutionsController
 
             mock.Id = creationRecord.Id;
             mock.Name = RandomUtils.String(10);
-            (HttpStatusCode Status, ServerGenericFrame Response) updateResponse = await Post("Update", mock, true);
+            (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
             RecordUpdateOut<Solution> updateResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(updateResponse.Response).Estela;

@@ -13,7 +13,7 @@ public class ContactsService
     public ContactsService(ContactsDepot contacts) {
         Contacts = contacts;
     }
-    public async Task<SetComplexOut<Contact>> Create(Contact[] contact) {
+    public async Task<SetBatchOut<Contact>> Create(Contact[] contact) {
         return await Contacts.Create(contact);
     }
 }

@@ -6,7 +6,7 @@ namespace CSM_Foundation.Database.Models;
 /// <summary>
 /// 
 /// </summary>
-public record SetComplexFailure {
+public record SetOperationFailure {
     /// <summary>
     /// 
     /// </summary>
@@ -25,7 +25,7 @@ public record SetComplexFailure {
     /// </summary>
     /// <param name="Set"></param>
     /// <param name="SystemInternal"></param>
-    public SetComplexFailure(ISet Set, Exception SystemInternal) {
+    public SetOperationFailure(ISet Set, Exception SystemInternal) {
         this.Set = Set;
         this.SystemInternal = SystemInternal;
         System = SystemInternal.Message;

@@ -33,7 +33,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, ServerGenericFrame Response) = await Post("View", new SetViewOptions<Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -98,7 +98,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
                 Timestamp = DateTime.Now,
             };
 
-            (HttpStatusCode Status, ServerGenericFrame Respone) = await Post("Update", mock, true);
+            (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.True(HttpStatusCode.OK.Equals(Status));
             RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
@@ -137,7 +137,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
                 Driver = 1,
                 Timestamp = DateTime.Now,
             };
-            (HttpStatusCode Status, ServerGenericFrame Response) = await Post("Update", mock, true);
+            (HttpStatusCode Status, GenericFrame Response) = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
@@ -159,7 +159,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             mock.Section = creationRecord.SectionNavigation!.Id;
             mock.SectionNavigation.Id = creationRecord.SectionNavigation!.Id;
             mock.SectionNavigation.Name = "UPT" + RandomUtils.String(10);
-            (HttpStatusCode Status, ServerGenericFrame Response) updateResponse = await Post("Update", mock, true);
+            (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
             RecordUpdateOut<YardLog> updateResult = Framing<SuccessFrame<RecordUpdateOut<YardLog>>>(updateResponse.Response).Estela;
