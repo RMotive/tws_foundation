@@ -33,7 +33,7 @@ final class YardLog implements CSMSetInterface {
 
   @override
   int id = 0;
-  bool? entry; //Optional only for client porpuses.
+  bool entry = true;
   int? truck;
   int? truckExternal;
   int? trailer;
@@ -47,7 +47,7 @@ final class YardLog implements CSMSetInterface {
   String gName = "";
   String fromTo = "";
   String seal = "";
-  bool? damage; //Optional only for client porpuses.
+  bool damage = false;
   String ttPicture = "";
   String? dmgEvidence;
   Driver? driverNavigation;
@@ -65,7 +65,7 @@ final class YardLog implements CSMSetInterface {
   this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation, this.accountNavigation);
   factory YardLog.des(JObject json) {
     int id = json.get('id');
-    bool? entry = json.getDefault('entry', null);
+    bool entry = json.get('entry');
     int? truck = json.getDefault('truck', null);
     int? truckExternal = json.getDefault('truckExternal', null);
     int? trailer = json.getDefault('trailer', null);
@@ -79,7 +79,7 @@ final class YardLog implements CSMSetInterface {
     String gName = json.get('gName');
     String fromTo = json.get('fromTo');
     String seal = json.get('seal');
-    bool? damage = json.getDefault('damage', null);
+    bool damage = json.get('damage');
     String ttPicture = json.get('ttPicture');
     String? dmgEvidence = json.getDefault('dmgEvidence', null);
 
@@ -170,31 +170,22 @@ final class YardLog implements CSMSetInterface {
     if(section < 0) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar la seccion.', 'pointerHandler()'));
     if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
 
-    if(entry == null){
-      results.add(CSMSetValidationResult(kEntry, 'Debe seleccionar si el registro es de entrada o salida.', 'pointerHandler()'));
-    }
-
     if(driverExternalNavigation == null && driverNavigation == null){
       results.add(CSMSetValidationResult(kDriver, 'Debe seleccionar un conductor', 'pointerHandler()'));
     }
 
     if(truckExternalNavigation == null && truckNavigation == null){
-      results.add(CSMSetValidationResult(kTruckExternalNavigation, 'Debe seleccionar un camion', 'pointerHandler()'));
+      results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
     }
 
     if(loadTypeNavigation?.name == "Botado" && (trailerExternalNavigation != null || trailerNavigation != null)){
       results.add(CSMSetValidationResult(kLoadType, 'Si el tipo de carga es Botado, no puede seleccionar datos del remolque', 'FieldConflic()'));
     }
 
-    if(damage == null){
-      results.add(CSMSetValidationResult(kEntry, 'Debe indicar si la carga tiene algun daño o no.', 'pointerHandler()'));
-    }else{
-      if( damage! && dmgEvidence == null){
-        results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));
-      }
+    if(damage && dmgEvidence == null){
+      results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));
     }
     
-
     if(dmgEvidence != null && damage == false){
       results.add(CSMSetValidationResult(kDmgEvidence, 'Se registro una foto del daño, pero no se ha seleccionado la carga como dañada.', 'FieldConflic()'));
     }
