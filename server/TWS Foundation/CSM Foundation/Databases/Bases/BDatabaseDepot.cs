@@ -160,7 +160,7 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     /// </returns>
     public async Task<DatabasesTransactionOut<TMigrationSet>> Create(TMigrationSet[] Sets, bool Sync = false) {
         TMigrationSet[] saved = [];
-        SourceTransactionFailure[] fails = [];
+        SourceTransactionFailure<TMigrationSet>[] fails = [];
 
         foreach (TMigrationSet record in Sets) {
             try {
@@ -175,7 +175,7 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
                     throw;
                 }
 
-                SourceTransactionFailure fail = new(record, excep);
+                SourceTransactionFailure<TMigrationSet> fail = new(record, excep);
                 fails = [.. fails, fail];
             }
         }
@@ -207,14 +207,14 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
 
 
         TMigrationSet[] successes = [];
-        SourceTransactionFailure[] failures = [];
+        SourceTransactionFailure<TMigrationSet>[] failures = [];
         foreach (TMigrationSet item in items) {
             try {
                 item.EvaluateRead();
 
                 successes = [.. successes, item];
             } catch (Exception excep) {
-                SourceTransactionFailure failure = new(item, excep);
+                SourceTransactionFailure<TMigrationSet> failure = new(item, excep);
                 failures = [.. failures, failure];
             }
         }
@@ -328,14 +328,14 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
     public Task<DatabasesTransactionOut<TMigrationSet>> Delete(TMigrationSet[] Sets) {
 
         TMigrationSet[] safe = [];
-        SourceTransactionFailure[] fails = [];
+        SourceTransactionFailure<TMigrationSet>[] fails = [];
 
         foreach (TMigrationSet set in Sets) {
             try {
                 set.EvaluateWrite();
                 safe = [.. safe, set];
             } catch (Exception excep) {
-                SourceTransactionFailure fail = new(set, excep);
+                SourceTransactionFailure<TMigrationSet> fail = new(set, excep);
                 fails = [.. fails, fail];
             }
         }

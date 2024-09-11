@@ -11,7 +11,6 @@ public class Q_TruckCommon : BQ_MigrationSet<TruckCommon> {
         Q_MigrationSet_EvaluateRecord<TruckCommon> success = new() {
             Mock = new() {
                 Id = 1,
-                Vin = "",
                 Economic = "",
                 Situation = 1,
 
@@ -23,12 +22,10 @@ public class Q_TruckCommon : BQ_MigrationSet<TruckCommon> {
                 Id = 0,
                 Status = 0,
                 Situation = 0,
-                Vin = "",
-                Economic = ""
+                Economic = "",
             },
             Expectations = [
                 (nameof(TruckCommon.Id), [(new PointerValidator(), 3)]),
-                (nameof(TruckCommon.Vin), [(new LengthValidator(),2)]),
                 (nameof(TruckCommon.Economic), [(new LengthValidator(),2)]),
                 (nameof(TruckCommon.Status), [(new PointerValidator(), 3)]),
 
