@@ -14,7 +14,15 @@
         - [SetViewPropertyFilter] Allow to specify a property or nested property from the model to calculate based on the [Evaluation] proeprty, nested proeprtyes are splitted by '.' ex: ('Location.Name').
         - [SetViewFilterLinearEvaluation] Allow to specify a group of filters applying a specific logical operator, this one is linear that means will apply the same operator for all the given filters.
 
-    4. Developers: Huge improvement in testing base labeling, now tests will be labeled and the most auto-managed by [CSM].
+    4. [Developers]: Huge improvement in testing base labeling, now tests will be labeled and the most auto-managed by [CSM].
+
+    5. [Developers]: Fixed a problem with the test data disposer, now is working even in async operations, also was fixing and well implemented Contact controller tests and was fixed a problem was causing errors trying to deserealize object [SetOperationFailure] model in tests validations.
+
+    6. [Developers]: Included tests for:
+
+        - [SetViewDateFilter]
+        - [SetViewPropertyFilter]
+        - [SetViewFilterLinearEvaluation] 
 
 - Dependencies Upgrade:
 
