@@ -2,8 +2,12 @@
 
 using System.Net;
 
+using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Server.Records;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 
+using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using TWS_Security.Sets;
@@ -18,30 +22,32 @@ public class Q_ContactsController
     }
 
     protected override Contact MockFactory(string RandomSeed) {
-        throw new NotImplementedException();
+        return new Contact {
+            Name = RandomSeed,
+            Lastname = RandomSeed,
+            Email = RandomSeed,
+            Phone = RandomSeed[..10],
+        };
     }
 
     [Fact]
     public async Task Create() {
         {
-            Contact[] mocks = [];
-            for (int i = 0; i < 3; i++) {
-                string uniqueToken = Guid.NewGuid().ToString();
+            Contact[] mocks = MockFactory(5);
 
-                mocks = [
-                    ..mocks,
-                    new Contact {
-                        Name = $"{i}_{uniqueToken[..20]}",
-                        Lastname = $"{i}_{uniqueToken[..20]}",
-                        Email = $"{i}_{uniqueToken[..20]}",
-                        Phone = $"{i}_{uniqueToken[..14]}"
-                    },
-                ];
-            }
-
-            (HttpStatusCode Status, _) = await Post("Create", mocks, true);
+            (HttpStatusCode Status, GenericFrame Frame) = await Post("Create", mocks, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
+
+            SetBatchOut<Contact> creationResult = Framing<SuccessFrame<SetBatchOut<Contact>>>(Frame).Estela;
+            
+            Assert.Multiple([
+                () => Assert.Equal(mocks.Length, creationResult.QTransactions),
+                () => Assert.Equal(mocks.Length, creationResult.QSuccesses),
+                () => Assert.All(creationResult.Successes, (i) => {
+                    Assert.True(i.Id > 0);    
+                }),
+            ]);
         }
     }
 }

@@ -13,7 +13,7 @@ public class DispositionManager
     : IDisposer {
 
     private readonly IServiceProvider Servicer;
-    private readonly ConcurrentDictionary<DbContext, List<ISet>> DispositionStack = [];
+    private readonly ConcurrentDictionary<DbContext, List<ISet>> DispositionStack = new();
     private bool Active = false;
 
     public DispositionManager(IServiceProvider Servicer) {
@@ -54,14 +54,14 @@ public class DispositionManager
             return;
         }
         List<ISet> recordsListed = [.. Records.ToList()];
-        DispositionStack.TryAdd(Databases, recordsListed);
+        bool wasAdded = DispositionStack.TryAdd(Databases, recordsListed);
     }
 
     public void Status(bool Active) {
         this.Active = Active;
     }
 
-    public void Dispose() {
+    public async Task Dispose() {
         if (DispositionStack.Empty()) {
             AdvisorManager.Announce($"No records to dispose");
         }
@@ -84,14 +84,13 @@ public class DispositionManager
             foreach (ISet record in disposeLine.Value) {
                 try {
                     Database.Remove(record);
-                    Database.SaveChanges();
+                    await Database.SaveChangesAsync();
                     
                     corrects++;
                     AdvisorManager.Success($"Disposed: ({record.GetType()}) | ({record.Id})");
                 } catch (DbUpdateConcurrencyException ex) {
                     foreach (EntityEntry entry in ex.Entries) {
                         if (entry.Entity.GetType() == record.GetType()) {
-                            // Detach the failed entity to prevent retrying
                             entry.State = EntityState.Detached;
                         }
                     }
@@ -102,11 +101,13 @@ public class DispositionManager
                 }
             }
 
+
             if (incorrects > 0) {
                 AdvisorManager.Warning($"Disposed with errors: (Errors: ({incorrects}) Successes: {corrects})");
             } else {
                 AdvisorManager.Success($"Disposed: ({corrects} elements) at ({Database.GetType()})");
             }
         }
+        DispositionStack.Clear();
     }
 }

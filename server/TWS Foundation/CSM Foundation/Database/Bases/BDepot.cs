@@ -182,7 +182,7 @@ public abstract class BDepot<TDatabase, TSet>
     /// </returns>
     public async Task<SetBatchOut<TSet>> Create(TSet[] Sets, bool Sync = false) {
         TSet[] saved = [];
-        SetOperationFailure[] fails = [];
+        SetOperationFailure<TSet>[] fails = [];
 
         foreach (TSet record in Sets) {
             try {
@@ -197,7 +197,7 @@ public abstract class BDepot<TDatabase, TSet>
                     throw;
                 }
 
-                SetOperationFailure fail = new(record, excep);
+                SetOperationFailure<TSet> fail = new(record, excep);
                 fails = [.. fails, fail];
             }
         }
@@ -229,14 +229,14 @@ public abstract class BDepot<TDatabase, TSet>
 
 
         TSet[] successes = [];
-        SetOperationFailure[] failures = [];
+        SetOperationFailure<TSet>[] failures = [];
         foreach (TSet item in items) {
             try {
                 item.EvaluateRead();
 
                 successes = [.. successes, item];
             } catch (Exception excep) {
-                SetOperationFailure failure = new(item, excep);
+                SetOperationFailure<TSet> failure = new(item, excep);
                 failures = [.. failures, failure];
             }
         }
@@ -345,14 +345,14 @@ public abstract class BDepot<TDatabase, TSet>
     public Task<SetBatchOut<TSet>> Delete(TSet[] Sets) {
 
         TSet[] safe = [];
-        SetOperationFailure[] fails = [];
+        SetOperationFailure<TSet>[] fails = [];
 
         foreach (TSet set in Sets) {
             try {
                 set.EvaluateWrite();
                 safe = [.. safe, set];
             } catch (Exception excep) {
-                SetOperationFailure fail = new(set, excep);
+                SetOperationFailure<TSet> fail = new(set, excep);
                 fails = [.. fails, fail];
             }
         }

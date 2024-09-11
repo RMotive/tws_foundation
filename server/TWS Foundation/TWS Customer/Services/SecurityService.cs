@@ -48,7 +48,7 @@ public class SecurityService
 
         SetBatchOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, SetReadBehaviors.First, include);
         if (result.Failed) {
-            throw new XMigrationTransaction(result.Failures);
+            throw new XMigrationTransaction<Account>(result.Failures);
         }
 
         if (result.QTransactions == 0) {

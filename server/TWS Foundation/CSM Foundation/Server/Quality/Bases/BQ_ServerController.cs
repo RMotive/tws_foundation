@@ -30,7 +30,6 @@ public abstract class BQ_ServerController<TEntry>
     protected BQ_ServerController(string Service, WebApplicationFactory<TEntry> Factory) {
         this.Service = Service;
         Host = new(Factory.CreateClient());
-
         SOptions.Converters.Add(new ISetViewFilterConverterFactory());
         SOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
     }

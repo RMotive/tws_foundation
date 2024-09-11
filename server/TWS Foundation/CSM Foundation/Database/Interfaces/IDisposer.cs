@@ -20,5 +20,5 @@ public interface IDisposer {
     /// <summary>
     /// 
     /// </summary>
-    void Dispose();
+    Task Dispose();
 }

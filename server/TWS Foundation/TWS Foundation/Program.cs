@@ -1,16 +1,15 @@
-﻿using System.Text.Json;
+﻿using System.Linq.Expressions;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using CSM_Foundation.Advisor.Interfaces;
 using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Server.Utils;
 using CSM_Foundation.Database.Interfaces;
-
-using TWS_Foundation.Managers;
-using TWS_Foundation.Middlewares;
-using TWS_Foundation.Models;
+using CSM_Foundation.Server.Enumerators;
+using CSM_Foundation.Server.Managers;
+using CSM_Foundation.Server.Utils;
 
 using TWS_Business;
 using TWS_Business.Depots;
@@ -18,18 +17,18 @@ using TWS_Business.Depots;
 using TWS_Customer.Services;
 using TWS_Customer.Services.Interfaces;
 
+using TWS_Foundation.Managers;
+using TWS_Foundation.Middlewares;
+using TWS_Foundation.Models;
+
 using TWS_Security;
 using TWS_Security.Depots;
-using CSM_Foundation.Server.Managers;
-using CSM_Foundation.Server.Enumerators;
-using TWS_Security.Sets;
 
 namespace TWS_Foundation;
 
 public partial class Program {
     private const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
     private const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
-    private static IDisposer? Disposer;
     private static Settings? SettingsStore { get; set; }
     public static Settings Settings => SettingsStore ??= RetrieveSettings();
 
@@ -149,6 +148,7 @@ public partial class Program {
                 builder.Services.AddScoped<ILoadTypesService, LoadTypesService>();
                 builder.Services.AddScoped<ISectionsService, SectionsService>();
                 builder.Services.AddScoped<IYardLogsService, YardLogsService>();
+
             }
             WebApplication app = builder.Build();
             app.MapControllers();
@@ -159,10 +159,12 @@ public partial class Program {
                 app.UseMiddleware<FramingMiddleware>();
                 app.UseMiddleware<DispositionMiddleware>();
             }
-
-            Disposer = app.Services.GetService<IDisposer>()
-                ?? throw new Exception("Required disposer service");
-            app.Lifetime.ApplicationStopping.Register(OnProcessExit);
+            app.Lifetime.ApplicationStopping.Register(() => {
+                using (var scope = app.Services.CreateScope()) {
+                    var disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
+                    OnProcessExit(disposer).GetAwaiter().GetResult();
+                };
+            });
             app.UseCors();
 
 
@@ -175,7 +177,7 @@ public partial class Program {
             AdvisorManager.Exception(new XSystem(X));
         } finally {
             Console.WriteLine($"Press any key to close...");
-            _ = Console.ReadKey();
+            Console.ReadKey();
         }
     }
 
@@ -183,9 +185,13 @@ public partial class Program {
         Console.Title = $"{Settings.Solution.Name} | {Settings.Host}";
     }
 
-    private static void OnProcessExit() {
+    private static async Task OnProcessExit(IDisposer Disposer) {
         AdvisorManager.Announce("Disposing quality context records");
-        Disposer?.Dispose();
+        try {
+            await Disposer.Dispose();
+        } catch(Exception X) {
+            AdvisorManager.Exception(new XSystem(X));
+        }
     }
 
     private static Settings RetrieveSettings() {
