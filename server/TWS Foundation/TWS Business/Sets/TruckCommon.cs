@@ -13,8 +13,6 @@ public partial class TruckCommon
 
     public int Status { get; set; }
 
-    public string Vin { get; set; } = null!;
-
     public string Economic { get; set; } = null!;
 
     public int? Location { get; set; }

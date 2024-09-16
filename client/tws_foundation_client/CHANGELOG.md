@@ -4,6 +4,13 @@
 
 - Notes:
 
+    1. Moved the [vin] property, from [TruckCommon] set, to [Truck] and [TruckExternal] sets.
+    2. [entry] and [damage] properies set to "optional" for client-side.
+    3. Changed and added evaluations to the following sets:
+        1. [Truck]
+        2. [TruckCommon]
+        3. [TruckExternal]
+
   - Services:
 
     1. [YardLogs] added new action naed [ViewInventory] that provides from the current Yard trucks inventory.

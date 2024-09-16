@@ -19,6 +19,7 @@ public class Q_TruckDepot
         return new() {
             Status = 1,
             Manufacturer = 1,
+            Vin = RandomUtils.String(17),
             Motor = RandomUtils.String(16),
             Common = 1,
             Carrier = 1

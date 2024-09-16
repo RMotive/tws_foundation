@@ -17,7 +17,9 @@ public partial class TruckExternal
 
     public string Carrier { get; set; } = null!;
 
-    public string? UsaPlate { get; set; } = null!;
+    public string? Vin { get; set; }
+
+    public string? UsaPlate { get; set; }
 
     public string MxPlate { get; set; } = null!;
 
@@ -50,6 +52,10 @@ public partial class TruckExternal
 
             Entity.Property(e => e.Id)
                  .HasColumnName("id");
+
+            Entity.Property(e => e.Vin)
+                 .HasColumnName("VIN")
+                 .HasMaxLength(17);
 
             Entity.Property(e => e.UsaPlate)
               .HasMaxLength(12)

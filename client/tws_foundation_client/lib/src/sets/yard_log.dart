@@ -33,7 +33,7 @@ final class YardLog implements CSMSetInterface {
 
   @override
   int id = 0;
-  bool entry = false;
+  bool entry = true;
   int? truck;
   int? truckExternal;
   int? trailer;
@@ -79,7 +79,7 @@ final class YardLog implements CSMSetInterface {
     String gName = json.get('gName');
     String fromTo = json.get('fromTo');
     String seal = json.get('seal');
-    bool damage = json.get('entry');
+    bool damage = json.get('damage');
     String ttPicture = json.get('ttPicture');
     String? dmgEvidence = json.getDefault('dmgEvidence', null);
 
@@ -163,31 +163,31 @@ final class YardLog implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Truck and Trailer pickture must be non-empty", "strictLength(1, max)"));
-    if(gName.isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "Name must be 100 max lenght and non-empty", "strictLength(1,100)"));
-    if(fromTo.isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "FromTo must be 25 max lenght and non-empty", "strictLength(1,25)"));
-    if(seal.isEmpty || gName.length > 64) results.add(CSMSetValidationResult(kSeal, "Seal must be 100 max lenght and non-empty", "strictLength(1,64)"));
-    if(section < 0) results.add(CSMSetValidationResult(kSection, 'Section pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'loadType pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Debe tomar una foto del camión con el remolque.", "strictLength(1, max)"));
+    if(gName.isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "El nombre del guardia no debe exeder los 100 caracteres y no debe estar vacio.", "strictLength(1,100)"));
+    if(fromTo.isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "Debe indicar de donde viene (o a donde va el camión). Maximo 25 caracteres.", "strictLength(1,25)"));
+    if(seal.isEmpty || gName.length > 64) results.add(CSMSetValidationResult(kSeal, "El campo del sello no debe estar vacio. Maximo 100 caracteres.", "strictLength(1,64)"));
+    if(section < 0) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar la seccion.', 'pointerHandler()'));
+    if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
 
     if(driverExternalNavigation == null && driverNavigation == null){
-      results.add(CSMSetValidationResult(kDriver, 'There is not driver or external driver pointer setted', 'pointerHandler()'));
+      results.add(CSMSetValidationResult(kDriver, 'Debe seleccionar un conductor', 'pointerHandler()'));
     }
 
     if(truckExternalNavigation == null && truckNavigation == null){
-      results.add(CSMSetValidationResult(kTruckExternalNavigation, 'There is not truck or external truck pointer setted', 'pointerHandler()'));
+      results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
     }
 
     if(loadTypeNavigation?.name == "Botado" && (trailerExternalNavigation != null || trailerNavigation != null)){
-      results.add(CSMSetValidationResult(kLoadType, 'If Botado load type is selected, cannot be any trailer data setted.', 'FieldConflic()'));
+      results.add(CSMSetValidationResult(kLoadType, 'Si el tipo de carga es Botado, no puede seleccionar datos del remolque', 'FieldConflic()'));
     }
 
     if(damage && dmgEvidence == null){
-      results.add(CSMSetValidationResult(kDamage, 'If damage is true, then dmgEvidence field mus be provided', 'FieldConflic()'));
+      results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));
     }
-
+    
     if(dmgEvidence != null && damage == false){
-      results.add(CSMSetValidationResult(kDmgEvidence, 'dmg evidence is provided but damage field is set to false', 'FieldConflic()'));
+      results.add(CSMSetValidationResult(kDmgEvidence, 'Se registro una foto del daño, pero no se ha seleccionado la carga como dañada.', 'FieldConflic()'));
     }
 
     return results;

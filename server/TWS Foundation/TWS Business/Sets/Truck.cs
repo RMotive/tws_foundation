@@ -17,10 +17,11 @@ public partial class Truck
 
     public string Motor { get; set; } = null!;
 
+    public string Vin { get; set; } = null!;
+
     public int Carrier { get; set; }
 
     public int Manufacturer { get; set; }
-
 
     public int? Maintenance { get; set; }
 
@@ -93,6 +94,7 @@ public partial class Truck
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
+            (nameof(Vin), [new UniqueValidator(), new LengthValidator(17, 17)]),
             (nameof(Motor), [new LengthValidator(1, 16)]),
             (nameof(Carrier), [new PointerValidator(true)]),
             (nameof(Manufacturer), [new PointerValidator(true)]),
