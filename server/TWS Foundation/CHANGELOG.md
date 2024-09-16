@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## CURRENT - [xx.xx-xxxx]
+
+- Notes: N/A
+
+- Dependencies Upgrade: N/A
+
 ## 2.0.2 - [16.09-2024]
 
 - Notes:
