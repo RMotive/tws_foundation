@@ -19,6 +19,8 @@
 
     1. [MigrationView] -> [SetViewOut]
     2. [MigrationViewOptions] -> [SetViewOptions]
+    3. [MigrationViewOrderOptions] -> [SetViewOrderOptions]
+    4. [MigrationViewOrderBehaviors] -> [SetViewOrderings]
 
 - Dependencies Upgrade:
 
