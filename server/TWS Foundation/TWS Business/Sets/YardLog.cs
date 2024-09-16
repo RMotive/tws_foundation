@@ -64,7 +64,7 @@ public partial class YardLog
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
                 .. Container,
-            (nameof(TTPicture), [new RequiredValidator()]),
+            (nameof(TTPicture), [new LengthValidator(1, 199999999)]),
             (nameof(Gname), [new LengthValidator(1, 100)]),
             (nameof(Seal), [new LengthValidator(1, 64)]),
             (nameof(FromTo), [new LengthValidator(1, 100)]),

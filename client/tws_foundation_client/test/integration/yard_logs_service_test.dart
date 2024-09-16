@@ -113,7 +113,6 @@ void main() {
         TruckCommon truckCommon = TruckCommon(
         0, //id
         1, //status
-        "VINtest-$randomToken", //vin
         "ECO$randomToken", //economic
         null, //location
         1, //situation
@@ -127,6 +126,7 @@ void main() {
           0, //common
           1,
           "Motor $randomToken", //motor
+          "VINtest-$randomToken", //vin
           i, //maintenance
           i, //insurance
           null, //statusNavigation

@@ -91,7 +91,9 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   if(status &lt; 0) results.add(CSMSetValidationResult(kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(carrier.isEmpty || mxPlate.length &gt; 100) results.add(CSMSetValidationResult(kCarrier, &quot;Carrier length must be between 1 and 100&quot;, &quot;strictLength(1, 100)&quot;));
   if(mxPlate.length &lt; 8 || mxPlate.length &gt; 12) results.add(CSMSetValidationResult(kMxPlate, &quot;MxPlate length must be between 8 and 12&quot;, &quot;strictLength(1, 32)&quot;));
-
+  if(vin != null){
+    if(vin!.length != 17) results.add(CSMSetValidationResult(kVin, &#39;VIN number must be 17 length&#39;, &#39;strictLength(17)&#39;));
+  }
   return results;
 }</code></pre>
 </section>
@@ -127,7 +129,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

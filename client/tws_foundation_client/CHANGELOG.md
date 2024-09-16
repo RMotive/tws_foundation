@@ -1,16 +1,21 @@
 # CHANGELOG
 
-## CURRENT
+## 4.0.0 - [16.09-2024]
 
 - Notes:
 
-    1. Template
+    1. Moved the [vin] property, from [TruckCommon] set, to [Truck] and [TruckExternal] sets.
+    2. [entry] and [damage] properies set to "optional" for client-side.
+    3. Changed and added evaluations to the following sets:
+        1. [Truck]
+        2. [TruckCommon]
+        3. [TruckExternal]
 
 - Dependencies Upgrade:
 
     1. Template
 
-## 3.0.0
+## 3.0.0 - [03.09-2024]
 
 - Notes:
 
@@ -24,7 +29,7 @@
 
     1. dotenv ([4.2.0])
 
-## 2.0.0 [09/07/2024]
+## 2.0.0 - [09.07-2024]
 
 - Notes:
 

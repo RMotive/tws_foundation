@@ -87,31 +87,31 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, &quot;Truck and Trailer pickture must be non-empty&quot;, &quot;strictLength(1, max)&quot;));
-  if(gName.isEmpty || gName.length &gt; 100) results.add(CSMSetValidationResult(kName, &quot;Name must be 100 max lenght and non-empty&quot;, &quot;strictLength(1,100)&quot;));
-  if(fromTo.isEmpty || fromTo.length &gt; 100) results.add(CSMSetValidationResult(kFromTo, &quot;FromTo must be 25 max lenght and non-empty&quot;, &quot;strictLength(1,25)&quot;));
-  if(seal.isEmpty || gName.length &gt; 64) results.add(CSMSetValidationResult(kSeal, &quot;Seal must be 100 max lenght and non-empty&quot;, &quot;strictLength(1,64)&quot;));
-  if(section &lt; 0) results.add(CSMSetValidationResult(kSection, &#39;Section pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(loadType &lt; 0) results.add(CSMSetValidationResult(kLoadType, &#39;loadType pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, &quot;Debe tomar una foto del camión con el remolque.&quot;, &quot;strictLength(1, max)&quot;));
+  if(gName.isEmpty || gName.length &gt; 100) results.add(CSMSetValidationResult(kName, &quot;El nombre del guardia no debe exeder los 100 caracteres y no debe estar vacio.&quot;, &quot;strictLength(1,100)&quot;));
+  if(fromTo.isEmpty || fromTo.length &gt; 100) results.add(CSMSetValidationResult(kFromTo, &quot;Debe indicar de donde viene (o a donde va el camión). Maximo 25 caracteres.&quot;, &quot;strictLength(1,25)&quot;));
+  if(seal.isEmpty || gName.length &gt; 64) results.add(CSMSetValidationResult(kSeal, &quot;El campo del sello no debe estar vacio. Maximo 100 caracteres.&quot;, &quot;strictLength(1,64)&quot;));
+  if(section &lt; 0) results.add(CSMSetValidationResult(kSection, &#39;Debe seleccionar la seccion.&#39;, &#39;pointerHandler()&#39;));
+  if(loadType &lt; 0) results.add(CSMSetValidationResult(kLoadType, &#39;Debe seleccionar el tipo de carga.&#39;, &#39;pointerHandler()&#39;));
 
   if(driverExternalNavigation == null &amp;&amp; driverNavigation == null){
-    results.add(CSMSetValidationResult(kDriver, &#39;There is not driver or external driver pointer setted&#39;, &#39;pointerHandler()&#39;));
+    results.add(CSMSetValidationResult(kDriver, &#39;Debe seleccionar un conductor&#39;, &#39;pointerHandler()&#39;));
   }
 
   if(truckExternalNavigation == null &amp;&amp; truckNavigation == null){
-    results.add(CSMSetValidationResult(kTruckExternalNavigation, &#39;There is not truck or external truck pointer setted&#39;, &#39;pointerHandler()&#39;));
+    results.add(CSMSetValidationResult(kTruck, &#39;Debe seleccionar un camion&#39;, &#39;pointerHandler()&#39;));
   }
 
   if(loadTypeNavigation?.name == &quot;Botado&quot; &amp;&amp; (trailerExternalNavigation != null || trailerNavigation != null)){
-    results.add(CSMSetValidationResult(kLoadType, &#39;If Botado load type is selected, cannot be any trailer data setted.&#39;, &#39;FieldConflic()&#39;));
+    results.add(CSMSetValidationResult(kLoadType, &#39;Si el tipo de carga es Botado, no puede seleccionar datos del remolque&#39;, &#39;FieldConflic()&#39;));
   }
 
   if(damage &amp;&amp; dmgEvidence == null){
-    results.add(CSMSetValidationResult(kDamage, &#39;If damage is true, then dmgEvidence field mus be provided&#39;, &#39;FieldConflic()&#39;));
+    results.add(CSMSetValidationResult(kDamage, &#39;Si selecciono la carga como dañada, debe tomar una foto del daño.&#39;, &#39;FieldConflic()&#39;));
   }
 
   if(dmgEvidence != null &amp;&amp; damage == false){
-    results.add(CSMSetValidationResult(kDmgEvidence, &#39;dmg evidence is provided but damage field is set to false&#39;, &#39;FieldConflic()&#39;));
+    results.add(CSMSetValidationResult(kDmgEvidence, &#39;Se registro una foto del daño, pero no se ha seleccionado la carga como dañada.&#39;, &#39;FieldConflic()&#39;));
   }
 
   return results;
@@ -149,7 +149,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

@@ -35,6 +35,7 @@ public class TrucksService : ITrucksService {
                 Maintenance = t.Maintenance,
                 Insurance = t.Insurance,
                 CarrierNavigation = t.CarrierNavigation,
+                Vin = t.Vin,
                 StatusNavigation = t.StatusNavigation == null? null : new Status() {
                     Id = t.StatusNavigation.Id,
                     Name = t.StatusNavigation.Name,
@@ -42,7 +43,6 @@ public class TrucksService : ITrucksService {
                 },
                 TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
                     Id = t.TruckCommonNavigation.Id,
-                    Vin = t.TruckCommonNavigation.Vin,
                     Economic = t.TruckCommonNavigation.Economic,
                     Location = t.TruckCommonNavigation.Location,
                     Situation = t.TruckCommonNavigation.Situation,

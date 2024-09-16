@@ -292,7 +292,6 @@ constraint FK_Drivers_Employees foreign key(Employee) references Employees(id),
 create table Trucks_Commons(
  id int IDENTITY(1,1) PRIMARY KEY,
  [Status] int NOT NULL,
- VIN varchar(17) UNIQUE NOT NULL,
  Economic varchar(16) NOT NULL,
  Situation int,
  [Location] int,
@@ -311,12 +310,14 @@ create table Trucks_Externals(
  Carrier varchar(100) NOT NULL,
  MxPlate varchar(12) NOT NULL,
  UsaPlate varchar(12),
+ VIN varchar(17),
  constraint FK_TrucksExternals_TrucksCommons foreign key(Common) references Trucks_Commons(id),
 );
 
 create table Trucks(
  id int IDENTITY(1,1) PRIMARY KEY,
  [Status] int NOT NULL,
+ VIN varchar(17) UNIQUE NOT NULL,
  Common int NOT NULL,
  Manufacturer int NOT NULL,
  Motor varchar(16) UNIQUE NOT NULL,

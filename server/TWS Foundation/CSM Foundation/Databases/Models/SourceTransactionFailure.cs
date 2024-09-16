@@ -6,11 +6,11 @@ namespace CSM_Foundation.Databases.Models;
 /// <summary>
 /// 
 /// </summary>
-public record SourceTransactionFailure {
+public record SourceTransactionFailure<TSet> where TSet : IDatabasesSet {
     /// <summary>
     /// 
     /// </summary>
-    public IDatabasesSet Set { get; init; }
+    public TSet Set { get; init; }
     /// <summary>
     /// 
     /// </summary>
@@ -25,7 +25,7 @@ public record SourceTransactionFailure {
     /// </summary>
     /// <param name="Set"></param>
     /// <param name="SystemInternal"></param>
-    public SourceTransactionFailure(IDatabasesSet Set, Exception SystemInternal) {
+    public SourceTransactionFailure(TSet Set, Exception SystemInternal) {
         this.Set = Set;
         this.SystemInternal = SystemInternal;
         System = SystemInternal.Message;
