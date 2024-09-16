@@ -12,7 +12,7 @@ final class SituationsService extends SituationsServiceBase {
         );
         
   @override
-  Effect<SetViewOut<Situation>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<Situation>> view(SetViewOptions<Situation> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<Situation>>(actEffect);
   }

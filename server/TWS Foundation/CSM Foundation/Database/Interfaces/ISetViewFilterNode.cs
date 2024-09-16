@@ -12,16 +12,17 @@ namespace CSM_Foundation.Database.Interfaces;
 
 public interface ISetViewFilterNode<TSet>
     where TSet : ISet {
-    /// <summary>
-    /// 
-    /// </summary>
-    int Order { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
     [JsonPropertyOrder(0)]
     string Discrimination { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    int Order { get; set; }
 
     /// <summary>
     /// 

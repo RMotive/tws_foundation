@@ -12,7 +12,7 @@ final class TrucksService extends TrucksServiceBase {
         );
         
   @override
-  Effect<SetViewOut<Truck>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<Truck>> view(SetViewOptions<Truck> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<Truck>>(actEffect);
   }

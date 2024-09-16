@@ -2,18 +2,19 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late TrailersExternalsServiceBase service;
   late SetViewOut<TrailerExternal> viewMock;
   late TrailerExternal createMock;
-  late SetViewOptions options;
+  late SetViewOptions<TrailerExternal> options;
 
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
-      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      options = SetViewOptions<TrailerExternal>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<TrailerExternal>>[]);
       viewMock = SetViewOut<TrailerExternal>(<TrailerExternal>[], 1, DateTime.now(), 3, 0, 20);
       createMock = TrailerExternal(0, 1, 1,"Carrier test", "12345678", "87654321",null, null);
 

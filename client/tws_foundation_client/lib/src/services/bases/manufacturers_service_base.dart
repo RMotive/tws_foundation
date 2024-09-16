@@ -10,6 +10,6 @@ abstract class ManufacturersServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<SetViewOut<Manufacturer>> view(SetViewOptions options, String auth);
+  Effect<SetViewOut<Manufacturer>> view(SetViewOptions<Manufacturer> options, String auth);
 
 }

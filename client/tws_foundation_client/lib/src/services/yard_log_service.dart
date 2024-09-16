@@ -15,13 +15,13 @@ final class YardLogsService extends YardLogServiceBase {
         );
         
   @override
-  Effect<SetViewOut<YardLog>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<YardLog>> view(SetViewOptions<YardLog> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<YardLog>>(actEffect);
   }
 
   @override
-  Effect<SetViewOut<YardLog>> viewInventory(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<YardLog>> viewInventory(SetViewOptions<YardLog> options, String auth) async {
     CSMActEffect actEffect = await post('viewInventory', options, auth: auth);
     return MainResolver<SetViewOut<YardLog>>(actEffect);
   }

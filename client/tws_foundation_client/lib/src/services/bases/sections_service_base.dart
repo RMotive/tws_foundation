@@ -10,6 +10,6 @@ abstract class SectionsServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<SetViewOut<Section>> view(SetViewOptions options, String auth);
+  Effect<SetViewOut<Section>> view(SetViewOptions<Section> options, String auth);
 
 }

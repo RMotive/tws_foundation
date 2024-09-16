@@ -31,11 +31,9 @@ public partial class TruckCommon
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
-        UniqueValidator Unique = new();
 
         Container = [
             ..Container,
-            (nameof(Vin), [Unique, new LengthValidator(17, 17)]),
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
             (nameof(Status), [new PointerValidator(true)])
         ];
@@ -53,11 +51,6 @@ public partial class TruckCommon
 
             Entity.Property(e => e.Id)
                  .HasColumnName("id");
-
-            Entity.Property(e => e.Vin)
-               .HasMaxLength(17)
-               .IsUnicode(false)
-               .HasColumnName("VIN");
 
             Entity.Property(e => e.Economic)
                 .HasMaxLength(16)

@@ -12,7 +12,7 @@ final class SectionsService extends SectionsServiceBase {
         );
         
   @override
-  Effect<SetViewOut<Section>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<Section>> view(SetViewOptions<Section> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<Section>>(actEffect);
   }

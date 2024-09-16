@@ -10,6 +10,6 @@ abstract class LoadTypeServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<SetViewOut<LoadType>> view(SetViewOptions options, String auth);
+  Effect<SetViewOut<LoadType>> view(SetViewOptions<LoadType> options, String auth);
 
 }

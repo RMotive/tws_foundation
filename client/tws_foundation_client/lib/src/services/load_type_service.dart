@@ -12,7 +12,7 @@ final class LoadTypeService extends LoadTypeServiceBase {
         );
         
   @override
-  Effect<SetViewOut<LoadType>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<LoadType>> view(SetViewOptions<LoadType> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<LoadType>>(actEffect);
   }

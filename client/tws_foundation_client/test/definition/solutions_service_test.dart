@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
@@ -11,13 +12,13 @@ void main() {
   late MigrationTransactionResult<Solution> createMock;
   late MigrationUpdateResult<Solution> updateMock;
   
-  late SetViewOptions options;
+  late SetViewOptions<Solution> options;
   late List<Solution> solutions;
 
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
-      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      options = SetViewOptions<Solution>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Solution>>[]);
       viewMock = SetViewOut<Solution>(<Solution>[], 1, DateTime.now(), 3, 0, 20);
       createMock = MigrationTransactionResult<Solution>(<Solution>[], <MigrationTransactionFailure<Solution>>[], 0, 0, 0, false);
       updateMock = MigrationUpdateResult<Solution>(Solution.a(), Solution.a());

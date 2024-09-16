@@ -12,7 +12,7 @@ final class TrailersExternalsService extends TrailersExternalsServiceBase {
         );
         
   @override
-  Effect<SetViewOut<TrailerExternal>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<TrailerExternal>> view(SetViewOptions<TrailerExternal> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<TrailerExternal>>(actEffect);
   }

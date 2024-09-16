@@ -13,7 +13,7 @@ final class AccountService extends AccountsServiceBase {
         );
         
   @override
-  Effect<SetViewOut<Account>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<Account>> view(SetViewOptions<Account> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<Account>>(actEffect);
   }

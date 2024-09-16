@@ -1,4 +1,5 @@
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/src/services/bases/accounts_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -34,7 +35,7 @@ void main() {
     'View',
     () async {
       MainResolver<SetViewOut<Account>> fact = await service.view(
-        SetViewOptions(null, <SetViewOrderOptions>[], 1, 10, false),
+        SetViewOptions<Account>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<Account>>[]),
         auth,
       );
       fact.resolve(

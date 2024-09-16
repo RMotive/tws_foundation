@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../integration_credentials.dart';
@@ -54,7 +55,7 @@ void main() {
     () async {
 
       MainResolver<SetViewOut<Solution>> fact = await service.view(
-        SetViewOptions(null, <SetViewOrderOptions>[], 1, 10, false),
+        SetViewOptions<Solution>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<Solution>>[]),
         auth,
       );
       fact.resolve(

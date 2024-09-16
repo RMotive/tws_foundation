@@ -1,15 +1,29 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class SetViewOptions implements CSMEncodeInterface {
+final class SetViewOptions<TSet extends CSMSetInterface> implements CSMEncodeInterface {
+  ///
   final bool retroactive;
+
+  ///
   final int range;
+
+  ///
   final int page;
+
+  ///
   final DateTime? creation;
+
+  ///
   final List<SetViewOrderOptions> orderings;
 
-  const SetViewOptions(this.creation, this.orderings, this.page, this.range, this.retroactive);
+  ///
+  final List<SetViewFilterNodeInterface<TSet>> filters;
+
+  ///
+  const SetViewOptions(this.retroactive, this.range, this.page, this.creation, this.orderings, this.filters);
 
   @override
   JObject encode() {
@@ -19,6 +33,7 @@ final class SetViewOptions implements CSMEncodeInterface {
       'page': page,
       'creation': creation,
       'orderings': orderings.map((SetViewOrderOptions i) => i.encode()).toList(),
+      'filters': filters.map((SetViewFilterNodeInterface<TSet> i) => i.encode()).toList(),
     };
   }
 }

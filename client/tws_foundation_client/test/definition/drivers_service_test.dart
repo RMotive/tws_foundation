@@ -2,18 +2,19 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late DriversServiceBase service;
   late SetViewOut<Driver> viewMock;
   late Driver createMock;
-  late SetViewOptions options;
+  late SetViewOptions<Driver> options;
 
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
-      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      options = SetViewOptions<Driver>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Driver>>[]);
       viewMock = SetViewOut<Driver>(<Driver>[], 1, DateTime.now(), 3, 0, 20);
       DateTime time = DateTime.now();
       createMock = Driver(0, 1, 1, 1, "Mexican", time, time, time, null, null, null, null, null, null, null, null, null, null, null);

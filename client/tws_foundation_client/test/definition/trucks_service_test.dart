@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late TrucksServiceBase service;
   late SetViewOut<Truck> viewMock;
-  late SetViewOptions options;
+  late SetViewOptions<Truck> options;
   MigrationTransactionResult<Truck> createMock;
   List<Truck> models = <Truck>[];
   group("Truck Service - Definition Service", () {
@@ -15,7 +16,7 @@ void main() {
       () {
         // models = <Truck>[];
         List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
-        options = SetViewOptions(null, noOrderigns, 1, 10, false);
+        options = SetViewOptions<Truck>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Truck>>[]);
         viewMock = SetViewOut<Truck>(<Truck>[], 1, DateTime.now(), 3, 0, 20);
         // //SCT sct = SCT(0, 1,"type test", "number 2344235", "configuration 32131", null, <Truck>[]);
         // Maintenance maintenance = Maintenance(1, 1,DateTime.now(), DateTime.now(), null, <Truck>[]);

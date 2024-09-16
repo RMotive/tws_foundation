@@ -12,7 +12,7 @@ final class DriversService extends DriversServiceBase {
         );
         
   @override
-  Effect<SetViewOut<Driver>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<Driver>> view(SetViewOptions<Driver> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<Driver>>(actEffect);
   }

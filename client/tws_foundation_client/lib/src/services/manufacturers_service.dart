@@ -12,7 +12,7 @@ final class ManufacturersService extends ManufacturersServiceBase {
         );
         
   @override
-  Effect<SetViewOut<Manufacturer>> view(SetViewOptions options, String auth) async {
+  Effect<SetViewOut<Manufacturer>> view(SetViewOptions<Manufacturer> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<Manufacturer>>(actEffect);
   }

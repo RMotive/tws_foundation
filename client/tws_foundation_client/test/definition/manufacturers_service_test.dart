@@ -2,18 +2,19 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late ManufacturersServiceBase service;
   late SetViewOut<Manufacturer> viewMock;
   late Manufacturer createMock;
-  late SetViewOptions options;
+  late SetViewOptions<Manufacturer> options;
 
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
-      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      options = SetViewOptions<Manufacturer>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Manufacturer>>[]);
       viewMock = SetViewOut<Manufacturer>(<Manufacturer>[], 1, DateTime.now(), 3, 0, 20);
 
       DateTime time = DateTime.now();

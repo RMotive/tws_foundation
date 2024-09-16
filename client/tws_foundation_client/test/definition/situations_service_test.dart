@@ -2,18 +2,19 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late SituationsServiceBase service;
   late SetViewOut<Situation> viewMock;
   late Situation createMock;
-  late SetViewOptions options;
+  late SetViewOptions<Situation> options;
 
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
-      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      options = SetViewOptions<Situation>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Situation>>[]);
       viewMock = SetViewOut<Situation>(<Situation>[], 1, DateTime.now(), 3, 0, 20);
 
       createMock = Situation(0, "Situational test", "Description test ");
