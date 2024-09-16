@@ -1,30 +1,18 @@
 # CHANGELOG
 
-## CURRENT
+## 2.0.2 - [16.09-2024]
 
 - Notes:
 
-    1. Template.  
+    1. Moved the [vin] property, from [TruckCommon] set, to [Truck] and [TruckExternal] sets.
+    2. Changed and added evaluations to the following sets:
+        1. [Truck]
+        2. [TruckCommon]
+        3. [TruckExternal]  
 
-- Dependencies Upgrade:
+- Dependencies Upgrade: N/A
 
-    1. TWS Security
-
-        - TWS Security.Quality
-
-    2. TWS Business
-
-        - TWS Business.Quality
-
-    3. TWS Customer
-
-        - TWS Customer.Quality
-
-    4. TWS Foundation
-
-        - TWS Foundation.Quality
-
-## 2.0.1 - 03.09-2024
+## 2.0.1 - [03.09-2024]
 
 - Notes:
 

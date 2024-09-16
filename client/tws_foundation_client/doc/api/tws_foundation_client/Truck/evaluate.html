@@ -87,8 +87,8 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-
-  if(motor!= null &amp;&amp; (motor!.length &lt; 15 &amp;&amp; motor!.length &gt; 16)) results.add(CSMSetValidationResult(kMotor, &#39;Motor number must be between 15 and 16 length&#39;, &#39;strictLength(15,16)&#39;));
+  if(vin.length != 17) results.add(CSMSetValidationResult(kVin, &#39;VIN number must be 17 length&#39;, &#39;strictLength(17)&#39;));
+  if(motor.length &lt; 15 &amp;&amp; motor.length &gt; 16) results.add(CSMSetValidationResult(kMotor, &#39;Motor number must be between 15 and 16 length&#39;, &#39;strictLength(15,16)&#39;));
   if(manufacturer &lt; 0) results.add(CSMSetValidationResult(kManufacturer, &#39;Manufactuer pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(carrier &lt; 0) results.add(CSMSetValidationResult(kCarrier, &#39;Carrier pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(manufacturer &gt; 0 &amp;&amp; manufacturerNavigation != null){
@@ -154,7 +154,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

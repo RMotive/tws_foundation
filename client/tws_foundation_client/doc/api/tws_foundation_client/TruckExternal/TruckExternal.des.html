@@ -76,6 +76,7 @@
   int id = json.get(&#39;id&#39;);
   int status = json.get(&#39;status&#39;);
   int common = json.get(&#39;common&#39;);
+  String? vin = json.getDefault(&quot;vin&quot;, null);
   String carrier = json.get(&#39;carrier&#39;);
   String mxPlate = json.get(&#39;mxPlate&#39;);
   String? usaPlate = json.getDefault(&#39;usaPlate&#39;, null);
@@ -91,7 +92,7 @@
     statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
   }
 
-  return TruckExternal(id, status, common,  carrier, mxPlate, usaPlate, truckCommonNavigation, statusNavigation);
+  return TruckExternal(id, status, common,  vin, carrier, mxPlate, usaPlate, truckCommonNavigation, statusNavigation);
 }</code></pre>
 </section>
 
@@ -126,7 +127,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

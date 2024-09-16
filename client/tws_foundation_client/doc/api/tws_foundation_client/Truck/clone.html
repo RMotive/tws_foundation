@@ -68,6 +68,7 @@
 <li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
 <li><span class="parameter" id="clone-param-manufacturer"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">manufacturer</span>, </span></li>
 <li><span class="parameter" id="clone-param-motor"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">motor</span>, </span></li>
+<li><span class="parameter" id="clone-param-vin"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">vin</span>, </span></li>
 <li><span class="parameter" id="clone-param-maintenance"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maintenance</span>, </span></li>
 <li><span class="parameter" id="clone-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">common</span>, </span></li>
 <li><span class="parameter" id="clone-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">carrier</span>, </span></li>
@@ -95,6 +96,7 @@
   int? status,
   int? manufacturer,
   String? motor,
+  String? vin,
   int? maintenance,
   int? common,
   int? carrier,
@@ -112,7 +114,7 @@
   Manufacturer? manufacturerNav = manufacturerNavigation ?? this.manufacturerNavigation;
   if(manufacturer == 0) manufacturerNav = null;
 
-  return Truck(id ?? this.id, status ?? this.status, manufacturer ?? this.manufacturer, common ?? this.common, carrier ?? this.carrier, motor ?? this.motor, maintenance ?? this.maintenance,
+  return Truck(id ?? this.id, status ?? this.status, manufacturer ?? this.manufacturer, common ?? this.common, carrier ?? this.carrier, motor ?? this.motor, vin ?? this.vin, maintenance ?? this.maintenance,
   insurance ?? this.insurance, statusNavigation ?? this.statusNavigation, manufacturerNav, truckCommonNavigation ?? this.truckCommonNavigation,
   maintenanceNavigation ?? this.maintenanceNavigation, insuranceNavigation ?? this.insuranceNavigation, carrierNavigation ?? this.carrierNavigation, plates ?? this.plates);
 }</code></pre>
@@ -149,7 +151,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   
