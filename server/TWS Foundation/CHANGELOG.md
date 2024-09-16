@@ -22,7 +22,7 @@
 
         - [SetViewDateFilter]
         - [SetViewPropertyFilter]
-        - [SetViewFilterLinearEvaluation] 
+        - [SetViewFilterLinearEvaluation]
 
 - Dependencies Upgrade:
 

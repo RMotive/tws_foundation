@@ -12,7 +12,7 @@ void main() {
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
       options = SetViewOptions(null, noOrderigns, 1, 10, false);
       viewMock = SetViewOut<TrailerExternal>(<TrailerExternal>[], 1, DateTime.now(), 3, 0, 20);
       createMock = TrailerExternal(0, 1, 1,"Carrier test", "12345678", "87654321",null, null);
@@ -43,7 +43,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<TrailerExternal>(TrailerExternalDecoder()),
+        decoder: SetViewOutDecode<TrailerExternal>(TrailerExternalDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

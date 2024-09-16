@@ -12,7 +12,7 @@ void main() {
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
       options = SetViewOptions(null, noOrderigns, 1, 10, false);
       viewMock = SetViewOut<DriverExternal>(<DriverExternal>[], 1, DateTime.now(), 3, 0, 20);
       createMock = DriverExternal(0, 1, 1, 1, null, null, null);
@@ -43,7 +43,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<DriverExternal>(DriverExternalDecoder()),
+        decoder: SetViewOutDecode<DriverExternal>(DriverExternalDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

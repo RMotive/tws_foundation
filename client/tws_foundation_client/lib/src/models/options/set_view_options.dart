@@ -7,7 +7,7 @@ final class SetViewOptions implements CSMEncodeInterface {
   final int range;
   final int page;
   final DateTime? creation;
-  final List<MigrationViewOrderOptions> orderings;
+  final List<SetViewOrderOptions> orderings;
 
   const SetViewOptions(this.creation, this.orderings, this.page, this.range, this.retroactive);
 
@@ -18,7 +18,7 @@ final class SetViewOptions implements CSMEncodeInterface {
       'range': range,
       'page': page,
       'creation': creation,
-      'orderings': orderings.map((MigrationViewOrderOptions i) => i.encode()).toList(),
+      'orderings': orderings.map((SetViewOrderOptions i) => i.encode()).toList(),
     };
   }
 }

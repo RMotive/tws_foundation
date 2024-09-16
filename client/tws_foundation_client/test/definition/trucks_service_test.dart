@@ -14,7 +14,7 @@ void main() {
     setUp(
       () {
         // models = <Truck>[];
-        List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
+        List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
         options = SetViewOptions(null, noOrderigns, 1, 10, false);
         viewMock = SetViewOut<Truck>(<Truck>[], 1, DateTime.now(), 3, 0, 20);
         // //SCT sct = SCT(0, 1,"type test", "number 2344235", "configuration 32131", null, <Truck>[]);
@@ -64,7 +64,7 @@ void main() {
 
         bool passed = false;
         fact.resolve(
-          decoder: MigrationViewDecode<Truck>(TruckDecoder()),
+          decoder: SetViewOutDecode<Truck>(TruckDecoder()),
           onConnectionFailure: () {},
           onFailure: (FailureFrame failure, int status) {
             assert(false, 'server returned a success $status');

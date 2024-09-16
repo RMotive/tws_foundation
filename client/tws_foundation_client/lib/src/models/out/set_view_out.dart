@@ -68,12 +68,12 @@ final class SetViewOut<TSet extends CSMEncodeInterface> implements CSMEncodeInte
 
 /// [CSMDecodeInterface] implementation from [SetViewOut] represents the deserealization
 /// convention and operation to convert a [JObject] into a [SetViewOut].
-final class MigrationViewDecode<TSet extends CSMEncodeInterface> implements CSMDecodeInterface<SetViewOut<TSet>> {
+final class SetViewOutDecode<TSet extends CSMEncodeInterface> implements CSMDecodeInterface<SetViewOut<TSet>> {
   /// Required [CSMDecodeInterface] implementation for the inner generic type [TSet] from [SetViewOut].
   final CSMDecodeInterface<TSet> setDecoder;
 
-  /// Creates a new [MigrationViewDecode] object.
-  const MigrationViewDecode(this.setDecoder);
+  /// Creates a new [SetViewOutDecode] object.
+  const SetViewOutDecode(this.setDecoder);
 
   @override
   SetViewOut<TSet> decode(JObject json) {

@@ -34,11 +34,11 @@ void main() {
     'View',
     () async {
       MainResolver<SetViewOut<DriverExternal>> fact = await service.view(
-        SetViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+        SetViewOptions(null, <SetViewOrderOptions>[], 1, 10, false),
         auth,
       );
       fact.resolve(
-        decoder: MigrationViewDecode<DriverExternal>(DriverExternalDecoder()),
+        decoder: SetViewOutDecode<DriverExternal>(DriverExternalDecoder()),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

@@ -97,11 +97,11 @@ void main() {
     'View',
     () async {
       MainResolver<SetViewOut<Truck>> fact = await service.view(
-        SetViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+        SetViewOptions(null, <SetViewOrderOptions>[], 1, 10, false),
         auth,
       );
       fact.resolve(
-        decoder: MigrationViewDecode<Truck>(TruckDecoder()),
+        decoder: SetViewOutDecode<Truck>(TruckDecoder()),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

@@ -11,7 +11,7 @@ void main() {
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
       options = SetViewOptions(null, noOrderigns, 1, 10, false);
       viewMock = SetViewOut<TruckExternal>(<TruckExternal>[], 1, DateTime.now(), 3, 0, 20);
 
@@ -40,7 +40,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<TruckExternal>(TruckExternalDecoder()),
+        decoder: SetViewOutDecode<TruckExternal>(TruckExternalDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

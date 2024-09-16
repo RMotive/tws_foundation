@@ -34,11 +34,11 @@ void main() {
     'View',
     () async {
       MainResolver<SetViewOut<Manufacturer>> fact = await service.view(
-        SetViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+        SetViewOptions(null, <SetViewOrderOptions>[], 1, 10, false),
         auth,
       );
       fact.resolve(
-        decoder: MigrationViewDecode<Manufacturer>(ManufacturerDecoder()),
+        decoder: SetViewOutDecode<Manufacturer>(ManufacturerDecoder()),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
