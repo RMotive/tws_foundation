@@ -6,21 +6,21 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late TrailersExternalsServiceBase service;
-  late MigrationView<TrailerExternal> viewMock;
+  late SetViewOut<TrailerExternal> viewMock;
   late TrailerExternal createMock;
-  late MigrationViewOptions options;
+  late SetViewOptions options;
 
   setUp(
     () {
       List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<TrailerExternal>(<TrailerExternal>[], 1, DateTime.now(), 3, 0, 20);
+      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      viewMock = SetViewOut<TrailerExternal>(<TrailerExternal>[], 1, DateTime.now(), 3, 0, 20);
       createMock = TrailerExternal(0, 1, 1,"Carrier test", "12345678", "87654321",null, null);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<TrailerExternal>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<TrailerExternal>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<TrailerExternal>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
@@ -39,7 +39,7 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<TrailerExternal>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<TrailerExternal>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
@@ -51,10 +51,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<TrailerExternal>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<TrailerExternal>> success) {
           passed = true;
 
-          MigrationView<TrailerExternal> fact = success.estela;
+          SetViewOut<TrailerExternal> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

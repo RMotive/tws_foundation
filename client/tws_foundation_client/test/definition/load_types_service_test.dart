@@ -6,19 +6,19 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late LoadTypeServiceBase service;
-  late MigrationView<LoadType> viewMock;
-  late MigrationViewOptions options;
+  late SetViewOut<LoadType> viewMock;
+  late SetViewOptions options;
 
   setUp(
     () {
       List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<LoadType>(<LoadType>[], 1, DateTime.now(), 3, 0, 20);
+      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      viewMock = SetViewOut<LoadType>(<LoadType>[], 1, DateTime.now(), 3, 0, 20);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<LoadType>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<LoadType>>('qTracer', viewMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -36,7 +36,7 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<LoadType>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<LoadType>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
@@ -48,10 +48,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<LoadType>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<LoadType>> success) {
           passed = true;
 
-          MigrationView<LoadType> fact = success.estela;
+          SetViewOut<LoadType> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

@@ -8,7 +8,8 @@ using TWS_Business.Sets;
 using TWS_Customer.Services.Interfaces;
 
 namespace TWS_Customer.Services;
-public class YardLogsService : IYardLogsService {
+public class YardLogsService 
+    : IYardLogsService {
     private readonly YardLogsDepot YardLogs;
 
     public YardLogsService(
@@ -499,5 +500,9 @@ public class YardLogsService : IYardLogsService {
 
     public async Task<YardLog> Delete(int Id) {
         return await YardLogs.Delete(Id);
+    }
+
+    public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {
+        return YardLogs.ViewInventory(Options);
     }
 }

@@ -6,8 +6,8 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late TrucksServiceBase service;
-  late MigrationView<Truck> viewMock;
-  late MigrationViewOptions options;
+  late SetViewOut<Truck> viewMock;
+  late SetViewOptions options;
   MigrationTransactionResult<Truck> createMock;
   List<Truck> models = <Truck>[];
   group("Truck Service - Definition Service", () {
@@ -15,8 +15,8 @@ void main() {
       () {
         // models = <Truck>[];
         List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-        options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-        viewMock = MigrationView<Truck>(<Truck>[], 1, DateTime.now(), 3, 0, 20);
+        options = SetViewOptions(null, noOrderigns, 1, 10, false);
+        viewMock = SetViewOut<Truck>(<Truck>[], 1, DateTime.now(), 3, 0, 20);
         // //SCT sct = SCT(0, 1,"type test", "number 2344235", "configuration 32131", null, <Truck>[]);
         // Maintenance maintenance = Maintenance(1, 1,DateTime.now(), DateTime.now(), null, <Truck>[]);
         // Insurance insurance = Insurance(1, 1, "policy number 232", DateTime.now(), "MEX", null, <Truck>[]);
@@ -39,7 +39,7 @@ void main() {
         Client mockClient = MockClient(
           (Request request) async {
             JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<Truck>>('qTracer', viewMock).encode(),
+              'view' => SuccessFrame<SetViewOut<Truck>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<MigrationTransactionResult<Truck>>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
@@ -59,7 +59,7 @@ void main() {
     test(
       'View',
       () async {
-        MainResolver<MigrationView<Truck>> fact =
+        MainResolver<SetViewOut<Truck>> fact =
             await service.view(options, '');
 
         bool passed = false;
@@ -72,10 +72,10 @@ void main() {
           onException: (Object exception, StackTrace trace) {
             assert(false, 'server returned a success');
           },
-          onSuccess: (SuccessFrame<MigrationView<Truck>> success) {
+          onSuccess: (SuccessFrame<SetViewOut<Truck>> success) {
             passed = true;
 
-            MigrationView<Truck> fact = success.estela;
+            SetViewOut<Truck> fact = success.estela;
             expect(viewMock.page, fact.page);
             expect(viewMock.pages, fact.pages);
             expect(viewMock.records, fact.records);

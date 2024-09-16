@@ -7,18 +7,18 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 void main() {
   late SolutionsServiceBase service;
 
-  late MigrationView<Solution> viewMock;
+  late SetViewOut<Solution> viewMock;
   late MigrationTransactionResult<Solution> createMock;
   late MigrationUpdateResult<Solution> updateMock;
   
-  late MigrationViewOptions options;
+  late SetViewOptions options;
   late List<Solution> solutions;
 
   setUp(
     () {
       List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<Solution>(<Solution>[], 1, DateTime.now(), 3, 0, 20);
+      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      viewMock = SetViewOut<Solution>(<Solution>[], 1, DateTime.now(), 3, 0, 20);
       createMock = MigrationTransactionResult<Solution>(<Solution>[], <MigrationTransactionFailure<Solution>>[], 0, 0, 0, false);
       updateMock = MigrationUpdateResult<Solution>(Solution.a(), Solution.a());
       solutions = <Solution>[
@@ -28,7 +28,7 @@ void main() {
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<Solution>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<Solution>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<MigrationTransactionResult<Solution>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<MigrationUpdateResult<Solution>>('qTracer', updateMock).encode(),
             _ => <String, dynamic>{},
@@ -49,7 +49,7 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Solution>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<Solution>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
@@ -61,10 +61,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<Solution>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<Solution>> success) {
           passed = true;
 
-          MigrationView<Solution> fact = success.estela;
+          SetViewOut<Solution> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

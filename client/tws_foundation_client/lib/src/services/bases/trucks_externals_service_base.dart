@@ -10,6 +10,6 @@ abstract class TrucksExternalsServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<MigrationView<TruckExternal>> view(MigrationViewOptions options, String auth);
+  Effect<SetViewOut<TruckExternal>> view(SetViewOptions options, String auth);
 
 }

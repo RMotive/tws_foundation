@@ -12,9 +12,9 @@ final class SectionsService extends SectionsServiceBase {
         );
         
   @override
-  Effect<MigrationView<Section>> view(MigrationViewOptions options, String auth) async {
+  Effect<SetViewOut<Section>> view(SetViewOptions options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
-    return MainResolver<MigrationView<Section>>(actEffect);
+    return MainResolver<SetViewOut<Section>>(actEffect);
   }
 }
       

@@ -10,6 +10,6 @@ abstract class SituationsServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<MigrationView<Situation>> view(MigrationViewOptions options, String auth);
+  Effect<SetViewOut<Situation>> view(SetViewOptions options, String auth);
 
 }

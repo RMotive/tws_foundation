@@ -33,8 +33,8 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Trailer>> fact = await service.view(
-        MigrationViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+      MainResolver<SetViewOut<Trailer>> fact = await service.view(
+        SetViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
         auth,
       );
       fact.resolve(
@@ -48,8 +48,8 @@ void main() {
         onFailure: (FailureFrame failure, int status) {
           throw failure.estela.system;
         },
-        onSuccess: (SuccessFrame<MigrationView<Trailer>> success) {
-          MigrationView<Trailer> fact = success.estela;
+        onSuccess: (SuccessFrame<SetViewOut<Trailer>> success) {
+          SetViewOut<Trailer> fact = success.estela;
 
           expect(fact.amount >= fact.records, true);
           expect(fact.records >= 0, true);

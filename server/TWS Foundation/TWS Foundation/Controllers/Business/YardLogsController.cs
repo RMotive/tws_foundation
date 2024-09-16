@@ -18,6 +18,11 @@ public class YardLogsController : ControllerBase {
     }
 
     [HttpPost(), Auth([])]
+    public async Task<IActionResult> ViewInventory(SetViewOptions<YardLog> Options) {
+        return Ok(await Service.ViewInventory(Options));
+    }
+
+    [HttpPost(), Auth([])]
     public async Task<IActionResult> View(SetViewOptions<YardLog> Options) {
         return Ok(await Service.View(Options));
     }
@@ -36,5 +41,4 @@ public class YardLogsController : ControllerBase {
     public async Task<IActionResult> Delete(int Id) {
         return Ok(await Service.Delete(Id));
     }
-
 }

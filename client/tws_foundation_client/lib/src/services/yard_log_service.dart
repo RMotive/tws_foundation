@@ -1,6 +1,7 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
+///
 final class YardLogsService extends YardLogServiceBase {
   YardLogsService(
     CSMUri host, {
@@ -14,9 +15,15 @@ final class YardLogsService extends YardLogServiceBase {
         );
         
   @override
-  Effect<MigrationView<YardLog>> view(MigrationViewOptions options, String auth) async {
+  Effect<SetViewOut<YardLog>> view(SetViewOptions options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
-    return MainResolver<MigrationView<YardLog>>(actEffect);
+    return MainResolver<SetViewOut<YardLog>>(actEffect);
+  }
+
+  @override
+  Effect<SetViewOut<YardLog>> viewInventory(SetViewOptions options, String auth) async {
+    CSMActEffect actEffect = await post('viewInventory', options, auth: auth);
+    return MainResolver<SetViewOut<YardLog>>(actEffect);
   }
   
   @override

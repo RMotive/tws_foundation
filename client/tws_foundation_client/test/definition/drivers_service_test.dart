@@ -6,22 +6,22 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late DriversServiceBase service;
-  late MigrationView<Driver> viewMock;
+  late SetViewOut<Driver> viewMock;
   late Driver createMock;
-  late MigrationViewOptions options;
+  late SetViewOptions options;
 
   setUp(
     () {
       List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<Driver>(<Driver>[], 1, DateTime.now(), 3, 0, 20);
+      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      viewMock = SetViewOut<Driver>(<Driver>[], 1, DateTime.now(), 3, 0, 20);
       DateTime time = DateTime.now();
       createMock = Driver(0, 1, 1, 1, "Mexican", time, time, time, null, null, null, null, null, null, null, null, null, null, null);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<Driver>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<Driver>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<Driver>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
@@ -40,7 +40,7 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Driver>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<Driver>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
@@ -52,10 +52,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<Driver>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<Driver>> success) {
           passed = true;
 
-          MigrationView<Driver> fact = success.estela;
+          SetViewOut<Driver> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

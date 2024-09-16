@@ -6,7 +6,6 @@ using CSM_Foundation.Database.Enumerators;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Models.Options;
-using CSM_Foundation.Database.Models.Options.Filters;
 using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
@@ -59,9 +58,24 @@ public abstract class BDepot<TDatabase, TSet>
         Set = Database.Set<TSet>();
     }
 
-    #region View 
+    protected IQueryable<TSet> Filtering(SetViewOptions<TSet> Options, IQueryable<TSet> Source) {
+        ISetViewFilterNode<TSet>[] filters = Options.Filters;
+        if (filters.Length > 0) {
+            filters = [.. filters.OrderBy(x => x.Order)];
 
-    public Task<SetViewOut<TSet>> View(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? include = null) {
+            foreach (ISetViewFilterNode<TSet> filter in filters) {
+                Expression<Func<TSet, bool>> queryExpression = filter.Compose();
+                string lambdaValue = queryExpression.ToString();
+
+                Source = Source.Where(queryExpression);
+            }
+        }
+
+        return Source;
+    }
+
+    public (IQueryable<TSet>, int Amount, int Pages, int Page) Paging(SetViewOptions<TSet> Options, IQueryable<TSet> Source) {
+
         int range = Options.Range;
         int page = Options.Page;
         int amount = Set.Count();
@@ -73,66 +87,78 @@ public abstract class BDepot<TDatabase, TSet>
         int start = (page - 1) * range;
         int records = page == pages ? left : range;
 
-        IQueryable<TSet> query = Set;
-        ISetViewFilterNode<TSet>[] filters = Options.Filters;
-        if (filters.Length > 0) {
-            filters = [.. filters.OrderBy(x => x.Order)];
-
-            foreach (ISetViewFilterNode<TSet> filter in filters) {
-                Expression<Func<TSet, bool>> queryExpression = filter.Compose();
-                string lambdaValue = queryExpression.ToString();
-
-                query = query.Where(queryExpression);
-            }
-        }
-
-
-        query = query
+        Source = Source
             .Skip(start)
             .Take(records);
 
+        return (Source, amount, pages, page);
+    }
+
+    public IQueryable<TSet> Ordering(SetViewOptions<TSet> Options, IQueryable<TSet> Source) {
         int orderActions = Options.Orderings.Length;
-        if (orderActions > 0) {
-            Type setType = typeof(TSet);
-            IOrderedQueryable<TSet> orderingQuery = default!;
-
-            for (int i = 0; i < orderActions; i++) {
-                ParameterExpression parameterExpression = Expression.Parameter(setType, $"X{i}");
-                SetViewOrderOptions ordering = Options.Orderings[i];
-
-                PropertyInfo property = setType.GetProperty(ordering.Property)
-                    ?? throw new Exception($"Unexisted property ({ordering.Property}) on ({setType})");
-                MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
-                UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
-                Expression<Func<TSet, object>> orderingExpression = Expression.Lambda<Func<TSet, object>>(translationExpression, parameterExpression);
-                if (i == 0) {
-                    orderingQuery = ordering.Behavior switch {
-                        SetViewOrders.Ascending => query.OrderBy(orderingExpression),
-                        SetViewOrders.Descending => query.OrderByDescending(orderingExpression),
-                        _ => query.OrderBy(orderingExpression),
-                    };
-                    continue;
-                }
-
-                orderingQuery = ordering.Behavior switch {
-                    SetViewOrders.Ascending => orderingQuery.ThenBy(orderingExpression),
-                    SetViewOrders.Descending => orderingQuery.ThenByDescending(orderingExpression),
-                    _ => orderingQuery.ThenBy(orderingExpression),
-                };
-            }
-            query = orderingQuery;
+        if (orderActions <= 0) {
+            return Source;
         }
 
+        Type setType = typeof(TSet);
+        IOrderedQueryable<TSet> orderingQuery = default!;
 
-        query = include?.Invoke(query) ?? query;
+        for (int i = 0; i < orderActions; i++) {
+            ParameterExpression parameterExpression = Expression.Parameter(setType, $"X{i}");
+            SetViewOrderOptions ordering = Options.Orderings[i];
+
+            PropertyInfo property = setType.GetProperty(ordering.Property)
+                ?? throw new Exception($"Unexisted property ({ordering.Property}) on ({setType})");
+            MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
+            UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
+            Expression<Func<TSet, object>> orderingExpression = Expression.Lambda<Func<TSet, object>>(translationExpression, parameterExpression);
+            if (i == 0) {
+                orderingQuery = ordering.Behavior switch {
+                    SetViewOrders.Ascending => Source.OrderBy(orderingExpression),
+                    SetViewOrders.Descending => Source.OrderByDescending(orderingExpression),
+                    _ => Source.OrderBy(orderingExpression),
+                };
+                continue;
+            }
+
+            orderingQuery = ordering.Behavior switch {
+                SetViewOrders.Ascending => orderingQuery.ThenBy(orderingExpression),
+                SetViewOrders.Descending => orderingQuery.ThenByDescending(orderingExpression),
+                _ => orderingQuery.ThenBy(orderingExpression),
+            };
+        }
+        return orderingQuery;
+    }
+
+    public Task<SetViewOut<TSet>> Processing(SetViewOptions<TSet> Options, IQueryable<TSet> Source, Func<IQueryable<TSet>, IQueryable<TSet>>? inclusions = null) {
+        IQueryable<TSet> query = Source;
+
+        query = Filtering(Options, query);
+
+        (IQueryable<TSet> source, int amount, int pages, int page) = Paging(Options, query);
+
+        query = source;
+
+        query = Ordering(Options, query);
+
+        query = inclusions?.Invoke(query) ?? query;
+
         TSet[] sets = [.. query];
 
-        return Task.FromResult(new SetViewOut<TSet>() {
-            Amount = amount,
-            Pages = pages,
-            Page = page,
-            Sets = sets,
-        });
+        return Task.FromResult(
+            new SetViewOut<TSet>() {
+                Amount = amount,
+                Pages = pages,
+                Page = page,
+                Sets = sets,
+            }
+        );
+    }
+
+    #region View 
+
+    public Task<SetViewOut<TSet>> View(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? include = null) {
+        return Processing(Options, Set, include);
     }
 
     #endregion

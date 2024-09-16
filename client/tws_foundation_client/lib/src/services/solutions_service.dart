@@ -15,9 +15,9 @@ final class SolutionsService extends SolutionsServiceBase {
         );
 
   @override
-  Effect<MigrationView<Solution>> view(MigrationViewOptions options, String auth) async {
+  Effect<SetViewOut<Solution>> view(SetViewOptions options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
-    return MainResolver<MigrationView<Solution>>(actEffect);
+    return MainResolver<SetViewOut<Solution>>(actEffect);
   }
 
   @override

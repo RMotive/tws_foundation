@@ -4,7 +4,14 @@
 
 - Notes:
 
-    1. Template
+  - Services:
+
+    1. [YardLogs] added new action naed [ViewInventory] that provides from the current Yard trucks inventory.
+
+  - Models:
+
+    1. [MigrationView] -> [SetViewOut]
+    2. [MigrationViewOptions] -> [SetViewOptions]
 
 - Dependencies Upgrade:
 

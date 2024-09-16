@@ -6,19 +6,19 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late TrucksExternalsServiceBase service;
-  late MigrationView<TruckExternal> viewMock;
-  late MigrationViewOptions options;
+  late SetViewOut<TruckExternal> viewMock;
+  late SetViewOptions options;
 
   setUp(
     () {
       List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<TruckExternal>(<TruckExternal>[], 1, DateTime.now(), 3, 0, 20);
+      options = SetViewOptions(null, noOrderigns, 1, 10, false);
+      viewMock = SetViewOut<TruckExternal>(<TruckExternal>[], 1, DateTime.now(), 3, 0, 20);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<TruckExternal>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<TruckExternal>>('qTracer', viewMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -36,7 +36,7 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<TruckExternal>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<TruckExternal>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
@@ -48,10 +48,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<TruckExternal>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<TruckExternal>> success) {
           passed = true;
 
-          MigrationView<TruckExternal> fact = success.estela;
+          SetViewOut<TruckExternal> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

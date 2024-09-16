@@ -12,9 +12,9 @@ final class LoadTypeService extends LoadTypeServiceBase {
         );
         
   @override
-  Effect<MigrationView<LoadType>> view(MigrationViewOptions options, String auth) async {
+  Effect<SetViewOut<LoadType>> view(SetViewOptions options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
-    return MainResolver<MigrationView<LoadType>>(actEffect);
+    return MainResolver<SetViewOut<LoadType>>(actEffect);
   }
 }
       
