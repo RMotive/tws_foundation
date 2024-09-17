@@ -17,6 +17,8 @@ public partial class Truck
 
     public string Motor { get; set; } = null!;
 
+    public string Vin { get; set; } = null!;
+
     public int Carrier { get; set; }
 
     public int Manufacturer { get; set; }
@@ -58,6 +60,11 @@ public partial class Truck
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
+            _ = entity.Property(e => e.Vin)
+               .HasMaxLength(17)
+               .IsUnicode(false)
+               .HasColumnName("VIN");
+
             _ = entity.HasOne(d => d.CarrierNavigation)
              .WithMany(p => p.Trucks)
              .HasForeignKey(d => d.Carrier)
@@ -93,6 +100,7 @@ public partial class Truck
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
+            (nameof(Vin), [new UniqueValidator(), new LengthValidator(17, 17)]),
             (nameof(Motor), [new LengthValidator(1, 16)]),
         ];
         return Container;

@@ -26,11 +26,14 @@ public class Q_Truck : BQ_MigrationSet<Truck> {
                 Manufacturer = 0,
                 Carrier = 0,
                 Motor = "",
+                Vin = "",
                 Status = 0
             },
             Expectations = [
                 (nameof(Truck.Id), [(new PointerValidator(), 3) ]),
                 (nameof(Truck.Motor), [(new LengthValidator(),2)]),
+                (nameof(Truck.Vin), [(new LengthValidator(),2)]),
+                (nameof(Truck.Manufacturer), [(new PointerValidator(), 3) ]),
                 (nameof(Truck.Status), [(new PointerValidator(), 3) ]),
 
             ],

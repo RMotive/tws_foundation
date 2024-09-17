@@ -78,7 +78,8 @@
   int manufacturer = json.get(&#39;manufacturer&#39;);
   int common = json.get(&#39;common&#39;);
   int carrier = json.get(&#39;carrier&#39;);
-  String? motor = json.getDefault(&#39;motor&#39;, null);
+  String vin = json.get(&#39;vin&#39;);
+  String motor = json.get(&#39;motor&#39;);
   int? maintenance = json.getDefault(&#39;maintenance&#39;, null);
   int? insurance = json.getDefault(&#39;insurance&#39;, null);
   Status? statusNavigation;
@@ -121,7 +122,7 @@
     JObject rawNavigation = json.getDefault(&#39;CarrierNavigation&#39;, &lt;String, dynamic&gt;{});
     carrierNavigation = deserealize&lt;Carrier&gt;(rawNavigation, decode: CarrierDecoder());
   }
-  return Truck(id, status, manufacturer, common, carrier, motor, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates);
+  return Truck(id, status, manufacturer, common, carrier, motor, vin, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates);
 }</code></pre>
 </section>
 
@@ -156,7 +157,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

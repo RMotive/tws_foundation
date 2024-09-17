@@ -87,18 +87,9 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(vin.length != 17) results.add(CSMSetValidationResult(kVin, &quot;VIN number must be 17 length&quot;, &quot;strictLength(17)&quot;));
   if(economic.isEmpty || economic.length &gt; 16) results.add(CSMSetValidationResult(kEconomic, &quot;Economic number length must be between 1 and 16&quot;, &quot;strictLength(1,16)&quot;));
   if(status &lt; 0) results.add(CSMSetValidationResult(kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
-  &#47;&#47; if(carrier  == 0 &amp;&amp; carrierNavigation == null) results.add(CSMSetValidationResult(&quot;[$kCarrier, $kCarrierNavigation]&quot;, &#39;Required Carrier. Must be one Manufacturer insertion property&#39;, &#39;requiredInsertion()&#39;));
-  &#47;&#47; if((carrier != 0 &amp;&amp; carrierNavigation != null) &amp;&amp; (carrierNavigation!.id != carrier)) results.add(CSMSetValidationResult(&quot;[$kCarrier, $kCarrierNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
-  &#47;&#47; if(situation != null &amp;&amp; situationNavigation != null){
-  &#47;&#47;   if(situation != 0 &amp;&amp; (situationNavigation!.id != situation)) results.add(CSMSetValidationResult(&quot;[$kSituation, $kSituationNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
-  &#47;&#47; }
-  &#47;&#47; if(situation != null &amp;&amp; situation! &lt; 0) results.add(CSMSetValidationResult(kSituation, &#39;Situation pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  &#47;&#47; if(carrierNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...carrierNavigation!.evaluate()];
-  &#47;&#47; if(situationNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...situationNavigation!.evaluate()];
   return results;
 }</code></pre>
 </section>
@@ -134,7 +125,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

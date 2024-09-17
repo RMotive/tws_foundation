@@ -75,7 +75,6 @@
   <pre class="language-dart"><code class="language-dart">factory TruckCommon.des(JObject json) {
   int id = json.get(&#39;id&#39;);
   int status = json.get(&#39;status&#39;);
-  String vin = json.get(&#39;vin&#39;);
   String economic = json.get(&#39;economic&#39;);
   int? location = json.getDefault(&#39;location&#39;, null);
   int? situation = json.getDefault(&#39;situation&#39;, null);
@@ -92,7 +91,7 @@
     situationNavigation = deserealize&lt;Situation&gt;(rawNavigation, decode: SituationDecoder());
   }
 
-  return TruckCommon(id, status, vin, economic, location, situation, situationNavigation, statusNavigation);
+  return TruckCommon(id, status, economic, location, situation, situationNavigation, statusNavigation);
 }</code></pre>
 </section>
 
@@ -127,7 +126,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

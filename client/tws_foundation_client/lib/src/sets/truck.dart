@@ -7,6 +7,7 @@ final class Truck implements CSMSetInterface {
   static const String kCommon = 'common';
   static const String kCarrier = 'carrier';
   static const String kMotor = 'motor';
+  static const String kVin = "vin";
   static const String kMaintenance = 'maintenace';
   static const String kInsurance = 'insurance';
   static const String kstatusNavigation = 'StatusNavigation';
@@ -23,7 +24,8 @@ final class Truck implements CSMSetInterface {
   int manufacturer = 0;
   int common = 0;
   int carrier = 0;
-  String? motor = '';
+  String vin = "";
+  String motor = '';
   int? maintenance;
   int? insurance;
   Status? statusNavigation;
@@ -41,7 +43,7 @@ final class Truck implements CSMSetInterface {
 
   Truck.def();
 
-  Truck(this.id, this.status, this.manufacturer, this.common, this.carrier, this.motor, this.maintenance, this.insurance, this.statusNavigation, this.manufacturerNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
+  Truck(this.id, this.status, this.manufacturer, this.common, this.carrier, this.motor, this.vin, this.maintenance, this.insurance, this.statusNavigation, this.manufacturerNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
     this.insuranceNavigation, this.carrierNavigation, this.plates);
   factory Truck.des(JObject json) {
     int id = json.get('id');
@@ -49,7 +51,8 @@ final class Truck implements CSMSetInterface {
     int manufacturer = json.get('manufacturer');
     int common = json.get('common');
     int carrier = json.get('carrier');
-    String? motor = json.getDefault('motor', null);
+    String vin = json.get('vin');
+    String motor = json.get('motor');
     int? maintenance = json.getDefault('maintenance', null);
     int? insurance = json.getDefault('insurance', null);
     Status? statusNavigation;
@@ -92,13 +95,14 @@ final class Truck implements CSMSetInterface {
       JObject rawNavigation = json.getDefault('CarrierNavigation', <String, dynamic>{});
       carrierNavigation = deserealize<Carrier>(rawNavigation, decode: CarrierDecoder());
     }
-    return Truck(id, status, manufacturer, common, carrier, motor, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates);
+    return Truck(id, status, manufacturer, common, carrier, motor, vin, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates);
   }
   Truck clone({
     int? id,
     int? status,
     int? manufacturer,
     String? motor,
+    String? vin,
     int? maintenance,
     int? common,
     int? carrier,
@@ -116,7 +120,7 @@ final class Truck implements CSMSetInterface {
     Manufacturer? manufacturerNav = manufacturerNavigation ?? this.manufacturerNavigation;
     if(manufacturer == 0) manufacturerNav = null;
     
-    return Truck(id ?? this.id, status ?? this.status, manufacturer ?? this.manufacturer, common ?? this.common, carrier ?? this.carrier, motor ?? this.motor, maintenance ?? this.maintenance, 
+    return Truck(id ?? this.id, status ?? this.status, manufacturer ?? this.manufacturer, common ?? this.common, carrier ?? this.carrier, motor ?? this.motor, vin ?? this.vin, maintenance ?? this.maintenance, 
     insurance ?? this.insurance, statusNavigation ?? this.statusNavigation, manufacturerNav, truckCommonNavigation ?? this.truckCommonNavigation, 
     maintenanceNavigation ?? this.maintenanceNavigation, insuranceNavigation ?? this.insuranceNavigation, carrierNavigation ?? this.carrierNavigation, plates ?? this.plates);
   }
@@ -129,6 +133,7 @@ final class Truck implements CSMSetInterface {
       kCommon: common,
       kCarrier: carrier,
       kMotor: motor,
+      kVin: vin,
       kMaintenance: maintenance,
       kInsurance: insurance,
       kstatusNavigation: statusNavigation?.encode(),
@@ -144,8 +149,8 @@ final class Truck implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-
-    if(motor!= null && (motor!.length < 15 && motor!.length > 16)) results.add(CSMSetValidationResult(kMotor, 'Motor number must be between 15 and 16 length', 'strictLength(15,16)'));
+    if(vin.length != 17) results.add(CSMSetValidationResult(kVin, 'VIN number must be 17 length', 'strictLength(17)'));
+    if(motor.length < 15 && motor.length > 16) results.add(CSMSetValidationResult(kMotor, 'Motor number must be between 15 and 16 length', 'strictLength(15,16)'));
     if(manufacturer < 0) results.add(CSMSetValidationResult(kManufacturer, 'Manufactuer pointer must be equal or greater than 0', 'pointerHandler()'));
     if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
     if(manufacturer > 0 && manufacturerNavigation != null){

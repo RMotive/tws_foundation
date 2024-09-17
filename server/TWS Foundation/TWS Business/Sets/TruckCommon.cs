@@ -12,8 +12,6 @@ public partial class TruckCommon
 
     public int Status { get; set; }
 
-    public string Vin { get; set; } = null!;
-
     public string Economic { get; set; } = null!;
 
     public int? Location { get; set; }
@@ -36,7 +34,6 @@ public partial class TruckCommon
 
         Container = [
                 .. Container,
-            (nameof(Vin), [Unique, new LengthValidator(17, 17)]),
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
             (nameof(Status), [new PointerValidator(true)])
         ];
@@ -51,11 +48,6 @@ public partial class TruckCommon
 
             _ = entity.Property(e => e.Id)
                  .HasColumnName("id");
-
-            _ = entity.Property(e => e.Vin)
-               .HasMaxLength(17)
-               .IsUnicode(false)
-               .HasColumnName("VIN");
 
             _ = entity.Property(e => e.Economic)
                 .HasMaxLength(16)

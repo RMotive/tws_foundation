@@ -67,14 +67,14 @@ VALUES(1, 1, 1),(1, 2, 2),(1, 3, 3);
 INSERT INTO Drivers([Status], Employee, DriverType, Common, LicenseExpiration, TWIC,TWICExpiration, VISA, VISAExpiration, [FAST], FASTExpiration, ANAM, ANAMExpiration, DrugalcRegistrationDate, PullnoticeRegistrationDate)
 VALUES(1, 1, 'Binational', 1, SYSDATETIME(), '28250230', SYSDATETIME(), 'TJT005336269', SYSDATETIME(), '411000013467', SYSDATETIME(), 'SATGN2017091940000001885', SYSDATETIME(), SYSDATETIME(), SYSDATETIME()), (1, 2, 'Mexican', 2, SYSDATETIME(), '28237819', SYSDATETIME(), 'TJT005044433', SYSDATETIME(), '41100103485400', SYSDATETIME(), 'SATGN2018060440000020884', SYSDATETIME(), SYSDATETIME(), SYSDATETIME()), (1, 3, 'Mexican', 3, SYSDATETIME(), '28247760', SYSDATETIME(), 'MEX041410210', SYSDATETIME(), '41100220935700', SYSDATETIME(), 'SATGN2022032740000116226', SYSDATETIME(), SYSDATETIME(), SYSDATETIME());
 
-INSERT INTO Trucks_Commons([Status], VIN, Economic, Situation)
-VALUES (1, 'VINtest1-13324231',  'Economic 1', 1), (1, 'VINtest2-63324231', 'Economic 2', 2), (1, 'VINtest3-93324231', 'Economic 3', 2);
+INSERT INTO Trucks_Commons([Status], Economic, Situation)
+VALUES (1,  'Economic 1', 1), (1, 'Economic 2', 2), (1, 'Economic 3', 2);
 
 INSERT INTO Trucks_Externals([Status], Common, MxPlate, UsaPlate, Carrier)
 VALUES (1, 1, 'MXexternal1', 'USAexternal1', 'Carrier 1'), (1, 2, 'MXexternal2', 'USAexternal3', 'Carrier 1'), (1, 3,'MXexternal3', null, 'Carrier 1');
 
-INSERT INTO Trucks(Common, Manufacturer, Motor, Maintenance, Insurance, [Status], Carrier)
-VALUES(1,1,'Motortestnumber1',1,1,1,1),(2,2,'Motortestnumber2',2,2,1,2),(3,3,'Motortestnumber3',3,3,1,3);
+INSERT INTO Trucks(Common, Manufacturer, Motor, VIN, Maintenance, Insurance, [Status], Carrier)
+VALUES(1,1,'Motortestnumber1', 'VINtest1-13324231',1,1,1,1),(2,2,'Motortestnumber2','VINtest2-63324231',2,2,1,2),(3,3,'Motortestnumber3', 'VINtest3-93324231',3,3,1,3);
 
 INSERT INTO Plates(Identifier,[State],Country,Expiration, Truck, Trailer, [Status])
 VALUES
