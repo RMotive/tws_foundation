@@ -32,7 +32,7 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
     public virtual DbSet<Profile> Profiles { get; set; }
 
-    public virtual DbSet<ProfilesPermit> ProfilesPermits { get; set; }
+    public virtual DbSet<ProfilePermit> ProfilesPermits { get; set; }
 
     public virtual DbSet<Solution> Solutions { get; set; }
 
@@ -64,7 +64,7 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
         AccountPermit.CreateModel(modelBuilder);
         AccountProfile.CreateModel(modelBuilder);   
-
+        ProfilePermit.CreateModel(modelBuilder);
 
         modelBuilder.Entity<Contact>(entity => {
             entity.HasKey(e => e.Id);
@@ -133,21 +133,6 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
             _ = entity.Property(e => e.Name)
                 .HasMaxLength(25)
                 .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<ProfilesPermit>(entity => {
-            _ = entity.HasNoKey();
-
-            _ = entity.Property(e => e.Permit);
-            _ = entity.Property(e => e.Profile);
-
-            _ = entity.HasOne(d => d.PermitNavigation).WithMany()
-                .HasForeignKey(d => d.Permit)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            _ = entity.HasOne(d => d.ProfileNavigation).WithMany()
-                .HasForeignKey(d => d.Profile)
-                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<Solution>(entity => {
