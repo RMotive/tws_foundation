@@ -29,7 +29,7 @@ final class SetViewPropertyFilter<TSet extends CSMSetInterface> implements SetVi
       'discrimination': discrimination,
       'order': order,
       'property': property,
-      'evaluation': evaluation,
+      'evaluation': evaluation.index,
       'value': value?.toString(),
     };
   }
