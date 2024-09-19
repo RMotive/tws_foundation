@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 
 using CSM_Foundation.Database.Models.Options.Filters;
 
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
 namespace CSM_Foundation.Database.Interfaces;
 
 /// <summary>
@@ -63,18 +65,16 @@ public class ISetViewFilterNodeConverter<TSet> : JsonConverter<ISetViewFilterNod
             discriminator = jsonObject.RootElement.GetProperty("discrimination").GetString();
         }
 
-        string val = typeof(SetViewFilterLinearEvaluation<TSet>).ToString();
-
-        if (discriminator == typeof(SetViewFilterLinearEvaluation<TSet>).ToString()) {
-            return JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options);
-        } else if (discriminator == typeof(SetViewPropertyFilter<TSet>).ToString()) {
-            return JsonSerializer.Deserialize<SetViewPropertyFilter<TSet>>(json, options);
-        } else if (discriminator == typeof(SetViewDateFilter<TSet>).ToString()) {
-            return JsonSerializer.Deserialize<SetViewDateFilter<TSet>>(json, options);
+        switch (discriminator) {
+            case var _ when discriminator == SetViewFilterLinearEvaluation<TSet>.Discriminator:
+                return JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options);
+            case var _ when discriminator == SetViewPropertyFilter<TSet>.Discriminator:
+                return JsonSerializer.Deserialize<SetViewPropertyFilter<TSet>>(json, options);
+            case var _ when discriminator == SetViewDateFilter<TSet>.Discriminator:
+                return JsonSerializer.Deserialize<SetViewDateFilter<TSet>>(json, options);
+            default:
+                throw new UnsupportedContentTypeException($"No discriminator recognized for ({discriminator})");
         }
-
-
-        throw new Exception("Unsupported derived type");
     }
 
     public override void Write(Utf8JsonWriter writer, ISetViewFilterNode<TSet> value, JsonSerializerOptions options) {

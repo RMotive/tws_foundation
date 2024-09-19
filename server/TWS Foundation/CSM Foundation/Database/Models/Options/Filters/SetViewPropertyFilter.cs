@@ -12,7 +12,10 @@ public class SetViewPropertyFilter<TSet>
 
     public required string Property { get; set; }
     public int Order { get; set; }
-    public string Discrimination { get; } = typeof(SetViewPropertyFilter<TSet>).ToString();
+
+
+    public static readonly string Discriminator = typeof(SetViewPropertyFilter<TSet>).Name;
+    public string Discrimination { get; } = Discriminator;
 
 
     public required SetViewFilterEvaluations Evaluation { get; set; }

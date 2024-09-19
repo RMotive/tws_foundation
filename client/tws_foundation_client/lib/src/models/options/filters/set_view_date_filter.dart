@@ -3,7 +3,7 @@ import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_inte
 
 final class SetViewDateFilter<TSet extends CSMSetInterface> implements SetViewFilterInterface<TSet> {
   @override
-  final String discrimination = 'CSM_Foundation.Database.Models.Options.Filters.SetViewDateFilter`1[TSet]';
+  final String discrimination = 'SetViewDateFilter`1';
 
   ///
   @override

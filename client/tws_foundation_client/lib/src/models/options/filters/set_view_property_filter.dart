@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_inte
 ///
 final class SetViewPropertyFilter<TSet extends CSMSetInterface> implements SetViewFilterInterface<TSet> {
   @override
-  final String discrimination = 'CSM_Foundation.Database.Models.Options.Filters.SetViewPropertyFilter`1[TSet]';
+  final String discrimination = 'SetViewPropertyFilter`1';
 
   ///
   @override

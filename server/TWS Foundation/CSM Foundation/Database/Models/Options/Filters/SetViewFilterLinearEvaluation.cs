@@ -7,9 +7,11 @@ public class SetViewFilterLinearEvaluation<TSet>
     : ISetViewFilterNode<TSet>
     where TSet : ISet {
 
-    public int Order { get; set; } = 0;
-    public string Discrimination { get; } = typeof(SetViewFilterLinearEvaluation<TSet>).ToString();
+    public readonly static string Discriminator = typeof(SetViewFilterLinearEvaluation<TSet>).Name;
 
+    public int Order { get; set; } = 0;
+    public string Discrimination { get; } = Discriminator;
+    
 
     public required SetViewFilterEvaluationOperators Operator { get; set; }
     public required ISetViewFilter<TSet>[] Filters { get; set; }

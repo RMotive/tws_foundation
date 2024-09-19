@@ -11,7 +11,10 @@ namespace CSM_Foundation.Database.Models.Options.Filters;
 public class SetViewDateFilter<TSet>
    : ISetViewFilter<TSet>
     where TSet : ISet {
-    public string Discrimination { get; init; } = typeof(SetViewDateFilter<TSet>).ToString();
+    public static readonly string Discriminator = typeof(SetViewDateFilter<TSet>).Name;
+    public string Discrimination { get; init; } = Discriminator;
+    
+    
     public string Property { get; set; } = "Timestamp";
     public int Order { get; set; }
 
