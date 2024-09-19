@@ -178,6 +178,10 @@ final class YardLog implements CSMSetInterface {
       results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
     }
 
+    if(loadTypeNavigation?.name != "Botado" && (trailerExternalNavigation == null || trailerNavigation == null)){
+      results.add(CSMSetValidationResult(kLoadType, 'Debe agregar los datos del remolque, de lo contrario seleccione el tipo de carga como Botado', 'FieldConflic()'));
+    }
+    
     if(loadTypeNavigation?.name == "Botado" && (trailerExternalNavigation != null || trailerNavigation != null)){
       results.add(CSMSetValidationResult(kLoadType, 'Si el tipo de carga es Botado, no puede seleccionar datos del remolque', 'FieldConflic()'));
     }

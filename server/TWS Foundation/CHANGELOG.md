@@ -2,8 +2,9 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: N/A
-
+- Notes: 
+    1. Added Inventories and Yardlog Triggers validations. 
+    2. Fixed: Now the trailers not sum +1 (Only Trucks) to the ocupancy section counter, in inventories management.
 - Dependencies Upgrade: N/A
 
 ## 2.0.2 - [16.09-2024]
