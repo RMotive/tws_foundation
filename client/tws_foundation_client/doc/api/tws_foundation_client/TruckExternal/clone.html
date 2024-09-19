@@ -67,6 +67,7 @@
 <span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
 <li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
 <li><span class="parameter" id="clone-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">common</span>, </span></li>
+<li><span class="parameter" id="clone-param-vin"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">vin</span>, </span></li>
 <li><span class="parameter" id="clone-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">carrier</span>, </span></li>
 <li><span class="parameter" id="clone-param-mxPlate"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">mxPlate</span>, </span></li>
 <li><span class="parameter" id="clone-param-usaPlate"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">usaPlate</span>, </span></li>
@@ -87,6 +88,7 @@
   int? id,
   int? status,
   int? common,
+  String? vin,
   String? carrier,
   String? mxPlate,
   String? usaPlate,
@@ -97,7 +99,10 @@
   if(usaPlate == &quot;&quot;){
     uPlate = null;
   }
-  return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, mxPlate ?? this.mxPlate, uPlate, truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
+  String? v = vin ?? this.vin;
+  if(v == &quot;&quot;) v = null;
+
+  return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, vin, carrier ?? this.carrier, mxPlate ?? this.mxPlate, uPlate, truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
 }</code></pre>
 </section>
 
@@ -132,7 +137,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      3.0.0
+      4.0.0
   </span>
 
   

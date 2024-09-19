@@ -1,6 +1,12 @@
 # CHANGELOG
 
-## CURRENT
+## CURRENT - [xx.xx-xxxx]
+
+- Notes: N/A
+
+- Dependencies Upgrade: N/A
+
+## 4.0.0 - [16.09-2024]
 
 - Notes:
 
@@ -33,7 +39,7 @@
 
     1. Template
 
-## 3.0.0
+## 3.0.0 - [03.09-2024]
 
 - Notes:
 
@@ -47,7 +53,7 @@
 
     1. dotenv ([4.2.0])
 
-## 2.0.0 [09/07/2024]
+## 2.0.0 - [09.07-2024]
 
 - Notes:
 

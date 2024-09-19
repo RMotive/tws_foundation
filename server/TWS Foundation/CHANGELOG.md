@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## CURRENT
+## CURRENT - [xx.xx-xxxx]
 
-- Notes:
+- Notes: N/A
 
     1. All sets got updated adding [Timestamp] new property to the [ISet] interface, representing the timestamp when the record got created.
 
@@ -24,25 +24,19 @@
         - [SetViewPropertyFilter]
         - [SetViewFilterLinearEvaluation]
 
-- Dependencies Upgrade:
+## 2.0.2 - [16.09-2024]
 
-    1. TWS Security
+- Notes:
 
-        - TWS Security.Quality
+    1. Moved the [vin] property, from [TruckCommon] set, to [Truck] and [TruckExternal] sets.
+    2. Changed and added evaluations to the following sets:
+        1. [Truck]
+        2. [TruckCommon]
+        3. [TruckExternal]  
 
-    2. TWS Business
+- Dependencies Upgrade: N/A
 
-        - TWS Business.Quality
-
-    3. TWS Customer
-
-        - TWS Customer.Quality
-
-    4. TWS Foundation
-
-        - TWS Foundation.Quality
-
-## 2.0.1 - 03.09-2024
+## 2.0.1 - [03.09-2024]
 
 - Notes:
 
