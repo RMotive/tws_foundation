@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node
 final class SetViewFilterLinearEvaluation<TSet extends CSMSetInterface> implements SetViewFilterNodeInterface<TSet> {
   ///
   @override
-  final String discrimination = 'SetViewFilterLinearEvaluation<TSet>';
+  final String discrimination = 'CSM_Foundation.Database.Models.Options.Filters.SetViewFilterLinearEvaluation`1[TSet]';
 
   ///
   @override

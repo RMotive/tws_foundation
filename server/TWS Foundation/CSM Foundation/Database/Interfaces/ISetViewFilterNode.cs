@@ -56,7 +56,14 @@ public class ISetViewFilterNodeConverter<TSet> : JsonConverter<ISetViewFilterNod
         string json = jsonObject.RootElement.GetRawText();
 
         // Determine the type from the Discriminator property
-        string? discriminator = jsonObject.RootElement.GetProperty("Discrimination").GetString();
+        string? discriminator;
+        try {
+            discriminator = jsonObject.RootElement.GetProperty("Discrimination").GetString();
+        } catch {
+            discriminator = jsonObject.RootElement.GetProperty("discrimination").GetString();
+        }
+
+        string val = typeof(SetViewFilterLinearEvaluation<TSet>).ToString();
 
         if (discriminator == typeof(SetViewFilterLinearEvaluation<TSet>).ToString()) {
             return JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options);
