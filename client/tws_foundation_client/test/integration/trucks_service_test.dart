@@ -70,6 +70,7 @@ void main() {
         1, //location
         1, //situation
         null,
+        null,
         null, //statusNavigation
         );
         Truck truck = Truck(

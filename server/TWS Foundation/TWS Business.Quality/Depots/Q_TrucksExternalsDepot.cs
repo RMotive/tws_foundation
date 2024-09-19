@@ -21,7 +21,6 @@ public class Q_TrucksExternalsDepot
             Common = 0,
             TruckCommonNavigation = new() {
                 Status = 1,
-                Vin = RandomUtils.String(17),
                 Economic = RandomUtils.String(16),
             },
             MxPlate = "12345678",

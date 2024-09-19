@@ -117,7 +117,6 @@ public class Q_TrucksController : BQ_CustomServerController {
         };
         TruckCommon common = new() {
             Status = 1,
-            Vin = "VINtestcTbkd" + tag,
             Economic = "EconomicTbkd" + tag,
             Location = 0,
             Situation = 0,
@@ -133,6 +132,7 @@ public class Q_TrucksController : BQ_CustomServerController {
             Common = 0,
             Manufacturer = 0,
             Motor = motor,
+            Vin = "VINtestcTbkd" + tag,
             ManufacturerNavigation = manufacturer,
             CarrierNavigation = carrier,
             InsuranceNavigation = insurance,
@@ -207,7 +207,7 @@ public class Q_TrucksController : BQ_CustomServerController {
             Truck creationRecord = creationResult.Updated;
             Assert.Multiple([
                 () => Assert.True(creationRecord.Id > 0),
-                () => Assert.Equal(mock.TruckCommonNavigation!.Vin, creationRecord.TruckCommonNavigation!.Vin),
+                () => Assert.Equal(mock.Vin, creationRecord.Vin),
                 () => Assert.Equal(mock.Motor, creationRecord.Motor),
             ]);
             #endregion
@@ -219,8 +219,9 @@ public class Q_TrucksController : BQ_CustomServerController {
             string modifiedMotor = updatedTag + RandomUtils.String(11);
             mock = creationRecord;
 
-            mock.TruckCommonNavigation!.Vin = modifiedVin;
+            mock.Vin = modifiedVin;
             mock.Motor = modifiedMotor;
+            mock.TruckCommonNavigation!.Economic = modifiedMotor;
             Plate plate = mock.Plates.First();
             plate.Identifier = "identfy" + updatedTag;
             (HttpStatusCode Status, ServerGenericFrame Response) updateResponse = await Post("Update", mock, true);
@@ -236,9 +237,10 @@ public class Q_TrucksController : BQ_CustomServerController {
                 () => Assert.Equal(creationRecord.Id, updateRecord.Id),
                 () => Assert.Equal(creationRecord.Manufacturer, updateRecord.Manufacturer),
                 () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
-                () => Assert.NotEqual(previousRecord.TruckCommonNavigation!.Vin, updateRecord.TruckCommonNavigation!.Vin),
+                () => Assert.NotEqual(previousRecord.Vin, updateRecord.Vin),
                 () => Assert.NotEqual(previousRecord.Plates.First().Identifier, updateRecord.Plates.First().Identifier),
-                () => Assert.NotEqual(previousRecord.Motor, updateRecord.Motor)
+                () => Assert.NotEqual(previousRecord.Motor, updateRecord.Motor),
+                () => Assert.NotEqual(previousRecord.TruckCommonNavigation!.Economic, updateRecord.TruckCommonNavigation!.Economic)
             ]);
             #endregion
         }

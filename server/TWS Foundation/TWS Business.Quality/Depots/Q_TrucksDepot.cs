@@ -24,7 +24,6 @@ public class Q_TruckDepot
             Common = 0,
             TruckCommonNavigation = new() {
                 Status = 1,
-                Vin = RandomUtils.String(17),
                 Economic = RandomUtils.String(16),
             },
             Carrier = 1

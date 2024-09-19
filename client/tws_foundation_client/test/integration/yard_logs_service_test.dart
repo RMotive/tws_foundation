@@ -117,6 +117,7 @@ void main() {
         null, //location
         1, //situation
         null, //statusNavigation
+        null,
         null
         );
         Truck truck = Truck(
