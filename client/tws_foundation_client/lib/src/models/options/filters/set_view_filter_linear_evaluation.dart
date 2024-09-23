@@ -26,7 +26,7 @@ final class SetViewFilterLinearEvaluation<TSet extends CSMSetInterface> implemen
     return <String, dynamic>{
       'discrimination': discrimination,
       'order': order,
-      'operator': operator,
+      'operator': operator.index,
       'filters': filters.map((SetViewFilterInterface<TSet> i) => i.encode()).toList(),
     };
   }
