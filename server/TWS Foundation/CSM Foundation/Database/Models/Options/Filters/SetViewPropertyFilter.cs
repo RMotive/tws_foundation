@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json;
 
 using CSM_Foundation.Database.Enumerators;
 using CSM_Foundation.Database.Interfaces;
@@ -24,7 +25,7 @@ public class SetViewPropertyFilter<TSet>
     public Expression<Func<TSet, bool>> Compose() {
         ParameterExpression param = Expression.Parameter(typeof(TSet), "X");
 
-        MemberExpression prop = Expression.PropertyOrField(param, Property);
+        MemberExpression prop;
         if (Property.Contains('.')) {
             string[] nesting = Property.Trim().Split('.');
 
@@ -34,24 +35,37 @@ public class SetViewPropertyFilter<TSet>
             }
 
             prop = targetProp;
+        } else {
+            prop = Expression.PropertyOrField(param, Property);
         }
 
-        Expression.Constant(Value);
+        ConstantExpression constant = Expression.Constant(Value);
 
         Expression expression;
         switch (Evaluation) {
-            case SetViewFilterEvaluations.CONTAINS:
-                MethodInfo method = typeof(string)
-                .GetMethod("Contains", [
-                    typeof(string)
-                ])!;
+            case SetViewFilterEvaluations.CONTAINS: {
+                    MethodInfo method = typeof(string)
+                    .GetMethod("Contains", [
+                        typeof(string)
+                    ])!;
 
-                ConstantExpression constant = Expression.Constant(Value?.ToString(), typeof(string));
-                expression = Expression.Call(prop, method, constant);
+                    constant = Expression.Constant(Value?.ToString(), typeof(string));
+                    expression = Expression.Call(prop, method, constant);
+                }
                 break;
+            case SetViewFilterEvaluations.EQUAL: {
+                    if(Value is JsonElement element) {
+                        Value = element.GetString();
+                    }
 
+                    object? convertedValue = Convert.ChangeType(Value, prop.Type);
+                    constant = Expression.Constant(convertedValue, prop.Type);
+
+                    expression = Expression.Equal(prop, constant);
+                }
+                break;
             default:
-                throw new Exception();
+                throw new Exception($"Unsupported filter evaluation for ({Evaluation})");
         }
 
         return Expression.Lambda<Func<TSet, bool>>(expression, param);
