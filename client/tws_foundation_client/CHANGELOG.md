@@ -2,7 +2,9 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: N/A
+- Notes: 
+
+    1. Added validation in [Yardlog] set, for trailers when "Botado" load type is not selected.
 
 - Dependencies Upgrade: N/A
 

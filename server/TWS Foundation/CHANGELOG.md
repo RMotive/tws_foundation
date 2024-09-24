@@ -24,6 +24,11 @@
         - [SetViewPropertyFilter]
         - [SetViewFilterLinearEvaluation]
 
+    7. Added Inventories and Yardlog Triggers validations.
+    8. Fixed: Now the trailers not sum +1 (Only Trucks) to the ocupancy section counter, in inventories management.
+
+- Dependencies Upgrade: N/A
+
 ## 2.0.2 - [16.09-2024]
 
 - Notes:
