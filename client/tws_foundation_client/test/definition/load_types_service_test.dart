@@ -2,23 +2,24 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late LoadTypeServiceBase service;
-  late MigrationView<LoadType> viewMock;
-  late MigrationViewOptions options;
+  late SetViewOut<LoadType> viewMock;
+  late SetViewOptions<LoadType> options;
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<LoadType>(<LoadType>[], 1, DateTime.now(), 3, 0, 20);
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
+      options = SetViewOptions<LoadType>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<LoadType>>[]);
+      viewMock = SetViewOut<LoadType>(<LoadType>[], 1, DateTime.now(), 3, 0, 20);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<LoadType>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<LoadType>>('qTracer', viewMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -36,11 +37,11 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<LoadType>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<LoadType>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<LoadType>(LoadTypeDecoder()),
+        decoder: SetViewOutDecode<LoadType>(LoadTypeDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
@@ -48,10 +49,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<LoadType>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<LoadType>> success) {
           passed = true;
 
-          MigrationView<LoadType> fact = success.estela;
+          SetViewOut<LoadType> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

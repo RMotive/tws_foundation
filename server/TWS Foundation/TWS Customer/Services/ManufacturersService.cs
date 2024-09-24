@@ -1,7 +1,7 @@
 ﻿
 
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -16,7 +16,7 @@ public class ManufacturersService : IManufacturersService {
         Manufacturers = manufacturers;
     }
 
-    public async Task<SetViewOut<Manufacturer>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Manufacturer>> View(SetViewOptions<Manufacturer> Options) {
         return await Manufacturers.View(Options);
     }
 

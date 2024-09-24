@@ -1,6 +1,6 @@
 ﻿
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class PlatesServices
         Plates = plates;
     }
 
-    public async Task<SetViewOut<Plate>> View(SetViewOptions options) {
+    public async Task<SetViewOut<Plate>> View(SetViewOptions<Plate> options) {
         return await Plates.View(options, query => query
             .Select(p => new Plate() {
                 Id = p.Id,

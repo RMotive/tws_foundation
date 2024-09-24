@@ -1,6 +1,6 @@
 ﻿
 using CSM_Foundation.Server.Exceptions;
-using CSM_Foundation.Databases.Interfaces;
+using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.Extensions.Primitives;
 
@@ -13,7 +13,7 @@ public class DispositionMiddleware : IMiddleware {
     private const string DISP_HEAD_VALUE = "Quality";
     private readonly DispositionManager Disposer;
 
-    public DispositionMiddleware(IMigrationDisposer Disposer) {
+    public DispositionMiddleware(IDisposer Disposer) {
         this.Disposer = (DispositionManager)Disposer;
     }
 

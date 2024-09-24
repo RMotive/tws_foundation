@@ -13,9 +13,9 @@ final class AccountService extends AccountsServiceBase {
         );
         
   @override
-  Effect<MigrationView<Account>> view(MigrationViewOptions options, String auth) async {
+  Effect<SetViewOut<Account>> view(SetViewOptions<Account> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
-    return MainResolver<MigrationView<Account>>(actEffect);
+    return MainResolver<SetViewOut<Account>>(actEffect);
   }
 }
       

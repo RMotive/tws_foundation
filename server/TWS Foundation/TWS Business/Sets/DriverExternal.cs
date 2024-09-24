@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class DriverExternal
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -27,7 +28,7 @@ public partial class DriverExternal
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Status), [new PointerValidator(true)]),
             (nameof(Identification), [new PointerValidator(true)]),
             (nameof(Common), [new PointerValidator(true)]),
@@ -36,23 +37,26 @@ public partial class DriverExternal
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<DriverExternal>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Drivers_Externals");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<DriverExternal>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Drivers_Externals");
 
-            _ = entity.Property(e => e.Id)
-                 .HasColumnName("id");
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
 
-            _ = entity.HasOne(d => d.DriverCommonNavigation)
-               .WithMany(p => p.DriversExternals)
-               .HasForeignKey(d => d.Common);
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
 
-            _ = entity.HasOne(d => d.IdentificationNavigation)
+            Entity.HasOne(d => d.DriverCommonNavigation)
+                .WithMany(p => p.DriversExternals)
+                .HasForeignKey(d => d.Common);
+
+            Entity.HasOne(d => d.IdentificationNavigation)
                 .WithMany(p => p.DriversExternals)
                 .HasForeignKey(d => d.Identification);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.DriversExternals)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

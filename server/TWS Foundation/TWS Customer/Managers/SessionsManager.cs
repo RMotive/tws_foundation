@@ -1,4 +1,9 @@
-﻿using TWS_Customer.Managers.Records;
+﻿using System.Collections.Concurrent;
+
+using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Server.Exceptions;
+
+using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
 using TWS_Security.Sets;
@@ -12,64 +17,87 @@ public sealed class SessionsManager {
     public static SessionsManager Manager => Instance ??= new SessionsManager();
 
     private readonly TimeSpan EXPIRATION_RANGE = TimeSpan.FromHours(2);
-    private readonly List<Session> Sessions = [];
+
+    private readonly ConcurrentDictionary<string, Session> SESSIONS = [];
     
     SessionsManager() { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Expiration"></param>
+    /// <returns></returns>
     private static bool EvaluateAlive(DateTime Expiration) {
         return DateTime.Compare(DateTime.Now, Expiration) >= 0;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private Guid Tokenize() {
         Guid token = Guid.NewGuid();
-        Session? session = Sessions
-            .Where(i => i.Token.ToString() == token.ToString())
-            .FirstOrDefault();
-        return session == null ? token : Tokenize();
+
+        if (!SESSIONS.TryGetValue(token.ToString(), out Session? _)) 
+            return token;
+       
+       return Tokenize();
     }
-    private Session? Clean(string Identity) {
-        Session? session = Sessions
-            .Where(i => i.Identity == Identity)
-            .FirstOrDefault();
-        if (session is null) {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="TokenOrIdentity"></param>
+    /// <returns></returns>
+    private Session? Clean(string TokenOrIdentity) {
+        KeyValuePair<string, Session>? sessionEntry = SESSIONS.Where(
+            (KeyValuePair<string, Session> i) => {
+                if(i.Key == TokenOrIdentity) 
+                    return true;
+                else if (i.Value.Identity == TokenOrIdentity)
+                    return true;
+
+                return false;
+            }
+        ).FirstOrDefault(); 
+
+
+        if (sessionEntry.Value.Key is null) 
             return null;
-        }
 
-        if (DateTime.Compare(DateTime.UtcNow, session.Expiration) < 0) {
-            return session;
-        }
+        KeyValuePair<string, Session> session = sessionEntry.Value;
+        if (DateTime.Compare(DateTime.UtcNow, session.Value.Expiration) < 0) 
+            return session.Value;
 
-        _ = Sessions.Remove(session);
+        SESSIONS.TryRemove(session.Key, out Session? Entry);
         return null;
     }
-    private Session? TClean(string Token) {
-        Session? session = Sessions
-            .Where(i => i.Token.ToString() == Token)
-            .FirstOrDefault();
-        if (session is null) {
-            return null;
-        }
 
-        if (DateTime.Compare(DateTime.UtcNow, session.Expiration) < 0) {
-            return session;
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Session"></param>
+    /// <returns></returns>
+    private Session Refresh(Session Session) {
+        KeyValuePair<string, Session> sessionEntry = SESSIONS
+            .Where(i => i.Value.Identity == Session.Identity)
+            .First();
 
-        _ = Sessions.Remove(session);
-        return null;
+        Session refreshed = sessionEntry.Value.Copy(Expiration: DateTime.UtcNow.Add(EXPIRATION_RANGE));
+
+        if(SESSIONS.TryUpdate(sessionEntry.Key, refreshed, sessionEntry.Value)) { 
+            return refreshed;        
+        } else throw new XAuth(XAuthSituation.SystemUCL);
     }
-    private Session Refresh(Session session) {
-        int position = Sessions.IndexOf(session);
 
-        Session refreshed = new() {
-            Expiration = DateTime.UtcNow.Add(EXPIRATION_RANGE),
-            Wildcard = session.Wildcard,
-            Identity = session.Identity,
-            Token = session.Token,
-            Permits = session.Permits,
-            Contact = session.Contact
-        };
-        Sessions[position] = refreshed;
-        return refreshed;
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Credentials"></param>
+    /// <param name="Wildcard"></param>
+    /// <param name="Permits"></param>
+    /// <param name="Contact"></param>
+    /// <returns></returns>
     public Session Subscribe(Credentials Credentials, bool Wildcard, Permit[] Permits, Contact Contact) {
         Session? session = Clean(Credentials.Identity);
 
@@ -77,23 +105,38 @@ public sealed class SessionsManager {
             return Refresh(session);
         }
 
+        Guid caledToken = Tokenize();
         session = new() {
             Expiration = DateTime.Now.Add(EXPIRATION_RANGE),
+            Token = caledToken,
             Identity = Credentials.Identity,
             Wildcard = Wildcard,
-            Token = Tokenize(),
             Permits = Permits,
             Contact = Contact
         };
-        Sessions.Add(session);
-        return session;
+
+        if(SESSIONS.TryAdd(caledToken.ToString(),  session)) {
+            return session;
+        } else throw new XAuth(XAuthSituation.SystemACL);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Token"></param>
+    /// <returns></returns>
     public bool EvaluateExpiration(string Token) {
-        Session? session = TClean(Token);
+        Session? session = Clean(Token);
         return session is not null && EvaluateAlive(session.Expiration);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Token"></param>
+    /// <returns></returns>
     public bool EvaluateWildcard(string Token) {
-        Session? session = TClean(Token);
+        Session? session = Clean(Token);
         return session is not null && session.Wildcard;
     }
 }

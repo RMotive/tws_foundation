@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_YardLog : BQ_MigrationSet<YardLog> {
+public class Q_YardLog : BQ_Set<YardLog> {
     protected override Q_MigrationSet_EvaluateRecord<YardLog>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<YardLog>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<YardLog> success = new() {
@@ -29,7 +29,7 @@ public class Q_YardLog : BQ_MigrationSet<YardLog> {
             },
             Expectations = [
                 (nameof(YardLog.Id), [(new PointerValidator(), 3)]),
-                (nameof(YardLog.TTPicture), [(new LengthValidator(), 1)]),
+                (nameof(YardLog.TTPicture), [(new RequiredValidator(), 1)]),
                 (nameof(YardLog.Gname), [(new LengthValidator(), 2)]),
                 (nameof(YardLog.Seal), [(new LengthValidator(), 2)]),
                 (nameof(YardLog.FromTo), [(new LengthValidator(), 2)]),

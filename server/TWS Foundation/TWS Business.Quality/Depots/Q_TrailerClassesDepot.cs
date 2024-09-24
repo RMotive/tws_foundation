@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -9,16 +9,20 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TrailerClassesDepot"/>.
 /// </summary>
 public class Q_TrailerClassesDepot
-    : BQ_MigrationDepot<TrailerClass, TrailerClassesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<TrailerClass, TrailerClassesDepot, TWSBusinessDatabase> {
     public Q_TrailerClassesDepot()
         : base(nameof(TrailerClass.Id)) {
     }
 
-    protected override TrailerClass MockFactory() {
+    protected override TrailerClass MockFactory(string RandomSeed) {
 
         return new() {
             Name = "Trailer Class name",
             Axis = 1
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(TrailerClass Mock) {
+        return (nameof(TrailerClass.Name), Mock.Name);
     }
 }

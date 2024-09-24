@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class TrailerClass
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -32,26 +33,30 @@ public partial class TrailerClass
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<TrailerClass>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Trailer_Classes");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<TrailerClass>(Entity => {
+            Entity.ToTable("Trailer_Classes");
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Description)
+            Entity.Property(e => e.Description)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.AxisNavigation)
-                 .WithMany(p => p.TrailerClasses)
-                 .HasForeignKey(d => d.Axis)
-                 .OnDelete(DeleteBehavior.ClientSetNull);
+            Entity.HasOne(d => d.AxisNavigation)
+                .WithMany(p => p.TrailerClasses)
+                .HasForeignKey(d => d.Axis)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
     }
 }

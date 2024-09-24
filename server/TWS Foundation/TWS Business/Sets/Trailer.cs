@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Trailer
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -48,37 +49,39 @@ public partial class Trailer
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Trailer>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Trailers");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Trailer>(Entity => {
+            Entity.ToTable("Trailers");
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
-                 .HasColumnName("id");
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
 
-            _ = entity.HasOne(d => d.TrailerCommonNavigation)
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            Entity.HasOne(d => d.TrailerCommonNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Common);
 
-            _ = entity.HasOne(d => d.CarrierNavigation)
+            Entity.HasOne(d => d.CarrierNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Carrier)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.ManufacturerNavigation)
+            Entity.HasOne(d => d.ManufacturerNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Manufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.MaintenanceNavigation)
+            Entity.HasOne(d => d.MaintenanceNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Maintenance);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Trailers)
                .HasForeignKey(d => d.Status)
                .OnDelete(DeleteBehavior.ClientSetNull);
-
         });
     }
 }

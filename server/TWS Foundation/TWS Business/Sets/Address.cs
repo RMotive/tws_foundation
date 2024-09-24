@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Address
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string? State { get; set; }
 
@@ -42,36 +43,39 @@ public partial class Address
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Address>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Addresses");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Address>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Addresses");
 
-            _ = entity.Property(e => e.Id)
-                 .HasColumnName("id");
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
 
-            _ = entity.Property(e => e.Street)
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            Entity.Property(e => e.Street)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.AltStreet)
+            Entity.Property(e => e.AltStreet)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.City)
+            Entity.Property(e => e.City)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Zip)
+            Entity.Property(e => e.Zip)
                 .HasMaxLength(30)
                 .IsUnicode(false)
                 .HasColumnName("ZIP");
 
-            _ = entity.Property(e => e.Country)
+            Entity.Property(e => e.Country)
                 .HasMaxLength(3)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Colonia)
+            Entity.Property(e => e.Colonia)
                 .HasMaxLength(30)
                 .IsUnicode(false);
         });

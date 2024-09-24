@@ -1,17 +1,16 @@
-﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class PlateH
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
-    //public override DateTime Timemark { get; set; }
     public int Sequence { get; set; }
 
     public int Status { get; set; }
@@ -39,7 +38,7 @@ public partial class PlateH
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Identifier), [new LengthValidator(8, 12)]),
             (nameof(State), [new LengthValidator(2, 3)]),
             (nameof(Country), [new LengthValidator(2, 3)]),
@@ -53,33 +52,34 @@ public partial class PlateH
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<PlateH>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
-                .HasColumnName("id");
-            _ = entity.ToTable("Plate_H");
+        builder.Entity<PlateH>(entity => {
+            entity.ToTable("Plate_H");
+            entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Country)
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            entity.Property(e => e.Country)
                 .HasMaxLength(3)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Identifier)
+            entity.Property(e => e.Identifier)
                 .HasMaxLength(12)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.State)
+            entity.Property(e => e.State)
                 .HasMaxLength(3)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.TruckNavigation)
+            entity.HasOne(d => d.TruckNavigation)
                 .WithMany(p => p.PlatesH)
                 .HasForeignKey(d => d.Truck)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.PlatesH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.PlateNavigation)
+            entity.HasOne(d => d.PlateNavigation)
                 .WithMany(p => p.PlatesH)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);

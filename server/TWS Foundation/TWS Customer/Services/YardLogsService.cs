@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +8,8 @@ using TWS_Business.Sets;
 using TWS_Customer.Services.Interfaces;
 
 namespace TWS_Customer.Services;
-public class YardLogsService : IYardLogsService {
+public class YardLogsService 
+    : IYardLogsService {
     private readonly YardLogsDepot YardLogs;
 
     public YardLogsService(
@@ -18,8 +19,7 @@ public class YardLogsService : IYardLogsService {
    
     }
 
-    public async Task<SetViewOut<YardLog>> View(SetViewOptions options) {
-
+    public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
         static IQueryable<YardLog> include(IQueryable<YardLog> query) {
             return query
             .Include(t => t.DriverExternalNavigation)
@@ -256,7 +256,7 @@ public class YardLogsService : IYardLogsService {
         return await YardLogs.View(options, include);
     }
 
-    public async Task<DatabasesTransactionOut<YardLog>> Create(YardLog[] yardLog) {
+    public async Task<SetBatchOut<YardLog>> Create(YardLog[] yardLog) {
         return await this.YardLogs.Create(yardLog);
     }
     public async Task<RecordUpdateOut<YardLog>> Update(YardLog yardLog, bool updatePivot = false) {
@@ -500,5 +500,9 @@ public class YardLogsService : IYardLogsService {
 
     public async Task<YardLog> Delete(int Id) {
         return await YardLogs.Delete(Id);
+    }
+
+    public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {
+        return YardLogs.ViewInventory(Options);
     }
 }

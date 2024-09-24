@@ -19,6 +19,24 @@
         2. [TruckCommon]
         3. [TruckExternal]
 
+  - Services:
+
+    1. [YardLogs] added new action naed [ViewInventory] that provides from the current Yard trucks inventory.
+
+  - Models:
+
+    1. [MigrationView] -> [SetViewOut]
+    2. [MigrationViewOptions] -> [SetViewOptions]
+
+        - Added [filters] to specify bonds along queries.
+
+            1. [SetViewFilterLinearEvaluation] allows to filter entries by logical operators based on specific filters.
+            2. [SetViewDateFilter] allows to filter entries based on DateTime proeprties specifying limits between dates to show up entries.
+            3. [SetViewPropertyFilter] allows to filter entries based on a property an operator and a value to evaluate the operator.
+
+    3. [MigrationViewOrderOptions] -> [SetViewOrderOptions]
+    4. [MigrationViewOrderBehaviors] -> [SetViewOrderings]
+
 - Dependencies Upgrade:
 
     1. Template

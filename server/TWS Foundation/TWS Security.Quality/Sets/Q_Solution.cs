@@ -1,13 +1,13 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Security.Sets;
 
 
 namespace TWS_Security.Quality.Sets;
 public class Q_Solution
-    : BQ_MigrationSet<Solution> {
+    : BQ_Set<Solution> {
     protected override Q_MigrationSet_EvaluateRecord<Solution>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Solution>[] Container) {
         const string successName = "TWS Quality";
         const string successSign = "TWSMQ";

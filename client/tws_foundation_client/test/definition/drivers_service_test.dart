@@ -2,26 +2,27 @@ import 'dart:convert';
 
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late DriversServiceBase service;
-  late MigrationView<Driver> viewMock;
+  late SetViewOut<Driver> viewMock;
   late Driver createMock;
-  late MigrationViewOptions options;
+  late SetViewOptions<Driver> options;
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<Driver>(<Driver>[], 1, DateTime.now(), 3, 0, 20);
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
+      options = SetViewOptions<Driver>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Driver>>[]);
+      viewMock = SetViewOut<Driver>(<Driver>[], 1, DateTime.now(), 3, 0, 20);
       DateTime time = DateTime.now();
       createMock = Driver(0, 1, 1, 1, "Mexican", time, time, time, null, null, null, null, null, null, null, null, null, null, null);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<Driver>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<Driver>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<Driver>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
@@ -40,11 +41,11 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Driver>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<Driver>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<Driver>(DriverDecoder()),
+        decoder: SetViewOutDecode<Driver>(DriverDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
@@ -52,10 +53,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<Driver>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<Driver>> success) {
           passed = true;
 
-          MigrationView<Driver> fact = success.estela;
+          SetViewOut<Driver> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

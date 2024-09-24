@@ -1,20 +1,20 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using TWS_Security.Sets;
 
 namespace TWS_Security.Depots;
 
 /// <summary>
-///     Implements a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/>
+///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Contact"/> dataDatabases entity mirror.
 /// </summary>
 public class ContactsDepot
-     : BDatabaseDepot<TWSSecurityDatabase, Contact> {
+     : BDepot<TWSSecurityDatabase, Contact> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Contact"/>.
     /// </summary>
-    public ContactsDepot(IMigrationDisposer? Disposer = null) : base(new(), Disposer) { }
+    public ContactsDepot(IDisposer? Disposer = null) : base(new(), Disposer) { }
 
     public ContactsDepot()
         : base(new(), null) {

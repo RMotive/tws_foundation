@@ -1,4 +1,5 @@
 import 'package:test/test.dart';
+import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_node_interface.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../integration_credentials.dart';
@@ -33,12 +34,12 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Driver>> fact = await service.view(
-        MigrationViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+      MainResolver<SetViewOut<Driver>> fact = await service.view(
+        SetViewOptions<Driver>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<Driver>>[]),
         auth,
       );
       fact.resolve(
-        decoder: MigrationViewDecode<Driver>(DriverDecoder()),
+        decoder: SetViewOutDecode<Driver>(DriverDecoder()),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -48,8 +49,8 @@ void main() {
         onFailure: (FailureFrame failure, int status) {
           throw failure.estela.system;
         },
-        onSuccess: (SuccessFrame<MigrationView<Driver>> success) {
-          MigrationView<Driver> fact = success.estela;
+        onSuccess: (SuccessFrame<SetViewOut<Driver>> success) {
+          SetViewOut<Driver> fact = success.estela;
 
           expect(fact.amount >= fact.records, true);
           expect(fact.records >= 0, true);

@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Section
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -39,23 +40,27 @@ public partial class Section
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Section>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Sections");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Section>(Entity => {
+            Entity.ToTable("Sections");
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
-                 .HasColumnName("id");
 
-            _ = entity.Property(e => e.Name)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            Entity.Property(e => e.Name)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.LocationNavigation)
+            Entity.HasOne(d => d.LocationNavigation)
                 .WithMany(p => p.Sections)
                 .HasForeignKey(d => d.Yard);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Sections)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

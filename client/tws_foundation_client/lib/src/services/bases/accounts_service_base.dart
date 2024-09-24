@@ -10,6 +10,6 @@ abstract class AccountsServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<MigrationView<Account>> view(MigrationViewOptions options, String auth);
+  Effect<SetViewOut<Account>> view(SetViewOptions<Account> options, String auth);
 
 }

@@ -1,14 +1,14 @@
-﻿using CSM_Foundation.Databases.Bases;
+﻿using CSM_Foundation.Database.Bases;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Depots;
 /// <summary>
-///     Implements a <see cref="BDatabaseDepot{TMigrationDatabases, TMigrationSet}"/>
+///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="TruckH"/> dataDatabases entity mirror.
 /// </summary>
 public class TrucksHDepot
-: BDatabaseDepot<TWSBusinessDatabase, TruckH> {
+: BDepot<TWSBusinessDatabase, TruckH> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="TruckH"/>.
     /// </summary>

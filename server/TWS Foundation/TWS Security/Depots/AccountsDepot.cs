@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +12,12 @@ namespace TWS_Security.Depots;
 ///     transactions. 
 /// </summary>
 public class AccountsDepot
-    : BDatabaseDepot<TWSSecurityDatabase, Account>
+    : BDepot<TWSSecurityDatabase, Account>
     , IAccountsDepot {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Account"/>.
     /// </summary>
-    public AccountsDepot(TWSSecurityDatabase Databases, IMigrationDisposer? Disposer = null)
+    public AccountsDepot(TWSSecurityDatabase Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     /// <summary>
