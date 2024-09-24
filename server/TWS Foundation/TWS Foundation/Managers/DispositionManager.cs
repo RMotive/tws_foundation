@@ -1,21 +1,26 @@
-﻿using CSM_Foundation.Advisor.Managers;
+﻿using System.Collections.Concurrent;
+
+using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Extensions;
-using CSM_Foundation.Databases.Interfaces;
+using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TWS_Foundation.Managers;
 
-public class DispositionManager : IMigrationDisposer {
+public class DispositionManager
+    : IDisposer {
+
     private readonly IServiceProvider Servicer;
-    private readonly Dictionary<DbContext, List<IDatabasesSet>> DispositionStack = [];
+    private readonly ConcurrentDictionary<DbContext, List<ISet>> DispositionStack = new();
     private bool Active = false;
 
     public DispositionManager(IServiceProvider Servicer) {
         this.Servicer = Servicer;
     }
 
-    public void Push(DbContext Databases, IDatabasesSet Record) {
+    public void Push(DbContext Databases, ISet Record) {
         if (!Active) {
             return;
         }
@@ -30,10 +35,10 @@ public class DispositionManager : IMigrationDisposer {
             DispositionStack[db].Add(Record);
             return;
         }
-        List<IDatabasesSet> recordsListed = [Record];
-        DispositionStack.Add(Databases, recordsListed);
+        List<ISet> recordsListed = [Record];
+        DispositionStack.TryAdd(Databases, recordsListed);
     }
-    public void Push(DbContext Databases, IDatabasesSet[] Records) {
+    public void Push(DbContext Databases, ISet[] Records) {
         if (!Active) {
             return;
         }
@@ -48,51 +53,61 @@ public class DispositionManager : IMigrationDisposer {
             DispositionStack[db].AddRange(Records);
             return;
         }
-        List<IDatabasesSet> recordsListed = [.. Records.ToList()];
-        DispositionStack.Add(Databases, recordsListed);
+        List<ISet> recordsListed = [.. Records.ToList()];
+        bool wasAdded = DispositionStack.TryAdd(Databases, recordsListed);
     }
 
     public void Status(bool Active) {
         this.Active = Active;
     }
 
-    public void Dispose() {
+    public async Task Dispose() {
         if (DispositionStack.Empty()) {
             AdvisorManager.Announce($"No records to dispose");
         }
-        foreach (KeyValuePair<DbContext, List<IDatabasesSet>> disposeLine in DispositionStack) {
+        foreach (KeyValuePair<DbContext, List<ISet>> disposeLine in DispositionStack) {
             using IServiceScope servicerScope = Servicer.CreateScope();
-            DbContext Databases = disposeLine.Key;
+            DbContext Database = disposeLine.Key;
             try {
-                _ = Databases.Database.CanConnect();
+                Database.Database.CanConnect();
             } catch (ObjectDisposedException) {
-                Databases = (DbContext)servicerScope.ServiceProvider.GetRequiredService(Databases.GetType());
+                Database = (DbContext)servicerScope.ServiceProvider.GetRequiredService(Database.GetType());
             }
 
-            AdvisorManager.Announce($"Disposing db ({Databases.GetType()})");
+            AdvisorManager.Announce($"Disposing db ({Database.GetType()})");
             if (disposeLine.Value is null || disposeLine.Value.Count == 0) {
                 AdvisorManager.Announce($"No records to dispose");
                 continue;
             }
             int corrects = 0;
             int incorrects = 0;
-            foreach (IDatabasesSet record in disposeLine.Value) {
+            foreach (ISet record in disposeLine.Value) {
                 try {
-                    _ = Databases.Remove(record);
-                    _ = Databases.SaveChanges();
+                    Database.Remove(record);
+                    await Database.SaveChangesAsync();
+                    
                     corrects++;
                     AdvisorManager.Success($"Disposed: ({record.GetType()}) | ({record.Id})");
-                } catch (Exception Exep) {
+                } catch (DbUpdateConcurrencyException ex) {
+                    foreach (EntityEntry entry in ex.Entries) {
+                        if (entry.Entity.GetType() == record.GetType()) {
+                            entry.State = EntityState.Detached;
+                        }
+                    }
+
+                } catch (Exception ex) {
                     incorrects++;
-                    AdvisorManager.Warning($"No disposed: ({record.GetType()}) | ({record.Id}) |> ({Exep.Message})");
+                    AdvisorManager.Warning($"No disposed: ({record.GetType()}) | ({record.Id}) |> ({ex.Message})");
                 }
             }
+
 
             if (incorrects > 0) {
                 AdvisorManager.Warning($"Disposed with errors: (Errors: ({incorrects}) Successes: {corrects})");
             } else {
-                AdvisorManager.Success($"Disposed: ({corrects} elements) at ({Databases.GetType()})");
+                AdvisorManager.Success($"Disposed: ({corrects} elements) at ({Database.GetType()})");
             }
         }
+        DispositionStack.Clear();
     }
 }

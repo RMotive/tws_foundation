@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="DriversDepot"/>.
 /// </summary>
 public class Q_DriversDepot
-    : BQ_MigrationDepot<Driver, DriversDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Driver, DriversDepot, TWSBusinessDatabase> {
     public Q_DriversDepot()
         : base(nameof(Driver.Id)) {
     }
 
-    protected override Driver MockFactory() {
+    protected override Driver MockFactory(string RandomSeed) {
 
         return new() {
            Status = 1,
@@ -23,4 +23,7 @@ public class Q_DriversDepot
            Common = 1
         };
     }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Driver Mock) 
+    => null;
 }

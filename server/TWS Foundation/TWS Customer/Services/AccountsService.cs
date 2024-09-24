@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 using TWS_Business.Sets;
@@ -32,7 +32,7 @@ public class AccountsService
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    public async Task<SetViewOut<Account>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Account>> View(SetViewOptions<Account> Options) {
 
         static IQueryable<Account> include(IQueryable<Account> query) {
             return query

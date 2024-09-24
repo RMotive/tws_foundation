@@ -1,7 +1,7 @@
 ﻿
 
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class DriversExternalsService : IDriversExternalsService {
         DriversExternals = driversExternals;
     }
 
-    public async Task<SetViewOut<DriverExternal>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<DriverExternal>> View(SetViewOptions<DriverExternal> Options) {
         static IQueryable<DriverExternal> include(IQueryable<DriverExternal> query) {
             return query
             .Include(t => t.DriverCommonNavigation)

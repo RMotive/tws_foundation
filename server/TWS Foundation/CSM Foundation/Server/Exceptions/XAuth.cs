@@ -12,6 +12,7 @@ public class XAuth
         Advise = Situation switch {
             XAuthSituation.Lack => AdvisesConstants.SERVER_CONTACT_ADVISE,
             XAuthSituation.Format => $"Wrong token format {AdvisesConstants.SERVER_CONTACT_ADVISE}",
+            XAuthSituation.SystemUCL | XAuthSituation.SystemACL => $"SystemUCL error caugth {AdvisesConstants.SERVER_CONTACT_ADVISE}",
             _ => AdvisesConstants.SERVER_CONTACT_ADVISE,
         };
     }
@@ -20,4 +21,6 @@ public class XAuth
 public enum XAuthSituation {
     Lack,
     Format,
+    SystemUCL,
+    SystemACL,
 }

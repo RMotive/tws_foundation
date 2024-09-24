@@ -10,6 +10,6 @@ abstract class DriversServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<MigrationView<Driver>> view(MigrationViewOptions options, String auth);
+  Effect<SetViewOut<Driver>> view(SetViewOptions<Driver> options, String auth);
 
 }

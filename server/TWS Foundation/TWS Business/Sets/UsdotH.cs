@@ -1,17 +1,18 @@
 ﻿using System.Diagnostics.Metrics;
 
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class UsdotH
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     //public override DateTime Timemark { get; set; }
 
@@ -44,29 +45,32 @@ public partial class UsdotH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<UsdotH>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<UsdotH>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.Property(e => e.Id)
                .HasColumnName("id");
-            _ = entity.ToTable("USDOT_H");
+            Entity.ToTable("USDOT_H");
 
-            _ = entity.Property(e => e.Mc)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Mc)
                 .HasMaxLength(7)
                 .IsUnicode(false)
                 .HasColumnName("MC");
 
-            _ = entity.Property(e => e.Scac)
+            Entity.Property(e => e.Scac)
                 .HasMaxLength(4)
                 .IsUnicode(false)
                 .HasColumnName("SCAC");
 
-            _ = entity.HasOne(d => d.UsdotNavigation)
+            Entity.HasOne(d => d.UsdotNavigation)
                 .WithMany(p => p.UsdotsH)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.UsdotsH)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

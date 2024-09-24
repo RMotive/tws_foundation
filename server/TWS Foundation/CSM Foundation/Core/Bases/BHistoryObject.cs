@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using CSM_Foundation.Databases.Exceptions;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+using CSM_Foundation.Database.Exceptions;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.IdentityModel.Tokens;
 

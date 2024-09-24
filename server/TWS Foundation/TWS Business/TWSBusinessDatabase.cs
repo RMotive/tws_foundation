@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 
 using Microsoft.EntityFrameworkCore;
@@ -76,43 +76,43 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
 
     protected override void OnModelCreating(ModelBuilder builder) {
-        Sct.Set(builder);
-        Plate.Set(builder);
-        Truck.Set(builder);
-        Situation.Set(builder);
-        Insurance.Set(builder);
-        Maintenance.Set(builder);
-        Manufacturer.Set(builder);
-        Trailer.Set(builder);
-        TrailerClass.Set(builder);
-        TrailerCommon.Set(builder);
-        TrailerExternal.Set(builder);
-        Axis.Set(builder);
-        Status.Set(builder);
-        Address.Set(builder);
-        Approach.Set(builder);
-        Carrier.Set(builder);
-        Location.Set(builder);
-        TruckExternal.Set(builder);
-        TruckCommon.Set(builder);
-        Identification.Set(builder);
-        Employee.Set(builder);
-        Driver.Set(builder);
-        DriverCommon.Set(builder);
-        DriverExternal.Set(builder);
-        LoadType.Set(builder);
-        Section.Set(builder);
+        Sct.CreateModel(builder);
+        Plate.CreateModel(builder);
+        Truck.CreateModel(builder);
+        Situation.CreateModel(builder);
+        Insurance.CreateModel(builder);
+        Maintenance.CreateModel(builder);
+        Manufacturer.CreateModel(builder);
+        Trailer.CreateModel(builder);
+        TrailerClass.CreateModel(builder);
+        TrailerCommon.CreateModel(builder);
+        TrailerExternal.CreateModel(builder);
+        Axis.CreateModel(builder);
+        Status.CreateModel(builder);
+        Address.CreateModel(builder);
+        Approach.CreateModel(builder);
+        Carrier.CreateModel(builder);
+        Location.CreateModel(builder);
+        TruckExternal.CreateModel(builder);
+        TruckCommon.CreateModel(builder);
+        Identification.CreateModel(builder);
+        Employee.CreateModel(builder);
+        Driver.CreateModel(builder);
+        DriverCommon.CreateModel(builder);
+        DriverExternal.CreateModel(builder);
+        LoadType.CreateModel(builder);
+        Section.CreateModel(builder);
         YardLog.Set(builder);
-        TruckH.Set(builder);
-        Usdot.Set(builder); 
-        UsdotH.Set(builder);
-        ApproachesH.Set(builder);
-        CarrierH.Set(builder);
+        TruckH.CreateModel(builder);
+        Usdot.CreateModel(builder); 
+        UsdotH.CreateModel(builder);
+        ApproachesH.CreateModel(builder);
+        CarrierH.CreateModel(builder);
 
         OnModelCreatingPartial(builder);
     }
 
-    protected override IDatabasesSet[] EvaluateFactory() {
+    protected override ISet[] EvaluateFactory() {
         return [
             new Plate(),
             new Manufacturer(),

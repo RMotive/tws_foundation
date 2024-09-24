@@ -1,15 +1,15 @@
-﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Truck
-    : BDatabaseSet  {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -47,46 +47,44 @@ public partial class Truck
 
     public virtual ICollection<PlateH> PlatesH { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Truck>(entity => {
-            _ = entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Truck>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            _ = entity.Property(e => e.Motor)   
+            Entity.Property(e => e.Motor)
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Vin)
-               .HasMaxLength(17)
-               .IsUnicode(false)
-               .HasColumnName("VIN");
+            Entity.HasOne(d => d.CarrierNavigation)
+                .WithMany(p => p.Trucks)
+                .HasForeignKey(d => d.Carrier)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.CarrierNavigation)
-             .WithMany(p => p.Trucks)
-             .HasForeignKey(d => d.Carrier)
-             .OnDelete(DeleteBehavior.ClientSetNull);
-
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.InsuranceNavigation)
+            Entity.HasOne(d => d.InsuranceNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Insurance);
 
-            _ = entity.HasOne(d => d.MaintenanceNavigation)
+            Entity.HasOne(d => d.MaintenanceNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Maintenance);
 
-            _ = entity.HasOne(d => d.ManufacturerNavigation)
+            Entity.HasOne(d => d.ManufacturerNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Manufacturer)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.TruckCommonNavigation)
+            Entity.HasOne(d => d.TruckCommonNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Common);
         });

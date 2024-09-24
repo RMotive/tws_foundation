@@ -9,7 +9,7 @@ abstract class TrucksServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<MigrationView<Truck>> view(MigrationViewOptions options, String auth);
+  Effect<SetViewOut<Truck>> view(SetViewOptions<Truck> options, String auth);
 
   Effect<MigrationTransactionResult<Truck>> create(List<Truck> trucks, String auth);
 

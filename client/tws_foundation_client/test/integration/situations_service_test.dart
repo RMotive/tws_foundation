@@ -35,12 +35,12 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Situation>> fact = await service.view(
-        MigrationViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+      MainResolver<SetViewOut<Situation>> fact = await service.view(
+        SetViewOptions<Situation>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<Situation>>[]),
         auth,
       );
       fact.resolve(
-        decoder: MigrationViewDecode<Situation>(SituationDecoder()),
+        decoder: SetViewOutDecode<Situation>(SituationDecoder()),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -50,8 +50,8 @@ void main() {
         onFailure: (FailureFrame failure, int status) {
           throw failure.estela.system;
         },
-        onSuccess: (SuccessFrame<MigrationView<Situation>> success) {
-          MigrationView<Situation> fact = success.estela;
+        onSuccess: (SuccessFrame<SetViewOut<Situation>> success) {
+          SetViewOut<Situation> fact = success.estela;
 
           expect(fact.amount >= fact.records, true);
           expect(fact.records >= 0, true);

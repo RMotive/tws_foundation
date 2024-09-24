@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -14,7 +14,7 @@ public class SituationsService : ISituationsService {
         Situations = situations;
     }
 
-    public async Task<SetViewOut<Situation>> View(SetViewOptions options) {
+    public async Task<SetViewOut<Situation>> View(SetViewOptions<Situation> options) {
         return await Situations.View(options);
     }
 

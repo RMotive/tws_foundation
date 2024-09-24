@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Situation
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -22,18 +23,22 @@ public partial class Situation
 
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Situation>(entity => {
-            _ = entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Situation>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.HasIndex(e => e.Name)
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.HasIndex(e => e.Name)
                 .IsUnique();
 
-            _ = entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
-            _ = entity.Property(e => e.Description)
+            Entity.Property(e => e.Description)
                 .HasMaxLength(100);
-            _ = entity.Property(e => e.Name)
+            Entity.Property(e => e.Name)
                 .HasMaxLength(25);
         });
     }

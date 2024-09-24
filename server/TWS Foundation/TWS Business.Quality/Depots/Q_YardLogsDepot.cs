@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="YardLogsDepot"/>.
 /// </summary>
 public class Q_YardLogsDepot
-    : BQ_MigrationDepot<YardLog, YardLogsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<YardLog, YardLogsDepot, TWSBusinessDatabase> {
     public Q_YardLogsDepot()
         : base(nameof(YardLog.Id)) {
     }
 
-    protected override YardLog MockFactory() {
+    protected override YardLog MockFactory(string RandomSeed) {
 
         return new() {
             Entry = true,
@@ -29,5 +29,9 @@ public class Q_YardLogsDepot
             Damage = false,
             TTPicture = RandomUtils.String(30),
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(YardLog Mock) {
+        return null;
     }
 }

@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_Location : BQ_MigrationSet<Location> {
+public class Q_Location : BQ_Set<Location> {
     protected override Q_MigrationSet_EvaluateRecord<Location>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Location>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Location> success = new() {

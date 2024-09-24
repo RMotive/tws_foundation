@@ -1,15 +1,17 @@
 ﻿
-using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class YardLog
-    : BDatabaseSet {
+    : BSet {
+
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public bool Entry { get; set; }
 
@@ -28,8 +30,6 @@ public partial class YardLog
     public int? Driver { get; set; }
 
     public int? DriverExternal { get; set; }
-
-    public DateTime? Timestamp { get; set; }
 
     public int Guard { get; set; }
 
@@ -63,7 +63,7 @@ public partial class YardLog
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
-                .. Container,
+            ..Container,
             (nameof(TTPicture), [new LengthValidator(1, 199999999)]),
             (nameof(Gname), [new LengthValidator(1, 100)]),
             (nameof(Seal), [new LengthValidator(1, 64)]),
@@ -76,71 +76,75 @@ public partial class YardLog
     }
 
     public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<YardLog>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Yard_Logs", tb => tb.HasTrigger("tgr_YardLogs_Insert"));
+        builder.Entity<YardLog>(entity => {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("Yard_Logs", tb => tb.HasTrigger("tgr_YardLogs_Insert"));
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                  .HasColumnName("id");
 
             //this property cannot be modified "manually". Modify this property will result in unexpected exceptions.
             entity.Property(b => b.Timestamp) 
             .ValueGeneratedOnAddOrUpdate();
 
-            _ = entity.Property(e => e.Gname)
+
+            entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.Gname)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Seal)
+            entity.Property(e => e.Seal)
                 .HasMaxLength(64)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.FromTo)
+            entity.Property(e => e.FromTo)
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.TTPicture)
+            entity.Property(e => e.TTPicture)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.DmgEvidence)
+            entity.Property(e => e.DmgEvidence)
                .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.DriverNavigation)
+            entity.HasOne(d => d.DriverNavigation)
                 .WithMany(p => p.YardLogs)
                 .HasForeignKey(d => d.Driver)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.DriverExternalNavigation)
+            entity.HasOne(d => d.DriverExternalNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.DriverExternal)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.TruckNavigation)
+            entity.HasOne(d => d.TruckNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.Truck)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.TruckExternalNavigation)
+            entity.HasOne(d => d.TruckExternalNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.TruckExternal)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.TrailerNavigation)
+            entity.HasOne(d => d.TrailerNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.Trailer)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.TrailerExternalNavigation)
+            entity.HasOne(d => d.TrailerExternalNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.TrailerExternal)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.LoadTypeNavigation)
+            entity.HasOne(d => d.LoadTypeNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.LoadType)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.SectionNavigation)
+            entity.HasOne(d => d.SectionNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.Section)
                .OnDelete(DeleteBehavior.ClientSetNull);

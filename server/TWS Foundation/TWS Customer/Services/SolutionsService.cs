@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using TWS_Customer.Services.Interfaces;
 
@@ -28,7 +28,7 @@ public class SolutionsService
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    public async Task<SetViewOut<Solution>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Solution>> View(SetViewOptions<Solution> Options) {
         return await SolutionsDepot.View(Options);
     }
     /// <summary>
@@ -36,7 +36,7 @@ public class SolutionsService
     /// </summary>
     /// <param name="Solutions"></param>
     /// <returns></returns>
-    public async Task<DatabasesTransactionOut<Solution>> Create(Solution[] Solutions) {
+    public async Task<SetBatchOut<Solution>> Create(Solution[] Solutions) {
         return await SolutionsDepot.Create(Solutions);
     }
     /// <summary>

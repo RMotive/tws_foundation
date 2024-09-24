@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 using Microsoft.AspNetCore.Http;
 
@@ -10,9 +11,10 @@ public class QM_ServerHost(HttpClient host) {
     private const string DISPOSITION_TOKEN = "CSMDisposition";
     private readonly HttpClient Host = host;
 
-    public async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string Location, TRequest Request) {
-        HttpResponseMessage Response = await Host.PostAsJsonAsync(Location, Request);
+    public async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string Location, TRequest Request, JsonSerializerOptions? Options = null) {
+        HttpResponseMessage Response = await Host.PostAsJsonAsync(Location, Request, options: Options);
         HttpStatusCode resolutionCode = Response.StatusCode;
+
         TResponse resolution = await Response.Content.ReadFromJsonAsync<TResponse>()
             ?? throw new Exception("Nullified deserealization");
 

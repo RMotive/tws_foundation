@@ -6,19 +6,19 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late YardLogServiceBase service;
-  late MigrationView<YardLog> viewMock;
-  late MigrationViewOptions options;
+  late SetViewOut<YardLog> viewMock;
+  late SetViewOptions<YardLog> options;
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<YardLog>(<YardLog>[], 1, DateTime.now(), 3, 0, 20);
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
+      options = SetViewOptions<YardLog>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<YardLog>>[]);
+      viewMock = SetViewOut<YardLog>(<YardLog>[], 1, DateTime.now(), 3, 0, 20);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<YardLog>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<YardLog>>('qTracer', viewMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -36,11 +36,11 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<YardLog>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<YardLog>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<YardLog>(YardLogDecoder()),
+        decoder: SetViewOutDecode<YardLog>(YardLogDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
@@ -48,10 +48,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<YardLog>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<YardLog>> success) {
           passed = true;
 
-          MigrationView<YardLog> fact = success.estela;
+          SetViewOut<YardLog> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

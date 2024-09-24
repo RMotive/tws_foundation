@@ -7,19 +7,19 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late AccountsServiceBase service;
-  late MigrationView<Account> viewMock;
-  late MigrationViewOptions options;
+  late SetViewOut<Account> viewMock;
+  late SetViewOptions<Account> options;
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<Account>(<Account>[], 1, DateTime.now(), 3, 0, 20);
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
+      options = SetViewOptions<Account>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Account>>[]);
+      viewMock = SetViewOut<Account>(<Account>[], 1, DateTime.now(), 3, 0, 20);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<Account>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<Account>>('qTracer', viewMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -37,11 +37,11 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Account>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<Account>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<Account>(AccountDecoder()),
+        decoder: SetViewOutDecode<Account>(AccountDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
@@ -49,10 +49,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<Account>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<Account>> success) {
           passed = true;
 
-          MigrationView<Account> fact = success.estela;
+          SetViewOut<Account> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);
