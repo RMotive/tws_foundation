@@ -225,13 +225,6 @@ public abstract class BDatabaseDepot<TMigrationDatabases, TMigrationSet>
 
     #region Update 
 
-    //void AttachDate(object entity, bool excluideCreation = false) {
-    //    IHistoryDatabasesSet? historyDatabasesSet = entity as IHistoryDatabasesSet;
-    //    IPivotDatabasesSet? pivotDatabasesSet = entity as IPivotDatabasesSet;
-    //    if (historyDatabasesSet != null) historyDatabasesSet.Timemark = DateTime.Now;
-    //    if (pivotDatabasesSet != null && !excluideCreation) pivotDatabasesSet.Creation = DateTime.Now;
-    //}
-
     /// <summary>
     /// Perform the navigation changes in a Tmigrationset
     /// </summary>

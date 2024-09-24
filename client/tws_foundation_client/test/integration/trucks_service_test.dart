@@ -1,5 +1,6 @@
 
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:test/test.dart';
@@ -11,7 +12,141 @@ void main() {
   late String auth;
   late TrucksServiceBase service;
   late List<Truck> mocks;
-
+  
+  Truck buildTruck(String randomToken){
+    DateTime time = DateTime.now();
+    Plate plateMX = Plate(
+      0, //id
+      1, //status
+      "MEX$randomToken",//identifier 
+      "TIJ", //state
+      "MEX", //country
+      time, //expiration
+      0, //truck
+      null, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
+    Plate plateUSA = Plate(
+      0, //id
+      1, //status
+      "USA$randomToken",//identifier 
+      "CA", //state
+      "USA", //country
+      time, //expiration
+      0, //truck
+      null, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
+    TruckCommon truckCommon = TruckCommon(
+      0, //id
+      1, //status
+      "ECO$randomToken", //economic
+      null, //location
+      null, //situation
+      null,
+      null,
+      null, //statusNavigation
+    );
+    Maintenance maintenance = Maintenance(
+      0, 
+      1, 
+      DateTime.now(), 
+      DateTime.now(), 
+      null, 
+      <Truck>[]
+    );
+    Insurance insurance = Insurance(
+      0, 
+      1, 
+      "P232Policy$randomToken", 
+      DateTime.now(), 
+      "USA", 
+      null, 
+      <Truck>[]
+    );
+    Manufacturer manufacturer = Manufacturer(
+      0, 
+      "model $randomToken", 
+      "brand $randomToken", 
+      DateTime.now(), 
+      <Truck>[]
+    );
+    Approach approach = Approach(
+      0, 
+      1, 
+      "Testemail@$randomToken.com", 
+      null, 
+      null, 
+      null, 
+      null, 
+      <Carrier>[]
+    );
+    Address address = Address(
+      0, 
+      "USA", 
+      null, 
+      null, 
+      null, 
+      null, 
+      null, 
+      null, 
+      <Carrier>[]
+    );
+    USDOT usdot = USDOT(
+      0, 
+      1, 
+      "MCtestT", 
+      "scac", 
+      null
+    );
+    SCT sct = SCT(
+      0, 
+      1, 
+      "type01", 
+      "Number_test_sct:$randomToken", 
+      "C$randomToken", 
+      null
+    );
+    Carrier carrier = Carrier(
+      0, 
+      1, 
+      0, 
+      0, 
+      "Carrier: $randomToken", 
+      "Carrier description: $randomToken", 
+      null, 
+      null, 
+      approach, 
+      address, 
+      usdot, 
+      sct, 
+      null, 
+      <Truck>[]
+    );
+    Truck truck = Truck(
+      0, // id 
+      1, //Status
+      0,//manufacturer
+      0, //common
+      1, //carrier
+      "Motor $randomToken", //motor
+      "VINtest-$randomToken", //vin
+      null, //maintenance
+      null, //insurance
+      null, //statusNavigation
+      manufacturer, //manufacturerNavigation
+      truckCommon, //truckCommonNavigation
+      maintenance, //maintenanceNavigation
+      insurance, //insuranceNavigation
+      carrier, //carrierNavigation
+      <Plate>[plateMX,plateUSA]
+    );
+    return truck;
+  }
   setUp(
     () async {
       final TWSFoundationSource source = TWSFoundationSource(false);
@@ -36,65 +171,14 @@ void main() {
       mocks = <Truck>[];
       for (int i = 0; i < 3; i++) {
         int rnd = Random().nextInt(900)  + 99;
-        String randomToken = '${i}_qual$rnd';        DateTime time = DateTime.now();
-        Plate plateMX = Plate(
-          0, //id
-          1, //status
-          "MEX$randomToken",//identifier 
-          "TIJ", //state
-          "MEX", //country
-          time, //expiration
-          0, //truck
-          null, //trailer
-          null, //statusNavigation
-          null, //truckCommonNavigation
-          null //trailerCommonNavigation
-        );
-        Plate plateUSA = Plate(
-          0, //id
-          1, //status
-          "USA$randomToken",//identifier 
-          "CA", //state
-          "USA", //country
-          time, //expiration
-          0, //truck
-          null, //trailer
-          null, //statusNavigation
-          null, //truckCommonNavigation
-          null //trailerCommonNavigation
-        );
-        TruckCommon truckCommon = TruckCommon(
-        0, //id
-        1, //status
-        "ECO$randomToken", //economic
-        1, //location
-        1, //situation
-        null,
-        null,
-        null, //statusNavigation
-        );
-        Truck truck = Truck(
-          0, // id 
-          1, //Status
-          2,//manufacturer
-          0, //common
-          1, //carrier
-          "Motor $randomToken", //motor
-          "VINtest-$randomToken", //vin
-          1, //maintenance
-          1, //insurance
-          null, //statusNavigation
-          null, //manufacturerNavigation
-          truckCommon, //truckCommonNavigation
-          null, //maintenanceNavigation
-          null, //insuranceNavigation
-          null,
-          <Plate>[plateMX,plateUSA]
-        );
-        mocks.add(truck);
+        String randomToken = '${i}_qual$rnd';
+        Truck mock = buildTruck(randomToken);
+        mocks.add(mock);
       }
     },
   );
+
+  
 
   test(
     'View',
@@ -144,6 +228,44 @@ void main() {
       );
 
       expect(true, resolved, reason: 'The action wasn\'t resolved');
+    },
+  );
+
+  group(
+    'Update',
+    () {
+      final MigrationUpdateResultDecoder<Truck> decoder = MigrationUpdateResultDecoder<Truck>(TruckDecoder());
+      late Truck creationMock;
+      test(
+        'Creates when unexist',
+        () async {
+          int rnd = Random().nextInt(900)  + 99;
+          Truck mock = buildTruck("U_qual$rnd");
+
+          MainResolver<MigrationUpdateResult<Truck>> fact = await service.update(mock, auth);
+          MigrationUpdateResult<Truck> actEffect = await fact.act(decoder);
+          assert(actEffect.previous == null);
+          assert(actEffect.updated.id > 0);
+
+          creationMock = actEffect.updated;
+        },
+      );
+
+      test(
+        'Updates when exist',
+        () async {
+          int rnd = Random().nextInt(900)  + 99;
+          Truck mock = creationMock.clone(vin: "UPDATEDVIN_T: $rnd");
+          mock.manufacturerNavigation!.brand = "brand $rnd";
+          MainResolver<MigrationUpdateResult<Truck>> fact = await service.update(mock, auth);
+          MigrationUpdateResult<Truck> actEffect = await fact.act(decoder);
+          assert(actEffect.previous != null);
+          assert(actEffect.updated.id == creationMock.id);
+          assert(actEffect.updated.vin != actEffect.previous!.vin);
+          assert(actEffect.updated.manufacturerNavigation!.brand != actEffect.previous!.manufacturerNavigation!.brand);
+
+        },
+      );
     },
   );
 }

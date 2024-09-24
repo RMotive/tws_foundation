@@ -8,7 +8,7 @@ final class Truck implements CSMSetInterface {
   static const String kCarrier = 'carrier';
   static const String kMotor = 'motor';
   static const String kVin = "vin";
-  static const String kMaintenance = 'maintenace';
+  static const String kMaintenance = 'maintenance';
   static const String kInsurance = 'insurance';
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kManufacturerNavigation = 'ManufacturerNavigation';

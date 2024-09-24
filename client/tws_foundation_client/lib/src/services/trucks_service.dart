@@ -22,5 +22,11 @@ final class TrucksService extends TrucksServiceBase {
     CSMActEffect actEffect = await postList('create', trucks, auth: auth);
     return MainResolver<MigrationTransactionResult<Truck>>(actEffect);
   }
+
+  @override
+  Effect<MigrationUpdateResult<Truck>> update(Truck truck, String auth) async {
+    CSMActEffect actEffect = await post('update', truck, auth: auth);
+    return MainResolver<MigrationUpdateResult<Truck>>(actEffect);
+  }
 }
       

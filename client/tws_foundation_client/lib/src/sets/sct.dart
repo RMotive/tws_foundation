@@ -7,7 +7,6 @@ final class SCT implements CSMSetInterface {
   static const String kNumber = "number";
   static const String kConfiguration = "configuration";
   static const String kstatusNavigation = 'StatusNavigation';
-  static const String kTrucks = "trucks";
 
   @override
   int id = 0;
@@ -16,11 +15,9 @@ final class SCT implements CSMSetInterface {
   String number = "";
   String configuration = "";
   Status? statusNavigation;
-  List<Truck> trucks = <Truck>[];
 
-  SCT(this.id, this.status, this.type, this.number, this.configuration, this.statusNavigation ,this.trucks);
+  SCT(this.id, this.status, this.type, this.number, this.configuration, this.statusNavigation);
   factory SCT.des(JObject json) {
-    List<Truck> trucks = <Truck>[];
     int id = json.get('id');
     int status = json.get('status');
     String type = json.get('type');
@@ -32,11 +29,8 @@ final class SCT implements CSMSetInterface {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
-
-    List<JObject> rawTrucksArray = json.getList('Trucks');
-    trucks = rawTrucksArray.map<Truck>((JObject e) => deserealize(e, decode: TruckDecoder())).toList();
     
-    return SCT(id, status, type, number, configuration, statusNavigation, trucks);
+    return SCT(id, status, type, number, configuration, statusNavigation);
   }
 
   @override
@@ -48,7 +42,6 @@ final class SCT implements CSMSetInterface {
       kNumber: number,
       kConfiguration: configuration,
       kstatusNavigation: statusNavigation?.encode(),
-      kTrucks: trucks.map((Truck i) => i.encode()).toList(),
     };
   }
   
@@ -69,9 +62,8 @@ final class SCT implements CSMSetInterface {
     String? number,
     String? configuration,
     Status? statusNavigation,
-    List<Truck>? trucks
   }){
-    return SCT(id ?? this.id, status ?? this.status, type ?? this.type, number ?? this.number, configuration ?? this.configuration, statusNavigation ?? this.statusNavigation, trucks ?? this.trucks);
+    return SCT(id ?? this.id, status ?? this.status, type ?? this.type, number ?? this.number, configuration ?? this.configuration, statusNavigation ?? this.statusNavigation);
   }
 }
 

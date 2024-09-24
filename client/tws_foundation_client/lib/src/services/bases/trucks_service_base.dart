@@ -13,4 +13,7 @@ abstract class TrucksServiceBase extends CSMServiceBase {
 
   Effect<MigrationTransactionResult<Truck>> create(List<Truck> trucks, String auth);
 
+  Effect<MigrationUpdateResult<Truck>> update(Truck truck, String auth);
+
+
 }

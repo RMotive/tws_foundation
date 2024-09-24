@@ -3,8 +3,8 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class USDOT implements CSMSetInterface {
   static const String kStatus = "status";
-  static const String kMc = "type";
-  static const String kScac = "number";
+  static const String kMc = "mc";
+  static const String kScac = "scac";
   static const String kstatusNavigation = 'StatusNavigation';
 
   @override

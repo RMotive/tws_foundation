@@ -96,7 +96,7 @@ final class Carrier implements CSMSetInterface {
       kStatusNavigation: statusNavigation?.encode(),
       kApproachNavigation: approachNavigation?.encode(),
       kAddressNavigation: addressNavigation?.encode(),
-      kUsdotNavigation: addressNavigation?.encode(),
+      kUsdotNavigation: usdotNavigation?.encode(),
       kSctNavigation: sctNavigation?.encode(),
       kTrucks: trucks.map((Truck i) => i.encode()).toList(),
     };

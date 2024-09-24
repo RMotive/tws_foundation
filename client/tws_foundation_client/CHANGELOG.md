@@ -2,7 +2,7 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: N/A
+- Notes: [TrucksExternals] Create & update service methods added and tested.
 
 - Dependencies Upgrade: N/A
 
