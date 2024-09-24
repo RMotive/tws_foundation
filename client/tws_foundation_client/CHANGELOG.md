@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 4.1.0 - [23.09-2024]
 
-- Notes: 
+- Notes:
 
     1. Added validation in [Yardlog] set, for trailers when "Botado" load type is not selected.
 

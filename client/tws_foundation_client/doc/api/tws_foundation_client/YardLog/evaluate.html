@@ -101,8 +101,12 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   if(truckExternalNavigation == null &amp;&amp; truckNavigation == null){
     results.add(CSMSetValidationResult(kTruck, &#39;Debe seleccionar un camion&#39;, &#39;pointerHandler()&#39;));
   }
+  &#47;&#47;Loadtype: 3 == &quot;Botado&quot;
+  if(loadType != 3 &amp;&amp; (trailerExternalNavigation == null &amp;&amp; trailerNavigation == null)){
+    results.add(CSMSetValidationResult(kLoadType, &#39;Debe agregar los datos del remolque, de lo contrario seleccione el tipo de carga como Botado&#39;, &#39;FieldConflic()&#39;));
+  }
 
-  if(loadTypeNavigation?.name == &quot;Botado&quot; &amp;&amp; (trailerExternalNavigation != null || trailerNavigation != null)){
+  if(loadType == 3 &amp;&amp; (trailerExternalNavigation != null || trailerNavigation != null)){
     results.add(CSMSetValidationResult(kLoadType, &#39;Si el tipo de carga es Botado, no puede seleccionar datos del remolque&#39;, &#39;FieldConflic()&#39;));
   }
 
@@ -149,7 +153,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.0.0
+      4.1.0
   </span>
 
   
