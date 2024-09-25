@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Employee
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -46,7 +47,7 @@ public partial class Employee
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Identification), [new PointerValidator(true)]),
             (nameof(Approach), [new PointerValidator(true)]),
             (nameof(Address), [new PointerValidator(true)]),
@@ -59,45 +60,48 @@ public partial class Employee
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Employee>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Employees");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Employee>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Employees");
 
-            _ = entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.Curp)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Curp)
                .HasColumnName("CURP");
-            _ = entity.Property(e => e.Curp)
+            Entity.Property(e => e.Curp)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Rfc)
+            Entity.Property(e => e.Rfc)
                .HasColumnName("RFC");
-            _ = entity.Property(e => e.Rfc)
+            Entity.Property(e => e.Rfc)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Nss)
+            Entity.Property(e => e.Nss)
                .HasColumnName("NSS");
-            _ = entity.Property(e => e.Nss)
+            Entity.Property(e => e.Nss)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.IdentificationNavigation)
+            Entity.HasOne(d => d.IdentificationNavigation)
              .WithMany(p => p.Employees)
              .HasForeignKey(d => d.Identification);
 
-            _ = entity.HasOne(d => d.ApproachNavigation)
+            Entity.HasOne(d => d.ApproachNavigation)
               .WithMany(p => p.Employees)
               .HasForeignKey(d => d.Approach);
 
-            _ = entity.HasOne(d => d.AddressNavigation)
+            Entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.Employees)
                 .HasForeignKey(d => d.Address);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Employees)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

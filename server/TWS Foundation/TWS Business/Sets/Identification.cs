@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Identification
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -27,29 +28,33 @@ public partial class Identification
     public virtual ICollection<Employee> Employees { get; set; } = [];
 
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Identification>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
-               .HasColumnName("id");
-            _ = entity.ToTable("Identifications");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Identification>(Entity => {
+            Entity.ToTable("Identifications");
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Name)
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Name)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.FatherLastname)
+            Entity.Property(e => e.FatherLastname)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.MotherLastName)
+            Entity.Property(e => e.MotherLastName)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Identifications)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+            Entity.HasOne(d => d.StatusNavigation)
+               .WithMany(p => p.Identifications)
+               .HasForeignKey(d => d.Status)
+               .OnDelete(DeleteBehavior.ClientSetNull);
         });
     }
 
@@ -57,10 +62,10 @@ public partial class Identification
         RequiredValidator Required = new();
         Container = [
             ..Container,
-            (nameof(Name), [Required, new LengthValidator(1,32)]),
-            (nameof(FatherLastname), [Required, new LengthValidator(1,32)]),
-            (nameof(MotherLastName), [Required, new LengthValidator(1,32)]),
-            (nameof(Status), [Required, new PointerValidator(true)])
+            (nameof(Name), [Required, new LengthValidator(Max: 32)]),
+            (nameof(FatherLastname), [Required, new LengthValidator(Max: 32)]),
+            (nameof(MotherLastName), [Required, new LengthValidator(Max: 32)]),
+            (nameof(Status), [new PointerValidator(true)])
         ];
         return Container;
     }

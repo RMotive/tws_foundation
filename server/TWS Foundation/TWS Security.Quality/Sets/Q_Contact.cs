@@ -1,12 +1,12 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Security.Sets;
 
 namespace TWS_Security.Quality.Sets;
 public class Q_Contact
-    : BQ_MigrationSet<Contact> {
+    : BQ_Set<Contact> {
     protected override Q_MigrationSet_EvaluateRecord<Contact>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Contact>[] Container) {
         Q_MigrationSet_EvaluateRecord<Contact> success = new() {
             Mock = new() {

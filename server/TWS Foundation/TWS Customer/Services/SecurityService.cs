@@ -1,6 +1,5 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Enumerators;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Enumerators;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +46,7 @@ public class SecurityService
                 });
         }
 
-        DatabasesTransactionOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, MigrationReadBehavior.First, include);
+        SetBatchOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, SetReadBehaviors.First, include);
         if (result.Failed) {
             throw new XMigrationTransaction<Account>(result.Failures);
         }

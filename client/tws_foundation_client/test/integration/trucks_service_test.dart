@@ -1,6 +1,5 @@
 
 
-import 'dart:io';
 import 'dart:math';
 
 import 'package:test/test.dart';
@@ -183,12 +182,12 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Truck>> fact = await service.view(
-        MigrationViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+      MainResolver<SetViewOut<Truck>> fact = await service.view(
+        SetViewOptions<Truck>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<Truck>>[]),
         auth,
       );
       fact.resolve(
-        decoder: MigrationViewDecode<Truck>(TruckDecoder()),
+        decoder: SetViewOutDecode<Truck>(TruckDecoder()),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -198,8 +197,8 @@ void main() {
         onFailure: (FailureFrame failure, int status) {
           throw failure.estela.system;
         },
-        onSuccess: (SuccessFrame<MigrationView<Truck>> success) {
-          MigrationView<Truck> fact = success.estela;
+        onSuccess: (SuccessFrame<SetViewOut<Truck>> success) {
+          SetViewOut<Truck> fact = success.estela;
 
           expect(fact.amount >= fact.records, true);
           expect(fact.records >= 0, true);

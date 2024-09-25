@@ -68,12 +68,12 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<TruckExternal>> fact = await service.view(
-        MigrationViewOptions(null, <MigrationViewOrderOptions>[], 1, 10, false),
+      MainResolver<SetViewOut<TruckExternal>> fact = await service.view(
+        SetViewOptions<TruckExternal>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<TruckExternal>>[]),
         auth,
       );
       fact.resolve(
-        decoder: MigrationViewDecode<TruckExternal>(TruckExternalDecoder()),
+        decoder: SetViewOutDecode<TruckExternal>(TruckExternalDecoder()),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -83,8 +83,8 @@ void main() {
         onFailure: (FailureFrame failure, int status) {
           throw failure.estela.system;
         },
-        onSuccess: (SuccessFrame<MigrationView<TruckExternal>> success) {
-          MigrationView<TruckExternal> fact = success.estela;
+        onSuccess: (SuccessFrame<SetViewOut<TruckExternal>> success) {
+          SetViewOut<TruckExternal> fact = success.estela;
 
           expect(fact.amount >= fact.records, true);
           expect(fact.records >= 0, true);

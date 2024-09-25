@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -9,16 +9,20 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TrucksCommonsDepot"/>.
 /// </summary>
 public class Q_TrucksCommonsDepot
-    : BQ_MigrationDepot<TruckCommon, TrucksCommonsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<TruckCommon, TrucksCommonsDepot, TWSBusinessDatabase> {
     public Q_TrucksCommonsDepot()
         : base(nameof(TruckCommon.Id)) {
     }
 
-    protected override TruckCommon MockFactory() {
+    protected override TruckCommon MockFactory(string RandomSeed) {
 
         return new() {
             Status = 1,
             Economic = RandomUtils.String(16),
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(TruckCommon Mock) {
+        return (nameof(TruckCommon.Economic), Mock.Economic);
     }
 }

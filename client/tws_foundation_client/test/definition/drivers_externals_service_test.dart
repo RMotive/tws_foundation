@@ -6,21 +6,21 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late DriversExternalsServiceBase service;
-  late MigrationView<DriverExternal> viewMock;
+  late SetViewOut<DriverExternal> viewMock;
   late DriverExternal createMock;
-  late MigrationViewOptions options;
+  late SetViewOptions<DriverExternal> options;
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<DriverExternal>(<DriverExternal>[], 1, DateTime.now(), 3, 0, 20);
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
+      options = SetViewOptions<DriverExternal>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<DriverExternal>>[]);
+      viewMock = SetViewOut<DriverExternal>(<DriverExternal>[], 1, DateTime.now(), 3, 0, 20);
       createMock = DriverExternal(0, 1, 1, 1, null, null, null);
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<DriverExternal>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<DriverExternal>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<DriverExternal>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
@@ -39,11 +39,11 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<DriverExternal>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<DriverExternal>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<DriverExternal>(DriverExternalDecoder()),
+        decoder: SetViewOutDecode<DriverExternal>(DriverExternalDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
@@ -51,10 +51,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<DriverExternal>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<DriverExternal>> success) {
           passed = true;
 
-          MigrationView<DriverExternal> fact = success.estela;
+          SetViewOut<DriverExternal> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

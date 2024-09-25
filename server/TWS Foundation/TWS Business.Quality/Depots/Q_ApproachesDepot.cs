@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+﻿using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -9,15 +8,19 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="ApproachesDepot"/>.
 /// </summary>
 public class Q_ApproachesDepot
-    : BQ_MigrationDepot<Approach, ApproachesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Approach, ApproachesDepot, TWSBusinessDatabase> {
     public Q_ApproachesDepot()
         : base(nameof(Approach.Email)) {
     }
 
-    protected override Approach MockFactory() {
+    protected override Approach MockFactory(string RandomSeed) {
         return new() {
             Status = 1,
             Email = "mail@test.com"
         };
+    }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Approach Mock) {
+        return (nameof(Approach.Personal), Mock.Personal);
     }
 }

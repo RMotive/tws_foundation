@@ -13,7 +13,7 @@ abstract class SolutionsServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<MigrationView<Solution>> view(MigrationViewOptions options, String auth);
+  Effect<SetViewOut<Solution>> view(SetViewOptions<Solution> options, String auth);
 
   /// Transaction to create solutions entities.
   Effect<MigrationTransactionResult<Solution>> create(List<Solution> solutions, String auth);

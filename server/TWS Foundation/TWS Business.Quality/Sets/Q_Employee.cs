@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_Employee : BQ_MigrationSet<Employee> {
+public class Q_Employee : BQ_Set<Employee> {
     protected override Q_MigrationSet_EvaluateRecord<Employee>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Employee>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Employee> success = new() {
@@ -34,9 +34,9 @@ public class Q_Employee : BQ_MigrationSet<Employee> {
             },
             Expectations = [
                 (nameof(Employee.Id), [(new PointerValidator(), 3)]),
-                (nameof(Employee.Curp), [(new LengthValidator(), 2)]),
-                (nameof(Employee.Nss), [(new LengthValidator(), 2)]),
-                (nameof(Employee.Rfc), [(new LengthValidator(), 2)]),
+                (nameof(Employee.Curp), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Employee.Nss), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Employee.Rfc), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(Employee.Identification), [(new PointerValidator(true), 3)]),
                 (nameof(Employee.Address), [(new PointerValidator(true), 3)]),
                 (nameof(Employee.Approach), [(new PointerValidator(true), 3)]),

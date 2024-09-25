@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="EmployeesDepot"/>.
 /// </summary>
 public class Q_EmployeesDepot
-    : BQ_MigrationDepot<Employee, EmployeesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Employee, EmployeesDepot, TWSBusinessDatabase> {
     public Q_EmployeesDepot()
         : base(nameof(Employee.Id)) {
     }
 
-    protected override Employee MockFactory() {
+    protected override Employee MockFactory(string RandomSeed) {
 
         return new() {
             Identification = 1,
@@ -26,4 +26,7 @@ public class Q_EmployeesDepot
             Nss = RandomUtils.String(11)
         };
     }
+
+    protected override (string Property, string? Value)? FactorizeProperty(Employee Mock) 
+    => (nameof(Employee.Curp), Mock.Curp);
 }

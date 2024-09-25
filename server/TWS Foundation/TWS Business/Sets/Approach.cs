@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Approach
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -29,42 +30,44 @@ public partial class Approach
     public virtual ICollection<Employee> Employees { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
 
         Container = [
-                .. Container,
-            (nameof(Email), [Required, new LengthValidator(1, 30)]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
+            ..Container,
+            (nameof(Email), [new RequiredValidator(), new LengthValidator(Max: 30)]),
+            (nameof(Status), [new PointerValidator(true)]),
         ];
 
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Approach>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Approaches");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Approach>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Approaches");
 
-            _ = entity.Property(e => e.Id)
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.Enterprise)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Enterprise)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Personal)
+            Entity.Property(e => e.Personal)
                 .HasMaxLength(13)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Alternative)
+            Entity.Property(e => e.Alternative)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Email)
+            Entity.Property(e => e.Email)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Contacts)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

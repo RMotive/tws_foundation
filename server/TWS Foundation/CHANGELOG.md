@@ -6,6 +6,35 @@
 
 - Dependencies Upgrade: N/A
 
+## 3.0.0 - [23.09-2024]
+
+- Notes: N/A
+
+    1. All sets got updated adding [Timestamp] new property to the [ISet] interface, representing the timestamp when the record got created.
+
+    2. Renamed items: A lot of items got renamed to enumerate them in the changelog.
+
+    3. Added [Filters] to [View] [BDepot] operation, allowing to specify bounds from the data that want to be retrieved.
+
+        - [SetViewDateFilter] Allow to specify a range of dates where the data where created ([Timestamp]).
+        - [SetViewPropertyFilter] Allow to specify a property or nested property from the model to calculate based on the [Evaluation] proeprty, nested proeprtyes are splitted by '.' ex: ('Location.Name').
+        - [SetViewFilterLinearEvaluation] Allow to specify a group of filters applying a specific logical operator, this one is linear that means will apply the same operator for all the given filters.
+
+    4. [Developers]: Huge improvement in testing base labeling, now tests will be labeled and the most auto-managed by [CSM].
+
+    5. [Developers]: Fixed a problem with the test data disposer, now is working even in async operations, also was fixing and well implemented Contact controller tests and was fixed a problem was causing errors trying to deserealize object [SetOperationFailure] model in tests validations.
+
+    6. [Developers]: Included tests for:
+
+        - [SetViewDateFilter]
+        - [SetViewPropertyFilter]
+        - [SetViewFilterLinearEvaluation]
+
+    7. Added Inventories and Yardlog Triggers validations.
+    8. Fixed: Now the trailers not sum +1 (Only Trucks) to the ocupancy section counter, in inventories management.
+
+- Dependencies Upgrade: N/A
+
 ## 2.0.2 - [16.09-2024]
 
 - Notes:

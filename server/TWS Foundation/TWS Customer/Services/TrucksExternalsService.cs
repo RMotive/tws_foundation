@@ -1,7 +1,7 @@
 ﻿
 
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class TrucksExternalsService : ITrucksExternalsService {
         TrucksExternals = trucksExternals;
     }
 
-    public async Task<SetViewOut<TruckExternal>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<TruckExternal>> View(SetViewOptions<TruckExternal> Options) {
         static IQueryable<TruckExternal> include(IQueryable<TruckExternal> query) {
             return query
             .Include(t => t.TruckCommonNavigation)
@@ -42,7 +42,7 @@ public class TrucksExternalsService : ITrucksExternalsService {
         return await TrucksExternals.View(Options, include);
     }
 
-    public async Task<DatabasesTransactionOut<TruckExternal>> Create(TruckExternal[] trucks) {
+    public async Task<SetBatchOut<TruckExternal>> Create(TruckExternal[] trucks) {
         return await this.TrucksExternals.Create(trucks);
     }
 

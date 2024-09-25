@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -32,11 +32,11 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
     public virtual DbSet<Profile> Profiles { get; set; }
 
-    public virtual DbSet<ProfilesPermit> ProfilesPermits { get; set; }
+    public virtual DbSet<ProfilePermit> ProfilesPermits { get; set; }
 
     public virtual DbSet<Solution> Solutions { get; set; }
 
-    protected override IDatabasesSet[] EvaluateFactory() {
+    protected override ISet[] EvaluateFactory() {
         return [
             new Solution(),
         ];
@@ -64,31 +64,9 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
         AccountPermit.CreateModel(modelBuilder);
         AccountProfile.CreateModel(modelBuilder);   
-
-
-        modelBuilder.Entity<Contact>(entity => {
-            entity.HasKey(e => e.Id);
-
-            entity.HasIndex(e => e.Phone)
-                .IsUnique();
-
-            entity.HasIndex(e => e.Email)
-                .IsUnique();
-
-            entity.Property(e => e.Id);
-            entity.Property(e => e.Email)
-                .HasMaxLength(30)
-                .IsUnicode(false);
-            entity.Property(e => e.Lastname)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Phone)
-                .HasMaxLength(14)
-                .IsUnicode(false);
-        });
+        Solution.CreateModel(modelBuilder);
+        Contact.CreateModel(modelBuilder);
+        ProfilePermit.CreateModel(modelBuilder);
 
         modelBuilder.Entity<Feature>(entity => {
             _ = entity.HasKey(e => e.Id);
@@ -132,39 +110,6 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
                 .IsUnicode(false);
             _ = entity.Property(e => e.Name)
                 .HasMaxLength(25)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<ProfilesPermit>(entity => {
-            _ = entity.HasNoKey();
-
-            _ = entity.Property(e => e.Permit);
-            _ = entity.Property(e => e.Profile);
-
-            _ = entity.HasOne(d => d.PermitNavigation).WithMany()
-                .HasForeignKey(d => d.Permit)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            _ = entity.HasOne(d => d.ProfileNavigation).WithMany()
-                .HasForeignKey(d => d.Profile)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-        modelBuilder.Entity<Solution>(entity => {
-            _ = entity.HasKey(e => e.Id);
-
-            _ = entity.HasIndex(e => e.Sign).IsUnique();
-
-            _ = entity.HasIndex(e => e.Name).IsUnique();
-
-            _ = entity.Property(e => e.Id);
-            _ = entity.Property(e => e.Description)
-                .IsUnicode(false);
-            _ = entity.Property(e => e.Name)
-                .HasMaxLength(25)
-                .IsUnicode(false);
-            _ = entity.Property(e => e.Sign)
-                .HasMaxLength(5)
                 .IsUnicode(false);
         });
 

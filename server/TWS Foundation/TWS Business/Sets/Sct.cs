@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Sct
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -24,25 +25,29 @@ public partial class Sct
     public virtual ICollection<SctH> SctsH { get; set; } = [];
 
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Sct>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.Property(e => e.Id)
-               .HasColumnName("id");
-            _ = entity.ToTable("SCT");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Sct>(Entity => {
+            Entity.ToTable("SCT");
+            Entity.HasKey(e => e.Id);
 
-           
-            _ = entity.Property(e => e.Configuration)
+
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
+               .HasColumnName("id");
+
+            Entity.Property(e => e.Configuration)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Number)
+            Entity.Property(e => e.Number)
                 .HasMaxLength(25)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Type)
+            Entity.Property(e => e.Type)
                 .HasMaxLength(6)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Scts)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class TrailerCommon
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -41,41 +42,44 @@ public partial class TrailerCommon
         Container = [
                 .. Container,
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
+            (nameof(Status), [new PointerValidator(true)]),
         ];
 
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<TrailerCommon>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Trailers_Commons");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<TrailerCommon>(Entity => {
+            Entity.ToTable("Trailers_Commons");
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
-                 .HasColumnName("id");
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
 
-            _ = entity.Property(e => e.Economic)
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            Entity.Property(e => e.Economic)
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.TrailerClassNavigation)
-              .WithMany(p => p.TrailersCommons)
-              .HasForeignKey(d => d.Class);
-            
-            _ = entity.HasOne(d => d.SituationNavigation)
-               .WithMany(p => p.TrailersCommons)
-               .HasForeignKey(d => d.Situation);
+            Entity.HasOne(d => d.TrailerClassNavigation)
+                .WithMany(p => p.TrailersCommons)
+                .HasForeignKey(d => d.Class);
 
-            _ = entity.HasOne(d => d.LocationNavigation)
-               .WithMany(p => p.TrailersCommons)
-               .HasForeignKey(d => d.Location)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+            Entity.HasOne(d => d.SituationNavigation)
+                .WithMany(p => p.TrailersCommons)
+                .HasForeignKey(d => d.Situation);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
-               .WithMany(p => p.TrailersCommons)
-               .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+            Entity.HasOne(d => d.LocationNavigation)
+                .WithMany(p => p.TrailersCommons)
+                .HasForeignKey(d => d.Location)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            Entity.HasOne(d => d.StatusNavigation)
+                .WithMany(p => p.TrailersCommons)
+                .HasForeignKey(d => d.Status)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
     }
 }

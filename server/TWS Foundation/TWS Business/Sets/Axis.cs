@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Axis
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -19,32 +20,33 @@ public partial class Axis
     public virtual ICollection<TrailerClass> TrailerClasses { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
 
         Container = [
-                .. Container,
-            (nameof(Name), [Required, new LengthValidator(1, 30)]),
+            ..Container,
+            (nameof(Name), [new RequiredValidator(), new LengthValidator(Max: 30)]),
         ];
 
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Axis>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Axes");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Axis>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Axes");
 
-            _ = entity.Property(e => e.Id)
-                 .HasColumnName("id");
+            Entity.Property(e => e.Id)
+                .HasColumnName("id");
 
-            _ = entity.Property(e => e.Name)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Name)
                 .HasMaxLength(30)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Description)
+            Entity.Property(e => e.Description)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-
         });
     }
 }

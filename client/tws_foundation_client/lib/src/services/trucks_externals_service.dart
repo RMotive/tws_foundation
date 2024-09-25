@@ -12,9 +12,9 @@ final class TrucksExternalsService extends TrucksExternalsServiceBase {
         );
         
   @override
-  Effect<MigrationView<TruckExternal>> view(MigrationViewOptions options, String auth) async {
+  Effect<SetViewOut<TruckExternal>> view(SetViewOptions<TruckExternal> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
-    return MainResolver<MigrationView<TruckExternal>>(actEffect);
+    return MainResolver<SetViewOut<TruckExternal>>(actEffect);
   }
 
   @override

@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class TruckCommon
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -30,10 +31,9 @@ public partial class TruckCommon
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
-        UniqueValidator Unique = new();
 
         Container = [
-                .. Container,
+            ..Container,
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
             (nameof(Status), [new PointerValidator(true)])
         ];
@@ -41,28 +41,31 @@ public partial class TruckCommon
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<TruckCommon>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Trucks_Commons");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<TruckCommon>(Entity => {
+            Entity.ToTable("Trucks_Commons");
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                  .HasColumnName("id");
 
-            _ = entity.Property(e => e.Economic)
+            Entity.Property(e => e.Economic)
                 .HasMaxLength(16)
                 .IsUnicode(false);
-            
-            _ = entity.HasOne(d => d.SituationNavigation)
+
+            Entity.HasOne(d => d.SituationNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Situation);
 
-            _ = entity.HasOne(d => d.LocationNavigation)
+            Entity.HasOne(d => d.LocationNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Location)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Status)
                .OnDelete(DeleteBehavior.ClientSetNull);

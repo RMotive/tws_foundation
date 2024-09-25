@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_Approach : BQ_MigrationSet<Approach> {
+public class Q_Approach : BQ_Set<Approach> {
     protected override Q_MigrationSet_EvaluateRecord<Approach>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Approach>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Approach> success = new() {
@@ -25,7 +25,7 @@ public class Q_Approach : BQ_MigrationSet<Approach> {
             },
             Expectations = [
                 (nameof(Approach.Id), [(new PointerValidator(), 3)]),
-                (nameof(Approach.Email), [(new LengthValidator(), 2)]),
+                (nameof(Approach.Email), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(Approach.Status), [(new PointerValidator(true), 3)]),
 
             ],

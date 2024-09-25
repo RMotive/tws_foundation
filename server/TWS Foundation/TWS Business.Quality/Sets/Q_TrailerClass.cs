@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_TrailerClass : BQ_MigrationSet<TrailerClass> {
+public class Q_TrailerClass : BQ_Set<TrailerClass> {
     protected override Q_MigrationSet_EvaluateRecord<TrailerClass>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TrailerClass>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<TrailerClass> success = new() {
@@ -25,7 +25,7 @@ public class Q_TrailerClass : BQ_MigrationSet<TrailerClass> {
             },
             Expectations = [
                 (nameof(TrailerClass.Id), [(new PointerValidator(), 3)]),
-                (nameof(TrailerClass.Name), [(new LengthValidator(), 2)]),
+                (nameof(TrailerClass.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(TrailerClass.Axis), [(new PointerValidator(true), 3)]),
             ],
         };

@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Databases.Quality.Bases;
+using CSM_Foundation.Database.Quality.Bases;
 
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -11,12 +11,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="CarriersHDepot"/>.
 /// </summary>
 public class Q_CarriersHDepot
-    : BQ_MigrationDepot<CarrierH, CarriersHDepot, TWSBusinessDatabase> {
+    : BQ_Depot<CarrierH, CarriersHDepot, TWSBusinessDatabase> {
     public Q_CarriersHDepot()
         : base(nameof(CarrierH.Entity)) {
     }
 
-    protected override CarrierH MockFactory() {
+    protected override CarrierH MockFactory(string RandomSeed) {
 
         return new() {
             Sequence = 1,
@@ -27,4 +27,7 @@ public class Q_CarriersHDepot
             Address = 1
         };
     }
+
+    protected override (string Property, string? Value)? FactorizeProperty(CarrierH Mock) 
+    => null;
 }

@@ -1,7 +1,7 @@
 ﻿
 
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class TrailersService : ITrailersService {
         Trailers = trailers;
     }
 
-    public async Task<SetViewOut<Trailer>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Trailer>> View(SetViewOptions<Trailer> Options) {
         static IQueryable<Trailer> include(IQueryable<Trailer> query) {
             return query
             .Include(t => t.TrailerCommonNavigation)

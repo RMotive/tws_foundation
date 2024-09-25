@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_Identification : BQ_MigrationSet<Identification> {
+public class Q_Identification : BQ_Set<Identification> {
     protected override Q_MigrationSet_EvaluateRecord<Identification>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Identification>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Identification> success = new() {
@@ -29,9 +29,9 @@ public class Q_Identification : BQ_MigrationSet<Identification> {
             },
             Expectations = [
                 (nameof(Identification.Id), [(new PointerValidator(), 3)]),
-                (nameof(Identification.Name), [(new LengthValidator(), 2)]),
-                (nameof(Identification.FatherLastname), [(new LengthValidator(), 2)]),
-                (nameof(Identification.MotherLastName), [(new LengthValidator(), 2)]),
+                (nameof(Identification.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Identification.FatherLastname), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Identification.MotherLastName), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(Identification.Status), [(new PointerValidator(true), 3)]),
             ],
         };

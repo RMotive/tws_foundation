@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Databases.Quality.Bases;
-using CSM_Foundation.Databases.Quality.Records;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Sets;
 
 namespace TWS_Business.Quality.Sets;
-public class Q_TruckExternal : BQ_MigrationSet<TruckExternal> {
+public class Q_TruckExternal : BQ_Set<TruckExternal> {
     protected override Q_MigrationSet_EvaluateRecord<TruckExternal>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TruckExternal>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<TruckExternal> success = new() {

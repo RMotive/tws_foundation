@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Manufacturer
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public string Model { get; set; } = null!;
 
@@ -22,22 +23,24 @@ public partial class Manufacturer
 
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Manufacturer>(entity => {
-            _ = entity.HasKey(e => e.Id);
-            _ = entity.ToTable("Manufacturers");
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Manufacturer>(Entity => {
+            Entity.HasKey(e => e.Id);
+            Entity.ToTable("Manufacturers");
 
-            _ = entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            _ = entity.Property(e => e.Brand)
+            Entity.Property(e => e.Brand)
                 .HasMaxLength(15)
                 .IsUnicode(false);
 
-            _ = entity.Property(e => e.Model)
+            Entity.Property(e => e.Model)
                 .HasMaxLength(30)
                 .IsUnicode(false);
-
         });
     }
 

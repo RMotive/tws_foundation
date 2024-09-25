@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+﻿using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +16,7 @@ public class TrucksService : ITrucksService {
         this.Trucks = Trucks;
     }
 
-    public async Task<SetViewOut<Truck>> View(SetViewOptions options) {
+    public async Task<SetViewOut<Truck>> View(SetViewOptions<Truck> options) {
 
         static IQueryable<Truck> include(IQueryable<Truck> query) {
             return query
@@ -81,7 +81,7 @@ public class TrucksService : ITrucksService {
         return await Trucks.View(options, include);
     }
 
-    public async Task<DatabasesTransactionOut<Truck>> Create(Truck[] trucks) {
+    public async Task<SetBatchOut<Truck>> Create(Truck[] trucks) {
         return await this.Trucks.Create(trucks);
     }
     public async Task<RecordUpdateOut<Truck>> Update(Truck Truck) {

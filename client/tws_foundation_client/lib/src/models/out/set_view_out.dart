@@ -1,11 +1,11 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 
-/// Defines the mirror class to store a [MigrationView] result,
+/// Defines the mirror class to store a [SetViewOut] result,
 /// describing the behavior of a paged table returning data for the required size of pages and page.
 ///
 ///
 /// [TSet] : The type of live database mirror set from to build the [View].
-final class MigrationView<TSet extends CSMEncodeInterface> implements CSMEncodeInterface {
+final class SetViewOut<TSet extends CSMEncodeInterface> implements CSMEncodeInterface {
   /// Records resolved.
   final List<TSet> sets;
 
@@ -24,14 +24,14 @@ final class MigrationView<TSet extends CSMEncodeInterface> implements CSMEncodeI
   /// The total quantity of available records at the live database.
   final int amount;
 
-  /// Creates a new [MigrationView] object.
-  const MigrationView(this.sets, this.page, this.creation, this.pages, this.records, this.amount);
+  /// Creates a new [SetViewOut] object.
+  const SetViewOut(this.sets, this.page, this.creation, this.pages, this.records, this.amount);
 
-  /// Creates a new [MigrationView] object based on deserealization from a [JObject].
+  /// Creates a new [SetViewOut] object based on deserealization from a [JObject].
   ///
   /// [json] : The object to bind properties.
   /// [setDecode] : Optional [CSMDecodeInterface] implementation to use on environment cases.
-  factory MigrationView.des(
+  factory SetViewOut.des(
     JObject json, {
     CSMDecodeInterface<TSet>? setDecode,
   }) {
@@ -50,7 +50,7 @@ final class MigrationView<TSet extends CSMEncodeInterface> implements CSMEncodeI
 
     DateTime creation = json.get('creation');
 
-    return MigrationView<TSet>(setsObjects, page, creation, pages, records, amount);
+    return SetViewOut<TSet>(setsObjects, page, creation, pages, records, amount);
   }
 
   @override
@@ -66,17 +66,17 @@ final class MigrationView<TSet extends CSMEncodeInterface> implements CSMEncodeI
   }
 }
 
-/// [CSMDecodeInterface] implementation from [MigrationView] represents the deserealization
-/// convention and operation to convert a [JObject] into a [MigrationView].
-final class MigrationViewDecode<TSet extends CSMEncodeInterface> implements CSMDecodeInterface<MigrationView<TSet>> {
-  /// Required [CSMDecodeInterface] implementation for the inner generic type [TSet] from [MigrationView].
+/// [CSMDecodeInterface] implementation from [SetViewOut] represents the deserealization
+/// convention and operation to convert a [JObject] into a [SetViewOut].
+final class SetViewOutDecode<TSet extends CSMEncodeInterface> implements CSMDecodeInterface<SetViewOut<TSet>> {
+  /// Required [CSMDecodeInterface] implementation for the inner generic type [TSet] from [SetViewOut].
   final CSMDecodeInterface<TSet> setDecoder;
 
-  /// Creates a new [MigrationViewDecode] object.
-  const MigrationViewDecode(this.setDecoder);
+  /// Creates a new [SetViewOutDecode] object.
+  const SetViewOutDecode(this.setDecoder);
 
   @override
-  MigrationView<TSet> decode(JObject json) {
-    return MigrationView<TSet>.des(json, setDecode: setDecoder);
+  SetViewOut<TSet> decode(JObject json) {
+    return SetViewOut<TSet>.des(json, setDecode: setDecoder);
   }
 }

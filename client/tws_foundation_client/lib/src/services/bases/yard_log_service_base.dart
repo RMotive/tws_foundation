@@ -10,7 +10,9 @@ abstract class YardLogServiceBase extends CSMServiceBase {
   });
 
   /// Transaction to generate a set view object.
-  Effect<MigrationView<YardLog>> view(MigrationViewOptions options, String auth);
+  Effect<SetViewOut<YardLog>> view(SetViewOptions<YardLog> options, String auth);
+
+  Effect<SetViewOut<YardLog>> viewInventory(SetViewOptions<YardLog> options, String auth);
 
   Effect<MigrationTransactionResult<YardLog>> create(List<YardLog> yardlogs, String auth);
 

@@ -1,5 +1,5 @@
 ﻿
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Out;
 
 using TWS_Customer.Services.Interfaces;
 
@@ -13,7 +13,7 @@ public class ContactsService
     public ContactsService(ContactsDepot contacts) {
         Contacts = contacts;
     }
-    public async Task<DatabasesTransactionOut<Contact>> Create(Contact[] contact) {
+    public async Task<SetBatchOut<Contact>> Create(Contact[] contact) {
         return await Contacts.Create(contact);
     }
 }

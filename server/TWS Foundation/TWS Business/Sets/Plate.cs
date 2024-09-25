@@ -1,14 +1,15 @@
-﻿using CSM_Foundation.Databases.Bases;
-using CSM_Foundation.Databases.Interfaces;
-using CSM_Foundation.Databases.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 
 public partial class Plate
-    : BDatabaseSet {
+    : BSet {
     public override int Id { get; set; }
+    public override DateTime Timestamp { get; set; }
 
     public int Status { get; set; }
 
@@ -32,33 +33,36 @@ public partial class Plate
 
     public virtual ICollection<PlateH> PlatesH { get; set; } = [];
 
-    public static void Set(ModelBuilder builder) {
-        _ = builder.Entity<Plate>(entity => {
-            _ = entity.HasKey(e => e.Id);
+    public static void CreateModel(ModelBuilder Builder) {
+        Builder.Entity<Plate>(Entity => {
+            Entity.HasKey(e => e.Id);
 
-            _ = entity.Property(e => e.Id)
+            Entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
+            Entity.Property(e => e.Id)
                 .HasColumnName("id");
-            _ = entity.Property(e => e.Country)
+            Entity.Property(e => e.Country)
                 .HasMaxLength(3)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Identifier)
+            Entity.Property(e => e.Identifier)
                 .HasMaxLength(12)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.State)
+            Entity.Property(e => e.State)
                 .HasMaxLength(3)
                 .IsUnicode(false);
 
-            _ = entity.HasOne(d => d.TruckNavigation)
+            Entity.HasOne(d => d.TruckNavigation)
                 .WithMany(p => p.Plates)
                 .HasForeignKey(d => d.Truck)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.TrailerNavigation)
+            Entity.HasOne(d => d.TrailerNavigation)
                 .WithMany(p => p.Plates)
                 .HasForeignKey(d => d.Trailer)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            _ = entity.HasOne(d => d.StatusNavigation)
+            Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Plates)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);

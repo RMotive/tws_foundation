@@ -6,15 +6,15 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late ManufacturersServiceBase service;
-  late MigrationView<Manufacturer> viewMock;
+  late SetViewOut<Manufacturer> viewMock;
   late Manufacturer createMock;
-  late MigrationViewOptions options;
+  late SetViewOptions<Manufacturer> options;
 
   setUp(
     () {
-      List<MigrationViewOrderOptions> noOrderigns = <MigrationViewOrderOptions>[];
-      options = MigrationViewOptions(null, noOrderigns, 1, 10, false);
-      viewMock = MigrationView<Manufacturer>(<Manufacturer>[], 1, DateTime.now(), 3, 0, 20);
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
+      options = SetViewOptions<Manufacturer>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Manufacturer>>[]);
+      viewMock = SetViewOut<Manufacturer>(<Manufacturer>[], 1, DateTime.now(), 3, 0, 20);
 
       DateTime time = DateTime.now();
       createMock = Manufacturer(0, "S23", "SCANIA", time, <Truck>[]);
@@ -22,7 +22,7 @@ void main() {
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
-            'view' => SuccessFrame<MigrationView<Manufacturer>>('qTracer', viewMock).encode(),
+            'view' => SuccessFrame<SetViewOut<Manufacturer>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<Manufacturer>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
@@ -41,11 +41,11 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<MigrationView<Manufacturer>> fact = await service.view(options, '');
+      MainResolver<SetViewOut<Manufacturer>> fact = await service.view(options, '');
 
       bool passed = false;
       fact.resolve(
-        decoder: MigrationViewDecode<Manufacturer>(ManufacturerDecoder()),
+        decoder: SetViewOutDecode<Manufacturer>(ManufacturerDecoder()),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
@@ -53,10 +53,10 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           assert(false, 'server returned a success');
         },
-        onSuccess: (SuccessFrame<MigrationView<Manufacturer>> success) {
+        onSuccess: (SuccessFrame<SetViewOut<Manufacturer>> success) {
           passed = true;
 
-          MigrationView<Manufacturer> fact = success.estela;
+          SetViewOut<Manufacturer> fact = success.estela;
           expect(viewMock.page, fact.page);
           expect(viewMock.pages, fact.pages);
           expect(viewMock.records, fact.records);

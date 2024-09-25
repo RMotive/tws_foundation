@@ -1,7 +1,7 @@
 ﻿
 
-using CSM_Foundation.Databases.Models.Options;
-using CSM_Foundation.Databases.Models.Out;
+using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class DriversService : IDriversService {
         Drivers = drivers;
     }
 
-    public async Task<SetViewOut<Driver>> View(SetViewOptions Options) {
+    public async Task<SetViewOut<Driver>> View(SetViewOptions<Driver> Options) {
         static IQueryable<Driver> include(IQueryable<Driver> query) {
             return query
             .Include(t => t.DriverCommonNavigation)

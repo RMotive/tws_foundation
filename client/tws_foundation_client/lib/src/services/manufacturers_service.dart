@@ -12,9 +12,9 @@ final class ManufacturersService extends ManufacturersServiceBase {
         );
         
   @override
-  Effect<MigrationView<Manufacturer>> view(MigrationViewOptions options, String auth) async {
+  Effect<SetViewOut<Manufacturer>> view(SetViewOptions<Manufacturer> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
-    return MainResolver<MigrationView<Manufacturer>>(actEffect);
+    return MainResolver<SetViewOut<Manufacturer>>(actEffect);
   }
 }
       

@@ -84,7 +84,7 @@ public class Q_FramingMiddleware
 
         string value = await Response.Content.ReadAsStringAsync();
 
-        ServerGenericFrame? fact = await Response.Content.ReadFromJsonAsync<ServerGenericFrame>();
+        GenericFrame? fact = await Response.Content.ReadFromJsonAsync<GenericFrame>();
 
         Assert.Equal(HttpStatusCode.InternalServerError, Response.StatusCode);
         Assert.NotNull(fact);
@@ -101,7 +101,7 @@ public class Q_FramingMiddleware
 
         HttpResponseMessage Response = await TWS_Foundation.GetAsync(FOUNDATION_EXCEPTION_EP);
 
-        ServerGenericFrame? fact = await Response.Content.ReadFromJsonAsync<ServerGenericFrame>();
+        GenericFrame? fact = await Response.Content.ReadFromJsonAsync<GenericFrame>();
 
         Assert.Equal(HttpStatusCode.BadRequest, Response.StatusCode);
         Assert.NotNull(fact);
