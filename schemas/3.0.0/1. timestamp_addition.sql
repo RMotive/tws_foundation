@@ -23,9 +23,6 @@ EXEC sp_executesql @SQL;
 -- Updating Business tables --
 use [TWS Business];
 
-DECLARE @ColumnName NVARCHAR(128) = 'Timemark';
-DECLARE @SQL NVARCHAR(MAX) = '';
-
 -- Generate SQL to drop constraints associated with the column
 SELECT @SQL = @SQL + 'ALTER TABLE ' + QUOTENAME(TABLE_SCHEMA) + '.' + QUOTENAME(TABLE_NAME) + 
               ' DROP CONSTRAINT ' + QUOTENAME(CONSTRAINT_NAME) + ';' + CHAR(13)
@@ -43,7 +40,7 @@ SET @SQL = '';
 
 -- Generate SQL to drop the column
 SELECT @SQL = @SQL + 'ALTER TABLE ' + QUOTENAME(TABLE_SCHEMA) + '.' + QUOTENAME(TABLE_NAME) + 
-              ' DROP COLUMN ' + QUOTENAME(@ColumnName) + ';' + CHAR(13)
+              '  DROP COLUMN ' + QUOTENAME(@ColumnName) + ';' + CHAR(13)
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE COLUMN_NAME = @ColumnName;
 
@@ -52,11 +49,6 @@ PRINT @SQL;
 
 -- Execute the SQL to drop the column
 EXEC sp_executesql @SQL;
-
-
-DECLARE @ColumnName NVARCHAR(128) = 'Timestamp';
-DECLARE @ColumnType NVARCHAR(128) = 'DATETIME NOT NULL DEFAULT GETDATE()';
-DECLARE @SQL NVARCHAR(MAX) = '';
 
 -- Generate SQL to add the column if it doesn't exist
 SELECT @SQL = @SQL + 'IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ''' + TABLE_SCHEMA + ''' AND TABLE_NAME = ''' + TABLE_NAME + ''' AND COLUMN_NAME = ''' + @ColumnName + ''') ' +

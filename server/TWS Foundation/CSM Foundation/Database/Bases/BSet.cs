@@ -7,19 +7,47 @@ using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 namespace CSM_Foundation.Database.Bases;
+
+/// <summary>
+///     
+/// </summary>
 public abstract class BSet
     : BObject<ISet>, ISet {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract int Id { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract DateTime Timestamp { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private bool Defined = false;
+    
+    /// <summary>
+    /// 
+    /// </summary>
     private (string Property, IValidator[] Validators)[]? Validators;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Container"></param>
+    /// <returns></returns>
     protected abstract (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Custom"></param>
+    /// <exception cref="XBMigrationSet_Evaluate"></exception>
     protected void Evaluate((string Propety, IValidator[] Validators)[] Custom) {
         Validators ??= Validations([]);
 
-        (string Propety, IValidator[] Validators)[] validators = [.. Custom, .. Validators];
+        (string Propety, IValidator[] Validators)[] validators = [..Custom, ..Validators];
         (string property, XIValidator_Evaluate[] faults)[] unvalidations = [];
         int quantity = validators.Length;
         for (int i = 0; i < quantity; i++) {
@@ -50,15 +78,27 @@ public abstract class BSet
 
         throw new XBMigrationSet_Evaluate(GetType(), unvalidations);
     }
+    /// <summary>
+    /// 
+    /// </summary>
     public void EvaluateRead() {
         Evaluate([
-            (nameof(Id), [new PointerValidator()])
+            (nameof(Id), [new PointerValidator()]),
+            (nameof(Timestamp), [new RequiredValidator()])
         ]);
     }
+    /// <summary>
+    /// 
+    /// </summary>
     public void EvaluateWrite() {
-        Evaluate([]);
+        Evaluate([
+            (nameof(Timestamp), [new RequiredValidator()])
+        ]);
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public Exception[] EvaluateDefinition() {
         if (Defined) {
             return [];
