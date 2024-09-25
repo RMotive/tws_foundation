@@ -8,7 +8,8 @@ namespace TWS_Business.Sets;
 public partial class Status
 : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.Now;
 
     public string Name { get; set; } = null!;
 

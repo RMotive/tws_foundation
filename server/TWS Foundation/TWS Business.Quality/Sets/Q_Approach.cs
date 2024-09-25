@@ -11,7 +11,6 @@ public class Q_Approach : BQ_Set<Approach> {
         Q_MigrationSet_EvaluateRecord<Approach> success = new() {
             Mock = new() {
                 Id = 1,
-                Email = "",
                 Status = 1
 
             },
@@ -20,12 +19,11 @@ public class Q_Approach : BQ_Set<Approach> {
         Q_MigrationSet_EvaluateRecord<Approach> failAllCases = new() {
             Mock = new() {
                 Id = 0,
-                Email = "",
                 Status = 0
             },
             Expectations = [
                 (nameof(Approach.Id), [(new PointerValidator(), 3)]),
-                (nameof(Approach.Email), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Approach.Email), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
                 (nameof(Approach.Status), [(new PointerValidator(true), 3)]),
 
             ],

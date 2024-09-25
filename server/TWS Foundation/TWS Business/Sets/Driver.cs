@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Driver
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.Now;
 
     public int Status { get; set; }
 

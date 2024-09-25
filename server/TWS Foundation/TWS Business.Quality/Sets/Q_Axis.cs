@@ -20,11 +20,10 @@ public class Q_Axis : BQ_Set<Axis> {
         Q_MigrationSet_EvaluateRecord<Axis> failAllCases = new() {
             Mock = new() {
                 Id = 0,
-                Name = ""
             },
             Expectations = [
                 (nameof(Axis.Id), [(new PointerValidator(), 3)]),
-                (nameof(Axis.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Axis.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
             ],
         };
 

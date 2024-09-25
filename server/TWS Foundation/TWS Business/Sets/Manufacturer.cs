@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Manufacturer
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.Now;
 
     public string Model { get; set; } = null!;
 
