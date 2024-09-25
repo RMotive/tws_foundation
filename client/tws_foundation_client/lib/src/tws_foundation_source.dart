@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/account_service.dart';
 import 'package:tws_foundation_client/src/services/bases/accounts_service_base.dart';
 import 'package:tws_foundation_client/src/services/drivers_externals_service.dart';

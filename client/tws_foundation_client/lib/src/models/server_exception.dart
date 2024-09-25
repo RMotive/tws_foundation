@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 
 /// Represents a server exception exposed information.
 final class ServerExceptionPublish {

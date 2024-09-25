@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 class MainResolver<TSuccess extends CSMEncodeInterface> extends CSMServiceResolverBase<TSuccess> {

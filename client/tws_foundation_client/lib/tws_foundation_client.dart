@@ -3,9 +3,9 @@
 /// More dartdocs go here.
 library;
 
-export 'package:csm_foundation_services/src/common/enums/csm_protocols.dart';
-export 'package:csm_foundation_services/src/interfaces/csm_encode_interface.dart';
-export 'package:csm_foundation_services/src/models/csm_uri.dart';
+export 'package:csm_client/src/common/enums/csm_protocols.dart';
+export 'package:csm_client/src/interfaces/csm_encode_interface.dart';
+export 'package:csm_client/src/models/csm_uri.dart';
 
 export 'src/frames/frames_module.dart'; // --> Exporting frames
 export 'src/models/models_module.dart'; // --> Exporting modules

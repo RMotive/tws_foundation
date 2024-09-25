@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 
 /// Defines the mirror class to store a [SetViewOut] result,
 /// describing the behavior of a paged table returning data for the required size of pages and page.

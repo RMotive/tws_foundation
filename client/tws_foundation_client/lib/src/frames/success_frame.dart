@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 
 /// Represents the success frame for responses from [TWSAdministration] source
 /// exposing static properties from transaction contexts.

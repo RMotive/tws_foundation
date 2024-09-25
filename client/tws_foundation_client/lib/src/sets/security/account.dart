@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/sets/set_common_keys.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -41,7 +41,7 @@ final class Account implements CSMSetInterface {
     Contact? contactNavigation;
     if (json[kContactNavigation] != null) {
       JObject rawNavigation = json.getDefault(kContactNavigation, <String, dynamic>{});
-      contactNavigation = deserealize<Contact>(rawNavigation, decode: ContactDecoder());
+      contactNavigation = Contact.des(rawNavigation);
     }
 
     return Account(id, contact, user, contactNavigation);
@@ -81,16 +81,5 @@ final class Account implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     return results;
-  }
-}
-
-/// Decodification class for [Account] entity set object.
-final class AccountDecoder implements CSMDecodeInterface<Account> {
-  /// Creates a new
-  const AccountDecoder();
-
-  @override
-  Account decode(JObject json) {
-    return Account.des(json);
   }
 }

@@ -7,4 +7,10 @@ final class SetCommonKeys {
 
   /// [timestamp] property key.
   static const String kTimestamp = 'timestamp';
+
+  /// [name] property key.
+  static const String kName = 'name';
+
+  /// [description] property key.
+  static const String kDescription = 'description';
 }

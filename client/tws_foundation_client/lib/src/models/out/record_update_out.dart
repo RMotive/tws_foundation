@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 
 final class MigrationUpdateResult<TSet extends CSMSetInterface> implements CSMEncodeInterface {
   final TSet? previous;

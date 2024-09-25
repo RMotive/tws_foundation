@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/src/services/bases/accounts_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
