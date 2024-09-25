@@ -1,4 +1,3 @@
-export 'account.dart';
 export 'address.dart';
 export 'approach.dart';
 export 'carrier.dart';
@@ -17,6 +16,7 @@ export 'manufacturer.dart';
 export 'plate.dart';
 export 'sct.dart';
 export 'section.dart';
+export 'security/account.dart';
 export 'situation.dart';
 export 'solution.dart';
 export 'status.dart';
