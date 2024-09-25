@@ -1,4 +1,3 @@
--- Updating Security tables --
 use [TWS Security];
 
 DECLARE @ColumnName NVARCHAR(128) = 'Timestamp';
@@ -22,9 +21,6 @@ EXEC sp_executesql @SQL;
 
 -- Updating Business tables --
 use [TWS Business];
-
-DECLARE @ColumnName NVARCHAR(128) = 'Timestamp';
-DECLARE @SQL NVARCHAR(MAX) = '';
 
 -- Generate SQL to drop constraints associated with the column
 SELECT @SQL = @SQL + 'ALTER TABLE ' + QUOTENAME(TABLE_SCHEMA) + '.' + QUOTENAME(TABLE_NAME) + 
