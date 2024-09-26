@@ -6,10 +6,13 @@ final class DriverExternal implements CSMSetInterface {
   static const String kIdentification = "identification";
   static const String kCommon = "common";
   static const String kstatusNavigation = 'StatusNavigation';
+  static const String kTimestamp = "timestamp";
   static const String kDriverCommonNavigation = 'DriverCommonNavigation';
   static const String kIdentificationNavigatorNavigation = 'IdentificationNavigation';
 
-
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp;
+  
   @override
   int id = 0;
   int status = 1;
@@ -19,12 +22,18 @@ final class DriverExternal implements CSMSetInterface {
   Identification? identificationNavigation;
   Status? statusNavigation;
 
-  DriverExternal(this.id, this.status, this.identification, this.common, this.driverCommonNavigation, this.identificationNavigation, this.statusNavigation);
+  DriverExternal(this.id, this.status, this.identification, this.common, this.driverCommonNavigation, this.identificationNavigation, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory DriverExternal.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     int identification = json.get('identification');
     int common = json.get('identification');
+    DateTime timestamp = json.get('timestamp');
 
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
@@ -44,7 +53,7 @@ final class DriverExternal implements CSMSetInterface {
       identificationNavigator = deserealize<Identification>(rawNavigation, decode: IdentificationDecoder());
     }
         
-    return DriverExternal(id, status, identification, common, driverCommonNavigation, identificationNavigator, statusNavigation);
+    return DriverExternal(id, status, identification, common, driverCommonNavigation, identificationNavigator, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -54,6 +63,7 @@ final class DriverExternal implements CSMSetInterface {
       kStatus: status,
       kIdentification: identification,
       kCommon: common,
+      kTimestamp: timestamp.toIso8601String(),
       kDriverCommonNavigation: driverCommonNavigation?.encode(),
       kIdentificationNavigatorNavigation: identificationNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),

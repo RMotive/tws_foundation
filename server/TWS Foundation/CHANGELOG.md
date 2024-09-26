@@ -2,7 +2,11 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: [TrucksExternals] Create & update service methods added and tested.
+- Notes: 
+  
+    1. [TrucksExternals] Create & update service methods added and tested.
+    2. removed the yardlog timestamp trigger.
+    3. added a default value to timestamp property.
 
 - Dependencies Upgrade: N/A
 

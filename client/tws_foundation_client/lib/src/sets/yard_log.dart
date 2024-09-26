@@ -31,6 +31,9 @@ final class YardLog implements CSMSetInterface {
   static const String kSectionNavigation = "SectionNavigation";
   static const String kAccount = "AccountNavigation";
 
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
+
   @override
   int id = 0;
   bool entry = true;
@@ -42,7 +45,6 @@ final class YardLog implements CSMSetInterface {
   int section = 0;
   int? driver;
   int? driverExternal;
-  DateTime? timestamp;
   int guard = 0;
   String gName = "";
   String fromTo = "";
@@ -60,9 +62,13 @@ final class YardLog implements CSMSetInterface {
   Section? sectionNavigation;
   Account? accountNavigation; //Only for local handle.
 
-  YardLog(this.id, this.entry, this.truck, this.truckExternal, this.trailer, this.trailerExternal, this.loadType, this.section, this.driver, this.driverExternal, this.timestamp,
+  YardLog(this.id, this.entry, this.truck, this.truckExternal, this.trailer, this.trailerExternal, this.loadType, this.section, this.driver, this.driverExternal,
   this.guard, this.gName, this.fromTo, this.seal, this.damage, this.ttPicture, this.dmgEvidence, this.driverNavigation, this.driverExternalNavigation, this.truckNavigation, this.truckExternalNavigation,
-  this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation, this.accountNavigation);
+  this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation, this.accountNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
   factory YardLog.des(JObject json) {
     int id = json.get('id');
     bool entry = json.get('entry');
@@ -124,13 +130,14 @@ final class YardLog implements CSMSetInterface {
       sectionNavigation = deserealize<Section>(rawNavigation, decode: SectionDecoder());
     }
 
-    return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, timestamp, guard, gName, fromTo, seal, damage,
-    ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null);
+    return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, guard, gName, fromTo, seal, damage,
+    ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null, timestamp: timestamp, );
   }
 
   @override
   JObject encode() {
-    return <String, dynamic>{
+
+    JObject request = <String, dynamic>{
       'id': id,
       kEntry: entry,
       kTruck: truck,
@@ -141,7 +148,7 @@ final class YardLog implements CSMSetInterface {
       kSection: section,
       kDriver: driver,
       kDriverExternal: driverExternal,
-      kTimestamp: timestamp?.toIso8601String(),
+      kTimestamp: timestamp.toIso8601String(),
       kGuard: guard,
       kGName: gName,
       kFromTo: fromTo,
@@ -158,6 +165,7 @@ final class YardLog implements CSMSetInterface {
       kLoadTypeNavigation: loadTypeNavigation?.encode(),
       kSectionNavigation: sectionNavigation?.encode(),
     };
+    return request;
   }
 
   @override
@@ -281,7 +289,7 @@ final class YardLog implements CSMSetInterface {
     }
     
     return YardLog(id ?? this.id, entry ?? this.entry, truckIndex, truckExtIndex, trailerIndex, trailerExtIndex, 
-    loadType ?? this.loadType, section ?? this.section, driverIndex,driverExtIndex, timestamp ?? this.timestamp, guard ?? this.guard, 
+    loadType ?? this.loadType, section ?? this.section, driverIndex,driverExtIndex, guard ?? this.guard, 
     gName ?? this.gName, fromTo ?? this.fromTo, seal ?? this.seal, damage ?? this.damage, ttPicture ?? this.ttPicture, dmgEv, driverNav, 
     driverExtNav, truckNav, truckExtNav, trailerNav, trailerExtNav, load, sect, accountNavigation ?? this.accountNavigation);
   }

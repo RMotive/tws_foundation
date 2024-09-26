@@ -4,6 +4,10 @@ final class Solution implements CSMSetInterface {
   static const String kName = 'name';
   static const String kSign = 'sign';
   static const String kDescription = 'description';
+  static const String kTimestamp = "timestamp";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -11,16 +15,30 @@ final class Solution implements CSMSetInterface {
   String sign = '';
   String? description;
 
-  Solution.a();
-  Solution.b(this.name, this.sign, {this.id = 0, this.description});
-  Solution(this.id, this.name, this.sign, this.description);
+  Solution.a({ 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
+  Solution.b(this.name, this.sign, {this.id = 0, this.description, DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
+  Solution(this.id, this.name, this.sign, this.description, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
   factory Solution.des(JObject json) {
     int id = json.get('id');
     String name = json.get('name');
     String sign = json.get('sign');
+    DateTime timestamp = json.get('timestamp');
     String? description = json.getDefault('description', null);
 
-    return Solution(id, name, sign, description);
+    return Solution(id, name, sign, description, timestamp: timestamp);
   }
 
 
@@ -31,6 +49,7 @@ final class Solution implements CSMSetInterface {
       'id': id,
       kName: name,
       kSign: sign,
+      kTimestamp: timestamp.toIso8601String(),
       kDescription: description,
     };
   }

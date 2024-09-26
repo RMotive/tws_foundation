@@ -10,6 +10,10 @@ final class Address implements CSMSetInterface {
   static const String kZip = "zip";
   static const String kColonia = "colonia";
   static const String kCarriers = "Carriers";
+  static const String kTimestamp = "timestamp";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -22,13 +26,18 @@ final class Address implements CSMSetInterface {
   String? colonia = "";
   List<Carrier> carriers = <Carrier>[];
 
-  Address(this.id, this.country, this.state, this.street, this.altStreet, this.city, this.zip, this.colonia, this.carriers);
+  Address(this.id, this.country, this.state, this.street, this.altStreet, this.city, this.zip, this.colonia, this.carriers, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
   
   factory Address.des(JObject json) {
     List<Carrier> carriers = <Carrier>[];
     int id = json.get('id');
     String country = json.get('country');
     String? state = json.getDefault('state', null);
+    DateTime timestamp = json.get('timestamp');
     String? street = json.getDefault('street', null);
     String? altStreet = json.getDefault('altStreet', null);
     String? city = json.getDefault('city', null);
@@ -38,7 +47,7 @@ final class Address implements CSMSetInterface {
     List<JObject> rawCarriersArray = json.getList('Carriers');
     carriers = rawCarriersArray.map<Carrier>((JObject e) => deserealize(e, decode: CarrierDecoder())).toList();
     
-    return Address(id, country, state, street, altStreet, city, zip, colonia, carriers);
+    return Address(id, country, state, street, altStreet, city, zip, colonia, carriers, timestamp: timestamp);
   }
 
   @override
@@ -52,6 +61,7 @@ final class Address implements CSMSetInterface {
       kCity: city,
       kZip: zip,
       kColonia: colonia,
+      kTimestamp: timestamp.toIso8601String(),
       kCarriers: carriers.map((Carrier i) => i.encode()).toList(),
     };
   }

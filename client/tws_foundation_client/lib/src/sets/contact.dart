@@ -1,13 +1,22 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 
 final class Contact implements CSMEncodeInterface {
+  static const String kTimestamp = "timestamp";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp;
+  
   final int id;
   final String name;
   final String lastname;
   final String email;
   final String phone;
-
-  const Contact(this.id, this.name, this.lastname, this.email, this.phone);
+  
+  Contact(this.id, this.name, this.lastname, this.email, this.phone, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
 
   factory Contact.des(JObject json) {
     int id = json.get('id');
@@ -15,8 +24,9 @@ final class Contact implements CSMEncodeInterface {
     String lastname = json.get('lastname');
     String email = json.get('email');
     String phone = json.get('phone');
+    DateTime timestamp = json.get('timestamp');
 
-    return Contact(id, name, lastname, email, phone);
+    return Contact(id, name, lastname, email, phone, timestamp: timestamp);
   }
 
   @override
@@ -26,7 +36,8 @@ final class Contact implements CSMEncodeInterface {
       'name': name,
       'lastname': lastname,
       'email': email,
-      'phone': phone
+      'phone': phone,
+      kTimestamp: timestamp.toIso8601String(),
     };
   }
 }

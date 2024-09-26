@@ -7,9 +7,12 @@ final class TrailerExternal implements CSMSetInterface {
   static const String kCarrier = "carrier";
   static const String kMxPlate = "mxPlate";
   static const String kUsaPlate = "usaPlate";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kTrailerCommonNavigation = 'TrailerCommonNavigation';
 
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -21,13 +24,19 @@ final class TrailerExternal implements CSMSetInterface {
   TrailerCommon? trailerCommonNavigation;
   Status? statusNavigation;
 
-  TrailerExternal(this.id, this.status, this.common, this.carrier, this.mxPlate, this.usaPlate, this.trailerCommonNavigation, this.statusNavigation);
+  TrailerExternal(this.id, this.status, this.common, this.carrier, this.mxPlate, this.usaPlate, this.trailerCommonNavigation, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory TrailerExternal.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     int common = json.get('common');
     String carrier = json.get('carrier');
     String mxPlate = json.get('mxPlate');
+    DateTime timestamp = json.get('timestamp');
     String? usaPlate = json.getDefault('usaPlate', null);
     TrailerCommon? trailerCommonNavigation;
 
@@ -42,7 +51,7 @@ final class TrailerExternal implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return TrailerExternal(id, status, common, carrier, mxPlate, usaPlate, trailerCommonNavigation, statusNavigation);
+    return TrailerExternal(id, status, common, carrier, mxPlate, usaPlate, trailerCommonNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -54,6 +63,7 @@ final class TrailerExternal implements CSMSetInterface {
       kCarrier:carrier,
       kMxPlate: mxPlate,
       kUsaPlate: usaPlate,
+      kTimestamp: timestamp.toIso8601String(),
       kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),
     };

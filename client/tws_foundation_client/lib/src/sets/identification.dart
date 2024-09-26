@@ -7,7 +7,12 @@ final class Identification implements CSMSetInterface {
   static const String kFatherLastName = "fatherlastname";
   static const String kMotherLastName = "motherlastname";
   static const String kBirthday = "birthday";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
+
 
   @override
   int id = 0;
@@ -18,13 +23,19 @@ final class Identification implements CSMSetInterface {
   DateTime? birthday;
   Status? statusNavigation;
 
-  Identification(this.id, this.status, this.name, this.fatherlastname, this.motherlastname, this.birthday, this.statusNavigation);
+  Identification(this.id, this.status, this.name, this.fatherlastname, this.motherlastname, this.birthday, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Identification.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     String name = json.get('name');
     String fatherlastname = json.get('fatherlastname');
     String motherlastname = json.get('motherlastname');
+    DateTime timestamp = json.get('timestamp');
     // DateTime birthday = json.get('birthday');
 
     Status? statusNavigation;
@@ -33,7 +44,7 @@ final class Identification implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return Identification(id, status, name, fatherlastname, motherlastname, null, statusNavigation);
+    return Identification(id, status, name, fatherlastname, motherlastname, null, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -45,6 +56,7 @@ final class Identification implements CSMSetInterface {
       kName: name,
       kFatherLastName: fatherlastname,
       kMotherLastName: motherlastname,
+      kTimestamp: timestamp.toIso8601String(),
       // kBirthday: a,
       kstatusNavigation: statusNavigation?.encode(),
     };

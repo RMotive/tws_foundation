@@ -7,8 +7,12 @@ final class Section implements CSMSetInterface {
   static const String kName = "name";
   static const String kCapacity = "capacity";
   static const String kOcupancy = "ocupancy";
+  static const String kTimestamp = "timestamp";
   static const String kLocationNavigation = "LocationNavigation";
   static const String kstatusNavigation = 'StatusNavigation';
+  
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp;
 
   @override
   int id = 0;
@@ -20,12 +24,18 @@ final class Section implements CSMSetInterface {
   Location? locationNavigation;
   Status? statusNavigation;
 
-  Section(this.id, this.status, this.yard, this.name, this.capacity, this.ocupancy, this.locationNavigation, this.statusNavigation);
+  Section(this.id, this.status, this.yard, this.name, this.capacity, this.ocupancy, this.locationNavigation, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+  
   factory Section.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     int yard = json.get('yard');
-    String name = json.get('name');    
+    String name = json.get('name');
+    DateTime timestamp = json.get('timestamp');
     int capacity = json.get('capacity');
     int ocupancy = json.get('ocupancy');
 
@@ -41,7 +51,7 @@ final class Section implements CSMSetInterface {
       locationNavigation = deserealize<Location>(rawNavigation, decode: LocationDecoder());
     }
 
-    return Section(id, status, yard, name, capacity, ocupancy, locationNavigation, statusNavigation);
+    return Section(id, status, yard, name, capacity, ocupancy, locationNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -53,6 +63,7 @@ final class Section implements CSMSetInterface {
       kName: name,
       kCapacity: capacity,
       kOcupancy: ocupancy,
+      kTimestamp: timestamp.toIso8601String(),
       kLocationNavigation: locationNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),
     };

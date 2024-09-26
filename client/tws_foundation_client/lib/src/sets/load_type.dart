@@ -4,20 +4,30 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 final class LoadType implements CSMSetInterface {
   static const String kName = "name";
   static const String kDescription = "description";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
   String name = "";
   String? description;
 
-  LoadType(this.id, this.name, this.description);
+  LoadType(this.id, this.name, this.description, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory LoadType.des(JObject json) {
     int id = json.get('id');
     String name = json.get('name');
+    DateTime timestamp = json.get('timestamp');
     String? description = json.getDefault('description', null);
     
-    return LoadType(id, name, description);
+    return LoadType(id, name, description, timestamp: timestamp);
   }
 
   @override
@@ -26,6 +36,7 @@ final class LoadType implements CSMSetInterface {
       'id': id,
       kName: name,
       kDescription: description,
+      kTimestamp: timestamp.toIso8601String(),
     };
   }
 

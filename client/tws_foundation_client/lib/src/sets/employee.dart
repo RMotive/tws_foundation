@@ -7,6 +7,7 @@ final class Employee implements CSMSetInterface {
   static const String kAddress = "address";
   static const String kApproach = "approach";
   static const String kCurp = "curp";
+  static const String kTimestamp = "timestamp";
   static const String kAntecedentesNoPenalesExp = "antecedentesNoPenalesExp";
   static const String kRfc = "rfc";
   static const String kNss = "nss";
@@ -15,6 +16,9 @@ final class Employee implements CSMSetInterface {
   static const String kTerminationDate = "terminationDate";
   static const String kIdentificationNavigation = 'identificationNavigation';
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -32,7 +36,12 @@ final class Employee implements CSMSetInterface {
   Identification? identificationNavigation;
   Status? statusNavigation;
 
-  Employee(this.id, this.status, this.identification, this.address, this.approach, this.curp, this.antecedentesNoPenalesExp, this.rfc, this.nss, this.imssRegistrationDate, this.hiringDate, this.terminationDate, this.identificationNavigation, this.statusNavigation);
+  Employee(this.id, this.status, this.identification, this.address, this.approach, this.curp, this.antecedentesNoPenalesExp, this.rfc, this.nss, this.imssRegistrationDate, this.hiringDate, this.terminationDate, this.identificationNavigation, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Employee.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -43,6 +52,7 @@ final class Employee implements CSMSetInterface {
     DateTime antecedentesNoPenalesExp = json.get('antecedentesNoPenalesExp');
     String rfc = json.get('rfc');
     String nss = json.get('nss');
+    DateTime timestamp = json.get('timestamp');
     DateTime imssRegistrationDate = json.get('imssRegistrationDate');
     DateTime hiringDate = json.get('hiringDate');
     DateTime terminationDate = json.get('terminationDate');
@@ -59,7 +69,7 @@ final class Employee implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return Employee(id, status, identification, address, approach, curp, antecedentesNoPenalesExp, rfc, nss, imssRegistrationDate, hiringDate, terminationDate, identificationNavigation, statusNavigation);
+    return Employee(id, status, identification, address, approach, curp, antecedentesNoPenalesExp, rfc, nss, imssRegistrationDate, hiringDate, terminationDate, identificationNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -82,6 +92,7 @@ final class Employee implements CSMSetInterface {
       kImssRegistrationDate: b,
       kHiringdate: c,
       kTerminationDate: d,
+      kTimestamp: timestamp.toIso8601String(),
       kIdentificationNavigation: identificationNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),
     };

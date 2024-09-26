@@ -10,7 +10,7 @@ public partial class Trailer
     : BSet {
     public override int Id { get; set; }
 
-    public override DateTime Timestamp { get; set; } = DateTime.Now;
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 

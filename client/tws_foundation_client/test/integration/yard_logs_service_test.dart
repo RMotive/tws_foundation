@@ -149,7 +149,6 @@ void main() {
             1, // section
             1, // driver
             null, // driverExternal
-            null, // timestamp
             1, // guard
             "Guard $randomToken", // gName
             "Los angeles $randomToken", // fromTo
@@ -243,7 +242,6 @@ void main() {
               1, // section
               1, // driver
               null, // driverExternal
-              null, // timestamp
               1, // guard
               "Guard $randomToken", // gName
               "Los angeles $randomToken", // fromTo
@@ -274,7 +272,6 @@ void main() {
         'Updates when exist',
         () async {
           YardLog mock = creationMock.clone(gName: 'a new name to test');
-          mock.timestamp = null;
           MainResolver<MigrationUpdateResult<YardLog>> fact = await service.update(mock, auth);
           MigrationUpdateResult<YardLog> actEffect = await fact.act(decoder);
           assert(actEffect.previous != null);

@@ -3,7 +3,6 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class TruckCommon implements CSMSetInterface {
   static const String kStatus = "status";
-  static const String kCarrier = "carrier";
   static const String kEconomic = "economic";
   static const String kLocation = "location";
   static const String kSituation = "situation";

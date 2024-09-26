@@ -7,9 +7,13 @@ final class Trailer implements CSMSetInterface {
   static const String kCarrier = "carrier";
   static const String kManufacturer = "manufacturer";
   static const String kMaintenance = "maintenance";
+  static const String kTimestamp = "timestamp";
   static const String kTrailerCommonNavigation = 'TrailerCommonNavigation';
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kPlates = 'plates';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -25,11 +29,17 @@ final class Trailer implements CSMSetInterface {
     Plate.def(),
     Plate.def()
   ];
-  Trailer(this.id, this.status, this.common, this.carrier, this.manufacturer, this.maintenance, this.trailerCommonNavigation, this.statusNavigation, this.plates);
+  Trailer(this.id, this.status, this.common, this.carrier, this.manufacturer, this.maintenance, this.trailerCommonNavigation, this.statusNavigation, this.plates, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Trailer.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     int common = json.get('common');
+    DateTime timestamp = json.get('timestamp');
     int carrier = json.get('carrier');
     int manufactuer = json.get('manufacturer');
     int? maintenance = json.getDefault('situation', null);
@@ -51,7 +61,7 @@ final class Trailer implements CSMSetInterface {
     }
 
 
-    return Trailer(id, status, common, carrier, manufactuer, maintenance, trailerCommonNavigation, statusNavigation, plates);
+    return Trailer(id, status, common, carrier, manufactuer, maintenance, trailerCommonNavigation, statusNavigation, plates, timestamp: timestamp);
   }
 
   @override
@@ -63,6 +73,7 @@ final class Trailer implements CSMSetInterface {
       kCarrier: carrier,
       kManufacturer: manufacturer,
       kMaintenance: maintenance,
+      kTimestamp: timestamp.toIso8601String(),
       kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),
       kPlates: plates.map((Plate i) => i.encode()).toList(),

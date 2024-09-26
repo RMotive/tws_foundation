@@ -9,9 +9,13 @@ final class Plate implements CSMSetInterface {
   static const String kExpiration = "expiration";
   static const String kTruck = "truck";
   static const String kTrailer = "trailer";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = "StatusNavigation";
   static const String kTruckCommonNavigation = "TruckCommonNavigation";
   static const String kTrailerCommonNavigation = "TrailerCommonNavigation";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -28,7 +32,12 @@ final class Plate implements CSMSetInterface {
 
   Plate.def();
 
-  Plate(this.id, this.status, this.identifier, this.state, this.country, this.expiration, this.truck, this.trailer, this.statusNavigation, this.truckCommonNavigation, this.trailerCommonNavigation);
+  Plate(this.id, this.status, this.identifier, this.state, this.country, this.expiration, this.truck, this.trailer, this.statusNavigation, this.truckCommonNavigation, this.trailerCommonNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Plate.des(JObject json) {
     TruckCommon? truckCommonNavigation;
     if(json['TruckCommonNavigation'] != null){
@@ -50,10 +59,11 @@ final class Plate implements CSMSetInterface {
     String identifier = json.get('identifier');
     String state = json.get('state');
     String country = json.get('country');
+    DateTime timestamp = json.get('timestamp');
     DateTime expiration = json.get("expiration");
     int? truck = json.getDefault('truck', null);
     int? trailer = json.getDefault('trailer', null);
-    return Plate(id, status, identifier, state, country, expiration, truck, trailer, statusNavigation, truckCommonNavigation, trailerNavigation);
+    return Plate(id, status, identifier, state, country, expiration, truck, trailer, statusNavigation, truckCommonNavigation, trailerNavigation, timestamp: timestamp);
   }
   
   @override
@@ -68,6 +78,7 @@ final class Plate implements CSMSetInterface {
       kExpiration: exp,
       kTruck: truck,
       kTrailer: trailer,
+      kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation?.encode(),
       kTruckCommonNavigation: truckCommonNavigation?.encode(),
       kTrailerCommonNavigation: trailerCommonNavigation?.encode()

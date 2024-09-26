@@ -5,7 +5,11 @@ final class DriverCommon implements CSMSetInterface {
   static const String kStatus = "status";
   static const String kLicense = "license";
   static const String kSituation = "situation";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -14,19 +18,25 @@ final class DriverCommon implements CSMSetInterface {
   int? situation;
   Status? statusNavigation;
 
-  DriverCommon(this.id, this.status, this.license, this.situation, this.statusNavigation);
+  DriverCommon(this.id, this.status, this.license, this.situation, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory DriverCommon.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     String license = json.get('license');
     int? situation = json.getDefault('situation', null);
+    DateTime timestamp = json.get('timestamp');
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
-        
-    return DriverCommon(id, status, license, situation, statusNavigation);
+    
+    return DriverCommon(id, status, license, situation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -36,6 +46,7 @@ final class DriverCommon implements CSMSetInterface {
       kStatus: status,
       kLicense: license,
       kSituation: situation,
+      kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation?.encode(),
     };
   }

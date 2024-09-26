@@ -5,7 +5,11 @@ final class Manufacturer implements CSMSetInterface {
   static const String kModel = "model";
   static const String kBrand = "brand";
   static const String kYear = "year";
+  static const String kTimestamp = "timestamp";
   static const String kTrucks = "trucks";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id;
@@ -14,13 +18,19 @@ final class Manufacturer implements CSMSetInterface {
   DateTime year;
   List<Truck>? trucks;
 
-  Manufacturer(this.id, this.model, this.brand, this.year, this.trucks);
+  Manufacturer(this.id, this.model, this.brand, this.year, this.trucks, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Manufacturer.des(JObject json) {
     List<Truck> trucks = <Truck>[];
     int id = json.get('id');
     String model = json.get('model');
     String brand = json.get('brand');
     DateTime year = json.get('year');
+    DateTime timestamp = json.get('timestamp');
 
    //Validate if the first position is not null for non-empty Truck lists.
     List<JObject> rawTrucksArray = json.getList('Trucks');
@@ -28,7 +38,7 @@ final class Manufacturer implements CSMSetInterface {
     
    
    
-    return Manufacturer(id, model, brand, year, trucks);
+    return Manufacturer(id, model, brand, year, trucks, timestamp: timestamp);
   }
 
   @override
@@ -40,6 +50,7 @@ final class Manufacturer implements CSMSetInterface {
       kModel: model,
       kBrand: brand,
       kYear: y,
+      kTimestamp: timestamp.toIso8601String(),
       kTrucks: trucks?.map((Truck i) => i.encode()).toList(),
     };
   }

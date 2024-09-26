@@ -8,9 +8,12 @@ final class TruckExternal implements CSMSetInterface {
   static const String kCarrier = "carrier";
   static const String kMxPlate = "mxPlate";
   static const String kUsaPlate = "usaPlate";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kTruckCommonNavigation = 'TruckCommonNavigation';
 
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -23,7 +26,12 @@ final class TruckExternal implements CSMSetInterface {
   TruckCommon? truckCommonNavigation;
   Status? statusNavigation;
 
-  TruckExternal(this.id, this.status, this.common, this.vin, this.carrier, this.mxPlate, this.usaPlate, this.truckCommonNavigation, this.statusNavigation);
+  TruckExternal(this.id, this.status, this.common, this.vin, this.carrier, this.mxPlate, this.usaPlate, this.truckCommonNavigation, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory TruckExternal.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -31,6 +39,7 @@ final class TruckExternal implements CSMSetInterface {
     String? vin = json.getDefault("vin", null);
     String carrier = json.get('carrier');
     String mxPlate = json.get('mxPlate');
+    DateTime timestamp = json.get('timestamp');
     String? usaPlate = json.getDefault('usaPlate', null);
     TruckCommon? truckCommonNavigation;
     if (json['TruckCommonNavigation'] != null) {
@@ -44,7 +53,7 @@ final class TruckExternal implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return TruckExternal(id, status, common,  vin, carrier, mxPlate, usaPlate, truckCommonNavigation, statusNavigation);
+    return TruckExternal(id, status, common,  vin, carrier, mxPlate, usaPlate, truckCommonNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -57,6 +66,7 @@ final class TruckExternal implements CSMSetInterface {
       kCarrier: carrier,
       kMxPlate: mxPlate,
       kUsaPlate: usaPlate,
+      kTimestamp: timestamp.toIso8601String(),
       kTruckCommonNavigation: truckCommonNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),
     };

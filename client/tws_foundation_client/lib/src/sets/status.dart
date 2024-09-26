@@ -5,6 +5,10 @@ final class Status implements CSMSetInterface {
   static const String kName = "name";
   static const String kDescription = "description";
   static const String kTrucks = "trucks";
+  static const String kTimestamp = "timestamp";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -12,16 +16,22 @@ final class Status implements CSMSetInterface {
   String? description;
   List<Truck> trucks = <Truck>[];
 
-  Status(this.id, this.name, this.description, this.trucks);
+  Status(this.id, this.name, this.description, this.trucks, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Status.des(JObject json) {
     List<Truck> trucks = <Truck>[];
     int id = json.get('id');
     String name = json.get('name');
     String? description = json.getDefault('description', null);
+    DateTime timestamp = json.get('timestamp');
     List<JObject> rawTrucksArray = json.getList('Trucks');
     trucks = rawTrucksArray.map<Truck>((JObject e) => deserealize(e, decode: TruckDecoder())).toList();
     
-    return Status(id, name, description, trucks);
+    return Status(id, name, description, trucks, timestamp: timestamp);
   }
 
   @override
@@ -30,6 +40,7 @@ final class Status implements CSMSetInterface {
       'id': id,
       kName: name,
       kDescription: description,
+      kTimestamp: timestamp.toIso8601String(),
       kTrucks: trucks.map((Truck i) => i.encode()).toList(),
     };
   }

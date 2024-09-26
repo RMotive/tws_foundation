@@ -7,7 +7,11 @@ final class TrailerCommon implements CSMSetInterface {
   static const String kSituation = "situation";
   static const String kLocation = "location";
   static const String kEconomic = "economic";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp;
 
   @override
   int id = 0;
@@ -18,7 +22,12 @@ final class TrailerCommon implements CSMSetInterface {
   String economic = "";
   Status? statusNavigation;
   
-  TrailerCommon(this.id, this.status, this.trailerClass, this.situation, this.location, this.economic, this.statusNavigation);
+  TrailerCommon(this.id, this.status, this.trailerClass, this.situation, this.location, this.economic, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory TrailerCommon.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -26,6 +35,7 @@ final class TrailerCommon implements CSMSetInterface {
     int? situation = json.getDefault('situation', null);
     int? location = json.getDefault('location', null);
     String economic = json.get('economic');
+    DateTime timestamp = json.get('timestamp');
 
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
@@ -33,7 +43,7 @@ final class TrailerCommon implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return TrailerCommon(id, status, trailerClass, situation, location, economic, statusNavigation);
+    return TrailerCommon(id, status, trailerClass, situation, location, economic, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -45,6 +55,7 @@ final class TrailerCommon implements CSMSetInterface {
       kSituation: situation,
       kLocation: location,
       kEconomic: economic,
+      kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation?.encode()
     };
   }

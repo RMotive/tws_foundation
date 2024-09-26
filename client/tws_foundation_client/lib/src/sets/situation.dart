@@ -4,7 +4,11 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 final class Situation implements CSMSetInterface {
   static const String kStatus = "status";
   static const String kName = "name";
+  static const String kTimestamp = "timestamp";
   static const String kDescription = "description";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -14,13 +18,19 @@ final class Situation implements CSMSetInterface {
   Status? statusNavigation;
   List<Truck> trucks = <Truck>[];
 
-  Situation(this.id, this.name, this.description);
+  Situation(this.id, this.name, this.description, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Situation.des(JObject json) {
     int id = json.get('id');
     String name = json.get('name');
+    DateTime timestamp = json.get('timestamp');
     String? description = json.getDefault('description', null);
     
-    return Situation(id, name, description);
+    return Situation(id, name, description, timestamp: timestamp);
   }
 
   @override
@@ -29,6 +39,7 @@ final class Situation implements CSMSetInterface {
       'id': id,
       kName: name,
       kDescription: description,
+      kTimestamp: timestamp.toIso8601String(),
     };
   }
 

@@ -2,7 +2,10 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: [TrucksExternals] Create & update service methods added and tested.
+- Notes: 
+
+    1. [TrucksExternals] Create & update service methods added and tested.
+    2. timestamp property added to sets.
 
 - Dependencies Upgrade: N/A
 

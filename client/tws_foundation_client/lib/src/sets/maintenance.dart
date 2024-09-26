@@ -5,9 +5,13 @@ final class Maintenance implements CSMSetInterface {
   static const String kAnual = "anual";
   static const String kTrimestral = "trimestral";
   static const String kStatus = "status";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = "StatusNavigation";
   static const String kTrucks = "trucks";
   
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp;
+
   @override
   int id = 0;
   int status = 1;
@@ -16,7 +20,12 @@ final class Maintenance implements CSMSetInterface {
   Status? statusNavigation;
   List<Truck> trucks = <Truck>[];
 
-  Maintenance(this.id, this.status, this.anual, this.trimestral, this.statusNavigation, this.trucks);
+  Maintenance(this.id, this.status, this.anual, this.trimestral, this.statusNavigation, this.trucks, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Maintenance.des(JObject json) {
     List<Truck> trucks = <Truck>[];
 
@@ -24,6 +33,7 @@ final class Maintenance implements CSMSetInterface {
     int status = json.get('status');
     DateTime anual = json.get('anual');
     DateTime trimestral = json.get('trimestral');
+    DateTime timestamp = json.get('timestamp');
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
@@ -31,7 +41,7 @@ final class Maintenance implements CSMSetInterface {
     }
     List<JObject> rawTrucksArray = json.getList('Trucks');
     trucks = rawTrucksArray.map<Truck>((JObject e) => deserealize(e, decode: TruckDecoder())).toList();
-    return Maintenance(id, status, anual, trimestral, statusNavigation, trucks);
+    return Maintenance(id, status, anual, trimestral, statusNavigation, trucks, timestamp: timestamp);
   }
 
   @override
@@ -43,6 +53,7 @@ final class Maintenance implements CSMSetInterface {
       kStatus: status,
       kAnual: a,
       kTrimestral:t,
+      kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation,
       kTrucks: trucks.map((Truck i) => i.encode()).toList(),
     };

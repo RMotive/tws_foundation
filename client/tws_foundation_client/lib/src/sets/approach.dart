@@ -6,9 +6,13 @@ final class Approach implements CSMSetInterface {
   static const String kEmail = "email";
   static const String kEnterprise = "enterprise";
   static const String kPersonal = "personal";
+  static const String kTimestamp = "timestamp";
   static const String kAlternative = "alternative";
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kCarriers = "Carriers";
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -20,12 +24,18 @@ final class Approach implements CSMSetInterface {
   Status? statusNavigation;
   List<Carrier> carriers = <Carrier>[];
 
-  Approach(this.id, this.status, this.email, this.enterprise, this.personal, this.alternative, this.statusNavigation, this.carriers);
+  Approach(this.id, this.status, this.email, this.enterprise, this.personal, this.alternative, this.statusNavigation, this.carriers, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Approach.des(JObject json) {
     List<Carrier> carriers = <Carrier>[];
     int id = json.get('id');
     int status = json.get('status');
     String email = json.get('email');
+    DateTime timestamp = json.get('timestamp');
     String? enterprise = json.getDefault('enterprise', null);
     String? personal = json.getDefault('personal', null);
     String? alternative = json.getDefault('alternative', null);
@@ -39,7 +49,7 @@ final class Approach implements CSMSetInterface {
     List<JObject> rawCarriersArray = json.getList('Carriers');
     carriers = rawCarriersArray.map<Carrier>((JObject e) => deserealize(e, decode: CarrierDecoder())).toList();
     
-    return Approach(id, status, email, enterprise, personal, alternative, statusNavigation, carriers);
+    return Approach(id, status, email, enterprise, personal, alternative, statusNavigation, carriers, timestamp: timestamp);
   }
 
   @override
@@ -52,6 +62,7 @@ final class Approach implements CSMSetInterface {
       kPersonal: personal,
       kAlternative: alternative,
       kstatusNavigation: statusNavigation?.encode(),
+            kTimestamp: timestamp.toIso8601String(),
       kCarriers: carriers.map((Carrier i) => i.encode()).toList(),
     };
   }

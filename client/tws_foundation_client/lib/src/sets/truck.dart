@@ -10,6 +10,7 @@ final class Truck implements CSMSetInterface {
   static const String kVin = "vin";
   static const String kMaintenance = 'maintenance';
   static const String kInsurance = 'insurance';
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kManufacturerNavigation = 'ManufacturerNavigation';
   static const String kTruckCommonNavigation = 'TruckCommonNavigation';
@@ -17,6 +18,9 @@ final class Truck implements CSMSetInterface {
   static const String kInsuranceNavigation = 'InsuranceNavigation';
   static const String kCarrierNavigation = 'CarrierNavigation';
   static const String kPlates = 'plates';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -44,7 +48,12 @@ final class Truck implements CSMSetInterface {
   Truck.def();
 
   Truck(this.id, this.status, this.manufacturer, this.common, this.carrier, this.motor, this.vin, this.maintenance, this.insurance, this.statusNavigation, this.manufacturerNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
-    this.insuranceNavigation, this.carrierNavigation, this.plates);
+    this.insuranceNavigation, this.carrierNavigation, this.plates, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Truck.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -53,6 +62,7 @@ final class Truck implements CSMSetInterface {
     int carrier = json.get('carrier');
     String vin = json.get('vin');
     String motor = json.get('motor');
+    DateTime timestamp = json.get('timestamp');
     int? maintenance = json.getDefault('maintenance', null);
     int? insurance = json.getDefault('insurance', null);
     Status? statusNavigation;
@@ -95,7 +105,7 @@ final class Truck implements CSMSetInterface {
       JObject rawNavigation = json.getDefault('CarrierNavigation', <String, dynamic>{});
       carrierNavigation = deserealize<Carrier>(rawNavigation, decode: CarrierDecoder());
     }
-    return Truck(id, status, manufacturer, common, carrier, motor, vin, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates);
+    return Truck(id, status, manufacturer, common, carrier, motor, vin, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates, timestamp: timestamp);
   }
   Truck clone({
     int? id,
@@ -136,6 +146,7 @@ final class Truck implements CSMSetInterface {
       kVin: vin,
       kMaintenance: maintenance,
       kInsurance: insurance,
+      kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation?.encode(),
       kManufacturerNavigation: manufacturerNavigation?.encode(),
       kTruckCommonNavigation: truckCommonNavigation?.encode(),

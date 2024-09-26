@@ -9,6 +9,7 @@ final class Carrier implements CSMSetInterface {
   static const String kAddress = "address";
   static const String kUsdot = "usdot";
   static const String kSct = "sct";
+  static const String kTimestamp = "timestamp";
   static const String kStatusNavigation = 'StatusNavigation';
   static const String kApproachNavigation = "ApproachNavigation";
   static const String kAddressNavigation = "AddressNavigation";
@@ -16,6 +17,8 @@ final class Carrier implements CSMSetInterface {
   static const String kSctNavigation = "SctNavigation";
   static const String kTrucks = "trucks";
 
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp;
 
   @override
   int id = 0;
@@ -34,7 +37,12 @@ final class Carrier implements CSMSetInterface {
   
   List<Truck> trucks = <Truck>[];
 
-  Carrier(this.id, this.status, this.approach, this.address, this.name, this.description, this.usdot, this.sct, this.approachNavigation, this.addressNavigation, this.usdotNavigation, this.sctNavigation, this.statusNavigation, this.trucks);
+  Carrier(this.id, this.status, this.approach, this.address, this.name, this.description, this.usdot, this.sct, this.approachNavigation, 
+  this.addressNavigation, this.usdotNavigation, this.sctNavigation, this.statusNavigation, this.trucks, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
   factory Carrier.des(JObject json) {
     List<Truck> trucks = <Truck>[];
     int id = json.get('id');
@@ -42,6 +50,7 @@ final class Carrier implements CSMSetInterface {
     int approach = json.get('approach');
     int address = json.get('address');
     String name = json.get('name');
+    DateTime timestamp = json.get('timestamp');
     String? description = json.getDefault('description', null);
     int? usdot = json.getDefault('usdot', null);
     int? sct = json.getDefault('sct', null);
@@ -79,7 +88,7 @@ final class Carrier implements CSMSetInterface {
     List<JObject> rawTrucksArray = json.getList('Trucks');
     trucks = rawTrucksArray.map<Truck>((JObject e) => deserealize(e, decode: TruckDecoder())).toList();
     
-    return Carrier(id, status, approach, address, name, description, usdot, sct, approachNavigation, addressNavigation, usdotNavigation, sctNavigation, statusNavigation, trucks);
+    return Carrier(id, status, approach, address, name, description, usdot, sct, approachNavigation, addressNavigation, usdotNavigation, sctNavigation, statusNavigation, trucks, timestamp: timestamp);
   }
 
   @override

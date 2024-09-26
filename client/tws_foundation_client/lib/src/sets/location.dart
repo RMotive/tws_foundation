@@ -5,7 +5,11 @@ final class Location implements CSMSetInterface {
   static const String kStatus = "status";
   static const String kAddress = "address";
   static const String kName = "name";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -14,12 +18,18 @@ final class Location implements CSMSetInterface {
   String name = "";
   Status? statusNavigation;
 
-  Location(this.id, this.status, this.address, this.name, this.statusNavigation);
+  Location(this.id, this.status, this.address, this.name, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Location.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     int address = json.get('address');
     String name = json.get('name');    
+    DateTime timestamp = json.get('timestamp');
 
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
@@ -27,7 +37,7 @@ final class Location implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
 
-    return Location(id, status, address, name, statusNavigation);
+    return Location(id, status, address, name, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -37,6 +47,7 @@ final class Location implements CSMSetInterface {
       kName: name,
       kStatus: status,
       kAddress: address,
+      kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation?.encode(),
     };
   }

@@ -12,7 +12,7 @@ public partial class YardLog
 
     public override int Id { get; set; }
 
-    public override DateTime Timestamp { get; set; } = DateTime.Now;
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public bool Entry { get; set; }
 
@@ -80,15 +80,10 @@ public partial class YardLog
     public static void Set(ModelBuilder builder) {
         builder.Entity<YardLog>(entity => {
             entity.HasKey(e => e.Id);
-            entity.ToTable("Yard_Logs", tb => tb.HasTrigger("tgr_YardLogs_Insert"));
+            entity.ToTable("Yard_Logs", tb => tb.HasTrigger("YardLogs_InsertInto_TrucksInventories"));
 
             entity.Property(e => e.Id)
                  .HasColumnName("id");
-
-            //this property cannot be modified "manually". Modify this property will result in unexpected exceptions.
-            entity.Property(b => b.Timestamp) 
-            .ValueGeneratedOnAddOrUpdate();
-
 
             entity.Property(e => e.Timestamp)
                 .HasColumnType("datetime");

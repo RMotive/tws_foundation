@@ -5,6 +5,7 @@ final class Driver implements CSMSetInterface {
   static const String kStatus = "status";
   static const String kEmployee = "employee";
   static const String kCommon = "common";
+  static const String kTimestamp = "timestamp";
   static const String kDriverType = "driverType";
   static const String kLicenseExpiration = "licenseExpiration";
   static const String kDrugalcRegistrationDate = "drugalcRegistrationDate";
@@ -20,6 +21,10 @@ final class Driver implements CSMSetInterface {
   static const String kDriverCommonNavigation = "driverCommonNavigation";
   static const String kEmployeeNavigation = "employeeNavigation";
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
+
 
   @override
   int id = 0;
@@ -43,13 +48,19 @@ final class Driver implements CSMSetInterface {
   Status? statusNavigation;
 
   Driver(this.id, this.status, this.employee, this.common, this.driverType, this.licenseExpiration, this.drugalcRegistrationDate, this.pullnoticeRegistrationDate, this.twic,
-  this.twicExpiration, this.visa, this.visaExpiration, this.fast, this.fastExpiration, this.anam, this.anamExpiration, this.driverCommonNavigation, this.employeeNavigation, this.statusNavigation);
+  this.twicExpiration, this.visa, this.visaExpiration, this.fast, this.fastExpiration, this.anam, this.anamExpiration, this.driverCommonNavigation, this.employeeNavigation, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory Driver.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     int employee = json.get('employee');
     int common = json.get('common');
     String driverType = json.get('driverType');
+    DateTime timestamp = json.get('timestamp');
     DateTime licenseExpiration = json.get('licenseExpiration');
     DateTime drugalcRegistrationDate = json.get('drugalcRegistrationDate');
     DateTime pullnoticeRegistrationDate = json.get('pullnoticeRegistrationDate');
@@ -81,7 +92,7 @@ final class Driver implements CSMSetInterface {
     }
         
     return Driver(id, status, employee, common, driverType, licenseExpiration, drugalcRegistrationDate, pullnoticeRegistrationDate, twic, twicExpiration, visa, visaExpiration,
-    fast, fastExpiration, anam, anamExpiration, driverCommonNavigation, employeeNavigation, statusNavigation);
+    fast, fastExpiration, anam, anamExpiration, driverCommonNavigation, employeeNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -111,6 +122,7 @@ final class Driver implements CSMSetInterface {
       kFastExpiration: f,
       kAnam: anam,
       kAnamExpiration: g,
+      kTimestamp: timestamp.toIso8601String(),
       kDriverCommonNavigation: driverCommonNavigation?.encode(),
       kEmployeeNavigation: employeeNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),

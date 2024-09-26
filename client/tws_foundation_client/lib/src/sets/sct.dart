@@ -6,7 +6,11 @@ final class SCT implements CSMSetInterface {
   static const String kType = "type";
   static const String kNumber = "number";
   static const String kConfiguration = "configuration";
+  static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
+
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   @override
   int id = 0;
@@ -16,12 +20,18 @@ final class SCT implements CSMSetInterface {
   String configuration = "";
   Status? statusNavigation;
 
-  SCT(this.id, this.status, this.type, this.number, this.configuration, this.statusNavigation);
+  SCT(this.id, this.status, this.type, this.number, this.configuration, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory SCT.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
     String type = json.get('type');
     String number = json.get('number');
+    DateTime timestamp = json.get('timestamp');
     String configuration = json.get('configuration');
 
     Status? statusNavigation;
@@ -30,7 +40,7 @@ final class SCT implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
     
-    return SCT(id, status, type, number, configuration, statusNavigation);
+    return SCT(id, status, type, number, configuration, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -41,6 +51,7 @@ final class SCT implements CSMSetInterface {
       kType: type,
       kNumber: number,
       kConfiguration: configuration,
+      kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation?.encode(),
     };
   }
