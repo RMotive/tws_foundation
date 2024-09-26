@@ -15,14 +15,11 @@ final class SuccessFrame<TEstela extends CSMEncodeInterface> implements CSMEncod
   const SuccessFrame(this.tracer, this.estela);
 
   /// Generates a new success frame object decoding a json object.
-  factory SuccessFrame.des(
-    JObject json, {
-    CSMDecodeInterface<TEstela>? estelaDecoder,
-  }) {
+  factory SuccessFrame.des(JObject json, TEstela Function(JObject json) estelaDecoder) {
     String tracer = json.get('tracer');
 
     JObject objEstela = json.getDefault('estela', <String, dynamic>{});
-    TEstela estelaObject = deserealize(objEstela, decode: estelaDecoder);
+    TEstela estelaObject = estelaDecoder(objEstela);
 
     return SuccessFrame<TEstela>(tracer, estelaObject);
   }
@@ -33,19 +30,5 @@ final class SuccessFrame<TEstela extends CSMEncodeInterface> implements CSMEncod
       'tracer': '',
       'estela': estela.encode(),
     };
-  }
-}
-
-final class SuccessFrameDecode<TEstela extends CSMEncodeInterface> implements CSMDecodeInterface<SuccessFrame<TEstela>> {
-  final CSMDecodeInterface<TEstela> estelaDecoder;
-
-  const SuccessFrameDecode(this.estelaDecoder);
-
-  @override
-  SuccessFrame<TEstela> decode(JObject json) {
-    return SuccessFrame<TEstela>.des(
-      json,
-      estelaDecoder: estelaDecoder,
-    );
   }
 }

@@ -31,16 +31,11 @@ final class SetViewOut<TSet extends CSMEncodeInterface> implements CSMEncodeInte
   ///
   /// [json] : The object to bind properties.
   /// [setDecode] : Optional [CSMDecodeInterface] implementation to use on environment cases.
-  factory SetViewOut.des(
-    JObject json, {
-    CSMDecodeInterface<TSet>? setDecode,
-  }) {
+  factory SetViewOut.des(JObject json, TSet Function(JObject json) decoder) {
+
     List<JObject> rawSetsArray = json.getDefault('sets', <dynamic>[]).cast();
     List<TSet> setsObjects = rawSetsArray
-        .map<TSet>((JObject e) => deserealize(
-              e,
-              decode: setDecode,
-            ))
+        .map<TSet>(decoder)
         .toList();
 
     int pages = json.get('pages');
@@ -63,20 +58,5 @@ final class SetViewOut<TSet extends CSMEncodeInterface> implements CSMEncodeInte
       'records': records,
       'amount': amount,
     };
-  }
-}
-
-/// [CSMDecodeInterface] implementation from [SetViewOut] represents the deserealization
-/// convention and operation to convert a [JObject] into a [SetViewOut].
-final class SetViewOutDecode<TSet extends CSMEncodeInterface> implements CSMDecodeInterface<SetViewOut<TSet>> {
-  /// Required [CSMDecodeInterface] implementation for the inner generic type [TSet] from [SetViewOut].
-  final CSMDecodeInterface<TSet> setDecoder;
-
-  /// Creates a new [SetViewOutDecode] object.
-  const SetViewOutDecode(this.setDecoder);
-
-  @override
-  SetViewOut<TSet> decode(JObject json) {
-    return SetViewOut<TSet>.des(json, setDecode: setDecoder);
   }
 }

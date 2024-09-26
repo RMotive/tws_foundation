@@ -19,7 +19,7 @@ final class Maintenance implements CSMSetInterface {
 
   Maintenance(this.id, this.status, this.anual, this.trimestral, this.statusNavigation, this.trucks);
 
-  Maintenance.def();
+  Maintenance.a();
 
   factory Maintenance.des(JObject json) {
     List<Truck> trucks = <Truck>[];

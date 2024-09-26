@@ -21,11 +21,12 @@ final class Trailer implements CSMSetInterface {
   TrailerCommon? trailerCommonNavigation;
   Status? statusNavigation;
   // List default initialization data for clone method.
-  List<Plate> plates = <Plate>[
-    Plate.def(),
-    Plate.def()
-  ];
+  List<Plate> plates = <Plate>[Plate.a(), Plate.a()];
+
   Trailer(this.id, this.status, this.common, this.carrier, this.manufacturer, this.maintenance, this.trailerCommonNavigation, this.statusNavigation, this.plates);
+
+  Trailer.a();
+
   factory Trailer.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -36,22 +37,45 @@ final class Trailer implements CSMSetInterface {
 
     List<Plate> plates = <Plate>[];
     List<JObject> rawPlateArray = json.getList('Plates');
-    plates = rawPlateArray.map<Plate>((JObject e) => deserealize(e, decode: PlateDecoder())).toList();
+    plates = rawPlateArray.map<Plate>(Plate.des).toList();
 
     TrailerCommon? trailerCommonNavigation;
     if (json['TrailerCommonNavigation'] != null) {
       JObject rawNavigation = json.getDefault('TrailerCommonNavigation', <String, dynamic>{});
-      trailerCommonNavigation = deserealize<TrailerCommon>(rawNavigation, decode: TrailerCommonDecoder());
+      trailerCommonNavigation = TrailerCommon.des(rawNavigation);
     }
 
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
-      statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
+      statusNavigation = Status.des(rawNavigation);
     }
 
-
     return Trailer(id, status, common, carrier, manufactuer, maintenance, trailerCommonNavigation, statusNavigation, plates);
+  }
+
+  Trailer clone({
+    int? id,
+    int? status,
+    int? common,
+    int? carrier,
+    int? manufacturer,
+    int? maintenance,
+    TrailerCommon? trailerCommonNavigation,
+    Status? statusNavigation,
+    List<Plate>? plates,
+  }) {
+    return Trailer(
+      id ?? this.id,
+      status ?? this.status,
+      common ?? this.common,
+      carrier ?? this.carrier,
+      manufacturer ?? this.manufacturer,
+      maintenance ?? this.maintenance,
+      trailerCommonNavigation ?? this.trailerCommonNavigation,
+      statusNavigation ?? this.statusNavigation,
+      plates ?? this.plates,
+    );
   }
 
   @override
@@ -68,43 +92,19 @@ final class Trailer implements CSMSetInterface {
       kPlates: plates.map((Plate i) => i.encode()).toList(),
     };
   }
-  
+
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(manufacturer < 0) results.add(CSMSetValidationResult(kManufacturer, 'Manufacturer pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));
-    for(Plate plate in plates){
+    if (common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
+    if (manufacturer < 0) results.add(CSMSetValidationResult(kManufacturer, 'Manufacturer pointer must be equal or greater than 0', 'pointerHandler()'));
+    if (carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
+    if (status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if (plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));
+    for (Plate plate in plates) {
       results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
     }
 
     return results;
-  }
-  Trailer.def();
-  Trailer clone({
-    int? id,
-    int? status,
-    int? common,
-    int? carrier,
-    int? manufacturer,
-    int? maintenance,
-    TrailerCommon? trailerCommonNavigation,
-    Status? statusNavigation,
-    List<Plate>? plates
-  }){
-    return Trailer(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, manufacturer ?? this.manufacturer, maintenance ?? this.maintenance,
-    trailerCommonNavigation ?? this.trailerCommonNavigation, statusNavigation ?? this.statusNavigation, plates ?? this.plates);
-  }
-}
-
-final class TrailerDecoder implements CSMDecodeInterface<Trailer> {
-  const TrailerDecoder();
-
-  @override
-  Trailer decode(JObject json) {
-    return Trailer.des(json);
   }
 }

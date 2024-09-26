@@ -41,7 +41,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<Account>(AccountDecoder()),
+        decoder: (JObject json) => SetViewOut<Account>.des(json, Account.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

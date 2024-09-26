@@ -59,7 +59,7 @@ final class Address implements CSMSetInterface {
   Address(this.id, this.country, this.state, this.street, this.altStreet, this.city, this.zip, this.colonia, this.carriers);
 
   /// Creates an [Address] object with default properties.
-  Address.def();
+  Address.a();
 
   /// Creates an [Address] based on a [json] object.
   factory Address.des(JObject json) {

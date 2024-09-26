@@ -48,7 +48,7 @@ final class SCT implements CSMSetInterface {
   SCT(this.id, this.status, this.type, this.number, this.configuration, this.statusNavigation, this.trucks);
 
   /// Creates a [SCT] object with default properties.
-  SCT.def();
+  SCT.a();
 
   /// Creates a [SCT] object based on the given [json] object.
   factory SCT.des(JObject json) {

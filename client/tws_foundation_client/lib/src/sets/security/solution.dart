@@ -11,9 +11,12 @@ final class Solution implements CSMSetInterface {
   String sign = '';
   String? description;
 
-  Solution.a();
-  Solution.b(this.name, this.sign, {this.id = 0, this.description});
   Solution(this.id, this.name, this.sign, this.description);
+
+  Solution.a();
+
+  Solution.b(this.name, this.sign, {this.id = 0, this.description});
+
   factory Solution.des(JObject json) {
     int id = json.get('id');
     String name = json.get('name');
@@ -23,7 +26,19 @@ final class Solution implements CSMSetInterface {
     return Solution(id, name, sign, description);
   }
 
-
+  Solution clone({
+    int? id,
+    String? name,
+    String? sign,
+    String? description,
+  }) {
+    return Solution(
+      id ?? this.id,
+      name ?? this.name,
+      sign ?? this.sign,
+      description ?? this.description,
+    );
+  }
 
   @override
   JObject encode() {
@@ -34,7 +49,7 @@ final class Solution implements CSMSetInterface {
       kDescription: description,
     };
   }
-  
+
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
@@ -43,20 +58,4 @@ final class Solution implements CSMSetInterface {
     if (sign.length != 5) results.add(CSMSetValidationResult(kSign, 'Solution sign must be 5 length', 'strictLength(5)'));
     return results;
   }
-
-  Solution clone({
-    int? id,
-    String? name,
-    String? sign,
-    String? description,
-  }) {
-    return Solution(id ?? this.id, name ?? this.name, sign ?? this.sign, description ?? this.description);
-  }
-}
-
-final class SolutionDecoder implements CSMDecodeInterface<Solution> {
-  const SolutionDecoder();
-
-  @override
-  Solution decode(JObject json) => Solution.des(json);
 }

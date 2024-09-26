@@ -21,14 +21,14 @@ final class SolutionsService extends SolutionsServiceBase {
   }
 
   @override
-  Effect<MigrationTransactionResult<Solution>> create(List<Solution> solutions, String auth) async {
+  Effect<SetBatchOut<Solution>> create(List<Solution> solutions, String auth) async {
     CSMActEffect actEffect = await postList('create', solutions, auth: auth);
-    return MainResolver<MigrationTransactionResult<Solution>>(actEffect);
+    return MainResolver<SetBatchOut<Solution>>(actEffect);
   }
 
   @override
-  Effect<MigrationUpdateResult<Solution>> update(Solution solution, String auth) async {
+  Effect<RecordUpdateOut<Solution>> update(Solution solution, String auth) async {
     CSMActEffect actEffect = await post('update', solution, auth: auth);
-    return MainResolver<MigrationUpdateResult<Solution>>(actEffect);
+    return MainResolver<RecordUpdateOut<Solution>>(actEffect);
   }
 }

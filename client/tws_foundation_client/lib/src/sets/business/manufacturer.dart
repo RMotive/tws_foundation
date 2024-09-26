@@ -36,7 +36,7 @@ final class Manufacturer implements CSMSetInterface {
   Manufacturer(this.id, this.model, this.brand, this.year, this.trucks);
 
   /// Creates a [Manufacturer] object with refault properties.
-  Manufacturer.def();
+  Manufacturer.a();
 
   /// Creates a [Manufacturer] object based on the given [json] object.
   factory Manufacturer.des(JObject json) {

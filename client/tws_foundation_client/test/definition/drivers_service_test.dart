@@ -44,7 +44,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<Driver>(DriverDecoder()),
+        decoder: (JObject json) => SetViewOut<Driver>.des(json, Driver.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

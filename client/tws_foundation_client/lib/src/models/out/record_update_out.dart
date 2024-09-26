@@ -1,19 +1,19 @@
 import 'package:csm_client/csm_client.dart';
 
-final class MigrationUpdateResult<TSet extends CSMSetInterface> implements CSMEncodeInterface {
+final class RecordUpdateOut<TSet extends CSMSetInterface> implements CSMEncodeInterface {
   final TSet? previous;
   final TSet updated;
 
-  const MigrationUpdateResult(this.previous, this.updated);
+  const RecordUpdateOut(this.previous, this.updated);
 
-  factory MigrationUpdateResult.des(JObject json, {CSMDecodeInterface<TSet>? decoder}) {
+  factory RecordUpdateOut.des(JObject json, TSet Function(JObject json) decoder) {
     JObject? rawPrevious = json.getDefault('previous', null);
     JObject rawUpdated = json.get('updated');
 
-    TSet? previous = rawPrevious != null ? deserealize(rawPrevious, decode: decoder) : null;
-    TSet updated = deserealize(rawUpdated, decode: decoder);
+    TSet? previous = rawPrevious != null ? decoder(rawPrevious) : null;
+    TSet updated = decoder(rawUpdated);
 
-    return MigrationUpdateResult<TSet>(previous, updated);
+    return RecordUpdateOut<TSet>(previous, updated);
   }
 
   @override
@@ -22,16 +22,5 @@ final class MigrationUpdateResult<TSet extends CSMSetInterface> implements CSMEn
       'previous': previous?.encode(),
       'updated': updated.encode(),
     };
-  }
-}
-
-final class MigrationUpdateResultDecoder<TSet extends CSMSetInterface> implements CSMDecodeInterface<MigrationUpdateResult<TSet>> {
-  final CSMDecodeInterface<TSet> innerDecoder;
-
-  const MigrationUpdateResultDecoder(this.innerDecoder);
-
-  @override
-  MigrationUpdateResult<TSet> decode(JObject json) {
-    return MigrationUpdateResult<TSet>.des(json, decoder: innerDecoder);
   }
 }

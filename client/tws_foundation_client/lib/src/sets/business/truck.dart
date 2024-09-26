@@ -37,12 +37,12 @@ final class Truck implements CSMSetInterface {
   Carrier? carrierNavigation;
 
   // List default initialization data for clone method.
-  List<Plate> plates = <Plate>[Plate.def(), Plate.def()];
+  List<Plate> plates = <Plate>[Plate.a(), Plate.a()];
 
   Truck(this.id, this.status, this.manufacturer, this.common, this.carrier, this.motor, this.vin, this.maintenance, this.insurance, this.statusNavigation, this.manufacturerNavigation,
       this.truckCommonNavigation, this.maintenanceNavigation, this.insuranceNavigation, this.carrierNavigation, this.plates);
 
-  Truck.def();
+  Truck.a();
 
   factory Truck.des(JObject json) {
     int id = json.get(SCK.kId);

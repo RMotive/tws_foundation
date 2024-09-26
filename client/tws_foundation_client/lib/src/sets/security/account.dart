@@ -30,7 +30,7 @@ final class Account implements CSMSetInterface {
   Account(this.id, this.contact, this.user, this.contactNavigation);
 
   /// Creates a new [Account] object with default properties.
-  Account.def();
+  Account.a();
 
   /// Converts a [JObject] into an [Account] object.
   factory Account.des(JObject json) {

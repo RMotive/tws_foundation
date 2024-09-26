@@ -18,9 +18,9 @@ final class TrucksService extends TrucksServiceBase {
   }
   
   @override
-  Effect<MigrationTransactionResult<Truck>> create(List<Truck> trucks, String auth) async {
+  Effect<SetBatchOut<Truck>> create(List<Truck> trucks, String auth) async {
     CSMActEffect actEffect = await postList('create', trucks, auth: auth);
-    return MainResolver<MigrationTransactionResult<Truck>>(actEffect);
+    return MainResolver<SetBatchOut<Truck>>(actEffect);
   }
 }
       

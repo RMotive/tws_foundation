@@ -1,11 +1,13 @@
 import 'package:csm_client/csm_client.dart';
 
 final class Feature implements CSMEncodeInterface {
-  final int id;
-  final String name;
-  final String? description;
+  int id = 0;
+  String name = '';
+  String? description;
 
-  const Feature(this.id, this.name, this.description);
+  Feature(this.id, this.name, this.description);
+
+  Feature.a();
 
   @override
   JObject encode() {

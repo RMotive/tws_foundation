@@ -11,7 +11,6 @@ final class TruckExternal implements CSMSetInterface {
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kTruckCommonNavigation = 'TruckCommonNavigation';
 
-
   @override
   int id = 0;
   int status = 1;
@@ -24,6 +23,7 @@ final class TruckExternal implements CSMSetInterface {
   Status? statusNavigation;
 
   TruckExternal(this.id, this.status, this.common, this.vin, this.carrier, this.mxPlate, this.usaPlate, this.truckCommonNavigation, this.statusNavigation);
+
   factory TruckExternal.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
@@ -35,16 +35,16 @@ final class TruckExternal implements CSMSetInterface {
     TruckCommon? truckCommonNavigation;
     if (json['TruckCommonNavigation'] != null) {
       JObject rawNavigation = json.getDefault('TruckCommonNavigation', <String, dynamic>{});
-      truckCommonNavigation = deserealize<TruckCommon>(rawNavigation, decode: TruckCommonDecoder());
+      truckCommonNavigation = TruckCommon.des(rawNavigation);
     }
 
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
-      statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
+      statusNavigation = Status.des(rawNavigation);
     }
-        
-    return TruckExternal(id, status, common,  vin, carrier, mxPlate, usaPlate, truckCommonNavigation, statusNavigation);
+
+    return TruckExternal(id, status, common, vin, carrier, mxPlate, usaPlate, truckCommonNavigation, statusNavigation);
   }
 
   @override
@@ -61,20 +61,21 @@ final class TruckExternal implements CSMSetInterface {
       kstatusNavigation: statusNavigation?.encode(),
     };
   }
-  
+
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(carrier.isEmpty || mxPlate.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
-    if(mxPlate.length < 8 || mxPlate.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MxPlate length must be between 8 and 12", "strictLength(1, 32)"));
-    if(vin != null){
-      if(vin!.length != 17) results.add(CSMSetValidationResult(kVin, 'VIN number must be 17 length', 'strictLength(17)'));
+    if (common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
+    if (status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if (carrier.isEmpty || mxPlate.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
+    if (mxPlate.length < 8 || mxPlate.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MxPlate length must be between 8 and 12", "strictLength(1, 32)"));
+    if (vin != null) {
+      if (vin!.length != 17) results.add(CSMSetValidationResult(kVin, 'VIN number must be 17 length', 'strictLength(17)'));
     }
     return results;
   }
-  TruckExternal.def();
+
+  TruckExternal.a();
   TruckExternal clone({
     int? id,
     int? status,
@@ -85,23 +86,15 @@ final class TruckExternal implements CSMSetInterface {
     String? usaPlate,
     TruckCommon? truckCommonNavigation,
     Status? statusNavigation,
-  }){
+  }) {
     String? uPlate = usaPlate ?? this.usaPlate;
-    if(usaPlate == ""){
+    if (usaPlate == "") {
       uPlate = null;
     }
     String? v = vin ?? this.vin;
-    if(v == "") v = null;
-    
-    return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, vin, carrier ?? this.carrier, mxPlate ?? this.mxPlate, uPlate, truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
-  }
-}
+    if (v == "") v = null;
 
-final class TruckExternalDecoder implements CSMDecodeInterface<TruckExternal> {
-  const TruckExternalDecoder();
-
-  @override
-  TruckExternal decode(JObject json) {
-    return TruckExternal.des(json);
+    return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, vin, carrier ?? this.carrier, mxPlate ?? this.mxPlate, uPlate,
+        truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
   }
 }

@@ -31,7 +31,7 @@ final class Situation implements CSMSetInterface {
   Situation(this.id, this.name, this.description);
 
   /// Creates a [Situation] object with default properties.
-  Situation.def();
+  Situation.a();
 
   /// Creates a [Situation] object based on a given [json] object.
   factory Situation.des(JObject json) {

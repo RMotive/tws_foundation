@@ -21,7 +21,7 @@ final class Identification implements CSMSetInterface {
 
   Identification(this.id, this.status, this.name, this.fatherlastname, this.motherlastname, this.birthday, this.statusNavigation);
 
-  Identification.def();
+  Identification.a();
 
   factory Identification.des(JObject json) {
     int id = json.get(SCK.kId);

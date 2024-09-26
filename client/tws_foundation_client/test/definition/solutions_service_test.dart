@@ -8,8 +8,8 @@ void main() {
   late SolutionsServiceBase service;
 
   late SetViewOut<Solution> viewMock;
-  late MigrationTransactionResult<Solution> createMock;
-  late MigrationUpdateResult<Solution> updateMock;
+  late SetBatchOut<Solution> createMock;
+  late RecordUpdateOut<Solution> updateMock;
   
   late SetViewOptions<Solution> options;
   late List<Solution> solutions;
@@ -19,8 +19,8 @@ void main() {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
       options = SetViewOptions<Solution>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Solution>>[]);
       viewMock = SetViewOut<Solution>(<Solution>[], 1, DateTime.now(), 3, 0, 20);
-      createMock = MigrationTransactionResult<Solution>(<Solution>[], <MigrationTransactionFailure<Solution>>[], 0, 0, 0, false);
-      updateMock = MigrationUpdateResult<Solution>(Solution.a(), Solution.a());
+      createMock = SetBatchOut<Solution>(<Solution>[], <SetOperationFailure<Solution>>[], 0, 0, 0, false);
+      updateMock = RecordUpdateOut<Solution>(Solution.a(), Solution.a());
       solutions = <Solution>[
         Solution(12, 'something', 'TWS', ''),
       ];
@@ -29,8 +29,8 @@ void main() {
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
             'view' => SuccessFrame<SetViewOut<Solution>>('qTracer', viewMock).encode(),
-            'create' => SuccessFrame<MigrationTransactionResult<Solution>>('qTracer', createMock).encode(),
-            'update' => SuccessFrame<MigrationUpdateResult<Solution>>('qTracer', updateMock).encode(),
+            'create' => SuccessFrame<SetBatchOut<Solution>>('qTracer', createMock).encode(),
+            'update' => SuccessFrame<RecordUpdateOut<Solution>>('qTracer', updateMock).encode(),
             _ => <String, dynamic>{},
           };
           
@@ -53,7 +53,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<Solution>(SolutionDecoder()),
+        decoder: (JObject json) => SetViewOut<Solution>.des(json, Solution.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
@@ -80,15 +80,15 @@ void main() {
   test(
     'Create',
     () async {
-      MainResolver<MigrationTransactionResult<Solution>> fact = await service.create(solutions, '');
+      MainResolver<SetBatchOut<Solution>> fact = await service.create(solutions, '');
       bool pased = false;
       fact.resolve(
-        decoder: MigrationTransactionResultDecoder<Solution>(SolutionDecoder()),
+        decoder: (JObject json) => SetBatchOut<Solution>.des(json, Solution.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           throw failure;
         },
-        onSuccess: (SuccessFrame<MigrationTransactionResult<Solution>> success) {
+        onSuccess: (SuccessFrame<SetBatchOut<Solution>> success) {
           pased = true;
         },
         onException: (Object exception, StackTrace trace) {
@@ -102,15 +102,15 @@ void main() {
   test(
     'Update',
     () async {
-      MainResolver<MigrationUpdateResult<Solution>> fact = await service.update(Solution.a(), '');
+      MainResolver<RecordUpdateOut<Solution>> fact = await service.update(Solution.a(), '');
       bool pased = false;
       fact.resolve(
-        decoder: MigrationUpdateResultDecoder<Solution>(SolutionDecoder()),
+        decoder: (JObject json) => RecordUpdateOut<Solution>.des(json, Solution.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           throw failure;
         },
-        onSuccess: (SuccessFrame<MigrationUpdateResult<Solution>> success) {
+        onSuccess: (SuccessFrame<RecordUpdateOut<Solution>> success) {
           pased = true;
         },
         onException: (Object exception, StackTrace trace) {

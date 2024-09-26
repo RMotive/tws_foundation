@@ -36,7 +36,7 @@ final class Employee implements CSMSetInterface {
   Employee(this.id, this.status, this.identification, this.address, this.approach, this.curp, this.antecedentesNoPenalesExp, this.rfc, this.nss, this.imssRegistrationDate, this.hiringDate,
       this.terminationDate, this.identificationNavigation, this.statusNavigation);
 
-  Employee.def();
+  Employee.a();
 
   factory Employee.des(JObject json) {
     int id = json.get(SCK.kId);

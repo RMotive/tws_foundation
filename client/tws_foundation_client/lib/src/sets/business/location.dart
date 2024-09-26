@@ -2,53 +2,49 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/sets/set_common_keys.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-final class DriverCommon implements CSMSetInterface {
+final class Location implements CSMSetInterface {
   static const String kStatus = "status";
-  static const String kLicense = "license";
-  static const String kSituation = "situation";
+  static const String kAddress = "address";
   static const String kstatusNavigation = 'StatusNavigation';
 
   @override
   int id = 0;
   int status = 1;
-  String license = "";
-  int? situation;
+  int address = 0;
+  String name = "";
   Status? statusNavigation;
 
-  DriverCommon(this.id, this.status, this.license, this.situation, this.statusNavigation);
+  Location(this.id, this.status, this.address, this.name, this.statusNavigation);
 
-  DriverCommon.a();
+  Location.a();
 
-  factory DriverCommon.des(JObject json) {
+  factory Location.des(JObject json) {
     int id = json.get(SCK.kId);
     int status = json.get(kStatus);
-    String license = json.get(kLicense);
-    int? situation = json.getDefault(kSituation, null);
+    int address = json.get(kAddress);
+    String name = json.get(SCK.kName);
+
     Status? statusNavigation;
     if (json[kstatusNavigation] != null) {
       JObject rawNavigation = json.getDefault(kstatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
 
-    return DriverCommon(id, status, license, situation, statusNavigation);
+    return Location(id, status, address, name, statusNavigation);
   }
 
-  DriverCommon clone({
+  Location clone({
     int? id,
     int? status,
-    String? license,
-    int? situation,
+    int? address,
+    String? name,
     Status? statusNavigation,
   }) {
-    int? sit = situation ?? this.situation;
-    if (sit == 0) {
-      sit = null;
-    }
-    return DriverCommon(
+    return Location(
       id ?? this.id,
       status ?? this.status,
-      license ?? this.license,
-      sit,
+      address ?? this.address,
+      name ?? this.name,
       statusNavigation ?? this.statusNavigation,
     );
   }
@@ -57,9 +53,9 @@ final class DriverCommon implements CSMSetInterface {
   JObject encode() {
     return <String, dynamic>{
       SCK.kId: id,
+      SCK.kName: name,
       kStatus: status,
-      kLicense: license,
-      kSituation: situation,
+      kAddress: address,
       kstatusNavigation: statusNavigation?.encode(),
     };
   }
@@ -67,7 +63,8 @@ final class DriverCommon implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if (license.length < 8 || license.length > 12) results.add(CSMSetValidationResult(kLicense, "license number length must be between 8 and 12", "strictLength(8,12)"));
+    if (name.isEmpty || name.length > 30) results.add(CSMSetValidationResult(SCK.kName, "Name must be 25 max lenght and non-empty", "strictLength(1,30)"));
+    if (address < 0) results.add(CSMSetValidationResult(kAddress, 'Address pointer must be equal or greater than 0', 'pointerHandler()'));
     if (status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
 
     return results;

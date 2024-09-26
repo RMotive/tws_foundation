@@ -1,4 +1,3 @@
-
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -60,9 +59,34 @@ final class YardLog implements CSMSetInterface {
   Section? sectionNavigation;
   Account? accountNavigation; //Only for local handle.
 
-  YardLog(this.id, this.entry, this.truck, this.truckExternal, this.trailer, this.trailerExternal, this.loadType, this.section, this.driver, this.driverExternal, this.timestamp,
-  this.guard, this.gName, this.fromTo, this.seal, this.damage, this.ttPicture, this.dmgEvidence, this.driverNavigation, this.driverExternalNavigation, this.truckNavigation, this.truckExternalNavigation,
-  this.trailerNavigation, this.trailerExternalNavigation, this.loadTypeNavigation, this.sectionNavigation, this.accountNavigation);
+  YardLog(
+      this.id,
+      this.entry,
+      this.truck,
+      this.truckExternal,
+      this.trailer,
+      this.trailerExternal,
+      this.loadType,
+      this.section,
+      this.driver,
+      this.driverExternal,
+      this.timestamp,
+      this.guard,
+      this.gName,
+      this.fromTo,
+      this.seal,
+      this.damage,
+      this.ttPicture,
+      this.dmgEvidence,
+      this.driverNavigation,
+      this.driverExternalNavigation,
+      this.truckNavigation,
+      this.truckExternalNavigation,
+      this.trailerNavigation,
+      this.trailerExternalNavigation,
+      this.loadTypeNavigation,
+      this.sectionNavigation,
+      this.accountNavigation);
   factory YardLog.des(JObject json) {
     int id = json.get('id');
     bool entry = json.get('entry');
@@ -86,46 +110,46 @@ final class YardLog implements CSMSetInterface {
     Driver? driverNavigation;
     if (json['DriverNavigation'] != null) {
       JObject rawNavigation = json.getDefault('DriverNavigation', <String, dynamic>{});
-      driverNavigation = deserealize<Driver>(rawNavigation, decode: DriverDecoder());
+      driverNavigation = Driver.des(rawNavigation);
     }
     DriverExternal? driverExternalNavigation;
     if (json['DriverExternalNavigation'] != null) {
       JObject rawNavigation = json.getDefault('DriverExternalNavigation', <String, dynamic>{});
-      driverExternalNavigation = deserealize<DriverExternal>(rawNavigation, decode: DriverExternalDecoder());
+      driverExternalNavigation = DriverExternal.des(rawNavigation);
     }
     Truck? truckNavigation;
     if (json['TruckNavigation'] != null) {
       JObject rawNavigation = json.getDefault('TruckNavigation', <String, dynamic>{});
-      truckNavigation = deserealize<Truck>(rawNavigation, decode: TruckDecoder());
+      truckNavigation = Truck.des(rawNavigation);
     }
     TruckExternal? truckExternalNavigation;
     if (json['TruckExternalNavigation'] != null) {
       JObject rawNavigation = json.getDefault('TruckExternalNavigation', <String, dynamic>{});
-      truckExternalNavigation = deserealize<TruckExternal>(rawNavigation, decode: TruckExternalDecoder());
+      truckExternalNavigation = TruckExternal.des(rawNavigation);
     }
     Trailer? trailerNavigation;
     if (json['TrailerNavigation'] != null) {
       JObject rawNavigation = json.getDefault('TrailerNavigation', <String, dynamic>{});
-      trailerNavigation = deserealize<Trailer>(rawNavigation, decode: TrailerDecoder());
+      trailerNavigation = Trailer.des(rawNavigation);
     }
     TrailerExternal? trailerExternalNavigation;
     if (json['TrailerExternalNavigation'] != null) {
       JObject rawNavigation = json.getDefault('TrailerExternalNavigation', <String, dynamic>{});
-      trailerExternalNavigation = deserealize<TrailerExternal>(rawNavigation, decode: TrailerExternalDecoder());
+      trailerExternalNavigation = TrailerExternal.des(rawNavigation);
     }
     LoadType? loadTypeNavigation;
     if (json['LoadTypeNavigation'] != null) {
       JObject rawNavigation = json.getDefault('LoadTypeNavigation', <String, dynamic>{});
-      loadTypeNavigation = deserealize<LoadType>(rawNavigation, decode: LoadTypeDecoder());
+      loadTypeNavigation = LoadType.des(rawNavigation);
     }
     Section? sectionNavigation;
     if (json['SectionNavigation'] != null) {
       JObject rawNavigation = json.getDefault('SectionNavigation', <String, dynamic>{});
-      sectionNavigation = deserealize<Section>(rawNavigation, decode: SectionDecoder());
+      sectionNavigation = Section.des(rawNavigation);
     }
 
-    return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, timestamp, guard, gName, fromTo, seal, damage,
-    ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null);
+    return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, timestamp, guard, gName, fromTo, seal, damage, ttPicture, dmgEvidence,
+        driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null);
   }
 
   @override
@@ -163,136 +187,150 @@ final class YardLog implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Debe tomar una foto del camión con el remolque.", "strictLength(1, max)"));
-    if(gName.isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "El nombre del guardia no debe exeder los 100 caracteres y no debe estar vacio.", "strictLength(1,100)"));
-    if(fromTo.isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "Debe indicar de donde viene (o a donde va el camión). Maximo 25 caracteres.", "strictLength(1,25)"));
-    if(seal.isEmpty || gName.length > 64) results.add(CSMSetValidationResult(kSeal, "El campo del sello no debe estar vacio. Maximo 100 caracteres.", "strictLength(1,64)"));
-    if(section < 0) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar la seccion.', 'pointerHandler()'));
-    if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
+    if (ttPicture.isEmpty) results.add(CSMSetValidationResult(kTtPicture, "Debe tomar una foto del camión con el remolque.", "strictLength(1, max)"));
+    if (gName.isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "El nombre del guardia no debe exeder los 100 caracteres y no debe estar vacio.", "strictLength(1,100)"));
+    if (fromTo.isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "Debe indicar de donde viene (o a donde va el camión). Maximo 25 caracteres.", "strictLength(1,25)"));
+    if (seal.isEmpty || gName.length > 64) results.add(CSMSetValidationResult(kSeal, "El campo del sello no debe estar vacio. Maximo 100 caracteres.", "strictLength(1,64)"));
+    if (section < 0) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar la seccion.', 'pointerHandler()'));
+    if (loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
 
-    if(driverExternalNavigation == null && driverNavigation == null){
+    if (driverExternalNavigation == null && driverNavigation == null) {
       results.add(CSMSetValidationResult(kDriver, 'Debe seleccionar un conductor', 'pointerHandler()'));
     }
 
-    if(truckExternalNavigation == null && truckNavigation == null){
+    if (truckExternalNavigation == null && truckNavigation == null) {
       results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
     }
     //Loadtype: 3 == "Botado"
-    if(loadType != 3 && (trailerExternalNavigation == null && trailerNavigation == null)){
+    if (loadType != 3 && (trailerExternalNavigation == null && trailerNavigation == null)) {
       results.add(CSMSetValidationResult(kLoadType, 'Debe agregar los datos del remolque, de lo contrario seleccione el tipo de carga como Botado', 'FieldConflic()'));
     }
-    
-    if(loadType == 3 && (trailerExternalNavigation != null || trailerNavigation != null)){
+
+    if (loadType == 3 && (trailerExternalNavigation != null || trailerNavigation != null)) {
       results.add(CSMSetValidationResult(kLoadType, 'Si el tipo de carga es Botado, no puede seleccionar datos del remolque', 'FieldConflic()'));
     }
 
-    if(damage && dmgEvidence == null){
+    if (damage && dmgEvidence == null) {
       results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));
     }
-    
-    if(dmgEvidence != null && damage == false){
+
+    if (dmgEvidence != null && damage == false) {
       results.add(CSMSetValidationResult(kDmgEvidence, 'Se registro una foto del daño, pero no se ha seleccionado la carga como dañada.', 'FieldConflic()'));
     }
 
     return results;
   }
-  YardLog.def();
-  YardLog clone({
-    int? id,
-    bool? entry,
-    int? truck,
-    int? truckExternal,
-    int? trailer,
-    int? trailerExternal,
-    int? loadType,
-    int? section,
-    int? driver,
-    int? driverExternal,
-    DateTime? timestamp,
-    int? guard,
-    String? gName,
-    String? fromTo,
-    String? seal,
-    bool? damage,
-    String? ttPicture,
-    String? dmgEvidence,
-    Driver? driverNavigation,
-    DriverExternal? driverExternalNavigation,
-    Truck? truckNavigation,
-    TruckExternal? truckExternalNavigation,
-    Trailer? trailerNavigation,
-    TrailerExternal? trailerExternalNavigation,
-    LoadType? loadTypeNavigation,
-    Section? sectionNavigation,
-    Account? accountNavigation
-  }){
+
+  YardLog.a();
+  YardLog clone(
+      {int? id,
+      bool? entry,
+      int? truck,
+      int? truckExternal,
+      int? trailer,
+      int? trailerExternal,
+      int? loadType,
+      int? section,
+      int? driver,
+      int? driverExternal,
+      DateTime? timestamp,
+      int? guard,
+      String? gName,
+      String? fromTo,
+      String? seal,
+      bool? damage,
+      String? ttPicture,
+      String? dmgEvidence,
+      Driver? driverNavigation,
+      DriverExternal? driverExternalNavigation,
+      Truck? truckNavigation,
+      TruckExternal? truckExternalNavigation,
+      Trailer? trailerNavigation,
+      TrailerExternal? trailerExternalNavigation,
+      LoadType? loadTypeNavigation,
+      Section? sectionNavigation,
+      Account? accountNavigation}) {
     //
     String? dmgEv = dmgEvidence ?? this.dmgEvidence;
-    if(dmgEv == "") dmgEv = null;
+    if (dmgEv == "") dmgEv = null;
 
-    if(gName == "") this.guard = 0;
+    if (gName == "") this.guard = 0;
 
     LoadType? load = loadTypeNavigation ?? this.loadTypeNavigation;
-    if(loadType == 0) load = null;
+    if (loadType == 0) load = null;
 
     Section? sect = sectionNavigation ?? this.sectionNavigation;
-    if(section == 0) sect = null;
+    if (section == 0) sect = null;
 
     int? driverIndex = driver ?? this.driver;
     Driver? driverNav = driverNavigation ?? this.driverNavigation;
-    if(driverIndex == 0){
+    if (driverIndex == 0) {
       driverIndex = null;
-      driverNav = null; 
+      driverNav = null;
     }
 
     int? driverExtIndex = driverExternal ?? this.driverExternal;
     DriverExternal? driverExtNav = driverExternalNavigation ?? this.driverExternalNavigation;
-    if(driverExtIndex == 0){
+    if (driverExtIndex == 0) {
       driverExtIndex = null;
-      driverExtNav = null; 
+      driverExtNav = null;
     }
 
     int? truckIndex = truck ?? this.truck;
     Truck? truckNav = truckNavigation ?? this.truckNavigation;
-    if(truckIndex == 0){
+    if (truckIndex == 0) {
       truckIndex = null;
-      truckNav = null; 
+      truckNav = null;
     }
 
     int? truckExtIndex = truckExternal ?? this.truckExternal;
     TruckExternal? truckExtNav = truckExternalNavigation ?? this.truckExternalNavigation;
-    if(truckExtIndex == 0){
+    if (truckExtIndex == 0) {
       truckExtIndex = null;
-      truckExtNav = null; 
+      truckExtNav = null;
     }
 
     int? trailerIndex = trailer ?? this.trailer;
     Trailer? trailerNav = trailerNavigation ?? this.trailerNavigation;
-    if(trailerIndex == 0){
+    if (trailerIndex == 0) {
       trailerIndex = null;
-      trailerNav = null; 
+      trailerNav = null;
     }
 
     int? trailerExtIndex = trailerExternal ?? this.trailerExternal;
     TrailerExternal? trailerExtNav = trailerExternalNavigation ?? this.trailerExternalNavigation;
-    if(trailerExtIndex == 0){
+    if (trailerExtIndex == 0) {
       trailerExtIndex = null;
-      trailerExtNav = null; 
+      trailerExtNav = null;
     }
-    
-    return YardLog(id ?? this.id, entry ?? this.entry, truckIndex, truckExtIndex, trailerIndex, trailerExtIndex, 
-    loadType ?? this.loadType, section ?? this.section, driverIndex,driverExtIndex, timestamp ?? this.timestamp, guard ?? this.guard, 
-    gName ?? this.gName, fromTo ?? this.fromTo, seal ?? this.seal, damage ?? this.damage, ttPicture ?? this.ttPicture, dmgEv, driverNav, 
-    driverExtNav, truckNav, truckExtNav, trailerNav, trailerExtNav, load, sect, accountNavigation ?? this.accountNavigation);
-  }
 
-}
-
-final class YardLogDecoder implements CSMDecodeInterface<YardLog> {
-  const YardLogDecoder();
-
-  @override
-  YardLog decode(JObject json) {
-    return YardLog.des(json);
+    return YardLog(
+        id ?? this.id,
+        entry ?? this.entry,
+        truckIndex,
+        truckExtIndex,
+        trailerIndex,
+        trailerExtIndex,
+        loadType ?? this.loadType,
+        section ?? this.section,
+        driverIndex,
+        driverExtIndex,
+        timestamp ?? this.timestamp,
+        guard ?? this.guard,
+        gName ?? this.gName,
+        fromTo ?? this.fromTo,
+        seal ?? this.seal,
+        damage ?? this.damage,
+        ttPicture ?? this.ttPicture,
+        dmgEv,
+        driverNav,
+        driverExtNav,
+        truckNav,
+        truckExtNav,
+        trailerNav,
+        trailerExtNav,
+        load,
+        sect,
+        accountNavigation ?? this.accountNavigation);
   }
 }

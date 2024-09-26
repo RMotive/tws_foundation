@@ -43,7 +43,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<DriverExternal>(DriverExternalDecoder()),
+        decoder: (JObject json) => SetViewOut<DriverExternal>.des(json, DriverExternal.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

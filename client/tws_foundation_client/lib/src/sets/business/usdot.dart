@@ -36,7 +36,7 @@ final class USDOT implements CSMSetInterface {
   USDOT(this.id, this.status, this.mc, this.scac, this.statusNavigation);
 
   /// Creates an [USDOT] object with default properties.
-  USDOT.def();
+  USDOT.a();
 
   /// Creates an [USDOT] object based on a given [json] object.
   factory USDOT.des(JObject json) {

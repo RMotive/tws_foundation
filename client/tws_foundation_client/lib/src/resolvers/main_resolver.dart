@@ -4,16 +4,11 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 class MainResolver<TSuccess extends CSMEncodeInterface> extends CSMServiceResolverBase<TSuccess> {
   MainResolver(super.operationResult);
 
-  Future<TSuccess> act([CSMDecodeInterface<TSuccess>? decoder]) async {
+  Future<TSuccess> act(TSuccess Function(JObject json) decoder) async {
     late final TSuccess actResult;
     result.resolve(
       (JObject success) {
-        if (decoder == null) {
-          throw 'DependencyException: decoder is mandatory due to framing is generic abstracted';
-        }
-
-        CSMDecodeInterface<SuccessFrame<TSuccess>> frameDecoder = SuccessFrameDecode<TSuccess>(decoder);
-        final SuccessFrame<TSuccess> templateWithSuccess = deserealize(success, decode: frameDecoder);
+        final SuccessFrame<TSuccess> templateWithSuccess = SuccessFrame<TSuccess>.des(success, decoder);
         actResult = templateWithSuccess.estela;
       },
       (JObject failure, int statusCode) {
@@ -31,17 +26,12 @@ class MainResolver<TSuccess extends CSMEncodeInterface> extends CSMServiceResolv
     required void Function(Object exception, StackTrace trace) onException,
     required void Function(FailureFrame failure, int status) onFailure,
     required void Function(SuccessFrame<TSuccess> success) onSuccess,
+    required TSuccess Function(JObject json) decoder,
     void Function()? onFinally,
-    CSMDecodeInterface<TSuccess>? decoder,
   }) {
     result.resolve(
       (JObject jSuccess) {
-        if (decoder == null) {
-          throw 'DependencyException: decoder is mandatory due to framing is generic abstracted';
-        }
-
-        CSMDecodeInterface<SuccessFrame<TSuccess>> frameDecoder = SuccessFrameDecode<TSuccess>(decoder);
-        final SuccessFrame<TSuccess> templateWithSuccess = deserealize(jSuccess, decode: frameDecoder);
+        final SuccessFrame<TSuccess> templateWithSuccess = SuccessFrame<TSuccess>.des(jSuccess, decoder);
         onSuccess(templateWithSuccess);
       },
       (JObject jFailure, int statusCode) {

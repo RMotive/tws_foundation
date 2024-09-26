@@ -24,7 +24,7 @@ final class Status implements CSMSetInterface {
   Status(this.id, this.name, this.description, this.trucks);
 
   /// Creates a new [Status] object with default properties.
-  Status.def();
+  Status.a();
 
   /// Creaes a [Status] object based on a given [json] object.
   factory Status.des(JObject json) {

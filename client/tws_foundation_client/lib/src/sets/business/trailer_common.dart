@@ -21,7 +21,7 @@ final class TrailerCommon implements CSMSetInterface {
 
   TrailerCommon(this.id, this.status, this.trailerClass, this.situation, this.location, this.economic, this.statusNavigation);
 
-  TrailerCommon.def();
+  TrailerCommon.a();
 
   factory TrailerCommon.des(JObject json) {
     int id = json.get(SCK.kId);

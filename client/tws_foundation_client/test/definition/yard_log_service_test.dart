@@ -40,7 +40,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<YardLog>(YardLogDecoder()),
+        decoder: (JObject json) => SetViewOut<YardLog>.des(json, YardLog.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

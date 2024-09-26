@@ -35,7 +35,7 @@ final class Contact implements CSMSetInterface {
   Contact(this.id, this.name, this.lastName, this.email, this.phone);
 
   /// Creates a new [Contact] object with default properties.
-  Contact.def();
+  Contact.a();
 
   /// Creates a new [Contact] object based on a [json] object.
   factory Contact.des(JObject json) {

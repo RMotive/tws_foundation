@@ -2,7 +2,13 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: N/A
+- Notes:
+
+  - Renames
+
+        1. [MigrationTransactionResult] -> [SetBatchOut]
+        2. [MigrationTransactionFailure] -> [SetOperationFailure]
+        3. [MigrationUpdateResult] -> [RecordUpdateOut]
 
 - Dependencies Upgrade: N/A
 

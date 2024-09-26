@@ -48,7 +48,7 @@ final class TruckCommon implements CSMSetInterface {
   TruckCommon(this.id, this.status, this.economic, this.location, this.situation, this.situationNavigation, this.statusNavigation);
 
   /// Creates a [TruckCommon] object with default properties.
-  TruckCommon.def();
+  TruckCommon.a();
 
   /// Creates a [TruckCommon] object based on a given [json] object.
   factory TruckCommon.des(JObject json) {

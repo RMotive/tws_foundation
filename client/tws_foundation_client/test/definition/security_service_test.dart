@@ -39,7 +39,7 @@ void main() {
       MainResolver<Privileges> fact = await service.authenticate(credentialsMock);
 
       fact.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

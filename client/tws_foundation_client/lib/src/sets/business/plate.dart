@@ -29,7 +29,7 @@ final class Plate implements CSMSetInterface {
 
   Plate(this.id, this.status, this.identifier, this.state, this.country, this.expiration, this.truck, this.trailer, this.statusNavigation, this.truckCommonNavigation, this.trailerCommonNavigation);
 
-  Plate.def();
+  Plate.a();
 
   factory Plate.des(JObject json) {
     TruckCommon? truckCommonNavigation;

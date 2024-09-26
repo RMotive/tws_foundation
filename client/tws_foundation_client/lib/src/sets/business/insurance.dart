@@ -48,7 +48,7 @@ final class Insurance implements CSMSetInterface {
   Insurance(this.id, this.status, this.policy, this.expiration, this.country, this.statusNavigation, this.trucks);
 
   /// Creates an [Insurance] object with default properties.
-  Insurance.def();
+  Insurance.a();
 
   /// Creates an [Insurance] object based on a given [json] object.
   factory Insurance.des(JObject json) {

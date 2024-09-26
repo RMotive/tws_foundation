@@ -86,7 +86,7 @@ final class Carrier implements CSMSetInterface {
       this.sctNavigation, this.statusNavigation, this.trucks);
 
   /// Creates a [Carrier] object with default properties.
-  Carrier.def();
+  Carrier.a();
 
   /// Creates a [Carrier] object based on a given [json] object.
   factory Carrier.des(JObject json) {

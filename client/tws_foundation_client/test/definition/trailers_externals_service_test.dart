@@ -43,7 +43,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<TrailerExternal>(TrailerExternalDecoder()),
+        decoder: (JObject json) => SetViewOut<TrailerExternal>.des(json, TrailerExternal.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');

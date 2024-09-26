@@ -14,9 +14,9 @@ abstract class YardLogServiceBase extends CSMServiceBase {
 
   Effect<SetViewOut<YardLog>> viewInventory(SetViewOptions<YardLog> options, String auth);
 
-  Effect<MigrationTransactionResult<YardLog>> create(List<YardLog> yardlogs, String auth);
+  Effect<SetBatchOut<YardLog>> create(List<YardLog> yardlogs, String auth);
 
-  Effect<MigrationUpdateResult<YardLog>> update(YardLog yardlog, String auth);
+  Effect<RecordUpdateOut<YardLog>> update(YardLog yardlog, String auth);
 
 
 }

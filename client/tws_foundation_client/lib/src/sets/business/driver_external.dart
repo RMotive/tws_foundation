@@ -21,7 +21,7 @@ final class DriverExternal implements CSMSetInterface {
 
   DriverExternal(this.id, this.status, this.identification, this.common, this.driverCommonNavigation, this.identificationNavigation, this.statusNavigation);
 
-  DriverExternal.def();
+  DriverExternal.a();
 
   factory DriverExternal.des(JObject json) {
     int id = json.get(SCK.kId);

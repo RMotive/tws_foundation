@@ -27,15 +27,15 @@ final class YardLogsService extends YardLogServiceBase {
   }
   
   @override
-  Effect<MigrationTransactionResult<YardLog>> create(List<YardLog> yardlogs, String auth) async {
+  Effect<SetBatchOut<YardLog>> create(List<YardLog> yardlogs, String auth) async {
     CSMActEffect actEffect = await postList('create', yardlogs, auth: auth);
-    return MainResolver<MigrationTransactionResult<YardLog>>(actEffect);
+    return MainResolver<SetBatchOut<YardLog>>(actEffect);
   }
 
   @override
-  Effect<MigrationUpdateResult<YardLog>> update(YardLog yardlog, String auth) async {
+  Effect<RecordUpdateOut<YardLog>> update(YardLog yardlog, String auth) async {
     CSMActEffect actEffect = await post('update', yardlog, auth: auth);
-    return MainResolver<MigrationUpdateResult<YardLog>>(actEffect);
+    return MainResolver<RecordUpdateOut<YardLog>>(actEffect);
   }
 }
       

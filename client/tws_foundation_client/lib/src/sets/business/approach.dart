@@ -54,7 +54,7 @@ final class Approach implements CSMSetInterface {
   Approach(this.id, this.status, this.email, this.enterprise, this.personal, this.alternative, this.statusNavigation, this.carriers);
 
   /// Creates an [Approach] object with default properties.
-  Approach.def();
+  Approach.a();
 
   /// Creates an [Approach] object based on a [json] object.
   factory Approach.des(JObject json) {

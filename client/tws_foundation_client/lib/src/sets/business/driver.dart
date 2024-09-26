@@ -46,7 +46,7 @@ final class Driver implements CSMSetInterface {
   Driver(this.id, this.status, this.employee, this.common, this.driverType, this.licenseExpiration, this.drugalcRegistrationDate, this.pullnoticeRegistrationDate, this.twic, this.twicExpiration,
       this.visa, this.visaExpiration, this.fast, this.fastExpiration, this.anam, this.anamExpiration, this.driverCommonNavigation, this.employeeNavigation, this.statusNavigation);
 
-  Driver.def();
+  Driver.a();
 
   factory Driver.des(JObject json) {
     int id = json.get(SCK.kId);
