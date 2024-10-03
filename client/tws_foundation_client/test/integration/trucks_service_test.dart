@@ -153,7 +153,7 @@ void main() {
       <Plate>[plateMX,plateUSA]
     );
     List<CSMSetValidationResult> evaluation = mock.evaluate();
-    assert(evaluation.isNotEmpty);
+    assert(evaluation.isEmpty);
     return mock;
   }
   setUp(

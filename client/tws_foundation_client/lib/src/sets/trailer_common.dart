@@ -33,7 +33,7 @@ final class TrailerCommon implements CSMSetInterface {
   factory TrailerCommon.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
-    int? trailerClass = json.getDefault('class', null);
+    int? type = json.getDefault('type', null);
     int? situation = json.getDefault('situation', null);
     int? location = json.getDefault('location', null);
     String economic = json.get('economic');
@@ -50,7 +50,7 @@ final class TrailerCommon implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return TrailerCommon(id, status, trailerClass, situation, location, economic,   trailerTypeNavigation, statusNavigation, timestamp: timestamp);
+    return TrailerCommon(id, status, type, situation, location, economic,   trailerTypeNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -63,6 +63,7 @@ final class TrailerCommon implements CSMSetInterface {
       kLocation: location,
       kEconomic: economic,
       kTimestamp: timestamp.toIso8601String(),
+      kTrailerTypeNavigation: trailerTypeNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode()
     };
   }

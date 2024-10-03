@@ -178,7 +178,7 @@ final class YardLog implements CSMSetInterface {
     if(section < 0) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar la seccion.', 'pointerHandler()'));
     if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
 
-    if(driverExternalNavigation == null && driverNavigation == null){
+    if(driverExternalNavigation == null && driverNavigation == null && driver == 0){
       results.add(CSMSetValidationResult(kDriver, 'Debe seleccionar un conductor', 'pointerHandler()'));
     }
 
@@ -201,6 +201,16 @@ final class YardLog implements CSMSetInterface {
     if(dmgEvidence != null && damage == false){
       results.add(CSMSetValidationResult(kDmgEvidence, 'Se registro una foto del daño, pero no se ha seleccionado la carga como dañada.', 'FieldConflic()'));
     }
+
+    if(driverNavigation != null) results = <CSMSetValidationResult>[...results, ...driverNavigation!.evaluate()];   
+    if(driverExternalNavigation != null) results = <CSMSetValidationResult>[...results, ...driverExternalNavigation!.evaluate()];   
+    if(truckNavigation != null) results = <CSMSetValidationResult>[...results, ...truckNavigation!.evaluate()];   
+    if(truckExternalNavigation != null) results = <CSMSetValidationResult>[...results, ...truckExternalNavigation!.evaluate()];   
+    if(trailerNavigation != null) results = <CSMSetValidationResult>[...results, ...trailerNavigation!.evaluate()];   
+    if(trailerExternalNavigation != null) results = <CSMSetValidationResult>[...results, ...trailerExternalNavigation!.evaluate()];   
+    if(loadTypeNavigation != null) results = <CSMSetValidationResult>[...results, ...loadTypeNavigation!.evaluate()];   
+    if(sectionNavigation != null) results = <CSMSetValidationResult>[...results, ...sectionNavigation!.evaluate()];   
+
 
     return results;
   }

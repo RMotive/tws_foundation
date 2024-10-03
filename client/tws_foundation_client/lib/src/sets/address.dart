@@ -71,7 +71,9 @@ final class Address implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(country.length > 3) results.add(CSMSetValidationResult(kCountry, "Country must be 3 length", "strictLength(3)"));
     if(country.length < 2 && country.length > 3) results.add(CSMSetValidationResult(kCountry,"Country must be between 2 and 3 length", "strictLength(2,3)"));
-    if(state != null && state!.length < 2 || state!.length > 4) results.add(CSMSetValidationResult(kState, "State length must be between 2 and 4", "strictLength(2,4)"));
+    if(state != null){
+      if(state!.length < 2 || state!.length > 4) results.add(CSMSetValidationResult(kState, "State length must be between 2 and 4", "strictLength(2,4)"));
+    } 
     if(street != null && street!.length > 100) results.add(CSMSetValidationResult(kStreet, "Street must be 100 max length ",  "strictLength(0, 100)"));
     if(altStreet != null && altStreet!.length > 100) results.add(CSMSetValidationResult(kAltStreet, "altStreet must be 100 max length ",  "strictLength(0, 100)"));
     if(city != null && city!.length > 30) results.add(CSMSetValidationResult(kCity, "City must be 30 max length ",  "strictLength(0, 30)"));

@@ -71,8 +71,14 @@ final class Approach implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(email.length > 30) results.add(CSMSetValidationResult(kEmail, "Email must be 30  max length", "strictLength(1, 30)"));
-    if(enterprise != null && enterprise!.length < 10 || enterprise!.length > 14) results.add(CSMSetValidationResult(kEnterprise, "Enterprise number length must be between 10 and 14", "strictLength(1,4)"));
-    if(personal != null && personal!.length < 10 || personal!.length > 14) results.add(CSMSetValidationResult(kPersonal, "Personal number length must be between 10 and 14", "strictLength(1,4)"));
+    if(enterprise != null){
+      if(enterprise!.length < 10 || enterprise!.length > 14) results.add(CSMSetValidationResult(kEnterprise, "Enterprise number length must be between 10 and 14", "strictLength(1,4)"));
+    }
+     
+    if(personal != null){
+      if(personal!.length < 10 || personal!.length > 14) results.add(CSMSetValidationResult(kPersonal, "Personal number length must be between 10 and 14", "strictLength(1,4)"));
+    }
+
     if(alternative != null && alternative!.length > 30) results.add(CSMSetValidationResult(kAlternative, "Alternative contact must be 30  max length", "strictLength(0, 30)"));
 
     return results;

@@ -34,9 +34,13 @@ public class YardLogsService
 
             .Include(t => t.TrailerExternalNavigation)
                 .ThenInclude(d => d!.TrailerCommonNavigation)
-
+                    .ThenInclude(d => d!.TrailerTypeNavigation)
+                        .ThenInclude(d => d!.TrailerClassNavigation)
+                    
             .Include(t => t.TrailerNavigation)
                 .ThenInclude(d => d!.TrailerCommonNavigation)
+                  .ThenInclude(t => t!.TrailerTypeNavigation)
+                    .ThenInclude(t => t!.TrailerClassNavigation)
 
             .Include(t => t.TrailerNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
@@ -99,6 +103,7 @@ public class YardLogsService
                 DriverExternal = y.DriverExternal,
                 DriverExternalNavigation = y.DriverExternalNavigation == null ? null : new DriverExternal() {
                     Id = y.DriverExternalNavigation.Id,
+                    Timestamp = y.DriverExternalNavigation.Timestamp,
                     Status = y.DriverExternalNavigation.Status,
                     Common = y.DriverExternalNavigation.Common,
                     Identification = y.DriverExternalNavigation.Identification,
@@ -110,6 +115,7 @@ public class YardLogsService
                     },
                     IdentificationNavigation = y.DriverExternalNavigation.IdentificationNavigation == null ? null : new Identification() {
                         Id = y.DriverExternalNavigation.IdentificationNavigation.Id,
+                        Timestamp = y.DriverExternalNavigation.IdentificationNavigation.Timestamp,
                         Status = y.DriverExternalNavigation.IdentificationNavigation.Status,
                         Name = y.DriverExternalNavigation.IdentificationNavigation.Name,
                         FatherLastname = y.DriverExternalNavigation.IdentificationNavigation.FatherLastname,
@@ -119,6 +125,7 @@ public class YardLogsService
                 },
                 DriverNavigation = y.DriverNavigation == null ? null : new Driver() {
                     Id = y.DriverNavigation.Id,
+                    Timestamp = y.DriverNavigation.Timestamp,
                     Status = y.DriverNavigation.Status,
                     Employee = y.DriverNavigation.Employee,
                     Common = y.DriverNavigation.Common,
@@ -136,6 +143,7 @@ public class YardLogsService
                     AnamExpiration = y.DriverNavigation.AnamExpiration,
                     EmployeeNavigation = y.DriverNavigation.EmployeeNavigation == null ? null : new Employee() {
                         Id = y.DriverNavigation.EmployeeNavigation.Id,
+                        Timestamp = y.DriverNavigation.EmployeeNavigation.Timestamp,
                         Status = y.DriverNavigation.EmployeeNavigation.Status,
                         Identification = y.DriverNavigation.EmployeeNavigation.Identification,
                         Address = y.DriverNavigation.EmployeeNavigation.Address,
@@ -149,6 +157,7 @@ public class YardLogsService
                         TerminationDate = y.DriverNavigation.EmployeeNavigation.TerminationDate,
                         IdentificationNavigation = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation == null ? null : new Identification() {
                             Id = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Id,
+                            Timestamp = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Timestamp,
                             Status = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Status,
                             Name = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Name,
                             FatherLastname = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.FatherLastname,
@@ -158,6 +167,7 @@ public class YardLogsService
                     },
                     DriverCommonNavigation = y.DriverNavigation.DriverCommonNavigation == null ? null : new DriverCommon() {
                         Id = y.DriverNavigation.DriverCommonNavigation.Id,
+                        Timestamp = y.DriverNavigation.DriverCommonNavigation.Timestamp,
                         Status = y.DriverNavigation.DriverCommonNavigation.Status,
                         License = y.DriverNavigation.DriverCommonNavigation.License,
                         Situation = y.DriverNavigation.DriverCommonNavigation.Situation,
@@ -165,6 +175,7 @@ public class YardLogsService
                 },
                 TrailerExternalNavigation = y.TrailerExternalNavigation == null ? null : new TrailerExternal() {
                     Id = y.TrailerExternalNavigation.Id,
+                    Timestamp = y.TrailerExternalNavigation.Timestamp,
                     Status = y.TrailerExternalNavigation.Status,
                     Common = y.TrailerExternalNavigation.Common,
                     UsaPlate = y.TrailerExternalNavigation.UsaPlate,
@@ -172,22 +183,39 @@ public class YardLogsService
                     Carrier = y.TrailerExternalNavigation.Carrier,
                     TrailerCommonNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerExternalNavigation.TrailerCommonNavigation.Id,
+                        Timestamp = y.TrailerExternalNavigation.TrailerCommonNavigation.Timestamp,
                         Status = y.TrailerExternalNavigation.TrailerCommonNavigation.Status,
                         Economic = y.TrailerExternalNavigation.TrailerCommonNavigation.Economic,
                         Type = y.TrailerExternalNavigation.TrailerCommonNavigation.Type,
                         Situation = y.TrailerExternalNavigation.TrailerCommonNavigation.Situation,
-                        Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location
+                        Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location,
+                        TrailerTypeNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation == null? null : new TrailerType() {
+                            Id = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Id,
+                            Timestamp = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Timestamp,
+                            Status = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Status,
+                            Size = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Size,
+                            TrailerClass = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClass,
+                            TrailerClassNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation == null? null : new TrailerClass() {
+                                Id = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Id,
+                                Timestamp = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Timestamp,
+                                Name = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Name,
+                                Description = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Description
+                            }
+                        }
                     }
                 },
                 TrailerNavigation = y.TrailerNavigation == null ? null : new Trailer() {
                     Id = y.TrailerNavigation.Id,
+                    Timestamp = y.TrailerNavigation.Timestamp,
                     Status = y.TrailerNavigation.Status,
                     Common = y.TrailerNavigation.Common,
                     Model = y.TrailerNavigation.Model,
                     Maintenance = y.TrailerNavigation.Maintenance,
                     Carrier = y.TrailerNavigation.Carrier,
+                    SctNavigation = y.TrailerNavigation.SctNavigation,
                     VehiculesModelsNavigation = y.TrailerNavigation.VehiculesModelsNavigation == null ? null : new VehiculeModel() {
                         Id = y.TrailerNavigation.VehiculesModelsNavigation.Id,
+                        Timestamp = y.TrailerNavigation.VehiculesModelsNavigation.Timestamp,
                         Status = y.TrailerNavigation.VehiculesModelsNavigation.Status,
                         Name = y.TrailerNavigation.VehiculesModelsNavigation.Name,
                         Year = y.TrailerNavigation.VehiculesModelsNavigation.Year,
@@ -197,14 +225,29 @@ public class YardLogsService
                     CarrierNavigation = y.TrailerNavigation.CarrierNavigation,
                     TrailerCommonNavigation = y.TrailerNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerNavigation.TrailerCommonNavigation.Id,
+                        Timestamp = y.TrailerNavigation.TrailerCommonNavigation.Timestamp,
                         Status = y.TrailerNavigation.TrailerCommonNavigation.Status,
                         Economic = y.TrailerNavigation.TrailerCommonNavigation.Economic,
                         Type = y.TrailerNavigation.TrailerCommonNavigation.Type,
                         Situation = y.TrailerNavigation.TrailerCommonNavigation.Situation,
-                        Location = y.TrailerNavigation.TrailerCommonNavigation.Location
+                        Location = y.TrailerNavigation.TrailerCommonNavigation.Location,
+                        TrailerTypeNavigation = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation == null ? null : new TrailerType() {
+                            Id = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Id,
+                            Timestamp = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Timestamp,
+                            Status = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Status,
+                            Size = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Size,
+                            TrailerClass = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClass,
+                            TrailerClassNavigation = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation == null ? null : new TrailerClass() {
+                                Id = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Id,
+                                Timestamp = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Timestamp,
+                                Name = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Name,
+                                Description = y.TrailerNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Description
+                            }
+                        }
                     },
                     Plates = (ICollection<Plate>)y.TrailerNavigation.Plates.Select(p => new Plate() {
                         Id = p.Id,
+                        Timestamp = p.Timestamp,
                         Status = p.Status,
                         Identifier = p.Identifier,
                         State = p.State,
@@ -216,6 +259,7 @@ public class YardLogsService
                 },
                 TruckExternalNavigation = y.TruckExternalNavigation == null ? null : new TruckExternal() {
                     Id = y.TruckExternalNavigation.Id,
+                    Timestamp = y.TruckExternalNavigation.Timestamp,
                     Status = y.TruckExternalNavigation.Status,
                     Common = y.TruckExternalNavigation.Common,
                     MxPlate = y.TruckExternalNavigation.MxPlate,
@@ -224,6 +268,7 @@ public class YardLogsService
                     Vin = y.TruckExternalNavigation.Vin,
                     TruckCommonNavigation = y.TruckExternalNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckExternalNavigation.TruckCommonNavigation.Id,
+                        Timestamp = y.TruckExternalNavigation.TruckCommonNavigation.Timestamp,
                         Status = y.TruckExternalNavigation.TruckCommonNavigation.Id,
                         Economic = y.TruckExternalNavigation.TruckCommonNavigation.Economic,
                         Location = y.TruckExternalNavigation.TruckCommonNavigation.Location,
@@ -232,7 +277,9 @@ public class YardLogsService
                 },
                 TruckNavigation = y.TruckNavigation == null ? null : new Truck() {
                     Id = y.TruckNavigation.Id,
+                    Timestamp = y.TruckNavigation.Timestamp,
                     Status = y.TruckNavigation.Status,
+                    Sct = y.TruckNavigation.Sct,
                     Common = y.TruckNavigation.Common,
                     Motor = y.TruckNavigation.Motor,
                     Model = y.TruckNavigation.Model,
@@ -241,8 +288,10 @@ public class YardLogsService
                     Carrier = y.TruckNavigation.Carrier,
                     CarrierNavigation = y.TruckNavigation.CarrierNavigation,
                     Vin = y.TruckNavigation.Vin,
+                    SctNavigation = y.TruckNavigation.SctNavigation,
                     VehiculeModelNavigation = y.TruckNavigation.VehiculeModelNavigation == null? null : new VehiculeModel() {
                         Id = y.TruckNavigation.VehiculeModelNavigation.Id,
+                        Timestamp = y.TruckNavigation.VehiculeModelNavigation.Timestamp,
                         Status = y.TruckNavigation.VehiculeModelNavigation.Status,
                         Name = y.TruckNavigation.VehiculeModelNavigation.Name,
                         Year = y.TruckNavigation.VehiculeModelNavigation.Year,
@@ -252,6 +301,7 @@ public class YardLogsService
                     },
                     TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckNavigation.TruckCommonNavigation.Id,
+                        Timestamp = y.TruckNavigation.TruckCommonNavigation.Timestamp,
                         Status = y.TruckNavigation.TruckCommonNavigation.Id,
                         Economic = y.TruckNavigation.TruckCommonNavigation.Economic,
                         Location = y.TruckNavigation.TruckCommonNavigation.Location,
@@ -259,6 +309,7 @@ public class YardLogsService
                     },
                     Plates = (ICollection<Plate>)y.TruckNavigation.Plates.Select(p => new Plate() {
                         Id = p.Id,
+                        Timestamp = p.Timestamp,
                         Status = p.Status,
                         Identifier = p.Identifier,
                         State = p.State,
@@ -270,11 +321,13 @@ public class YardLogsService
                 },
                 LoadTypeNavigation = y.LoadTypeNavigation == null ? null : new LoadType() {
                     Id = y.LoadTypeNavigation.Id,
+                    Timestamp = y.LoadTypeNavigation.Timestamp,
                     Name = y.LoadTypeNavigation.Name,
                     Description = y.LoadTypeNavigation.Description
                 },
                 SectionNavigation = y.SectionNavigation == null ? null : new Section() {
                     Id = y.SectionNavigation.Id,
+                    Timestamp = y.SectionNavigation.Timestamp,
                     Status = y.SectionNavigation.Status,
                     Name = y.SectionNavigation.Name,
                     Yard = y.SectionNavigation.Yard,
@@ -282,6 +335,7 @@ public class YardLogsService
                     Ocupancy = y.SectionNavigation.Ocupancy,
                     LocationNavigation = y.SectionNavigation.LocationNavigation == null ? null : new Location() {
                         Id = y.SectionNavigation.LocationNavigation.Id,
+                        Timestamp = y.SectionNavigation.LocationNavigation.Timestamp,
                         Status = y.SectionNavigation.LocationNavigation.Status,
                         Name = y.SectionNavigation.LocationNavigation.Name,
                         Address = y.SectionNavigation.LocationNavigation.Address
@@ -289,7 +343,7 @@ public class YardLogsService
                 }
 
 
-            });
+            });;
     }
     public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
        

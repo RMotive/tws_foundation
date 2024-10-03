@@ -81,7 +81,7 @@ void main() {
     TrailerCommon trailerCommon = TrailerCommon(
       0, //id
       1, //status
-      0, //trailerClass
+      0, //type
       1, //situation
       null, //location
       "ECT$randomToken", //economic
@@ -175,7 +175,7 @@ void main() {
       null
     );
     List<CSMSetValidationResult> evaluation = mock.evaluate();
-    assert(evaluation.isNotEmpty);
+    assert(evaluation.isEmpty);
     return mock;
   }
 
@@ -288,6 +288,7 @@ void main() {
           MigrationUpdateResult<YardLog> actEffect = await fact.act(decoder);
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
+          assert(actEffect.updated.gName == mock.gName);
         },
       );
     },
