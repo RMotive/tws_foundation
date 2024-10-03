@@ -19,7 +19,7 @@ final class TrailerExternal implements CSMSetInterface {
   int status = 1;
   int common = 0;
   String carrier = "";
-  String mxPlate = "";
+  String? mxPlate;
   String? usaPlate;
   TrailerCommon? trailerCommonNavigation;
   Status? statusNavigation;
@@ -35,7 +35,7 @@ final class TrailerExternal implements CSMSetInterface {
     int status = json.get('status');
     int common = json.get('common');
     String carrier = json.get('carrier');
-    String mxPlate = json.get('mxPlate');
+    String? mxPlate = json.getDefault('mxPlate', null);
     DateTime timestamp = json.get('timestamp');
     String? usaPlate = json.getDefault('usaPlate', null);
     TrailerCommon? trailerCommonNavigation;
@@ -74,9 +74,17 @@ final class TrailerExternal implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(carrier.isEmpty || mxPlate.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
-    if(mxPlate.length < 8 || mxPlate.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MxPlate length must be between 8 and 12", "strictLength(1, 32)"));
+    if(carrier.isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
+    if(mxPlate != null){
+      if(mxPlate!.length < 8 || mxPlate!.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MxPlate length must be between 8 and 12", "strictLength(1, 12)"));
+    }
+    if(usaPlate != null){
+      if(usaPlate!.length < 8 || usaPlate!.length > 12) results.add(CSMSetValidationResult(kUsaPlate, "USA Plate length must be between 8 and 12", "strictLength(1, 12)"));
+    }
 
+    if(trailerCommonNavigation != null){
+      results = <CSMSetValidationResult>[...results, ...trailerCommonNavigation!.evaluate()];
+    }
     return results;
   }
   TrailerExternal.def();
@@ -94,7 +102,12 @@ final class TrailerExternal implements CSMSetInterface {
     if(usaPlate == ""){
       uPlate = null;
     }
-    return TrailerExternal(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, mxPlate ?? this.mxPlate, uPlate, trailerCommonNavigation ?? this.trailerCommonNavigation, statusNavigation ?? this.statusNavigation);
+    String? mPlate = mxPlate ?? this.mxPlate;
+    if(mxPlate == ""){
+      mPlate = null;
+    }
+    return TrailerExternal(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, 
+    mPlate, uPlate, trailerCommonNavigation ?? this.trailerCommonNavigation, statusNavigation ?? this.statusNavigation);
   }
 }
 

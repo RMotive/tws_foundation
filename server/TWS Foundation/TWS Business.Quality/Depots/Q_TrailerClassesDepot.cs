@@ -17,8 +17,7 @@ public class Q_TrailerClassesDepot
     protected override TrailerClass MockFactory(string RandomSeed) {
 
         return new() {
-            Name = "Trailer Class name",
-            Axis = 1
+            Name = "Trailer TrailerClass name",
         };
     }
 

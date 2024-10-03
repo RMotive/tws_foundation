@@ -32,7 +32,6 @@ public partial class DriverExternal
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Identification), [new PointerValidator(true)]),
         ];
 
         return Container;

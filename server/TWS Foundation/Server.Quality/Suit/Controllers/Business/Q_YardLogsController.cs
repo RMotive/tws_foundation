@@ -1,6 +1,8 @@
 ﻿
 using System.Net;
 
+using Azure;
+
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
@@ -15,6 +17,8 @@ using TWS_Foundation.Quality.Bases;
 
 using TWS_Security.Sets;
 
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
 
 
@@ -28,7 +32,104 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
     }
 
     protected override YardLog MockFactory(string RandomSeed) {
-        throw new NotImplementedException();
+        string iterationTag = RandomSeed;
+        DateOnly date = new(2024, 12, 12);
+
+        string motor = "motortestbkd" + RandomSeed;
+        Manufacturer manufacturer = new() {
+            Name = "SCANIA " + RandomSeed,
+            Description = "DESC " + RandomSeed
+        };
+        VehiculeModel vehiculeModel = new VehiculeModel() {
+            Status = 1,
+            Name = "Generic model " + RandomSeed,
+            ManufacturerNavigation = manufacturer,
+        };
+       
+        Sct sct = new() {
+            Status = 1,
+            Type = "TypT14",
+            Number = "NumberSCTTesting value" + RandomSeed,
+            Configuration = "Conf" + RandomSeed
+        };
+        Address addressCommon = new() {
+            Street = "Truck Location " + RandomSeed,
+            Country = "USA"
+        };
+
+        Approach contact = new() {
+            Status = 1,
+            Email = "mail@test.com " + RandomSeed
+        };
+
+        Carrier carrier = new() {
+            Status = 1,
+            Name = "Carrier " + RandomSeed,
+            Approach = 0,
+            Address = 0,
+            AddressNavigation = addressCommon,
+            ApproachNavigation = contact,
+        };
+
+        Plate plateMX = new() {
+            Status = 1,
+            Identifier = "mxPlate" + RandomSeed,
+            State = "BAC",
+            Country = "MXN",
+            Expiration = date,
+        };
+        Plate plateUSA = new() {
+            Status = 1,
+            Identifier = "usaPlate" + RandomSeed,
+            State = "CaA",
+            Country = "USA",
+            Expiration = date,
+        };
+        TruckCommon common = new() {
+            Status = 1,
+            Economic = "EconomicTbkd" + RandomSeed,
+        };
+
+        List<Plate> plateList = [plateMX, plateUSA];
+
+        Truck truck = new() {
+            Status = 1,
+            Carrier = 0,
+            Common = 0,
+            Model = 0,
+            Motor = motor,
+            Vin = "VINtestcTbkd" + RandomSeed,
+            VehiculeModelNavigation = vehiculeModel,
+            CarrierNavigation = carrier,
+            TruckCommonNavigation = common,
+            SctNavigation = sct,
+            Plates = plateList,
+        };
+        Section section = new() {
+            Status = 1,
+            Yard = 1,
+            Name = "section " + RandomSeed,
+            Capacity = 30,
+            Ocupancy = 1,
+            Timestamp = DateTime.UtcNow,
+        };
+        YardLog mock = new() {
+            Entry = true,
+            Truck = 0,
+            LoadType = 1,
+            Guard = 1,
+            Gname = "Enrique" + iterationTag,
+            Section = 0,
+            SectionNavigation = section,
+            Seal = "Seal " + iterationTag,
+            FromTo = "Cocacola florido " + iterationTag,
+            Damage = false,
+            TTPicture = "Foto " + iterationTag,
+            Driver = 1,
+            TruckNavigation = truck,
+        };
+        return mock;
+
     }
 
     [Fact]
@@ -53,23 +154,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         string testTag = Guid.NewGuid().ToString()[..2];
 
         for (int i = 0; i < 3; i++) {
-            string iterationTag = testTag + i;
-
-            YardLog mock = new() {
-                Entry = true,
-                Truck = -1,
-                Trailer = i,
-                LoadType = i,
-                Guard = i,
-                Gname = "Enrique" + iterationTag,
-                Section = i,
-                Seal = "Seal " + iterationTag,
-                FromTo = "Cocacola florido " + iterationTag,
-                Damage = false,
-                TTPicture = "Foto " + iterationTag,
-                Driver = i,
-            };
-            mockList.Add(mock);
+            mockList.Add(MockFactory(testTag+i));
         }
 
         (HttpStatusCode Status, _) = await Post("Create", mockList, true);
@@ -82,21 +167,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         string tag = RandomUtils.String(3);
         #region First (Correctly creates when doesn't exist)
         {
-            YardLog mock = new() {
-                Entry = true,
-                Truck = 1,
-                Trailer = 1,
-                LoadType = 1,
-                Guard = 1,
-                Gname = "Enrique" + tag,
-                Section = 1,
-                Seal = "Seal " + tag,
-                FromTo = "Cocacola florido " + tag,
-                Damage = false,
-                TTPicture = "Foto " + tag,
-                Driver = 1,
-                Timestamp = DateTime.Now,
-            };
+            YardLog mock = MockFactory(tag);
 
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
@@ -112,31 +183,8 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
 
         #region Second (Updates an exist record)
         {
-            tag = "UPT " + RandomUtils.String(3);
-            Section section = new() {
-                Status = 1,
-                Yard = 1,
-                Name = RandomUtils.String(10),
-                Capacity = 30,
-                Ocupancy = 1,
-                Timestamp = DateTime.UtcNow,
-            };
-
-            YardLog mock = new() {
-                Entry = true,
-                Truck = 1,
-                Trailer = 1,
-                LoadType = 1,
-                Guard = 1,
-                Gname = "Enrique" + tag,
-                Seal = "Seal " + tag,
-                SectionNavigation = section,
-                FromTo = "Cocacola florido " + tag,
-                Damage = false,
-                TTPicture = "Foto " + tag,
-                Driver = 1,
-                Timestamp = DateTime.Now,
-            };
+            tag = "U" + RandomUtils.String(2);
+            YardLog mock = MockFactory(tag);
             (HttpStatusCode Status, GenericFrame Response) = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
@@ -150,15 +198,11 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
                 () => Assert.Equal(mock.Gname, creationRecord.Gname),
                 () => Assert.Equal(mock.FromTo, creationRecord.FromTo),
                 () => Assert.Equal(mock.TTPicture, creationRecord.TTPicture),
-                () => Assert.Equal(mock.SectionNavigation.Name, creationRecord.SectionNavigation!.Name),
+                () => Assert.Equal(mock.SectionNavigation!.Name, creationRecord.SectionNavigation!.Name),
             ]);
-
-            mock.Id = creationRecord.Id;
-            mock.Timestamp = creationRecord.Timestamp;
-            mock.Gname = RandomUtils.String(10);
-            mock.Section = creationRecord.SectionNavigation!.Id;
-            mock.SectionNavigation.Id = creationRecord.SectionNavigation!.Id;
-            mock.SectionNavigation.Name = "UPT" + RandomUtils.String(10);
+            mock = creationRecord.DeepCopy();
+            mock.Gname = "UPDATED" + RandomUtils.String(10);
+            mock.SectionNavigation!.Name = "UPT" + RandomUtils.String(10);
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);

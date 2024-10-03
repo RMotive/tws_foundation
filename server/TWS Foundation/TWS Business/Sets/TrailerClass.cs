@@ -14,21 +14,16 @@ public partial class TrailerClass
 
     public string Name { get; set; } = null!;
 
-    public int Axis { get; set; }
-
     public string? Description { get; set; }
 
-    public virtual Axis? AxisNavigation { get; set; }
+    public virtual ICollection<TrailerType> TrailersTypesCommons { get; set; } = [];
 
-    public virtual ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
 
         Container = [
                 .. Container,
-            (nameof(Name), [Required, new LengthValidator(1, 30)]),
-            (nameof(Axis), [new PointerValidator(true)]),
+            (nameof(Name), [new RequiredValidator(), new LengthValidator(Max: 30)]),
         ];
 
         return Container;
@@ -51,13 +46,9 @@ public partial class TrailerClass
                 .IsUnicode(false);
 
             Entity.Property(e => e.Description)
-                .HasMaxLength(30)
+                .HasMaxLength(100)
                 .IsUnicode(false);
 
-            Entity.HasOne(d => d.AxisNavigation)
-                .WithMany(p => p.TrailerClasses)
-                .HasForeignKey(d => d.Axis)
-                .OnDelete(DeleteBehavior.ClientSetNull);
         });
     }
 }

@@ -18,6 +18,7 @@ using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Truck>;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Core.Utils;
+using Azure;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_TrucksController : BQ_CustomServerController<Truck> {
@@ -36,23 +37,27 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         return Status != HttpStatusCode.OK ? throw new ArgumentNullException(nameof(Status)) : Response.Estela.Token.ToString();
     }
 
-    private static Truck BuildTruck(string tag) {
+    protected override Truck MockFactory(string RandomSeed) {
         DateOnly date = new(2024, 12, 12);
-        string motor = "motortestbkd" + tag;
+        string motor = "motortestbkd" + RandomSeed;
         Manufacturer manufacturer = new() {
-            Model = "X23 " + tag,
-            Brand = "SCANIA TEST",
-            Year = date
+            Name = "SCANIA " + RandomSeed,
+            Description = "DESC " + RandomSeed
+        };
+        VehiculeModel vehiculeModel = new VehiculeModel() {
+            Status = 1,
+            Name = "Generic model " + RandomSeed,
+            ManufacturerNavigation = manufacturer,
         };
         Insurance insurance = new() {
             Status = 1,
-            Policy = "P232Policy" + tag,
+            Policy = "P232Policy" + RandomSeed,
             Expiration = date,
             Country = "MEX"
         };
         Situation situation = new() {
-            Name = "Situational test " + tag,
-            Description = "Description test " + tag
+            Name = "Situational test " + RandomSeed,
+            Description = "Description test " + RandomSeed
         };
         Maintenance maintenance = new() {
             Status = 1,
@@ -62,63 +67,62 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         Sct sct = new() {
             Status = 1,
             Type = "TypT14",
-            Number = "NumberSCTTesting value" + tag,
-            Configuration = "Conf" + tag
+            Number = "NumberSCTTesting value" + RandomSeed,
+            Configuration = "Conf" + RandomSeed
         };
         Address address = new() {
-            Street = "Main street " + tag,
+            Street = "Main street " + RandomSeed,
             Country = "USA"
         };
         Address addressCommon = new() {
-            Street = "Truck Location " + tag,
+            Street = "Truck Location " + RandomSeed,
             Country = "USA"
         };
 
         Usdot usdot = new() {
             Status = 1,
-            Mc = "mc- " + tag,
-            Scac = "s" + tag
+            Mc = "mc- " + RandomSeed,
+            Scac = "s" + RandomSeed
         };
 
         Approach contact = new() {
             Status = 1,
-            Email = "mail@test.com " + tag
+            Email = "mail@test.com " + RandomSeed
         };
 
         Carrier carrier = new() {
             Status = 1,
-            Name = "Carrier " + tag,
+            Name = "Carrier " + RandomSeed,
             Approach = 0,
             Address = 0,
             AddressNavigation = addressCommon,
             ApproachNavigation = contact,
             UsdotNavigation = usdot,
-            SctNavigation = sct
         };
 
         Plate plateMX = new() {
             Status = 1,
-            Identifier = "mxPlate" + tag,
+            Identifier = "mxPlate" + RandomSeed,
             State = "BAC",
             Country = "MXN",
             Expiration = date,
         };
         Plate plateUSA = new() {
             Status = 1,
-            Identifier = "usaPlate" + tag,
+            Identifier = "usaPlate" + RandomSeed,
             State = "CaA",
             Country = "USA",
             Expiration = date,
         };
         Location location = new() {
-            Name = "random location: " + tag,
+            Name = "random location: " + RandomSeed,
             Status = 1,
             Address = 0,
             AddressNavigation = address,
         };
         TruckCommon common = new() {
             Status = 1,
-            Economic = "EconomicTbkd" + tag,
+            Economic = "EconomicTbkd" + RandomSeed,
             Location = 0,
             Situation = 0,
             LocationNavigation = location,
@@ -131,20 +135,18 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Status = 1,
             Carrier = 0,
             Common = 0,
-            Manufacturer = 0,
+            Model = 0,
             Motor = motor,
-            Vin = "VINtestcTbkd" + tag,
-            ManufacturerNavigation = manufacturer,
+            Vin = "VINtestcTbkd" + RandomSeed,
+            VehiculeModelNavigation = vehiculeModel,
             CarrierNavigation = carrier,
             InsuranceNavigation = insurance,
             TruckCommonNavigation = common,
             MaintenanceNavigation = maintenance,
+            SctNavigation = sct,
             Plates = plateList,
         };
         return truck;
-    }
-    protected override Truck MockFactory(string RandomSeed) {
-        throw new NotImplementedException();
     }
     [Fact]
     public async Task View() {
@@ -169,7 +171,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
 
         for (int i = 0; i < 3; i++) {
             string iterationTag = testTag + i;
-            mockList.Add(BuildTruck(iterationTag));
+            mockList.Add(MockFactory(iterationTag));
         }
         (HttpStatusCode Status, GenericFrame response) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
@@ -181,7 +183,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         #region First (Correctly creates when doesn't exist)
         {
             string testTag = Guid.NewGuid().ToString()[..3];
-            Truck mock = BuildTruck(testTag);
+            Truck mock = MockFactory(testTag);
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
@@ -198,7 +200,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         {
             #region generate a new record
             string testTag = Guid.NewGuid().ToString()[..3];
-            Truck mock = BuildTruck(testTag);
+            Truck mock = MockFactory(testTag);
 
             (HttpStatusCode Status, GenericFrame Response) = await Post("Update", mock, true);
 
@@ -238,7 +240,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Truck previousRecord = updateResult.Previous;
             Assert.Multiple([
                 () => Assert.Equal(creationRecord.Id, updateRecord.Id),
-                () => Assert.Equal(creationRecord.Manufacturer, updateRecord.Manufacturer),
+                () => Assert.Equal(creationRecord.Model, updateRecord.Model),
                 () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
                 () => Assert.NotEqual(previousRecord.Vin, updateRecord.Vin),
                 () => Assert.NotEqual(previousRecord.Plates.First().Identifier, updateRecord.Plates.First().Identifier),

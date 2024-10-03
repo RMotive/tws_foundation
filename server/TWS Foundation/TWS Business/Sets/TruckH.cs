@@ -108,11 +108,6 @@ public partial class TruckH
                  .WithMany(p => p.TrucksH)
                  .HasForeignKey(d => d.CarrierH);
 
-            Entity.HasOne(d => d.ManufacturerNavigation)
-                .WithMany(p => p.TrucksH)
-                .HasForeignKey(d => d.Manufacturer)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
             Entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.TrucksH)
                 .HasForeignKey(d => d.Situation)

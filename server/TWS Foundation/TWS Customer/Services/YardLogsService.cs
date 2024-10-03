@@ -18,10 +18,8 @@ public class YardLogsService
         this.YardLogs = YardLogs;
    
     }
-
-    public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
-        static IQueryable<YardLog> include(IQueryable<YardLog> query) {
-            return query
+    private IQueryable<YardLog> include(IQueryable<YardLog> query) {
+        return query
             .Include(t => t.DriverExternalNavigation)
                 .ThenInclude(i => i!.IdentificationNavigation)
             .Include(t => t.DriverExternalNavigation)
@@ -41,13 +39,37 @@ public class YardLogsService
                 .ThenInclude(d => d!.TrailerCommonNavigation)
 
             .Include(t => t.TrailerNavigation)
-                .ThenInclude(d => d!.CarrierNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
+            .Include(t => t.TrailerNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
+                    .ThenInclude(t => t!.AddressNavigation)
+            .Include(t => t.TrailerNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
+                    .ThenInclude(t => t!.UsdotNavigation)
+            .Include(t => t.TrailerNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
+                    .ThenInclude(t => t!.ApproachNavigation)
+
+            .Include(t => t.TrailerNavigation)
+                .ThenInclude(t => t!.VehiculesModelsNavigation)
 
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.TruckCommonNavigation)
 
             .Include(t => t.TruckNavigation)
+                .ThenInclude(t => t!.VehiculeModelNavigation)
+
+            .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
+            .Include(t => t.TruckNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
+                    .ThenInclude(t => t!.AddressNavigation)
+            .Include(t => t.TruckNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
+                    .ThenInclude(t => t!.UsdotNavigation)
+            .Include(t => t.TruckNavigation)
+                .ThenInclude(t => t!.CarrierNavigation)
+                    .ThenInclude(t => t!.ApproachNavigation)
 
             .Include(t => t.TruckExternalNavigation)
                 .ThenInclude(t => t!.TruckCommonNavigation)
@@ -152,7 +174,7 @@ public class YardLogsService
                         Id = y.TrailerExternalNavigation.TrailerCommonNavigation.Id,
                         Status = y.TrailerExternalNavigation.TrailerCommonNavigation.Status,
                         Economic = y.TrailerExternalNavigation.TrailerCommonNavigation.Economic,
-                        Class = y.TrailerExternalNavigation.TrailerCommonNavigation.Class,
+                        Type = y.TrailerExternalNavigation.TrailerCommonNavigation.Type,
                         Situation = y.TrailerExternalNavigation.TrailerCommonNavigation.Situation,
                         Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location
                     }
@@ -161,15 +183,23 @@ public class YardLogsService
                     Id = y.TrailerNavigation.Id,
                     Status = y.TrailerNavigation.Status,
                     Common = y.TrailerNavigation.Common,
-                    Manufacturer = y.TrailerNavigation.Manufacturer,
+                    Model = y.TrailerNavigation.Model,
                     Maintenance = y.TrailerNavigation.Maintenance,
                     Carrier = y.TrailerNavigation.Carrier,
+                    VehiculesModelsNavigation = y.TrailerNavigation.VehiculesModelsNavigation == null ? null : new VehiculeModel() {
+                        Id = y.TrailerNavigation.VehiculesModelsNavigation.Id,
+                        Status = y.TrailerNavigation.VehiculesModelsNavigation.Status,
+                        Name = y.TrailerNavigation.VehiculesModelsNavigation.Name,
+                        Year = y.TrailerNavigation.VehiculesModelsNavigation.Year,
+                        Manufacturer = y.TrailerNavigation.VehiculesModelsNavigation.Manufacturer,
+                        ManufacturerNavigation = y.TrailerNavigation.VehiculesModelsNavigation.ManufacturerNavigation,
+                    },
                     CarrierNavigation = y.TrailerNavigation.CarrierNavigation,
                     TrailerCommonNavigation = y.TrailerNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerNavigation.TrailerCommonNavigation.Id,
                         Status = y.TrailerNavigation.TrailerCommonNavigation.Status,
                         Economic = y.TrailerNavigation.TrailerCommonNavigation.Economic,
-                        Class = y.TrailerNavigation.TrailerCommonNavigation.Class,
+                        Type = y.TrailerNavigation.TrailerCommonNavigation.Type,
                         Situation = y.TrailerNavigation.TrailerCommonNavigation.Situation,
                         Location = y.TrailerNavigation.TrailerCommonNavigation.Location
                     },
@@ -205,12 +235,21 @@ public class YardLogsService
                     Status = y.TruckNavigation.Status,
                     Common = y.TruckNavigation.Common,
                     Motor = y.TruckNavigation.Motor,
-                    Manufacturer = y.TruckNavigation.Manufacturer,
+                    Model = y.TruckNavigation.Model,
                     Maintenance = y.TruckNavigation.Maintenance,
                     Insurance = y.TruckNavigation.Insurance,
                     Carrier = y.TruckNavigation.Carrier,
                     CarrierNavigation = y.TruckNavigation.CarrierNavigation,
                     Vin = y.TruckNavigation.Vin,
+                    VehiculeModelNavigation = y.TruckNavigation.VehiculeModelNavigation == null? null : new VehiculeModel() {
+                        Id = y.TruckNavigation.VehiculeModelNavigation.Id,
+                        Status = y.TruckNavigation.VehiculeModelNavigation.Status,
+                        Name = y.TruckNavigation.VehiculeModelNavigation.Name,
+                        Year = y.TruckNavigation.VehiculeModelNavigation.Year,
+                        Manufacturer = y.TruckNavigation.VehiculeModelNavigation.Manufacturer,
+                        ManufacturerNavigation = y.TruckNavigation.VehiculeModelNavigation.ManufacturerNavigation,
+
+                    },
                     TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckNavigation.TruckCommonNavigation.Id,
                         Status = y.TruckNavigation.TruckCommonNavigation.Id,
@@ -251,8 +290,9 @@ public class YardLogsService
 
 
             });
-
-        }
+    }
+    public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
+       
         return await YardLogs.View(options, include);
     }
 
@@ -260,240 +300,6 @@ public class YardLogsService
         return await this.YardLogs.Create(yardLog);
     }
     public async Task<RecordUpdateOut<YardLog>> Update(YardLog yardLog, bool updatePivot = false) {
-
-        static IQueryable<YardLog> include(IQueryable<YardLog> query) {
-            return query
-            .Include(t => t.DriverExternalNavigation)
-                .ThenInclude(i => i!.IdentificationNavigation)
-            .Include(t => t.DriverExternalNavigation)
-                .ThenInclude(i => i!.DriverCommonNavigation)
-
-            .Include(t => t.DriverNavigation)
-                .ThenInclude(d => d!.EmployeeNavigation)
-                    .ThenInclude(e => e!.IdentificationNavigation)
-
-            .Include(t => t.DriverNavigation)
-                .ThenInclude(d => d!.DriverCommonNavigation)
-
-            .Include(t => t.TrailerExternalNavigation)
-                .ThenInclude(d => d!.TrailerCommonNavigation)
-
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(d => d!.TrailerCommonNavigation)
-
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(d => d!.CarrierNavigation)
-
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.TruckCommonNavigation)
-
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-
-            .Include(t => t.TruckExternalNavigation)
-                .ThenInclude(t => t!.TruckCommonNavigation)
-
-            .Include(t => t.LoadTypeNavigation)
-
-            .Include(t => t.SectionNavigation)
-                .ThenInclude(t => t!.LocationNavigation)
-            .Select(y => new YardLog() {
-                Id = y.Id,
-                Entry = y.Entry,
-                Timestamp = y.Timestamp,
-                Truck = y.Truck,
-                TruckExternal = y.TruckExternal,
-                Trailer = y.Trailer,
-                TrailerExternal = y.TrailerExternal,
-                LoadType = y.LoadType,
-                Guard = y.Guard,
-                Gname = y.Gname,
-                Seal = y.Seal,
-                Section = y.Section,
-                FromTo = y.FromTo,
-                Damage = y.Damage,
-                TTPicture = y.TTPicture,
-                DmgEvidence = y.DmgEvidence,
-                Driver = y.Driver,
-                DriverExternal = y.DriverExternal,
-                DriverExternalNavigation = y.DriverExternalNavigation == null ? null : new DriverExternal() {
-                    Id = y.DriverExternalNavigation.Id,
-                    Status = y.DriverExternalNavigation.Status,
-                    Common = y.DriverExternalNavigation.Common,
-                    Identification = y.DriverExternalNavigation.Identification,
-                    DriverCommonNavigation = y.DriverExternalNavigation.DriverCommonNavigation == null ? null : new DriverCommon() {
-                        Id = y.DriverExternalNavigation.DriverCommonNavigation.Id,
-                        Status = y.DriverExternalNavigation.DriverCommonNavigation.Status,
-                        License = y.DriverExternalNavigation.DriverCommonNavigation.License,
-                        Situation = y.DriverExternalNavigation.DriverCommonNavigation.Situation,
-                    },
-                    IdentificationNavigation = y.DriverExternalNavigation.IdentificationNavigation == null ? null : new Identification() {
-                        Id = y.DriverExternalNavigation.IdentificationNavigation.Id,
-                        Status = y.DriverExternalNavigation.IdentificationNavigation.Status,
-                        Name = y.DriverExternalNavigation.IdentificationNavigation.Name,
-                        FatherLastname = y.DriverExternalNavigation.IdentificationNavigation.FatherLastname,
-                        MotherLastName = y.DriverExternalNavigation.IdentificationNavigation.MotherLastName,
-                        Birthday = y.DriverExternalNavigation.IdentificationNavigation.Birthday
-                    }
-                },
-                DriverNavigation = y.DriverNavigation == null ? null : new Driver() {
-                    Id = y.DriverNavigation.Id,
-                    Status = y.DriverNavigation.Status,
-                    Employee = y.DriverNavigation.Employee,
-                    Common = y.DriverNavigation.Common,
-                    DriverType = y.DriverNavigation.DriverType,
-                    LicenseExpiration = y.DriverNavigation.LicenseExpiration,
-                    DrugalcRegistrationDate = y.DriverNavigation.DrugalcRegistrationDate,
-                    PullnoticeRegistrationDate = y.DriverNavigation.PullnoticeRegistrationDate,
-                    Twic = y.DriverNavigation.Twic,
-                    TwicExpiration = y.DriverNavigation.TwicExpiration,
-                    Visa = y.DriverNavigation.Visa,
-                    VisaExpiration = y.DriverNavigation.VisaExpiration,
-                    Fast = y.DriverNavigation.Fast,
-                    FastExpiration = y.DriverNavigation.FastExpiration,
-                    Anam = y.DriverNavigation.Anam,
-                    AnamExpiration = y.DriverNavigation.AnamExpiration,
-                    EmployeeNavigation = y.DriverNavigation.EmployeeNavigation == null ? null : new Employee() {
-                        Id = y.DriverNavigation.EmployeeNavigation.Id,
-                        Status = y.DriverNavigation.EmployeeNavigation.Status,
-                        Identification = y.DriverNavigation.EmployeeNavigation.Identification,
-                        Address = y.DriverNavigation.EmployeeNavigation.Address,
-                        Approach = y.DriverNavigation.EmployeeNavigation.Approach,
-                        Curp = y.DriverNavigation.EmployeeNavigation.Curp,
-                        AntecedentesNoPenaleseExp = y.DriverNavigation.EmployeeNavigation.AntecedentesNoPenaleseExp,
-                        Rfc = y.DriverNavigation.EmployeeNavigation.Rfc,
-                        Nss = y.DriverNavigation.EmployeeNavigation.Nss,
-                        IMSSRegistrationDate = y.DriverNavigation.EmployeeNavigation.IMSSRegistrationDate,
-                        HiringDate = y.DriverNavigation.EmployeeNavigation.HiringDate,
-                        TerminationDate = y.DriverNavigation.EmployeeNavigation.TerminationDate,
-                        IdentificationNavigation = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation == null ? null : new Identification() {
-                            Id = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Id,
-                            Status = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Status,
-                            Name = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Name,
-                            FatherLastname = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.FatherLastname,
-                            MotherLastName = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.MotherLastName,
-                            Birthday = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Birthday
-                        }
-                    },
-                    DriverCommonNavigation = y.DriverNavigation.DriverCommonNavigation == null ? null : new DriverCommon() {
-                        Id = y.DriverNavigation.DriverCommonNavigation.Id,
-                        Status = y.DriverNavigation.DriverCommonNavigation.Status,
-                        License = y.DriverNavigation.DriverCommonNavigation.License,
-                        Situation = y.DriverNavigation.DriverCommonNavigation.Situation,
-                    },
-                },
-                TrailerExternalNavigation = y.TrailerExternalNavigation == null ? null : new TrailerExternal() {
-                    Id = y.TrailerExternalNavigation.Id,
-                    Status = y.TrailerExternalNavigation.Status,
-                    Common = y.TrailerExternalNavigation.Common,
-                    UsaPlate = y.TrailerExternalNavigation.UsaPlate,
-                    MxPlate = y.TrailerExternalNavigation.MxPlate,
-                    Carrier = y.TrailerExternalNavigation.Carrier,
-                    TrailerCommonNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
-                        Id = y.TrailerExternalNavigation.TrailerCommonNavigation.Id,
-                        Status = y.TrailerExternalNavigation.TrailerCommonNavigation.Status,
-                        Economic = y.TrailerExternalNavigation.TrailerCommonNavigation.Economic,
-                        Class = y.TrailerExternalNavigation.TrailerCommonNavigation.Class,
-                        Situation = y.TrailerExternalNavigation.TrailerCommonNavigation.Situation,
-                        Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location
-                    }
-                },
-                TrailerNavigation = y.TrailerNavigation == null ? null : new Trailer() {
-                    Id = y.TrailerNavigation.Id,
-                    Status = y.TrailerNavigation.Status,
-                    Common = y.TrailerNavigation.Common,
-                    Manufacturer = y.TrailerNavigation.Manufacturer,
-                    Maintenance = y.TrailerNavigation.Maintenance,
-                    Carrier = y.TrailerNavigation.Carrier,
-                    CarrierNavigation = y.TrailerNavigation.CarrierNavigation,
-                    TrailerCommonNavigation = y.TrailerNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
-                        Id = y.TrailerNavigation.TrailerCommonNavigation.Id,
-                        Status = y.TrailerNavigation.TrailerCommonNavigation.Status,
-                        Economic = y.TrailerNavigation.TrailerCommonNavigation.Economic,
-                        Class = y.TrailerNavigation.TrailerCommonNavigation.Class,
-                        Situation = y.TrailerNavigation.TrailerCommonNavigation.Situation,
-                        Location = y.TrailerNavigation.TrailerCommonNavigation.Location
-                    },
-                    Plates = (ICollection<Plate>)y.TrailerNavigation.Plates.Select(p => new Plate() {
-                        Id = p.Id,
-                        Status = p.Status,
-                        Identifier = p.Identifier,
-                        State = p.State,
-                        Country = p.Country,
-                        Expiration = p.Expiration,
-                        Truck = p.Truck,
-                        Trailer = p.Trailer
-                    })
-                },
-                TruckExternalNavigation = y.TruckExternalNavigation == null ? null : new TruckExternal() {
-                    Id = y.TruckExternalNavigation.Id,
-                    Status = y.TruckExternalNavigation.Status,
-                    Common = y.TruckExternalNavigation.Common,
-                    MxPlate = y.TruckExternalNavigation.MxPlate,
-                    UsaPlate = y.TruckExternalNavigation.UsaPlate,
-                    Carrier = y.TruckExternalNavigation.Carrier,
-                    Vin = y.TruckExternalNavigation.Vin,
-                    TruckCommonNavigation = y.TruckExternalNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
-                        Id = y.TruckExternalNavigation.TruckCommonNavigation.Id,
-                        Status = y.TruckExternalNavigation.TruckCommonNavigation.Id,
-                        Economic = y.TruckExternalNavigation.TruckCommonNavigation.Economic,
-                        Location = y.TruckExternalNavigation.TruckCommonNavigation.Location,
-                        Situation = y.TruckExternalNavigation.TruckCommonNavigation.Situation,
-                    }
-                },
-                TruckNavigation = y.TruckNavigation == null ? null : new Truck() {
-                    Id = y.TruckNavigation.Id,
-                    Status = y.TruckNavigation.Status,
-                    Common = y.TruckNavigation.Common,
-                    Motor = y.TruckNavigation.Motor,
-                    Manufacturer = y.TruckNavigation.Manufacturer,
-                    Maintenance = y.TruckNavigation.Maintenance,
-                    Insurance = y.TruckNavigation.Insurance,
-                    Carrier = y.TruckNavigation.Carrier,
-                    CarrierNavigation = y.TruckNavigation.CarrierNavigation,
-                    Vin = y.TruckNavigation.Vin,
-                    TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
-                        Id = y.TruckNavigation.TruckCommonNavigation.Id,
-                        Status = y.TruckNavigation.TruckCommonNavigation.Id,
-                        Economic = y.TruckNavigation.TruckCommonNavigation.Economic,
-                        Location = y.TruckNavigation.TruckCommonNavigation.Location,
-                        Situation = y.TruckNavigation.TruckCommonNavigation.Situation,
-                    },
-                    Plates = (ICollection<Plate>)y.TruckNavigation.Plates.Select(p => new Plate() {
-                        Id = p.Id,
-                        Status = p.Status,
-                        Identifier = p.Identifier,
-                        State = p.State,
-                        Country = p.Country,
-                        Expiration = p.Expiration,
-                        Truck = p.Truck,
-                        Trailer = p.Trailer
-                    })
-                },
-                LoadTypeNavigation = y.LoadTypeNavigation == null ? null : new LoadType() {
-                    Id = y.LoadTypeNavigation.Id,
-                    Name = y.LoadTypeNavigation.Name,
-                    Description = y.LoadTypeNavigation.Description
-                },
-                SectionNavigation = y.SectionNavigation == null ? null : new Section() {
-                    Id = y.SectionNavigation.Id,
-                    Status = y.SectionNavigation.Status,
-                    Name = y.SectionNavigation.Name,
-                    Yard = y.SectionNavigation.Yard,
-                    Capacity = y.SectionNavigation.Capacity,
-                    Ocupancy = y.SectionNavigation.Ocupancy,
-                    LocationNavigation = y.SectionNavigation.LocationNavigation == null ? null : new Location() {
-                        Id = y.SectionNavigation.LocationNavigation.Id,
-                        Status = y.SectionNavigation.LocationNavigation.Status,
-                        Name = y.SectionNavigation.LocationNavigation.Name,
-                        Address = y.SectionNavigation.LocationNavigation.Address
-                    }
-                }
-
-
-            });
-
-        }
 
         return await YardLogs.Update(yardLog, include) ;
     }

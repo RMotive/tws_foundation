@@ -24,14 +24,11 @@ public class Q_Carrier : BQ_Set<Carrier> {
             Mock = new() {
                 Id = -1,
                 Status = 0,
-                Approach = 0,
-                Address = 0
+               
             },
             Expectations = [
                 (nameof(Carrier.Id), [(new PointerValidator(), 3) ]),
                 (nameof(Carrier.Name), [(new RequiredValidator(), 1), (new LengthValidator(),1)]),
-                (nameof(Carrier.Approach), [(pointer, 3)]),
-                (nameof(Carrier.Address), [(pointer, 3) ]),
                 (nameof(Carrier.Status), [(pointer, 3) ])
             ],
         };

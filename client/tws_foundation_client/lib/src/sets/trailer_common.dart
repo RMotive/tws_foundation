@@ -3,12 +3,13 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class TrailerCommon implements CSMSetInterface {
   static const String kStatus = "status";
-  static const String kTrailerClass = "class";
+  static const String kType = "type";
   static const String kSituation = "situation";
   static const String kLocation = "location";
   static const String kEconomic = "economic";
   static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
+  static const String kTrailerTypeNavigation = 'TrailerTypeNavigation';
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp;
@@ -16,13 +17,14 @@ final class TrailerCommon implements CSMSetInterface {
   @override
   int id = 0;
   int status = 1;
-  int? trailerClass = 0;
-  int? situation = 0;
+  int? type;
+  int? situation;
   int? location;
   String economic = "";
+  TrailerType? trailerTypeNavigation;
   Status? statusNavigation;
   
-  TrailerCommon(this.id, this.status, this.trailerClass, this.situation, this.location, this.economic, this.statusNavigation, { 
+  TrailerCommon(this.id, this.status, this.type, this.situation, this.location, this.economic,  this.trailerTypeNavigation, this.statusNavigation, { 
     DateTime? timestamp,
   }){
     _timestamp = timestamp ?? DateTime.now(); 
@@ -37,13 +39,18 @@ final class TrailerCommon implements CSMSetInterface {
     String economic = json.get('economic');
     DateTime timestamp = json.get('timestamp');
 
+    TrailerType? trailerTypeNavigation;
+    if (json['TrailerTypeNavigation'] != null) {
+      JObject rawNavigation = json.getDefault('TrailerTypeNavigation', <String, dynamic>{});
+      trailerTypeNavigation = deserealize<TrailerType>(rawNavigation, decode: TrailerTypeDecoder());
+    }
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return TrailerCommon(id, status, trailerClass, situation, location, economic, statusNavigation, timestamp: timestamp);
+    return TrailerCommon(id, status, trailerClass, situation, location, economic,   trailerTypeNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -51,7 +58,7 @@ final class TrailerCommon implements CSMSetInterface {
     return <String, dynamic>{
       'id': id,
       kStatus: status,
-      kTrailerClass: trailerClass,
+      kType: type,
       kSituation: situation,
       kLocation: location,
       kEconomic: economic,
@@ -65,21 +72,30 @@ final class TrailerCommon implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(economic.length < 8 || economic.length > 12) results.add(CSMSetValidationResult(kEconomic, "Economic number length must be between 1 and 16", "strictLength(1,16)"));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-  
+    if(type != null){
+      if(type! < 0) results.add(CSMSetValidationResult(kType, 'Trailer Type pointer must be empty, equal or greater than 0', 'pointerHandler()'));
+    }
     return results;
   }
   TrailerCommon.def();
   TrailerCommon clone({
     int? id,
     int? status,
-    int? trailerClass,
+    int? type,
     int? situation,
     int? location,
     String? economic,
+    TrailerType? trailerTypeNavigation,
     Status? statusNavigation,
   }){
-    return TrailerCommon(id ?? this.id, status ?? this.status, trailerClass ?? this.trailerClass, situation ?? this.situation, location ?? this.location,
-    economic ?? this.economic, statusNavigation ?? this.statusNavigation);
+    int? tType = type ?? this.type;
+    TrailerType? typeNav = trailerTypeNavigation ?? this.trailerTypeNavigation;
+    if(type == 0){
+      tType = null;
+      typeNav = null;
+    }
+    return TrailerCommon(id ?? this.id, status ?? this.status, tType, situation ?? this.situation, location ?? this.location,
+    economic ?? this.economic, typeNav, statusNavigation ?? this.statusNavigation);
   }
 }
 

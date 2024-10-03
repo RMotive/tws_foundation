@@ -13,11 +13,7 @@ public class Q_Employee : BQ_Set<Employee> {
                 Id = 1,
                 Status = 1,
                 Identification = 1,
-                Curp = "",
-                Address = 0,
-                Approach = 0,
-                Rfc = "",
-                Nss = "",
+
 
             },
             Expectations = [],
@@ -26,21 +22,11 @@ public class Q_Employee : BQ_Set<Employee> {
             Mock = new() {
                 Status = 0,
                 Identification = 0,
-                Curp = "",
-                Address = 0,
-                Approach = 0,
-                Rfc = "",
-                Nss = "",
             },
             Expectations = [
                 (nameof(Employee.Id), [(new PointerValidator(), 3)]),
-                (nameof(Employee.Curp), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
-                (nameof(Employee.Nss), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
-                (nameof(Employee.Rfc), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
-                (nameof(Employee.Identification), [(new PointerValidator(true), 3)]),
-                (nameof(Employee.Address), [(new PointerValidator(true), 3)]),
-                (nameof(Employee.Approach), [(new PointerValidator(true), 3)]),
-                (nameof(Employee.Status), [(new PointerValidator(true), 3)]),
+                (nameof(Employee.Identification), [(new PointerValidator(), 3)]),
+                (nameof(Employee.Status), [(new PointerValidator(), 3)]),
             ],
         };
 

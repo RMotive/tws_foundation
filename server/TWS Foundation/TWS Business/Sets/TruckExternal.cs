@@ -22,7 +22,7 @@ public partial class TruckExternal
 
     public string? UsaPlate { get; set; }
 
-    public string MxPlate { get; set; } = null!;
+    public string? MxPlate { get; set; } = null!;
 
     public virtual Status? StatusNavigation { get; set; }
 
@@ -37,7 +37,6 @@ public partial class TruckExternal
                 .. Container,
             (nameof(Common), [new UniqueValidator()]),
             (nameof(Status), [Required, new PointerValidator(true)]),
-            (nameof(MxPlate), [new LengthValidator(8, 12)]),
         ];
 
         return Container;

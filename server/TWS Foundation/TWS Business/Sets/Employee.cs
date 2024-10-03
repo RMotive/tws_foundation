@@ -16,19 +16,19 @@ public partial class Employee
 
     public int Identification { get; set; }
 
-    public int Address { get; set; }
+    public int? Address { get; set; }
 
-    public int Approach { get; set; }
+    public int? Approach { get; set; }
 
-    public string Curp { get; set; } = null!;
+    public string? Curp { get; set; } = null!;
 
-    public DateOnly AntecedentesNoPenaleseExp { get; set; }
+    public DateOnly? AntecedentesNoPenaleseExp { get; set; }
 
-    public string Rfc { get; set; } = null!;
+    public string? Rfc { get; set; } = null!;
 
-    public string Nss { get; set; } = null!;
+    public string? Nss { get; set; } = null!;
 
-    public DateOnly IMSSRegistrationDate { get; set; }
+    public DateOnly? IMSSRegistrationDate { get; set; }
 
     public DateOnly? HiringDate { get; set; }
 
@@ -50,12 +50,7 @@ public partial class Employee
         Container = [
             ..Container,
             (nameof(Identification), [new PointerValidator(true)]),
-            (nameof(Approach), [new PointerValidator(true)]),
-            (nameof(Address), [new PointerValidator(true)]),
             (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Curp), [Required, new LengthValidator(18)]),
-            (nameof(Rfc), [Required, new LengthValidator(12)]),
-            (nameof(Nss), [Required, new LengthValidator(11)]),
         ];
 
         return Container;

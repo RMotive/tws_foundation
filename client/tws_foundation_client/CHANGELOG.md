@@ -5,7 +5,24 @@
 - Notes: 
 
     1. [TrucksExternals] Create & update service methods added and tested.
-    2. timestamp property added to sets.
+    2. [Trucks] tests refactored.
+    3. Timestamp property added to sets.
+    4. Added [VehiculeModel] set.
+    5. Added [TrailerType] set.
+    6. Added [TrailerClass] set.
+    7. The following sets have receive minor properties changes:
+        * [Approach]
+        * [Driver]
+        * [Employee]
+        * [Plate]
+        * [TrailerExternal]
+        * [TruckExternal]
+    8. The following sets have receive breaking changes in their structure:
+        * [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
+        * [TrailerCommon] - Added the trailerType navigation.
+        * [Trailer] - Added Vehicule Model navigation. 
+        * [Truck] - Added Vehicule Model navigation & SCT navigation.
+        * [Carrier] -  Removed SCT navigation.
 
 - Dependencies Upgrade: N/A
 

@@ -11,7 +11,7 @@ public class Q_TrailerCommon : BQ_Set<TrailerCommon> {
         Q_MigrationSet_EvaluateRecord<TrailerCommon> success = new() {
             Mock = new() {
                 Id = 1,
-                Class = 1,
+                Type = 1,
                 Situation = 1,
 
             },

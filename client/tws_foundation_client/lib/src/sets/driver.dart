@@ -31,10 +31,10 @@ final class Driver implements CSMSetInterface {
   int status = 1;
   int employee = 0;
   int common = 0;
-  String driverType = "";
-  DateTime licenseExpiration = DateTime.now();
-  DateTime drugalcRegistrationDate = DateTime.now();
-  DateTime pullnoticeRegistrationDate = DateTime.now();
+  String? driverType = "";
+  DateTime? licenseExpiration;
+  DateTime? drugalcRegistrationDate;
+  DateTime? pullnoticeRegistrationDate;
   String? twic;
   DateTime? twicExpiration;
   String? visa;
@@ -132,7 +132,9 @@ final class Driver implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(driverType.isEmpty || driverType.length > 12) results.add(CSMSetValidationResult(kDriverType, 'Driver Type length must be between 1 and 12', 'strictLength(1,12)'));
+    if(driverType != null){
+      if(driverType!.isEmpty || driverType!.length > 12) results.add(CSMSetValidationResult(kDriverType, 'Driver Type length must be between 1 and 12', 'strictLength(1,12)'));
+    }
     if(employee < 0) results.add(CSMSetValidationResult(kEmployee, 'Employee pointer must be equal or greater than 0', 'pointerHandler()'));
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));

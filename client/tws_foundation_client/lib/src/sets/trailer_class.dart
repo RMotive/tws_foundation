@@ -1,7 +1,7 @@
 import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-final class Manufacturer implements CSMSetInterface {
+final class TrailerClass implements CSMSetInterface {
   static const String kStatus = "status";
   static const String kName = "name";
   static const String kTimestamp = "timestamp";
@@ -17,19 +17,19 @@ final class Manufacturer implements CSMSetInterface {
   String? description;
   Status? statusNavigation;
 
-  Manufacturer(this.id, this.name, this.description, { 
+  TrailerClass(this.id, this.name, this.description, { 
     DateTime? timestamp,
   }){
     _timestamp = timestamp ?? DateTime.now(); 
   }
 
-  factory Manufacturer.des(JObject json) {
+  factory TrailerClass.des(JObject json) {
     int id = json.get('id');
     String name = json.get('name');
     DateTime timestamp = json.get('timestamp');
     String? description = json.getDefault('description', null);
     
-    return Manufacturer(id, name, description, timestamp: timestamp);
+    return TrailerClass(id, name, description, timestamp: timestamp);
   }
 
   @override
@@ -45,11 +45,11 @@ final class Manufacturer implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(name.isEmpty || name.length > 32) results.add(CSMSetValidationResult(kName, "Name must be 25 max lenght and non-empty", "strictLength(1,32)"));
+    if(name.isEmpty || name.length > 30) results.add(CSMSetValidationResult(kName, "Name must be 25 max lenght and non-empty", "strictLength(1,30)"));
     return results;
   }
 
-  Manufacturer clone({
+  TrailerClass clone({
     int? id,
     int? status,
     String? name,
@@ -57,16 +57,16 @@ final class Manufacturer implements CSMSetInterface {
   }){
     String? desc = description ?? this.description;
     if(desc == "") desc = null;
-    return Manufacturer(id ?? this.id, name ?? this.name, desc);
+    return TrailerClass(id ?? this.id, name ?? this.name, desc);
   }
 
 }
 
-final class ManufacturerDecoder implements CSMDecodeInterface<Manufacturer> {
-  const ManufacturerDecoder();
+final class TrailerClassDecoder implements CSMDecodeInterface<TrailerClass> {
+  const TrailerClassDecoder();
 
   @override
-  Manufacturer decode(JObject json) {
-    return Manufacturer.des(json);
+  TrailerClass decode(JObject json) {
+    return TrailerClass.des(json);
   }
 }

@@ -12,21 +12,17 @@ public class Q_TrailerClass : BQ_Set<TrailerClass> {
             Mock = new() {
                 Id = 1,
                 Name = "",
-                Axis = 1
             },
             Expectations = [],
         };
         Q_MigrationSet_EvaluateRecord<TrailerClass> failAllCases = new() {
             Mock = new() {
                 Id = 0,
-                Name = "",
-                Axis = 0
 
             },
             Expectations = [
                 (nameof(TrailerClass.Id), [(new PointerValidator(), 3)]),
-                (nameof(TrailerClass.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
-                (nameof(TrailerClass.Axis), [(new PointerValidator(true), 3)]),
+                (nameof(TrailerClass.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
             ],
         };
 

@@ -18,13 +18,13 @@ public partial class Driver
 
     public int Common { get; set; }
 
-    public string DriverType { get; set; } = null!;
+    public string? DriverType { get; set; }
 
-    public DateOnly LicenseExpiration { get; set; }
+    public DateOnly? LicenseExpiration { get; set; }
 
-    public DateOnly DrugalcRegistrationDate { get; set; }
+    public DateOnly? DrugalcRegistrationDate { get; set; }
 
-    public DateOnly PullnoticeRegistrationDate { get; set; }
+    public DateOnly? PullnoticeRegistrationDate { get; set; }
 
     public string? Twic { get; set; }
 
@@ -55,8 +55,6 @@ public partial class Driver
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Employee), [new PointerValidator(true)]),
-            (nameof(DriverType), [new UniqueValidator(), new LengthValidator(1,12)]),
         ];
 
         return Container;

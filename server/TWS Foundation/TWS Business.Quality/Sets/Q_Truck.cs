@@ -11,7 +11,7 @@ public class Q_Truck : BQ_Set<Truck> {
             Mock = new() {
                 Id = 1,
                 Common = 1,
-                Manufacturer = 3,
+                Model = 3,
                 Motor = "",
                 Maintenance = 4,
                 Insurance = 5,
@@ -23,16 +23,14 @@ public class Q_Truck : BQ_Set<Truck> {
             Mock = new() {
                 Id = -1,
                 Common = 0,
-                Manufacturer = 0,
+                Model = 0,
                 Carrier = 0,
-                Motor = "",
                 Vin = "",
                 Status = 0
             },
             Expectations = [
                 (nameof(Truck.Id), [(new PointerValidator(), 3) ]),
-                (nameof(Truck.Motor), [(new LengthValidator(),2)]),
-                (nameof(Truck.Vin), [(new LengthValidator(),2)]),
+                (nameof(Truck.Vin), [(new RequiredValidator(), 1),(new LengthValidator(),2)]),
                 (nameof(Truck.Status), [(new PointerValidator(), 3) ]),
 
             ],

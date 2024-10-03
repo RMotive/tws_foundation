@@ -64,8 +64,6 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
     public virtual DbSet<DriverExternal> DriverExternals { get; set; }
 
-    public virtual DbSet<Axis> Axes { get; set; }
-
     public virtual DbSet<TrailerClass> TrailerClasses { get; set; }
 
     public virtual DbSet<Location> Locations { get; set; }
@@ -75,6 +73,10 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     public virtual DbSet<Section> Sections { get; set; }
 
     public virtual DbSet<YardLog> YardLogs { get; set; }
+
+    public virtual DbSet<VehiculeModel> VehiculesModels { get; set; }
+
+    public virtual DbSet<TrailerType> TrailersTypes { get; set; }
 
 
 
@@ -90,7 +92,6 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
         TrailerClass.CreateModel(builder);
         TrailerCommon.CreateModel(builder);
         TrailerExternal.CreateModel(builder);
-        Axis.CreateModel(builder);
         Status.CreateModel(builder);
         Address.CreateModel(builder);
         Approach.CreateModel(builder);
@@ -106,11 +107,15 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
         LoadType.CreateModel(builder);
         Section.CreateModel(builder);
         YardLog.Set(builder);
+        TrailerType.CreateModel(builder);
+        VehiculeModel.CreateModel(builder);
         TruckH.CreateModel(builder);
+        Usdot.CreateModel(builder); 
         Usdot.CreateModel(builder); 
         UsdotH.CreateModel(builder);
         ApproachesH.CreateModel(builder);
         CarrierH.CreateModel(builder);
+
 
         OnModelCreatingPartial(builder);
     }
@@ -135,7 +140,6 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
             new TrailerCommon(),
             new TrailerExternal(),
             new Location(),
-            new Axis(),
             new Identification(),
             new Employee(),
             new Driver(),
@@ -144,6 +148,8 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
             new LoadType(),
             new Section(),
             new YardLog(),
+            new VehiculeModel(),
+            new TrailerType(),
             new UsdotH(),
             new Approach(),
             new ApproachesH(),

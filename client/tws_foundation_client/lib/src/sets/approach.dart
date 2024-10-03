@@ -62,7 +62,7 @@ final class Approach implements CSMSetInterface {
       kPersonal: personal,
       kAlternative: alternative,
       kstatusNavigation: statusNavigation?.encode(),
-            kTimestamp: timestamp.toIso8601String(),
+      kTimestamp: timestamp.toIso8601String(),
       kCarriers: carriers.map((Carrier i) => i.encode()).toList(),
     };
   }

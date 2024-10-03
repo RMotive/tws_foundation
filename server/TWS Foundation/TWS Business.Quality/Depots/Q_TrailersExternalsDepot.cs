@@ -22,7 +22,6 @@ public class Q_TrailersExternalsDepot
             Carrier = "Carrier test",
             MxPlate = "12345678",
             TrailerCommonNavigation = new() {
-                Timestamp = DateTime.Now,
                 Status = 1,
                 Economic = RandomUtils.String(16),
             }

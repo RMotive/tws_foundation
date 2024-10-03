@@ -21,7 +21,7 @@ final class TruckExternal implements CSMSetInterface {
   int common = 0;
   String? vin;
   String carrier = "";
-  String mxPlate = "";
+  String? mxPlate;
   String? usaPlate;
   TruckCommon? truckCommonNavigation;
   Status? statusNavigation;
@@ -77,10 +77,20 @@ final class TruckExternal implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(carrier.isEmpty || mxPlate.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
-    if(mxPlate.length < 8 || mxPlate.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MxPlate length must be between 8 and 12", "strictLength(1, 32)"));
+    
+    if(carrier.isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
+    if(mxPlate != null){
+      if(mxPlate!.length < 8 || mxPlate!.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MX plate length must be between 8 and 12", "strictLength(1, 32)"));
+    }
+    if(usaPlate != null){
+      if(usaPlate!.length < 8 || usaPlate!.length > 12) results.add(CSMSetValidationResult(kUsaPlate, "USA plate length must be between 8 and 12", "strictLength(1, 32)"));
+    }
     if(vin != null){
       if(vin!.length != 17) results.add(CSMSetValidationResult(kVin, 'VIN number must be 17 length', 'strictLength(17)'));
+    }
+
+    if(truckCommonNavigation != null){
+      results = <CSMSetValidationResult>[...results, ...truckCommonNavigation!.evaluate()];
     }
     return results;
   }
@@ -100,10 +110,14 @@ final class TruckExternal implements CSMSetInterface {
     if(usaPlate == ""){
       uPlate = null;
     }
+    String? mPlate = mxPlate ?? this.mxPlate;
+    if(mxPlate == ""){
+      mPlate = null;
+    }
     String? v = vin ?? this.vin;
     if(v == "") v = null;
     
-    return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, vin, carrier ?? this.carrier, mxPlate ?? this.mxPlate, uPlate, truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
+    return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, vin, carrier ?? this.carrier, mPlate, uPlate, truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
   }
 }
 

@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -12,7 +13,7 @@ void main() {
   late TrucksServiceBase service;
   late List<Truck> mocks;
   
-  Truck buildTruck(String randomToken){
+  Truck buildMock(String randomToken){
     DateTime time = DateTime.now();
     Plate plateMX = Plate(
       0, //id
@@ -69,10 +70,17 @@ void main() {
     );
     Manufacturer manufacturer = Manufacturer(
       0, 
-      "model $randomToken", 
-      "brand $randomToken", 
+      "manufacturer $randomToken",
+      null
+    );
+    VehiculeModel model = VehiculeModel(
+      0, 
+      1, 
+      0, 
+      "Model name $randomToken", 
       DateTime.now(), 
-      <Truck>[]
+      null, 
+      manufacturer
     );
     Approach approach = Approach(
       0, 
@@ -118,15 +126,13 @@ void main() {
       "Carrier: $randomToken", 
       "Carrier description: $randomToken", 
       null, 
-      null, 
       approach, 
       address, 
       usdot, 
-      sct, 
       null, 
       <Truck>[]
     );
-    Truck truck = Truck(
+    Truck mock = Truck(
       0, // id 
       1, //Status
       0,//manufacturer
@@ -136,19 +142,23 @@ void main() {
       "VINtest-$randomToken", //vin
       null, //maintenance
       null, //insurance
+      null,
       null, //statusNavigation
-      manufacturer, //manufacturerNavigation
+      model, //manufacturerNavigation
       truckCommon, //truckCommonNavigation
       maintenance, //maintenanceNavigation
       insurance, //insuranceNavigation
+      sct, //sct
       carrier, //carrierNavigation
       <Plate>[plateMX,plateUSA]
     );
-    return truck;
+    List<CSMSetValidationResult> evaluation = mock.evaluate();
+    assert(evaluation.isNotEmpty);
+    return mock;
   }
   setUp(
     () async {
-      final TWSFoundationSource source = TWSFoundationSource(false);
+      final TWSFoundationSource source = TWSFoundationSource(true);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),
@@ -171,7 +181,7 @@ void main() {
       for (int i = 0; i < 3; i++) {
         int rnd = Random().nextInt(900)  + 99;
         String randomToken = '${i}_qual$rnd';
-        Truck mock = buildTruck(randomToken);
+        Truck mock = buildMock(randomToken);
         mocks.add(mock);
       }
     },
@@ -239,7 +249,7 @@ void main() {
         'Creates when unexist',
         () async {
           int rnd = Random().nextInt(900)  + 99;
-          Truck mock = buildTruck("U_qual$rnd");
+          Truck mock = buildMock("U_qual$rnd");
 
           MainResolver<MigrationUpdateResult<Truck>> fact = await service.update(mock, auth);
           MigrationUpdateResult<Truck> actEffect = await fact.act(decoder);
@@ -255,14 +265,13 @@ void main() {
         () async {
           int rnd = Random().nextInt(900)  + 99;
           Truck mock = creationMock.clone(vin: "UPDATEDVIN_T: $rnd");
-          mock.manufacturerNavigation!.brand = "brand $rnd";
+          mock.vehiculeModelNavigation!.name = "manufacturer $rnd";
           MainResolver<MigrationUpdateResult<Truck>> fact = await service.update(mock, auth);
           MigrationUpdateResult<Truck> actEffect = await fact.act(decoder);
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.vin != actEffect.previous!.vin);
-          assert(actEffect.updated.manufacturerNavigation!.brand != actEffect.previous!.manufacturerNavigation!.brand);
-
+          assert(actEffect.updated.vehiculeModelNavigation!.name != actEffect.previous!.vehiculeModelNavigation!.name);
         },
       );
     },

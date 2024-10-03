@@ -15,6 +15,10 @@ public partial class Status
 
     public string? Description { get; set; }
 
+    public virtual ICollection<VehiculeModel> VehiculeModels { get; set; } = [];
+
+    public virtual ICollection<TrailerType> TrailerTypes { get; set; } = [];
+
     public virtual ICollection<TruckCommon> TrucksCommons { get; set; } = [];
 
     public virtual ICollection<TrailerCommon> TrailersCommons { get; set; } = [];

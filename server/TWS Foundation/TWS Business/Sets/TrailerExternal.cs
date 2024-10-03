@@ -18,7 +18,7 @@ public partial class TrailerExternal
 
     public string Carrier { get; set; } = null!;
 
-    public string MxPlate { get; set; } = null!;
+    public string? MxPlate { get; set; }
 
     public string? UsaPlate { get; set; } = null!;
 
@@ -35,7 +35,6 @@ public partial class TrailerExternal
                 .. Container,
             (nameof(Common), [new UniqueValidator()]),
             (nameof(Status), [Required, new PointerValidator(true)]),
-            (nameof(MxPlate), [new LengthValidator(8, 12)]),
             (nameof(Carrier), [new LengthValidator(1, 100)]),
 
         ];

@@ -4,11 +4,13 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 final class Trailer implements CSMSetInterface {
   static const String kStatus = "status";
   static const String kCommon = "common";
+  static const String kModel = "model";
   static const String kCarrier = "carrier";
-  static const String kManufacturer = "manufacturer";
   static const String kMaintenance = "maintenance";
   static const String kTimestamp = "timestamp";
+  static const String kVehiculeModelNavigation = "VehiculeModelNavigation";
   static const String kTrailerCommonNavigation = 'TrailerCommonNavigation';
+  static const String kCarrierNavigation = "CarrierNavigation";
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kPlates = 'plates';
 
@@ -20,16 +22,18 @@ final class Trailer implements CSMSetInterface {
   int status = 1;
   int common = 0;
   int carrier = 0;
-  int manufacturer = 0;
+  int? model;
   int? maintenance;
+  Carrier? carrierNavigation;
   TrailerCommon? trailerCommonNavigation;
+  VehiculeModel? vehiculeModelNavigation;
   Status? statusNavigation;
   // List default initialization data for clone method.
   List<Plate> plates = <Plate>[
     Plate.def(),
     Plate.def()
   ];
-  Trailer(this.id, this.status, this.common, this.carrier, this.manufacturer, this.maintenance, this.trailerCommonNavigation, this.statusNavigation, this.plates, { 
+  Trailer(this.id, this.status, this.common, this.carrier, this.model, this.maintenance, this.carrierNavigation, this.trailerCommonNavigation, this.vehiculeModelNavigation, this.statusNavigation, this.plates, { 
     DateTime? timestamp,
   }){
     _timestamp = timestamp ?? DateTime.now(); 
@@ -41,9 +45,9 @@ final class Trailer implements CSMSetInterface {
     int common = json.get('common');
     DateTime timestamp = json.get('timestamp');
     int carrier = json.get('carrier');
-    int manufactuer = json.get('manufacturer');
+    int? model = json.getDefault('model', null);
     int? maintenance = json.getDefault('situation', null);
-
+  
     List<Plate> plates = <Plate>[];
     List<JObject> rawPlateArray = json.getList('Plates');
     plates = rawPlateArray.map<Plate>((JObject e) => deserealize(e, decode: PlateDecoder())).toList();
@@ -60,8 +64,19 @@ final class Trailer implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
 
+    VehiculeModel? vehiculeModelNavigation;
+    if (json['VehiculeModelNavigation'] != null) {
+      JObject rawNavigation = json.getDefault('VehiculeModelNavigation', <String, dynamic>{});
+      vehiculeModelNavigation = deserealize<VehiculeModel>(rawNavigation, decode: VehiculeModelDecoder());
+    }
 
-    return Trailer(id, status, common, carrier, manufactuer, maintenance, trailerCommonNavigation, statusNavigation, plates, timestamp: timestamp);
+    Carrier? carrierNavigation;
+    if (json['CarrierNavigation'] != null) {
+      JObject rawNavigation = json.getDefault('CarrierNavigation', <String, dynamic>{});
+      carrierNavigation = deserealize<Carrier>(rawNavigation, decode: CarrierDecoder());
+    }
+
+    return Trailer(id, status, common, carrier, model, maintenance, carrierNavigation, trailerCommonNavigation, vehiculeModelNavigation, statusNavigation, plates, timestamp: timestamp);
   }
 
   @override
@@ -71,9 +86,11 @@ final class Trailer implements CSMSetInterface {
       kStatus: status,
       kCommon: common,
       kCarrier: carrier,
-      kManufacturer: manufacturer,
+      kModel: model,
       kMaintenance: maintenance,
       kTimestamp: timestamp.toIso8601String(),
+      kCarrierNavigation: carrierNavigation?.encode(),
+      kVehiculeModelNavigation: vehiculeModelNavigation?.encode(),
       kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),
       kPlates: plates.map((Plate i) => i.encode()).toList(),
@@ -84,12 +101,22 @@ final class Trailer implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(manufacturer < 0) results.add(CSMSetValidationResult(kManufacturer, 'Manufacturer pointer must be equal or greater than 0', 'pointerHandler()'));
     if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));
     for(Plate plate in plates){
       results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
+    }
+    if(trailerCommonNavigation != null){
+      results = <CSMSetValidationResult>[...results, ...trailerCommonNavigation!.evaluate()];
+    }
+
+    if(vehiculeModelNavigation != null){
+      results = <CSMSetValidationResult>[...results, ...vehiculeModelNavigation!.evaluate()];
+    }
+
+    if(carrierNavigation != null){
+      results = <CSMSetValidationResult>[...results, ...carrierNavigation!.evaluate()];
     }
 
     return results;
@@ -100,14 +127,19 @@ final class Trailer implements CSMSetInterface {
     int? status,
     int? common,
     int? carrier,
-    int? manufacturer,
+    int? model,
     int? maintenance,
+    Carrier? carrierNavigation,
     TrailerCommon? trailerCommonNavigation,
+    VehiculeModel? vehiculeModelNavigation,
     Status? statusNavigation,
     List<Plate>? plates
   }){
-    return Trailer(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, manufacturer ?? this.manufacturer, maintenance ?? this.maintenance,
-    trailerCommonNavigation ?? this.trailerCommonNavigation, statusNavigation ?? this.statusNavigation, plates ?? this.plates);
+    Carrier? carrierNav = carrierNavigation ?? this.carrierNavigation;
+    if((carrier ?? this.carrier) == 0) carrierNav = null;
+
+    return Trailer(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, model ?? this.model, maintenance ?? this.maintenance, carrierNav,
+    trailerCommonNavigation ?? this.trailerCommonNavigation,  vehiculeModelNavigation ?? this.vehiculeModelNavigation, statusNavigation ?? this.statusNavigation, plates ?? this.plates);
   }
 }
 

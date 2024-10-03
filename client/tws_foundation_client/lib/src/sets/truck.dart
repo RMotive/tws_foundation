@@ -3,19 +3,21 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Truck implements CSMSetInterface {
   static const String kStatus = "status";
-  static const String kManufacturer = 'manufacturer';
+  static const String kModel = 'model';
   static const String kCommon = 'common';
   static const String kCarrier = 'carrier';
   static const String kMotor = 'motor';
   static const String kVin = "vin";
+  static const String kSct = "sct";
   static const String kMaintenance = 'maintenance';
   static const String kInsurance = 'insurance';
   static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
-  static const String kManufacturerNavigation = 'ManufacturerNavigation';
+  static const String kVehiculeModelNavigation = 'VehiculeModelNavigation';
   static const String kTruckCommonNavigation = 'TruckCommonNavigation';
   static const String kMaintenanceNavigation = 'MaintenanceNavigation';
   static const String kInsuranceNavigation = 'InsuranceNavigation';
+  static const String kSctNavigation = "SctNavigation";
   static const String kCarrierNavigation = 'CarrierNavigation';
   static const String kPlates = 'plates';
 
@@ -25,18 +27,20 @@ final class Truck implements CSMSetInterface {
   @override
   int id = 0;
   int status = 1;
-  int manufacturer = 0;
+  int model = 0;
   int common = 0;
   int carrier = 0;
   String vin = "";
-  String motor = '';
+  String? motor = '';
   int? maintenance;
   int? insurance;
+  int? sct = 0;
   Status? statusNavigation;
   TruckCommon? truckCommonNavigation;
-  Manufacturer? manufacturerNavigation;
+  VehiculeModel? vehiculeModelNavigation;
   Maintenance? maintenanceNavigation;
   Insurance? insuranceNavigation;
+  SCT? sctNavigation;
   Carrier? carrierNavigation;
 
   // List default initialization data for clone method.
@@ -47,8 +51,8 @@ final class Truck implements CSMSetInterface {
 
   Truck.def();
 
-  Truck(this.id, this.status, this.manufacturer, this.common, this.carrier, this.motor, this.vin, this.maintenance, this.insurance, this.statusNavigation, this.manufacturerNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
-    this.insuranceNavigation, this.carrierNavigation, this.plates, { 
+  Truck(this.id, this.status, this.model, this.common, this.carrier, this.motor, this.vin, this.maintenance, this.insurance, this.sct, this.statusNavigation, this.vehiculeModelNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
+    this.insuranceNavigation, this.sctNavigation ,this.carrierNavigation, this.plates, { 
     DateTime? timestamp,
   }){
     _timestamp = timestamp ?? DateTime.now(); 
@@ -57,19 +61,21 @@ final class Truck implements CSMSetInterface {
   factory Truck.des(JObject json) {
     int id = json.get('id');
     int status = json.get('status');
-    int manufacturer = json.get('manufacturer');
+    int model = json.get('model');
     int common = json.get('common');
     int carrier = json.get('carrier');
     String vin = json.get('vin');
-    String motor = json.get('motor');
+    String? motor = json.getDefault('motor', null);
     DateTime timestamp = json.get('timestamp');
     int? maintenance = json.getDefault('maintenance', null);
     int? insurance = json.getDefault('insurance', null);
+    int? sct = json.getDefault('sct', null);
     Status? statusNavigation;
     TruckCommon? truckCommonNavigation;
-    Manufacturer? manufacturerNavigation;
+    VehiculeModel? vehiculeModelNavigation;
     Maintenance? maintenanceNavigation;
     Insurance? insuranceNavigation;
+    SCT? sctNavigation;
     Carrier? carrierNavigation;
     List<Plate> plates = <Plate>[];
     List<JObject> rawPlateArray = json.getList('Plates');
@@ -86,9 +92,9 @@ final class Truck implements CSMSetInterface {
       truckCommonNavigation = deserealize<TruckCommon>(rawNavigation, decode: TruckCommonDecoder());
     }
 
-    if (json['ManufacturerNavigation'] != null) {
-      JObject rawNavigation = json.getDefault('ManufacturerNavigation', <String, dynamic>{});
-      manufacturerNavigation = deserealize<Manufacturer>(rawNavigation, decode: ManufacturerDecoder());
+    if (json['VehiculeModelNavigation'] != null) {
+      JObject rawNavigation = json.getDefault('VehiculeModelNavigation', <String, dynamic>{});
+      vehiculeModelNavigation = deserealize<VehiculeModel>(rawNavigation, decode: VehiculeModelDecoder());
     }
     
     if (json['MaintenanceNavigation'] != null) {
@@ -105,53 +111,63 @@ final class Truck implements CSMSetInterface {
       JObject rawNavigation = json.getDefault('CarrierNavigation', <String, dynamic>{});
       carrierNavigation = deserealize<Carrier>(rawNavigation, decode: CarrierDecoder());
     }
-    return Truck(id, status, manufacturer, common, carrier, motor, vin, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates, timestamp: timestamp);
+
+    if (json['SctNavigation'] != null) {
+      JObject rawNavigation = json.getDefault('SctNavigation', <String, dynamic>{});
+      sctNavigation = deserealize<SCT>(rawNavigation, decode: SCTDecoder());
+    }
+    return Truck(id, status, model, common, carrier, motor, vin, maintenance, insurance, sct, statusNavigation, vehiculeModelNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, sctNavigation, carrierNavigation, plates, timestamp: timestamp);
   }
   Truck clone({
     int? id,
     int? status,
-    int? manufacturer,
+    int? model,
     String? motor,
     String? vin,
     int? maintenance,
     int? common,
     int? carrier,
     int? insurance,
+    int? sct,
     Status? statusNavigation,
-    Manufacturer? manufacturerNavigation,
+    VehiculeModel? vehiculeModelNavigation,
     TruckCommon? truckCommonNavigation,
     Maintenance? maintenanceNavigation,
     Insurance? insuranceNavigation,
+    SCT? sctNavigation,
     Carrier? carrierNavigation,
     List<Plate>? plates
   }){
-    
+    //Motor null validation
+    //sct null validation
     // If the field is setted via catalogs, then the pointers must be setted null when index is 0
-    Manufacturer? manufacturerNav = manufacturerNavigation ?? this.manufacturerNavigation;
-    if(manufacturer == 0) manufacturerNav = null;
+    VehiculeModel? vehiculeNav = vehiculeModelNavigation ?? this.vehiculeModelNavigation;
+    if(model == 0) vehiculeNav = null;
     
-    return Truck(id ?? this.id, status ?? this.status, manufacturer ?? this.manufacturer, common ?? this.common, carrier ?? this.carrier, motor ?? this.motor, vin ?? this.vin, maintenance ?? this.maintenance, 
-    insurance ?? this.insurance, statusNavigation ?? this.statusNavigation, manufacturerNav, truckCommonNavigation ?? this.truckCommonNavigation, 
-    maintenanceNavigation ?? this.maintenanceNavigation, insuranceNavigation ?? this.insuranceNavigation, carrierNavigation ?? this.carrierNavigation, plates ?? this.plates);
+    return Truck(id ?? this.id, status ?? this.status, model ?? this.model, common ?? this.common, carrier ?? this.carrier, motor ?? this.motor, vin ?? this.vin, maintenance ?? this.maintenance, 
+    insurance ?? this.insurance, sct ?? this.sct, statusNavigation ?? this.statusNavigation, vehiculeNav, truckCommonNavigation ?? this.truckCommonNavigation, 
+    maintenanceNavigation ?? this.maintenanceNavigation, insuranceNavigation ?? this.insuranceNavigation, sctNavigation ?? this.sctNavigation, carrierNavigation ?? this.carrierNavigation, plates ?? this.plates);
   }
   @override
   JObject encode() {
     return <String, dynamic>{
       'id': id,
       kStatus: status,
-      kManufacturer: manufacturer,
+      kModel: model,
       kCommon: common,
       kCarrier: carrier,
       kMotor: motor,
       kVin: vin,
       kMaintenance: maintenance,
       kInsurance: insurance,
+      kSct: sct,
       kTimestamp: timestamp.toIso8601String(),
       kstatusNavigation: statusNavigation?.encode(),
-      kManufacturerNavigation: manufacturerNavigation?.encode(),
+      kVehiculeModelNavigation: vehiculeModelNavigation?.encode(),
       kTruckCommonNavigation: truckCommonNavigation?.encode(),
       kMaintenanceNavigation: maintenanceNavigation?.encode(),
       kInsuranceNavigation: insuranceNavigation?.encode(),
+      kSctNavigation: sctNavigation?.encode(),
       kCarrierNavigation: carrierNavigation?.encode(),
       kPlates: plates.map((Plate i) => i.encode()).toList()
     };
@@ -161,16 +177,20 @@ final class Truck implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(vin.length != 17) results.add(CSMSetValidationResult(kVin, 'VIN number must be 17 length', 'strictLength(17)'));
-    if(motor.length < 15 && motor.length > 16) results.add(CSMSetValidationResult(kMotor, 'Motor number must be between 15 and 16 length', 'strictLength(15,16)'));
-    if(manufacturer < 0) results.add(CSMSetValidationResult(kManufacturer, 'Manufactuer pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(motor != null){
+      if(motor!.length < 15 && motor!.length > 16) results.add(CSMSetValidationResult(kMotor, 'Motor number must be between 15 and 16 length', 'strictLength(15,16)'));
+    }
+    if(model < 0) results.add(CSMSetValidationResult(kModel, 'Manufactuer pointer must be equal or greater than 0', 'pointerHandler()'));
     if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(manufacturer > 0 && manufacturerNavigation != null){
-      if(manufacturer != manufacturerNavigation!.id) results.add(CSMSetValidationResult("[$kManufacturer, $kManufacturerNavigation]", 'if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.', 'insertionConflict()'));
+    if(sct != null && sct! < 0) results.add(CSMSetValidationResult(kSct, 'SCT pointer must be equal or greater than 0', 'pointerHandler()'));
+
+    if(model > 0 && vehiculeModelNavigation != null){
+      if(model != vehiculeModelNavigation!.id) results.add(CSMSetValidationResult("[$kModel, $kVehiculeModelNavigation]", 'if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.', 'insertionConflict()'));
     } 
 
-    if(manufacturer  == 0 && manufacturerNavigation == null) results.add(CSMSetValidationResult("[$kManufacturer, $kManufacturerNavigation]", 'Required Manufacturer. Must be one Manufacturer insertion property', 'requiredInsertion()'));
+    if(model  == 0 && vehiculeModelNavigation == null) results.add(CSMSetValidationResult("[$kModel, $kVehiculeModelNavigation]", 'Required Manufacturer. Must be one Manufacturer insertion property', 'requiredInsertion()'));
     
-    if((manufacturer != 0 && manufacturerNavigation != null) && (manufacturerNavigation!.id != manufacturer)) results.add(CSMSetValidationResult("[$kManufacturer, $kManufacturerNavigation]", 'if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.', 'insertionConflict()'));
+    if((model != 0 && vehiculeModelNavigation != null) && (vehiculeModelNavigation!.id != model)) results.add(CSMSetValidationResult("[$kModel, $kVehiculeModelNavigation]", 'if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.', 'insertionConflict()'));
 
     
     if(maintenance != null && maintenanceNavigation != null){
@@ -179,12 +199,20 @@ final class Truck implements CSMSetInterface {
     if(insurance != null && insuranceNavigation != null){
       if(insurance != 0 && (insuranceNavigation!.id != insurance)) results.add(CSMSetValidationResult("[$kInsurance, $kInsurance]", 'if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.', 'insertionConflict()'));
     } 
+    if(sct != null && sctNavigation != null){
+      if(sct != 0 && (sctNavigation!.id != sct)) results.add(CSMSetValidationResult("[$kSct, $kSctNavigation]", 'if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.', 'insertionConflict()'));
+    } 
+    
+    // if((usdot == null && usdotNavigation == null) && (sct == null && sctNavigation == null)) results.add(CSMSetValidationResult("[$usdot, $sct]", 'Missing pointers. at least SCT or USDOT property must be set', 'missingProperty()'));
 
+    if(sctNavigation != null) results = <CSMSetValidationResult>[...results, ...sctNavigation!.evaluate()];   
+    if(carrierNavigation != null) results = <CSMSetValidationResult>[...results, ...carrierNavigation!.evaluate()]; 
+    if(truckCommonNavigation != null) results = <CSMSetValidationResult>[...results, ...truckCommonNavigation!.evaluate()]; 
     if(maintenance != null && maintenance! < 0) results.add(CSMSetValidationResult(kMaintenance, 'Maintenance pointer must be equal or greater than 0', 'pointerHandler()'));
     if(insurance != null && insurance! < 0) results.add(CSMSetValidationResult(kInsurance, 'Insurance pointer must be equal or greater than 0', 'pointerHandler()'));
-  
+    
     //Models validations 
-    if(manufacturerNavigation != null) results = <CSMSetValidationResult>[...results, ...manufacturerNavigation!.evaluate()];
+    if(vehiculeModelNavigation != null) results = <CSMSetValidationResult>[...results, ...vehiculeModelNavigation!.evaluate()];
     if(maintenanceNavigation != null) results = <CSMSetValidationResult>[...results, ...maintenanceNavigation!.evaluate()];
     if(insuranceNavigation != null) results = <CSMSetValidationResult>[...results, ...insuranceNavigation!.evaluate()];
     

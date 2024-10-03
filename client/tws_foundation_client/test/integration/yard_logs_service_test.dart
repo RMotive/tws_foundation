@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:csm_foundation_services/csm_foundation_services.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -8,11 +9,179 @@ import '../integration_credentials.dart';
 void main() {
   late String auth;
   late YardLogServiceBase service;
-  late List<YardLog> mocks;
+  late List<YardLog> mocks; 
+  
+  YardLog buildMock(String randomToken){
+    DateTime time = DateTime.now();
+    Plate plateMX = Plate(
+      0, //id
+      1, //status
+      "MEX$randomToken", //identifier
+      "TIJ", //state
+      "MEX", //country
+      time, //expiration
+      0, //truck
+      null, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
+    Plate plateUSA = Plate(
+      0, //id
+      1, //status
+      "USA$randomToken", //identifier
+      "CA", //state
+      "USA", //country
+      time, //expiration
+      0, //truck
+      null, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
+    Plate plateMX2 = Plate(
+      0, //id
+      1, //status
+      "MEX$randomToken", //identifier
+      "TIJ", //state
+      "MEX", //country
+      time, //expiration
+      null, //truck
+      0, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
+    Plate plateUSA2 = Plate(
+      0, //id
+      1, //status
+      "USA$randomToken", //identifier
+      "CA", //state
+      "USA", //country
+      time, //expiration
+      null, //truck
+      0, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
+    TrailerClass trailerClass = TrailerClass(
+      0, 
+      "trailer class: $randomToken", 
+      null
+    );
+    TrailerType trailerType = TrailerType(
+      0, 
+      1,
+      0,
+      "48FT", 
+      null, 
+      trailerClass
+    );
+    TrailerCommon trailerCommon = TrailerCommon(
+      0, //id
+      1, //status
+      0, //trailerClass
+      1, //situation
+      null, //location
+      "ECT$randomToken", //economic
+      trailerType,
+      null, //statusNavigation
+    );
+    
+    Trailer trailer = Trailer(
+      0, //id
+      1, //status
+      0, //common
+      1, //carrier
+      null, //model
+      1, //maintenance
+      null,
+      trailerCommon, //trailerCommonNavigation
+      null, //vehiculeModelNavigation
+      null, //statusNavigation
+      <Plate>[plateMX2, plateUSA2] //plates
+    );
+    TruckCommon truckCommon = TruckCommon(
+    0, //id
+    1, //status
+    "ECO$randomToken", //economic
+    null, //location
+    1, //situation
+    null, //statusNavigation
+    null,
+    null
+    );
+    Manufacturer manufacturer = Manufacturer(
+      0, 
+      "manufacturer $randomToken",
+      null
+    );
+    VehiculeModel model = VehiculeModel(
+      0, 
+      1, 
+      0, 
+      "Model name $randomToken", 
+      DateTime.now(), 
+      null, 
+      manufacturer
+    );
+    Truck truck = Truck(
+      0, // id
+      1, //Status
+      0, //model
+      0, //common
+      1, //carrier
+      "Motor $randomToken", //motor
+      "VINtest-$randomToken", //vin
+      null, //maintenance
+      null, //insurance
+      null, //sct
+      null, //statusNavigation
+      model, //modelNavigation
+      truckCommon, //truckCommonNavigation
+      null, //maintenanceNavigation
+      null, //insuranceNavigation
+      null, //sct
+      null, //carrierNavigation
+      <Plate>[plateMX, plateUSA] //plates
+    );
+    YardLog mock = YardLog(
+      0, // ID
+      true, //Entry
+      0, // Truck? Id
+      null, // truckExternal
+      0, // trailer
+      null, // trailerExternal
+      1, // loadType
+      1, // section
+      1, // driver
+      null, // driverExternal
+      1, // guard
+      "Guard $randomToken", // gName
+      "Los angeles $randomToken", // fromTo
+      "seal $randomToken", //seal
+      false, //damage
+      "Truck picture $randomToken", //ttPicture
+      null, // dmgEvidence
+      null, //driverNavigation
+      null, //driverExternalNavigation
+      truck, //truckNavigation
+      null, //truckExternalNavigation
+      trailer, //trailerNavigation
+      null, //trailerExternalNavigation
+      null, //loadTypeNavigation
+      null, //sectionNavigation
+      null
+    );
+    List<CSMSetValidationResult> evaluation = mock.evaluate();
+    assert(evaluation.isNotEmpty);
+    return mock;
+  }
 
   setUp(
     () async {
-      final TWSFoundationSource source = TWSFoundationSource(false);
+      final TWSFoundationSource source = TWSFoundationSource(true);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
         decoder: PrivilegesDecode(),
@@ -35,141 +204,10 @@ void main() {
       for (int i = 0; i < 3; i++) {
         int rnd = Random().nextInt(900) + 99;
         String randomToken = '${i}_qual$rnd';
-        bool first = i == 0;
-        DateTime time = DateTime.now();
-        Plate plateMX = Plate(
-            0, //id
-            1, //status
-            "MEX$randomToken", //identifier
-            "TIJ", //state
-            "MEX", //country
-            time, //expiration
-            0, //truck
-            null, //trailer
-            null, //statusNavigation
-            null, //truckCommonNavigation
-            null //trailerCommonNavigation
-            );
-        Plate plateUSA = Plate(
-            0, //id
-            1, //status
-            "USA$randomToken", //identifier
-            "CA", //state
-            "USA", //country
-            time, //expiration
-            0, //truck
-            null, //trailer
-            null, //statusNavigation
-            null, //truckCommonNavigation
-            null //trailerCommonNavigation
-            );
-        Plate plateMX2 = Plate(
-            0, //id
-            1, //status
-            "MEX$randomToken", //identifier
-            "TIJ", //state
-            "MEX", //country
-            time, //expiration
-            null, //truck
-            0, //trailer
-            null, //statusNavigation
-            null, //truckCommonNavigation
-            null //trailerCommonNavigation
-            );
-        Plate plateUSA2 = Plate(
-            0, //id
-            1, //status
-            "USA$randomToken", //identifier
-            "CA", //state
-            "USA", //country
-            time, //expiration
-            null, //truck
-            0, //trailer
-            null, //statusNavigation
-            null, //truckCommonNavigation
-            null //trailerCommonNavigation
-            );
-        TrailerCommon trailerCommon = TrailerCommon(
-            0, //id
-            1, //status
-            1, //trailerClass
-            1, //situation
-            null, //location
-            "ECT$randomToken", //economic
-            null //statusNavigation
-
-            );
-        Trailer trailer = Trailer(
-            0, //id
-            1, //status
-            0, //common
-            1,
-            1, //manufactuer
-            1, //maintenance
-            trailerCommon, //trailerCommonNavigation
-            null, //statusNavigation
-            <Plate>[plateMX2, plateUSA2] //plates
-            );
-        TruckCommon truckCommon = TruckCommon(
-        0, //id
-        1, //status
-        "ECO$randomToken", //economic
-        null, //location
-        1, //situation
-        null, //statusNavigation
-        null,
-        null
-        );
-        Truck truck = Truck(
-            0, // id
-            1, //Status
-            2, //manufacturer
-            0, //common
-            1,
-            "Motor $randomToken", //motor
-            "VINtest-$randomToken", //vin
-            i, //maintenance
-            i, //insurance
-            null, //statusNavigation
-            null, //manufacturerNavigation
-            truckCommon, //truckCommonNavigation
-            null, //maintenanceNavigation
-            null, //insuranceNavigation
-            null, //carrierNavigation
-            <Plate>[plateMX, plateUSA] //plates
-            );
-        YardLog mock = YardLog(
-            0, // ID
-            true, //Entry
-            first ? 1 : 0, // Truck? Id
-            null, // truckExternal
-            first ? 1 : 0, // trailer
-            null, // trailerExternal
-            first ? 1 : 2, // loadType
-            1, // section
-            1, // driver
-            null, // driverExternal
-            1, // guard
-            "Guard $randomToken", // gName
-            "Los angeles $randomToken", // fromTo
-            "seal $randomToken", //seal
-            false, //damage
-            "Truck picture $randomToken", //ttPicture
-            null, // dmgEvidence
-            null, //driverNavigation
-            null, //driverExternalNavigation
-            first ? null : truck, //truckNavigation
-            null, //truckExternalNavigation
-            first ? null : trailer, //trailerNavigation
-            null, //trailerExternalNavigation
-            null, //loadTypeNavigation
-            null, //sectionNavigation
-            null);
-        mocks.add(mock);
+        mocks.add(buildMock(randomToken));
       }
-    },
+    }
   );
-
   test(
     'View',
     () async {
@@ -231,33 +269,7 @@ void main() {
         () async {
           int rnd = Random().nextInt(900) + 99;
           String randomToken = '_quali$rnd';
-          YardLog mock = YardLog(
-              0, // ID
-              true, //Entry
-              1, // Truck? Id
-              null, // truckExternal
-              1, // trailer
-              null, // trailerExternal
-              1, // loadType
-              1, // section
-              1, // driver
-              null, // driverExternal
-              1, // guard
-              "Guard $randomToken", // gName
-              "Los angeles $randomToken", // fromTo
-              "seal $randomToken", //seal
-              false, //damage
-              "Truck picture $randomToken", //ttPicture
-              null, // dmgEvidence
-              null, //driverNavigation
-              null, //driverExternalNavigation
-              null, //truckNavigation
-              null, //truckExternalNavigation
-              null, //trailerNavigation
-              null, //trailerExternalNavigation
-              null, //loadTypeNavigation
-              null, //sectionNavigation
-              null);
+          YardLog mock = buildMock(randomToken);
 
           MainResolver<MigrationUpdateResult<YardLog>> fact = await service.update(mock, auth);
           MigrationUpdateResult<YardLog> actEffect = await fact.act(decoder);

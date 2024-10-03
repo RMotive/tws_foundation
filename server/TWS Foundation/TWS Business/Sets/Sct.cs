@@ -19,9 +19,13 @@ public partial class Sct
     public string Number { get; set; } = null!;
 
     public string Configuration { get; set; } = null!;
+
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<Carrier> Carriers { get; set; } = [];
+    public virtual ICollection<Truck> Trucks { get; set; } = [];
+
+    public virtual ICollection<Trailer> Trailers { get; set; } = [];
+
 
     public virtual ICollection<SctH> SctsH { get; set; } = [];
 

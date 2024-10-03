@@ -22,8 +22,6 @@ public partial class Carrier
 
     public int? Usdot { get; set; }
 
-    public int? Sct { get; set; }
-
     public virtual Status? StatusNavigation { get; set; }
 
     public virtual Approach? ApproachNavigation { get; set; }
@@ -31,8 +29,6 @@ public partial class Carrier
     public virtual Address? AddressNavigation { get; set; }
 
     public virtual Usdot? UsdotNavigation { get; set; }
-
-    public virtual Sct? SctNavigation { get; set; }
 
     public virtual ICollection<Truck> Trucks { get; set; } = [];
 
@@ -42,11 +38,10 @@ public partial class Carrier
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        RequiredValidator required = new RequiredValidator();
         Container = [
             ..Container,
-            (nameof(Name), [new RequiredValidator(), new LengthValidator(Max: 20)]),
-            (nameof(Approach), [new PointerValidator(true)]),
-            (nameof(Address), [new PointerValidator(true)]),
+            (nameof(Name), [required, new LengthValidator(Max: 20)]),
             (nameof(Status), [new PointerValidator(true)]),
         ];
 
@@ -82,12 +77,6 @@ public partial class Carrier
             Entity.HasOne(d => d.UsdotNavigation)
                .WithMany(p => p.Carriers)
                .HasForeignKey(d => d.Usdot);
-
-            Entity.Property(e => e.Sct)
-                .HasColumnName("SCT");
-            Entity.HasOne(d => d.SctNavigation)
-               .WithMany(p => p.Carriers)
-               .HasForeignKey(d => d.Sct);
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Carriers)

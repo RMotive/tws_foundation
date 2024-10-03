@@ -12,7 +12,6 @@ public class Q_Trailer : BQ_Set<Trailer> {
             Mock = new() {
                 Id = 1,
                 Common = 0,
-                Manufacturer = 0,
                 Maintenance = 0,
                 Status = 0
             },
@@ -21,17 +20,12 @@ public class Q_Trailer : BQ_Set<Trailer> {
         Q_MigrationSet_EvaluateRecord<Trailer> failAllCases = new() {
             Mock = new() {
                 Id = 0,
-                Common = 0,
-                Manufacturer = 0,
-                Carrier = 0,
                 Status = 0
 
             },
             Expectations = [
                 (nameof(Trailer.Id), [(new PointerValidator(), 3)]),
-                (nameof(Trailer.Manufacturer), [(new PointerValidator(true), 3)]),
-                (nameof(Trailer.Carrier), [(new PointerValidator(), 3)]),
-                (nameof(Trailer.Status), [(new PointerValidator(true), 3)]),
+                (nameof(Trailer.Status), [(new PointerValidator(), 3)])
             ],
         };
 

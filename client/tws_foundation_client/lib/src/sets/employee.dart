@@ -24,13 +24,13 @@ final class Employee implements CSMSetInterface {
   int id = 0;
   int status = 1;
   int identification = 0;
-  int address = 0;
-  int approach = 0;
-  String curp = "";
-  DateTime antecedentesNoPenalesExp = DateTime.now();
-  String rfc = "";
-  String nss = "";
-  DateTime imssRegistrationDate = DateTime.now();
+  int? address;
+  int? approach;
+  String? curp;
+  DateTime? antecedentesNoPenalesExp;
+  String? rfc;
+  String? nss;
+  DateTime? imssRegistrationDate;
   DateTime? hiringDate;
   DateTime? terminationDate;
   Identification? identificationNavigation;
@@ -46,12 +46,12 @@ final class Employee implements CSMSetInterface {
     int id = json.get('id');
     int status = json.get('status');
     int identification = json.get('identification');
-    int address = json.get('address');
-    int approach = json.get('approach');
-    String curp = json.get('curp');
+    int? address = json.getDefault('address', null);
+    int? approach = json.getDefault('approach', null);
+    String? curp = json.getDefault('curp', null);
     DateTime antecedentesNoPenalesExp = json.get('antecedentesNoPenalesExp');
-    String rfc = json.get('rfc');
-    String nss = json.get('nss');
+    String? rfc = json.getDefault('rfc', null);
+    String? nss = json.getDefault('nss', null);
     DateTime timestamp = json.get('timestamp');
     DateTime imssRegistrationDate = json.get('imssRegistrationDate');
     DateTime hiringDate = json.get('hiringDate');
@@ -102,13 +102,23 @@ final class Employee implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(identification < 0) results.add(CSMSetValidationResult(kIdentification, 'Identification pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(address < 0) results.add(CSMSetValidationResult(kAddress, 'Address pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(approach < 0) results.add(CSMSetValidationResult(kApproach, 'Approach pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(address != null){
+      if(address! < 0) results.add(CSMSetValidationResult(kAddress, 'Address pointer must be equal or greater than 0', 'pointerHandler()'));
+    }
+    if(approach != null){
+      if(approach! < 0) results.add(CSMSetValidationResult(kApproach, 'Approach pointer must be equal or greater than 0', 'pointerHandler()'));
+    }
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
 
-    if(curp.length != 18) results.add(CSMSetValidationResult(kCurp, "CURP number must be 18 length", "strictLength(18)"));
-    if(rfc.length != 12) results.add(CSMSetValidationResult(kRfc, "CURP number must be 18 length", "strictLength(12)"));
-    if(nss.length != 11) results.add(CSMSetValidationResult(kNss, "SCAC number must be 4 length", "structLength(11)"));
+    if(curp != null){
+      if(curp!.length != 18) results.add(CSMSetValidationResult(kCurp, "CURP number must be 18 length", "strictLength(18)"));
+    }
+    if(rfc != null){
+      if(rfc!.length != 12) results.add(CSMSetValidationResult(kRfc, "CURP number must be 18 length", "strictLength(12)"));
+    }
+    if(nss != null){
+      if(nss!.length != 11) results.add(CSMSetValidationResult(kNss, "SCAC number must be 4 length", "structLength(11)"));
+    }
 
     return results;
   }

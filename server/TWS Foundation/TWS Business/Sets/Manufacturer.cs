@@ -12,17 +12,11 @@ public partial class Manufacturer
 
     public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-    public string Model { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-    public string Brand { get; set; } = null!;
+    public string? Description { get; set; }
 
-    public DateOnly Year { get; set; }
-
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
-
-    public virtual ICollection<Trailer> Trailers { get; set; } = [];
-
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+    public virtual ICollection<VehiculeModel> Models { get; set; } = [];
 
     public static void CreateModel(ModelBuilder Builder) {
         Builder.Entity<Manufacturer>(Entity => {
@@ -35,12 +29,12 @@ public partial class Manufacturer
             Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            Entity.Property(e => e.Brand)
-                .HasMaxLength(15)
+            Entity.Property(e => e.Name)
+                .HasMaxLength(32)
                 .IsUnicode(false);
 
-            Entity.Property(e => e.Model)
-                .HasMaxLength(30)
+            Entity.Property(e => e.Description)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         });
     }
@@ -50,8 +44,7 @@ public partial class Manufacturer
 
         Container = [
                 .. Container,
-            (nameof(Model), [new LengthValidator(1, 30)]),
-            (nameof(Brand), [new LengthValidator(1, 15)]),
+            (nameof(Name), [Required, new LengthValidator(Max: 32)]),
         ];
 
         return Container;

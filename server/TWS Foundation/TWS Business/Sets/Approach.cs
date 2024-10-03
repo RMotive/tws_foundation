@@ -20,7 +20,7 @@ public partial class Approach
 
     public string? Alternative { get; set; }
 
-    public string? Email { get; set; }
+    public string Email { get; set; } = null!;
 
     public virtual Status? StatusNavigation { get; set; }
 
