@@ -150,6 +150,9 @@ final class Truck implements CSMSetInterface {
   }
   @override
   JObject encode() {
+    // Avoiding EF tracking issues.
+    JObject? carrierNav = carrierNavigation?.encode();
+    if(carrier != 0) carrierNav = null;
     return <String, dynamic>{
       'id': id,
       kStatus: status,
@@ -168,7 +171,7 @@ final class Truck implements CSMSetInterface {
       kMaintenanceNavigation: maintenanceNavigation?.encode(),
       kInsuranceNavigation: insuranceNavigation?.encode(),
       kSctNavigation: sctNavigation?.encode(),
-      kCarrierNavigation: carrierNavigation?.encode(),
+      kCarrierNavigation: carrierNav,
       kPlates: plates.map((Plate i) => i.encode()).toList()
     };
   }

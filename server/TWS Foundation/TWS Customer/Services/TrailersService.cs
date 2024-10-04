@@ -22,7 +22,14 @@ public class TrailersService : ITrailersService {
         static IQueryable<Trailer> include(IQueryable<Trailer> query) {
             return query
             .Include(t => t.TrailerCommonNavigation)
+
             .Include(t => t.CarrierNavigation)
+                .ThenInclude(c => c!.AddressNavigation)
+            .Include(t => t.CarrierNavigation)
+                .ThenInclude(c => c!.ApproachNavigation)
+            .Include(t => t.CarrierNavigation)
+                .ThenInclude(c => c!.UsdotNavigation)
+
             .Include(t => t.VehiculesModelsNavigation)
             .Select(p => new Trailer() {
                 Id = p.Id,
@@ -33,7 +40,17 @@ public class TrailersService : ITrailersService {
                 Sct = p.Sct,
                 Maintenance = p.Maintenance,
                 MaintenanceNavigation = p.MaintenanceNavigation,
-                CarrierNavigation = p.CarrierNavigation,
+                CarrierNavigation = p.CarrierNavigation == null ? null : new Carrier() {
+                    Id = p.CarrierNavigation.Id,
+                    Status = p.CarrierNavigation.Status,
+                    Name = p.CarrierNavigation.Name,
+                    Approach = p.CarrierNavigation.Approach,
+                    Address = p.CarrierNavigation.Address,
+                    Usdot = p.CarrierNavigation.Usdot,
+                    ApproachNavigation = p.CarrierNavigation.ApproachNavigation,
+                    AddressNavigation = p.CarrierNavigation.AddressNavigation,
+                    UsdotNavigation = p.CarrierNavigation.UsdotNavigation,
+                },
                 SctNavigation = p.SctNavigation == null ? null : new Sct() {
                     Id = p.SctNavigation.Id,
                     Status = p.SctNavigation.Status,

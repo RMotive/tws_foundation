@@ -34,8 +34,6 @@ public class TrucksService : ITrucksService {
         .Include(t => t.CarrierNavigation)
             .ThenInclude(c => c!.ApproachNavigation)
         .Include(t => t.CarrierNavigation)
-            .ThenInclude(c => c!.StatusNavigation)
-        .Include(t => t.CarrierNavigation)
             .ThenInclude(c => c!.UsdotNavigation).Select(t => new Truck() {
                 Id = t.Id,
                 Status = t.Status,

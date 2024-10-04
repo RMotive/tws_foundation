@@ -45,7 +45,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Name = "Generic model " + RandomSeed,
             ManufacturerNavigation = manufacturer,
         };
-       
+        
         Sct sct = new() {
             Status = 1,
             Type = "TypT14",
@@ -91,10 +91,19 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         List<Plate> plateList = [plateMX, plateUSA];
-
+        TrailerCommon trailerCommon = new() {
+            Status = 1,
+            Economic = "TrailerEco " + RandomSeed,
+        };
+        Trailer trailer = new() {
+            Status = 1,
+            Common = 0,
+            Carrier = 1,
+            TrailerCommonNavigation = trailerCommon,
+        };
         Truck truck = new() {
             Status = 1,
-            Carrier = 0,
+            Carrier = 1,
             Common = 0,
             Model = 0,
             Motor = motor,
@@ -118,8 +127,9 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Truck = 0,
             LoadType = 1,
             Guard = 1,
+            TrailerNavigation = trailer,
             Gname = "Enrique" + iterationTag,
-            Section = 0,
+            Section = 1,
             SectionNavigation = section,
             Seal = "Seal " + iterationTag,
             FromTo = "Cocacola florido " + iterationTag,
@@ -157,7 +167,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             mockList.Add(MockFactory(testTag+i));
         }
 
-        (HttpStatusCode Status, _) = await Post("Create", mockList, true);
+        (HttpStatusCode Status, GenericFrame Response) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
 
     }

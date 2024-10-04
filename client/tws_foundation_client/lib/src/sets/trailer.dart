@@ -81,6 +81,9 @@ final class Trailer implements CSMSetInterface {
 
   @override
   JObject encode() {
+    // Avoiding EF tracking issues.
+    JObject? carrierNav = carrierNavigation?.encode();
+    if(carrier != 0) carrierNav = null;
     return <String, dynamic>{
       'id': id,
       kStatus: status,
@@ -89,7 +92,7 @@ final class Trailer implements CSMSetInterface {
       kModel: model,
       kMaintenance: maintenance,
       kTimestamp: timestamp.toIso8601String(),
-      kCarrierNavigation: carrierNavigation?.encode(),
+      kCarrierNavigation: carrierNav,
       kVehiculeModelNavigation: vehiculeModelNavigation?.encode(),
       kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode(),
