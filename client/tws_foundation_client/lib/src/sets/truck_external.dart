@@ -82,13 +82,13 @@ final class TruckExternal implements CSMSetInterface {
 
     if(mxPlate == null && usaPlate == null) results.add(CSMSetValidationResult(kMxPlate, "Debe agregar alguna placa al camion externo.", "fieldConflict()"));
     if(mxPlate != null){
-      if(mxPlate!.length < 8 || mxPlate!.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MX plate length must be between 8 and 12", "strictLength(8, 12)"));
+      if(mxPlate!.length < 8 || mxPlate!.length > 12) results.add(CSMSetValidationResult(kMxPlate, "Truck Mexican plate length must be between 8 and 12", "strictLength(8, 12)"));
     }
     if(usaPlate != null){
-      if(usaPlate!.length < 8 || usaPlate!.length > 12) results.add(CSMSetValidationResult(kUsaPlate, "USA plate length must be between 8 and 12", "strictLength(8, 12)"));
+      if(usaPlate!.length < 8 || usaPlate!.length > 12) results.add(CSMSetValidationResult(kUsaPlate, "Truck American plate length must be between 8 and 12", "strictLength(8, 12)"));
     }
     if(vin != null){
-      if(vin!.length != 17) results.add(CSMSetValidationResult(kVin, 'VIN number must be 17 length', 'strictLength(17)'));
+      if(vin!.length != 17) results.add(CSMSetValidationResult(kVin, 'Truck VIN number must be 17 length', 'strictLength(17)'));
     }
 
     if(truckCommonNavigation != null){
@@ -109,13 +109,18 @@ final class TruckExternal implements CSMSetInterface {
     Status? statusNavigation,
   }){
     String? uPlate = usaPlate ?? this.usaPlate;
-    if(usaPlate == ""){
-      uPlate = null;
+    if(usaPlate != null){
+      if(usaPlate.isEmpty){
+        uPlate = null;
+      }
     }
     String? mPlate = mxPlate ?? this.mxPlate;
-    if(mxPlate == ""){
-      mPlate = null;
+    if(mxPlate != null){
+      if(mxPlate.isEmpty){
+        mPlate = null;
+      }
     }
+   
     String? v = vin ?? this.vin;
     if(v == "") v = null;
     

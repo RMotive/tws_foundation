@@ -79,10 +79,10 @@ final class TrailerExternal implements CSMSetInterface {
     if(mxPlate == null && usaPlate == null) results.add(CSMSetValidationResult(kMxPlate, "Debe agregar alguna placa al remolque externo.", "fieldConflict()"));
 
     if(mxPlate != null){
-      if(mxPlate!.length < 8 || mxPlate!.length > 12) results.add(CSMSetValidationResult(kMxPlate, "MxPlate length must be between 8 and 12", "strictLength(1, 12)"));
+      if(mxPlate!.length < 8 || mxPlate!.length > 12) results.add(CSMSetValidationResult(kMxPlate, "Trailer Mexican plate length must be between 8 and 12", "strictLength(1, 12)"));
     }
     if(usaPlate != null){
-      if(usaPlate!.length < 8 || usaPlate!.length > 12) results.add(CSMSetValidationResult(kUsaPlate, "USA Plate length must be between 8 and 12", "strictLength(1, 12)"));
+      if(usaPlate!.length < 8 || usaPlate!.length > 12) results.add(CSMSetValidationResult(kUsaPlate, "American Plate length must be between 8 and 12", "strictLength(1, 12)"));
     }
 
     if(trailerCommonNavigation != null){
@@ -102,12 +102,16 @@ final class TrailerExternal implements CSMSetInterface {
     Status? statusNavigation,
   }){
     String? uPlate = usaPlate ?? this.usaPlate;
-    if(usaPlate == ""){
-      uPlate = null;
+    if(usaPlate != null){
+      if(usaPlate.isEmpty){
+        uPlate = null;
+      }
     }
     String? mPlate = mxPlate ?? this.mxPlate;
-    if(mxPlate == ""){
-      mPlate = null;
+    if(mxPlate != null){
+      if(mxPlate.isEmpty){
+        mPlate = null;
+      }
     }
     return TrailerExternal(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, 
     mPlate, uPlate, trailerCommonNavigation ?? this.trailerCommonNavigation, statusNavigation ?? this.statusNavigation);
