@@ -75,20 +75,27 @@ final class TruckExternal implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
+    bool isPlate = false;
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     
     if(carrier.isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
 
-    if(mxPlate == null && usaPlate == null) results.add(CSMSetValidationResult(kMxPlate, "Debe agregar alguna placa al camion externo.", "fieldConflict()"));
     if(mxPlate != null){
-      if(mxPlate!.length < 8 || mxPlate!.length > 12) results.add(CSMSetValidationResult(kMxPlate, "Truck Mexican plate length must be between 8 and 12", "strictLength(8, 12)"));
+      if((mxPlate!.length < 8 || mxPlate!.length > 12) && mxPlate!.isNotEmpty){
+        isPlate = true;
+        results.add(CSMSetValidationResult(kMxPlate, "External Truck Mexican plate length must be between 8 and 12", "strictLength(8, 12)"));
+      } 
     }
     if(usaPlate != null){
-      if(usaPlate!.length < 8 || usaPlate!.length > 12) results.add(CSMSetValidationResult(kUsaPlate, "Truck American plate length must be between 8 and 12", "strictLength(8, 12)"));
+      if((usaPlate!.length < 8 || usaPlate!.length > 12) && usaPlate!.isNotEmpty){
+        isPlate = true;
+        results.add(CSMSetValidationResult(kUsaPlate, "External Truck American plate length must be between 8 and 12", "strictLength(8, 12)"));
+      }
     }
+    if(!isPlate) results.add(CSMSetValidationResult(kMxPlate, "Debe agregar alguna placa al camion externo.", "fieldConflict()"));
     if(vin != null){
-      if(vin!.length != 17) results.add(CSMSetValidationResult(kVin, 'Truck VIN number must be 17 length', 'strictLength(17)'));
+      if(vin!.length != 17 && vin!.isNotEmpty) results.add(CSMSetValidationResult(kVin, 'External Truck VIN number must be 17 length', 'strictLength(17)'));
     }
 
     if(truckCommonNavigation != null){
