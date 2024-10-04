@@ -185,6 +185,8 @@ final class YardLog implements CSMSetInterface {
     if(truckExternalNavigation == null && truckNavigation == null){
       results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
     }
+
+
     //Loadtype: 3 == "Botado"
     if(loadType != 3 && (trailerExternalNavigation == null && trailerNavigation == null)){
       results.add(CSMSetValidationResult(kLoadType, 'Debe agregar los datos del remolque, de lo contrario seleccione el tipo de carga como Botado', 'FieldConflic()'));
@@ -193,6 +195,8 @@ final class YardLog implements CSMSetInterface {
     if(loadType == 3 && (trailerExternalNavigation != null || trailerNavigation != null)){
       results.add(CSMSetValidationResult(kLoadType, 'Si el tipo de carga es Botado, no puede seleccionar datos del remolque', 'FieldConflic()'));
     }
+
+    if(loadType <= 0) results.add(CSMSetValidationResult(kLoadType, 'Seleccione el tipo de carga.', 'pointerHandler()'));
 
     if(damage && dmgEvidence == null){
       results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));

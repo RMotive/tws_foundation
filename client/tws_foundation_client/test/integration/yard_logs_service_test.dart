@@ -85,6 +85,7 @@ void main() {
       1, //situation
       null, //location
       "ECT$randomToken", //economic
+      null,
       trailerType,
       null, //statusNavigation
     );

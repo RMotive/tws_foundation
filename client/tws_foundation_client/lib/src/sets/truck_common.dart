@@ -14,8 +14,8 @@ final class TruckCommon implements CSMSetInterface {
   int id = 0;
   int status = 1;
   String economic = "";
-  int? location = 0;
-  int? situation = 0;
+  int? location;
+  int? situation;
   Situation? situationNavigation;
   Location? locationNavigation;
   Status? statusNavigation;
@@ -52,6 +52,9 @@ final class TruckCommon implements CSMSetInterface {
 
   @override
   JObject encode() {
+     // Avoiding EF tracking issues.
+    JObject? locationNav = locationNavigation?.encode();
+    if(location != null && location != 0) locationNav = null;
     return <String, dynamic>{
       'id': id,
       kStatus: status,
@@ -59,7 +62,7 @@ final class TruckCommon implements CSMSetInterface {
       kLocation: location,
       kSituation: situation,
       kSituationNavigation: situationNavigation?.encode(),
-      kLocationNavigation: locationNavigation?.encode(),
+      kLocationNavigation: locationNav,
       kStatusNavigation: statusNavigation?.encode()
     };
   }

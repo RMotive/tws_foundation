@@ -10,6 +10,7 @@ final class TrailerCommon implements CSMSetInterface {
   static const String kTimestamp = "timestamp";
   static const String kstatusNavigation = 'StatusNavigation';
   static const String kTrailerTypeNavigation = 'TrailerTypeNavigation';
+  static const String kLocationNavigation = "LocationNavigation";
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp;
@@ -21,10 +22,11 @@ final class TrailerCommon implements CSMSetInterface {
   int? situation;
   int? location;
   String economic = "";
+  Location? locationNavigation;
   TrailerType? trailerTypeNavigation;
   Status? statusNavigation;
   
-  TrailerCommon(this.id, this.status, this.type, this.situation, this.location, this.economic,  this.trailerTypeNavigation, this.statusNavigation, { 
+  TrailerCommon(this.id, this.status, this.type, this.situation, this.location, this.economic,  this.locationNavigation, this.trailerTypeNavigation, this.statusNavigation, { 
     DateTime? timestamp,
   }){
     _timestamp = timestamp ?? DateTime.now(); 
@@ -49,12 +51,21 @@ final class TrailerCommon implements CSMSetInterface {
       JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
+
+    Location? locationNavigation;
+    if (json['LocationNavigation'] != null) {
+      JObject rawNavigation = json.getDefault('LocationNavigation', <String, dynamic>{});
+      locationNavigation = deserealize<Location>(rawNavigation, decode: LocationDecoder());
+    }
         
-    return TrailerCommon(id, status, type, situation, location, economic,   trailerTypeNavigation, statusNavigation, timestamp: timestamp);
+    return TrailerCommon(id, status, type, situation, location, economic, locationNavigation, trailerTypeNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
   JObject encode() {
+     // Avoiding EF tracking issues.
+    JObject? locationNav = locationNavigation?.encode();
+    if(location != null && location != 0) locationNav = null;
     return <String, dynamic>{
       'id': id,
       kStatus: status,
@@ -63,6 +74,7 @@ final class TrailerCommon implements CSMSetInterface {
       kLocation: location,
       kEconomic: economic,
       kTimestamp: timestamp.toIso8601String(),
+      kLocationNavigation: locationNav,
       kTrailerTypeNavigation: trailerTypeNavigation?.encode(),
       kstatusNavigation: statusNavigation?.encode()
     };
@@ -86,9 +98,13 @@ final class TrailerCommon implements CSMSetInterface {
     int? situation,
     int? location,
     String? economic,
+    Location? locationNavigation,
     TrailerType? trailerTypeNavigation,
     Status? statusNavigation,
   }){
+    Location? locationNav = locationNavigation ?? this.locationNavigation;
+    if(type == 0) locationNav = null;
+
     int? tType = type ?? this.type;
     TrailerType? typeNav = trailerTypeNavigation ?? this.trailerTypeNavigation;
     if(type == 0){
@@ -96,7 +112,7 @@ final class TrailerCommon implements CSMSetInterface {
       typeNav = null;
     }
     return TrailerCommon(id ?? this.id, status ?? this.status, tType, situation ?? this.situation, location ?? this.location,
-    economic ?? this.economic, typeNav, statusNavigation ?? this.statusNavigation);
+    economic ?? this.economic, locationNav ,typeNav, statusNavigation ?? this.statusNavigation);
   }
 }
 

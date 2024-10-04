@@ -56,6 +56,9 @@ final class Section implements CSMSetInterface {
 
   @override
   JObject encode() {
+    // Avoiding EF tracking issues.
+    JObject? locationNav = locationNavigation?.encode();
+    if(yard != 0) locationNav = null;
     return <String, dynamic>{
       'id': id,
       kStatus: status,
@@ -64,7 +67,7 @@ final class Section implements CSMSetInterface {
       kCapacity: capacity,
       kOcupancy: ocupancy,
       kTimestamp: timestamp.toIso8601String(),
-      kLocationNavigation: locationNavigation?.encode(),
+      kLocationNavigation: locationNav,
       kstatusNavigation: statusNavigation?.encode(),
     };
   }
