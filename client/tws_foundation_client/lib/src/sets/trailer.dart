@@ -106,7 +106,7 @@ final class Trailer implements CSMSetInterface {
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));
+    if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, 'Trailer must have 1 plate at least', 'listLength()'));
     for(Plate plate in plates){
       results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
     }
