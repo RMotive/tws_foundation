@@ -252,7 +252,9 @@ final class YardLog implements CSMSetInterface {
     Section? sectionNavigation,
     Account? accountNavigation
   }){
-    //
+    String? sea = seal ?? this.seal;
+    if(sea == "") sea = null;
+
     String? dmgEv = dmgEvidence ?? this.dmgEvidence;
     if(dmgEv == "") dmgEv = null;
 
@@ -308,7 +310,7 @@ final class YardLog implements CSMSetInterface {
     
     return YardLog(id ?? this.id, entry ?? this.entry, truckIndex, truckExtIndex, trailerIndex, trailerExtIndex, 
     loadType ?? this.loadType, section ?? this.section, driverIndex,driverExtIndex, guard ?? this.guard, 
-    gName ?? this.gName, fromTo ?? this.fromTo, seal ?? this.seal, damage ?? this.damage, ttPicture ?? this.ttPicture, dmgEv, driverNav, 
+    gName ?? this.gName, fromTo ?? this.fromTo, sea, damage ?? this.damage, ttPicture ?? this.ttPicture, dmgEv, driverNav, 
     driverExtNav, truckNav, truckExtNav, trailerNav, trailerExtNav, load, sect, accountNavigation ?? this.accountNavigation);
   }
 
