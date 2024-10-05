@@ -49,13 +49,22 @@ final class Employee implements CSMSetInterface {
     int? address = json.getDefault('address', null);
     int? approach = json.getDefault('approach', null);
     String? curp = json.getDefault('curp', null);
-    DateTime antecedentesNoPenalesExp = json.get('antecedentesNoPenalesExp');
+
+    String? antecedentesExp = json.getDefault('antecedentesNoPenalesExp', null);
+    DateTime? antecedentesNoPenalesExp = antecedentesExp != null? DateTime.parse(antecedentesExp) : null;
+
     String? rfc = json.getDefault('rfc', null);
     String? nss = json.getDefault('nss', null);
     DateTime timestamp = json.get('timestamp');
-    DateTime imssRegistrationDate = json.get('imssRegistrationDate');
-    DateTime hiringDate = json.get('hiringDate');
-    DateTime terminationDate = json.get('terminationDate');
+    
+    String? imssReg = json.getDefault('imssRegistrationDate', null);
+    DateTime? imssRegistrationDate = imssReg != null? DateTime.parse(imssReg) : null;
+
+    String? hiringD = json.getDefault('hiringDate', null);
+    DateTime? hiringDate = hiringD != null? DateTime.parse(hiringD) : null;
+
+    String? terminationD =  json.getDefault('terminationDate', null);
+    DateTime? terminationDate = terminationD != null? DateTime.parse(terminationD) : null;
 
     Identification? identificationNavigation;
     if (json['IdentificationNavigation'] != null) {
@@ -74,8 +83,8 @@ final class Employee implements CSMSetInterface {
 
   @override
   JObject encode() {
-    String a = antecedentesNoPenalesExp.toString().substring(0,10);
-    String b = imssRegistrationDate.toString().substring(0,10);
+    String? a = antecedentesNoPenalesExp?.toString().substring(0,10);
+    String? b = imssRegistrationDate?.toString().substring(0,10);
     String? c = hiringDate?.toString().substring(0,10);
     String? d =  terminationDate?.toString().substring(0,10);
 

@@ -219,7 +219,7 @@ final class Truck implements CSMSetInterface {
     if(maintenanceNavigation != null) results = <CSMSetValidationResult>[...results, ...maintenanceNavigation!.evaluate()];
     if(insuranceNavigation != null) results = <CSMSetValidationResult>[...results, ...insuranceNavigation!.evaluate()];
     
-    if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, 'Plates list must contain 2 objects', 'listLength(2)'));
+    if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, 'Truck must have 1 plate at least', 'listLength()'));
     for(Plate plate in plates){
       results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
     }

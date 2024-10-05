@@ -57,10 +57,13 @@ final class Plate implements CSMSetInterface {
     int id = json.get('id');
     int status = json.get('status');
     String identifier = json.get('identifier');
-    String state = json.get('state');
+    String? state = json.getDefault('state', null);
     String country = json.get('country');
     DateTime timestamp = json.get('timestamp');
-    DateTime expiration = json.get("expiration");
+
+    String? exp = json.getDefault("expiration", null);
+    DateTime? expiration = exp != null? DateTime.parse(exp) : null;
+    
     int? truck = json.getDefault('truck', null);
     int? trailer = json.getDefault('trailer', null);
     return Plate(id, status, identifier, state, country, expiration, truck, trailer, statusNavigation, truckCommonNavigation, trailerNavigation, timestamp: timestamp);
@@ -68,7 +71,7 @@ final class Plate implements CSMSetInterface {
   
   @override
   JObject encode() {
-    String exp = expiration.toString().substring(0,10);
+    String? exp = expiration?.toString().substring(0,10);
     return <String, dynamic>{
       'id': id,
       kStatus: status,

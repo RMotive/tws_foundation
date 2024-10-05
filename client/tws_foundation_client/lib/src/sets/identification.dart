@@ -36,7 +36,9 @@ final class Identification implements CSMSetInterface {
     String fatherlastname = json.get('fatherlastname');
     String motherlastname = json.get('motherlastname');
     DateTime timestamp = json.get('timestamp');
-    // DateTime birthday = json.get('birthday');
+
+    String? birth = json.getDefault('birthday', null);
+    DateTime? birthday = birth != null? DateTime.parse(birth) : null;
 
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
@@ -44,12 +46,12 @@ final class Identification implements CSMSetInterface {
       statusNavigation = deserealize<Status>(rawNavigation, decode: StatusDecoder());
     }
         
-    return Identification(id, status, name, fatherlastname, motherlastname, null, statusNavigation, timestamp: timestamp);
+    return Identification(id, status, name, fatherlastname, motherlastname, birthday, statusNavigation, timestamp: timestamp);
   }
 
   @override
   JObject encode() {
-    // String? a = birthday?.toString().substring(0,10);
+    String? a = birthday?.toString().substring(0,10);
     return <String, dynamic>{
       'id': id,
       kStatus: status,
@@ -57,7 +59,7 @@ final class Identification implements CSMSetInterface {
       kFatherLastName: fatherlastname,
       kMotherLastName: motherlastname,
       kTimestamp: timestamp.toIso8601String(),
-      // kBirthday: a,
+      kBirthday: a,
       kstatusNavigation: statusNavigation?.encode(),
     };
   }

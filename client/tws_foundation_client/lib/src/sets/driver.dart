@@ -59,19 +59,38 @@ final class Driver implements CSMSetInterface {
     int status = json.get('status');
     int employee = json.get('employee');
     int common = json.get('common');
-    String driverType = json.get('driverType');
+    String? driverType = json.getDefault('driverType', null);
     DateTime timestamp = json.get('timestamp');
-    DateTime licenseExpiration = json.get('licenseExpiration');
-    DateTime drugalcRegistrationDate = json.get('drugalcRegistrationDate');
-    DateTime pullnoticeRegistrationDate = json.get('pullnoticeRegistrationDate');
+
+    String? licenExp = json.getDefault('licenseExpiration', null);
+    DateTime? licenseExpiration = licenExp != null? DateTime.parse(licenExp) : null;
+    
+
+    String? drugal = json.getDefault('drugalcRegistrationDate', null);
+    DateTime? drugalcRegistrationDate = drugal != null? DateTime.parse(drugal) : null;
+
+    String? pullnotice = json.getDefault('pullnoticeRegistrationDate', null);
+    DateTime? pullnoticeRegistrationDate = pullnotice != null? DateTime.parse(pullnotice) : null;
+    
     String? twic = json.getDefault('twic', null);
-    DateTime twicExpiration = json.get('twicExpiration');
+
+    String? twicEx = json.getDefault('twicExpiration', null);
+    DateTime? twicExpiration = twicEx != null? DateTime.parse(twicEx) : null;
+
     String? visa = json.getDefault('visa', null);
-    DateTime visaExpiration = json.get('visaExpiration');
+
+    String? visaExp = json.getDefault('visaExpiration', null);
+    DateTime? visaExpiration = visaExp != null? DateTime.parse(visaExp) : null;
+
     String? fast = json.getDefault('fast', null);
-    DateTime fastExpiration = json.get('fastExpiration');
+
+    String? fastExp = json.getDefault('fastExpiration', null);
+    DateTime? fastExpiration = fastExp != null? DateTime.parse(fastExp) : null;
+
     String? anam = json.getDefault('anam', null);
-    DateTime anamExpiration = json.get('anamExpiration');
+
+    String? anamExp = json.getDefault('anamExpiration', null);
+    DateTime? anamExpiration = anamExp != null? DateTime.parse(anamExp) : null;
     
     Status? statusNavigation;
     if (json['StatusNavigation'] != null) {
@@ -97,9 +116,9 @@ final class Driver implements CSMSetInterface {
 
   @override
   JObject encode() {
-    String a = licenseExpiration.toString().substring(0,10);
-    String b = drugalcRegistrationDate.toString().substring(0,10);
-    String c = pullnoticeRegistrationDate.toString().substring(0,10);
+    String? a = licenseExpiration?.toString().substring(0,10);
+    String? b = drugalcRegistrationDate?.toString().substring(0,10);
+    String? c = pullnoticeRegistrationDate?.toString().substring(0,10);
     String? d = twicExpiration?.toString().substring(0,10);
     String? e = visaExpiration?.toString().substring(0,10);
     String? f = fastExpiration?.toString().substring(0,10);
