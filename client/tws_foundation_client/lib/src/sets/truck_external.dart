@@ -83,14 +83,16 @@ final class TruckExternal implements CSMSetInterface {
 
     if(mxPlate != null){
       if((mxPlate!.length < 5 || mxPlate!.length > 12) && mxPlate!.isNotEmpty){
-        isPlate = true;
         results.add(CSMSetValidationResult(kMxPlate, "External Truck Mexican plate length must be between 8 and 12", "strictLength(8, 12)"));
-      } 
+      }else{
+        isPlate = true;
+      }
     }
     if(usaPlate != null){
-      if((usaPlate!.length < 8 || usaPlate!.length > 12) && usaPlate!.isNotEmpty){
-        isPlate = true;
+      if((usaPlate!.length < 5 || usaPlate!.length > 12) && usaPlate!.isNotEmpty){
         results.add(CSMSetValidationResult(kUsaPlate, "External Truck American plate length must be between 8 and 12", "strictLength(8, 12)"));
+      }else{
+        isPlate = true;
       }
     }
     if(!isPlate) results.add(CSMSetValidationResult(kMxPlate, "Debe agregar alguna placa al camión externo.", "fieldConflict()"));
