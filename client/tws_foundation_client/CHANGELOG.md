@@ -17,12 +17,16 @@
         * [Plate]
         * [TrailerExternal]
         * [TruckExternal]
+        * [YardLog]
+        * [Approaches]
     8. The following sets have receive breaking changes in their structure:
         * [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
         * [TrailerCommon] - Added the trailerType navigation.
         * [Trailer] - Added Vehicule Model navigation. 
         * [Truck] - Added Vehicule Model navigation & SCT navigation.
         * [Carrier] -  Removed SCT navigation.
+    9. Changed all nulleable [Datetime] properties decode implementation.
+    10. Sets evaluation methods changed.
 
 - Dependencies Upgrade: N/A
 

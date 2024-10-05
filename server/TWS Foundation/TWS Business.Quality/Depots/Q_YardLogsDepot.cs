@@ -23,7 +23,6 @@ public class Q_YardLogsDepot
             Timestamp = DateTime.Now,
             Guard = 1,
             TruckExternal = 0,
-            Seal = " seal",
             Gname = RandomUtils.String(30),
             FromTo = RandomUtils.String(30),
             Damage = false,

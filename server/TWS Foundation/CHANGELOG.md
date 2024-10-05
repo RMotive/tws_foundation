@@ -20,6 +20,8 @@
         * [Plate]
         * [TrailerExternal]
         * [TruckExternal]
+        * [YArdlog]
+        * [Approaches]
     12. The following sets have receive breaking changes in their structure:
         * [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
         * [TrailerCommon] - Added the trailerType navigation.

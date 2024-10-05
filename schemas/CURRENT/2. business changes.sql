@@ -162,6 +162,10 @@ ALTER COLUMN PullnoticeRegistrationDate Date;
 ALTER TABLE Approaches
 	ALTER Column Email varchar(64) NOT NULL;
 
+--> Yardlog
+ALTER TABLE Yard_Logs
+	ALTER Column Seal varchar(64);
+
 --> Employees
 
 ALTER TABLE Employees

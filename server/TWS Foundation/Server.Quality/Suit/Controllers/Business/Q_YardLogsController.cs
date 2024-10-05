@@ -131,7 +131,6 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Gname = "Enrique" + iterationTag,
             Section = 1,
             SectionNavigation = section,
-            Seal = "Seal " + iterationTag,
             FromTo = "Cocacola florido " + iterationTag,
             Damage = false,
             TTPicture = "Foto " + iterationTag,

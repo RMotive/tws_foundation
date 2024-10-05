@@ -36,7 +36,7 @@ public partial class YardLog
 
     public string Gname { get; set; } = null!;
 
-    public string Seal { get; set; } = null!;
+    public string? Seal { get; set; }
 
     public string FromTo { get; set; } = null!;
 
@@ -44,7 +44,7 @@ public partial class YardLog
 
     public string TTPicture { get; set; } = null!;
 
-    public string? DmgEvidence { get; set; } = null!;
+    public string? DmgEvidence { get; set; }
 
     public virtual Driver? DriverNavigation { get; set; }
 
@@ -68,7 +68,6 @@ public partial class YardLog
             ..Container,
             (nameof(TTPicture), [required]),
             (nameof(Gname), [new LengthValidator(1, 100)]),
-            (nameof(Seal), [new LengthValidator(1, 64)]),
             (nameof(FromTo), [new LengthValidator(1, 100)]),
             (nameof(LoadType), [new PointerValidator(true)]),
             (nameof(Section), [new PointerValidator(true)]),
