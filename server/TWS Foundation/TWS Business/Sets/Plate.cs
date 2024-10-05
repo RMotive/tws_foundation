@@ -74,7 +74,7 @@ public partial class Plate
         RequiredValidator Required = new();
         Container = [
             ..Container,
-            (nameof(Identifier), [new LengthValidator(8, 12)]),
+            (nameof(Identifier), [new LengthValidator(5, 12)]),
             (nameof(Country), [new LengthValidator(2, 3)]),
             (nameof(Status), [new PointerValidator(true)]),
         ];

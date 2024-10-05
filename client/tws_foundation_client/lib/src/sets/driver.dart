@@ -31,7 +31,7 @@ final class Driver implements CSMSetInterface {
   int status = 1;
   int employee = 0;
   int common = 0;
-  String? driverType = "";
+  String? driverType;
   DateTime? licenseExpiration;
   DateTime? drugalcRegistrationDate;
   DateTime? pullnoticeRegistrationDate;

@@ -70,7 +70,7 @@ final class Approach implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(email.length > 30) results.add(CSMSetValidationResult(kEmail, "Email must be 30  max length", "strictLength(1, 30)"));
+    if(email.length > 64) results.add(CSMSetValidationResult(kEmail, "Email must be 64  max length", "strictLength(1, 64)"));
     if(enterprise != null){
       if(enterprise!.length < 10 || enterprise!.length > 14) results.add(CSMSetValidationResult(kEnterprise, "Enterprise number length must be between 10 and 14", "strictLength(1,4)"));
     }

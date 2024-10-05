@@ -128,6 +128,9 @@ ADD Constraint FK_Trucks_VehiculesModels foreign key(Model) references Vehicules
 ALTER TABLE Trucks
 ALTER COLUMN Motor varchar(16);
 
+ALTER TABLE Trucks
+	DROP Constraint UQ__Trucks__FF113ED47118BD0A;
+
 --> Setting to nulleable non required values
 ALTER TABLE Trailers_Externals
 ALTER COLUMN MxPlate varchar(12);
@@ -155,6 +158,10 @@ ALTER COLUMN DrugalcRegistrationDate Date;
 ALTER TABLE Drivers
 ALTER COLUMN PullnoticeRegistrationDate Date;
 
+--> Approaches
+ALTER TABLE Approaches
+	ALTER Column Email varchar(64) NOT NULL;
+
 --> Employees
 
 ALTER TABLE Employees
@@ -178,6 +185,14 @@ ALTER COLUMN Approach int;
 ALTER TABLE Employees
 ALTER COLUMN [Address] int;
 
+ALTER TABLE Employees
+	DROP Constraint UQ__Employee__C7DE920BAD9263E3;
+
+ALTER TABLE Employees
+	DROP Constraint UQ__Employee__CAFFA85E827A0F86;
+
+ALTER TABLE Employees
+	DROP Constraint UQ__Employee__F46C4CBF75078591;
 
 --> Stores the last id's inserted in tables
 DECLARE @ID1 INT, @ID2 INT, @ID3 INT, @TID1 INT, @TID2 INT, @TID3 INT;

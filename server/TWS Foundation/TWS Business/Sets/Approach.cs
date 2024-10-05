@@ -34,7 +34,7 @@ public partial class Approach
 
         Container = [
             ..Container,
-            (nameof(Email), [new RequiredValidator(), new LengthValidator(Max: 30)]),
+            (nameof(Email), [new RequiredValidator(), new LengthValidator(Max: 64)]),
             (nameof(Status), [new PointerValidator(true)]),
         ];
 
@@ -65,7 +65,7 @@ public partial class Approach
                 .IsUnicode(false);
 
             Entity.Property(e => e.Email)
-                .HasMaxLength(30)
+                .HasMaxLength(64)
                 .IsUnicode(false);
 
             Entity.HasOne(d => d.StatusNavigation)

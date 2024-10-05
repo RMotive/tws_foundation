@@ -21,7 +21,7 @@ final class Plate implements CSMSetInterface {
   int id = 0;
   int status = 1;
   String identifier = "";
-  String? state = "";
+  String? state;
   String country = "";
   DateTime? expiration;
   int? truck;
@@ -88,7 +88,7 @@ final class Plate implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(identifier.length < 8 || identifier.length > 12) results.add(CSMSetValidationResult(kIdentifier, "Identifier length must be between 8 and 12", "strictLength(8,12)"));
+    if(identifier.length < 5 || identifier.length > 12) results.add(CSMSetValidationResult(kIdentifier, "Identifier length must be between 8 and 12", "strictLength(8,12)"));
     if(state != null){
       if(state!.length < 2 || state!.length > 4) results.add(CSMSetValidationResult(kState, "State length must be between 2 and 4", "strictLength(2,4)"));
     }
