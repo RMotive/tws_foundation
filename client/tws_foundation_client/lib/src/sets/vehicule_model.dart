@@ -68,7 +68,7 @@ final class VehiculeModel implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(name.isEmpty || name.length > 32) results.add(CSMSetValidationResult(kName, "Max name length is 32 characters", "strictLength(1,32)"));
+    if(name.trim().isEmpty || name.length > 32) results.add(CSMSetValidationResult(kName, "Max name length is 32 characters", "strictLength(1,32)"));
     
     return results;
   }

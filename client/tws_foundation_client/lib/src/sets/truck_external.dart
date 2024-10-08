@@ -99,7 +99,7 @@ final class TruckExternal implements CSMSetInterface {
     }
     if(!isPlate) results.add(CSMSetValidationResult(kMxPlate, "Debe agregar alguna placa al camión externo.", "fieldConflict()"));
     if(vin != null){
-      if(vin!.length != 17 && vin!.isNotEmpty) results.add(CSMSetValidationResult(kVin, 'External Truck VIN number must be 17 length', 'strictLength(17)'));
+      if(vin!.length != 17 && vin!.trim().isNotEmpty) results.add(CSMSetValidationResult(kVin, 'External Truck VIN number must be 17 length', 'strictLength(17)'));
     }
 
     if(truckCommonNavigation != null){
