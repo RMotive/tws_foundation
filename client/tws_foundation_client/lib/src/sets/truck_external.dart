@@ -104,6 +104,8 @@ final class TruckExternal implements CSMSetInterface {
 
     if(truckCommonNavigation != null){
       results = <CSMSetValidationResult>[...results, ...truckCommonNavigation!.evaluate()];
+    }else{
+      if(common == 0) results.add(CSMSetValidationResult(kCommon, "Debe agregar el numero economico del camión. Common data not founded.", "pointerHandle()"));
     }
     return results;
   }

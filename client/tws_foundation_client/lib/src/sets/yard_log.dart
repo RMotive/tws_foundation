@@ -219,7 +219,7 @@ final class YardLog implements CSMSetInterface {
     }
 
     if(truckExternalNavigation == null && truckNavigation == null){
-      if( ((truck ?? 0) == 0) && ((truckExternal ?? 0) == 0) ) results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
+      if( ((truck ?? 0) == 0) && ((truckExternal ?? 0) == 0) ) results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camión', 'pointerHandler()'));
     }
     //Loadtype: 3 == "Botado"
     if(loadType != 3 && (trailerExternalNavigation == null && trailerNavigation == null)){

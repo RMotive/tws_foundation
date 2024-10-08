@@ -93,10 +93,13 @@ final class TrailerExternal implements CSMSetInterface {
         isPlate = true;
       }
     }
+
     if(!isPlate) results.add(CSMSetValidationResult(kMxPlate, "Debe agregar alguna placa al Remolque externo.", "fieldConflict()"));
 
     if(trailerCommonNavigation != null){
       results = <CSMSetValidationResult>[...results, ...trailerCommonNavigation!.evaluate()];
+    }else{
+      if(common == 0) results.add(CSMSetValidationResult(kCommon, "Debe agregar el numero economico del trailer. Common data not founded.", "pointerHandle()"));
     }
     return results;
   }
