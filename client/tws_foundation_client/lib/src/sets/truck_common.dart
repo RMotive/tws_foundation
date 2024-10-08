@@ -70,7 +70,7 @@ final class TruckCommon implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(economic.isEmpty || economic.length > 16) results.add(CSMSetValidationResult(kEconomic, "Economic number length must be between 1 and 16", "strictLength(1,16)"));
+    if(economic.isEmpty || economic.length > 16) results.add(CSMSetValidationResult(kEconomic, "El numero economico no debe estar vacio y debe tener un maximo de 16 caracteres", "strictLength(1,16)"));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     if(location != null){
       if(location! < 0) results.add(CSMSetValidationResult(kLocation, 'Location pointer must be equal or greater than 0', 'pointerHandler()'));

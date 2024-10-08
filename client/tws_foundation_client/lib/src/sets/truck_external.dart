@@ -79,7 +79,7 @@ final class TruckExternal implements CSMSetInterface {
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     
-    if(carrier.trim().isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
+    if(carrier.trim().isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "El nombre del transportista (Carrier) no debe estar vacio y debe tener maximo 100 caracteres", "strictLength(1, 100)"));
 
     if(mxPlate != null){
       if(mxPlate!.trim().isEmpty) results.add(CSMSetValidationResult(kMxPlate, "Elimine los espacios en blanco de las placas mexicanas en el trailer externo.", "emptyString()"));
