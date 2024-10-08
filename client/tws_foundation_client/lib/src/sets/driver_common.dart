@@ -54,7 +54,7 @@ final class DriverCommon implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(license.length < 8 || license.length > 12) results.add(CSMSetValidationResult(kLicense, "license number length must be between 8 and 12", "strictLength(8,12)"));
+    if(license.length < 8 || license.length > 12) results.add(CSMSetValidationResult(kLicense, "El numero de licencia debe tener un largo entre 8 y 12 caracteres.", "strictLength(8,12)"));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
 
     return results;

@@ -154,8 +154,8 @@ final class Driver implements CSMSetInterface {
     if(driverType != null){
       if(driverType!.trim().isEmpty || driverType!.length > 12) results.add(CSMSetValidationResult(kDriverType, 'Driver Type length must be between 1 and 12', 'strictLength(1,12)'));
     }
-    if(employee <= 0 && employeeNavigation == null) results.add(CSMSetValidationResult(kEmployee, 'Employee pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(common <= 0 && driverCommonNavigation == null) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(employee <= 0 && employeeNavigation == null) results.add(CSMSetValidationResult(kEmployee, 'Debe ingresar los datos del empleado. Employee pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(common <= 0 && driverCommonNavigation == null) results.add(CSMSetValidationResult(kCommon, 'Debe ingresar los datos comunes del conductor. Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     if(driverCommonNavigation != null) results = <CSMSetValidationResult>[...results, ...driverCommonNavigation!.evaluate()];   
     if(employeeNavigation != null) results = <CSMSetValidationResult>[...results, ...employeeNavigation!.evaluate()];   

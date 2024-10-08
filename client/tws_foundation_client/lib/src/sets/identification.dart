@@ -67,9 +67,9 @@ final class Identification implements CSMSetInterface {
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(name.trim().isEmpty || name.length > 32) results.add(CSMSetValidationResult(kName, "Name length must be between 1 and 32", "strictLength(1, 32)"));
-    if(fatherlastname.trim().isEmpty || fatherlastname.length > 32) results.add(CSMSetValidationResult(kFatherLastName, "FatherLastName length must be between 1 and 32", "strictLength(1, 32)"));
-    if(motherlastname.trim().isEmpty || motherlastname.length > 32) results.add(CSMSetValidationResult(kMotherLastName, "MotherLastName length must be between 1 and 32", "strictLength(1, 32)"));
+    if(name.trim().isEmpty || name.length > 32) results.add(CSMSetValidationResult(kName, "El nombre no debe de estar vacio y no debe tener mas de 32 caracteres", "strictLength(1, 32)"));
+    if(fatherlastname.trim().isEmpty || fatherlastname.length > 32) results.add(CSMSetValidationResult(kFatherLastName, "El apellido paterno no debe estar vacio y no debe tener mas de 32 caracteres", "strictLength(1, 32)"));
+    if(motherlastname.trim().isEmpty || motherlastname.length > 32) results.add(CSMSetValidationResult(kMotherLastName, "El apellido materno no debe estar vacio y no debe tener mas de 32 caracteres", "strictLength(1, 32)"));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
 
     return results;
