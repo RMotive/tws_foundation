@@ -27,6 +27,11 @@
         * [Carrier] -  Removed SCT navigation.
     9. Changed all nulleable [Datetime] properties decode implementation.
     10. Sets evaluation methods changed.
+    11. Alternative seal [sealAlt] property added in yardlog set.
+    12. Additional empty strings validations in the following sets:
+        * [Yardlog]
+        * [TruckExternal]
+        * [TrailerExternal]
 
 - Dependencies Upgrade: N/A
 

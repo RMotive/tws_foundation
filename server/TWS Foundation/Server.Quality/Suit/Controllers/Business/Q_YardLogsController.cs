@@ -129,6 +129,8 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Guard = 1,
             TrailerNavigation = trailer,
             Gname = "Enrique" + iterationTag,
+            Seal = "seal " + iterationTag,
+            SealAlt = "seal Alternative " + iterationTag,
             Section = 1,
             SectionNavigation = section,
             FromTo = "Cocacola florido " + iterationTag,

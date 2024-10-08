@@ -162,6 +162,7 @@ void main() {
       "Guard $randomToken", // gName
       "Los angeles $randomToken", // fromTo
       "seal $randomToken", //seal
+      "alt seal $randomToken",
       false, //damage
       "Truck picture $randomToken", //ttPicture
       null, // dmgEvidence

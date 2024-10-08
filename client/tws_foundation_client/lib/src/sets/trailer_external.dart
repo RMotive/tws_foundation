@@ -75,18 +75,20 @@ final class TrailerExternal implements CSMSetInterface {
     bool isPlate = false;
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(carrier.isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
+    if(carrier.trim().isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
 
     if(mxPlate != null){
-      if((mxPlate!.length < 5 || mxPlate!.length > 12) && mxPlate!.isNotEmpty){
-        results.add(CSMSetValidationResult(kMxPlate, "External Remolque Mexican plate length must be between 8 and 12", "strictLength(8, 12)"));
+      if(mxPlate!.trim().isEmpty) results.add(CSMSetValidationResult(kMxPlate, "Elimine los espacios en blanco de las placas mexicanas en el trailer externo.", "emptyString()"));
+      if((mxPlate!.length < 5 || mxPlate!.length > 12) && mxPlate!.trim().isNotEmpty){
+        results.add(CSMSetValidationResult(kMxPlate, "Las placas mexicanas del remolque externo deben tener una longitud de entre 5 y 12 caracteres.", "strictLength(5, 12)"));
       }else{
         isPlate = true;
       }
     }
     if(usaPlate != null){
-      if((usaPlate!.length < 5 || usaPlate!.length > 12) && usaPlate!.isNotEmpty){
-        results.add(CSMSetValidationResult(kUsaPlate, "External Remolque American plate length must be between 8 and 12", "strictLength(8, 12)"));
+      if(usaPlate!.trim().isEmpty) results.add(CSMSetValidationResult(kUsaPlate, "Elimine los espacios en blanco de las placas americanas en el trailer externo.", "emptyString()"));
+      if((usaPlate!.length < 5 || usaPlate!.length > 12) && usaPlate!.trim().isNotEmpty){
+        results.add(CSMSetValidationResult(kUsaPlate, "Las placas americanas del remolque externo deben tener una longitud de entre 5 y 12 caracteres.", "strictLength(8, 12)"));
       }else{
         isPlate = true;
       }
@@ -111,15 +113,11 @@ final class TrailerExternal implements CSMSetInterface {
   }){
     String? uPlate = usaPlate ?? this.usaPlate;
     if(usaPlate != null){
-      if(usaPlate.isEmpty){
-        uPlate = null;
-      }
+      if(usaPlate.trim().isEmpty) uPlate = null;
     }
     String? mPlate = mxPlate ?? this.mxPlate;
     if(mxPlate != null){
-      if(mxPlate.isEmpty){
-        mPlate = null;
-      }
+      if(mxPlate.trim().isEmpty) mPlate = null;
     }
     return TrailerExternal(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, 
     mPlate, uPlate, trailerCommonNavigation ?? this.trailerCommonNavigation, statusNavigation ?? this.statusNavigation);

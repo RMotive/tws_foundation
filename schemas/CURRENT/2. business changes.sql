@@ -166,6 +166,9 @@ ALTER TABLE Approaches
 ALTER TABLE Yard_Logs
 	ALTER Column Seal varchar(64);
 
+ALTER TABLE Yard_Logs
+	ADD SealAlt varchar(64);
+
 --> Employees
 
 ALTER TABLE Employees

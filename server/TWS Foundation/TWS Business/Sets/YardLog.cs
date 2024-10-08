@@ -38,6 +38,8 @@ public partial class YardLog
 
     public string? Seal { get; set; }
 
+    public string? SealAlt { get; set; }
+
     public string FromTo { get; set; } = null!;
 
     public bool Damage { get; set; }
@@ -92,6 +94,10 @@ public partial class YardLog
                 .IsUnicode(false);
 
             entity.Property(e => e.Seal)
+                .HasMaxLength(64)
+                .IsUnicode(false);
+
+            entity.Property(e => e.SealAlt)
                 .HasMaxLength(64)
                 .IsUnicode(false);
 

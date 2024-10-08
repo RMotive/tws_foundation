@@ -94,6 +94,7 @@ public class YardLogsService
                 Guard = y.Guard,
                 Gname = y.Gname,
                 Seal = y.Seal,
+                SealAlt = y.SealAlt,
                 Section = y.Section,
                 FromTo = y.FromTo,
                 Damage = y.Damage,

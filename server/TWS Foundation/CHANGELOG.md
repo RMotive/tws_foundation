@@ -28,6 +28,7 @@
         * [Trailer] - Added Vehicule Model navigation and carrier navigation. 
         * [Truck] - Added Vehicule Model navigation & SCT navigation.
         * [Carrier] -  Removed SCT navigation.
+    13. Alternative seal [sealAlt] added on yardlog set. 
 
 - Dependencies Upgrade: N/A
 
