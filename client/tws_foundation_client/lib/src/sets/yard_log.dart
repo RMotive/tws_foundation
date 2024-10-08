@@ -177,7 +177,7 @@ final class YardLog implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(ttPicture.isEmpty ) results.add(CSMSetValidationResult(kTtPicture, "Debe tomar una foto del camión con el remolque.", "strictLength(1, max)"));
     if(gName.trim().isEmpty || gName.length > 100) results.add(CSMSetValidationResult(kName, "El nombre del guardia no debe exeder los 100 caracteres y no debe estar vacio.", "strictLength(1,100)"));
-    if(fromTo.trim().isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "Debe indicar de donde viene (o a donde va el camión). Maximo 25 caracteres.", "strictLength(1,25)"));
+    if(fromTo.trim().isEmpty || fromTo.length > 100) results.add(CSMSetValidationResult(kFromTo, "Debe indicar de donde viene (o a donde va el camión). Maximo 100 caracteres.", "strictLength(1,100)"));
     if(seal != null){
       if(trailerNavigation == null && trailerExternalNavigation == null) results.add(CSMSetValidationResult(kSeal, "Se ingreso un sello pero no un relmolque, seleccione alguno.", "FieldConflict()"));
       if(seal!.trim().isEmpty || seal!.length > 64) results.add(CSMSetValidationResult(kSeal, "El campo del sello no contiene un texto valido. Maximo 64 caracteres.", "strictLength(1,64)"));
