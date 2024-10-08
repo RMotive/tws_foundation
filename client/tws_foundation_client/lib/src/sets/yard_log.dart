@@ -187,18 +187,40 @@ final class YardLog implements CSMSetInterface {
     }
     if(seal == null && (trailerNavigation != null || trailerExternalNavigation != null)) results.add(CSMSetValidationResult(kSeal, "Debe agregar el campo de sello. De lo contrario seleccione el tipo de carga Botado.", "FieldConflict()"));
     
-    if(section < 0) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar la seccion.', 'pointerHandler()'));
-    if(loadType < 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
+    if(section <= 0 && sectionNavigation == null) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar una seccion.', 'pointerHandler()'));
+    if(loadType <= 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
+    
+    if(trailer != null){
+      if(trailer! < 0) results.add(CSMSetValidationResult(kTrailer , 'Trailer pointer must be equal or greather than 0', 'pointerHandler()')); 
+    }
+    
+    if(trailerExternal != null){
+      if(trailerExternal! < 0) results.add(CSMSetValidationResult(kTrailerExternal , 'External trailer pointer must be equal or greather than 0', 'pointerHandler()')); 
+    }
 
-    if(driverExternalNavigation == null && driverNavigation == null && driver == 0){
-      results.add(CSMSetValidationResult(kDriver, 'Debe seleccionar un conductor', 'pointerHandler()'));
+    if(truck != null){
+      if(truck! < 0) results.add(CSMSetValidationResult(kTruck , 'Truck pointer must be equal or greather than 0', 'pointerHandler()'));
+    }
+
+    if(truckExternal != null){
+      if(truckExternal! < 0) results.add(CSMSetValidationResult(kTruckExternal, 'External Truck pointer must be equal or greather than 0', 'pointerHandler()'));
+    }
+
+    if(driverExternal != null){
+      if(driverExternal! < 0) results.add(CSMSetValidationResult(kDriverExternal, 'DriverExternal pointer must be equal or greather than 0', 'pointerHandler()'));
+    }
+
+    if(driver != null){
+      if(driver! < 0) results.add(CSMSetValidationResult(kDriver, 'Driver pointer must be equal or greather than 0', 'pointerHandler()'));
+    }
+
+    if(driverExternalNavigation == null && driverNavigation == null){
+      if( ((driver ?? 0) == 0) && ((driverExternal ?? 0) == 0) ) results.add(CSMSetValidationResult(kDriver, 'Debe seleccionar un conductor', 'pointerHandler()'));
     }
 
     if(truckExternalNavigation == null && truckNavigation == null){
-      results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
+      if( ((truck ?? 0) == 0) && ((truckExternal ?? 0) == 0) ) results.add(CSMSetValidationResult(kTruck, 'Debe seleccionar un camion', 'pointerHandler()'));
     }
-
-
     //Loadtype: 3 == "Botado"
     if(loadType != 3 && (trailerExternalNavigation == null && trailerNavigation == null)){
       results.add(CSMSetValidationResult(kLoadType, 'Debe agregar los datos del remolque, de lo contrario seleccione el tipo de carga como Botado', 'FieldConflic()'));
@@ -207,8 +229,6 @@ final class YardLog implements CSMSetInterface {
     if(loadType == 3 && (trailerExternalNavigation != null || trailerNavigation != null)){
       results.add(CSMSetValidationResult(kLoadType, 'Si el tipo de carga es Botado, no puede seleccionar datos del remolque', 'FieldConflic()'));
     }
-
-    if(loadType <= 0) results.add(CSMSetValidationResult(kLoadType, 'Seleccione el tipo de carga.', 'pointerHandler()'));
 
     if(damage && dmgEvidence == null){
       results.add(CSMSetValidationResult(kDamage, 'Si selecciono la carga como dañada, debe tomar una foto del daño.', 'FieldConflic()'));
