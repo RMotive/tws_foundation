@@ -10,7 +10,7 @@ final class Account implements CSMSetInterface {
   static const String kContact = 'contact';
 
   /// [contactNavigation] property key.
-  static const String kContactNavigation = 'contactNavigation';
+  static const String kContactNavigation = 'ContactNavigation';
 
   /// Private timestamp property.
   late final DateTime _timestamp;
