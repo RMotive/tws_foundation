@@ -17,8 +17,8 @@ final class Driver implements CSMSetInterface {
   static const String kFastExpiration = "fastExpiration";
   static const String kAnam = "anam";
   static const String kAnamExpiration = "anamExpiration";
-  static const String kDriverCommonNavigation = "driverCommonNavigation";
-  static const String kEmployeeNavigation = "employeeNavigation";
+  static const String kDriverCommonNavigation = "DriverCommonNavigation";
+  static const String kEmployeeNavigation = "EmployeeNavigation";
   static const String kstatusNavigation = 'StatusNavigation';
 
   late final DateTime _timestamp;

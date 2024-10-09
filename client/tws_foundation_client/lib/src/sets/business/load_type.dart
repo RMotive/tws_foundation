@@ -2,7 +2,6 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class LoadType implements CSMSetInterface {
-  static const String kstatusNavigation = 'StatusNavigation';
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 

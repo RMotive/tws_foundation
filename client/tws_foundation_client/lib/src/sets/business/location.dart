@@ -3,7 +3,6 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Location implements CSMSetInterface {
   static const String kAddress = "address";
-  static const String kstatusNavigation = 'StatusNavigation';
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
@@ -31,8 +30,8 @@ final class Location implements CSMSetInterface {
     DateTime timestamp = json.get(SCK.kTimestamp);
 
     Status? statusNavigation;
-    if (json[kstatusNavigation] != null) {
-      JObject rawNavigation = json.getDefault(kstatusNavigation, <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
 
@@ -47,7 +46,7 @@ final class Location implements CSMSetInterface {
       SCK.kStatus: status,
       kAddress: address,
       SCK.kTimestamp: timestamp.toIso8601String(),
-      kstatusNavigation: statusNavigation?.encode(),
+      SCK.kStatusNavigation: statusNavigation?.encode(),
     };
   }
 

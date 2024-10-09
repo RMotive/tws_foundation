@@ -6,15 +6,13 @@ final class Employee implements CSMSetInterface {
   static const String kAddress = "address";
   static const String kApproach = "approach";
   static const String kCurp = "curp";
-  static const String kTimestamp = "timestamp";
   static const String kAntecedentesNoPenalesExp = "antecedentesNoPenalesExp";
   static const String kRfc = "rfc";
   static const String kNss = "nss";
   static const String kImssRegistrationDate = "imssRegistrationDate";
   static const String kHiringdate = "hiringDate";
   static const String kTerminationDate = "terminationDate";
-  static const String kIdentificationNavigation = 'identificationNavigation';
-  static const String kstatusNavigation = 'StatusNavigation';
+  static const String kIdentificationNavigation = 'IdentificationNavigation';
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
@@ -72,8 +70,8 @@ final class Employee implements CSMSetInterface {
     }
 
     Status? statusNavigation;
-    if (json[kstatusNavigation] != null) {
-      JObject rawNavigation = json.getDefault(kstatusNavigation, <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
         
@@ -100,9 +98,9 @@ final class Employee implements CSMSetInterface {
       kImssRegistrationDate: b,
       kHiringdate: c,
       kTerminationDate: d,
-      kTimestamp: timestamp.toIso8601String(),
+      SCK.kTimestamp: timestamp.toIso8601String(),
       kIdentificationNavigation: identificationNavigation?.encode(),
-      kstatusNavigation: statusNavigation?.encode(),
+      SCK.kStatusNavigation: statusNavigation?.encode(),
     };
   }
   

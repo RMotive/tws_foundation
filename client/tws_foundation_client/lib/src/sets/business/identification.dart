@@ -2,17 +2,14 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Identification implements CSMSetInterface {
-  static const String kStatus = "status";
-  static const String kName = "name";
   static const String kFatherLastName = "fatherlastname";
   static const String kMotherLastName = "motherlastname";
   static const String kBirthday = "birthday";
-  static const String kTimestamp = "timestamp";
-  static const String kstatusNavigation = 'StatusNavigation';
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
 
+  Identification.a();
 
   @override
   int id = 0;
@@ -31,18 +28,18 @@ final class Identification implements CSMSetInterface {
 
   factory Identification.des(JObject json) {
     int id = json.get(SCK.kId);
-    int status = json.get(kStatus);
-    String name = json.get('name');
-    String fatherlastname = json.get('fatherlastname');
-    String motherlastname = json.get('motherlastname');
-    DateTime timestamp = json.get('timestamp');
+    int status = json.get(SCK.kStatus);
+    String name = json.get(SCK.kName);
+    String fatherlastname = json.get(kFatherLastName);
+    String motherlastname = json.get(kMotherLastName);
+    DateTime timestamp = json.get(SCK.kTimestamp);
 
-    String? birth = json.getDefault('birthday', null);
+    String? birth = json.getDefault(kBirthday, null);
     DateTime? birthday = birth != null? DateTime.parse(birth) : null;
 
     Status? statusNavigation;
-    if (json[kstatusNavigation] != null) {
-      JObject rawNavigation = json.getDefault(kstatusNavigation, <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
         
@@ -53,28 +50,27 @@ final class Identification implements CSMSetInterface {
   JObject encode() {
     String? a = birthday?.toString().substring(0,10);
     return <String, dynamic>{
-      'id': id,
-      kStatus: status,
-      kName: name,
+      SCK.kId: id,
+      SCK.kStatus: status,
+      SCK.kName: name,
       kFatherLastName: fatherlastname,
       kMotherLastName: motherlastname,
-      kTimestamp: timestamp.toIso8601String(),
+      SCK.kTimestamp: timestamp.toIso8601String(),
       kBirthday: a,
-      kstatusNavigation: statusNavigation?.encode(),
+      SCK.kStatusNavigation: statusNavigation?.encode(),
     };
   }
   
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if(name.trim().isEmpty || name.length > 32) results.add(CSMSetValidationResult(kName, "El nombre no debe de estar vacio y no debe tener mas de 32 caracteres", "strictLength(1, 32)"));
+    if(name.trim().isEmpty || name.length > 32) results.add(CSMSetValidationResult(SCK.kName, "El nombre no debe de estar vacio y no debe tener mas de 32 caracteres", "strictLength(1, 32)"));
     if(fatherlastname.trim().isEmpty || fatherlastname.length > 32) results.add(CSMSetValidationResult(kFatherLastName, "El apellido paterno no debe estar vacio y no debe tener mas de 32 caracteres", "strictLength(1, 32)"));
     if(motherlastname.trim().isEmpty || motherlastname.length > 32) results.add(CSMSetValidationResult(kMotherLastName, "El apellido materno no debe estar vacio y no debe tener mas de 32 caracteres", "strictLength(1, 32)"));
-    if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
 
     return results;
   }
-  Identification.def();
   Identification clone({
     int? id,
     int? status,
