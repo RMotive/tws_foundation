@@ -244,7 +244,7 @@ void main() {
   test(
     'Create',
     () async {
-      MainResolver<MigrationTransactionResult<YardLog>> fact = await service.create(mocks, auth);
+      MainResolver<SetBatchOut<YardLog>> fact = await service.create(mocks, auth);
 
       bool resolved = false;
       fact.resolve(
@@ -252,7 +252,7 @@ void main() {
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
-        onSuccess: (SuccessFrame<MigrationTransactionResult<YardLog>> success) {
+        onSuccess: (SuccessFrame<SetBatchOut<YardLog>> success) {
           resolved = true;
         },
       );
@@ -273,8 +273,8 @@ void main() {
           String randomToken = '_quali$rnd';
           YardLog mock = buildMock(randomToken);
 
-          MainResolver<MigrationUpdateResult<YardLog>> fact = await service.update(mock, auth);
-          MigrationUpdateResult<YardLog> actEffect = await fact.act(decoder);
+          MainResolver<RecordUpdateOut<YardLog>> fact = await service.update(mock, auth);
+          RecordUpdateOut<YardLog> actEffect = await fact.act(decoder);
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 

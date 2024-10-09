@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 abstract class YardLogServiceBase extends CSMServiceBase {
@@ -14,9 +14,9 @@ abstract class YardLogServiceBase extends CSMServiceBase {
 
   Effect<SetViewOut<YardLog>> viewInventory(SetViewOptions<YardLog> options, String auth);
 
-  Effect<MigrationTransactionResult<YardLog>> create(List<YardLog> yardlogs, String auth);
+  Effect<SetBatchOut<YardLog>> create(List<YardLog> yardlogs, String auth);
 
-  Effect<MigrationUpdateResult<YardLog>> update(YardLog yardlog, String auth);
+  Effect<RecordUpdateOut<YardLog>> update(YardLog yardlog, String auth);
 
 
 }

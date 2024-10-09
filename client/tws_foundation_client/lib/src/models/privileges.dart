@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Defines a privileges model, that stores different session descriptive data, like auth token,
@@ -28,7 +28,7 @@ final class Privileges implements CSMEncodeInterface {
     DateTime expiration = json.get('expiration');
     String identity = json.get('identity');
     bool wildcard = json.getDefault('wildcard', false);
-    Contact contact = deserealize(json.getDefault('contact', <String, dynamic>{}), decode: ContactDecoder());
+    Contact contact = Contact.des(json.getDefault('contact', <String, dynamic>{}));
 
     return Privileges(token, expiration, identity, wildcard, contact);
   }
@@ -42,12 +42,5 @@ final class Privileges implements CSMEncodeInterface {
       'wildcard': wildcard,
       'contact': contact.encode()
     };
-  }
-}
-
-final class PrivilegesDecode implements CSMDecodeInterface<Privileges> {
-  @override
-  Privileges decode(JObject json) {
-    return Privileges.des(json);
   }
 }

@@ -8,9 +8,9 @@ environment:
 
 dependencies:
 
-  csm_foundation_services:
+  csm_client:
     git:
-      url: https://github.com/RMotive/csm_foundation_services
+      url: https://github.com/RMotive/csm_client
       ref: main
 
   dotenv: ^4.2.0

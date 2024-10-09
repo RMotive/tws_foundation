@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/models/interfaces/set_view_filter_interface.dart';
 
 ///

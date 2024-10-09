@@ -223,7 +223,7 @@ void main() {
   test(
     'Create',
     () async {
-      MainResolver<MigrationTransactionResult<Truck>> fact = await service.create(mocks, auth);
+      MainResolver<SetBatchOut<Truck>> fact = await service.create(mocks, auth);
 
       bool resolved = false;
       fact.resolve(
@@ -231,7 +231,7 @@ void main() {
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
-        onSuccess: (SuccessFrame<MigrationTransactionResult<Truck>> success) {
+        onSuccess: (SuccessFrame<SetBatchOut<Truck>> success) {
           resolved = true;
         },
       );

@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class TrucksService extends TrucksServiceBase {
@@ -18,9 +18,9 @@ final class TrucksService extends TrucksServiceBase {
   }
   
   @override
-  Effect<MigrationTransactionResult<Truck>> create(List<Truck> trucks, String auth) async {
+  Effect<SetBatchOut<Truck>> create(List<Truck> trucks, String auth) async {
     CSMActEffect actEffect = await postList('create', trucks, auth: auth);
-    return MainResolver<MigrationTransactionResult<Truck>>(actEffect);
+    return MainResolver<SetBatchOut<Truck>>(actEffect);
   }
 
   @override

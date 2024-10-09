@@ -84,7 +84,7 @@ void main() {
   test(
     'Create',
     () async {
-      MainResolver<MigrationTransactionResult<Solution>> fact = await service.create(mocks, auth);
+      MainResolver<SetBatchOut<Solution>> fact = await service.create(mocks, auth);
 
       bool resolved = false;
       fact.resolve(
@@ -92,7 +92,7 @@ void main() {
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
-        onSuccess: (SuccessFrame<MigrationTransactionResult<Solution>> success) {
+        onSuccess: (SuccessFrame<SetBatchOut<Solution>> success) {
           resolved = true;
         },
       );
@@ -112,8 +112,8 @@ void main() {
           int rnd = Random().nextInt(900)  + 99;
           Solution mock = Solution.b('QualityT$rnd', 'QT$rnd');
 
-          MainResolver<MigrationUpdateResult<Solution>> fact = await service.update(mock, auth);
-          MigrationUpdateResult<Solution> actEffect = await fact.act(decoder);
+          MainResolver<RecordUpdateOut<Solution>> fact = await service.update(mock, auth);
+          RecordUpdateOut<Solution> actEffect = await fact.act(decoder);
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 
@@ -126,8 +126,8 @@ void main() {
         () async {
           int rnd = Random().nextInt(900)  + 99;
           Solution mock = creationMock.clone(name: 'a new name to test: $rnd');
-          MainResolver<MigrationUpdateResult<Solution>> fact = await service.update(mock, auth);
-          MigrationUpdateResult<Solution> actEffect = await fact.act(decoder);
+          MainResolver<RecordUpdateOut<Solution>> fact = await service.update(mock, auth);
+          RecordUpdateOut<Solution> actEffect = await fact.act(decoder);
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
         },

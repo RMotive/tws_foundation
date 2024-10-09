@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 abstract class TrucksServiceBase extends CSMServiceBase {
@@ -11,7 +11,7 @@ abstract class TrucksServiceBase extends CSMServiceBase {
   /// Transaction to generate a set view object.
   Effect<SetViewOut<Truck>> view(SetViewOptions<Truck> options, String auth);
 
-  Effect<MigrationTransactionResult<Truck>> create(List<Truck> trucks, String auth);
+  Effect<SetBatchOut<Truck>> create(List<Truck> trucks, String auth);
 
   Effect<MigrationUpdateResult<Truck>> update(Truck truck, String auth);
 

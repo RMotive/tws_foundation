@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -43,7 +43,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<DriverExternal>(DriverExternalDecoder()),
+        decoder: (JObject json) => SetViewOut<DriverExternal>.des(json, DriverExternal.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
