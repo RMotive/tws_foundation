@@ -13,4 +13,10 @@ final class SetCommonKeys {
 
   /// [description] property key.
   static const String kDescription = 'description';
+
+  /// [status] property key.
+  static const String kStatus = 'status';
+
+  /// [statusNavigation] property key.
+  static const String kStatusNavigation = 'StatusNavigation';
 }

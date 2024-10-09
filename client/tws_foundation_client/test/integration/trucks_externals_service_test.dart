@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -39,7 +40,7 @@ void main() {
       final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -73,7 +74,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: SetViewOutDecode<TruckExternal>(TruckExternalDecoder()),
+        decoder: (JObject json) => SetViewOut<TruckExternal>.des(json,TruckExternal.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -98,15 +99,15 @@ void main() {
   test(
     'Create',
     () async {
-      MainResolver<MigrationTransactionResult<TruckExternal>> fact = await service.create(mocks, auth);
+      MainResolver<SetBatchOut<TruckExternal>> fact = await service.create(mocks, auth);
 
       bool resolved = false;
       fact.resolve(
-        decoder: MigrationTransactionResultDecoder<TruckExternal>(TruckExternalDecoder()),
+        decoder:(JObject json) => SetBatchOut<TruckExternal>.des(json,TruckExternal.des),
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
-        onSuccess: (SuccessFrame<MigrationTransactionResult<TruckExternal>> success) {
+        onSuccess: (SuccessFrame<SetBatchOut<TruckExternal>> success) {
           resolved = true;
         },
       );
@@ -118,7 +119,6 @@ void main() {
   group(
     'Update',
     () {
-      final MigrationUpdateResultDecoder<TruckExternal> decoder = MigrationUpdateResultDecoder<TruckExternal>(TruckExternalDecoder());
       late TruckExternal creationMock;
       test(
         'Creates when unexist',
@@ -126,8 +126,8 @@ void main() {
           int rnd = Random().nextInt(900)  + 99;
           TruckExternal mock = buildExternalTruck("U_qual$rnd");
 
-          MainResolver<MigrationUpdateResult<TruckExternal>> fact = await service.update(mock, auth);
-          MigrationUpdateResult<TruckExternal> actEffect = await fact.act(decoder);
+          MainResolver<RecordUpdateOut<TruckExternal>> fact = await service.update(mock, auth);
+          RecordUpdateOut<TruckExternal> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<TruckExternal>.des(json ,TruckExternal.des));
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 
@@ -141,8 +141,8 @@ void main() {
           int rnd = Random().nextInt(900)  + 99;
           TruckExternal mock = creationMock.clone(vin: "UPDATEDVIN_T: $rnd");
           mock.truckCommonNavigation!.economic = "UPDTECONOMIC:$rnd";
-          MainResolver<MigrationUpdateResult<TruckExternal>> fact = await service.update(mock, auth);
-          MigrationUpdateResult<TruckExternal> actEffect = await fact.act(decoder);
+          MainResolver<RecordUpdateOut<TruckExternal>> fact = await service.update(mock, auth);
+          RecordUpdateOut<TruckExternal> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<TruckExternal>.des(json ,TruckExternal.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.vin != null);

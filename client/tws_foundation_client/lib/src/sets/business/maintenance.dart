@@ -4,9 +4,6 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 final class Maintenance implements CSMSetInterface {
   static const String kAnual = "anual";
   static const String kTrimestral = "trimestral";
-  static const String kStatus = "status";
-  static const String kTimestamp = "timestamp";
-  static const String kstatusNavigation = "StatusNavigation";
   static const String kTrucks = "trucks";
   
   late final DateTime _timestamp;
@@ -29,14 +26,14 @@ final class Maintenance implements CSMSetInterface {
   factory Maintenance.des(JObject json) {
     List<Truck> trucks = <Truck>[];
 
-    int id = json.get('id');
-    int status = json.get('status');
-    DateTime anual = json.get('anual');
-    DateTime trimestral = json.get('trimestral');
-    DateTime timestamp = json.get('timestamp');
+    int id = json.get(SCK.kId);
+    int status = json.get(SCK.kStatus);
+    DateTime anual = json.get(kAnual);
+    DateTime trimestral = json.get(kTrimestral);
+    DateTime timestamp = json.get(SCK.kTimestamp);
     Status? statusNavigation;
-    if (json[kstatusNavigation] != null) {
-      JObject rawNavigation = json.getDefault(kstatusNavigation, <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
     List<JObject> rawTrucksArray = json.getList('Trucks');
@@ -49,12 +46,12 @@ final class Maintenance implements CSMSetInterface {
     String a = anual.toString().substring(0,10);
     String t = trimestral.toString().substring(0,10);
     return <String, dynamic>{
-      'id': id,
-      kStatus: status,
+      SCK.kId: id,
+      SCK.kStatus: status,
       kAnual: a,
       kTrimestral:t,
-      kTimestamp: timestamp.toIso8601String(),
-      kstatusNavigation: statusNavigation,
+      SCK.kTimestamp: timestamp.toIso8601String(),
+      SCK.kStatusNavigation: statusNavigation,
       kTrucks: trucks.map((Truck i) => i.encode()).toList(),
     };
   }  

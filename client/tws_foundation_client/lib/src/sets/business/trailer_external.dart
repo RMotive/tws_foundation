@@ -2,13 +2,10 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class TrailerExternal implements CSMSetInterface {
-  static const String kStatus = "status";
   static const String kCommon = "common";
   static const String kCarrier = "carrier";
   static const String kMxPlate = "mxPlate";
   static const String kUsaPlate = "usaPlate";
-  static const String kTimestamp = "timestamp";
-  static const String kstatusNavigation = 'StatusNavigation';
   static const String kTrailerCommonNavigation = 'TrailerCommonNavigation';
 
   late final DateTime _timestamp;
@@ -31,23 +28,23 @@ final class TrailerExternal implements CSMSetInterface {
   }
 
   factory TrailerExternal.des(JObject json) {
-    int id = json.get('id');
-    int status = json.get('status');
-    int common = json.get('common');
-    String carrier = json.get('carrier');
-    String? mxPlate = json.getDefault('mxPlate', null);
-    DateTime timestamp = json.get('timestamp');
-    String? usaPlate = json.getDefault('usaPlate', null);
+    int id = json.get(SCK.kId);
+    int status = json.get(SCK.kStatus);
+    int common = json.get(kCommon);
+    String carrier = json.get(kCarrier);
+    String? mxPlate = json.getDefault(kMxPlate, null);
+    DateTime timestamp = json.get(SCK.kTimestamp);
+    String? usaPlate = json.getDefault(kUsaPlate, null);
     TrailerCommon? trailerCommonNavigation;
 
-    if (json['TrailerCommonNavigation'] != null) {
-      JObject rawNavigation = json.getDefault('TrailerCommonNavigation', <String, dynamic>{});
+    if (json[kTrailerCommonNavigation] != null) {
+      JObject rawNavigation = json.getDefault(kTrailerCommonNavigation, <String, dynamic>{});
       trailerCommonNavigation = TrailerCommon.des(rawNavigation);
     }
 
     Status? statusNavigation;
-    if (json['StatusNavigation'] != null) {
-      JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
         
@@ -57,15 +54,15 @@ final class TrailerExternal implements CSMSetInterface {
   @override
   JObject encode() {
     return <String, dynamic>{
-      'id': id,
-      kStatus: status,
+      SCK.kId: id,
+      SCK.kStatus: status,
       kCommon: common,
       kCarrier:carrier,
       kMxPlate: mxPlate,
       kUsaPlate: usaPlate,
-      kTimestamp: timestamp.toIso8601String(),
+      SCK.kTimestamp: timestamp.toIso8601String(),
       kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
-      kstatusNavigation: statusNavigation?.encode(),
+      SCK.kStatusNavigation: statusNavigation?.encode(),
     };
   }
   
@@ -74,7 +71,7 @@ final class TrailerExternal implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     bool isPlate = false;
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     if(carrier.trim().isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "Carrier length must be between 1 and 100", "strictLength(1, 100)"));
 
     if(mxPlate != null){

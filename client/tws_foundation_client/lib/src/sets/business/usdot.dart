@@ -1,56 +1,48 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/sets/set_common_keys.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// Government Mexico permit for lofistic activities information, handling information related to a government permit and identification.
+/// Government Mexico permit for logistic activities information, handling information related to a government permit and identification.
 final class USDOT implements CSMSetInterface {
-  /// [status] property key.
-  static const String kStatus = "status";
-
+ 
   /// [mc] property key.
   static const String kMc = "mc";
 
   /// [scac] property key.
   static const String kScac = "number";
-
-  /// [statusNavigation] property key.
-  static const String kstatusNavigation = 'StatusNavigation';
-
-  /// Record database pointer.
-  @override
-  int id = 0;
-
-  /// Foreign relation [Status] pointer.
-  int status = 1;
-
-  /// Identification number for permit.
-  String mc = "";
-
-  /// Alternative identification number for permit.
-  String scac = "";
-
-  /// Foreign relation [Status] object.
-  Status? statusNavigation;
-
-  /// Create an [USDOT] object with required properties.
-  USDOT(this.id, this.status, this.mc, this.scac, this.statusNavigation);
+  
+  /// Private timestamp property.
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
   /// Creates an [USDOT] object with default properties.
   USDOT.a();
 
-  /// Creates an [USDOT] object based on a given [json] object.
+  @override
+  int id = 0;
+  int status = 1;
+  String mc = "";
+  String scac = "";
+  Status? statusNavigation;
+
+  USDOT(this.id, this.status, this.mc, this.scac, this.statusNavigation, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+
   factory USDOT.des(JObject json) {
     int id = json.get(SCK.kId);
-    int status = json.get(kStatus);
+    int status = json.get(SCK.kStatus);
     String mc = json.get(kMc);
     String scac = json.get(kScac);
+    DateTime timestamp = json.get(SCK.kTimestamp);
     Status? statusNavigation;
-    if (json[kstatusNavigation] != null) {
-      JObject rawNavigation = json.getDefault(kstatusNavigation, <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
-
-    return USDOT(id, status, mc, scac, statusNavigation);
+        
+    return USDOT(id, status, mc, scac, statusNavigation, timestamp: timestamp);
   }
 
   /// Creates an [USDOT] object overriding the given properties.
@@ -60,13 +52,13 @@ final class USDOT implements CSMSetInterface {
     String? mc,
     String? scac,
     Status? statusNavigation,
-  }) {
+  }){
     return USDOT(
-      id ?? this.id,
+      id ?? this.id, 
       status ?? this.status,
-      mc ?? this.mc,
-      scac ?? this.scac,
-      statusNavigation ?? this.statusNavigation,
+      mc ?? this.mc, 
+      scac ?? this.scac, 
+      statusNavigation ?? this.statusNavigation
     );
   }
 
@@ -74,19 +66,22 @@ final class USDOT implements CSMSetInterface {
   JObject encode() {
     return <String, dynamic>{
       SCK.kId: id,
-      kStatus: status,
+      SCK.kStatus: status,
       kMc: mc,
       kScac: scac,
-      kstatusNavigation: statusNavigation?.encode(),
+      SCK.kTimestamp: timestamp.toIso8601String(),
+      SCK.kStatusNavigation: statusNavigation?.encode(),
     };
   }
-
+  
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if (mc.length != 7) results.add(CSMSetValidationResult(kMc, "MC number must be 7 length", "strictLength(7)"));
-    if (scac.length != 4) results.add(CSMSetValidationResult(kScac, "SCAC number must be 4 length", "structLength(4)"));
-
+    if(mc.length != 7) results.add(CSMSetValidationResult(kMc, "MC number must be 7 length", "strictLength(7)"));
+    if(scac.length != 4) results.add(CSMSetValidationResult(kScac, "SCAC number must be 4 length", "structLength(4)"));
+    
     return results;
   }
+  
 }
+

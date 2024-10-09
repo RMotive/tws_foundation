@@ -2,14 +2,11 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class TruckExternal implements CSMSetInterface {
-  static const String kStatus = "status";
   static const String kCommon = "common";
   static const String kVin = "vin";
   static const String kCarrier = "carrier";
   static const String kMxPlate = "mxPlate";
   static const String kUsaPlate = "usaPlate";
-  static const String kTimestamp = "timestamp";
-  static const String kstatusNavigation = 'StatusNavigation';
   static const String kTruckCommonNavigation = 'TruckCommonNavigation';
 
   late final DateTime _timestamp;
@@ -33,23 +30,23 @@ final class TruckExternal implements CSMSetInterface {
   }
 
   factory TruckExternal.des(JObject json) {
-    int id = json.get('id');
-    int status = json.get('status');
-    int common = json.get('common');
-    String? vin = json.getDefault("vin", null);
-    String carrier = json.get('carrier');
-    String mxPlate = json.get('mxPlate');
-    DateTime timestamp = json.get('timestamp');
-    String? usaPlate = json.getDefault('usaPlate', null);
+    int id = json.get(SCK.kId);
+    int status = json.get(SCK.kStatus);
+    int common = json.get(kCommon);
+    String? vin = json.getDefault(kVin, null);
+    String carrier = json.get(kCarrier);
+    String mxPlate = json.get(kMxPlate);
+    DateTime timestamp = json.get(SCK.kTimestamp);
+    String? usaPlate = json.getDefault(kUsaPlate, null);
     TruckCommon? truckCommonNavigation;
-    if (json['TruckCommonNavigation'] != null) {
-      JObject rawNavigation = json.getDefault('TruckCommonNavigation', <String, dynamic>{});
+    if (json[kTruckCommonNavigation] != null) {
+      JObject rawNavigation = json.getDefault(kTruckCommonNavigation, <String, dynamic>{});
       truckCommonNavigation = TruckCommon.des(rawNavigation);
     }
 
     Status? statusNavigation;
-    if (json['StatusNavigation'] != null) {
-      JObject rawNavigation = json.getDefault('StatusNavigation', <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
         
@@ -59,16 +56,16 @@ final class TruckExternal implements CSMSetInterface {
   @override
   JObject encode() {
     return <String, dynamic>{
-      'id': id,
-      kStatus: status,
+      SCK.kId: id,
+      SCK.kStatus: status,
       kCommon: common,
       kVin: vin,
       kCarrier: carrier,
       kMxPlate: mxPlate,
       kUsaPlate: usaPlate,
-      kTimestamp: timestamp.toIso8601String(),
+      SCK.kTimestamp: timestamp.toIso8601String(),
       kTruckCommonNavigation: truckCommonNavigation?.encode(),
-      kstatusNavigation: statusNavigation?.encode(),
+      SCK.kStatusNavigation: statusNavigation?.encode(),
     };
   }
 
@@ -77,7 +74,7 @@ final class TruckExternal implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     bool isPlate = false;
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(status < 0) results.add(CSMSetValidationResult(kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
     
     if(carrier.trim().isEmpty || carrier.length > 100) results.add(CSMSetValidationResult(kCarrier, "El nombre del transportista (Carrier) no debe estar vacio y debe tener maximo 100 caracteres", "strictLength(1, 100)"));
 

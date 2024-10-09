@@ -12,8 +12,8 @@ abstract class TrucksExternalsServiceBase extends CSMServiceBase {
   /// Transaction to generate a set view object.
   Effect<SetViewOut<TruckExternal>> view(SetViewOptions<TruckExternal> options, String auth);
 
-  Effect<MigrationTransactionResult<TruckExternal>> create(List<TruckExternal> trucks, String auth);
+  Effect<SetBatchOut<TruckExternal>> create(List<TruckExternal> trucks, String auth);
 
-  Effect<MigrationUpdateResult<TruckExternal>> update(TruckExternal truck, String auth);
+  Effect<RecordUpdateOut<TruckExternal>> update(TruckExternal truck, String auth);
 
 }

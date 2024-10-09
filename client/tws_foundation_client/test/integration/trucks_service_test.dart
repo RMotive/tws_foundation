@@ -2,7 +2,7 @@
 
 import 'dart:math';
 
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -161,7 +161,7 @@ void main() {
       final TWSFoundationSource source = TWSFoundationSource(true);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -197,7 +197,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: SetViewOutDecode<Truck>(TruckDecoder()),
+        decoder: (JObject json) => SetViewOut<Truck>.des(json,Truck.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -227,7 +227,7 @@ void main() {
 
       bool resolved = false;
       fact.resolve(
-        decoder: MigrationTransactionResultDecoder<Truck>(TruckDecoder()),
+        decoder:  (JObject json) => SetBatchOut<Truck>.des(json,Truck.des),
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
@@ -243,7 +243,6 @@ void main() {
   group(
     'Update',
     () {
-      final MigrationUpdateResultDecoder<Truck> decoder = MigrationUpdateResultDecoder<Truck>(TruckDecoder());
       late Truck creationMock;
       test(
         'Creates when unexist',
@@ -251,8 +250,8 @@ void main() {
           int rnd = Random().nextInt(900)  + 99;
           Truck mock = buildMock("U_qual$rnd");
 
-          MainResolver<MigrationUpdateResult<Truck>> fact = await service.update(mock, auth);
-          MigrationUpdateResult<Truck> actEffect = await fact.act(decoder);
+          MainResolver<RecordUpdateOut<Truck>> fact = await service.update(mock, auth);
+          RecordUpdateOut<Truck> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Truck>.des(json ,Truck.des));
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 
@@ -266,8 +265,8 @@ void main() {
           int rnd = Random().nextInt(900)  + 99;
           Truck mock = creationMock.clone(vin: "UPDATEDVIN_T: $rnd");
           mock.vehiculeModelNavigation!.name = "manufacturer $rnd";
-          MainResolver<MigrationUpdateResult<Truck>> fact = await service.update(mock, auth);
-          MigrationUpdateResult<Truck> actEffect = await fact.act(decoder);
+          MainResolver<RecordUpdateOut<Truck>> fact = await service.update(mock, auth);
+          RecordUpdateOut<Truck> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Truck>.des(json ,Truck.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.vin != actEffect.previous!.vin);

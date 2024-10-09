@@ -27,8 +27,8 @@ final class Trailer implements CSMSetInterface {
   Status? statusNavigation;
   // List default initialization data for clone method.
   List<Plate> plates = <Plate>[
-    Plate.def(),
-    Plate.def()
+    Plate.a(),
+    Plate.a()
   ];
   Trailer(this.id, this.status, this.common, this.carrier, this.model, this.maintenance, this.carrierNavigation, this.trailerCommonNavigation, this.vehiculeModelNavigation, this.statusNavigation, this.plates, { 
     DateTime? timestamp,
