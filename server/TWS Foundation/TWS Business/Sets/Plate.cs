@@ -9,17 +9,18 @@ namespace TWS_Business.Sets;
 public partial class Plate
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
     public string Identifier { get; set; } = null!;
 
-    public string State { get; set; } = null!;
+    public string? State { get; set; }
 
     public string Country { get; set; } = null!;
 
-    public DateOnly Expiration { get; set; }
+    public DateOnly? Expiration { get; set; }
 
     public int? Truck { get; set; }
 
@@ -73,11 +74,9 @@ public partial class Plate
         RequiredValidator Required = new();
         Container = [
             ..Container,
-            (nameof(Identifier), [new LengthValidator(8, 12)]),
-            (nameof(State), [new LengthValidator(2, 3)]),
+            (nameof(Identifier), [new LengthValidator(5, 12)]),
             (nameof(Country), [new LengthValidator(2, 3)]),
-            (nameof(Expiration), [Required]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
+            (nameof(Status), [new PointerValidator(true)]),
         ];
         return Container;
     }

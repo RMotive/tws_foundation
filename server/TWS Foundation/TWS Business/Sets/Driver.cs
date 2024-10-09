@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Driver
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -17,13 +18,13 @@ public partial class Driver
 
     public int Common { get; set; }
 
-    public string DriverType { get; set; } = null!;
+    public string? DriverType { get; set; }
 
-    public DateOnly LicenseExpiration { get; set; }
+    public DateOnly? LicenseExpiration { get; set; }
 
-    public DateOnly DrugalcRegistrationDate { get; set; }
+    public DateOnly? DrugalcRegistrationDate { get; set; }
 
-    public DateOnly PullnoticeRegistrationDate { get; set; }
+    public DateOnly? PullnoticeRegistrationDate { get; set; }
 
     public string? Twic { get; set; }
 
@@ -51,14 +52,9 @@ public partial class Driver
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Employee), [new PointerValidator(true)]),
-            (nameof(DriverType), [Required, new LengthValidator(1,12)]),
-            (nameof(Common), [new PointerValidator(true)]),
         ];
 
         return Container;
@@ -106,6 +102,9 @@ public partial class Driver
             Entity.HasOne(d => d.DriverCommonNavigation)
                 .WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.Common);
+
+            Entity.HasIndex(e => e.Common)
+               .IsUnique();
 
             Entity.HasOne(d => d.EmployeeNavigation)
                 .WithMany(p => p.Drivers)

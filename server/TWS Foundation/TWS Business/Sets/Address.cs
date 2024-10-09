@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Address
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public string? State { get; set; }
 
@@ -37,7 +38,7 @@ public partial class Address
 
         Container = [
                 .. Container,
-            (nameof(Country), [ new RequiredValidator(),new LengthValidator(1, 3)]),
+            (nameof(Country), [new RequiredValidator(), new LengthValidator(3)]),
         ];
 
         return Container;

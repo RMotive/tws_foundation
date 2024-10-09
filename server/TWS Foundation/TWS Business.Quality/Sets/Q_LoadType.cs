@@ -22,7 +22,7 @@ public class Q_LoadType : BQ_Set<LoadType> {
             },
             Expectations = [
                 (nameof(LoadType.Id), [(new PointerValidator(), 3)]),
-                (nameof(LoadType.Name), [(new LengthValidator(), 2)]),
+                (nameof(LoadType.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
 
             ],
         };

@@ -26,11 +26,12 @@ public class RequiredValidator
     /// <param name="Value"></param>
     /// <exception cref="XIValidator_Evaluate"></exception>
     public void Evaluate(PropertyInfo Property, object? Value) {
-        if (Value is not null) {
-            return;
+        if (Value is null) throw new XIValidator_Evaluate(this, Property, 1, "Value cannot be empty, is required");
+        if (Value is string stringValue && string.IsNullOrWhiteSpace(stringValue)) {
+            throw new XIValidator_Evaluate(this, Property, 1, "String value cannot be empty, is required");
         }
+        return;
 
-        throw new XIValidator_Evaluate(this, Property, 1, "Value cannot be empty, is required");
     }
     /// <summary>
     /// 

@@ -17,10 +17,27 @@ public class Q_TrailersDepot
     protected override Trailer MockFactory(string RandomSeed) {
 
         return new() {
-            Manufacturer = 1,
-            Common = 1,
+            Common = 0,
             Status = 1,
-            Carrier = 1
+            Carrier = 0,
+            TrailerCommonNavigation = new() {
+                Status = 1,
+                Timestamp = DateTime.Now,
+                Economic = RandomUtils.String(16),
+            },
+            CarrierNavigation = new() {
+                Status = 1,
+                Name = RandomUtils.String(10),
+                Approach = 0,
+                Address = 0,
+                ApproachNavigation = new() {
+                    Status = 1,
+                    Email = RandomUtils.String(30)
+                },
+                AddressNavigation = new() {
+                    Country = "USA"
+                }
+            }
         };
     }
 

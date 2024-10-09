@@ -31,7 +31,6 @@ public class Q_Plate : BQ_Set<Plate> {
             Expectations = [
                 (nameof(Plate.Id), [(new PointerValidator(), 3)]),
                 (nameof(Plate.Identifier), [(new LengthValidator(), 2)]),
-                (nameof(Plate.State), [(new LengthValidator(), 2)]),
                 (nameof(Plate.Country), [(new LengthValidator(), 2)]),
                 (nameof(Plate.Status), [(new PointerValidator(true), 3)]),
             ],

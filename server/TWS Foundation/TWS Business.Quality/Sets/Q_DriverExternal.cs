@@ -21,14 +21,10 @@ public class Q_DriverExternal : BQ_Set<DriverExternal> {
             Mock = new() {
                 Id = 0,
                 Status = 0,
-                Common = 0,
-                Identification = 0
             },
             Expectations = [
                 (nameof(DriverExternal.Id), [(new PointerValidator(), 3)]),
                 (nameof(DriverExternal.Status), [(new PointerValidator(), 3)]),
-                (nameof(DriverExternal.Common), [(new PointerValidator(), 3)]),
-                (nameof(DriverExternal.Identification), [(new PointerValidator(), 3)]),
             ],
         };
 

@@ -11,7 +11,7 @@ public class Q_TrailerCommon : BQ_Set<TrailerCommon> {
         Q_MigrationSet_EvaluateRecord<TrailerCommon> success = new() {
             Mock = new() {
                 Id = 1,
-                Class = 1,
+                Type = 1,
                 Situation = 1,
 
             },
@@ -25,7 +25,7 @@ public class Q_TrailerCommon : BQ_Set<TrailerCommon> {
             },
             Expectations = [
                 (nameof(TrailerCommon.Id), [(new PointerValidator(), 3)]),
-                (nameof(TrailerCommon.Economic), [(new LengthValidator(),2)]),
+                (nameof(TrailerCommon.Economic), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
                 (nameof(DriverCommon.Status), [(new PointerValidator(true), 3) ])
             ],
         };

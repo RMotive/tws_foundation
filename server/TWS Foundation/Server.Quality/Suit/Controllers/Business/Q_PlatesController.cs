@@ -56,15 +56,49 @@ public class Q_PlatesController : BQ_ServerController<Program> {
 
     [Fact]
     public async Task Create() {
-        DateOnly year = new(2024, 11, 11);
+        DateOnly date = DateOnly.FromDateTime(DateTime.Now);
 
         (HttpStatusCode Status, GenericFrame Response) = await Post("Create", new Plate() {
             Identifier = RandomUtils.String(10),
             Status = 1,
             State = "ABC",
             Country = "MXN",
-            Expiration = year,
-            Truck = 1, // <---- Important: CreateModel a valid Truck ID
+            Expiration = date,
+            Truck = 0,
+            TruckNavigation = new() {
+                Id = 0,
+                Status = 1,
+                Common = 0,
+                Vin = RandomUtils.String(17),
+                Carrier = 0,
+                Model = 0,
+                TruckCommonNavigation = new() {
+                    Status = 1,
+                    Economic = RandomUtils.String(16)
+                },
+                VehiculeModelNavigation = new() {
+                    Status = 1,
+                    Name = RandomUtils.String(32),
+                    Year = date,
+                    Manufacturer = 0,
+                    ManufacturerNavigation = new() {
+                        Name = RandomUtils.String(32),
+                    }
+                },
+                CarrierNavigation = new() {
+                    Status = 1,
+                    Name = RandomUtils.String(10),
+                    Approach = 0,
+                    Address = 0,
+                    ApproachNavigation = new() {
+                        Status = 1,
+                        Email = RandomUtils.String(30)
+                    },
+                    AddressNavigation = new() {
+                        Country = "USA"
+                    }
+                }
+            }
         }, true);
 
         Response.Estela.TryGetValue("Advise", out object? value);

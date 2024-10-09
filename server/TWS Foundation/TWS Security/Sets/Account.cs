@@ -7,7 +7,8 @@ namespace TWS_Security.Sets;
 public partial class Account
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.Now;
 
     public string User { get; set; } = null!;
 

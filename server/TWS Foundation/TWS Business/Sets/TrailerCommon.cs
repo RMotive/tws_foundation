@@ -9,14 +9,14 @@ namespace TWS_Business.Sets;
 public partial class TrailerCommon
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.Now;
 
     public int Status { get; set; }
 
     public string Economic { get; set; } = null!;
 
-    public int? Class { get; set; }
-
+    public int? Type { get; set; }
 
     public int? Situation { get; set; }
 
@@ -24,7 +24,7 @@ public partial class TrailerCommon
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual TrailerClass? TrailerClassNavigation { get; set; }
+    public virtual TrailerType? TrailerTypeNavigation { get; set; }
 
     public virtual Situation? SituationNavigation { get; set; }
 
@@ -42,7 +42,7 @@ public partial class TrailerCommon
         Container = [
                 .. Container,
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
+            (nameof(Status), [new PointerValidator(true)]),
         ];
 
         return Container;
@@ -63,9 +63,9 @@ public partial class TrailerCommon
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
-            Entity.HasOne(d => d.TrailerClassNavigation)
+            Entity.HasOne(d => d.TrailerTypeNavigation)
                 .WithMany(p => p.TrailersCommons)
-                .HasForeignKey(d => d.Class);
+                .HasForeignKey(d => d.Type);
 
             Entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.TrailersCommons)

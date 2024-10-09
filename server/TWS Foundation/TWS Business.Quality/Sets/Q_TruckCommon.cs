@@ -26,7 +26,7 @@ public class Q_TruckCommon : BQ_Set<TruckCommon> {
             },
             Expectations = [
                 (nameof(TruckCommon.Id), [(new PointerValidator(), 3)]),
-                (nameof(TruckCommon.Economic), [(new LengthValidator(),2)]),
+                (nameof(TruckCommon.Economic), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
                 (nameof(TruckCommon.Status), [(new PointerValidator(), 3)]),
 
             ],

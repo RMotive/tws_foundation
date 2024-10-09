@@ -27,8 +27,6 @@ public class Q_TruckExternal : BQ_Set<TruckExternal> {
             Expectations = [
                 (nameof(TruckExternal.Id), [(new PointerValidator(), 3)]),
                 (nameof(TruckExternal.Status), [(new PointerValidator(), 3)]),
-                (nameof(TruckExternal.Common), [(new PointerValidator(), 3)]),
-                (nameof(TruckExternal.MxPlate), [(new LengthValidator(), 2)]),
             ],
         };
 

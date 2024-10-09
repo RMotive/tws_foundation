@@ -27,8 +27,7 @@ public class Q_Location : BQ_Set<Location> {
             },
             Expectations = [
                 (nameof(Location.Id), [(new PointerValidator(), 3)]),
-                (nameof(Location.Name), [(new LengthValidator(), 2)]),
-                (nameof(Location.Address), [(new PointerValidator(true), 3)]),
+                (nameof(Location.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(Location.Status), [(new PointerValidator(true), 3)])
             ],
         };

@@ -8,7 +8,8 @@ namespace TWS_Business.Sets;
 public partial class TruckH
 : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Sequence { get; set; }
 
@@ -106,11 +107,6 @@ public partial class TruckH
             Entity.HasOne(d => d.CarrierHNavigation)
                  .WithMany(p => p.TrucksH)
                  .HasForeignKey(d => d.CarrierH);
-
-            Entity.HasOne(d => d.ManufacturerNavigation)
-                .WithMany(p => p.TrucksH)
-                .HasForeignKey(d => d.Manufacturer)
-                .OnDelete(DeleteBehavior.ClientSetNull);
 
             Entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.TrucksH)

@@ -23,16 +23,12 @@ public class Q_Carrier : BQ_Set<Carrier> {
         Q_MigrationSet_EvaluateRecord<Carrier> failAllCases = new() {
             Mock = new() {
                 Id = -1,
-                Name = "",
                 Status = 0,
-                Approach = 0,
-                Address = 0
+               
             },
             Expectations = [
                 (nameof(Carrier.Id), [(new PointerValidator(), 3) ]),
-                (nameof(Carrier.Name), [(new LengthValidator(),2)]),
-                (nameof(Carrier.Approach), [(pointer, 3)]),
-                (nameof(Carrier.Address), [(pointer, 3) ]),
+                (nameof(Carrier.Name), [(new RequiredValidator(), 1), (new LengthValidator(),1)]),
                 (nameof(Carrier.Status), [(pointer, 3) ])
             ],
         };

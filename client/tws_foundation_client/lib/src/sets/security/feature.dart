@@ -1,13 +1,20 @@
 import 'package:csm_client/csm_client.dart';
 
 final class Feature implements CSMEncodeInterface {
-  int id = 0;
-  String name = '';
-  String? description;
+  static const String kTimestamp = "timestamp";
 
-  Feature(this.id, this.name, this.description);
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
-  Feature.a();
+  final int id;
+  final String name;
+  final String? description;
+
+  Feature(this.id, this.name, this.description, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
 
   @override
   JObject encode() {
@@ -15,6 +22,7 @@ final class Feature implements CSMEncodeInterface {
       'id': id,
       'name': name,
       'description': description,
+      kTimestamp: timestamp.toIso8601String(),
     };
   }
 }

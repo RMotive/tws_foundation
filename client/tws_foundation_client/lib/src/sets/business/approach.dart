@@ -1,11 +1,7 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/sets/set_common_keys.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// Alternative contacts information, handles alternative contact information.
 final class Approach implements CSMSetInterface {
-  /// [status] property key.
-  static const String kStatus = "status";
 
   /// [email] property key.
   static const String kEmail = "email";
@@ -19,13 +15,13 @@ final class Approach implements CSMSetInterface {
   /// [alternative] property key.
   static const String kAlternative = "alternative";
 
-  /// [statusNavigation] property key.
-  static const String kstatusNavigation = 'StatusNavigation';
-
   /// [carriers] property key.
   static const String kCarriers = "Carriers";
 
-  /// Record database pointer.
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
+
+   /// Record database pointer.
   @override
   int id = 0;
 
@@ -51,8 +47,12 @@ final class Approach implements CSMSetInterface {
   List<Carrier> carriers = <Carrier>[];
 
   /// Creates an [Approach] object with required properties.
-  Approach(this.id, this.status, this.email, this.enterprise, this.personal, this.alternative, this.statusNavigation, this.carriers);
-
+  Approach(this.id, this.status, this.email, this.enterprise, this.personal, this.alternative, this.statusNavigation, this.carriers, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
+  }
+  
   /// Creates an [Approach] object with default properties.
   Approach.a();
 
@@ -60,26 +60,55 @@ final class Approach implements CSMSetInterface {
   factory Approach.des(JObject json) {
     List<Carrier> carriers = <Carrier>[];
     int id = json.get(SCK.kId);
-    int status = json.get(kStatus);
+    int status = json.get(SCK.kStatus);
     String email = json.get(kEmail);
+    DateTime timestamp = json.get(SCK.kTimestamp);
     String? enterprise = json.getDefault(kEnterprise, null);
     String? personal = json.getDefault(kPersonal, null);
-    String? alternative = json.getDefault(kPersonal, null);
+    String? alternative = json.getDefault(kAlternative, null);
 
     Status? statusNavigation;
-    if (json[kstatusNavigation] != null) {
-      JObject rawNavigation = json.getDefault(kstatusNavigation, <String, dynamic>{});
+    if (json[SCK.kStatusNavigation] != null) {
+      JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, <String, dynamic>{});
       statusNavigation = Status.des(rawNavigation);
     }
 
     List<JObject> rawCarriersArray = json.getList(kCarriers);
-    carriers = rawCarriersArray
-        .map<Carrier>(
-          (JObject json) => Carrier.des(json),
-        )
-        .toList();
+    carriers = rawCarriersArray.map<Carrier>(Carrier.des).toList();
+    
+    return Approach(id, status, email, enterprise, personal, alternative, statusNavigation, carriers, timestamp: timestamp);
+  }
 
-    return Approach(id, status, email, enterprise, personal, alternative, statusNavigation, carriers);
+  @override
+  JObject encode() {
+    return <String, dynamic>{
+      SCK.kId: id,
+      SCK.kStatus: status,
+      kEmail: email,
+      kEnterprise: enterprise,
+      kPersonal: personal,
+      kAlternative: alternative,
+      SCK.kStatusNavigation: statusNavigation?.encode(),
+      SCK.kTimestamp: timestamp.toIso8601String(),
+      kCarriers: carriers.map((Carrier i) => i.encode()).toList(),
+    };
+  }
+  
+  @override
+  List<CSMSetValidationResult> evaluate() {
+    List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
+    if(email.length > 64) results.add(CSMSetValidationResult(kEmail, "Email must be 64  max length", "strictLength(1, 64)"));
+    if(enterprise != null){
+      if(enterprise!.length < 10 || enterprise!.length > 14) results.add(CSMSetValidationResult(kEnterprise, "Enterprise number length must be between 10 and 14", "strictLength(1,4)"));
+    }
+     
+    if(personal != null){
+      if(personal!.length < 10 || personal!.length > 14) results.add(CSMSetValidationResult(kPersonal, "Personal number length must be between 10 and 14", "strictLength(1,4)"));
+    }
+
+    if(alternative != null && alternative!.length > 30) results.add(CSMSetValidationResult(kAlternative, "Alternative contact must be 30  max length", "strictLength(0, 30)"));
+
+    return results;
   }
 
   /// Creates an [Approach] object overriding the given properties.
@@ -91,44 +120,19 @@ final class Approach implements CSMSetInterface {
     String? personal,
     String? alternative,
     Status? statusNavigation,
-    List<Carrier>? carriers,
-  }) {
+    List<Carrier>? carriers
+  }){
     return Approach(
-      id ?? this.id,
-      status ?? this.status,
-      email ?? this.email,
-      enterprise ?? this.enterprise,
-      personal ?? this.personal,
-      alternative ?? this.alternative,
-      statusNavigation ?? this.statusNavigation,
-      carriers ?? this.carriers,
+      id ?? this.id, 
+      status ?? this.status, 
+      email ?? this.email, 
+      enterprise ?? this.enterprise, 
+      personal ?? this.personal, 
+      alternative ?? this.alternative, 
+      statusNavigation ?? this.statusNavigation, 
+      carriers ?? this.carriers
     );
   }
-
-  @override
-  JObject encode() {
-    return <String, dynamic>{
-      SCK.kId: id,
-      kStatus: status,
-      kEmail: email,
-      kEnterprise: enterprise,
-      kPersonal: personal,
-      kAlternative: alternative,
-      kstatusNavigation: statusNavigation?.encode(),
-      kCarriers: carriers.map((Carrier i) => i.encode()).toList(),
-    };
-  }
-
-  @override
-  List<CSMSetValidationResult> evaluate() {
-    List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if (email.length > 30) results.add(CSMSetValidationResult(kEmail, "Email must be 30  max length", "strictLength(1, 30)"));
-    if (enterprise != null && enterprise!.length < 10 || enterprise!.length > 14) {
-      results.add(CSMSetValidationResult(kEnterprise, "Enterprise number length must be between 10 and 14", "strictLength(10, 14)"));
-    }
-    if (personal != null && personal!.length < 10 || personal!.length > 14) results.add(CSMSetValidationResult(kPersonal, "Personal number length must be between 10 and 14", "strictLength(1,4)"));
-    if (alternative != null && alternative!.length > 30) results.add(CSMSetValidationResult(kAlternative, "Alternative contact must be 30  max length", "strictLength(0, 30)"));
-
-    return results;
-  }
+  
 }
+

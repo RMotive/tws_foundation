@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class TruckExternal
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -21,7 +22,7 @@ public partial class TruckExternal
 
     public string? UsaPlate { get; set; }
 
-    public string MxPlate { get; set; } = null!;
+    public string? MxPlate { get; set; } = null!;
 
     public virtual Status? StatusNavigation { get; set; }
 
@@ -34,9 +35,8 @@ public partial class TruckExternal
 
         Container = [
                 .. Container,
-            (nameof(Common), [Required, new PointerValidator(true)]),
+            (nameof(Common), [new UniqueValidator()]),
             (nameof(Status), [Required, new PointerValidator(true)]),
-            (nameof(MxPlate), [new LengthValidator(8, 12)]),
         ];
 
         return Container;

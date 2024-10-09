@@ -7,7 +7,6 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 void main() {
   late ManufacturersServiceBase service;
   late SetViewOut<Manufacturer> viewMock;
-  late Manufacturer createMock;
   late SetViewOptions<Manufacturer> options;
 
   setUp(
@@ -16,14 +15,10 @@ void main() {
       options = SetViewOptions<Manufacturer>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Manufacturer>>[]);
       viewMock = SetViewOut<Manufacturer>(<Manufacturer>[], 1, DateTime.now(), 3, 0, 20);
 
-      DateTime time = DateTime.now();
-      createMock = Manufacturer(0, "S23", "SCANIA", time, <Truck>[]);
-
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
             'view' => SuccessFrame<SetViewOut<Manufacturer>>('qTracer', viewMock).encode(),
-            'create' => SuccessFrame<Manufacturer>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
 

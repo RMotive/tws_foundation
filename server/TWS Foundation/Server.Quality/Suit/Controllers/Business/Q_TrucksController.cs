@@ -5,19 +5,24 @@ using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
+using TWS_Foundation.Middlewares.Frames;
+
 using TWS_Business.Sets;
 
 using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
-using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Truck>;
+using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Core.Utils;
+using Azure;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_TrucksController : BQ_CustomServerController<Truck> {
+
 
     public Q_TrucksController(WebApplicationFactory<Program> hostFactory) : base("Trucks", hostFactory) {
     }
@@ -33,9 +38,116 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
     }
 
     protected override Truck MockFactory(string RandomSeed) {
-        throw new NotImplementedException();
-    }
+        DateOnly date = new(2024, 12, 12);
+        string motor = "motortestbkd" + RandomSeed;
+        Manufacturer manufacturer = new() {
+            Name = "SCANIA " + RandomSeed,
+            Description = "DESC " + RandomSeed
+        };
+        VehiculeModel vehiculeModel = new VehiculeModel() {
+            Status = 1,
+            Name = "Generic model " + RandomSeed,
+            ManufacturerNavigation = manufacturer,
+        };
+        Insurance insurance = new() {
+            Status = 1,
+            Policy = "P232Policy" + RandomSeed,
+            Expiration = date,
+            Country = "MEX"
+        };
+        Situation situation = new() {
+            Name = "Situational test " + RandomSeed,
+            Description = "Description test " + RandomSeed
+        };
+        Maintenance maintenance = new() {
+            Status = 1,
+            Anual = date,
+            Trimestral = date,
+        };
+        Sct sct = new() {
+            Status = 1,
+            Type = "TypT14",
+            Number = "NumberSCTTesting value" + RandomSeed,
+            Configuration = "Conf" + RandomSeed
+        };
+        Address address = new() {
+            Street = "Main street " + RandomSeed,
+            Country = "USA"
+        };
+        Address addressCommon = new() {
+            Street = "Truck Location " + RandomSeed,
+            Country = "USA"
+        };
 
+        Usdot usdot = new() {
+            Status = 1,
+            Mc = "mc- " + RandomSeed,
+            Scac = "s" + RandomSeed
+        };
+
+        Approach contact = new() {
+            Status = 1,
+            Email = "mail@test.com " + RandomSeed
+        };
+
+        Carrier carrier = new() {
+            Status = 1,
+            Name = "Carrier " + RandomSeed,
+            Approach = 0,
+            Address = 0,
+            AddressNavigation = addressCommon,
+            ApproachNavigation = contact,
+            UsdotNavigation = usdot,
+        };
+
+        Plate plateMX = new() {
+            Status = 1,
+            Identifier = "mxPlate" + RandomSeed,
+            State = "BAC",
+            Country = "MXN",
+            Expiration = date,
+        };
+        Plate plateUSA = new() {
+            Status = 1,
+            Identifier = "usaPlate" + RandomSeed,
+            State = "CaA",
+            Country = "USA",
+            Expiration = date,
+        };
+        Location location = new() {
+            Name = "random location: " + RandomSeed,
+            Status = 1,
+            Address = 0,
+            AddressNavigation = address,
+        };
+        TruckCommon common = new() {
+            Status = 1,
+            Economic = "EconomicTbkd" + RandomSeed,
+            Location = 0,
+            Situation = 0,
+            LocationNavigation = location,
+            SituationNavigation = situation
+
+        };
+
+        List<Plate> plateList = [plateMX, plateUSA];
+        Truck truck = new() {
+            Status = 1,
+            Carrier = 0,
+            Common = 0,
+            Model = 0,
+            Motor = motor,
+            Vin = "VINtestcTbkd" + RandomSeed,
+            VehiculeModelNavigation = vehiculeModel,
+            CarrierNavigation = carrier,
+            InsuranceNavigation = insurance,
+            TruckCommonNavigation = common,
+            MaintenanceNavigation = maintenance,
+            SctNavigation = sct,
+            Plates = plateList,
+        };
+        return truck;
+    }
     [Fact]
     public async Task View() {
         (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
@@ -53,449 +165,90 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
     }
 
     [Fact]
-    public void Create() {
-        //DateOnly date = new(2024, 12, 12);
-        //List<Truck> mockList = new();
-        //string testTag = Guid.NewGuid().ToString()[..2];
+    public async Task Create() {
+        List<Truck> mockList = [];
+        string testTag = Guid.NewGuid().ToString()[..2];
 
-        //for (int i = 0; i < 3; i++) {
-        //    string iterationTag = testTag + i;
-        //    Manufacturer manufacturer = new() {
-        //        Model = "X23",
-        //        Brand = "SCANIA TEST" + iterationTag,
-        //        Year = date
-        //    };
-        //    Insurance insurance = new() {
-        //        Status = 1,
-        //        Policy = "P232Policy" + iterationTag,
-        //        Expiration = date,
-        //        Country = "MEX"
-        //    };
-        //    Situation situation = new() {
-        //        Name = "Situational test " + iterationTag,
-        //        Description = "Description test " + iterationTag
-        //    };
-        //    Maintenance maintenance = new() {
-        //        Status = 1,
-        //        Anual = date,
-        //        Trimestral = date,
-        //    };
-        //    Sct sct = new() {
-        //        Status = 1,
-        //        Type = "TypT14",
-        //        Number = "NumberSCTTesting value" + iterationTag,
-        //        Configuration = "Conf" + iterationTag
-        //    };
-        //    Address address = new() {
-        //        Street = "Main street " + iterationTag,
-        //        Country = "USA"
-        //    };
+        for (int i = 0; i < 3; i++) {
+            string iterationTag = testTag + i;
+            mockList.Add(MockFactory(iterationTag));
+        }
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mockList, true);
+        Assert.Equal(HttpStatusCode.OK, Status);
 
-        //    Usdot usdot = new() {
-        //        Status = 1,
-        //        Mc = "mc- " + iterationTag,
-        //        Scac = "s" + iterationTag
-        //    };
-
-        //    Approach contact = new() {
-        //        Status = 1,
-        //        Email = "mail@test.com " + iterationTag
-        //    };
-
-        //    Carrier carrier = new() {
-        //        Status = 1,
-        //        Name = "Carrier test " + iterationTag,
-        //        Approach = 0,
-        //        Address = 0,
-        //        ApproachNavigation = contact,
-        //        AddressNavigation = address,
-        //        SctNavigation = sct,
-        //        UsdotNavigation = usdot
-        //    };
-
-        //    Plate plateMX = new() {
-        //        Status = 1,
-        //        Identifier = "mxPlate" + iterationTag,
-        //        State = "BAC",
-        //        Country = "MXN",
-        //        Expiration = date,
-        //        Truck = 2
-        //    };
-        //    Plate plateUSA = new() {
-        //        Status = 1,
-        //        Identifier = "usaPlate" + iterationTag,
-        //        State = "CaA",
-        //        Country = "USA",
-        //        Expiration = date,
-        //        Truck = 2
-        //    };
-
-        //    List<Plate> plateList = [plateMX, plateUSA];
-        //Truck truck = new() {
-        //    Status = 1,
-        //    Vin = vin,
-        //    Motor = motor,
-        //    Economic = economic,
-        //    Maintenance = 0,
-        //    ManufacturerNavigation = manufacturer,
-        //    InsuranceNavigation = insurance,
-        //    MaintenanceNavigation = maintenance,
-        //    SituationNavigation = situation,
-        //    Carrier = 0,
-        //    CarrierNavigation = carrier,
-        //    Plates = plateList,
-        //};
-        //mockList.Add(truck);
-
-
-        //(HttpStatusCode Status, GenericFrame response) = await Post("Create", mockList, true);
-        //Assert.Equal(HttpStatusCode.OK, Status);
     }
 
     [Fact]
-    public void Update() {
-        //#region First (Correctly creates when doesn't exist)
-        //{
-        //    DateOnly date = new(2024, 12, 12);
-        //    string testTag = Guid.NewGuid().ToString()[..3];
-        //    Manufacturer manufacturer = new() {
-        //        Model = "X23",
-        //        Brand = "SCANIA TEST" + testTag,
-        //        Year = date
-        //    };
-        //    Situation situation = new() {
-        //        Name = "Situational test " + testTag,
-        //        Description = "Description test " + testTag
-        //    };
-        //    Maintenance maintenace = new() {
-        //        Status = 1,
-        //        Anual = date,
-        //        Trimestral = date,
-        //    };
-        //    Sct sct = new() {
-        //        Status = 1,
-        //        Type = "TypT14",
-        //        Number = "NumberSCTTesting value" + testTag,
-        //        Configuration = "Conf" + testTag
-        //    };
+    public async Task Update() {
+        #region First (Correctly creates when doesn't exist)
+        {
+            string testTag = Guid.NewGuid().ToString()[..3];
+            Truck mock = MockFactory(testTag);
+            (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
-        //    Plate plateMX = new() {
-        //        Status = 1,
-        //        Identifier = "mxPlate" + testTag,
-        //        State = "BAC",
-        //        Country = "MXN",
-        //        Expiration = date,
-        //        Truck = 2
-        //    };
-        //    Plate plateUSA = new() {
-        //        Status = 1,
-        //        Identifier = "usaPlate" + testTag,
-        //        State = "CaA",
-        //        Country = "USA",
-        //        Expiration = date,
-        //        Truck = 2
-        //    };
-        //    Address address = new() {
-        //        Street = "Main street " + testTag,
-        //        Country = "USA"
-        //    };
+            Assert.Equal(HttpStatusCode.OK, Status);
+            RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Respone).Estela;
 
-        //    Usdot usdot = new() {
-        //        Status = 1,
-        //        Mc = "mc- " + testTag,
-        //        Scac = "s" + testTag
-        //    };
+            Assert.Null(creationResult.Previous);
 
-        //    Approach contact = new() {
-        //        Status = 1,
-        //        Email = "mail@test.com " + testTag
-        //    };
+            Truck updated = creationResult.Updated;
+            Assert.True(updated.Id > 0);
+        }
+        #endregion
 
-        //    Carrier carrier = new() {
-        //        Status = 1,
-        //        Name = "Carrier test " + testTag,
-        //        Approach = 0,
-        //        Address = 0,
-        //        ApproachNavigation = contact,
-        //        AddressNavigation = address,
-        //        SctNavigation = sct,
-        //        UsdotNavigation = usdot
-        //    };
+        #region Second (Updates an exist record)
+        {
+            #region generate a new record
+            string testTag = Guid.NewGuid().ToString()[..3];
+            Truck mock = MockFactory(testTag);
 
-        //    List<Plate> plateList = [plateMX, plateUSA];
-        //    string vin = "VINnumber test" + testTag;
-        //    string motor = "Motor number " + testTag;
-        //    string economic = "Economic #n " + testTag;
+            (HttpStatusCode Status, GenericFrame Response) = await Post("Update", mock, true);
 
-        //    Truck mock = new() {
-        //        Id = 0,
-        //        Status = 1,
-        //        Vin = vin,
-        //        Motor = motor,
-        //        Economic = economic,
-        //        Manufacturer = 0,
-        //        ManufacturerNavigation = manufacturer,
-        //        MaintenanceNavigation = maintenace                         ,
-        //        SituationNavigation = situation,
-        //        Plates = plateList,
-        //        Carrier = 0,
-        //        CarrierNavigation = carrier,
-        //    };
+            Assert.Equal(HttpStatusCode.OK, Status);
 
-        //    (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
+            RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Response).Estela;
+            Assert.Null(creationResult.Previous);
 
-        //    Assert.Equal(HttpStatusCode.OK, Status);
-        //    RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Respone).Estela;
+            Truck creationRecord = creationResult.Updated;
+            Assert.Multiple([
+                () => Assert.True(creationRecord.Id > 0),
+                () => Assert.Equal(mock.Vin, creationRecord.Vin),
+                () => Assert.Equal(mock.Motor, creationRecord.Motor),
+            ]);
+            #endregion
 
-        //    Assert.Null(creationResult.Previous);
+            #region update only main properties
+            // Validate main properties changes to the previous record.
+            string updatedTag = "UPDTE";
+            string modifiedVin = updatedTag + RandomUtils.String(12);
+            string modifiedMotor = updatedTag + RandomUtils.String(11);
+            mock = creationRecord;
 
-        //    Truck updated = creationResult.Updated;
-        //    Assert.True(updated.Id > 0);
-        //}
-        //#endregion
+            mock.Vin = modifiedVin;
+            mock.Motor = modifiedMotor;
+            mock.TruckCommonNavigation!.Economic = modifiedMotor;
+            Plate plate = mock.Plates.First();
+            plate.Identifier = "identfy" + updatedTag;
+            (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
-        //#region Second (Updates an exist record)
-        //{
-        //    #region generate a new record
-        //    DateOnly date = new(2024, 12, 12);
-        //    string testTag = Guid.NewGuid().ToString()[..3];
-        //    string testKey = "First";
-        //    Manufacturer manufacturer = new() {
-        //        Model = "X23",
-        //        Brand = "SCANIA TEST" + testTag,
-        //        Year = date
-        //    };
-        //    Situation situation = new() {
-        //        Name = "Situational test " + testTag,
-        //        Description = "Description test " + testTag
-        //    };
-        //    Maintenance maintenace = new() {
-        //        Status = 1,
-        //        Anual = date,
-        //        Trimestral = date,
-        //    };
-        //    Sct sct = new() {
-        //        Status = 1,
-        //        Type = "TypT14",
-        //        Number = "NumberSCTTesting value" + testTag,
-        //        Configuration = "Conf" + testTag
-        //    };
+            Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
+            RecordUpdateOut<Truck> updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;
 
-        //    Plate plateMX = new() {
-        //        Status = 1,
-        //        Identifier = "mxPlate" + testTag,
-        //        State = "BAC",
-        //        Country = "MXN",
-        //        Expiration = date,
-        //        Truck = 2
-        //    };
-        //    Plate plateUSA = new() {
-        //        Status = 1,
-        //        Identifier = "usaPlate" + testTag,
-        //        State = "CaA",
-        //        Country = "USA",
-        //        Expiration = date,
-        //        Truck = 2
-        //    };
-        //    Address address = new() {
-        //        Street = "Main street " + testTag,
-        //        Country = "USA"
-        //    };
+            Assert.NotNull(updateResult.Previous);
 
-        //    Approach contact = new() {
-        //        Status = 1,
-        //        Email = "mail@test.com " + testTag
-        //    };
-
-        //    Carrier carrier = new() {
-        //        Status = 1,
-        //        Name = "Carrier test " + testTag,
-        //        Approach = 0,
-        //        Address = 0,
-        //        ApproachNavigation = contact,
-        //        AddressNavigation = address,
-        //        SctNavigation = sct,
-        //    };
-
-        //    List<Plate> plateList = [plateMX, plateUSA];
-        //    string vin = "VINnumber test" + testTag;
-        //    string motor = "Motor number " + testTag;
-        //    string economic = "Economic #n " + testTag;
-
-        //    Truck mock = new() {
-        //        Id = 0,
-        //        Status = 1,
-        //        Economic = economic,
-        //        Vin = vin,
-        //        Motor = motor,
-        //        Manufacturer = 0,
-        //        ManufacturerNavigation = manufacturer,
-        //        MaintenanceNavigation = maintenace,
-        //        SituationNavigation = situation,
-        //        Plates = plateList,
-        //        Carrier = 0,
-        //        CarrierNavigation = carrier,
-        //    };
-
-        //    (HttpStatusCode Status, GenericFrame Response) = await Post("Update", mock, true);
-
-        //    Assert.Equal(HttpStatusCode.OK, Status);
-
-        //    RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Response).Estela;
-        //    Assert.Null(creationResult.Previous);
-
-        //    Truck creationRecord = creationResult.Updated;
-        //    Assert.Multiple([
-        //        () => Assert.True(creationRecord.Id > 0),
-        //        () => Assert.Equal(mock.Vin, creationRecord.Vin),
-        //        () => Assert.Equal(mock.Motor, creationRecord.Motor),
-
-        //    ]);
-        //    #endregion
-
-        //    #region update only main properties
-        //    // Validate main properties changes to the previous record.
-        //    string modifiedVin = testKey + RandomUtils.String(12);
-        //    string modifiedMotor = testKey + RandomUtils.String(11);
-        //    mock = creationRecord;
-
-        //    mock.Vin = modifiedVin;
-        //    mock.Motor = modifiedMotor;
-
-        //    (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
-
-        //    Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-        //    RecordUpdateOut<Truck> updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;
-
-        //    Assert.NotNull(updateResult.Previous);
-
-        //    Truck updateRecord = updateResult.Updated;
-        //    Truck previousRecord = updateResult.Previous;
-        //    Assert.Multiple([
-        //        () => Assert.Equal(creationRecord.Id, updateRecord.Id),
-        //        () => Assert.Equal(creationRecord.Manufacturer, updateRecord.Manufacturer),
-        //        () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
-        //        () => Assert.NotEqual(previousRecord.Vin, updateRecord.Vin),
-        //        () => Assert.NotEqual(previousRecord.Motor, updateRecord.Motor)
-
-        //    ]);
-        //    #endregion
-
-        //    #region update only navigation properties.
-        //    // Validate nested properties changes to the previous record.
-        //    creationRecord = updateRecord;
-        //    mock = updateRecord;
-        //    List<Plate> updatedPlates = [.. mock.Plates];
-        //    updatedPlates[0].Identifier = RandomUtils.String(12);
-        //    updatedPlates[1].Identifier = RandomUtils.String(12);
-        //    mock.ManufacturerNavigation!.Brand = RandomUtils.String(15);
-        //    mock.ManufacturerNavigation!.Model = RandomUtils.String(30);
-        //    mock.ManufacturerNavigation!.Year = new DateOnly(1999, 12, 12);
-        //    mock.SituationNavigation!.Name = RandomUtils.String(15);
-        //    mock.Plates = updatedPlates;
-        //    mock.CarrierNavigation!.Name = RandomUtils.String(10);
-        //    mock.CarrierNavigation.SctNavigation!.Number = RandomUtils.String(25);
-        //    updateResponse = await Post("Update", mock, true);
-
-        //    Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-        //    updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;
-
-        //    Assert.NotNull(updateResult.Previous);
-
-        //    updateRecord = updateResult.Updated;
-        //    previousRecord = updateResult.Previous;
-        //    updatedPlates = [.. updateRecord.Plates];
-        //    Assert.Multiple([
-        //        () => Assert.Equal(creationRecord.Id, updateRecord.Id),
-        //        () => Assert.Equal(creationRecord.Manufacturer, updateRecord.Manufacturer),
-        //        () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
-        //        () => Assert.Equal(creationRecord.ManufacturerNavigation?.Id, updateRecord.ManufacturerNavigation?.Id),
-        //        () => Assert.NotEqual(previousRecord.ManufacturerNavigation?.Brand, updateRecord.ManufacturerNavigation?.Brand),
-        //        () => Assert.NotEqual(previousRecord.ManufacturerNavigation?.Year.ToString(), updateRecord.ManufacturerNavigation?.Year.ToString()),
-        //        () => Assert.NotEqual(previousRecord.ManufacturerNavigation?.Model, updateRecord.ManufacturerNavigation?.Model),
-        //        () => Assert.NotEqual(previousRecord.SituationNavigation?.Name, updateRecord.SituationNavigation?.Name),
-        //        () => Assert.NotEqual(previousRecord.Plates.ToList()[0].Identifier, updateRecord.Plates.ToList()[0].Identifier),
-        //        () => Assert.NotEqual(previousRecord.CarrierNavigation?.Name, updateRecord.CarrierNavigation?.Name),
-        //        () => Assert.NotEqual(previousRecord.CarrierNavigation!.SctNavigation?.Number, updateRecord.CarrierNavigation!.SctNavigation?.Number),
-
-        //    ]);
-        //    #endregion
-
-        //    #region update both, main properties and navigation properties.
-        //    // Validate nested properties changes to the previous record.
-        //    mock = updateRecord;
-        //    mock.Vin = RandomUtils.String(17);
-        //    mock.Motor = RandomUtils.String(16);
-        //    updatedPlates[0].Identifier = RandomUtils.String(12);
-        //    updatedPlates[1].Identifier = RandomUtils.String(12);
-        //    mock.ManufacturerNavigation!.Brand = RandomUtils.String(15);
-        //    mock.ManufacturerNavigation!.Model = RandomUtils.String(30);
-        //    mock.ManufacturerNavigation!.Year = new DateOnly(200, 12, 12);
-        //    mock.SituationNavigation!.Name = RandomUtils.String(15);
-        //    mock.Plates = updatedPlates;
-        //    updateResponse = await Post("Update", mock, true);
-
-        //    Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-        //    updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;
-
-        //    Assert.NotNull(updateResult.Previous);
-
-        //    updateRecord = updateResult.Updated;
-        //    previousRecord = updateResult.Previous;
-
-        //    updatedPlates = [.. updateRecord.Plates];
-        //    Assert.Multiple([
-        //        () => Assert.Equal(creationRecord.Id, updateRecord.Id),
-        //        () => Assert.Equal(creationRecord.Manufacturer, updateRecord.Manufacturer),
-        //        () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
-        //        () => Assert.Equal(creationRecord.ManufacturerNavigation?.Id, updateRecord.ManufacturerNavigation?.Id),
-        //        () => Assert.NotEqual(previousRecord.ManufacturerNavigation?.Brand, updateRecord.ManufacturerNavigation?.Brand),
-        //        () => Assert.NotEqual(previousRecord.ManufacturerNavigation?.Year.ToString(), updateRecord.ManufacturerNavigation?.Year.ToString()),
-        //        () => Assert.NotEqual(previousRecord.ManufacturerNavigation?.Model, updateRecord.ManufacturerNavigation?.Model),
-        //        () => Assert.NotEqual(previousRecord.SituationNavigation?.Name, updateRecord.SituationNavigation?.Name),
-        //        () => Assert.NotEqual(previousRecord.Plates.ToList()[0].Identifier, updateRecord.Plates.ToList()[0].Identifier),
-        //    ]);
-        //    #endregion
-
-        //    #region Adding optional property.
-        //    Insurance insurance = new() {
-        //        Status = 1,
-        //        Policy = "P232Policy" + testTag,
-        //        Expiration = date,
-        //        Country = "MEX"
-        //    };
-
-        //    Usdot usdot = new() {
-        //        Status = 1,
-        //        Mc = "mc- " + testTag,
-        //        Scac = "s" + testTag
-        //    };
-        //    mock = updateRecord;
-        //    mock.InsuranceNavigation = insurance;
-        //    mock.CarrierNavigation!.UsdotNavigation = usdot;
-        //    updateResponse = await Post("Update", mock, true);
-
-        //    Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-        //    updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;
-
-        //    Assert.NotNull(updateResult.Previous);
-
-        //    updateRecord = updateResult.Updated;
-        //    previousRecord = updateResult.Previous;
-
-        //    Assert.Multiple([
-        //        () => Assert.Equal(mock.Id, updateRecord.Id),
-        //        () => Assert.Equal(mock.InsuranceNavigation!.Policy, updateRecord.InsuranceNavigation!.Policy),
-        //        () => Assert.Equal(mock.CarrierNavigation!.UsdotNavigation.Mc, updateRecord.CarrierNavigation!.UsdotNavigation!.Mc),
-        //        () => Assert.NotEqual(mock.CarrierNavigation!.UsdotNavigation.Id, updateRecord.CarrierNavigation!.UsdotNavigation!.Id),
-
-        //    ]);
-        //    #endregion
-
-
-        //}
-        //}
-        //#endregion
+            Truck updateRecord = updateResult.Updated;
+            Truck previousRecord = updateResult.Previous;
+            Assert.Multiple([
+                () => Assert.Equal(creationRecord.Id, updateRecord.Id),
+                () => Assert.Equal(creationRecord.Model, updateRecord.Model),
+                () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
+                () => Assert.NotEqual(previousRecord.Vin, updateRecord.Vin),
+                () => Assert.NotEqual(previousRecord.Plates.First().Identifier, updateRecord.Plates.First().Identifier),
+                () => Assert.NotEqual(previousRecord.Motor, updateRecord.Motor),
+                () => Assert.NotEqual(previousRecord.TruckCommonNavigation!.Economic, updateRecord.TruckCommonNavigation!.Economic)
+            ]);
+            #endregion
+        }
     }
-
+    #endregion
 }

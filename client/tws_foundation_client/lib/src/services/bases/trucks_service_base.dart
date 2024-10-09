@@ -13,4 +13,7 @@ abstract class TrucksServiceBase extends CSMServiceBase {
 
   Effect<SetBatchOut<Truck>> create(List<Truck> trucks, String auth);
 
+  Effect<RecordUpdateOut<Truck>> update(Truck truck, String auth);
+
+
 }

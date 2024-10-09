@@ -53,21 +53,4 @@ public class Q_ManufacturerController
         Assert.True(Estela.Pages > 0);
     }
 
-    [Fact]
-    public async Task Create() {
-        DateOnly date = new(2024, 10, 10);
-
-        Manufacturer mock = new() {
-            Model = "X23",
-            Brand = "SCANIA ctr T1",
-            Year = date
-        };
-
-        (HttpStatusCode Status, GenericFrame Response) = await Post("Create", mock, true);
-
-        _ = Response.Estela.TryGetValue("Advise", out object? value);
-        Assert.Null(value);
-        Assert.Equal(HttpStatusCode.OK, Status);
-    }
-
 }

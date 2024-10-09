@@ -18,7 +18,7 @@ void main() {
       MainResolver<Privileges> fact = await service.authenticate(testCredentials);
 
       fact.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

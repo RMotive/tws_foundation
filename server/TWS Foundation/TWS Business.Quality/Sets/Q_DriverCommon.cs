@@ -25,7 +25,7 @@ public class Q_DriverCommon : BQ_Set<DriverCommon> {
             },
             Expectations = [
                 (nameof(DriverCommon.Id), [(new PointerValidator(), 3)]),
-                (nameof(DriverCommon.License), [(new LengthValidator(),2)]),
+                (nameof(DriverCommon.License), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
                 (nameof(DriverCommon.Status), [(new PointerValidator(true), 3) ])
             ],
         };

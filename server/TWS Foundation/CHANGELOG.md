@@ -2,7 +2,33 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: N/A
+- Notes: 
+  
+    1. [TrucksExternals] Create & update service methods added and tested.
+    2. removed the yardlog timestamp trigger.
+    3. added a default value to timestamp property.
+    4. Added a new schema for business properties changes and normalization.
+    5. [TrucksExternals] Create & update service methods added and tested.
+    6. [Trucks] tests refactored.
+    7. Timestamp property added to sets.
+    8. Added [VehiculeModel] set.
+    9. Added [TrailerType] set.
+    11. The following sets have receive minor properties changes:
+        * [Approach]
+        * [Driver]
+        * [Employee]
+        * [Plate]
+        * [TrailerExternal]
+        * [TruckExternal]
+        * [YArdlog]
+        * [Approaches]
+    12. The following sets have receive breaking changes in their structure:
+        * [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
+        * [TrailerCommon] - Added the trailerType navigation.
+        * [Trailer] - Added Vehicule Model navigation and carrier navigation. 
+        * [Truck] - Added Vehicule Model navigation & SCT navigation.
+        * [Carrier] -  Removed SCT navigation.
+    13. Alternative seal [sealAlt] added on yardlog set. 
 
 - Dependencies Upgrade: N/A
 

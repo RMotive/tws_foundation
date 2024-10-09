@@ -8,11 +8,16 @@ namespace TWS_Business.Sets;
 public partial class Status
 : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
+
+    public virtual ICollection<VehiculeModel> VehiculeModels { get; set; } = [];
+
+    public virtual ICollection<TrailerType> TrailerTypes { get; set; } = [];
 
     public virtual ICollection<TruckCommon> TrucksCommons { get; set; } = [];
 

@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Approach
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -19,7 +20,7 @@ public partial class Approach
 
     public string? Alternative { get; set; }
 
-    public string? Email { get; set; }
+    public string Email { get; set; } = null!;
 
     public virtual Status? StatusNavigation { get; set; }
 
@@ -30,12 +31,11 @@ public partial class Approach
     public virtual ICollection<Employee> Employees { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
 
         Container = [
             ..Container,
-            (nameof(Email), [Required, new LengthValidator(1, 30)]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
+            (nameof(Email), [new RequiredValidator(), new LengthValidator(Max: 64)]),
+            (nameof(Status), [new PointerValidator(true)]),
         ];
 
         return Container;
@@ -65,7 +65,7 @@ public partial class Approach
                 .IsUnicode(false);
 
             Entity.Property(e => e.Email)
-                .HasMaxLength(30)
+                .HasMaxLength(64)
                 .IsUnicode(false);
 
             Entity.HasOne(d => d.StatusNavigation)

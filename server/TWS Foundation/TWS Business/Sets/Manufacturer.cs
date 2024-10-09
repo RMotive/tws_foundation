@@ -9,23 +9,19 @@ namespace TWS_Business.Sets;
 public partial class Manufacturer
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
 
-    public string Model { get; set; } = null!;
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-    public string Brand { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-    public DateOnly Year { get; set; }
+    public string? Description { get; set; }
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
-
-    public virtual ICollection<Trailer> Trailers { get; set; } = [];
-
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+    public virtual ICollection<VehiculeModel> Models { get; set; } = [];
 
     public static void CreateModel(ModelBuilder Builder) {
         Builder.Entity<Manufacturer>(Entity => {
             Entity.HasKey(e => e.Id);
+            Entity.ToTable("Manufacturers");
 
             Entity.Property(e => e.Timestamp)
                 .HasColumnType("datetime");
@@ -33,12 +29,12 @@ public partial class Manufacturer
             Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            Entity.Property(e => e.Brand)
-                .HasMaxLength(15)
+            Entity.Property(e => e.Name)
+                .HasMaxLength(32)
                 .IsUnicode(false);
 
-            Entity.Property(e => e.Model)
-                .HasMaxLength(30)
+            Entity.Property(e => e.Description)
+                .HasMaxLength(100)
                 .IsUnicode(false);
         });
     }
@@ -47,10 +43,8 @@ public partial class Manufacturer
         RequiredValidator Required = new();
 
         Container = [
-            ..Container,
-            (nameof(Model), [Required, new LengthValidator(1, 30)]),
-            (nameof(Brand), [Required, new LengthValidator(1, 15)]),
-            (nameof(Year), [Required]),
+                .. Container,
+            (nameof(Name), [Required, new LengthValidator(Max: 32)]),
         ];
 
         return Container;

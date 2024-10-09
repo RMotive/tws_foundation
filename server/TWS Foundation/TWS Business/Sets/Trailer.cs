@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Trailer
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -17,17 +18,21 @@ public partial class Trailer
 
     public int Carrier { get; set; }
 
-    public int Manufacturer { get; set; }
+    public int? Model { get; set; }
+
+    public int? Sct { get; set; }
 
     public int? Maintenance { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
 
+    public virtual Sct? SctNavigation { get; set; }
+
     public virtual Carrier? CarrierNavigation { get; set; }
 
     public virtual TrailerCommon? TrailerCommonNavigation { get; set; }
 
-    public virtual Manufacturer? ManufacturerNavigation { get; set; }
+    public virtual VehiculeModel? VehiculesModelsNavigation { get; set; }
 
     public virtual Maintenance? MaintenanceNavigation { get; set; }
 
@@ -36,14 +41,11 @@ public partial class Trailer
     public virtual ICollection<Plate> Plates { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-        PointerValidator pointer = new(true);
+        RequiredValidator required = new RequiredValidator();
+
         Container = [
                 .. Container,
-            (nameof(Manufacturer), [Required, pointer]),
-            (nameof(Common), [Required, pointer]),
-            (nameof(Carrier), [new PointerValidator(true)]),
-            (nameof(Status), [Required, pointer]),
+            (nameof(Status), [new PointerValidator(true)]),
         ];
 
         return Container;
@@ -60,18 +62,28 @@ public partial class Trailer
             Entity.Property(e => e.Id)
                 .HasColumnName("id");
 
+            Entity.Property(e => e.Sct)
+              .HasColumnName("SCT");
+
             Entity.HasOne(d => d.TrailerCommonNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Common);
+
+            Entity.HasIndex(e => e.Common)
+               .IsUnique();
+
+            Entity.HasOne(d => d.SctNavigation)
+             .WithMany(p => p.Trailers)
+             .HasForeignKey(d => d.Sct);
 
             Entity.HasOne(d => d.CarrierNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Carrier)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            Entity.HasOne(d => d.ManufacturerNavigation)
+            Entity.HasOne(d => d.VehiculesModelsNavigation)
                 .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Manufacturer)
+                .HasForeignKey(d => d.Model)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             Entity.HasOne(d => d.MaintenanceNavigation)
