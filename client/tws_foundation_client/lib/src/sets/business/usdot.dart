@@ -8,7 +8,7 @@ final class USDOT implements CSMSetInterface {
   static const String kMc = "mc";
 
   /// [scac] property key.
-  static const String kScac = "number";
+  static const String kScac = "scac";
   
   /// Private timestamp property.
   late final DateTime _timestamp;

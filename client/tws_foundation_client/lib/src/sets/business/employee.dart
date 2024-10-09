@@ -123,7 +123,7 @@ final class Employee implements CSMSetInterface {
       if(rfc!.length != 12) results.add(CSMSetValidationResult(kRfc, "CURP number must be 18 length", "strictLength(12)"));
     }
     if(nss != null){
-      if(nss!.length != 11) results.add(CSMSetValidationResult(kNss, "SCAC number must be 4 length", "structLength(11)"));
+      if(nss!.length != 11) results.add(CSMSetValidationResult(kNss, "The NSS number must be 11 character length", "structLength(11)"));
     }
     if(identificationNavigation != null) results = <CSMSetValidationResult>[...results, ...identificationNavigation!.evaluate()];   
 
