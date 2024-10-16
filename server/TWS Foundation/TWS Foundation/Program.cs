@@ -149,6 +149,8 @@ public partial class Program {
                 builder.Services.AddScoped<ILoadTypesService, LoadTypesService>();
                 builder.Services.AddScoped<ISectionsService, SectionsService>();
                 builder.Services.AddScoped<IYardLogsService, YardLogsService>();
+                builder.Services.AddScoped<ICarriersService, CarriersService>();
+                builder.Services.AddScoped<IVehiculesModelsService, VehiculeModelService>();
 
             }
             WebApplication app = builder.Build();

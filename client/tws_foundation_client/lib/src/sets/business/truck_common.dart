@@ -159,8 +159,8 @@ final class TruckCommon implements CSMSetInterface {
       locationIndex, 
       situationIndex,
       situationNav, 
-      locationNav 
-      ,statusNavigation ?? this.statusNavigation
+      locationNav,
+      statusNavigation ?? this.statusNavigation
     );
   }
 }

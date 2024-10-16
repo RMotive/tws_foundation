@@ -3,6 +3,8 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes: 
+    1. Added Carriers service.
+    1. Added vehicules_models service.
 
     1. [TrucksExternals] Create & update service methods added and tested.
     2. [Trucks] tests refactored.

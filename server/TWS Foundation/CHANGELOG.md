@@ -3,7 +3,9 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes: 
-  
+    1. Added VehiculesModels Service
+    1. Added Carriers Service
+    
     1. [TrucksExternals] Create & update service methods added and tested.
     2. removed the yardlog timestamp trigger.
     3. added a default value to timestamp property.
