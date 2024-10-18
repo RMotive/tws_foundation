@@ -31,7 +31,7 @@ final class Truck implements CSMSetInterface {
   String? motor = '';
   int? maintenance;
   int? insurance;
-  int? sct = 0;
+  int? sct;
   Status? statusNavigation;
   TruckCommon? truckCommonNavigation;
   VehiculeModel? vehiculeModelNavigation;
@@ -43,7 +43,9 @@ final class Truck implements CSMSetInterface {
     Plate.a()
   ];
 
-  Truck.a();
+  Truck.a(){
+    _timestamp = DateTime.now();
+  }
 
   Truck(this.id, this.status, this.model, this.common, this.carrier, this.motor, this.vin, this.maintenance, this.insurance, this.sct, this.statusNavigation, this.vehiculeModelNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
     this.insuranceNavigation, this.sctNavigation ,this.carrierNavigation, this.plates, { 
