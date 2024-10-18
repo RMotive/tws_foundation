@@ -54,7 +54,9 @@ final class TruckCommon implements CSMSetInterface {
   Status? statusNavigation;
   
   /// Creates a [TruckCommon] object with default properties.
-  TruckCommon.a();
+  TruckCommon.a(){
+    _timestamp = DateTime.now();
+  }
 
   TruckCommon(this.id, this.status, this.economic, this.location, this.situation, this.situationNavigation, this.locationNavigation, this.statusNavigation, {
     DateTime? timestamp,
@@ -129,7 +131,6 @@ final class TruckCommon implements CSMSetInterface {
   TruckCommon clone({
     int? id,
     int? status,
-    String? vin,
     String? economic,
     int? location,
     int? situation,

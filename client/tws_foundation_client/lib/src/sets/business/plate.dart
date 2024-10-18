@@ -27,7 +27,9 @@ final class Plate implements CSMSetInterface {
   TruckCommon? truckCommonNavigation;
   TrailerCommon? trailerCommonNavigation;
 
-  Plate.a();
+  Plate.a(){
+    _timestamp = DateTime.now();
+  }
 
   Plate(this.id, this.status, this.identifier, this.state, this.country, this.expiration, this.truck, this.trailer, this.statusNavigation, this.truckCommonNavigation, this.trailerCommonNavigation, { 
     DateTime? timestamp,
@@ -111,6 +113,30 @@ final class Plate implements CSMSetInterface {
     TruckCommon? truckCommonNavigation,
     TrailerCommon? trailerCommonNavigation,
   }) {
+    if(state != null){
+      if(state.trim().isEmpty){
+        this.state = null;
+        status = null;
+      }
+    }
+    if(truck == 0){
+      this.truck = null;
+      this.truckCommonNavigation = null;
+      truck = null;
+      truckCommonNavigation = null;
+    }
+    if(trailer == 0){
+      this.trailer = null;
+      this.trailerCommonNavigation = null;
+      trailer = null;
+      trailerCommonNavigation = null;
+    }
+    if(expiration != null){
+      if(expiration == DateTime(0)){
+        this.expiration = null;
+        expiration = null;
+      }
+    }
     return Plate(
       id ?? this.id,
       status ?? this.status,

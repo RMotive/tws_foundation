@@ -12,8 +12,8 @@ final class Maintenance implements CSMSetInterface {
   @override
   int id = 0;
   int status = 1;
-  DateTime anual = DateTime.now();
-  DateTime trimestral = DateTime.now();
+  DateTime anual = DateTime(0);
+  DateTime trimestral = DateTime(0);
   Status? statusNavigation;
   List<Truck> trucks = <Truck>[];
 
@@ -60,7 +60,7 @@ final class Maintenance implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     return <CSMSetValidationResult>[];
   }
-  Maintenance.def();
+  Maintenance.a();
   Maintenance clone({
     int? id,
     int? status,
