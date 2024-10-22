@@ -51,6 +51,8 @@ public partial class Truck
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
+    public virtual ICollection<TruckInventory> TrucksInventories { get; set; } = [];
+
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
     public virtual ICollection<PlateH> PlatesH { get; set; } = [];

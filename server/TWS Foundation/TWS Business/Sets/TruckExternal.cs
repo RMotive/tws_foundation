@@ -30,6 +30,8 @@ public partial class TruckExternal
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
+    public virtual ICollection<TruckInventory> TrucksInventories { get; set; } = [];
+
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
 

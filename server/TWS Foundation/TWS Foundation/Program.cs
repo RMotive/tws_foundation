@@ -13,6 +13,7 @@ using CSM_Foundation.Server.Utils;
 
 using TWS_Business;
 using TWS_Business.Depots;
+using TWS_Business.Sets;
 
 using TWS_Customer.Services;
 using TWS_Customer.Services.Interfaces;
@@ -127,6 +128,7 @@ public partial class Program {
                 builder.Services.AddScoped<TrucksCommonsDepot>();
                 builder.Services.AddScoped<TrailersTypesDepot>();
                 builder.Services.AddScoped<VehiculesModelsDepot>();
+                builder.Services.AddScoped<TrucksInventoriesDepot>();
 
                 builder.Services.AddScoped<YardLogsDepot>();
 
@@ -151,6 +153,8 @@ public partial class Program {
                 builder.Services.AddScoped<IYardLogsService, YardLogsService>();
                 builder.Services.AddScoped<ICarriersService, CarriersService>();
                 builder.Services.AddScoped<IVehiculesModelsService, VehiculeModelService>();
+                builder.Services.AddScoped<ITrucksInventoriesService, TruckInventoryService>();
+
 
             }
             WebApplication app = builder.Build();

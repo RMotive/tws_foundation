@@ -8,6 +8,7 @@
     1. Changes on default date on datetime sets propeties.
     1. Added validations on [Carrier] set clone method.
     1. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
+    1. Added [TruckInventory] set and view service.
 
     1. [TrucksExternals] Create & update service methods added and tested.
     2. [Trucks] tests refactored.

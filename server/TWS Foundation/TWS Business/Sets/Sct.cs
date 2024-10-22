@@ -61,6 +61,7 @@ public partial class Sct
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
+        
         Container = [
             ..Container,
             (nameof(Type), [Required, new LengthValidator(6,6)]),
