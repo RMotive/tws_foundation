@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -15,7 +16,7 @@ void main() {
       final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -177,7 +178,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: SetViewOutDecode<YardLog>(YardLogDecoder()),
+        decoder: (JObject json) => SetViewOut<YardLog>.des(json, YardLog.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -207,7 +208,7 @@ void main() {
 
       bool resolved = false;
       fact.resolve(
-        decoder: MigrationTransactionResultDecoder<YardLog>(YardLogDecoder()),
+        decoder: (JObject json) => SetBatchOut<YardLog>.des(json, YardLog.des),
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
@@ -223,7 +224,8 @@ void main() {
   group(
     'Update',
     () {
-      final MigrationUpdateResultDecoder<YardLog> decoder = MigrationUpdateResultDecoder<YardLog>(YardLogDecoder());
+      updateDecoder(JObject json) => RecordUpdateOut<YardLog>.des(json, YardLog.des);
+
       late YardLog creationMock;
       test(
         'Creates when unexist',
@@ -260,7 +262,7 @@ void main() {
               null);
 
           MainResolver<RecordUpdateOut<YardLog>> fact = await service.update(mock, auth);
-          RecordUpdateOut<YardLog> actEffect = await fact.act(decoder);
+          RecordUpdateOut<YardLog> actEffect = await fact.act(updateDecoder);
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 
@@ -274,7 +276,7 @@ void main() {
           YardLog mock = creationMock.clone(gName: 'a new name to test');
           mock.timestamp = null;
           MainResolver<RecordUpdateOut<YardLog>> fact = await service.update(mock, auth);
-          RecordUpdateOut<YardLog> actEffect = await fact.act(decoder);
+          RecordUpdateOut<YardLog> actEffect = await fact.act(updateDecoder);
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
         },

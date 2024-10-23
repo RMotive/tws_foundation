@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -15,7 +16,7 @@ void main() {
       final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -101,7 +102,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: SetViewOutDecode<Truck>(TruckDecoder()),
+        decoder: (JObject json) => SetViewOut<Truck>.des(json, Truck.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -131,7 +132,7 @@ void main() {
 
       bool resolved = false;
       fact.resolve(
-        decoder: MigrationTransactionResultDecoder<Truck>(TruckDecoder()),
+        decoder: (JObject json) => SetBatchOut<Truck>.des(json, Truck.des),
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
