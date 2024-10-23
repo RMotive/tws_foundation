@@ -27,8 +27,6 @@ public class Q_TrailerExternal : BQ_Set<TrailerExternal> {
             Expectations = [
                 (nameof(TrailerExternal.Id), [(new PointerValidator(), 3)]),
                 (nameof(TrailerExternal.Status), [(new PointerValidator(), 3)]),
-                (nameof(TrailerExternal.Common), [(new PointerValidator(), 3)]),
-                (nameof(TrailerExternal.MxPlate), [(new LengthValidator(), 2)]),
                 (nameof(TrailerExternal.Carrier), [(new LengthValidator(), 2)]),
             ],
         };

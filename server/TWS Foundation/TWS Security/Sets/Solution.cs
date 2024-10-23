@@ -11,13 +11,13 @@ public partial class Solution
 
     public override int Id { get; set; }
 
+    public override DateTime Timestamp { get; set; } = DateTime.Now;
+
     public string Name { get; set; } = null!;
 
     public string Sign { get; set; } = null!;
 
     public string? Description { get; set; }
-
-    public override DateTime Timestamp { get; set; }
 
     public virtual ICollection<Permit> Permits { get; set; } = [];
 

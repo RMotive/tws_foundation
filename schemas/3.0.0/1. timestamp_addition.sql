@@ -1,4 +1,3 @@
--- Updating Security tables --
 use [TWS Security];
 
 DECLARE @ColumnName NVARCHAR(128) = 'Timestamp';

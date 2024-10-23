@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
+﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -17,7 +18,12 @@ public class Q_TrucksExternalsDepot
 
         return new() {
             Status = 1,
-            Common = 1,
+            Common = 0,
+            TruckCommonNavigation = new() {
+                Timestamp = DateTime.Now,
+                Status = 1,
+                Economic = RandomUtils.String(16),
+            },
             MxPlate = "12345678",
             Carrier = "truck carrier qlty"
         };

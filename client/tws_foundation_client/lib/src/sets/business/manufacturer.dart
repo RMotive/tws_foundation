@@ -1,81 +1,60 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/sets/set_common_keys.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// Catalog information for [Manufacturer], handles information of a [Truck] manufacturer.
 final class Manufacturer implements CSMSetInterface {
-  /// [model] property key.
-  static const String kModel = "model";
 
-  /// [brand] property key.
-  static const String kBrand = "brand";
+  late final DateTime _timestamp;
+  DateTime get timestamp => _timestamp; 
 
-  /// [year] property key.
-  static const String kYear = "year";
-
-  /// [trucks] property key.
-  static const String kTrucks = "trucks";
-
-  /// Record database pointer.
   @override
   int id = 0;
+  int status = 1;
+  String name = "";
+  String? description;
+  Status? statusNavigation;
 
-  /// Model identifier.
-  String model = '';
-
-  /// Brand identifier.
-  String brand = '';
-
-  /// Manufacture year.
-  DateTime year = DateTime(1000);
-
-  /// List of [Truck] that has the current [Manufacturer].
-  List<Truck>? trucks;
-
-  /// Creates a [Manufacturer] object with required properties.
-  Manufacturer(this.id, this.model, this.brand, this.year, this.trucks);
-
-  /// Creates a [Manufacturer] object with refault properties.
-  Manufacturer.a();
-
-  /// Creates a [Manufacturer] object based on the given [json] object.
-  factory Manufacturer.des(JObject json) {
-    List<Truck> trucks = <Truck>[];
-    int id = json.get(SCK.kId);
-    String model = json.get(kModel);
-    String brand = json.get(kBrand);
-    DateTime year = json.get(kYear);
-
-    //Validate if the first position is not null for non-empty Truck lists.
-    List<JObject> rawTrucksArray = json.getList(kTrucks);
-    trucks = rawTrucksArray.map<Truck>(Truck.des).toList();
-
-    return Manufacturer(id, model, brand, year, trucks);
+  Manufacturer(this.id, this.name, this.description, { 
+    DateTime? timestamp,
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
   }
 
-  /// Creates a [Manufacturer] object overriding the given properties.
-  Manufacturer clone({int? id, String? model, String? brand, DateTime? year}) {
-    return Manufacturer(id ?? this.id, model ?? this.model, brand ?? this.brand, year ?? this.year, trucks);
+  factory Manufacturer.des(JObject json) {
+    int id = json.get(SCK.kId);
+    String name = json.get(SCK.kName);
+    DateTime timestamp = json.get(SCK.kTimestamp);
+    String? description = json.getDefault(SCK.kDescription, null);
+    
+    return Manufacturer(id, name, description, timestamp: timestamp);
   }
 
   @override
   JObject encode() {
-    String y = year.toString().substring(0, 10);
     return <String, dynamic>{
-      SCK.kId: id,
-      kModel: model,
-      kBrand: brand,
-      kYear: y,
-      kTrucks: trucks?.map((Truck i) => i.encode()).toList(),
+      'id': id,
+      SCK.kName: name,
+      SCK.kDescription: description,
+      SCK.kTimestamp: timestamp.toIso8601String(),
     };
   }
 
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
-    if (kModel.length > 30) results.add(CSMSetValidationResult(kModel, "Model length must be a max lenght of 30", "strictLength(1,30)"));
-    if (kModel.length > 15) results.add(CSMSetValidationResult(kBrand, "Brand length must be a max lenght of 15", "strictLength(1,15)"));
-
+    if(name.trim().isEmpty || name.length > 32) results.add(CSMSetValidationResult(SCK.kName, "Name must be 25 max lenght and non-empty", "strictLength(1,32)"));
     return results;
   }
+
+  Manufacturer clone({
+    int? id,
+    int? status,
+    String? name,
+    String? description,
+  }){
+    String? desc = description ?? this.description;
+    if(desc == "") desc = null;
+    return Manufacturer(id ?? this.id, name ?? this.name, desc);
+  }
+
 }
+

@@ -11,7 +11,8 @@ namespace TWS_Security.Sets;
 public partial class Contact 
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.Now;
 
     public string Name { get; set; } = null!;
 
@@ -29,10 +30,10 @@ public partial class Contact
 
         Container = [
                 ..Container,
-                (nameof(Name), [Required, new LengthValidator(1,50)]),
-                (nameof(Lastname), [Required, new LengthValidator(1,50)]),
-                (nameof(Email), [Required, new UniqueValidator(),new LengthValidator(1,30)]),
-                (nameof(Phone), [Required, new UniqueValidator(), new LengthValidator(10,14)]),
+                (nameof(Name), [new LengthValidator(1,50)]),
+                (nameof(Lastname), [new LengthValidator(1,50)]),
+                (nameof(Email), [new UniqueValidator(),new LengthValidator(1,30)]),
+                (nameof(Phone), [new UniqueValidator(), new LengthValidator(10,14)]),
 
             ];
 

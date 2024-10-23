@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Location
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -34,7 +35,6 @@ public partial class Location
         Container = [
                 .. Container,
             (nameof(Name), [Required, new LengthValidator(1, 30)]),
-            (nameof(Address), [new PointerValidator(true)]),
             (nameof(Status), [new PointerValidator(true)])
         ];
 

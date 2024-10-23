@@ -11,7 +11,8 @@ public partial class YardLog
     : BSet {
 
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public bool Entry { get; set; }
 
@@ -35,7 +36,9 @@ public partial class YardLog
 
     public string Gname { get; set; } = null!;
 
-    public string Seal { get; set; } = null!;
+    public string? Seal { get; set; }
+
+    public string? SealAlt { get; set; }
 
     public string FromTo { get; set; } = null!;
 
@@ -43,7 +46,7 @@ public partial class YardLog
 
     public string TTPicture { get; set; } = null!;
 
-    public string? DmgEvidence { get; set; } = null!;
+    public string? DmgEvidence { get; set; }
 
     public virtual Driver? DriverNavigation { get; set; }
 
@@ -62,11 +65,11 @@ public partial class YardLog
     public virtual Section? SectionNavigation { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        RequiredValidator required = new RequiredValidator();
         Container = [
             ..Container,
-            (nameof(TTPicture), [new LengthValidator(1, 199999999)]),
+            (nameof(TTPicture), [required]),
             (nameof(Gname), [new LengthValidator(1, 100)]),
-            (nameof(Seal), [new LengthValidator(1, 64)]),
             (nameof(FromTo), [new LengthValidator(1, 100)]),
             (nameof(LoadType), [new PointerValidator(true)]),
             (nameof(Section), [new PointerValidator(true)]),
@@ -78,15 +81,10 @@ public partial class YardLog
     public static void Set(ModelBuilder builder) {
         builder.Entity<YardLog>(entity => {
             entity.HasKey(e => e.Id);
-            entity.ToTable("Yard_Logs", tb => tb.HasTrigger("tgr_YardLogs_Insert"));
+            entity.ToTable("Yard_Logs", tb => tb.HasTrigger("YardLogs_InsertInto_TrucksInventories"));
 
             entity.Property(e => e.Id)
                  .HasColumnName("id");
-
-            //this property cannot be modified "manually". Modify this property will result in unexpected exceptions.
-            entity.Property(b => b.Timestamp) 
-            .ValueGeneratedOnAddOrUpdate();
-
 
             entity.Property(e => e.Timestamp)
                 .HasColumnType("datetime");
@@ -96,6 +94,10 @@ public partial class YardLog
                 .IsUnicode(false);
 
             entity.Property(e => e.Seal)
+                .HasMaxLength(64)
+                .IsUnicode(false);
+
+            entity.Property(e => e.SealAlt)
                 .HasMaxLength(64)
                 .IsUnicode(false);
 
