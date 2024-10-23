@@ -16,5 +16,17 @@ final class TrucksExternalsService extends TrucksExternalsServiceBase {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<TruckExternal>>(actEffect);
   }
+
+  @override
+  Effect<SetBatchOut<TruckExternal>> create(List<TruckExternal> trucks, String auth) async {
+    CSMActEffect actEffect = await postList('create', trucks, auth: auth);
+    return MainResolver<SetBatchOut<TruckExternal>>(actEffect);
+  }
+
+  @override
+  Effect<RecordUpdateOut<TruckExternal>> update(TruckExternal truck, String auth) async {
+    CSMActEffect actEffect = await post('update', truck, auth: auth);
+    return MainResolver<RecordUpdateOut<TruckExternal>>(actEffect);
+  }
 }
       

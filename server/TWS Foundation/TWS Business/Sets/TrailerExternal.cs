@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class TrailerExternal
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -17,7 +18,7 @@ public partial class TrailerExternal
 
     public string Carrier { get; set; } = null!;
 
-    public string MxPlate { get; set; } = null!;
+    public string? MxPlate { get; set; }
 
     public string? UsaPlate { get; set; } = null!;
 
@@ -32,9 +33,8 @@ public partial class TrailerExternal
 
         Container = [
                 .. Container,
-            (nameof(Common), [Required, new PointerValidator(true)]),
+            (nameof(Common), [new UniqueValidator()]),
             (nameof(Status), [Required, new PointerValidator(true)]),
-            (nameof(MxPlate), [new LengthValidator(8, 12)]),
             (nameof(Carrier), [new LengthValidator(1, 100)]),
 
         ];
@@ -68,6 +68,8 @@ public partial class TrailerExternal
             Entity.HasOne(d => d.TrailerCommonNavigation)
                 .WithMany(p => p.TrailersExternals)
                 .HasForeignKey(d => d.Common);
+            Entity.HasIndex(e => e.Common)
+                .IsUnique();
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrailersExternals)

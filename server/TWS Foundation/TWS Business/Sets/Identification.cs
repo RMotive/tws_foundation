@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Identification
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -62,10 +63,10 @@ public partial class Identification
         RequiredValidator Required = new();
         Container = [
             ..Container,
-            (nameof(Name), [Required, new LengthValidator(1,32)]),
-            (nameof(FatherLastname), [Required, new LengthValidator(1,32)]),
-            (nameof(MotherLastName), [Required, new LengthValidator(1,32)]),
-            (nameof(Status), [Required, new PointerValidator(true)])
+            (nameof(Name), [Required, new LengthValidator(Max: 32)]),
+            (nameof(FatherLastname), [Required, new LengthValidator(Max: 32)]),
+            (nameof(MotherLastName), [Required, new LengthValidator(Max: 32)]),
+            (nameof(Status), [new PointerValidator(true)])
         ];
         return Container;
     }

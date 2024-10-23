@@ -351,11 +351,16 @@ public abstract class BDepot<TDatabase, TSet>
 
             Record.Timestamp = old.Timestamp;
             UpdateHelper(current, Record);
+            await Database.SaveChangesAsync();
         } else {
             Record.Timestamp = DateTime.Now;
             Set.Update(Record);
+            await Database.SaveChangesAsync();
+
+            current = await query
+                .Where(i => i.Id == Record.Id)
+                .FirstOrDefaultAsync();
         }
-        await Database.SaveChangesAsync();
 
         Disposer?.Push(Database, Record);
         return new RecordUpdateOut<TSet> {

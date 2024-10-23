@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class Sct
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -18,9 +19,13 @@ public partial class Sct
     public string Number { get; set; } = null!;
 
     public string Configuration { get; set; } = null!;
+
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<Carrier> Carriers { get; set; } = [];
+    public virtual ICollection<Truck> Trucks { get; set; } = [];
+
+    public virtual ICollection<Trailer> Trailers { get; set; } = [];
+
 
     public virtual ICollection<SctH> SctsH { get; set; } = [];
 

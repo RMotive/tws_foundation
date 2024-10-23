@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class DriverExternal
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -23,6 +24,7 @@ public partial class DriverExternal
 
     public virtual DriverCommon? DriverCommonNavigation { get; set; }
 
+
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
@@ -30,8 +32,6 @@ public partial class DriverExternal
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Identification), [new PointerValidator(true)]),
-            (nameof(Common), [new PointerValidator(true)]),
         ];
 
         return Container;
@@ -51,6 +51,9 @@ public partial class DriverExternal
             Entity.HasOne(d => d.DriverCommonNavigation)
                 .WithMany(p => p.DriversExternals)
                 .HasForeignKey(d => d.Common);
+
+            Entity.HasIndex(e => e.Common)
+               .IsUnique();
 
             Entity.HasOne(d => d.IdentificationNavigation)
                 .WithMany(p => p.DriversExternals)

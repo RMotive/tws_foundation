@@ -9,7 +9,8 @@ namespace TWS_Business.Sets;
 public partial class DriverCommon
     : BSet {
     public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; }
+
+    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Status { get; set; }
 
@@ -31,7 +32,7 @@ public partial class DriverCommon
         Container = [
                 .. Container,
             (nameof(License), [Required, new LengthValidator(8,12)]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
+            (nameof(Status), [new PointerValidator(true)]),
         ];
 
         return Container;

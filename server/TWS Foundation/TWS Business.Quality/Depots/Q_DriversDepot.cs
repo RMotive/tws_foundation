@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Core.Utils;
+using System.ComponentModel;
+
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
@@ -20,7 +22,12 @@ public class Q_DriversDepot
            Status = 1,
            Employee = 1,
            DriverType = RandomUtils.String(12),
-           Common = 1
+           Common = 0,
+           DriverCommonNavigation = new() {
+               Timestamp = DateTime.Now,
+               Status = 1,
+               License = RandomUtils.String(12)
+           }
         };
     }
 

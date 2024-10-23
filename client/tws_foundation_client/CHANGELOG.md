@@ -2,8 +2,37 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes:
+- Notes: 
 
+    1. [TrucksExternals] Create & update service methods added and tested.
+    2. [Trucks] tests refactored.
+    3. Timestamp property added to sets.
+    4. Added [VehiculeModel] set.
+    5. Added [TrailerType] set.
+    6. Added [TrailerClass] set.
+    7. The following sets have receive minor properties changes:
+        * [Approach]
+        * [Driver]
+        * [Employee]
+        * [Plate]
+        * [TrailerExternal]
+        * [TruckExternal]
+        * [YardLog]
+        * [Approaches]
+    8. The following sets have receive breaking changes in their structure:
+        * [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
+        * [TrailerCommon] - Added the trailerType navigation.
+        * [Trailer] - Added Vehicule Model navigation. 
+        * [Truck] - Added Vehicule Model navigation & SCT navigation.
+        * [Carrier] -  Removed SCT navigation.
+    9. Changed all nulleable [Datetime] properties decode implementation.
+    10. Sets evaluation methods changed.
+    11. Alternative seal [sealAlt] property added in yardlog set.
+    12. Additional empty strings validations in the following sets:
+        * [Yardlog]
+        * [TruckExternal]
+        * [TrailerExternal]
+        
   - Renames
 
         1. [MigrationTransactionResult] -> [SetBatchOut]
