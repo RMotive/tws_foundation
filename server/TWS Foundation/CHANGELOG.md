@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 4.0.0 - [24.10-2024]
 
 - Notes: 
   
