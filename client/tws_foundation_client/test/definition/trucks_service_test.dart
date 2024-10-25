@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -8,7 +8,7 @@ void main() {
   late TrucksServiceBase service;
   late SetViewOut<Truck> viewMock;
   late SetViewOptions<Truck> options;
-  MigrationTransactionResult<Truck> createMock;
+  SetBatchOut<Truck> createMock;
   List<Truck> models = <Truck>[];
   group("Truck Service - Definition Service", () {
     setUp(
@@ -34,13 +34,13 @@ void main() {
         // }
 
         // models.add(model);
-        createMock = MigrationTransactionResult<Truck>(<Truck>[], <MigrationTransactionFailure<Truck>>[], 0, 0, 0, false);
+        createMock = SetBatchOut<Truck>(<Truck>[], <SetOperationFailure<Truck>>[], 0, 0, 0, false);
 
         Client mockClient = MockClient(
           (Request request) async {
             JObject jObject = switch (request.url.pathSegments.last) {
               'view' => SuccessFrame<SetViewOut<Truck>>('qTracer', viewMock).encode(),
-            'create' => SuccessFrame<MigrationTransactionResult<Truck>>('qTracer', createMock).encode(),
+              'create' => SuccessFrame<SetBatchOut<Truck>>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
           
@@ -64,7 +64,7 @@ void main() {
 
         bool passed = false;
         fact.resolve(
-          decoder: SetViewOutDecode<Truck>(TruckDecoder()),
+          decoder: (JObject json) => SetViewOut<Truck>.des(json, Truck.des),
           onConnectionFailure: () {},
           onFailure: (FailureFrame failure, int status) {
             assert(false, 'server returned a success $status');
@@ -91,10 +91,10 @@ void main() {
     test(
       "Create",
       () async {
-        MainResolver<MigrationTransactionResult<Truck>> fact = await service.create(models, "");
+        MainResolver<SetBatchOut<Truck>> fact = await service.create(models, "");
         bool passed = false;
         fact.resolve(
-          decoder: MigrationTransactionResultDecoder<Truck>(TruckDecoder()),
+          decoder: (JObject json) => SetBatchOut<Truck>.des(json, Truck.des),
           onConnectionFailure: () {
             throw 'ConnectionFailure';
           },
@@ -104,7 +104,7 @@ void main() {
           onException: (Object exception, StackTrace trace) {
             assert(false, 'server returned a success');
           },
-          onSuccess: (SuccessFrame<MigrationTransactionResult<Truck>> success) {
+          onSuccess: (SuccessFrame<SetBatchOut<Truck>> success) {
             passed = true;
           },
         );

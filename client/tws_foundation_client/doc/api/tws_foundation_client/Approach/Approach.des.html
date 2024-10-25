@@ -67,6 +67,9 @@
     </section>
 
     
+<section class="desc markdown">
+  <p>Creates an <a href="../../tws_foundation_client/Approach-class.html">Approach</a> object based on a <code>json</code> object.</p>
+</section>
 
 
     
@@ -74,23 +77,24 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Approach.des(JObject json) {
   List&lt;Carrier&gt; carriers = &lt;Carrier&gt;[];
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  String email = json.get(&#39;email&#39;);
-  String? enterprise = json.getDefault(&#39;enterprise&#39;, null);
-  String? personal = json.getDefault(&#39;personal&#39;, null);
-  String? alternative = json.getDefault(&#39;alternative&#39;, null);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  String email = json.get(kEmail);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  String? enterprise = json.getDefault(kEnterprise, null);
+  String? personal = json.getDefault(kPersonal, null);
+  String? alternative = json.getDefault(kAlternative, null);
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  List&lt;JObject&gt; rawCarriersArray = json.getList(&#39;Carriers&#39;);
-  carriers = rawCarriersArray.map&lt;Carrier&gt;((JObject e) =&gt; deserealize(e, decode: CarrierDecoder())).toList();
+  List&lt;JObject&gt; rawCarriersArray = json.getList(kCarriers);
+  carriers = rawCarriersArray.map&lt;Carrier&gt;(Carrier.des).toList();
 
-  return Approach(id, status, email, enterprise, personal, alternative, statusNavigation, carriers);
+  return Approach(id, status, email, enterprise, personal, alternative, statusNavigation, carriers, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -125,7 +129,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

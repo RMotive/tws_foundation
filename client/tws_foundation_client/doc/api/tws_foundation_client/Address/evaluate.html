@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -89,7 +89,9 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
   if(country.length &gt; 3) results.add(CSMSetValidationResult(kCountry, &quot;Country must be 3 length&quot;, &quot;strictLength(3)&quot;));
   if(country.length &lt; 2 &amp;&amp; country.length &gt; 3) results.add(CSMSetValidationResult(kCountry,&quot;Country must be between 2 and 3 length&quot;, &quot;strictLength(2,3)&quot;));
-  if(state != null &amp;&amp; state!.length &lt; 2 || state!.length &gt; 4) results.add(CSMSetValidationResult(kState, &quot;State length must be between 2 and 4&quot;, &quot;strictLength(2,4)&quot;));
+  if(state != null){
+    if(state!.length &lt; 2 || state!.length &gt; 4) results.add(CSMSetValidationResult(kState, &quot;State length must be between 2 and 4&quot;, &quot;strictLength(2,4)&quot;));
+  }
   if(street != null &amp;&amp; street!.length &gt; 100) results.add(CSMSetValidationResult(kStreet, &quot;Street must be 100 max length &quot;,  &quot;strictLength(0, 100)&quot;));
   if(altStreet != null &amp;&amp; altStreet!.length &gt; 100) results.add(CSMSetValidationResult(kAltStreet, &quot;altStreet must be 100 max length &quot;,  &quot;strictLength(0, 100)&quot;));
   if(city != null &amp;&amp; city!.length &gt; 30) results.add(CSMSetValidationResult(kCity, &quot;City must be 30 max length &quot;,  &quot;strictLength(0, 30)&quot;));
@@ -131,7 +133,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

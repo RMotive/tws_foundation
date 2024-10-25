@@ -73,30 +73,32 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory DriverExternal.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int identification = json.get(&#39;identification&#39;);
-  int common = json.get(&#39;identification&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int identification = json.get(kIdentification);
+  int common = json.get(kCommon);
+  DateTime timestamp = json.get(SCK.kTimestamp);
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
   DriverCommon? driverCommonNavigation;
-  if (json[&#39;DriverCommonNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;DriverCommonNavigation&#39;, &lt;String, dynamic&gt;{});
-    driverCommonNavigation = deserealize&lt;DriverCommon&gt;(rawNavigation, decode: DriverCommonDecoder());
+  if (json[kDriverCommonNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kDriverCommonNavigation, &lt;String, dynamic&gt;{});
+    driverCommonNavigation = DriverCommon.des(rawNavigation);
   }
 
-  Identification? identificationNavigator;
-  if (json[&#39;IdentificationNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;IdentificationNavigation&#39;, &lt;String, dynamic&gt;{});
-    identificationNavigator = deserealize&lt;Identification&gt;(rawNavigation, decode: IdentificationDecoder());
+
+ Identification? identificationNavigator;
+  if (json[kIdentificationNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kIdentificationNavigation, &lt;String, dynamic&gt;{});
+    identificationNavigator = Identification.des(rawNavigation);
   }
 
-  return DriverExternal(id, status, identification, common, driverCommonNavigation, identificationNavigator, statusNavigation);
+  return DriverExternal(id, status, identification, common, driverCommonNavigation, identificationNavigator, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -131,7 +133,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

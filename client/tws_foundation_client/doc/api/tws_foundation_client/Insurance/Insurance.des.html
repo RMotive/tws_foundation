@@ -67,6 +67,9 @@
     </section>
 
     
+<section class="desc markdown">
+  <p>Creates an <a href="../../tws_foundation_client/Insurance-class.html">Insurance</a> object based on a given <code>json</code> object.</p>
+</section>
 
 
     
@@ -74,21 +77,27 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Insurance.des(JObject json) {
   List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  String policy = json.get(&#39;policy&#39;);
-  DateTime expiration = json.get(&#39;expiration&#39;);
-  String country = json.get(&#39;country&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  String policy = json.get(kPolicy);
+  DateTime expiration = json.get(kExpiration);
+  String country = json.get(kCountry);
+  DateTime timestamp = json.get(SCK.kTimestamp);
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[kstatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kstatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  List&lt;JObject&gt; rawTrucksArray = json.getList(&#39;Trucks&#39;);
-  trucks = rawTrucksArray.map&lt;Truck&gt;((JObject e) =&gt; deserealize(e, decode: TruckDecoder())).toList();
+  List&lt;JObject&gt; rawTrucksArray = json.getList(kTrucks);
+  trucks = rawTrucksArray
+    .map&lt;Truck&gt;(
+      (JObject json) =&gt; Truck.des(json),
+    )
+    .toList();
 
-  return Insurance(id, status, policy, expiration, country, statusNavigation,trucks);
+
+  return Insurance(id, status, policy, expiration, country, statusNavigation, trucks, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -123,7 +132,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

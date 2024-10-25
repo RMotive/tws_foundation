@@ -73,18 +73,19 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Location.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int address = json.get(&#39;address&#39;);
-  String name = json.get(&#39;name&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int address = json.get(kAddress);
+  String name = json.get(SCK.kName);
+  DateTime timestamp = json.get(SCK.kTimestamp);
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  return Location(id, status, address, name, statusNavigation);
+  return Location(id, status, address, name, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -119,7 +120,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

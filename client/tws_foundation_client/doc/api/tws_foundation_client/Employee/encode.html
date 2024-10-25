@@ -64,7 +64,7 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
@@ -82,14 +82,14 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 JObject encode() {
-  String a = antecedentesNoPenalesExp.toString().substring(0,10);
-  String b = imssRegistrationDate.toString().substring(0,10);
+  String? a = antecedentesNoPenalesExp?.toString().substring(0,10);
+  String? b = imssRegistrationDate?.toString().substring(0,10);
   String? c = hiringDate?.toString().substring(0,10);
   String? d =  terminationDate?.toString().substring(0,10);
 
   return &lt;String, dynamic&gt;{
     &#39;id&#39;: id,
-    kStatus: status,
+    SCK.kStatus: status,
     kIdentification: identification,
     kAddress: address,
     kApproach: approach,
@@ -100,8 +100,9 @@ JObject encode() {
     kImssRegistrationDate: b,
     kHiringdate: c,
     kTerminationDate: d,
+    SCK.kTimestamp: timestamp.toIso8601String(),
     kIdentificationNavigation: identificationNavigation?.encode(),
-    kstatusNavigation: statusNavigation?.encode(),
+    SCK.kStatusNavigation: statusNavigation?.encode(),
   };
 }</code></pre>
 </section>
@@ -137,7 +138,7 @@ JObject encode() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

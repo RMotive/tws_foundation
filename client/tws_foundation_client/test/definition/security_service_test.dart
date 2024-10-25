@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/src/core/constants/context_constants.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -39,7 +39,7 @@ void main() {
       MainResolver<Privileges> fact = await service.authenticate(credentialsMock);
 
       fact.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

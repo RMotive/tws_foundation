@@ -24,7 +24,7 @@ public class Q_Address : BQ_Set<Address> {
             },
             Expectations = [
                 (nameof(Address.Id), [(new PointerValidator(), 3)]),
-                (nameof(Address.Country), [(new LengthValidator(), 2)]),
+                (nameof(Address.Country), [(new RequiredValidator(), 1),(new LengthValidator(), 2)]),
             ],
         };
 

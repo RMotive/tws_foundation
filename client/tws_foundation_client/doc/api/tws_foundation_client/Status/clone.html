@@ -64,10 +64,10 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/Status-class.html">Status</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-name"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">name</span>, </span></li>
-<li><span class="parameter" id="clone-param-description"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">description</span>, </span></li>
-<li><span class="parameter" id="clone-param-trucks"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Truck-class.html">Truck</a></span>&gt;</span>?</span> <span class="parameter-name">trucks</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-name"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">name</span>, </span></li>
+<li><span class="parameter" id="clone-param-description"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">description</span>, </span></li>
+<li><span class="parameter" id="clone-param-trucks"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Truck-class.html">Truck</a></span>&gt;</span>?</span> <span class="parameter-name">trucks</span>, </span></li>
 </ol>})
 
       
@@ -85,7 +85,12 @@
   String? description,
   List&lt;Truck&gt;? trucks
 }){
-  return Status(id ?? this.id, name ?? this.name, description ?? this.description, trucks ?? this.trucks);
+  return Status(
+    id ?? this.id,
+    name ?? this.name,
+    description ?? this.description,
+    trucks ?? this.trucks
+  );
 }</code></pre>
 </section>
 
@@ -120,7 +125,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

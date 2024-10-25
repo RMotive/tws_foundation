@@ -74,49 +74,43 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Carrier.des(JObject json) {
   List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int approach = json.get(&#39;approach&#39;);
-  int address = json.get(&#39;address&#39;);
-  String name = json.get(&#39;name&#39;);
-  String? description = json.getDefault(&#39;description&#39;, null);
-  int? usdot = json.getDefault(&#39;usdot&#39;, null);
-  int? sct = json.getDefault(&#39;sct&#39;, null);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int approach = json.get(kApproach);
+  int address = json.get(kAddress);
+  String name = json.get(SCK.kName);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  String? description = json.getDefault(SCK.kDescription, null);
+  int? usdot = json.getDefault(kUsdot, null);
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
   Approach? approachNavigation;
-  if (json[&#39;ApproachNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;ApproachNavigation&#39;, &lt;String, dynamic&gt;{});
-    approachNavigation = deserealize&lt;Approach&gt;(rawNavigation, decode: ApproachDecoder());
+  if (json[kApproachNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kApproachNavigation, &lt;String, dynamic&gt;{});
+    approachNavigation = Approach.des(rawNavigation);
   }
 
    Address? addressNavigation;
-  if (json[&#39;addressNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;addressNavigation&#39;, &lt;String, dynamic&gt;{});
-    addressNavigation = deserealize&lt;Address&gt;(rawNavigation, decode: AddressDecoder());
+  if (json[kAddressNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kAddressNavigation, &lt;String, dynamic&gt;{});
+    addressNavigation = Address.des(rawNavigation);
   }
 
    USDOT? usdotNavigation;
-  if (json[&#39;UsdotNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;UsdotNavigation&#39;, &lt;String, dynamic&gt;{});
-    usdotNavigation = deserealize&lt;USDOT&gt;(rawNavigation, decode: USDOTDecoder());
-  }
-
-   SCT? sctNavigation;
-  if (json[&#39;SctNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;SctNavigation&#39;, &lt;String, dynamic&gt;{});
-    sctNavigation = deserealize&lt;SCT&gt;(rawNavigation, decode: SCTDecoder());
+  if (json[kUsdotNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kUsdotNavigation, &lt;String, dynamic&gt;{});
+    usdotNavigation = USDOT.des(rawNavigation);
   }
 
   List&lt;JObject&gt; rawTrucksArray = json.getList(&#39;Trucks&#39;);
-  trucks = rawTrucksArray.map&lt;Truck&gt;((JObject e) =&gt; deserealize(e, decode: TruckDecoder())).toList();
+  trucks = rawTrucksArray.map&lt;Truck&gt;(Truck.des).toList();
 
-  return Carrier(id, status, approach, address, name, description, usdot, sct, approachNavigation, addressNavigation, usdotNavigation, sctNavigation, statusNavigation, trucks);
+  return Carrier(id, status, approach, address, name, description, usdot, approachNavigation, addressNavigation, usdotNavigation, statusNavigation, trucks, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -151,7 +145,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

@@ -26,8 +26,8 @@ public class Q_Usdot : BQ_Set<Usdot> {
             },
             Expectations = [
                 (nameof(Usdot.Id), [(new PointerValidator(), 3) ]),
-                (nameof(Usdot.Mc), [(new LengthValidator(),2)]),
-                (nameof(Usdot.Scac), [(new LengthValidator(), 2)]),
+                (nameof(Usdot.Mc), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
+                (nameof(Usdot.Scac), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(Usdot.Status), [(new PointerValidator(), 3) ])
             ],
         };

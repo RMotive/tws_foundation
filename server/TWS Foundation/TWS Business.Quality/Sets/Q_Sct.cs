@@ -26,9 +26,9 @@ public class Q_Sct : BQ_Set<Sct> {
             },
             Expectations = [
                 (nameof(Sct.Id), [(new PointerValidator(), 3)]),
-                (nameof(Sct.Type), [(new LengthValidator(), 2)]),
-                (nameof(Sct.Number), [(new LengthValidator(), 2)]),
-                (nameof(Sct.Configuration), [(new LengthValidator(), 2)]),
+                (nameof(Sct.Type), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Sct.Number), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(Sct.Configuration), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(Sct.Status), [(new PointerValidator(), 3)]),
             ],
         };

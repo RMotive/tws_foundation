@@ -64,19 +64,21 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/SCT-class.html">SCT</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="clone-param-type"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">type</span>, </span></li>
-<li><span class="parameter" id="clone-param-number"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">number</span>, </span></li>
-<li><span class="parameter" id="clone-param-configuration"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">configuration</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="clone-param-type"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">type</span>, </span></li>
+<li><span class="parameter" id="clone-param-number"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">number</span>, </span></li>
+<li><span class="parameter" id="clone-param-configuration"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">configuration</span>, </span></li>
 <li><span class="parameter" id="clone-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
-<li><span class="parameter" id="clone-param-trucks"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Truck-class.html">Truck</a></span>&gt;</span>?</span> <span class="parameter-name">trucks</span>, </span></li>
 </ol>})
 
       
 
     </section>
     
+<section class="desc markdown">
+  <p>Creates a <a href="../../tws_foundation_client/SCT-class.html">SCT</a> object overriding given properties.</p>
+</section>
 
 
     
@@ -89,9 +91,15 @@
   String? number,
   String? configuration,
   Status? statusNavigation,
-  List&lt;Truck&gt;? trucks
 }){
-  return SCT(id ?? this.id, status ?? this.status, type ?? this.type, number ?? this.number, configuration ?? this.configuration, statusNavigation ?? this.statusNavigation, trucks ?? this.trucks);
+  return SCT(
+    id ?? this.id,
+    status ?? this.status,
+    type ?? this.type,
+    number ?? this.number,
+    configuration ?? this.configuration,
+    statusNavigation ?? this.statusNavigation
+  );
 }</code></pre>
 </section>
 
@@ -126,7 +134,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

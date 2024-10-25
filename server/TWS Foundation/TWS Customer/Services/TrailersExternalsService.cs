@@ -33,11 +33,11 @@ public class TrailersExternalsService : ITrailersExternalsService {
                     Id = p.TrailerCommonNavigation.Id,
                     Status = p.TrailerCommonNavigation.Status,
                     Economic = p.TrailerCommonNavigation.Economic,
-                    Class = p.TrailerCommonNavigation.Class,
+                    Type = p.TrailerCommonNavigation.Type,
                     Situation = p.TrailerCommonNavigation.Situation,
                     Location = p.TrailerCommonNavigation.Location,
                     SituationNavigation = p.TrailerCommonNavigation.SituationNavigation,
-                    TrailerClassNavigation = p.TrailerCommonNavigation.TrailerClassNavigation,
+                    TrailerTypeNavigation = p.TrailerCommonNavigation.TrailerTypeNavigation,
                     LocationNavigation = p.TrailerCommonNavigation.LocationNavigation
                 },
             });

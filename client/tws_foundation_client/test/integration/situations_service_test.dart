@@ -1,4 +1,5 @@
 
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -13,7 +14,7 @@ void main() {
       final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: PrivilegesDecode(),
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -40,7 +41,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: SetViewOutDecode<Situation>(SituationDecoder()),
+        decoder: (JObject json) => SetViewOut<Situation>.des(json, Situation.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

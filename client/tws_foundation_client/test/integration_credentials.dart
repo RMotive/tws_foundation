@@ -1,15 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:dotenv/dotenv.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-final DotEnv _env = DotEnv()..load();
 
 final Credentials testCredentials = Credentials(
-  _env['identity']!,
+  'twsm_quality',
   Uint8List.fromList(
-    utf8.encode(_env['password']!),
+    utf8.encode('twsmquality2024\$'),
   ),
-  _env['sign']!,
+  'TWSMF',
 );

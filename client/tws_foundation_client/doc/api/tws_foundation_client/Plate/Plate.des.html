@@ -74,29 +74,33 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Plate.des(JObject json) {
   TruckCommon? truckCommonNavigation;
-  if(json[&#39;TruckCommonNavigation&#39;] != null){
-    truckCommonNavigation =  deserealize&lt;TruckCommon&gt;(json[&#39;TruckCommonNavigation&#39;], decode: TruckCommonDecoder());
+  if (json[kTruckCommonNavigation] != null) {
+    truckCommonNavigation = TruckCommon.des(json[kTruckCommonNavigation]);
   }
 
   TrailerCommon? trailerNavigation;
-  if(json[&#39;TrailerCommonNavigation&#39;] != null){
-    trailerNavigation =  deserealize&lt;TrailerCommon&gt;(json[&#39;TrailerCommonNavigation&#39;], decode: TrailerCommonDecoder());
+  if (json[kTrailerCommonNavigation] != null) {
+    trailerNavigation = TrailerCommon.des(json[kTrailerCommonNavigation]);
   }
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
   int id = json.get(&#39;id&#39;);
   int status = json.get(&#39;status&#39;);
   String identifier = json.get(&#39;identifier&#39;);
-  String state = json.get(&#39;state&#39;);
+  String? state = json.getDefault(&#39;state&#39;, null);
   String country = json.get(&#39;country&#39;);
-  DateTime expiration = json.get(&quot;expiration&quot;);
+  DateTime timestamp = json.get(&#39;timestamp&#39;);
+
+  String? exp = json.getDefault(&quot;expiration&quot;, null);
+  DateTime? expiration = exp != null? DateTime.parse(exp) : null;
+
   int? truck = json.getDefault(&#39;truck&#39;, null);
   int? trailer = json.getDefault(&#39;trailer&#39;, null);
-  return Plate(id, status, identifier, state, country, expiration, truck, trailer, statusNavigation, truckCommonNavigation, trailerNavigation);
+  return Plate(id, status, identifier, state, country, expiration, truck, trailer, statusNavigation, truckCommonNavigation, trailerNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -131,7 +135,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

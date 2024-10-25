@@ -87,7 +87,8 @@
   int guard = json.get(&#39;guard&#39;);
   String gName = json.get(&#39;gName&#39;);
   String fromTo = json.get(&#39;fromTo&#39;);
-  String seal = json.get(&#39;seal&#39;);
+  String? seal = json.getDefault(&#39;seal&#39;, null);
+  String? sealAlt = json.getDefault(&#39;sealAlt&#39;, null);
   bool damage = json.get(&#39;damage&#39;);
   String ttPicture = json.get(&#39;ttPicture&#39;);
   String? dmgEvidence = json.getDefault(&#39;dmgEvidence&#39;, null);
@@ -95,46 +96,46 @@
   Driver? driverNavigation;
   if (json[&#39;DriverNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;DriverNavigation&#39;, &lt;String, dynamic&gt;{});
-    driverNavigation = deserealize&lt;Driver&gt;(rawNavigation, decode: DriverDecoder());
+    driverNavigation = Driver.des(rawNavigation);
   }
   DriverExternal? driverExternalNavigation;
   if (json[&#39;DriverExternalNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;DriverExternalNavigation&#39;, &lt;String, dynamic&gt;{});
-    driverExternalNavigation = deserealize&lt;DriverExternal&gt;(rawNavigation, decode: DriverExternalDecoder());
+    driverExternalNavigation = DriverExternal.des(rawNavigation);
   }
   Truck? truckNavigation;
   if (json[&#39;TruckNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;TruckNavigation&#39;, &lt;String, dynamic&gt;{});
-    truckNavigation = deserealize&lt;Truck&gt;(rawNavigation, decode: TruckDecoder());
+    truckNavigation = Truck.des(rawNavigation);
   }
   TruckExternal? truckExternalNavigation;
   if (json[&#39;TruckExternalNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;TruckExternalNavigation&#39;, &lt;String, dynamic&gt;{});
-    truckExternalNavigation = deserealize&lt;TruckExternal&gt;(rawNavigation, decode: TruckExternalDecoder());
+    truckExternalNavigation = TruckExternal.des(rawNavigation);
   }
   Trailer? trailerNavigation;
   if (json[&#39;TrailerNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;TrailerNavigation&#39;, &lt;String, dynamic&gt;{});
-    trailerNavigation = deserealize&lt;Trailer&gt;(rawNavigation, decode: TrailerDecoder());
+    trailerNavigation = Trailer.des(rawNavigation);
   }
   TrailerExternal? trailerExternalNavigation;
   if (json[&#39;TrailerExternalNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;TrailerExternalNavigation&#39;, &lt;String, dynamic&gt;{});
-    trailerExternalNavigation = deserealize&lt;TrailerExternal&gt;(rawNavigation, decode: TrailerExternalDecoder());
+    trailerExternalNavigation = TrailerExternal.des(rawNavigation);
   }
   LoadType? loadTypeNavigation;
   if (json[&#39;LoadTypeNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;LoadTypeNavigation&#39;, &lt;String, dynamic&gt;{});
-    loadTypeNavigation = deserealize&lt;LoadType&gt;(rawNavigation, decode: LoadTypeDecoder());
+    loadTypeNavigation = LoadType.des(rawNavigation);
   }
   Section? sectionNavigation;
   if (json[&#39;SectionNavigation&#39;] != null) {
     JObject rawNavigation = json.getDefault(&#39;SectionNavigation&#39;, &lt;String, dynamic&gt;{});
-    sectionNavigation = deserealize&lt;Section&gt;(rawNavigation, decode: SectionDecoder());
+    sectionNavigation = Section.des(rawNavigation);
   }
 
-  return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, timestamp, guard, gName, fromTo, seal, damage,
-  ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null);
+  return YardLog(id, entry, truck, truckExternal, trailer, trailerExternal, loadType, section, driver, driverExternal, guard, gName, fromTo, seal, sealAlt, damage,
+  ttPicture, dmgEvidence, driverNavigation, driverExternalNavigation, truckNavigation, truckExternalNavigation, trailerNavigation, trailerExternalNavigation, loadTypeNavigation, sectionNavigation, null, timestamp: timestamp, );
 }</code></pre>
 </section>
 
@@ -169,7 +170,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

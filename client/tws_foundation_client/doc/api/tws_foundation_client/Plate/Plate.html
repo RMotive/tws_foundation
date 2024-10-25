@@ -62,18 +62,19 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">Plate</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="-param-identifier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a></span> <span class="parameter-name">identifier</span>, </span></li>
-<li><span class="parameter" id="-param-state"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a></span> <span class="parameter-name">state</span>, </span></li>
-<li><span class="parameter" id="-param-country"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a></span> <span class="parameter-name">country</span>, </span></li>
-<li><span class="parameter" id="-param-expiration"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/DateTime-class.html">DateTime</a></span> <span class="parameter-name">expiration</span>, </span></li>
-<li><span class="parameter" id="-param-truck"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">truck</span>, </span></li>
-<li><span class="parameter" id="-param-trailer"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">trailer</span>, </span></li>
+      <span class="name ">Plate</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="-param-identifier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a></span> <span class="parameter-name">identifier</span>, </span></li>
+<li><span class="parameter" id="-param-state"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">state</span>, </span></li>
+<li><span class="parameter" id="-param-country"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a></span> <span class="parameter-name">country</span>, </span></li>
+<li><span class="parameter" id="-param-expiration"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">expiration</span>, </span></li>
+<li><span class="parameter" id="-param-truck"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">truck</span>, </span></li>
+<li><span class="parameter" id="-param-trailer"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">trailer</span>, </span></li>
 <li><span class="parameter" id="-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
 <li><span class="parameter" id="-param-truckCommonNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/TruckCommon-class.html">TruckCommon</a>?</span> <span class="parameter-name">truckCommonNavigation</span>, </span></li>
-<li><span class="parameter" id="-param-trailerCommonNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/TrailerCommon-class.html">TrailerCommon</a>?</span> <span class="parameter-name">trailerCommonNavigation</span>, </span></li>
-</ol>)
+<li><span class="parameter" id="-param-trailerCommonNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/TrailerCommon-class.html">TrailerCommon</a>?</span> <span class="parameter-name">trailerCommonNavigation</span>, {</span></li>
+<li><span class="parameter" id="-param-timestamp"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">timestamp</span>, </span></li>
+</ol>})
     </section>
 
     
@@ -82,7 +83,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Plate(this.id, this.status, this.identifier, this.state, this.country, this.expiration, this.truck, this.trailer, this.statusNavigation, this.truckCommonNavigation, this.trailerCommonNavigation);</code></pre>
+  <pre class="language-dart"><code class="language-dart">Plate(this.id, this.status, this.identifier, this.state, this.country, this.expiration, this.truck, this.trailer, this.statusNavigation, this.truckCommonNavigation, this.trailerCommonNavigation, {
+  DateTime? timestamp,
+}){
+  _timestamp = timestamp ?? DateTime.now();
+}</code></pre>
 </section>
 
 
@@ -116,7 +121,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

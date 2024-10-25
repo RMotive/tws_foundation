@@ -73,31 +73,43 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Trailer.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int common = json.get(&#39;common&#39;);
-  int carrier = json.get(&#39;carrier&#39;);
-  int manufactuer = json.get(&#39;manufacturer&#39;);
-  int? maintenance = json.getDefault(&#39;situation&#39;, null);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int common = json.get(kCommon);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  int carrier = json.get(kCarrier);
+  int? model = json.getDefault(kModel, null);
+  int? maintenance = json.getDefault(kMaintenance, null);
 
   List&lt;Plate&gt; plates = &lt;Plate&gt;[];
-  List&lt;JObject&gt; rawPlateArray = json.getList(&#39;Plates&#39;);
-  plates = rawPlateArray.map&lt;Plate&gt;((JObject e) =&gt; deserealize(e, decode: PlateDecoder())).toList();
+  List&lt;JObject&gt; rawPlateArray = json.getList(kPlates);
+  plates = rawPlateArray.map&lt;Plate&gt;(Plate.des).toList();
 
   TrailerCommon? trailerCommonNavigation;
-  if (json[&#39;TrailerCommonNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;TrailerCommonNavigation&#39;, &lt;String, dynamic&gt;{});
-    trailerCommonNavigation = deserealize&lt;TrailerCommon&gt;(rawNavigation, decode: TrailerCommonDecoder());
+  if (json[kTrailerCommonNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kTrailerCommonNavigation, &lt;String, dynamic&gt;{});
+    trailerCommonNavigation = TrailerCommon.des(rawNavigation);
   }
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
+  VehiculeModel? vehiculeModelNavigation;
+  if (json[kVehiculeModelNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kVehiculeModelNavigation, &lt;String, dynamic&gt;{});
+    vehiculeModelNavigation = VehiculeModel.des(rawNavigation);
+  }
 
-  return Trailer(id, status, common, carrier, manufactuer, maintenance, trailerCommonNavigation, statusNavigation, plates);
+  Carrier? carrierNavigation;
+  if (json[kCarrierNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kCarrierNavigation, &lt;String, dynamic&gt;{});
+    carrierNavigation = Carrier.des(rawNavigation);
+  }
+
+  return Trailer(id, status, common, carrier, model, maintenance, carrierNavigation, trailerCommonNavigation, vehiculeModelNavigation, statusNavigation, plates, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -132,7 +144,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

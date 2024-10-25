@@ -64,7 +64,7 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
@@ -83,9 +83,10 @@
   <pre class="language-dart"><code class="language-dart">@override
 JObject encode() {
   return &lt;String, dynamic&gt;{
-    &#39;id&#39;: id,
-    kName: name,
-    kDescription: description,
+    SCK.kId: id,
+    SCK.kName: name,
+    SCK.kDescription: description,
+    SCK.kTimestamp: timestamp.toIso8601String(),
   };
 }</code></pre>
 </section>
@@ -121,7 +122,7 @@ JObject encode() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

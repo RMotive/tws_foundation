@@ -1,5 +1,9 @@
-﻿using CSM_Foundation.Core.Utils;
+﻿using System.Linq.Expressions;
+
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality.Bases;
+
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 using TWS_Business.Depots;
 using TWS_Business.Sets;
@@ -15,14 +19,13 @@ public class Q_PlatesDepot
     }
 
     protected override Plate MockFactory(string RandomSeed) {
-        DateOnly date = new(2024, 12, 12);
+        DateOnly date = DateOnly.FromDateTime(DateTime.Now);
 
         return new() {
             Identifier = RandomUtils.String(12),
             State = RandomUtils.String(3),
             Country = RandomUtils.String(3),
             Expiration = date,
-            Truck = 3,
             Status = 1
         };
     }

@@ -110,7 +110,6 @@ public partial class Program {
                 builder.Services.AddScoped<AddressesDepot>();
                 builder.Services.AddScoped<ApproachesDepot>();
                 builder.Services.AddScoped<CarriersDepot>();
-                builder.Services.AddScoped<AxesDepot>();
                 builder.Services.AddScoped<DriversDepot>();
                 builder.Services.AddScoped<DriversCommonsDepot>();
                 builder.Services.AddScoped<DriversExternalsDepot>();
@@ -126,6 +125,8 @@ public partial class Program {
                 builder.Services.AddScoped<IdentificationsDepot>();
                 builder.Services.AddScoped<TrucksExternalsDepot>();
                 builder.Services.AddScoped<TrucksCommonsDepot>();
+                builder.Services.AddScoped<TrailersTypesDepot>();
+                builder.Services.AddScoped<VehiculesModelsDepot>();
 
                 builder.Services.AddScoped<YardLogsDepot>();
 

@@ -1,4 +1,4 @@
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class TrucksExternalsService extends TrucksExternalsServiceBase {
@@ -15,6 +15,18 @@ final class TrucksExternalsService extends TrucksExternalsServiceBase {
   Effect<SetViewOut<TruckExternal>> view(SetViewOptions<TruckExternal> options, String auth) async {
     CSMActEffect actEffect = await post('view', options, auth: auth);
     return MainResolver<SetViewOut<TruckExternal>>(actEffect);
+  }
+
+  @override
+  Effect<SetBatchOut<TruckExternal>> create(List<TruckExternal> trucks, String auth) async {
+    CSMActEffect actEffect = await postList('create', trucks, auth: auth);
+    return MainResolver<SetBatchOut<TruckExternal>>(actEffect);
+  }
+
+  @override
+  Effect<RecordUpdateOut<TruckExternal>> update(TruckExternal truck, String auth) async {
+    CSMActEffect actEffect = await post('update', truck, auth: auth);
+    return MainResolver<RecordUpdateOut<TruckExternal>>(actEffect);
   }
 }
       

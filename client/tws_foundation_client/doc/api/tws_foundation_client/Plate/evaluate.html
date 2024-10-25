@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -87,8 +87,10 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(identifier.length &lt; 8 || identifier.length &gt; 12) results.add(CSMSetValidationResult(kIdentifier, &quot;Identifier length must be between 8 and 12&quot;, &quot;strictLength(8,12)&quot;));
-  if(state.length &lt; 2 || state.length &gt; 4) results.add(CSMSetValidationResult(kState, &quot;State length must be between 2 and 4&quot;, &quot;strictLength(2,4)&quot;));
+  if(identifier.length &lt; 5 || identifier.length &gt; 12) results.add(CSMSetValidationResult(kIdentifier, &quot;Identifier length must be between 8 and 12&quot;, &quot;strictLength(8,12)&quot;));
+  if(state != null){
+    if(state!.length &lt; 2 || state!.length &gt; 4) results.add(CSMSetValidationResult(kState, &quot;State length must be between 2 and 4&quot;, &quot;strictLength(2,4)&quot;));
+  }
   if(country.length &lt;2 || country.length &gt; 3) results.add(CSMSetValidationResult(kCountry, &quot;Country length must be between 2 and 3&quot;, &quot;strictLength(2,3)&quot;));
 
   return results;
@@ -126,7 +128,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

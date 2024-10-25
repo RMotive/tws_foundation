@@ -74,13 +74,18 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Status.des(JObject json) {
   List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(&#39;id&#39;);
-  String name = json.get(&#39;name&#39;);
-  String? description = json.getDefault(&#39;description&#39;, null);
-  List&lt;JObject&gt; rawTrucksArray = json.getList(&#39;Trucks&#39;);
-  trucks = rawTrucksArray.map&lt;Truck&gt;((JObject e) =&gt; deserealize(e, decode: TruckDecoder())).toList();
+  int id = json.get(SCK.kId);
+  String name = json.get(SCK.kName);
+  String? description = json.getDefault(SCK.kDescription, null);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  List&lt;JObject&gt; rawTrucksArray = json.getList(kTrucks);
+  trucks = rawTrucksArray
+      .map&lt;Truck&gt;(
+        (JObject json) =&gt; Truck.des(json),
+      )
+      .toList();
 
-  return Status(id, name, description, trucks);
+  return Status(id, name, description, trucks, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -115,7 +120,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

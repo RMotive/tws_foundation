@@ -62,20 +62,28 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">Account</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="-param-contact"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">contact</span>, </span></li>
-<li><span class="parameter" id="-param-user"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a></span> <span class="parameter-name">user</span>, </span></li>
-<li><span class="parameter" id="-param-contactNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Contact-class.html">Contact</a>?</span> <span class="parameter-name">contactNavigation</span>, </span></li>
-</ol>)
+      <span class="name ">Account</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="-param-contact"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">contact</span>, </span></li>
+<li><span class="parameter" id="-param-user"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a></span> <span class="parameter-name">user</span>, </span></li>
+<li><span class="parameter" id="-param-contactNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Contact-class.html">Contact</a>?</span> <span class="parameter-name">contactNavigation</span>, {</span></li>
+<li><span class="parameter" id="-param-timestamp"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">timestamp</span>, </span></li>
+</ol>})
     </section>
 
     
+<section class="desc markdown">
+  <p>Creates a new <a href="../../tws_foundation_client/Account-class.html">Account</a> object with the required properties.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Account(this.id, this.contact, this.user, this.contactNavigation);</code></pre>
+  <pre class="language-dart"><code class="language-dart">Account(this.id, this.contact, this.user, this.contactNavigation, {
+  DateTime? timestamp,
+}){
+  _timestamp = timestamp ?? DateTime.now();
+}</code></pre>
 </section>
 
 
@@ -109,7 +117,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

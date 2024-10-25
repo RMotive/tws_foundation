@@ -62,10 +62,11 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">Situation</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="-param-name"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span></li>
-<li><span class="parameter" id="-param-description"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">description</span></span></li>
-</ol>)
+      <span class="name ">Situation</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="-param-name"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span></li>
+<li><span class="parameter" id="-param-description"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">description</span>, {</span></li>
+<li><span class="parameter" id="-param-timestamp"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">timestamp</span>, </span></li>
+</ol>})
     </section>
 
     
@@ -74,7 +75,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Situation(this.id, this.name, this.description);</code></pre>
+  <pre class="language-dart"><code class="language-dart">Situation(this.id, this.name, this.description, {
+  DateTime? timestamp,
+}){
+  _timestamp = timestamp ?? DateTime.now();
+}</code></pre>
 </section>
 
 
@@ -108,7 +113,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

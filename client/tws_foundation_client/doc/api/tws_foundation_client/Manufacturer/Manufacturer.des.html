@@ -73,19 +73,12 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Manufacturer.des(JObject json) {
-  List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(&#39;id&#39;);
-  String model = json.get(&#39;model&#39;);
-  String brand = json.get(&#39;brand&#39;);
-  DateTime year = json.get(&#39;year&#39;);
+  int id = json.get(SCK.kId);
+  String name = json.get(SCK.kName);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  String? description = json.getDefault(SCK.kDescription, null);
 
- &#47;&#47;Validate if the first position is not null for non-empty Truck lists.
-  List&lt;JObject&gt; rawTrucksArray = json.getList(&#39;Trucks&#39;);
-  trucks = rawTrucksArray.map&lt;Truck&gt;((JObject e) =&gt; deserealize(e, decode: TruckDecoder())).toList();
-
-
-
-  return Manufacturer(id, model, brand, year, trucks);
+  return Manufacturer(id, name, description, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -120,7 +113,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

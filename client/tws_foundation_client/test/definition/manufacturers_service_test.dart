@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:csm_foundation_services/csm_foundation_services.dart';
+import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late ManufacturersServiceBase service;
   late SetViewOut<Manufacturer> viewMock;
-  late Manufacturer createMock;
   late SetViewOptions<Manufacturer> options;
 
   setUp(
@@ -16,14 +15,10 @@ void main() {
       options = SetViewOptions<Manufacturer>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Manufacturer>>[]);
       viewMock = SetViewOut<Manufacturer>(<Manufacturer>[], 1, DateTime.now(), 3, 0, 20);
 
-      DateTime time = DateTime.now();
-      createMock = Manufacturer(0, "S23", "SCANIA", time, <Truck>[]);
-
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
             'view' => SuccessFrame<SetViewOut<Manufacturer>>('qTracer', viewMock).encode(),
-            'create' => SuccessFrame<Manufacturer>('qTracer', createMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -45,7 +40,7 @@ void main() {
 
       bool passed = false;
       fact.resolve(
-        decoder: SetViewOutDecode<Manufacturer>(ManufacturerDecoder()),
+        decoder: (JObject json) => SetViewOut<Manufacturer>.des(json, Manufacturer.des),
         onConnectionFailure: () {},
         onFailure: (FailureFrame failure, int status) {
           assert(false, 'server returned a success $status');
