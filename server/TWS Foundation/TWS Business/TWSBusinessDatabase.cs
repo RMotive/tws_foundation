@@ -17,10 +17,6 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     public TWSBusinessDatabase()
         : base("TWSB") {
     }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-        optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()))
-                             .EnableSensitiveDataLogging();
-    }
 
     public virtual DbSet<Insurance> Insurances { get; set; }
 
