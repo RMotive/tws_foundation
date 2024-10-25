@@ -67,6 +67,9 @@
     </section>
 
     
+<section class="desc markdown">
+  <p>Creates an <a href="../../tws_foundation_client/Address-class.html">Address</a> based on a <code>json</code> object.</p>
+</section>
 
 
     
@@ -74,19 +77,20 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Address.des(JObject json) {
   List&lt;Carrier&gt; carriers = &lt;Carrier&gt;[];
-  int id = json.get(&#39;id&#39;);
-  String country = json.get(&#39;country&#39;);
-  String? state = json.getDefault(&#39;state&#39;, null);
-  String? street = json.getDefault(&#39;street&#39;, null);
-  String? altStreet = json.getDefault(&#39;altStreet&#39;, null);
-  String? city = json.getDefault(&#39;city&#39;, null);
-  String? zip = json.getDefault(&#39;zip&#39;, null);
-  String? colonia = json.getDefault(&#39;colonia&#39;, null);
+  int id = json.get(SCK.kId);
+  String country = json.get(kCountry);
+  String? state = json.getDefault(kState, null);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  String? street = json.getDefault(kStreet, null);
+  String? altStreet = json.getDefault(kAltStreet, null);
+  String? city = json.getDefault(kCity, null);
+  String? zip = json.getDefault(kZip, null);
+  String? colonia = json.getDefault(kColonia, null);
 
-  List&lt;JObject&gt; rawCarriersArray = json.getList(&#39;Carriers&#39;);
-  carriers = rawCarriersArray.map&lt;Carrier&gt;((JObject e) =&gt; deserealize(e, decode: CarrierDecoder())).toList();
+  List&lt;JObject&gt; rawCarriersArray = json.getList(kCarriers);
+  carriers = rawCarriersArray.map&lt;Carrier&gt;(Carrier.des).toList();
 
-  return Address(id, country, state, street, altStreet, city, zip, colonia, carriers);
+  return Address(id, country, state, street, altStreet, city, zip, colonia, carriers, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -121,7 +125,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

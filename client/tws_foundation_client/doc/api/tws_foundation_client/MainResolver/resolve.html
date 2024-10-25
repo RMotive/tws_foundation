@@ -65,16 +65,17 @@
 
 <span class="returntype">void</span>
 <span class="name ">resolve</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="resolve-param-onConnectionFailure"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onConnectionFailure</span>(), </span></li>
-<li><span class="parameter" id="resolve-param-onException"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onException</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-exception"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">exception</span>, </span></li>
-<li><span class="parameter" id="param-trace"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">trace</span></span></li>
+<li><span class="parameter" id="resolve-param-onException"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onException</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-exception"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">exception</span>, </span></li>
+<li><span class="parameter" id="param-trace"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">trace</span></span></li>
 </ol>), </span></li>
 <li><span class="parameter" id="resolve-param-onFailure"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onFailure</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-failure"><span class="type-annotation"><a href="../../tws_foundation_client/FailureFrame-class.html">FailureFrame</a></span> <span class="parameter-name">failure</span>, </span></li>
-<li><span class="parameter" id="param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span></span></li>
+<li><span class="parameter" id="param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span></span></li>
 </ol>), </span></li>
 <li><span class="parameter" id="resolve-param-onSuccess"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onSuccess</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-success"><span class="type-annotation"><a href="../../tws_foundation_client/SuccessFrame-class.html">SuccessFrame</a><span class="signature">&lt;<wbr><span class="type-parameter">TSuccess</span>&gt;</span></span> <span class="parameter-name">success</span></span></li>
 </ol>), </span></li>
+<li><span class="parameter" id="resolve-param-decoder"><span>required</span> <span class="type-annotation">TSuccess</span> <span class="parameter-name">decoder</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-json"><span class="type-annotation">JObject</span> <span class="parameter-name">json</span></span></li>
+</ol>), </span></li>
 <li><span class="parameter" id="resolve-param-onFinally"><span class="type-annotation">void</span> <span class="parameter-name">onFinally</span>()?, </span></li>
-<li><span class="parameter" id="resolve-param-decoder"><span class="type-annotation">CSMDecodeInterface<span class="signature">&lt;<wbr><span class="type-parameter">TSuccess</span>&gt;</span>?</span> <span class="parameter-name">decoder</span>, </span></li>
 </ol>})
 
       
@@ -91,17 +92,12 @@
   required void Function(Object exception, StackTrace trace) onException,
   required void Function(FailureFrame failure, int status) onFailure,
   required void Function(SuccessFrame&lt;TSuccess&gt; success) onSuccess,
+  required TSuccess Function(JObject json) decoder,
   void Function()? onFinally,
-  CSMDecodeInterface&lt;TSuccess&gt;? decoder,
 }) {
   result.resolve(
     (JObject jSuccess) {
-      if (decoder == null) {
-        throw &#39;DependencyException: decoder is mandatory due to framing is generic abstracted&#39;;
-      }
-
-      CSMDecodeInterface&lt;SuccessFrame&lt;TSuccess&gt;&gt; frameDecoder = SuccessFrameDecode&lt;TSuccess&gt;(decoder);
-      final SuccessFrame&lt;TSuccess&gt; templateWithSuccess = deserealize(jSuccess, decode: frameDecoder);
+      final SuccessFrame&lt;TSuccess&gt; templateWithSuccess = SuccessFrame&lt;TSuccess&gt;.des(jSuccess, decoder);
       onSuccess(templateWithSuccess);
     },
     (JObject jFailure, int statusCode) {
@@ -151,7 +147,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

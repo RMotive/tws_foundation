@@ -67,19 +67,23 @@
     </section>
 
     
+<section class="desc markdown">
+  <p>Creates a new <a href="../../tws_foundation_client/Contact-class.html">Contact</a> object based on a <code>json</code> object.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Contact.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  String name = json.get(&#39;name&#39;);
-  String lastname = json.get(&#39;lastname&#39;);
-  String email = json.get(&#39;email&#39;);
-  String phone = json.get(&#39;phone&#39;);
+  int id = json.get(SCK.kId);
+  String name = json.get(kName);
+  String lastname = json.get(kLastName);
+  String email = json.get(kEmail);
+  String phone = json.get(kPhone);
+  DateTime timestamp = json.get(SCK.kTimestamp);
 
-  return Contact(id, name, lastname, email, phone);
+  return Contact(id, name, lastname, email, phone, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -114,7 +118,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

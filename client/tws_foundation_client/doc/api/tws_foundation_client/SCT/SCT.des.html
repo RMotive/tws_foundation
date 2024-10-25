@@ -73,23 +73,20 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory SCT.des(JObject json) {
-  List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  String type = json.get(&#39;type&#39;);
-  String number = json.get(&#39;number&#39;);
-  String configuration = json.get(&#39;configuration&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  String type = json.get(kType);
+  String number = json.get(kNumber);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  String configuration = json.get(kConfiguration);
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  List&lt;JObject&gt; rawTrucksArray = json.getList(&#39;Trucks&#39;);
-  trucks = rawTrucksArray.map&lt;Truck&gt;((JObject e) =&gt; deserealize(e, decode: TruckDecoder())).toList();
-
-  return SCT(id, status, type, number, configuration, statusNavigation, trucks);
+  return SCT(id, status, type, number, configuration, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -124,7 +121,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

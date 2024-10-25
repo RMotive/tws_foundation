@@ -64,12 +64,12 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/Maintenance-class.html">Maintenance</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="clone-param-anual"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">anual</span>, </span></li>
-<li><span class="parameter" id="clone-param-trimestral"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">trimestral</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="clone-param-anual"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">anual</span>, </span></li>
+<li><span class="parameter" id="clone-param-trimestral"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">trimestral</span>, </span></li>
 <li><span class="parameter" id="clone-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
-<li><span class="parameter" id="clone-param-trucks"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Truck-class.html">Truck</a></span>&gt;</span>?</span> <span class="parameter-name">trucks</span>, </span></li>
+<li><span class="parameter" id="clone-param-trucks"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Truck-class.html">Truck</a></span>&gt;</span>?</span> <span class="parameter-name">trucks</span>, </span></li>
 </ol>})
 
       
@@ -87,9 +87,16 @@
   DateTime? anual,
   DateTime? trimestral,
   Status? statusNavigation,
-  List&lt;Truck&gt;? trucks
-}){
-  return Maintenance(id ?? this.id, status ?? this.status, anual ?? this.anual, trimestral ?? this.trimestral, statusNavigation ?? this.statusNavigation, trucks ?? this.trucks);
+  List&lt;Truck&gt;? trucks,
+}) {
+  return Maintenance(
+    id ?? this.id,
+    status ?? this.status,
+    anual ?? this.anual,
+    trimestral ?? this.trimestral,
+    statusNavigation ?? this.statusNavigation,
+    trucks ?? this.trucks,
+  );
 }</code></pre>
 </section>
 
@@ -124,7 +131,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

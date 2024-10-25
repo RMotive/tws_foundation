@@ -63,9 +63,10 @@
     <section class="multi-line-signature">
       
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">TSuccess</span>&gt;</span></span>
-<span class="name ">act</span>(<wbr>[<ol class="parameter-list single-line"> <li><span class="parameter" id="act-param-decoder"><span class="type-annotation">CSMDecodeInterface<span class="signature">&lt;<wbr><span class="type-parameter">TSuccess</span>&gt;</span>?</span> <span class="parameter-name">decoder</span></span></li>
-</ol>])
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">TSuccess</span>&gt;</span></span>
+<span class="name ">act</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="act-param-decoder"><span class="type-annotation">TSuccess</span> <span class="parameter-name">decoder</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-json"><span class="type-annotation">JObject</span> <span class="parameter-name">json</span></span></li>
+</ol>)</span></li>
+</ol>)
 
       
 
@@ -76,16 +77,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;TSuccess&gt; act([CSMDecodeInterface&lt;TSuccess&gt;? decoder]) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;TSuccess&gt; act(TSuccess Function(JObject json) decoder) async {
   late final TSuccess actResult;
   result.resolve(
     (JObject success) {
-      if (decoder == null) {
-        throw &#39;DependencyException: decoder is mandatory due to framing is generic abstracted&#39;;
-      }
-
-      CSMDecodeInterface&lt;SuccessFrame&lt;TSuccess&gt;&gt; frameDecoder = SuccessFrameDecode&lt;TSuccess&gt;(decoder);
-      final SuccessFrame&lt;TSuccess&gt; templateWithSuccess = deserealize(success, decode: frameDecoder);
+      final SuccessFrame&lt;TSuccess&gt; templateWithSuccess = SuccessFrame&lt;TSuccess&gt;.des(success, decoder);
       actResult = templateWithSuccess.estela;
     },
     (JObject failure, int statusCode) {
@@ -131,7 +127,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

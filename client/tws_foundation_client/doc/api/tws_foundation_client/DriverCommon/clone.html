@@ -64,10 +64,10 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/DriverCommon-class.html">DriverCommon</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="clone-param-license"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">license</span>, </span></li>
-<li><span class="parameter" id="clone-param-situation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">situation</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="clone-param-license"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">license</span>, </span></li>
+<li><span class="parameter" id="clone-param-situation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">situation</span>, </span></li>
 <li><span class="parameter" id="clone-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
 </ol>})
 
@@ -86,12 +86,18 @@
   String? license,
   int? situation,
   Status? statusNavigation,
-}){
+}) {
   int? sit = situation ?? this.situation;
-  if(sit == 0){
+  if (sit == 0) {
     sit = null;
   }
-  return DriverCommon(id ?? this.id, status ?? this.status, license ?? this.license, sit, statusNavigation ?? this.statusNavigation);
+  return DriverCommon(
+    id ?? this.id,
+    status ?? this.status,
+    license ?? this.license,
+    sit,
+    statusNavigation ?? this.statusNavigation,
+  );
 }</code></pre>
 </section>
 
@@ -126,7 +132,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

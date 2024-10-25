@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -88,16 +88,20 @@
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
   if(vin.length != 17) results.add(CSMSetValidationResult(kVin, &#39;VIN number must be 17 length&#39;, &#39;strictLength(17)&#39;));
-  if(motor.length &lt; 15 &amp;&amp; motor.length &gt; 16) results.add(CSMSetValidationResult(kMotor, &#39;Motor number must be between 15 and 16 length&#39;, &#39;strictLength(15,16)&#39;));
-  if(manufacturer &lt; 0) results.add(CSMSetValidationResult(kManufacturer, &#39;Manufactuer pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(motor != null){
+    if(motor!.length &lt; 15 &amp;&amp; motor!.length &gt; 16) results.add(CSMSetValidationResult(kMotor, &#39;Motor number must be between 15 and 16 length&#39;, &#39;strictLength(15,16)&#39;));
+  }
+  if(model &lt; 0) results.add(CSMSetValidationResult(kModel, &#39;Manufactuer pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(carrier &lt; 0) results.add(CSMSetValidationResult(kCarrier, &#39;Carrier pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(manufacturer &gt; 0 &amp;&amp; manufacturerNavigation != null){
-    if(manufacturer != manufacturerNavigation!.id) results.add(CSMSetValidationResult(&quot;[$kManufacturer, $kManufacturerNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
+  if(sct != null &amp;&amp; sct! &lt; 0) results.add(CSMSetValidationResult(kSct, &#39;SCT pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+
+  if(model &gt; 0 &amp;&amp; vehiculeModelNavigation != null){
+    if(model != vehiculeModelNavigation!.id) results.add(CSMSetValidationResult(&quot;[$kModel, $kVehiculeModelNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
   }
 
-  if(manufacturer  == 0 &amp;&amp; manufacturerNavigation == null) results.add(CSMSetValidationResult(&quot;[$kManufacturer, $kManufacturerNavigation]&quot;, &#39;Required Manufacturer. Must be one Manufacturer insertion property&#39;, &#39;requiredInsertion()&#39;));
+  if(model  == 0 &amp;&amp; vehiculeModelNavigation == null) results.add(CSMSetValidationResult(&quot;[$kModel, $kVehiculeModelNavigation]&quot;, &#39;Required Manufacturer. Must be one Manufacturer insertion property&#39;, &#39;requiredInsertion()&#39;));
 
-  if((manufacturer != 0 &amp;&amp; manufacturerNavigation != null) &amp;&amp; (manufacturerNavigation!.id != manufacturer)) results.add(CSMSetValidationResult(&quot;[$kManufacturer, $kManufacturerNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
+  if((model != 0 &amp;&amp; vehiculeModelNavigation != null) &amp;&amp; (vehiculeModelNavigation!.id != model)) results.add(CSMSetValidationResult(&quot;[$kModel, $kVehiculeModelNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
 
 
   if(maintenance != null &amp;&amp; maintenanceNavigation != null){
@@ -106,16 +110,24 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   if(insurance != null &amp;&amp; insuranceNavigation != null){
     if(insurance != 0 &amp;&amp; (insuranceNavigation!.id != insurance)) results.add(CSMSetValidationResult(&quot;[$kInsurance, $kInsurance]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
   }
+  if(sct != null &amp;&amp; sctNavigation != null){
+    if(sct != 0 &amp;&amp; (sctNavigation!.id != sct)) results.add(CSMSetValidationResult(&quot;[$kSct, $kSctNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
+  }
 
+  &#47;&#47; if((usdot == null &amp;&amp; usdotNavigation == null) &amp;&amp; (sct == null &amp;&amp; sctNavigation == null)) results.add(CSMSetValidationResult(&quot;[$usdot, $sct]&quot;, &#39;Missing pointers. at least SCT or USDOT property must be set&#39;, &#39;missingProperty()&#39;));
+
+  if(sctNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...sctNavigation!.evaluate()];
+  if(carrierNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...carrierNavigation!.evaluate()];
+  if(truckCommonNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...truckCommonNavigation!.evaluate()];
   if(maintenance != null &amp;&amp; maintenance! &lt; 0) results.add(CSMSetValidationResult(kMaintenance, &#39;Maintenance pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(insurance != null &amp;&amp; insurance! &lt; 0) results.add(CSMSetValidationResult(kInsurance, &#39;Insurance pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
   &#47;&#47;Models validations
-  if(manufacturerNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...manufacturerNavigation!.evaluate()];
+  if(vehiculeModelNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...vehiculeModelNavigation!.evaluate()];
   if(maintenanceNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...maintenanceNavigation!.evaluate()];
   if(insuranceNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...insuranceNavigation!.evaluate()];
 
-  if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, &#39;Plates list must contain 2 objects&#39;, &#39;listLength(2)&#39;));
+  if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, &#39;Truck must have 1 plate at least&#39;, &#39;listLength()&#39;));
   for(Plate plate in plates){
     results = &lt;CSMSetValidationResult&gt;[...results, ...plate.evaluate()];
   }
@@ -154,7 +166,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

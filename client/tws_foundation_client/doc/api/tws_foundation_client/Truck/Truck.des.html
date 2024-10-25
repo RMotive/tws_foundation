@@ -73,56 +73,64 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Truck.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int manufacturer = json.get(&#39;manufacturer&#39;);
-  int common = json.get(&#39;common&#39;);
-  int carrier = json.get(&#39;carrier&#39;);
-  String vin = json.get(&#39;vin&#39;);
-  String motor = json.get(&#39;motor&#39;);
-  int? maintenance = json.getDefault(&#39;maintenance&#39;, null);
-  int? insurance = json.getDefault(&#39;insurance&#39;, null);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int model = json.get(kModel);
+  int common = json.get(kCommon);
+  int carrier = json.get(kCarrier);
+  String vin = json.get(kVin);
+  String? motor = json.getDefault(kMotor, null);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  int? maintenance = json.getDefault(kMaintenance, null);
+  int? insurance = json.getDefault(kInsurance, null);
+  int? sct = json.getDefault(kSct, null);
   Status? statusNavigation;
   TruckCommon? truckCommonNavigation;
-  Manufacturer? manufacturerNavigation;
+  VehiculeModel? vehiculeModelNavigation;
   Maintenance? maintenanceNavigation;
   Insurance? insuranceNavigation;
+  SCT? sctNavigation;
   Carrier? carrierNavigation;
   List&lt;Plate&gt; plates = &lt;Plate&gt;[];
-  List&lt;JObject&gt; rawPlateArray = json.getList(&#39;Plates&#39;);
-  plates = rawPlateArray.map&lt;Plate&gt;((JObject e) =&gt; deserealize(e, decode: PlateDecoder())).toList();
+  List&lt;JObject&gt; rawPlateArray = json.getList(kPlates);
+  plates = rawPlateArray.map&lt;Plate&gt;(Plate.des).toList();
 
   &#47;&#47;Optional parameters validation.
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  if (json[&#39;TruckCommonNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;TruckCommonNavigation&#39;, &lt;String, dynamic&gt;{});
-    truckCommonNavigation = deserealize&lt;TruckCommon&gt;(rawNavigation, decode: TruckCommonDecoder());
+  if (json[kTruckCommonNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kTruckCommonNavigation, &lt;String, dynamic&gt;{});
+    truckCommonNavigation = TruckCommon.des(rawNavigation);
   }
 
-  if (json[&#39;ManufacturerNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;ManufacturerNavigation&#39;, &lt;String, dynamic&gt;{});
-    manufacturerNavigation = deserealize&lt;Manufacturer&gt;(rawNavigation, decode: ManufacturerDecoder());
+  if (json[kVehiculeModelNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kVehiculeModelNavigation, &lt;String, dynamic&gt;{});
+    vehiculeModelNavigation = VehiculeModel.des(rawNavigation);
   }
 
-  if (json[&#39;MaintenanceNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;MaintenanceNavigation&#39;, &lt;String, dynamic&gt;{});
-    maintenanceNavigation = deserealize&lt;Maintenance&gt;(rawNavigation, decode: MaintenanceDecoder());
+  if (json[kMaintenanceNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kMaintenanceNavigation, &lt;String, dynamic&gt;{});
+    maintenanceNavigation = Maintenance.des(rawNavigation);
   }
 
-  if (json[&#39;InsuranceNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;InsuranceNavigation&#39;, &lt;String, dynamic&gt;{});
-    insuranceNavigation = deserealize&lt;Insurance&gt;(rawNavigation, decode: InsuranceDecoder());
+  if (json[kInsuranceNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kInsuranceNavigation, &lt;String, dynamic&gt;{});
+    insuranceNavigation = Insurance.des(rawNavigation);
   }
 
-  if (json[&#39;CarrierNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;CarrierNavigation&#39;, &lt;String, dynamic&gt;{});
-    carrierNavigation = deserealize&lt;Carrier&gt;(rawNavigation, decode: CarrierDecoder());
+  if (json[kCarrierNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kCarrierNavigation, &lt;String, dynamic&gt;{});
+    carrierNavigation = Carrier.des(rawNavigation);
   }
-  return Truck(id, status, manufacturer, common, carrier, motor, vin, maintenance, insurance, statusNavigation, manufacturerNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, carrierNavigation, plates);
+
+  if (json[kSctNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kSctNavigation, &lt;String, dynamic&gt;{});
+    sctNavigation = SCT.des(rawNavigation);
+  }
+  return Truck(id, status, model, common, carrier, motor, vin, maintenance, insurance, sct, statusNavigation, vehiculeModelNavigation, truckCommonNavigation, maintenanceNavigation, insuranceNavigation, sctNavigation, carrierNavigation, plates, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -157,7 +165,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

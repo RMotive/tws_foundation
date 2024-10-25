@@ -73,17 +73,18 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory DriverCommon.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  String license = json.get(&#39;license&#39;);
-  int? situation = json.getDefault(&#39;situation&#39;, null);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  String license = json.get(kLicense);
+  int? situation = json.getDefault(kSituation, null);
+  DateTime timestamp = json.get(SCK.kTimestamp);
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  return DriverCommon(id, status, license, situation, statusNavigation);
+  return DriverCommon(id, status, license, situation, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -118,7 +119,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

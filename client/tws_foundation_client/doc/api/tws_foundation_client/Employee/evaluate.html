@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -87,14 +87,25 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(identification &lt; 0) results.add(CSMSetValidationResult(kIdentification, &#39;Identification pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(address &lt; 0) results.add(CSMSetValidationResult(kAddress, &#39;Address pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(approach &lt; 0) results.add(CSMSetValidationResult(kApproach, &#39;Approach pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(identification &lt;= 0 &amp;&amp; identificationNavigation == null) results.add(CSMSetValidationResult(kIdentification, &#39;Identification pointer must be equal or greater than 0, or set a navigation&#39;, &#39;pointerHandler()&#39;));
+  if(address != null){
+    if(address! &lt; 0) results.add(CSMSetValidationResult(kAddress, &#39;Address pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  }
+  if(approach != null){
+    if(approach! &lt; 0) results.add(CSMSetValidationResult(kApproach, &#39;Approach pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  }
+  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
-  if(curp.length != 18) results.add(CSMSetValidationResult(kCurp, &quot;CURP number must be 18 length&quot;, &quot;strictLength(18)&quot;));
-  if(rfc.length != 12) results.add(CSMSetValidationResult(kRfc, &quot;CURP number must be 18 length&quot;, &quot;strictLength(12)&quot;));
-  if(nss.length != 11) results.add(CSMSetValidationResult(kNss, &quot;SCAC number must be 4 length&quot;, &quot;structLength(11)&quot;));
+  if(curp != null){
+    if(curp!.length != 18) results.add(CSMSetValidationResult(kCurp, &quot;CURP number must be 18 length&quot;, &quot;strictLength(18)&quot;));
+  }
+  if(rfc != null){
+    if(rfc!.length != 12) results.add(CSMSetValidationResult(kRfc, &quot;CURP number must be 18 length&quot;, &quot;strictLength(12)&quot;));
+  }
+  if(nss != null){
+    if(nss!.length != 11) results.add(CSMSetValidationResult(kNss, &quot;The NSS number must be 11 character length&quot;, &quot;structLength(11)&quot;));
+  }
+  if(identificationNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...identificationNavigation!.evaluate()];
 
   return results;
 }</code></pre>
@@ -131,7 +142,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

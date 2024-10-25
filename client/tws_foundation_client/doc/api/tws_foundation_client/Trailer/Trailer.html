@@ -62,16 +62,19 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">Trailer</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">common</span>, </span></li>
-<li><span class="parameter" id="-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">carrier</span>, </span></li>
-<li><span class="parameter" id="-param-manufacturer"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">manufacturer</span>, </span></li>
-<li><span class="parameter" id="-param-maintenance"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maintenance</span>, </span></li>
+      <span class="name ">Trailer</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">common</span>, </span></li>
+<li><span class="parameter" id="-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">carrier</span>, </span></li>
+<li><span class="parameter" id="-param-model"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">model</span>, </span></li>
+<li><span class="parameter" id="-param-maintenance"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maintenance</span>, </span></li>
+<li><span class="parameter" id="-param-carrierNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Carrier-class.html">Carrier</a>?</span> <span class="parameter-name">carrierNavigation</span>, </span></li>
 <li><span class="parameter" id="-param-trailerCommonNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/TrailerCommon-class.html">TrailerCommon</a>?</span> <span class="parameter-name">trailerCommonNavigation</span>, </span></li>
+<li><span class="parameter" id="-param-vehiculeModelNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/VehiculeModel-class.html">VehiculeModel</a>?</span> <span class="parameter-name">vehiculeModelNavigation</span>, </span></li>
 <li><span class="parameter" id="-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
-<li><span class="parameter" id="-param-plates"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Plate-class.html">Plate</a></span>&gt;</span></span> <span class="parameter-name">plates</span>, </span></li>
-</ol>)
+<li><span class="parameter" id="-param-plates"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Plate-class.html">Plate</a></span>&gt;</span></span> <span class="parameter-name">plates</span>, {</span></li>
+<li><span class="parameter" id="-param-timestamp"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">timestamp</span>, </span></li>
+</ol>})
     </section>
 
     
@@ -80,7 +83,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Trailer(this.id, this.status, this.common, this.carrier, this.manufacturer, this.maintenance, this.trailerCommonNavigation, this.statusNavigation, this.plates);</code></pre>
+  <pre class="language-dart"><code class="language-dart">Trailer(this.id, this.status, this.common, this.carrier, this.model, this.maintenance, this.carrierNavigation, this.trailerCommonNavigation, this.vehiculeModelNavigation, this.statusNavigation, this.plates, {
+  DateTime? timestamp,
+}){
+  _timestamp = timestamp ?? DateTime.now();
+}</code></pre>
 </section>
 
 
@@ -114,7 +121,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

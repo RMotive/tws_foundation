@@ -73,26 +73,27 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Section.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int yard = json.get(&#39;yard&#39;);
-  String name = json.get(&#39;name&#39;);
-  int capacity = json.get(&#39;capacity&#39;);
-  int ocupancy = json.get(&#39;ocupancy&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int yard = json.get(kYard);
+  String name = json.get(SCK.kName);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  int capacity = json.get(kCapacity);
+  int ocupancy = json.get(kOcupancy);
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
   Location? locationNavigation;
-  if (json[&#39;LocationNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;LocationNavigation&#39;, &lt;String, dynamic&gt;{});
-    locationNavigation = deserealize&lt;Location&gt;(rawNavigation, decode: LocationDecoder());
+  if (json[kLocationNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kLocationNavigation, &lt;String, dynamic&gt;{});
+    locationNavigation = Location.des(rawNavigation);
   }
 
-  return Section(id, status, yard, name, capacity, ocupancy, locationNavigation, statusNavigation);
+  return Section(id, status, yard, name, capacity, ocupancy, locationNavigation, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -127,7 +128,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   
