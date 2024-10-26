@@ -274,12 +274,13 @@ public abstract class BDepot<TDatabase, TSet>
     #region Update 
 
     /// <summary>
-    /// Perform the navigation changes in a Tmigrationset
+    /// 
     /// </summary>
+    /// <param name="current"> Lastest data set stored in db sorce. </param>
+    /// <param name="Record"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
     private void UpdateHelper(ISet current, ISet Record) {
         EntityEntry previousEntry = Database.Entry(current);
         if (previousEntry.State == EntityState.Unchanged) {
-            //AttachDate(Record, true);
             // Update the non-navigation properties.
             previousEntry.CurrentValues.SetValues(Record);
             foreach (NavigationEntry navigation in previousEntry.Navigations) {
@@ -293,13 +294,17 @@ public abstract class BDepot<TDatabase, TSet>
                     for (int i = 0; i < newList.Count; i++) {
                         ISet? newItemSet = (ISet)newList[i];
                         if (newItemSet != null && newItemSet.Id <= 0) {
-                            //AttachDate(newList[i]);
-                            EntityEntry newNavigationEntry = Database.Entry(newList[i]);
-                            newNavigationEntry.State = EntityState.Added;
+                            // Getting the item type to add.
+                            Type itemType = newItemSet.GetType();
+                            // Getting the Add method from Icollection.
+                            var addMethod = previousCollection.GetType().GetMethod("Add", [itemType]);
+                            // Adding the new item to Icollection.
+                            if (addMethod != null) addMethod.Invoke(previousCollection, [newItemSet]);
+
                         }
                     }
+                    // Find items to modify.
                     for (int i = 0; i < previousList.Count; i++) {
-                        // Find items to modify.
                         // For each new item stored in record collection, will search for an ID match and update the record.
                         foreach (object newitem in newList) {
                             if (previousList[i] is ISet previousItem && newitem is ISet newItemSet && previousItem.Id == newItemSet.Id) {
@@ -316,8 +321,6 @@ public abstract class BDepot<TDatabase, TSet>
                     navigation.CurrentValue = newNavigationValue;
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
                     // Update the existing navigation entity
-
-
                     if (navigation.CurrentValue is ISet currentItemSet && newNavigationValue is ISet newItemSet) {
                         UpdateHelper(currentItemSet, newItemSet);
                     }

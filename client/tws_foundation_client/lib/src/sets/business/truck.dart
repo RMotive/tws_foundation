@@ -141,6 +141,32 @@ final class Truck implements CSMSetInterface {
         this.motor = null;
       }
     }
+    // --> Removing empty navigations content
+    if(insuranceNavigation != null){
+      if(insuranceNavigation.policy.trim().isEmpty && insuranceNavigation.expiration == DateTime(0) && insuranceNavigation.country.trim().isEmpty){
+        this.insurance = null;
+        this.insuranceNavigation = null;
+        insurance = null;
+        insuranceNavigation = null;
+      }
+    }
+    if(maintenanceNavigation != null){
+      if(maintenanceNavigation.trimestral == DateTime(0) && maintenanceNavigation.anual == DateTime(0)){
+        this.maintenance = null;
+        this.maintenanceNavigation = null;
+        maintenance = null;
+        maintenanceNavigation = null;
+      }
+    }
+
+    if(sctNavigation != null){
+      if(sctNavigation.configuration.trim().isEmpty && sctNavigation.number.trim().isEmpty && sctNavigation.type.trim().isEmpty){
+        this.sct = null;
+        this.sctNavigation = null;
+        sct = null;
+        sctNavigation = null;
+      }
+    }
 
     if(sct == 0){
       this.sct = null;

@@ -17,43 +17,8 @@ public class TrucksExternalsService : ITrucksExternalsService {
     public TrucksExternalsService(TrucksExternalsDepot trucksExternals) {
         TrucksExternals = trucksExternals;
     }
-
-    public async Task<SetViewOut<TruckExternal>> View(SetViewOptions<TruckExternal> Options) {
-        static IQueryable<TruckExternal> include(IQueryable<TruckExternal> query) {
-            return query
-            .Include(t => t.TruckCommonNavigation)
-            .Select(t => new TruckExternal() {
-                Id = t.Id,
-                Status = t.Status,
-                Common = t.Common,
-                UsaPlate = t.UsaPlate,
-                MxPlate = t.MxPlate,
-                Carrier = t.Carrier,
-                Vin = t.Vin,
-                TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
-                    Id = t.TruckCommonNavigation.Id,
-                    Economic = t.TruckCommonNavigation.Economic,
-                    Location = t.TruckCommonNavigation.Location,
-                    Situation = t.TruckCommonNavigation.Situation,
-                },
-            });
-
-        }
-        return await TrucksExternals.View(Options, include);
-    }
-
-    public async Task<SetBatchOut<TruckExternal>> Create(TruckExternal[] trucks) {
-        return await this.TrucksExternals.Create(trucks);
-    }
-
-    public async Task<RecordUpdateOut<TruckExternal>> Update(TruckExternal Truck) {
-        static IQueryable<TruckExternal> include(IQueryable<TruckExternal> query) {
-            return query
-            .Include(t => t.TruckCommonNavigation)
-
-            .Include(t => t.TruckCommonNavigation)
-                .ThenInclude(t => t!.LocationNavigation)
-
+    private IQueryable<TruckExternal> include(IQueryable<TruckExternal> query) {
+        return query
             .Include(t => t.TruckCommonNavigation)
                 .ThenInclude(t => t!.SituationNavigation)
 
@@ -80,12 +45,12 @@ public class TrucksExternalsService : ITrucksExternalsService {
                         Name = t.TruckCommonNavigation.SituationNavigation.Name,
                         Description = t.TruckCommonNavigation.SituationNavigation.Description
                     },
-                    LocationNavigation = t.TruckCommonNavigation.LocationNavigation == null? null : new Location() {
-                        Id= t.TruckCommonNavigation.LocationNavigation.Id,
+                    LocationNavigation = t.TruckCommonNavigation.LocationNavigation == null ? null : new Location() {
+                        Id = t.TruckCommonNavigation.LocationNavigation.Id,
                         Status = t.TruckCommonNavigation.LocationNavigation.Status,
                         Name = t.TruckCommonNavigation.LocationNavigation.Name,
                         Address = t.TruckCommonNavigation.LocationNavigation.Address,
-                        AddressNavigation = t.TruckCommonNavigation.LocationNavigation.AddressNavigation == null? null : new Address() {
+                        AddressNavigation = t.TruckCommonNavigation.LocationNavigation.AddressNavigation == null ? null : new Address() {
                             Id = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.Id,
                             State = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.State,
                             Street = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.Street,
@@ -98,8 +63,17 @@ public class TrucksExternalsService : ITrucksExternalsService {
                     },
                 },
             });
-        }
+    }
 
+    public async Task<SetViewOut<TruckExternal>> View(SetViewOptions<TruckExternal> Options) {
+        return await TrucksExternals.View(Options, include);
+    }
+
+    public async Task<SetBatchOut<TruckExternal>> Create(TruckExternal[] trucks) {
+        return await this.TrucksExternals.Create(trucks);
+    }
+
+    public async Task<RecordUpdateOut<TruckExternal>> Update(TruckExternal Truck) {
         return await TrucksExternals.Update(Truck, include);
     }
 }
