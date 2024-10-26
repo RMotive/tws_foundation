@@ -73,11 +73,12 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory LoadType.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  String name = json.get(&#39;name&#39;);
-  String? description = json.getDefault(&#39;description&#39;, null);
+  int id = json.get(SCK.kId);
+  String name = json.get(SCK.kName);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+  String? description = json.getDefault(SCK.kDescription, null);
 
-  return LoadType(id, name, description);
+  return LoadType(id, name, description, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -112,7 +113,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

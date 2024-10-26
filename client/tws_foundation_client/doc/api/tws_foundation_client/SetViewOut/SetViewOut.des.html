@@ -62,9 +62,10 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">SetViewOut&lt;<wbr><span class="type-parameter">TSet extends CSMEncodeInterface</span>&gt;.des</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="des-param-json"><span class="type-annotation">JObject</span> <span class="parameter-name">json</span>, {</span></li>
-<li><span class="parameter" id="des-param-setDecode"><span class="type-annotation">CSMDecodeInterface<span class="signature">&lt;<wbr><span class="type-parameter">TSet</span>&gt;</span>?</span> <span class="parameter-name">setDecode</span>, </span></li>
-</ol>})
+      <span class="name ">SetViewOut&lt;<wbr><span class="type-parameter">TSet extends CSMEncodeInterface</span>&gt;.des</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="des-param-json"><span class="type-annotation">JObject</span> <span class="parameter-name">json</span>, </span></li>
+<li><span class="parameter" id="des-param-decoder"><span class="type-annotation">TSet</span> <span class="parameter-name">decoder</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-json"><span class="type-annotation">JObject</span> <span class="parameter-name">json</span></span></li>
+</ol>)</span></li>
+</ol>)
     </section>
 
     
@@ -78,16 +79,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">factory SetViewOut.des(
-  JObject json, {
-  CSMDecodeInterface&lt;TSet&gt;? setDecode,
-}) {
+  <pre class="language-dart"><code class="language-dart">factory SetViewOut.des(JObject json, TSet Function(JObject json) decoder) {
+
   List&lt;JObject&gt; rawSetsArray = json.getDefault(&#39;sets&#39;, &lt;dynamic&gt;[]).cast();
   List&lt;TSet&gt; setsObjects = rawSetsArray
-      .map&lt;TSet&gt;((JObject e) =&gt; deserealize(
-            e,
-            decode: setDecode,
-          ))
+      .map&lt;TSet&gt;(decoder)
       .toList();
 
   int pages = json.get(&#39;pages&#39;);
@@ -132,7 +128,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

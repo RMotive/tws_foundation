@@ -8,7 +8,10 @@
             "name": "(Native) Quality",
             "request": "launch",
             "type": "dart",
-            "program": "test/"
+            "program": "test/",
+            "args": [
+                "--ignore-timeouts"
+            ]
         },
         {
             "name": "(Browser) Quality",
@@ -17,13 +20,17 @@
             "program": "test/",
             "args": [
                 "-pchrome",
+                "--ignore-timeouts"
             ]
         },
         {
             "name": "(Native) Integration",
             "request": "launch",
             "program": "test/integration",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--ignore-timeouts"
+            ]
         },
         {
             "name": "(Browser) Integration",
@@ -32,6 +39,7 @@
             "program": "test/integration",
             "args": [
                 "-pchrome",
+                "--ignore-timeouts"
             ]
         },
         {

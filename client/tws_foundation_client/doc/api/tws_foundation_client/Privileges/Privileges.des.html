@@ -80,7 +80,7 @@
   DateTime expiration = json.get(&#39;expiration&#39;);
   String identity = json.get(&#39;identity&#39;);
   bool wildcard = json.getDefault(&#39;wildcard&#39;, false);
-  Contact contact = deserealize(json.getDefault(&#39;contact&#39;, &lt;String, dynamic&gt;{}), decode: ContactDecoder());
+  Contact contact = Contact.des(json.getDefault(&#39;contact&#39;, &lt;String, dynamic&gt;{}));
 
   return Privileges(token, expiration, identity, wildcard, contact);
 }</code></pre>
@@ -117,7 +117,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

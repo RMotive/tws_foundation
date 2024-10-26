@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -87,28 +87,21 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(name.length &gt; 20) results.add(CSMSetValidationResult(kName, &quot;Name must be 20 max length&quot;, &quot;structLength(20)&quot;));
+  if(name.length &gt; 20) results.add(CSMSetValidationResult(SCK.kName, &quot;Name must be 20 max length&quot;, &quot;structLength(20)&quot;));
   if(approach &lt;= 0 &amp;&amp; approachNavigation == null) results.add(CSMSetValidationResult(&quot;[$kApproach, $kApproachNavigation]&quot;, &#39;Required approach object. Must be at least one approach insertion property&#39;, &#39;requiredInsertion()&#39;));
   if(address &lt;= 0 &amp;&amp; addressNavigation == null) results.add(CSMSetValidationResult(&quot;[$address, $addressNavigation]&quot;, &#39;Required address object. Must be at least one address insertion property&#39;, &#39;requiredInsertion()&#39;));
-  if(sct != null &amp;&amp; sct! &lt; 0) results.add(CSMSetValidationResult(kSct, &#39;SCT pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(usdot != null &amp;&amp; usdot! &lt; 0) results.add(CSMSetValidationResult(kUsdot, &#39;USDOT pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
   if(approachNavigation != null &amp;&amp; approach != 0 &amp;&amp; (approach != approachNavigation!.id)) results.add(CSMSetValidationResult(&quot;[$kApproach, $kApproachNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
   if(addressNavigation != null &amp;&amp; address != 0 &amp;&amp; (address != addressNavigation!.id)) results.add(CSMSetValidationResult(&quot;[$kAddress, $kAddressNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
 
-  if(sct != null &amp;&amp; sctNavigation != null){
-    if(sct != 0 &amp;&amp; (sctNavigation!.id != sct)) results.add(CSMSetValidationResult(&quot;[$kSct, $kSctNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
-  }
-
   if(usdot != null &amp;&amp; usdotNavigation != null){
     if(usdot != 0 &amp;&amp; (usdotNavigation!.id != usdot)) results.add(CSMSetValidationResult(&quot;[$kUsdot, $usdotNavigation]&quot;, &#39;if pointer property and navegation property is not null, the pointers for both must be the same, and navegation data must be the same that the stored in data source.&#39;, &#39;insertionConflict()&#39;));
   }
 
-  if((usdot == null &amp;&amp; usdotNavigation == null) &amp;&amp; (sct == null &amp;&amp; sctNavigation == null)) results.add(CSMSetValidationResult(&quot;[$usdot, $sct]&quot;, &#39;Missing pointers. at least SCT or USDOT property must be set&#39;, &#39;missingProperty()&#39;));
   if(approachNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...approachNavigation!.evaluate()];
   if(addressNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...addressNavigation!.evaluate()];
   if(usdotNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...usdotNavigation!.evaluate()];
-  if(sctNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...sctNavigation!.evaluate()];
   return results;
 }</code></pre>
 </section>
@@ -144,7 +137,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

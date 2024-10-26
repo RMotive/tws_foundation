@@ -59,7 +59,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: (JObject json) => SetViewOut<Solution>.des(json,Solution.des),
+        decoder: (JObject json) => SetViewOut<Solution>.des(json, Solution.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -89,7 +89,7 @@ void main() {
 
       bool resolved = false;
       fact.resolve(
-        decoder: (JObject json) => SetBatchOut<Solution>.des(json,Solution.des),
+        decoder: (JObject json) => SetBatchOut<Solution>.des(json, Solution.des),
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
@@ -105,6 +105,8 @@ void main() {
   group(
     'Update',
     () {
+      outDecoder(JObject json) => RecordUpdateOut<Solution>.des(json, Solution.des);
+
       late Solution creationMock;
       test(
         'Creates when unexist',
@@ -113,7 +115,7 @@ void main() {
           Solution mock = Solution.b('QualityT$rnd', 'QT$rnd');
 
           MainResolver<RecordUpdateOut<Solution>> fact = await service.update(mock, auth);
-          RecordUpdateOut<Solution> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Solution>.des(json ,Solution.des));
+          RecordUpdateOut<Solution> actEffect = await fact.act(outDecoder);
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 
@@ -127,7 +129,7 @@ void main() {
           int rnd = Random().nextInt(900)  + 99;
           Solution mock = creationMock.clone(name: 'a new name to test: $rnd');
           MainResolver<RecordUpdateOut<Solution>> fact = await service.update(mock, auth);
-          RecordUpdateOut<Solution> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Solution>.des(json ,Solution.des));
+          RecordUpdateOut<Solution> actEffect = await fact.act((JObject json) => RecordUpdateOut<Solution>.des(json, Solution.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
         },

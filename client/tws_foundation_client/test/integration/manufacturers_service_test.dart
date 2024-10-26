@@ -12,7 +12,7 @@ void main() {
       final TWSFoundationSource source = TWSFoundationSource(false);
       MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder:  Privileges.des,
+        decoder: Privileges.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

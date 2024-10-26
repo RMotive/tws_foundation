@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -87,9 +87,15 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(email.length &gt; 30) results.add(CSMSetValidationResult(kEmail, &quot;Email must be 30  max length&quot;, &quot;strictLength(1, 30)&quot;));
-  if(enterprise != null &amp;&amp; enterprise!.length &lt; 10 || enterprise!.length &gt; 14) results.add(CSMSetValidationResult(kEnterprise, &quot;Enterprise number length must be between 10 and 14&quot;, &quot;strictLength(1,4)&quot;));
-  if(personal != null &amp;&amp; personal!.length &lt; 10 || personal!.length &gt; 14) results.add(CSMSetValidationResult(kPersonal, &quot;Personal number length must be between 10 and 14&quot;, &quot;strictLength(1,4)&quot;));
+  if(email.length &gt; 64) results.add(CSMSetValidationResult(kEmail, &quot;Email must be 64  max length&quot;, &quot;strictLength(1, 64)&quot;));
+  if(enterprise != null){
+    if(enterprise!.length &lt; 10 || enterprise!.length &gt; 14) results.add(CSMSetValidationResult(kEnterprise, &quot;Enterprise number length must be between 10 and 14&quot;, &quot;strictLength(1,4)&quot;));
+  }
+
+  if(personal != null){
+    if(personal!.length &lt; 10 || personal!.length &gt; 14) results.add(CSMSetValidationResult(kPersonal, &quot;Personal number length must be between 10 and 14&quot;, &quot;strictLength(1,4)&quot;));
+  }
+
   if(alternative != null &amp;&amp; alternative!.length &gt; 30) results.add(CSMSetValidationResult(kAlternative, &quot;Alternative contact must be 30  max length&quot;, &quot;strictLength(0, 30)&quot;));
 
   return results;
@@ -127,7 +133,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

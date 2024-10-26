@@ -64,12 +64,12 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/Identification-class.html">Identification</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="clone-param-name"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">name</span>, </span></li>
-<li><span class="parameter" id="clone-param-fatherlastname"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">fatherlastname</span>, </span></li>
-<li><span class="parameter" id="clone-param-motherlastname"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">motherlastname</span>, </span></li>
-<li><span class="parameter" id="clone-param-birthday"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">birthday</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="clone-param-name"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">name</span>, </span></li>
+<li><span class="parameter" id="clone-param-fatherlastname"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">fatherlastname</span>, </span></li>
+<li><span class="parameter" id="clone-param-motherlastname"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">motherlastname</span>, </span></li>
+<li><span class="parameter" id="clone-param-birthday"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">birthday</span>, </span></li>
 <li><span class="parameter" id="clone-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
 </ol>})
 
@@ -90,8 +90,16 @@
   String? motherlastname,
   DateTime? birthday,
   Status? statusNavigation,
-}){
-  return Identification(id ?? this.id, status ?? this.status, name ?? this.name, fatherlastname ?? this.fatherlastname, motherlastname ?? this.motherlastname, birthday ?? this.birthday, statusNavigation ?? this.statusNavigation);
+}) {
+  return Identification(
+    id ?? this.id,
+    status ?? this.status,
+    name ?? this.name,
+    fatherlastname ?? this.fatherlastname,
+    motherlastname ?? this.motherlastname,
+    birthday ?? this.birthday,
+    statusNavigation ?? this.statusNavigation,
+  );
 }</code></pre>
 </section>
 
@@ -126,7 +134,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

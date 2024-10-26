@@ -62,15 +62,16 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">TrailerExternal</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a></span> <span class="parameter-name">common</span>, </span></li>
-<li><span class="parameter" id="-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a></span> <span class="parameter-name">carrier</span>, </span></li>
-<li><span class="parameter" id="-param-mxPlate"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a></span> <span class="parameter-name">mxPlate</span>, </span></li>
-<li><span class="parameter" id="-param-usaPlate"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">usaPlate</span>, </span></li>
+      <span class="name ">TrailerExternal</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">common</span>, </span></li>
+<li><span class="parameter" id="-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a></span> <span class="parameter-name">carrier</span>, </span></li>
+<li><span class="parameter" id="-param-mxPlate"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">mxPlate</span>, </span></li>
+<li><span class="parameter" id="-param-usaPlate"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">usaPlate</span>, </span></li>
 <li><span class="parameter" id="-param-trailerCommonNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/TrailerCommon-class.html">TrailerCommon</a>?</span> <span class="parameter-name">trailerCommonNavigation</span>, </span></li>
-<li><span class="parameter" id="-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
-</ol>)
+<li><span class="parameter" id="-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, {</span></li>
+<li><span class="parameter" id="-param-timestamp"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">timestamp</span>, </span></li>
+</ol>})
     </section>
 
     
@@ -79,7 +80,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">TrailerExternal(this.id, this.status, this.common, this.carrier, this.mxPlate, this.usaPlate, this.trailerCommonNavigation, this.statusNavigation);</code></pre>
+  <pre class="language-dart"><code class="language-dart">TrailerExternal(this.id, this.status, this.common, this.carrier, this.mxPlate, this.usaPlate, this.trailerCommonNavigation, this.statusNavigation, {
+  DateTime? timestamp,
+}){
+  _timestamp = timestamp ?? DateTime.now();
+}</code></pre>
 </section>
 
 
@@ -113,7 +118,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

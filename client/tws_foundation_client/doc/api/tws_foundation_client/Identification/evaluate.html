@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -87,10 +87,10 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(name.isEmpty || name.length &gt; 32) results.add(CSMSetValidationResult(kName, &quot;Name length must be between 1 and 32&quot;, &quot;strictLength(1, 32)&quot;));
-  if(fatherlastname.isEmpty || fatherlastname.length &gt; 32) results.add(CSMSetValidationResult(kFatherLastName, &quot;FatherLastName length must be between 1 and 32&quot;, &quot;strictLength(1, 32)&quot;));
-  if(motherlastname.isEmpty || motherlastname.length &gt; 32) results.add(CSMSetValidationResult(kMotherLastName, &quot;MotherLastName length must be between 1 and 32&quot;, &quot;strictLength(1, 32)&quot;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(name.trim().isEmpty || name.length &gt; 32) results.add(CSMSetValidationResult(SCK.kName, &quot;El nombre no debe de estar vacio y no debe tener mas de 32 caracteres&quot;, &quot;strictLength(1, 32)&quot;));
+  if(fatherlastname.trim().isEmpty || fatherlastname.length &gt; 32) results.add(CSMSetValidationResult(kFatherLastName, &quot;El apellido paterno no debe estar vacio y no debe tener mas de 32 caracteres&quot;, &quot;strictLength(1, 32)&quot;));
+  if(motherlastname.trim().isEmpty || motherlastname.length &gt; 32) results.add(CSMSetValidationResult(kMotherLastName, &quot;El apellido materno no debe estar vacio y no debe tener mas de 32 caracteres&quot;, &quot;strictLength(1, 32)&quot;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
   return results;
 }</code></pre>
@@ -127,7 +127,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

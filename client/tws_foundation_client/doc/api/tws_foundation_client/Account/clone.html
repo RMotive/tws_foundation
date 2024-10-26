@@ -64,9 +64,9 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/Account-class.html">Account</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-contact"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">contact</span>, </span></li>
-<li><span class="parameter" id="clone-param-user"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">user</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-contact"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">contact</span>, </span></li>
+<li><span class="parameter" id="clone-param-user"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">user</span>, </span></li>
 <li><span class="parameter" id="clone-param-contactNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Contact-class.html">Contact</a>?</span> <span class="parameter-name">contactNavigation</span>, </span></li>
 </ol>})
 
@@ -74,6 +74,13 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Creates an <a href="../../tws_foundation_client/Account-class.html">Account</a> object cloning the current object with new overriden properties.</p>
+<p><code>id</code> : Record database pointer.</p>
+<p><code>contact</code> : Foreign relation <code>contactNavigation</code> pointer.</p>
+<p><code>user</code> : User identification.</p>
+<p><code>contactNavigation</code> : Foreign relation <code>contactNavigation</code> record entity.</p>
+</section>
 
 
     
@@ -84,8 +91,7 @@
   int? contact,
   String? user,
   Contact? contactNavigation,
-}){
-
+}) {
   return Account(id ?? this.id, contact ?? this.contact, user ?? this.user, contactNavigation ?? this.contactNavigation);
 }</code></pre>
 </section>
@@ -121,7 +127,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

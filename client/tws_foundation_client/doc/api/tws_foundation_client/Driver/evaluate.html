@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -87,10 +87,14 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(driverType.isEmpty || driverType.length &gt; 12) results.add(CSMSetValidationResult(kDriverType, &#39;Driver Type length must be between 1 and 12&#39;, &#39;strictLength(1,12)&#39;));
-  if(employee &lt; 0) results.add(CSMSetValidationResult(kEmployee, &#39;Employee pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(common &lt; 0) results.add(CSMSetValidationResult(kCommon, &#39;Common pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(driverType != null){
+    if(driverType!.trim().isEmpty || driverType!.length &gt; 12) results.add(CSMSetValidationResult(kDriverType, &#39;Driver Type length must be between 1 and 12&#39;, &#39;strictLength(1,12)&#39;));
+  }
+  if(employee &lt;= 0 &amp;&amp; employeeNavigation == null) results.add(CSMSetValidationResult(kEmployee, &#39;Debe ingresar los datos del empleado. Employee pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(common &lt;= 0 &amp;&amp; driverCommonNavigation == null) results.add(CSMSetValidationResult(kCommon, &#39;Debe ingresar los datos comunes del conductor. Common pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(driverCommonNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...driverCommonNavigation!.evaluate()];
+  if(employeeNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...employeeNavigation!.evaluate()];
 
   return results;
 }</code></pre>
@@ -127,7 +131,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

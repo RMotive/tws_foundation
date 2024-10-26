@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -87,7 +87,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(name.isEmpty || name.length &gt; 25) results.add(CSMSetValidationResult(kName, &quot;Name must be 25 max lenght and non-empty&quot;, &quot;strictLength(1,25)&quot;));
+  if(name.trim().isEmpty || name.length &gt; 25) results.add(CSMSetValidationResult(SCK.kName, &quot;Name must be 25 max lenght and non-empty&quot;, &quot;strictLength(1,25)&quot;));
   return results;
 }</code></pre>
 </section>
@@ -123,7 +123,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

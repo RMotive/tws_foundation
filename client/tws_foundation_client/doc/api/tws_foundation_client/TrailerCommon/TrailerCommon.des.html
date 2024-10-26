@@ -73,20 +73,32 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory TrailerCommon.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int? trailerClass = json.getDefault(&#39;class&#39;, null);
-  int? situation = json.getDefault(&#39;situation&#39;, null);
-  int? location = json.getDefault(&#39;location&#39;, null);
-  String economic = json.get(&#39;economic&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int? type = json.getDefault(kType, null);
+  int? situation = json.getDefault(kSituation, null);
+  int? location = json.getDefault(kLocation, null);
+  String economic = json.get(kEconomic);
+  DateTime timestamp = json.get(SCK.kTimestamp);
 
+  TrailerType? trailerTypeNavigation;
+  if (json[kTrailerTypeNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kTrailerTypeNavigation, &lt;String, dynamic&gt;{});
+    trailerTypeNavigation = TrailerType.des(rawNavigation);
+  }
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  return TrailerCommon(id, status, trailerClass, situation, location, economic, statusNavigation);
+  Location? locationNavigation;
+  if (json[kLocationNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kLocationNavigation, &lt;String, dynamic&gt;{});
+    locationNavigation = Location.des(rawNavigation);
+  }
+
+  return TrailerCommon(id, status, type, situation, location, economic, locationNavigation, trailerTypeNavigation, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -121,7 +133,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

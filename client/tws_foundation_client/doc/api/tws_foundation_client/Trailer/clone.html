@@ -64,15 +64,17 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/Trailer-class.html">Trailer</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="clone-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">common</span>, </span></li>
-<li><span class="parameter" id="clone-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">carrier</span>, </span></li>
-<li><span class="parameter" id="clone-param-manufacturer"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">manufacturer</span>, </span></li>
-<li><span class="parameter" id="clone-param-maintenance"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maintenance</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="clone-param-common"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">common</span>, </span></li>
+<li><span class="parameter" id="clone-param-carrier"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">carrier</span>, </span></li>
+<li><span class="parameter" id="clone-param-model"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">model</span>, </span></li>
+<li><span class="parameter" id="clone-param-maintenance"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maintenance</span>, </span></li>
+<li><span class="parameter" id="clone-param-carrierNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Carrier-class.html">Carrier</a>?</span> <span class="parameter-name">carrierNavigation</span>, </span></li>
 <li><span class="parameter" id="clone-param-trailerCommonNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/TrailerCommon-class.html">TrailerCommon</a>?</span> <span class="parameter-name">trailerCommonNavigation</span>, </span></li>
+<li><span class="parameter" id="clone-param-vehiculeModelNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/VehiculeModel-class.html">VehiculeModel</a>?</span> <span class="parameter-name">vehiculeModelNavigation</span>, </span></li>
 <li><span class="parameter" id="clone-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
-<li><span class="parameter" id="clone-param-plates"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Plate-class.html">Plate</a></span>&gt;</span>?</span> <span class="parameter-name">plates</span>, </span></li>
+<li><span class="parameter" id="clone-param-plates"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../tws_foundation_client/Plate-class.html">Plate</a></span>&gt;</span>?</span> <span class="parameter-name">plates</span>, </span></li>
 </ol>})
 
       
@@ -89,14 +91,19 @@
   int? status,
   int? common,
   int? carrier,
-  int? manufacturer,
+  int? model,
   int? maintenance,
+  Carrier? carrierNavigation,
   TrailerCommon? trailerCommonNavigation,
+  VehiculeModel? vehiculeModelNavigation,
   Status? statusNavigation,
   List&lt;Plate&gt;? plates
 }){
-  return Trailer(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, manufacturer ?? this.manufacturer, maintenance ?? this.maintenance,
-  trailerCommonNavigation ?? this.trailerCommonNavigation, statusNavigation ?? this.statusNavigation, plates ?? this.plates);
+  Carrier? carrierNav = carrierNavigation ?? this.carrierNavigation;
+  if((carrier ?? this.carrier) == 0) carrierNav = null;
+
+  return Trailer(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, model ?? this.model, maintenance ?? this.maintenance, carrierNav,
+  trailerCommonNavigation ?? this.trailerCommonNavigation,  vehiculeModelNavigation ?? this.vehiculeModelNavigation, statusNavigation ?? this.statusNavigation, plates ?? this.plates);
 }</code></pre>
 </section>
 
@@ -131,7 +138,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

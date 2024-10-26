@@ -39,7 +39,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: (JObject json) => SetViewOut<TrailerExternal>.des(json,TrailerExternal.des),
+        decoder: (JObject json) => SetViewOut<TrailerExternal>.des(json, TrailerExternal.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

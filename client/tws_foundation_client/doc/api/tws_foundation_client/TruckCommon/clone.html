@@ -64,13 +64,14 @@
       
 
 <span class="returntype"><a href="../../tws_foundation_client/TruckCommon-class.html">TruckCommon</a></span>
-<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
-<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
-<li><span class="parameter" id="clone-param-vin"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">vin</span>, </span></li>
-<li><span class="parameter" id="clone-param-economic"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">economic</span>, </span></li>
-<li><span class="parameter" id="clone-param-location"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">location</span>, </span></li>
-<li><span class="parameter" id="clone-param-situation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.1/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">situation</span>, </span></li>
+<span class="name ">clone</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="clone-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="clone-param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">status</span>, </span></li>
+<li><span class="parameter" id="clone-param-vin"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">vin</span>, </span></li>
+<li><span class="parameter" id="clone-param-economic"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">economic</span>, </span></li>
+<li><span class="parameter" id="clone-param-location"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">location</span>, </span></li>
+<li><span class="parameter" id="clone-param-situation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">situation</span>, </span></li>
 <li><span class="parameter" id="clone-param-situationNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Situation-class.html">Situation</a>?</span> <span class="parameter-name">situationNavigation</span>, </span></li>
+<li><span class="parameter" id="clone-param-locationNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Location-class.html">Location</a>?</span> <span class="parameter-name">locationNavigation</span>, </span></li>
 <li><span class="parameter" id="clone-param-statusNavigation"><span class="type-annotation"><a href="../../tws_foundation_client/Status-class.html">Status</a>?</span> <span class="parameter-name">statusNavigation</span>, </span></li>
 </ol>})
 
@@ -91,8 +92,10 @@
   int? location,
   int? situation,
   Situation? situationNavigation,
+  Location? locationNavigation,
   Status? statusNavigation,
 }){
+
   int? situationIndex = situation ?? this.situation;
   Situation? situationNav = situationNavigation ?? this.situationNavigation;
   if(situationIndex == 0){
@@ -100,9 +103,23 @@
     situationNav = null;
   }
 
+  int? locationIndex = location ?? this.location;
+  Location? locationNav = locationNavigation ?? this.locationNavigation;
+  if(locationIndex == 0){
+    locationIndex = null;
+    locationNav = null;
+  }
 
-  return TruckCommon(id ?? this.id, status ?? this.status, economic ?? this.economic, location ?? this.location, situation ?? this.situation,
-  situationNav ,statusNavigation ?? this.statusNavigation);
+  return TruckCommon(
+    id ?? this.id,
+    status ?? this.status,
+    economic ?? this.economic,
+    locationIndex,
+    situationIndex,
+    situationNav,
+    locationNav
+    ,statusNavigation ?? this.statusNavigation
+  );
 }</code></pre>
 </section>
 
@@ -137,7 +154,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

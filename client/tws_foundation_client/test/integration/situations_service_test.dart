@@ -41,7 +41,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: (JObject json) => SetViewOut<Situation>.des(json,Situation.des),
+        decoder: (JObject json) => SetViewOut<Situation>.des(json, Situation.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

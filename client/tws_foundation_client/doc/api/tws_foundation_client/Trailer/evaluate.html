@@ -64,11 +64,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.1/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.1/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -88,12 +88,22 @@
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
   if(common &lt; 0) results.add(CSMSetValidationResult(kCommon, &#39;Common pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(manufacturer &lt; 0) results.add(CSMSetValidationResult(kManufacturer, &#39;Manufacturer pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(carrier &lt; 0) results.add(CSMSetValidationResult(kCarrier, &#39;Carrier pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(plates.length != 2) results.add(CSMSetValidationResult(kPlates, &#39;Plates list must contain 2 objects&#39;, &#39;listLength(2)&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, &#39;Trailer must have 1 plate at least&#39;, &#39;listLength()&#39;));
   for(Plate plate in plates){
     results = &lt;CSMSetValidationResult&gt;[...results, ...plate.evaluate()];
+  }
+  if(trailerCommonNavigation != null){
+    results = &lt;CSMSetValidationResult&gt;[...results, ...trailerCommonNavigation!.evaluate()];
+  }
+
+  if(vehiculeModelNavigation != null){
+    results = &lt;CSMSetValidationResult&gt;[...results, ...vehiculeModelNavigation!.evaluate()];
+  }
+
+  if(carrierNavigation != null){
+    results = &lt;CSMSetValidationResult&gt;[...results, ...carrierNavigation!.evaluate()];
   }
 
   return results;
@@ -131,7 +141,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

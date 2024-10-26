@@ -39,7 +39,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: (JObject json) => SetViewOut<DriverExternal>.des(json,DriverExternal.des),
+        decoder: (JObject json) => SetViewOut<DriverExternal>.des(json, DriverExternal.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

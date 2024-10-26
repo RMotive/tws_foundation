@@ -73,20 +73,23 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Identification.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  String name = json.get(&#39;name&#39;);
-  String fatherlastname = json.get(&#39;fatherlastname&#39;);
-  String motherlastname = json.get(&#39;motherlastname&#39;);
-  &#47;&#47; DateTime birthday = json.get(&#39;birthday&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  String name = json.get(SCK.kName);
+  String fatherlastname = json.get(kFatherLastName);
+  String motherlastname = json.get(kMotherLastName);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+
+  String? birth = json.getDefault(kBirthday, null);
+  DateTime? birthday = birth != null? DateTime.parse(birth) : null;
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  return Identification(id, status, name, fatherlastname, motherlastname, null, statusNavigation);
+  return Identification(id, status, name, fatherlastname, motherlastname, birthday, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -121,7 +124,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

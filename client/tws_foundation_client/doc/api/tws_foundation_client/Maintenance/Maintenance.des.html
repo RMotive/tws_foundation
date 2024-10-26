@@ -75,18 +75,19 @@
   <pre class="language-dart"><code class="language-dart">factory Maintenance.des(JObject json) {
   List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
 
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  DateTime anual = json.get(&#39;anual&#39;);
-  DateTime trimestral = json.get(&#39;trimestral&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  DateTime anual = json.get(kAnual);
+  DateTime trimestral = json.get(kTrimestral);
+  DateTime timestamp = json.get(SCK.kTimestamp);
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
   List&lt;JObject&gt; rawTrucksArray = json.getList(&#39;Trucks&#39;);
-  trucks = rawTrucksArray.map&lt;Truck&gt;((JObject e) =&gt; deserealize(e, decode: TruckDecoder())).toList();
-  return Maintenance(id, status, anual, trimestral, statusNavigation, trucks);
+  trucks = rawTrucksArray.map&lt;Truck&gt;(Truck.des).toList();
+  return Maintenance(id, status, anual, trimestral, statusNavigation, trucks, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -121,7 +122,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

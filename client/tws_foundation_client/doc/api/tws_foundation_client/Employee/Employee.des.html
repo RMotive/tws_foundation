@@ -73,32 +73,42 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Employee.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int identification = json.get(&#39;identification&#39;);
-  int address = json.get(&#39;address&#39;);
-  int approach = json.get(&#39;approach&#39;);
-  String curp = json.get(&#39;curp&#39;);
-  DateTime antecedentesNoPenalesExp = json.get(&#39;antecedentesNoPenalesExp&#39;);
-  String rfc = json.get(&#39;rfc&#39;);
-  String nss = json.get(&#39;nss&#39;);
-  DateTime imssRegistrationDate = json.get(&#39;imssRegistrationDate&#39;);
-  DateTime hiringDate = json.get(&#39;hiringDate&#39;);
-  DateTime terminationDate = json.get(&#39;terminationDate&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int identification = json.get(kIdentification);
+  int? address = json.getDefault(kAddress, null);
+  int? approach = json.getDefault(kApproach, null);
+  String? curp = json.getDefault(kCurp, null);
+
+  String? antecedentesExp = json.getDefault(kAntecedentesNoPenalesExp, null);
+  DateTime? antecedentesNoPenalesExp = antecedentesExp != null? DateTime.parse(antecedentesExp) : null;
+
+  String? rfc = json.getDefault(kRfc, null);
+  String? nss = json.getDefault(kNss, null);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+
+  String? imssReg = json.getDefault(kImssRegistrationDate, null);
+  DateTime? imssRegistrationDate = imssReg != null? DateTime.parse(imssReg) : null;
+
+  String? hiringD = json.getDefault(kHiringdate, null);
+  DateTime? hiringDate = hiringD != null? DateTime.parse(hiringD) : null;
+
+  String? terminationD =  json.getDefault(kTerminationDate, null);
+  DateTime? terminationDate = terminationD != null? DateTime.parse(terminationD) : null;
 
   Identification? identificationNavigation;
-  if (json[&#39;IdentificationNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;IdentificationNavigation&#39;, &lt;String, dynamic&gt;{});
-    identificationNavigation = deserealize&lt;Identification&gt;(rawNavigation, decode: IdentificationDecoder());
+  if (json[kIdentificationNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kIdentificationNavigation, &lt;String, dynamic&gt;{});
+    identificationNavigation = Identification.des(rawNavigation);
   }
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[SCK.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
-  return Employee(id, status, identification, address, approach, curp, antecedentesNoPenalesExp, rfc, nss, imssRegistrationDate, hiringDate, terminationDate, identificationNavigation, statusNavigation);
+  return Employee(id, status, identification, address, approach, curp, antecedentesNoPenalesExp, rfc, nss, imssRegistrationDate, hiringDate, terminationDate, identificationNavigation, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -133,7 +143,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

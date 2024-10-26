@@ -39,7 +39,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: (JObject json) => SetViewOut<Trailer>.des(json,Trailer.des),
+        decoder: (JObject json) => SetViewOut<Trailer>.des(json, Trailer.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },

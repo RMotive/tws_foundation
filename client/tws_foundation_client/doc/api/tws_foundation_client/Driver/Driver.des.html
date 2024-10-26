@@ -73,43 +73,63 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Driver.des(JObject json) {
-  int id = json.get(&#39;id&#39;);
-  int status = json.get(&#39;status&#39;);
-  int employee = json.get(&#39;employee&#39;);
-  int common = json.get(&#39;common&#39;);
-  String driverType = json.get(&#39;driverType&#39;);
-  DateTime licenseExpiration = json.get(&#39;licenseExpiration&#39;);
-  DateTime drugalcRegistrationDate = json.get(&#39;drugalcRegistrationDate&#39;);
-  DateTime pullnoticeRegistrationDate = json.get(&#39;pullnoticeRegistrationDate&#39;);
-  String? twic = json.getDefault(&#39;twic&#39;, null);
-  DateTime twicExpiration = json.get(&#39;twicExpiration&#39;);
-  String? visa = json.getDefault(&#39;visa&#39;, null);
-  DateTime visaExpiration = json.get(&#39;visaExpiration&#39;);
-  String? fast = json.getDefault(&#39;fast&#39;, null);
-  DateTime fastExpiration = json.get(&#39;fastExpiration&#39;);
-  String? anam = json.getDefault(&#39;anam&#39;, null);
-  DateTime anamExpiration = json.get(&#39;anamExpiration&#39;);
+  int id = json.get(SCK.kId);
+  int status = json.get(SCK.kStatus);
+  int employee = json.get(kEmployee);
+  int common = json.get(kCommon);
+  String? driverType = json.getDefault(kDriverType, null);
+  DateTime timestamp = json.get(SCK.kTimestamp);
+
+  String? licenExp = json.getDefault(kLicenseExpiration, null);
+  DateTime? licenseExpiration = licenExp != null? DateTime.parse(licenExp) : null;
+
+
+  String? drugal = json.getDefault(kDrugalcRegistrationDate, null);
+  DateTime? drugalcRegistrationDate = drugal != null? DateTime.parse(drugal) : null;
+
+  String? pullnotice = json.getDefault(kPullnoticeRegistrationDate, null);
+  DateTime? pullnoticeRegistrationDate = pullnotice != null? DateTime.parse(pullnotice) : null;
+
+  String? twic = json.getDefault(kTwic, null);
+
+  String? twicEx = json.getDefault(kTwicExpiration, null);
+  DateTime? twicExpiration = twicEx != null? DateTime.parse(twicEx) : null;
+
+  String? visa = json.getDefault(kVisa, null);
+
+  String? visaExp = json.getDefault(kVisaExpiration, null);
+  DateTime? visaExpiration = visaExp != null? DateTime.parse(visaExp) : null;
+
+  String? fast = json.getDefault(kFast, null);
+
+  String? fastExp = json.getDefault(kFastExpiration, null);
+  DateTime? fastExpiration = fastExp != null? DateTime.parse(fastExp) : null;
+
+  String? anam = json.getDefault(kAnam, null);
+
+  String? anamExp = json.getDefault(kAnamExpiration, null);
+  DateTime? anamExpiration = anamExp != null? DateTime.parse(anamExp) : null;
 
   Status? statusNavigation;
-  if (json[&#39;StatusNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;StatusNavigation&#39;, &lt;String, dynamic&gt;{});
-    statusNavigation = deserealize&lt;Status&gt;(rawNavigation, decode: StatusDecoder());
+  if (json[kstatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kstatusNavigation, &lt;String, dynamic&gt;{});
+    statusNavigation = Status.des(rawNavigation);
   }
 
   DriverCommon? driverCommonNavigation;
-  if (json[&#39;DriverCommonNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;DriverCommonNavigation&#39;, &lt;String, dynamic&gt;{});
-    driverCommonNavigation = deserealize&lt;DriverCommon&gt;(rawNavigation, decode: DriverCommonDecoder());
+  if (json[kDriverCommonNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kDriverCommonNavigation, &lt;String, dynamic&gt;{});
+    driverCommonNavigation = DriverCommon.des(rawNavigation);
   }
 
   Employee? employeeNavigation;
-  if (json[&#39;EmployeeNavigation&#39;] != null) {
-    JObject rawNavigation = json.getDefault(&#39;EmployeeNavigation&#39;, &lt;String, dynamic&gt;{});
-    employeeNavigation = deserealize&lt;Employee&gt;(rawNavigation, decode: EmployeeDecoder());
+  if (json[kEmployeeNavigation] != null) {
+    JObject rawNavigation = json.getDefault(kEmployeeNavigation, &lt;String, dynamic&gt;{});
+    employeeNavigation = Employee.des(rawNavigation);
   }
 
   return Driver(id, status, employee, common, driverType, licenseExpiration, drugalcRegistrationDate, pullnoticeRegistrationDate, twic, twicExpiration, visa, visaExpiration,
-  fast, fastExpiration, anam, anamExpiration, driverCommonNavigation, employeeNavigation, statusNavigation);
+  fast, fastExpiration, anam, anamExpiration, driverCommonNavigation, employeeNavigation, statusNavigation, timestamp: timestamp);
 }</code></pre>
 </section>
 
@@ -144,7 +164,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      4.1.0
+      5.0.0
   </span>
 
   

@@ -2,13 +2,19 @@
 
 ## CURRENT - [xx.xx-xxxx]
 
-- Notes: 
+- Notes:
     1. Added Carriers service.
     1. Added vehicules_models service.
     1. Changes on default date on datetime sets propeties.
     1. Added validations on [Carrier] set clone method.
     1. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
     1. Added [TruckInventory] set and view service.
+
+- Dependencies Upgrade: N/A
+
+## 5.0.0 - [24.10-2024]
+
+- Notes:
 
     1. [TrucksExternals] Create & update service methods added and tested.
     2. [Trucks] tests refactored.
@@ -17,35 +23,43 @@
     5. Added [TrailerType] set.
     6. Added [TrailerClass] set.
     7. The following sets have receive minor properties changes:
-        * [Approach]
-        * [Driver]
-        * [Employee]
-        * [Plate]
-        * [TrailerExternal]
-        * [TruckExternal]
-        * [YardLog]
-        * [Approaches]
+        - [Approach]
+        - [Driver]
+        - [Employee]
+        - [Plate]
+        - [TrailerExternal]
+        - [TruckExternal]
+        - [YardLog]
+        - [Approaches]
     8. The following sets have receive breaking changes in their structure:
-        * [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
-        * [TrailerCommon] - Added the trailerType navigation.
-        * [Trailer] - Added Vehicule Model navigation. 
-        * [Truck] - Added Vehicule Model navigation & SCT navigation.
-        * [Carrier] -  Removed SCT navigation.
+        - [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
+        - [TrailerCommon] - Added the trailerType navigation.
+        - [Trailer] - Added Vehicule Model navigation.
+        - [Truck] - Added Vehicule Model navigation & SCT navigation.
+        - [Carrier] -  Removed SCT navigation.
     9. Changed all nulleable [Datetime] properties decode implementation.
     10. Sets evaluation methods changed.
     11. Alternative seal [sealAlt] property added in yardlog set.
     12. Additional empty strings validations in the following sets:
-        * [Yardlog]
-        * [TruckExternal]
-        * [TrailerExternal]
-        
+        - [Yardlog]
+        - [TruckExternal]
+        - [TrailerExternal]
+
   - Renames
 
         1. [MigrationTransactionResult] -> [SetBatchOut]
         2. [MigrationTransactionFailure] -> [SetOperationFailure]
         3. [MigrationUpdateResult] -> [RecordUpdateOut]
 
-- Dependencies Upgrade: N/A
+- Dependencies Upgrade:
+
+  - dev_dependencies:
+
+    1. lints ([4.0.0] -> [5.0.0])
+  
+  - dependencies:
+
+    1. remotion of dotenv
 
 ## 4.1.0 - [23.09-2024]
 
@@ -84,9 +98,7 @@
     3. [MigrationViewOrderOptions] -> [SetViewOrderOptions]
     4. [MigrationViewOrderBehaviors] -> [SetViewOrderings]
 
-- Dependencies Upgrade:
-
-    1. Template
+- Dependencies Upgrade: N/A
 
 ## 3.0.0 - [03.09-2024]
 
