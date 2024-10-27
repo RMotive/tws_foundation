@@ -57,8 +57,12 @@ final class Maintenance implements CSMSetInterface {
   }  
   
   @override
-  List<CSMSetValidationResult> evaluate() {
-    return <CSMSetValidationResult>[];
+  List<CSMSetValidationResult> evaluate() {    
+    List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
+    if(trimestral == DateTime(0)) results.add(CSMSetValidationResult(kTrimestral, 'Trimestral maintenance invalid value.', 'invalidDate()'));
+    if(anual == DateTime(0)) results.add(CSMSetValidationResult(kAnual, 'Anual maintenance invalid value.', 'invalidDate()'));
+
+    return results;
   }
   Maintenance.a();
   Maintenance clone({
