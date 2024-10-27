@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using TWS_Business.Sets;
 
@@ -12,6 +13,9 @@ public class SctsHDepot
     /// <summary>
     ///     Generates a new depot handler for <see cref="SctsHDepot"/>.
     /// </summary>
+    public SctsHDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+       : base(Databases, Disposer) {
+    }
     public SctsHDepot() : base(new(), null) {
     }
 }

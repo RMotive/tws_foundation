@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using TWS_Business.Sets;
 
@@ -11,6 +12,9 @@ public class EmployeesDepot : BDepot<TWSBusinessDatabase, Employee> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Employee"/>.
     /// </summary>
+    public EmployeesDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+        : base(Databases, Disposer) {
+    }
     public EmployeesDepot() : base(new(), null) {
     }
 }
