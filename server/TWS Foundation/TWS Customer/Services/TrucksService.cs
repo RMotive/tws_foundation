@@ -17,7 +17,7 @@ public class TrucksService : ITrucksService {
     }
 
 
-    private IQueryable<Truck> include(IQueryable<Truck> query) {
+    private IQueryable<Truck> Include(IQueryable<Truck> query) {
         return query
         .Include(t => t.InsuranceNavigation)
         .Include(t => t.VehiculeModelNavigation)
@@ -120,14 +120,14 @@ public class TrucksService : ITrucksService {
             });
     }
     public async Task<SetViewOut<Truck>> View(SetViewOptions<Truck> options) {
-        return await Trucks.View(options, include);
+        return await Trucks.View(options, Include);
     }
 
     public async Task<SetBatchOut<Truck>> Create(Truck[] trucks) {
         return await this.Trucks.Create(trucks);
     }
     public async Task<RecordUpdateOut<Truck>> Update(Truck Truck) {
-        return await Trucks.Update(Truck, include);
+        return await Trucks.Update(Truck, Include);
     }
 
 

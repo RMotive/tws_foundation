@@ -32,7 +32,7 @@ final class Insurance implements CSMSetInterface {
   String policy = "";
 
   /// Expiration time.
-  DateTime expiration = DateTime(2000);
+  DateTime expiration = DateTime(0);
 
   /// Source country.
   String country = "";
@@ -99,7 +99,8 @@ final class Insurance implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(policy.length > 20) results.add(CSMSetValidationResult(kPolicy, "Policy must be 20 length", "strictLength(20)"));
-    if(country.length<2 && country.length>3) results.add(CSMSetValidationResult(kCountry,"Country must be between 2 and 3 length", "strictLength(2,3)"));
+    if(country.length < 2 || country.length > 3) results.add(CSMSetValidationResult(kCountry,"Country must be between 2 and 3 length", "strictLength(2,3)"));
+    if(expiration == DateTime(0)) results.add(CSMSetValidationResult(kExpiration, 'Invalid expiration value.', 'invalidDate()'));
 
     return results;
   }

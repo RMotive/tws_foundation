@@ -3,6 +3,13 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes:
+    1. Added Carriers service.
+    2. Added vehicules_models service.
+    3. Changes on default date on datetime sets propeties.
+    4. Added validations on [Carrier] set clone method.
+    5. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
+    6. Added [TruckInventory] set and view service.
+    7. Added Disposer constructor in bussiness depots.
 
 - Dependencies Upgrade: N/A
 

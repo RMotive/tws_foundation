@@ -176,9 +176,32 @@ final class Carrier implements CSMSetInterface {
     Approach? approachNavigation,
     Address? addressNavigation,
     USDOT? usdotNavigation,
-
     List<Truck>? trucks
   }){
+
+    if(description != null){
+      if(description.trim().isEmpty){
+        this.description = null;
+        description = null;
+      }
+    }
+
+    if(usdot == 0){
+      usdot = null;
+      usdotNavigation = null;
+      this.usdot = null;
+      this.usdotNavigation = null;
+    }
+
+    if(approach == 0){
+      this.approachNavigation = null;
+      approachNavigation = null;
+    }
+
+    if(address == 0){
+      this.addressNavigation = null;
+      addressNavigation = null;
+    }
     return Carrier(id ?? this.id, status ?? this.status, approach ?? this.approach, address ?? this.address, name ?? this.name, description ?? this.description, usdot ?? this.usdot, 
     approachNavigation ?? this.approachNavigation, addressNavigation ?? this.addressNavigation, usdotNavigation ?? this.usdotNavigation, statusNavigation ?? this.statusNavigation, trucks ?? this.trucks);
   }

@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using TWS_Business.Sets;
 
@@ -11,6 +12,9 @@ public class ApproachesDepot : BDepot<TWSBusinessDatabase, Approach> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Approach"/>.
     /// </summary>
+    public ApproachesDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+       : base(Databases, Disposer) {
+    }
     public ApproachesDepot() : base(new(), null) {
     }
 }

@@ -2,14 +2,20 @@
 
 ## CURENT - [xx.xx-xxxx]
 
-- Notes:
-
+- Notes: 
+    1. Implemented [Carriers] and [VehiculesModels] service.
+    2. [UpdateHelper] method, in Update repository now add new items to a icollection
+    if the item is provided.
+    
 - Dependencies Upgrade: N/A
 
 ## 4.0.0 - [24.10-2024]
 
 - Notes: 
-  
+    1. Added [VehiculesModels] Service.
+    1. Added [Carriers] Service.
+    1. Added [TrucksInventories] Set & Service.
+    
     1. [TrucksExternals] Create & update service methods added and tested.
     2. removed the yardlog timestamp trigger.
     3. added a default value to timestamp property.

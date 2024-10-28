@@ -179,8 +179,8 @@ public abstract class BDepot<TDatabase, TSet>
         Set.Timestamp = DateTime.UtcNow;
         Set.EvaluateWrite();
 
-        await this.Set.AddAsync(Set);
-        await Database.SaveChangesAsync();
+        _ = await this.Set.AddAsync(Set);
+        _ = await Database.SaveChangesAsync();
         Database.ChangeTracker.Clear();
 
         Disposer?.Push(Database, [Set]);
@@ -215,8 +215,8 @@ public abstract class BDepot<TDatabase, TSet>
                 record.Timestamp = DateTime.UtcNow;
                 record.EvaluateWrite();
                 Database.ChangeTracker.Clear();
-                Set.Attach(record);
-                await Database.SaveChangesAsync();
+                _ = Set.Attach(record);
+                _ = await Database.SaveChangesAsync();
                 saved = [.. saved, record];
             } catch (Exception excep) {
                 if (Sync) {
@@ -274,12 +274,13 @@ public abstract class BDepot<TDatabase, TSet>
     #region Update 
 
     /// <summary>
-    /// Perform the navigation changes in a Tmigrationset
+    /// 
     /// </summary>
+    /// <param name="current"> Lastest data set stored in db sorce. </param>
+    /// <param name="Record"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
     private void UpdateHelper(ISet current, ISet Record) {
         EntityEntry previousEntry = Database.Entry(current);
         if (previousEntry.State == EntityState.Unchanged) {
-            //AttachDate(Record, true);
             // Update the non-navigation properties.
             previousEntry.CurrentValues.SetValues(Record);
             foreach (NavigationEntry navigation in previousEntry.Navigations) {
@@ -293,13 +294,17 @@ public abstract class BDepot<TDatabase, TSet>
                     for (int i = 0; i < newList.Count; i++) {
                         ISet? newItemSet = (ISet)newList[i];
                         if (newItemSet != null && newItemSet.Id <= 0) {
-                            //AttachDate(newList[i]);
-                            EntityEntry newNavigationEntry = Database.Entry(newList[i]);
-                            newNavigationEntry.State = EntityState.Added;
+                            // Getting the item type to add.
+                            Type itemType = newItemSet.GetType();
+                            // Getting the Add method from Icollection.
+                            var addMethod = previousCollection.GetType().GetMethod("Add", [itemType]);
+                            // Adding the new item to Icollection.
+                            _ = (addMethod?.Invoke(previousCollection, [newItemSet]));
+
                         }
                     }
+                    // Find items to modify.
                     for (int i = 0; i < previousList.Count; i++) {
-                        // Find items to modify.
                         // For each new item stored in record collection, will search for an ID match and update the record.
                         foreach (object newitem in newList) {
                             if (previousList[i] is ISet previousItem && newitem is ISet newItemSet && previousItem.Id == newItemSet.Id) {
@@ -316,8 +321,6 @@ public abstract class BDepot<TDatabase, TSet>
                     navigation.CurrentValue = newNavigationValue;
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
                     // Update the existing navigation entity
-
-
                     if (navigation.CurrentValue is ISet currentItemSet && newNavigationValue is ISet newItemSet) {
                         UpdateHelper(currentItemSet, newItemSet);
                     }
@@ -338,6 +341,7 @@ public abstract class BDepot<TDatabase, TSet>
         IQueryable<TSet> query = Set;
         TSet? old = null;
         TSet? current;
+        Record.EvaluateWrite();
         if (Include != null) {
             query = Include(query);
         }
@@ -346,16 +350,16 @@ public abstract class BDepot<TDatabase, TSet>
             .FirstOrDefaultAsync();
 
         if (current != null) {
-            Set.Attach(current);
+            _ = Set.Attach(current);
             old = current.DeepCopy();
 
             Record.Timestamp = old.Timestamp;
             UpdateHelper(current, Record);
-            await Database.SaveChangesAsync();
+            _ = await Database.SaveChangesAsync();
         } else {
             Record.Timestamp = DateTime.Now;
-            Set.Update(Record);
-            await Database.SaveChangesAsync();
+            _ = Set.Update(Record);
+            _ = await Database.SaveChangesAsync();
 
             current = await query
                 .Where(i => i.Id == Record.Id)
@@ -407,8 +411,8 @@ public abstract class BDepot<TDatabase, TSet>
             .FirstOrDefaultAsync()
             ?? throw new Exception("Trying to remove an unexist record");
 
-        Set.Remove(record);
-        await Database.SaveChangesAsync();
+        _ = Set.Remove(record);
+        _ = await Database.SaveChangesAsync();
 
         return record;
     }
