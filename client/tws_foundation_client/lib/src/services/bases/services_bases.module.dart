@@ -1,4 +1,5 @@
 export 'carriers_service_base.dart';
+export 'contacts_service_base.dart';
 export 'drivers_externals_service_base.dart';
 export 'drivers_service_base.dart';
 export 'load_type_service_base.dart';

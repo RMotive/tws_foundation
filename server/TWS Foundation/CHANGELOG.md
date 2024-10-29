@@ -2,7 +2,7 @@
 
 ## CURENT - [xx.xx-xxxx]
 
-- Notes: 
+- Notes:
     1. Implemented [Carriers] and [VehiculesModels] service.
     2. [UpdateHelper] method, in Update repository now add new items to a icollection
     if the item is provided.
