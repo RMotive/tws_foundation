@@ -10,6 +10,7 @@
     5. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
     6. Added [TruckInventory] set and view service.
     7. Added Disposer constructor in bussiness depots.
+    8. [Yardlog] seals properties now can be empty, even if a trailer is selected.
 
 - Dependencies Upgrade: N/A
 
