@@ -88,7 +88,8 @@
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
   if(policy.length &gt; 20) results.add(CSMSetValidationResult(kPolicy, &quot;Policy must be 20 length&quot;, &quot;strictLength(20)&quot;));
-  if(country.length&lt;2 &amp;&amp; country.length&gt;3) results.add(CSMSetValidationResult(kCountry,&quot;Country must be between 2 and 3 length&quot;, &quot;strictLength(2,3)&quot;));
+  if(country.length &lt; 2 || country.length &gt; 3) results.add(CSMSetValidationResult(kCountry,&quot;Country must be between 2 and 3 length&quot;, &quot;strictLength(2,3)&quot;));
+  if(expiration == DateTime(0)) results.add(CSMSetValidationResult(kExpiration, &#39;Invalid expiration value.&#39;, &#39;invalidDate()&#39;));
 
   return results;
 }</code></pre>
@@ -125,7 +126,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.0.0
+      5.1.0
   </span>
 
   

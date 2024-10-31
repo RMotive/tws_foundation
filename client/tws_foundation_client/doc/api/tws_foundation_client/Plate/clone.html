@@ -99,6 +99,30 @@
   TruckCommon? truckCommonNavigation,
   TrailerCommon? trailerCommonNavigation,
 }) {
+  if(state != null){
+    if(state.trim().isEmpty){
+      this.state = null;
+      status = null;
+    }
+  }
+  if(truck == 0){
+    this.truck = null;
+    this.truckCommonNavigation = null;
+    truck = null;
+    truckCommonNavigation = null;
+  }
+  if(trailer == 0){
+    this.trailer = null;
+    this.trailerCommonNavigation = null;
+    trailer = null;
+    trailerCommonNavigation = null;
+  }
+  if(expiration != null){
+    if(expiration == DateTime(0)){
+      this.expiration = null;
+      expiration = null;
+    }
+  }
   return Plate(
     id ?? this.id,
     status ?? this.status,
@@ -146,7 +170,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.0.0
+      5.1.0
   </span>
 
   
