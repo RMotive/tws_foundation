@@ -137,6 +137,6 @@ final class TruckExternal implements CSMSetInterface {
       if(v.trim().isEmpty) v = null;
     }
 
-    return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, vin, carrier ?? this.carrier, mPlate, uPlate, truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
+    return TruckExternal(id ?? this.id, status ?? this.status, common ?? this.common, v, carrier ?? this.carrier, mPlate, uPlate, truckCommonNavigation ?? this.truckCommonNavigation, statusNavigation ?? this.statusNavigation);
   }
 }

@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 5.1.0 - [30.10-2024]
+
+- Notes:
+
+    1. Added [Carriers] service.
+    2. Added [vehicules_models] service.
+    3. Changes on default date on datetime sets properties.
+    4. Added validations on [Carrier] set clone method.
+    5. Added [TruckInventory] set and view service.
+    6. Added Disposer constructor in bussiness depots.
+    7. [Yardlog] seals properties now can be empty, even if a trailer is selected.
+    8. Added [timestamp] record controls.
+
+- Dependencies Upgrade:
+
+    1. csm_client ([7.0.0])
+
 ## 5.0.0 - [24.10-2024]
 
 - Notes:

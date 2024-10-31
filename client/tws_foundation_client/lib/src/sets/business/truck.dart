@@ -31,7 +31,7 @@ final class Truck implements CSMSetInterface {
   String? motor = '';
   int? maintenance;
   int? insurance;
-  int? sct = 0;
+  int? sct;
   Status? statusNavigation;
   TruckCommon? truckCommonNavigation;
   VehiculeModel? vehiculeModelNavigation;
@@ -39,14 +39,13 @@ final class Truck implements CSMSetInterface {
   Insurance? insuranceNavigation;
   SCT? sctNavigation;
   Carrier? carrierNavigation;
-
-  // List default initialization data for clone method.
   List<Plate> plates = <Plate>[
-    Plate.a(),
     Plate.a()
   ];
 
-  Truck.a();
+  Truck.a(){
+    _timestamp = DateTime.now();
+  }
 
   Truck(this.id, this.status, this.model, this.common, this.carrier, this.motor, this.vin, this.maintenance, this.insurance, this.sct, this.statusNavigation, this.vehiculeModelNavigation, this.truckCommonNavigation, this.maintenanceNavigation,
     this.insuranceNavigation, this.sctNavigation ,this.carrierNavigation, this.plates, { 
@@ -136,13 +135,70 @@ final class Truck implements CSMSetInterface {
     List<Plate>? plates
   }){
     //Motor null validation
-    //sct null validation
+    if(motor != null){
+      if(motor.trim().isEmpty){
+        motor = null;
+        this.motor = null;
+      }
+    }
+    // --> Removing empty navigations content
+    if(insuranceNavigation != null){
+      if(insuranceNavigation.policy.trim().isEmpty && insuranceNavigation.expiration == DateTime(0) && insuranceNavigation.country.trim().isEmpty){
+        this.insurance = null;
+        this.insuranceNavigation = null;
+        insurance = null;
+        insuranceNavigation = null;
+      }
+    }
+    if(maintenanceNavigation != null){
+      if(maintenanceNavigation.trimestral == DateTime(0) && maintenanceNavigation.anual == DateTime(0)){
+        this.maintenance = null;
+        this.maintenanceNavigation = null;
+        maintenance = null;
+        maintenanceNavigation = null;
+      }
+    }
+
+    if(sctNavigation != null){
+      if(sctNavigation.configuration.trim().isEmpty && sctNavigation.number.trim().isEmpty && sctNavigation.type.trim().isEmpty){
+        this.sct = null;
+        this.sctNavigation = null;
+        sct = null;
+        sctNavigation = null;
+      }
+    }
+
+    if(sct == 0){
+      this.sct = null;
+      this.sctNavigation = null;
+      sct = null;
+      sctNavigation = null;
+    }
+    if(insurance == 0){
+      this.insurance = null;
+      this.insuranceNavigation = null;
+      insurance = null;
+      insuranceNavigation = null;
+    }
+    if(maintenance == 0){
+      this.maintenance = null;
+      this.maintenanceNavigation = null;
+      maintenance = null;
+      maintenanceNavigation = null;
+    }
     // If the field is setted via catalogs, then the pointers must be setted null when index is 0
-    VehiculeModel? vehiculeNav = vehiculeModelNavigation ?? this.vehiculeModelNavigation;
-    if(model == 0) vehiculeNav = null;
+    if(model == 0){
+      this.vehiculeModelNavigation = null;
+      vehiculeModelNavigation = null;
+    }
+    if(carrier == 0){
+      this.carrierNavigation = null;
+      carrierNavigation = null;
+    }
+
     
     return Truck(id ?? this.id, status ?? this.status, model ?? this.model, common ?? this.common, carrier ?? this.carrier, motor ?? this.motor, vin ?? this.vin, maintenance ?? this.maintenance, 
-    insurance ?? this.insurance, sct ?? this.sct, statusNavigation ?? this.statusNavigation, vehiculeNav, truckCommonNavigation ?? this.truckCommonNavigation, 
+    insurance ?? this.insurance, sct ?? this.sct, statusNavigation ?? this.statusNavigation, vehiculeModelNavigation ?? this.vehiculeModelNavigation, truckCommonNavigation ?? this.truckCommonNavigation, 
     maintenanceNavigation ?? this.maintenanceNavigation, insuranceNavigation ?? this.insuranceNavigation, sctNavigation ?? this.sctNavigation, carrierNavigation ?? this.carrierNavigation, plates ?? this.plates);
   }
   @override
@@ -216,7 +272,7 @@ final class Truck implements CSMSetInterface {
     if(maintenanceNavigation != null) results = <CSMSetValidationResult>[...results, ...maintenanceNavigation!.evaluate()];
     if(insuranceNavigation != null) results = <CSMSetValidationResult>[...results, ...insuranceNavigation!.evaluate()];
     
-    if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, 'Truck must have 1 plate at least', 'listLength()'));
+    if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, 'Truck must have one plate at least', 'listLength()'));
     for(Plate plate in plates){
       results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
     }

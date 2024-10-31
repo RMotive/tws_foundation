@@ -184,7 +184,6 @@ final class YardLog implements CSMSetInterface {
     if(sealAlt != null){
       if(sealAlt!.trim().isEmpty || sealAlt!.length > 64) results.add(CSMSetValidationResult(kSealAlt, "El campo del sello #2 (alternativo) es muy largo. Maximo 64 caracteres.", "strictLength(1,64)"));
     }
-    if(seal == null && (trailerNavigation != null || trailerExternalNavigation != null)) results.add(CSMSetValidationResult(kSeal, "Debe agregar el campo de sello. De lo contrario seleccione el tipo de carga Botado.", "FieldConflict()"));
     
     if(section <= 0 && sectionNavigation == null) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar una seccion.', 'pointerHandler()'));
     if(loadType <= 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
@@ -278,7 +277,7 @@ final class YardLog implements CSMSetInterface {
     TrailerExternal? trailerExternalNavigation,
     LoadType? loadTypeNavigation,
     Section? sectionNavigation,
-    Account? accountNavigation
+    Account? accountNavigation,
   }){
     String? sea = seal ?? this.seal;
     if(sea != null){
@@ -348,27 +347,33 @@ final class YardLog implements CSMSetInterface {
     }
     
     return YardLog(
-        id ?? this.id, 
-        entry ?? this.entry, 
-        truckIndex, truckExtIndex, 
-        trailerIndex, trailerExtIndex, 
-        loadType ?? this.loadType, 
-        section ?? this.section, 
-        driverIndex,driverExtIndex, 
-        guard ?? this.guard, 
-        gName ?? this.gName, 
-        fromTo ?? this.fromTo, 
-        sea, 
-        sealt,damage ?? this.damage, 
-        ttPicture ?? this.ttPicture, 
-        dmgEv, driverNav, 
-        driverExtNav, 
-        truckNav, 
-        truckExtNav, 
-        trailerNav, 
-        trailerExtNav, 
-        load, 
-        sect, 
-        accountNavigation ?? this.accountNavigation);
+      id ?? this.id,
+      entry ?? this.entry,
+      truckIndex,
+      truckExtIndex,
+      trailerIndex,
+      trailerExtIndex,
+      loadType ?? this.loadType,
+      section ?? this.section,
+      driverIndex,
+      driverExtIndex,
+      guard ?? this.guard,
+      gName ?? this.gName,
+      fromTo ?? this.fromTo,
+      sea,
+      sealt,
+      damage ?? this.damage,
+      ttPicture ?? this.ttPicture,
+      dmgEv,
+      driverNav,
+      driverExtNav,
+      truckNav,
+      truckExtNav,
+      trailerNav,
+      trailerExtNav,
+      load,
+      sect,
+      accountNavigation ?? this.accountNavigation,
+    );
   }
 }

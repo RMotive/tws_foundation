@@ -1,3 +1,4 @@
+export 'carriers_service_base.dart';
 export 'drivers_externals_service_base.dart';
 export 'drivers_service_base.dart';
 export 'load_type_service_base.dart';
@@ -10,4 +11,5 @@ export 'trailer_service_base.dart';
 export 'trailers_externals_service_base.dart';
 export 'trucks_externals_service_base.dart';
 export 'trucks_service_base.dart';
+export 'vehicules_models_service_base.dart';
 export 'yard_log_service_base.dart';

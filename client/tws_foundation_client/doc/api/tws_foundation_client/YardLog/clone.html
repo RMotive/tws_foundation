@@ -131,7 +131,7 @@
   TrailerExternal? trailerExternalNavigation,
   LoadType? loadTypeNavigation,
   Section? sectionNavigation,
-  Account? accountNavigation
+  Account? accountNavigation,
 }){
   String? sea = seal ?? this.seal;
   if(sea != null){
@@ -201,28 +201,34 @@
   }
 
   return YardLog(
-      id ?? this.id,
-      entry ?? this.entry,
-      truckIndex, truckExtIndex,
-      trailerIndex, trailerExtIndex,
-      loadType ?? this.loadType,
-      section ?? this.section,
-      driverIndex,driverExtIndex,
-      guard ?? this.guard,
-      gName ?? this.gName,
-      fromTo ?? this.fromTo,
-      sea,
-      sealt,damage ?? this.damage,
-      ttPicture ?? this.ttPicture,
-      dmgEv, driverNav,
-      driverExtNav,
-      truckNav,
-      truckExtNav,
-      trailerNav,
-      trailerExtNav,
-      load,
-      sect,
-      accountNavigation ?? this.accountNavigation);
+    id ?? this.id,
+    entry ?? this.entry,
+    truckIndex,
+    truckExtIndex,
+    trailerIndex,
+    trailerExtIndex,
+    loadType ?? this.loadType,
+    section ?? this.section,
+    driverIndex,
+    driverExtIndex,
+    guard ?? this.guard,
+    gName ?? this.gName,
+    fromTo ?? this.fromTo,
+    sea,
+    sealt,
+    damage ?? this.damage,
+    ttPicture ?? this.ttPicture,
+    dmgEv,
+    driverNav,
+    driverExtNav,
+    truckNav,
+    truckExtNav,
+    trailerNav,
+    trailerExtNav,
+    load,
+    sect,
+    accountNavigation ?? this.accountNavigation,
+  );
 }</code></pre>
 </section>
 
@@ -257,7 +263,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.0.0
+      5.1.0
   </span>
 
   

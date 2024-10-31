@@ -127,7 +127,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   if(maintenanceNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...maintenanceNavigation!.evaluate()];
   if(insuranceNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...insuranceNavigation!.evaluate()];
 
-  if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, &#39;Truck must have 1 plate at least&#39;, &#39;listLength()&#39;));
+  if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, &#39;Truck must have one plate at least&#39;, &#39;listLength()&#39;));
   for(Plate plate in plates){
     results = &lt;CSMSetValidationResult&gt;[...results, ...plate.evaluate()];
   }
@@ -166,7 +166,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.0.0
+      5.1.0
   </span>
 
   

@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using TWS_Business.Sets;
 
@@ -12,6 +13,10 @@ public class InsurancesHDepot
     /// <summary>
     ///     Generates a new depot handler for <see cref="InsurancesHDepot"/>.
     /// </summary>
+    public InsurancesHDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+        : base(Databases, Disposer) {
+    }
+
     public InsurancesHDepot() : base(new(), null) {
     }
 }

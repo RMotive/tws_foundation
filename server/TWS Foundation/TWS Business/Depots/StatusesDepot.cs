@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 
 using TWS_Business.Sets;
 
@@ -12,6 +13,9 @@ public class StatusesDepot
     /// <summary>
     ///     Generates a new depot handler for <see cref="Status"/>.
     /// </summary>
+    public StatusesDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+       : base(Databases, Disposer) {
+    }
     public StatusesDepot() : base(new(), null) {
     }
 }

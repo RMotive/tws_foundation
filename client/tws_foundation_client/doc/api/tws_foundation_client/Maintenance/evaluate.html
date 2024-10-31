@@ -86,7 +86,11 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
-  return &lt;CSMSetValidationResult&gt;[];
+  List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
+  if(trimestral == DateTime(0)) results.add(CSMSetValidationResult(kTrimestral, &#39;Trimestral maintenance invalid value.&#39;, &#39;invalidDate()&#39;));
+  if(anual == DateTime(0)) results.add(CSMSetValidationResult(kAnual, &#39;Anual maintenance invalid value.&#39;, &#39;invalidDate()&#39;));
+
+  return results;
 }</code></pre>
 </section>
 
@@ -121,7 +125,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.0.0
+      5.1.0
   </span>
 
   

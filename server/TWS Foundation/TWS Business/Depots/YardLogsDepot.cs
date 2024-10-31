@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 
@@ -16,6 +17,9 @@ public class YardLogsDepot
     /// <summary>
     ///     Generates a new depot handler for <see cref="YardLog"/>.
     /// </summary>
+    public YardLogsDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+       : base(Databases, Disposer) {
+    }
     public YardLogsDepot() 
         : base(new(), null) {
     }

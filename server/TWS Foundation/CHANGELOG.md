@@ -1,40 +1,59 @@
 # CHANGELOG
 
+## 4.1.0 - [30.10-2024]
+
+- Notes:
+
+    1. Implemented [Carriers] and [VehiculesModels] service.
+    2. [UpdateHelper] method, in Update repository now add new items to a [ICollection]
+    if the item is provided.
+
+- Dependencies:
+
+    1. Microsoft.AspNetCore.Mvc.Testing ([8.0.10])
+    2. Microsoft.EntityFrameworkCore ([8.0.10])
+    3. Microsoft.EntityFrameworkCore.SqlServer ([8.0.10])
+    4. Microsoft.IdentityModel.Tokens ([8.1.2])
+    5. Microsoft.NET.Test.Sdk ([17.11.1])
+    6. xunit ([2.9.2])
+
 ## 4.0.0 - [24.10-2024]
 
-- Notes: 
-  
-    1. [TrucksExternals] Create & update service methods added and tested.
-    2. removed the yardlog timestamp trigger.
-    3. added a default value to timestamp property.
-    4. Added a new schema for business properties changes and normalization.
-    5. [TrucksExternals] Create & update service methods added and tested.
-    6. [Trucks] tests refactored.
-    7. Timestamp property added to sets.
-    8. Added [VehiculeModel] set.
-    9. Added [TrailerType] set.
-    11. The following sets have receive minor properties changes:
-        * [Approach]
-        * [Driver]
-        * [Employee]
-        * [Plate]
-        * [TrailerExternal]
-        * [TruckExternal]
-        * [YArdlog]
-        * [Approaches]
-    12. The following sets have receive breaking changes in their structure:
-        * [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
-        * [TrailerCommon] - Added the trailerType navigation.
-        * [Trailer] - Added Vehicule Model navigation and carrier navigation. 
-        * [Truck] - Added Vehicule Model navigation & SCT navigation.
-        * [Carrier] -  Removed SCT navigation.
-    13. Alternative seal [sealAlt] added on yardlog set. 
+- Notes:
+    1. Added [VehiculesModels] Service.
+    2. Added [Carriers] Service.
+    3. Added [TrucksInventories] Set & Service.
+    4. [TrucksExternals] Create & update service methods added and tested.
+    5. removed the yardlog timestamp trigger.
+    6. added a default value to timestamp property.
+    7. Added a new schema for business properties changes and normalization.
+    8. [TrucksExternals] Create & update service methods added and tested.
+    9. [Trucks] tests refactored.
+    10. Timestamp property added to sets.
+    11. Added [VehiculeModel] set.
+    12. Added [TrailerType] set.
+    13. The following sets have receive minor properties changes:
+        - [Approach]
+        - [Driver]
+        - [Employee]
+        - [Plate]
+        - [TrailerExternal]
+        - [TruckExternal]
+        - [YArdlog]
+        - [Approaches]
+    14. The following sets have receive breaking changes in their structure:
+        - [Manufacturer] -  has been normalized. Now this sets stores the brand name for trucks and trailers manufacturers.
+        - [TrailerCommon] - Added the trailerType navigation.
+        - [Trailer] - Added Vehicule Model navigation and carrier navigation.
+        - [Truck] - Added Vehicule Model navigation & SCT navigation.
+        - [Carrier] -  Removed SCT navigation.
+    15. Alternative seal [sealAlt] added on yardlog set.
 
-- Dependencies Upgrade: N/A
+- Dependencies Upgrade: N-A
 
 ## 3.0.0 - [23.09-2024]
 
-- Notes: N/A
+- Notes: N-A
 
     1. All sets got updated adding [Timestamp] new property to the [ISet] interface, representing the timestamp when the record got created.
 
@@ -59,7 +78,7 @@
     7. Added Inventories and Yardlog Triggers validations.
     8. Fixed: Now the trailers not sum +1 (Only Trucks) to the ocupancy section counter, in inventories management.
 
-- Dependencies Upgrade: N/A
+- Dependencies Upgrade: N-A
 
 ## 2.0.2 - [16.09-2024]
 
@@ -71,7 +90,7 @@
         2. [TruckCommon]
         3. [TruckExternal]  
 
-- Dependencies Upgrade: N/A
+- Dependencies Upgrade: N-A
 
 ## 2.0.1 - [03.09-2024]
 

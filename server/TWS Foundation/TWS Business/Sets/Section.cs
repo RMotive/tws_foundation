@@ -29,6 +29,8 @@ public partial class Section
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
+    public virtual ICollection<TruckInventory> TrucksInventories { get; set; } = [];
+
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
 
         Container = [

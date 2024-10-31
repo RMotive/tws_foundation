@@ -129,7 +129,6 @@ final class TruckCommon implements CSMSetInterface {
   TruckCommon clone({
     int? id,
     int? status,
-    String? vin,
     String? economic,
     int? location,
     int? situation,
@@ -159,8 +158,8 @@ final class TruckCommon implements CSMSetInterface {
       locationIndex, 
       situationIndex,
       situationNav, 
-      locationNav 
-      ,statusNavigation ?? this.statusNavigation
+      locationNav,
+      statusNavigation ?? this.statusNavigation
     );
   }
 }

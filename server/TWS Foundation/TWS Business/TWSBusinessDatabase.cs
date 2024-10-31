@@ -72,6 +72,8 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
     public virtual DbSet<TrailerType> TrailersTypes { get; set; }
 
+    public virtual DbSet<TrailerType> TrucksInventories { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder builder) {
@@ -109,6 +111,7 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
         UsdotH.CreateModel(builder);
         ApproachesH.CreateModel(builder);
         CarrierH.CreateModel(builder);
+        TruckInventory.CreateModel(builder);
 
 
         OnModelCreatingPartial(builder);
@@ -144,6 +147,7 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
             new YardLog(),
             new VehiculeModel(),
             new TrailerType(),
+            new TruckInventory(),
             new UsdotH(),
             new Approach(),
             new ApproachesH(),
