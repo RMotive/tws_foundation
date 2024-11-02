@@ -3,6 +3,9 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes:
+- 
+    1. Changed Section property to nulleable in [Yardlog] set.
+ 
 
 - Dependencies:
 

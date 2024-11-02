@@ -12,8 +12,6 @@ public class Q_YardLog : BQ_Set<YardLog> {
             Mock = new() {
                 Id = 1,
                 LoadType = 0,
-                Section = 0
-
             },
             Expectations = [],
         };
@@ -21,7 +19,6 @@ public class Q_YardLog : BQ_Set<YardLog> {
             Mock = new() {
                 Id = 0,
                 LoadType = 0,
-                Section = 0,
                 TTPicture = "",
                 Gname = "",
                 FromTo = ""
@@ -32,7 +29,6 @@ public class Q_YardLog : BQ_Set<YardLog> {
                 (nameof(YardLog.Gname), [(new LengthValidator(), 2)]),
                 (nameof(YardLog.FromTo), [(new LengthValidator(), 2)]),
                 (nameof(YardLog.LoadType), [(new PointerValidator(true), 3)]),
-                (nameof(YardLog.Section), [(new PointerValidator(true), 3)]),
             ],
         };
 
