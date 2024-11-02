@@ -311,42 +311,49 @@ final class YardLog implements CSMSetInterface {
       this.section = null;
       this.sectionNavigation = null;
       sectionNavigation = null;
+      section = null;
     }
 
     if (driver == 0) {
       this.driver = null;
       this.driverNavigation = null;
       driverNavigation = null;
+      driver = null;
     }
 
     if (driverExternal == 0) {
       this.driverExternal = null;
       this.driverExternalNavigation = null;
       driverExternalNavigation = null;
+      driverExternal = null;
     }
 
     if (truck == 0) {
       this.truck = null;
       this.truckNavigation = null;
       truckExternalNavigation = null;
+      truck = null;
     }
 
     if (truckExternal == 0) {
       this.truckExternal = null;
       this.truckExternalNavigation = null;
       truckExternalNavigation = null;
+      truckExternal = null;
     }
 
     if (trailer == 0) {
       this.trailer = null;
       this.trailerNavigation = null;
       trailerNavigation = null;
+      trailer = null;
     }
 
     if (trailerExternal == 0) {
       this.trailerExternal = null;
       this.trailerExternalNavigation = null;
       trailerExternalNavigation = null;
+      trailerExternal = null;
     }
     
     return YardLog(
