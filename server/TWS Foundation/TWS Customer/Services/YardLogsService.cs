@@ -18,7 +18,7 @@ public class YardLogsService
         this.YardLogs = YardLogs;
    
     }
-    private IQueryable<YardLog> include(IQueryable<YardLog> query) {
+    private IQueryable<YardLog> Include(IQueryable<YardLog> query) {
         return query
             .Include(t => t.DriverExternalNavigation)
                 .ThenInclude(i => i!.IdentificationNavigation)
@@ -348,7 +348,7 @@ public class YardLogsService
     }
     public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
        
-        return await YardLogs.View(options, include);
+        return await YardLogs.View(options, Include);
     }
 
     public async Task<SetBatchOut<YardLog>> Create(YardLog[] yardLog) {
@@ -356,7 +356,7 @@ public class YardLogsService
     }
     public async Task<RecordUpdateOut<YardLog>> Update(YardLog yardLog, bool updatePivot = false) {
 
-        return await YardLogs.Update(yardLog, include) ;
+        return await YardLogs.Update(yardLog, Include) ;
     }
 
     public async Task<YardLog> Delete(int Id) {
