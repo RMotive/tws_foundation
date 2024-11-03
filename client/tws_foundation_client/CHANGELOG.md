@@ -1,10 +1,14 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 5.2.0 - [03.11-2024]
 
 - Notes:
 
+    1. Changed Section property to nulleable in [Yardlog] set.
+
 - Dependencies:
+
+    1. csm_client ([7.0.0])
 
 ## 5.1.0 - [30.10-2024]
 

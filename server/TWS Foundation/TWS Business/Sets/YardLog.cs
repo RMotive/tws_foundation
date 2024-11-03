@@ -26,7 +26,7 @@ public partial class YardLog
 
     public int LoadType { get; set; }
 
-    public int Section { get; set; }
+    public int? Section { get; set; }
 
     public int? Driver { get; set; }
 
@@ -65,14 +65,13 @@ public partial class YardLog
     public virtual Section? SectionNavigation { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator required = new RequiredValidator();
+        RequiredValidator required = new();
         Container = [
             ..Container,
             (nameof(TTPicture), [required]),
             (nameof(Gname), [new LengthValidator(1, 100)]),
             (nameof(FromTo), [new LengthValidator(1, 100)]),
             (nameof(LoadType), [new PointerValidator(true)]),
-            (nameof(Section), [new PointerValidator(true)]),
         ];
 
         return Container;

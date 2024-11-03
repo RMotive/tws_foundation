@@ -1,12 +1,21 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 6.0.0 - [03.11-2024]
 
 - Notes:
 
-    1. Refactorized [ViewInventory] method from [YardLogDepot] to calculate it based on [Trailers] and [TrailersExternal] instead of using [Trucks] and [TrucksExternal]
+    1. Changed Section property to nulleable in [Yardlog] set.
+    2. Now new trailers registered in yardlogs sum +1 to sections occupancy.
+    3. Refactorized [ViewInventory] method from [YardLogDepot] to calculate it based on [Trailers] and [TrailersExternal] instead of using [Trucks] and [TrucksExternal]
 
 - Dependencies:
+
+    1. Microsoft.AspNetCore.Mvc.Testing ([8.0.10])
+    2. Microsoft.EntityFrameworkCore ([8.0.10])
+    3. Microsoft.EntityFrameworkCore.SqlServer ([8.0.10])
+    4. Microsoft.IdentityModel.Tokens ([8.1.2])
+    5. Microsoft.NET.Test.Sdk ([17.11.1])
+    6. xunit ([2.9.2])
 
 ## 4.1.0 - [30.10-2024]
 
