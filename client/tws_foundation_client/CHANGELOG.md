@@ -4,6 +4,8 @@
 
 - Notes:
 
+    1. Changed Section property to nulleable in [Yardlog] set.
+
 - Dependencies:
 
 ## 5.1.0 - [30.10-2024]

@@ -17,9 +17,8 @@ public class Q_YardLogsDepot
     protected override YardLog MockFactory(string RandomSeed) {
 
         return new() {
-            Entry = true,
+            Entry = false,
             LoadType = 1,
-            Section = 1,
             Timestamp = DateTime.Now,
             Guard = 1,
             TruckExternal = 0,

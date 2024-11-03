@@ -4,6 +4,10 @@
 
 - Notes:
 
+    1. Changed Section property to nulleable in [Yardlog] set.
+    2. Now new trailers registered in yardlogs sum +1 to sections occupancy.
+ 
+
 - Dependencies:
 
 ## 4.1.0 - [30.10-2024]
