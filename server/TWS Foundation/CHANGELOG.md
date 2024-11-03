@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## CURRENT - [xx.xx-xxxx]
+
+- Notes:
+
+    1. Refactorized [ViewInventory] method from [YardLogDepot] to calculate it based on [Trailers] and [TrailersExternal] instead of using [Trucks] and [TrucksExternal]
+
+- Dependencies:
+
 ## 4.1.0 - [30.10-2024]
 
 - Notes:
