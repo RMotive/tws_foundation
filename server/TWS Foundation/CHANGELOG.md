@@ -6,6 +6,7 @@
 
     1. Changed Section property to nulleable in [Yardlog] set.
     2. Now new trailers registered in yardlogs sum +1 to sections occupancy.
+    3. Refactorized [ViewInventory] method from [YardLogDepot] to calculate it based on [Trailers] and [TrailersExternal] instead of using [Trucks] and [TrucksExternal]
 
 - Dependencies:
 
