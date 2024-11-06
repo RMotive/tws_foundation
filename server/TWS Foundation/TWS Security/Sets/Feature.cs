@@ -1,5 +1,6 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,11 @@ public partial class Feature
     public string? Description { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        throw new NotImplementedException();
+
+        return [
+            ..Container,
+            ( nameof(Name), [ new LengthValidator(1, 25) ] )
+        ];
     }
 
     public static void CreateModel(ModelBuilder Builder) {

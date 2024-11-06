@@ -22,10 +22,10 @@ public abstract class BDatabaseSQLS<TDatabases>
     }
     public BDatabaseSQLS(string Sign, DbContextOptions<TDatabases> Options)
         : base(Options) {
-
+        
         this.Sign = Sign;
         Connection = DatabaseUtilities.Retrieve(this.Sign);
-    }
+    } 
 
     /// <summary>
     /// 
@@ -36,10 +36,29 @@ public abstract class BDatabaseSQLS<TDatabases>
     /// 
     /// </summary>
     public void Evaluate() {
+        AdvisorManager.Announce("[{GetType().Name}] Evaluating Sets definitions...");
         ISet[] sets = EvaluateFactory();
 
+        Exception[] evResults = [];
         foreach (ISet set in sets) {
-            _ = set.EvaluateDefinition();
+            Exception[] result = set.EvaluateDefinition();
+            if(result.Length > 0) {
+                AdvisorManager.Warning(
+                    "Wrong Set definition", 
+                    new () {
+                        { "Set", set.GetType().Name },
+                        { "Exceptions", result },
+                    }
+                );
+            }
+
+            evResults = [..evResults, ..result];
+        }
+
+        if(evResults.Length > 0) {
+            throw new Exception("Database Sets definitions caugth exceptions");
+        } else {
+            AdvisorManager.Success($"[{GetType().Name}] Sets definition evaluation finished");
         }
     }
     /// <summary>
@@ -59,11 +78,9 @@ public abstract class BDatabaseSQLS<TDatabases>
             {"Base", nameof(BDatabaseSQLS<TDatabases>) }
         });
 
-
-
         if (Database.CanConnect()) {
             AdvisorManager.Success($"[{GetType().Name}] Connection stable");
-
+            Evaluate();
         } else {
             try {
                 Database.OpenConnection();
