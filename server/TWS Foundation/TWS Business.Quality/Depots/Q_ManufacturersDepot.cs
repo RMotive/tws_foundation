@@ -15,8 +15,6 @@ public class Q_ManufacturersDepot
     }
 
     protected override Manufacturer MockFactory(string RandomSeed) {
-        DateOnly date = new(2024, 12, 12);
-
         return new() {
             Name = RandomUtils.String(20),
         };

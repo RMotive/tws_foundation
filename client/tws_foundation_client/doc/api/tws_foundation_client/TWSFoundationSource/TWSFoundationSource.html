@@ -79,6 +79,9 @@
 <li><span class="parameter" id="-param-loadTypes"><span class="type-annotation">LoadTypeService?</span> <span class="parameter-name">loadTypes</span>, </span></li>
 <li><span class="parameter" id="-param-sections"><span class="type-annotation">SectionsService?</span> <span class="parameter-name">sections</span>, </span></li>
 <li><span class="parameter" id="-param-yardLogs"><span class="type-annotation">YardLogsService?</span> <span class="parameter-name">yardLogs</span>, </span></li>
+<li><span class="parameter" id="-param-carriers"><span class="type-annotation">CarriersService?</span> <span class="parameter-name">carriers</span>, </span></li>
+<li><span class="parameter" id="-param-vehiculesModels"><span class="type-annotation">VehiculesModelsService?</span> <span class="parameter-name">vehiculesModels</span>, </span></li>
+<li><span class="parameter" id="-param-trucksInventories"><span class="type-annotation">TrucksInventoriesService?</span> <span class="parameter-name">trucksInventories</span>, </span></li>
 <li><span class="parameter" id="-param-development"><span class="type-annotation"><a href="../../tws_foundation_client/CSMUri-class.html">CSMUri</a></span> <span class="parameter-name">development</span> = <span class="default-value">const CSMUri(&#39;127.0.0.1&#39;, &#39;&#39;, port: 5196, protocol: CSMProtocols.http)</span>, </span></li>
 <li><span class="parameter" id="-param-production"><span class="type-annotation"><a href="../../tws_foundation_client/CSMUri-class.html">CSMUri</a>?</span> <span class="parameter-name">production</span>, </span></li>
 </ol>})
@@ -112,6 +115,9 @@ services.</p>
   LoadTypeService? loadTypes,
   SectionsService? sections,
   YardLogsService? yardLogs,
+  CarriersService? carriers,
+  VehiculesModelsService? vehiculesModels,
+  TrucksInventoriesService? trucksInventories,
   CSMUri development = const CSMUri(
     &#39;127.0.0.1&#39;,
     &#39;&#39;,
@@ -139,6 +145,9 @@ services.</p>
   this.loadTypes = loadTypes ?? LoadTypeService(host, client: client);
   this.sections = sections ?? SectionsService(host, client: client);
   this.yardLogs = yardLogs ?? YardLogsService(host, client: client);
+  this.carriers = carriers ?? CarriersService(host, client: client);
+  this.vehiculesModels = vehiculesModels ?? VehiculesModelsService(host, client: client);
+  this.trucksInventories = trucksInventories ?? TrucksInventoriesService(host, client: client);
 
 }</code></pre>
 </section>
@@ -174,7 +183,7 @@ services.</p>
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.0.0
+      5.1.0
   </span>
 
   

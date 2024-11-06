@@ -39,8 +39,7 @@ public class SetViewPropertyFilter<TSet>
             prop = Expression.PropertyOrField(param, Property);
         }
 
-        ConstantExpression constant = Expression.Constant(Value);
-
+        ConstantExpression constant;
         Expression expression;
         switch (Evaluation) {
             case SetViewFilterEvaluations.CONTAINS: {

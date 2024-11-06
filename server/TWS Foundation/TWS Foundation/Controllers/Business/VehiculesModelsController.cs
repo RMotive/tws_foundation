@@ -18,12 +18,12 @@ public class VehiculesModelsController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost("[Action]"), Auth(["ABC1", "ABC2"])]
+    [HttpPost("[Action]"), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<VehiculeModel> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth(["ABC1", "ABC2"])]
+    [HttpPost("[Action]"), Auth("", "")]
     public async Task<IActionResult> Create(VehiculeModel vehiculeModel) {
         return Ok(await Service.Create(vehiculeModel));
     }

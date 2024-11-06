@@ -27,11 +27,11 @@ public class YardLogsDepot
 
     public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {
         IQueryable<YardLog> entries = Set
-            .Include(i => i.TruckNavigation)
-            .Include(i => i.TruckExternalNavigation)
+            .Include(i => i.TrailerNavigation)
+            .Include(i => i.TrailerExternalNavigation)
             .OrderBy(i => i.Timestamp)
-            .GroupBy(i => new { i.Truck, i.TruckExternal })
-            .Where(i => (i.Key.Truck != null || i.Key.Truck != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
+            .GroupBy(i => new { i.Trailer, i.TrailerExternal })
+            .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
             .Select(i => i.OrderBy(i => i.Timestamp).Last());
 
         return Processing(Options, entries);

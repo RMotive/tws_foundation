@@ -1,6 +1,4 @@
-﻿using System.Reflection.Emit;
-
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -8,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Security.Sets;
 
-public partial class Contact 
+public partial class Contact
     : BSet {
     public override int Id { get; set; }
 
@@ -25,9 +23,6 @@ public partial class Contact
     public virtual Account? Account { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-
-        RequiredValidator Required = new();
-
         Container = [
                 ..Container,
                 (nameof(Name), [new LengthValidator(1,50)]),

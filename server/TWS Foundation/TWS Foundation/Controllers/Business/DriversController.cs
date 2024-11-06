@@ -17,7 +17,7 @@ public class DriversController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<Driver> Options) {
         return Ok(await Service.View(Options));
     }

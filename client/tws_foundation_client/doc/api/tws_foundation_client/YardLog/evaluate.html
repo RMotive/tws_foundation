@@ -97,7 +97,6 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   if(sealAlt != null){
     if(sealAlt!.trim().isEmpty || sealAlt!.length &gt; 64) results.add(CSMSetValidationResult(kSealAlt, &quot;El campo del sello #2 (alternativo) es muy largo. Maximo 64 caracteres.&quot;, &quot;strictLength(1,64)&quot;));
   }
-  if(seal == null &amp;&amp; (trailerNavigation != null || trailerExternalNavigation != null)) results.add(CSMSetValidationResult(kSeal, &quot;Debe agregar el campo de sello. De lo contrario seleccione el tipo de carga Botado.&quot;, &quot;FieldConflict()&quot;));
 
   if(section &lt;= 0 &amp;&amp; sectionNavigation == null) results.add(CSMSetValidationResult(kSection, &#39;Debe seleccionar una seccion.&#39;, &#39;pointerHandler()&#39;));
   if(loadType &lt;= 0) results.add(CSMSetValidationResult(kLoadType, &#39;Debe seleccionar el tipo de carga.&#39;, &#39;pointerHandler()&#39;));
@@ -195,7 +194,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.0.0
+      5.1.0
   </span>
 
   

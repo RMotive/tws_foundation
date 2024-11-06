@@ -42,7 +42,7 @@ final class YardLog implements CSMSetInterface {
   int? trailer;
   int? trailerExternal;
   int loadType = 0;
-  int section = 0;
+  int? section;
   int? driver;
   int? driverExternal;
   int guard = 0;
@@ -78,7 +78,7 @@ final class YardLog implements CSMSetInterface {
     int? trailer = json.getDefault('trailer', null);
     int? trailerExternal = json.getDefault('trailerExternal', null);
     int loadType = json.get('loadtype');
-    int section = json.get('section');
+    int? section = json.getDefault('section', null);
     int? driver = json.getDefault('driver', null);
     int? driverExternal = json.getDefault('driverExternal', null);
     DateTime timestamp = json.get('timestamp');
@@ -184,11 +184,14 @@ final class YardLog implements CSMSetInterface {
     if(sealAlt != null){
       if(sealAlt!.trim().isEmpty || sealAlt!.length > 64) results.add(CSMSetValidationResult(kSealAlt, "El campo del sello #2 (alternativo) es muy largo. Maximo 64 caracteres.", "strictLength(1,64)"));
     }
-    if(seal == null && (trailerNavigation != null || trailerExternalNavigation != null)) results.add(CSMSetValidationResult(kSeal, "Debe agregar el campo de sello. De lo contrario seleccione el tipo de carga Botado.", "FieldConflict()"));
     
-    if(section <= 0 && sectionNavigation == null) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar una seccion.', 'pointerHandler()'));
+    
+    if((section == null || section == 0) && sectionNavigation == null && entry) results.add(CSMSetValidationResult(kSection, 'Debe seleccionar una seccion.', 'pointerHandler()'));
+
     if(loadType <= 0) results.add(CSMSetValidationResult(kLoadType, 'Debe seleccionar el tipo de carga.', 'pointerHandler()'));
-    
+
+    if(section != null) if(section! < 0) results.add(CSMSetValidationResult(kSection, 'Section pointer must be equal or greather than 0', 'pointerHandler()'));
+
     if(trailer != null){
       if(trailer! < 0) results.add(CSMSetValidationResult(kTrailer , 'Trailer pointer must be equal or greather than 0', 'pointerHandler()')); 
     }
@@ -278,7 +281,7 @@ final class YardLog implements CSMSetInterface {
     TrailerExternal? trailerExternalNavigation,
     LoadType? loadTypeNavigation,
     Section? sectionNavigation,
-    Account? accountNavigation
+    Account? accountNavigation,
   }){
     String? sea = seal ?? this.seal;
     if(sea != null){
@@ -299,76 +302,88 @@ final class YardLog implements CSMSetInterface {
       if(gName.trim().isEmpty) this.guard = 0;
     }
 
-    LoadType? load = loadTypeNavigation ?? this.loadTypeNavigation;
-    if (loadType == 0) load = null;
-
-    Section? sect = sectionNavigation ?? this.sectionNavigation;
-    if (section == 0) sect = null;
-
-    int? driverIndex = driver ?? this.driver;
-    Driver? driverNav = driverNavigation ?? this.driverNavigation;
-    if (driverIndex == 0) {
-      driverIndex = null;
-      driverNav = null;
+    if (loadType == 0){
+      this.loadTypeNavigation = null;
+      loadTypeNavigation = null;
     }
 
-    int? driverExtIndex = driverExternal ?? this.driverExternal;
-    DriverExternal? driverExtNav = driverExternalNavigation ?? this.driverExternalNavigation;
-    if (driverExtIndex == 0) {
-      driverExtIndex = null;
-      driverExtNav = null;
+    if (section == 0) { 
+      this.section = null;
+      this.sectionNavigation = null;
+      sectionNavigation = null;
+      section = null;
     }
 
-    int? truckIndex = truck ?? this.truck;
-    Truck? truckNav = truckNavigation ?? this.truckNavigation;
-    if (truckIndex == 0) {
-      truckIndex = null;
-      truckNav = null;
+    if (driver == 0) {
+      this.driver = null;
+      this.driverNavigation = null;
+      driverNavigation = null;
+      driver = null;
     }
 
-    int? truckExtIndex = truckExternal ?? this.truckExternal;
-    TruckExternal? truckExtNav = truckExternalNavigation ?? this.truckExternalNavigation;
-    if (truckExtIndex == 0) {
-      truckExtIndex = null;
-      truckExtNav = null;
+    if (driverExternal == 0) {
+      this.driverExternal = null;
+      this.driverExternalNavigation = null;
+      driverExternalNavigation = null;
+      driverExternal = null;
     }
 
-    int? trailerIndex = trailer ?? this.trailer;
-    Trailer? trailerNav = trailerNavigation ?? this.trailerNavigation;
-    if (trailerIndex == 0) {
-      trailerIndex = null;
-      trailerNav = null;
+    if (truck == 0) {
+      this.truck = null;
+      this.truckNavigation = null;
+      truckExternalNavigation = null;
+      truck = null;
     }
 
-    int? trailerExtIndex = trailerExternal ?? this.trailerExternal;
-    TrailerExternal? trailerExtNav = trailerExternalNavigation ?? this.trailerExternalNavigation;
-    if (trailerExtIndex == 0) {
-      trailerExtIndex = null;
-      trailerExtNav = null;
+    if (truckExternal == 0) {
+      this.truckExternal = null;
+      this.truckExternalNavigation = null;
+      truckExternalNavigation = null;
+      truckExternal = null;
+    }
+
+    if (trailer == 0) {
+      this.trailer = null;
+      this.trailerNavigation = null;
+      trailerNavigation = null;
+      trailer = null;
+    }
+
+    if (trailerExternal == 0) {
+      this.trailerExternal = null;
+      this.trailerExternalNavigation = null;
+      trailerExternalNavigation = null;
+      trailerExternal = null;
     }
     
     return YardLog(
-        id ?? this.id, 
-        entry ?? this.entry, 
-        truckIndex, truckExtIndex, 
-        trailerIndex, trailerExtIndex, 
-        loadType ?? this.loadType, 
-        section ?? this.section, 
-        driverIndex,driverExtIndex, 
-        guard ?? this.guard, 
-        gName ?? this.gName, 
-        fromTo ?? this.fromTo, 
-        sea, 
-        sealt,damage ?? this.damage, 
-        ttPicture ?? this.ttPicture, 
-        dmgEv, driverNav, 
-        driverExtNav, 
-        truckNav, 
-        truckExtNav, 
-        trailerNav, 
-        trailerExtNav, 
-        load, 
-        sect, 
-        accountNavigation ?? this.accountNavigation);
+      id ?? this.id,
+      entry ?? this.entry,
+      truck ?? this.truck,
+      truckExternal ?? this.truckExternal,
+      trailer ?? this.trailer,
+      trailerExternal ?? this.trailerExternal,
+      loadType ?? this.loadType,
+      section ?? this.section,
+      driver ?? this.driver,
+      driverExternal ?? this.driverExternal,
+      guard ?? this.guard,
+      gName ?? this.gName,
+      fromTo ?? this.fromTo,
+      sea,
+      sealt,
+      damage ?? this.damage,
+      ttPicture ?? this.ttPicture,
+      dmgEv,
+      driverNavigation ?? this.driverNavigation,
+      driverExternalNavigation ?? this.driverExternalNavigation,
+      truckNavigation ?? this.truckNavigation,
+      truckExternalNavigation ?? this.truckExternalNavigation,
+      trailerNavigation ?? this.trailerNavigation,
+      trailerExternalNavigation ?? this.trailerExternalNavigation,
+      loadTypeNavigation ?? this.loadTypeNavigation,
+      sectionNavigation ?? this.sectionNavigation,
+      accountNavigation ?? this.accountNavigation,
+    );
   }
 }

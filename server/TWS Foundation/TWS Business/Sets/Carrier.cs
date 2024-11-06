@@ -38,7 +38,7 @@ public partial class Carrier
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator required = new RequiredValidator();
+        RequiredValidator required = new();
         Container = [
             ..Container,
             (nameof(Name), [required, new LengthValidator(Max: 20)]),

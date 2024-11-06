@@ -16,14 +16,14 @@ public class VehiculeModelService : IVehiculesModelsService {
         VehiculesModels = vehiculeModel;
     }
 
-    private IQueryable<VehiculeModel> include(IQueryable<VehiculeModel> query) {
+    private IQueryable<VehiculeModel> Include(IQueryable<VehiculeModel> query) {
         return query
-        .Include(t => t.ManufacturerNavigation)
-        .Include(t => t.StatusNavigation);
+            .Include(t => t.ManufacturerNavigation)
+            .Include(t => t.StatusNavigation);
     }
 
     public async Task<SetViewOut<VehiculeModel>> View(SetViewOptions<VehiculeModel> Options) {
-        return await VehiculesModels.View(Options, include);
+        return await VehiculesModels.View(Options, Include);
     }
 
     public async Task<VehiculeModel> Create(VehiculeModel vehiculeModel) {

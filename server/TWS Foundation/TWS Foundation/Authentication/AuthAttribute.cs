@@ -12,10 +12,14 @@ public class AuthAttribute
     : Attribute, IAuthorizationFilter {
     private const string AUTH_TOKEN_KEY = "CSMAuth";
     private readonly SessionsManager Sessions;
-    private readonly string[] Permits;
 
-    public AuthAttribute(string[] Permits) {
-        this.Permits = Permits;
+    private readonly string Feature;
+    private readonly string Action;
+
+
+    public AuthAttribute(string Feature, string Action) {
+        this.Feature = Feature;
+        this.Action = Action;
         Sessions = SessionsManager.Manager;
     }
 
@@ -37,9 +41,6 @@ public class AuthAttribute
             }
 
             // TODO: Implement permits search
-            foreach (string permit in Permits) {
-
-            }
 
         } else {
             throw new XAuth(XAuthSituation.Format);

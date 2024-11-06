@@ -11,7 +11,8 @@ using TWS_Security.Sets;
 namespace TWS_Foundation.Controllers.Security;
 
 
-[ApiController, Route("[Controller]")]
+[ApiController]
+[Route("[Controller]")]
 public class ContactsController
     : ControllerBase {
     private readonly IContactsService Service;
@@ -20,12 +21,13 @@ public class ContactsController
         Service = service;
     }
 
-    [HttpPost("[Action]"), Auth(["ABC1", "ABC2"])]
+    [HttpPost("[Action]"), Auth("", "")]
     public async Task<IActionResult> Create(Contact[] contacts) {
         return Ok(await Service.Create(contacts));
     }
 
-    [HttpPost("[Action]"), Auth(["ABC1", "ABC2"])]
+    [HttpPost("[Action]")]
+    [Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<Contact> Options) {
         return Ok(await Service.View(Options));
     }

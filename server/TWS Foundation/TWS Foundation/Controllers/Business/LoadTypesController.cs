@@ -17,7 +17,7 @@ public class LoadTypesController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<LoadType> Options) {
         return Ok(await Service.View(Options));
     }

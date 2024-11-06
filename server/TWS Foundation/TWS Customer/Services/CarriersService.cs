@@ -18,21 +18,19 @@ public class CarriersService : ICarriersService {
         Carriers = carriers;
     }
 
-    private IQueryable<Carrier> include(IQueryable<Carrier> query) {
+    IQueryable<Carrier> Include(IQueryable<Carrier> query) {
         return query
-        .Include(t => t.AddressNavigation)
-        .Include(t => t.ApproachNavigation)
-        .Include(t => t.UsdotNavigation)
-        .Include(t => t.StatusNavigation);
+            .Include(t => t.AddressNavigation)
+            .Include(t => t.ApproachNavigation)
+            .Include(t => t.UsdotNavigation)
+            .Include(t => t.StatusNavigation);
     }
 
     public async Task<SetViewOut<Carrier>> View(SetViewOptions<Carrier> Options) {
-        return await Carriers.View(Options, include);
+        return await Carriers.View(Options, Include);
     }
 
     public async Task<Carrier> Create(Carrier carrier) {
         return await Carriers.Create(carrier);
     }
-
-
 }
