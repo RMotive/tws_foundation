@@ -18,7 +18,6 @@ using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Truck>;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Core.Utils;
-using Azure;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_TrucksController : BQ_CustomServerController<Truck> {
@@ -44,7 +43,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Name = "SCANIA " + RandomSeed,
             Description = "DESC " + RandomSeed
         };
-        VehiculeModel vehiculeModel = new VehiculeModel() {
+        VehiculeModel vehiculeModel = new() {
             Status = 1,
             Name = "Generic model " + RandomSeed,
             ManufacturerNavigation = manufacturer,

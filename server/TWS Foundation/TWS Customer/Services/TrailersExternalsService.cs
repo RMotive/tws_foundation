@@ -18,12 +18,23 @@ public class TrailersExternalsService : ITrailersExternalsService {
         TrailersExternals = trailersExternals;
     }
 
-    public async Task<SetViewOut<TrailerExternal>> View(SetViewOptions<TrailerExternal> Options) {
-        static IQueryable<TrailerExternal> include(IQueryable<TrailerExternal> query) {
-            return query
+    private IQueryable<TrailerExternal> Include(IQueryable<TrailerExternal> query) {
+        return query
             .Include(t => t.TrailerCommonNavigation)
+                .ThenInclude(t => t!.SituationNavigation)
+            .Include(t => t.TrailerCommonNavigation)
+                .ThenInclude(t => t!.TrailerTypeNavigation)
+            .Include(t => t.TrailerCommonNavigation)
+                .ThenInclude(t => t!.LocationNavigation)
+                    .ThenInclude(t => t!.AddressNavigation)
+
+            .Include(t => t.TrailerCommonNavigation)
+                .ThenInclude(t => t!.TrailerTypeNavigation)
+                    .ThenInclude(t => t!.TrailerClassNavigation)
+
             .Select(p => new TrailerExternal() {
                 Id = p.Id,
+                Timestamp = p.Timestamp,
                 Status = p.Status,
                 Common = p.Common,
                 UsaPlate = p.UsaPlate,
@@ -31,6 +42,7 @@ public class TrailersExternalsService : ITrailersExternalsService {
                 Carrier = p.Carrier,
                 TrailerCommonNavigation = p.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                     Id = p.TrailerCommonNavigation.Id,
+                    Timestamp = p.TrailerCommonNavigation.Timestamp,
                     Status = p.TrailerCommonNavigation.Status,
                     Economic = p.TrailerCommonNavigation.Economic,
                     Type = p.TrailerCommonNavigation.Type,
@@ -41,7 +53,16 @@ public class TrailersExternalsService : ITrailersExternalsService {
                     LocationNavigation = p.TrailerCommonNavigation.LocationNavigation
                 },
             });
-        }
-        return await TrailersExternals.View(Options, include);
+
+    }
+
+    public async Task<SetViewOut<TrailerExternal>> View(SetViewOptions<TrailerExternal> Options) {
+        return await TrailersExternals.View(Options, Include);
+    }
+    public async Task<SetBatchOut<TrailerExternal>> Create(TrailerExternal[] Trailers) {
+        return await TrailersExternals.Create(Trailers);
+    }
+    public async Task<RecordUpdateOut<TrailerExternal>> Update(TrailerExternal Trailer) {
+        return await TrailersExternals.Update(Trailer, Include);
     }
 }

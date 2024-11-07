@@ -41,7 +41,6 @@ public partial class Trailer
     public virtual ICollection<Plate> Plates { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator required = new RequiredValidator();
 
         Container = [
                 .. Container,

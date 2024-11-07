@@ -123,8 +123,8 @@ public class TrucksService : ITrucksService {
         return await Trucks.View(options, Include);
     }
 
-    public async Task<SetBatchOut<Truck>> Create(Truck[] trucks) {
-        return await this.Trucks.Create(trucks);
+    public async Task<SetBatchOut<Truck>> Create(Truck[] Trucks) {
+        return await this.Trucks.Create(Trucks);
     }
     public async Task<RecordUpdateOut<Truck>> Update(Truck Truck) {
         return await Trucks.Update(Truck, Include);
