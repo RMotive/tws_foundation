@@ -3,6 +3,8 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes:
+    
+    1. Added creation and update services for [Trailer] and [TrailerExternal] sets.
 
 - Dependencies:
 

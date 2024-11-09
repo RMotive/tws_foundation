@@ -11,5 +11,9 @@ abstract class TrailersServiceBase extends CSMServiceBase {
 
   /// Transaction to generate a set view object.
   Effect<SetViewOut<Trailer>> view(SetViewOptions<Trailer> options, String auth);
+    
+  Effect<SetBatchOut<Trailer>> create(List<Trailer> trailers, String auth);
+
+  Effect<RecordUpdateOut<Trailer>> update(Trailer trailer, String auth);
 
 }
