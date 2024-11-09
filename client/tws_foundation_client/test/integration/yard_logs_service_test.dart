@@ -87,6 +87,7 @@ void main() {
       "ECT$randomToken", //economic
       null,
       trailerType,
+      null,
       null, //statusNavigation
     );
     
