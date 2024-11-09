@@ -3,8 +3,11 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes:
-    1. [Trailers] and [TrailersExternals] added the Create and Update depot services.  
-    1. 
+    1. [Trailers] and [TrailersExternals] added the Create and Update depot services.
+    2. Added sets services:
+        - [TrailerClass]
+        - [TrailerType]
+
 - Dependencies:
 
 ## 6.0.0 - [03.11-2024]

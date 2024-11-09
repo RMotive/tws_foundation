@@ -1,0 +1,26 @@
+﻿using CSM_Foundation.Database.Models.Options;
+
+using Microsoft.AspNetCore.Mvc;
+
+using TWS_Business.Sets;
+
+using TWS_Customer.Services.Interfaces;
+
+using TWS_Foundation.Authentication;
+
+namespace TWS_Foundation.Controllers.Business;
+
+[ApiController, Route("[Controller]")]
+public class TrailersClassesController : ControllerBase {
+    private readonly ITrailersClassesService Service;
+
+    public TrailersClassesController(ITrailersClassesService Service) {
+        this.Service = Service;
+    }
+
+    [HttpPost("[Action]"), Auth([])]
+    public async Task<IActionResult> View(SetViewOptions<TrailerClass> Options) {
+        return Ok(await Service.View(Options));
+    }
+
+}

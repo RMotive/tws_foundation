@@ -154,6 +154,8 @@ public partial class Program {
                 builder.Services.AddScoped<ICarriersService, CarriersService>();
                 builder.Services.AddScoped<IVehiculesModelsService, VehiculeModelService>();
                 builder.Services.AddScoped<ITrucksInventoriesService, TruckInventoryService>();
+                builder.Services.AddScoped<ITrailersClassesService, TrailersClassesService>();
+                builder.Services.AddScoped<ITrailersTypesService, TrailersTypesService>();
 
 
             }
