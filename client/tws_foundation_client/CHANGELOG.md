@@ -6,6 +6,7 @@
     
     1. Added creation and update services for [Trailer] and [TrailerExternal] sets.
     2. Added [Situation] navigation set to [TrailerCommon] set.
+    3. Added default constructor for [TrailerCommon] set.
 
 - Dependencies:
 

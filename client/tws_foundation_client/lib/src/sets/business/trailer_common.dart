@@ -24,7 +24,9 @@ final class TrailerCommon implements CSMSetInterface {
   TrailerType? trailerTypeNavigation;
   Situation? situationNavigation;
   Status? statusNavigation;
-  
+
+  TrailerCommon.a();
+
   TrailerCommon(
     this.id,
     this.status,
