@@ -36,8 +36,8 @@ public abstract class BDatabaseSQLS<TDatabases>
     /// 
     /// </summary>
     public void Evaluate() {
-        AdvisorManager.Announce("[{GetType().Name}] Evaluating Sets definitions...");
         ISet[] sets = EvaluateFactory();
+        AdvisorManager.Announce($"[{GetType().Name}] Evaluating Sets definitions...", new() { { "Amount", sets.Length } });
 
         Exception[] evResults = [];
         foreach (ISet set in sets) {

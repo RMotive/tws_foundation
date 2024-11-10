@@ -13,8 +13,9 @@ begin
 		Name varchar(25) not null,
 		Description text,
 		Timestamp DateTime not null,
+		Enabled bit not null default 1,
 
-		constraint UC_Name unique (Name),
+		constraint UC_Action_Name unique (Name),
 	);
 
 	create table Features(
@@ -22,8 +23,9 @@ begin
 		Name varchar(25) not null,
 		Description text,
 		Timestamp DateTime not null,
+		Enabled bit not null default 1,
 
-		constraint UC_Name unique (Name),
+		constraint UC_Feature_Name unique (Name),
 	);
 
 	create table Permits(
@@ -33,13 +35,14 @@ begin
 		Action int not null,
 		Reference nvarchar(8) not null,
 		Timestamp datetime not null,
+		Enabled bit not null default 1,
 
 		constraint FK_Permits_Solutions foreign key (Solution) references Solutions(id),
 		constraint FK_Permits_Features foreign key (Feature) references Features(id),
 		constraint FK_Permits_Action foreign key (Action) references Actions(id),
 
 		constraint UC_Permit unique (Solution, Feature, Action),
-		constraint LC_Reference check (len(Reference) = 8),
+		constraint LC_Permit_Reference check (len(Reference) = 8),
 	);
 
 	create table Accounts_Permits(
@@ -55,6 +58,7 @@ begin
 		Profile integer not null,
 		Permit integer not null,
 
+		constraint UC_Profile_Permit unique (Profile, Permit),
 		constraint FK_Profiles_Permits_Account foreign key (Profile) references Profiles(id),
 		constraint FK_Profiles_Permits_Permit foreign key (Permit) references Permits(id),
 	);

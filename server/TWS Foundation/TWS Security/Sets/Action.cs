@@ -12,6 +12,7 @@ public class Action
 
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
+    public bool Enabled { get; set; }
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
@@ -34,6 +35,7 @@ public class Action
                     .HasMaxLength(25);
                 Entity.Property(i => i.Description);
                 Entity.Property(i => i.Timestamp);
+                Entity.Property(i => i.Enabled);
             }    
         );
     }

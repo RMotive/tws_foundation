@@ -25,6 +25,7 @@ public partial class Permit
     public virtual Action? ActionNavigation { get; set; }
 
     public string Reference { get; set; } = default!;
+    public bool Enabled { get; set; }
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
@@ -57,6 +58,8 @@ public partial class Permit
                 Entity.Property(i => i.Reference)
                     .IsRequired()
                     .HasMaxLength(8);
+                Entity.Property(i => i.Enabled)
+                    .IsRequired();
 
 
                 Entity.HasOne(i => i.SolutionNavigation)
