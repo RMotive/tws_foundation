@@ -93,9 +93,6 @@ public partial class Program {
                 builder.Services.AddDbContext<TWSSecurityDatabase>();
                 builder.Services.AddDbContext<TWSBusinessDatabase>();
 
-                // --> 
-                builder.Services.AddScoped<AuthFilter>();
-
                 // --> Depots
                 builder.Services.AddScoped<SolutionsDepot>();
                 builder.Services.AddScoped<AccountsDepot>();

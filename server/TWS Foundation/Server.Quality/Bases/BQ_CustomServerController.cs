@@ -19,7 +19,7 @@ public abstract class BQ_CustomServerController
     : BQ_ServerController<Program> {
 
     protected BQ_CustomServerController(string Service, WebApplicationFactory<Program> hostFactory)
-        : base("TWSMF", Service, hostFactory) {
+        : base(Service, "TWSMF", hostFactory) {
     }
 
     protected override async Task<string> Authentication() {

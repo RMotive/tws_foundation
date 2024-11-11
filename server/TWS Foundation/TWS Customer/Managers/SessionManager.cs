@@ -24,8 +24,6 @@ public sealed class SessionManager {
     private readonly ConcurrentDictionary<Guid, CredentialsExpiration> CurrentSessions = [];
     private readonly ConcurrentBag<Guid> CurrentTokens = [];
 
-    private SessionManager() {
-    }
 
     /// <summary>
     ///     Authorizes the given <paramref name="Credentials"/> unsafely into the current [Sessions] context.
@@ -163,7 +161,7 @@ public sealed class SessionManager {
 
         do {
             tempGuid = Guid.NewGuid();
-        } while (!CurrentTokens.Contains(tempGuid));
+        } while (CurrentTokens.Contains(tempGuid));
 
         return tempGuid;
     }
@@ -200,6 +198,7 @@ public sealed class SessionManager {
 
         if (CurrentSessions.TryAdd(SafeToken, safeExpiration)) {
             CurrentTokens.Add(SafeToken);
+            return;
         }
 
         throw new XSessionManager(XSessionManagerSituations.UNSAFE_TOKEN);

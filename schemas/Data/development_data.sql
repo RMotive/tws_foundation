@@ -30,11 +30,6 @@ begin
 	
 	insert into Accounts_Permits(Account,Permit) 
 	VALUES 
-		(1,2), 
-		(2,3);
-
-	insert into Accounts_Permits(Account,Permit) 
-	VALUES 
-		(3, 1);
+		( (select id from Accounts where [User] = 'qly_runner') , (select id from Permits where Reference = 'TWSMFD01') );
 end;
 go
