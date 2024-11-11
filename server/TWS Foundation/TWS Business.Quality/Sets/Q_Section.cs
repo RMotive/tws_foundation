@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Section : BQ_Set<Section> {
     protected override Q_MigrationSet_EvaluateRecord<Section>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Section>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Section> success = new() {
+        Q_MigrationSet_EvaluateRecord<Section> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
@@ -18,7 +18,7 @@ public class Q_Section : BQ_Set<Section> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Section> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Section> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Name = "",

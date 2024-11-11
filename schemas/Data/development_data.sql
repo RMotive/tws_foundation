@@ -14,7 +14,7 @@ begin
 
 	insert into Permits(Solution, Feature, Action, Reference, Timestamp)
 	values
-		( (select id from Solutions where Sign = 'TWSMF'), (select id from Features where Name = 'Development' ), (select id from Actions where Name = "Qualify"), (), GETUTCDATE() );
+		( (select id from Solutions where Sign = 'TWSMF'), (select id from Features where Name = 'Development' ), (select id from Actions where Name = 'Qualify'), 'TWSMFD01', GETUTCDATE() );
 	
 
 	-- Inserting development contacts --

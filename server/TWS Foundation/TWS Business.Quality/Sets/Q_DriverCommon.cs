@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_DriverCommon : BQ_Set<DriverCommon> {
     protected override Q_MigrationSet_EvaluateRecord<DriverCommon>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<DriverCommon>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<DriverCommon> success = new() {
+        Q_MigrationSet_EvaluateRecord<DriverCommon> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Situation = 0,
@@ -17,7 +17,7 @@ public class Q_DriverCommon : BQ_Set<DriverCommon> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<DriverCommon> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<DriverCommon> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 License = "",

@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Situation : BQ_Set<Situation> {
     protected override Q_MigrationSet_EvaluateRecord<Situation>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Situation>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Situation> success = new() {
+        Q_MigrationSet_EvaluateRecord<Situation> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
@@ -16,7 +16,7 @@ public class Q_Situation : BQ_Set<Situation> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Situation> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Situation> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Name = "Situation validation test, max lengh 25 characters",

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using CSM_Foundation.Advisor.Interfaces;
@@ -13,11 +12,12 @@ using CSM_Foundation.Server.Utils;
 
 using TWS_Business;
 using TWS_Business.Depots;
-using TWS_Business.Sets;
 
+using TWS_Customer.Managers;
 using TWS_Customer.Services;
 using TWS_Customer.Services.Interfaces;
 
+using TWS_Foundation.Authentication;
 using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;
 using TWS_Foundation.Models;
@@ -82,6 +82,7 @@ public partial class Program {
             // --> Adding customer services
             {
                 // --> Application
+                builder.Services.AddSingleton<SessionManager>();
                 builder.Services.AddSingleton<AnalyticsMiddleware>();
                 builder.Services.AddSingleton<AdvisorMiddleware>();
                 builder.Services.AddSingleton<FramingMiddleware>();
@@ -91,6 +92,9 @@ public partial class Program {
                 // --> Databasess contexts
                 builder.Services.AddDbContext<TWSSecurityDatabase>();
                 builder.Services.AddDbContext<TWSBusinessDatabase>();
+
+                // --> 
+                builder.Services.AddScoped<AuthFilter>();
 
                 // --> Depots
                 builder.Services.AddScoped<SolutionsDepot>();
@@ -129,10 +133,9 @@ public partial class Program {
                 builder.Services.AddScoped<TrailersTypesDepot>();
                 builder.Services.AddScoped<VehiculesModelsDepot>();
                 builder.Services.AddScoped<TrucksInventoriesDepot>();
-
                 builder.Services.AddScoped<YardLogsDepot>();
-
                 builder.Services.AddScoped<TrucksHDepot>();
+
                 // --> Services
                 builder.Services.AddScoped<ISolutionsService, SolutionsService>();
                 builder.Services.AddScoped<IAccountsService, AccountsService>();
@@ -167,8 +170,8 @@ public partial class Program {
                 app.UseMiddleware<DispositionMiddleware>();
             }
             app.Lifetime.ApplicationStopping.Register(() => {
-                using (var scope = app.Services.CreateScope()) {
-                    var disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
+                using (IServiceScope scope = app.Services.CreateScope()) {
+                    IDisposer disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
                     OnProcessExit(disposer).GetAwaiter().GetResult();
                 };
             });
@@ -196,7 +199,7 @@ public partial class Program {
         AdvisorManager.Announce("Disposing quality context records");
         try {
             await Disposer.Dispose();
-        } catch(Exception X) {
+        } catch (Exception X) {
             AdvisorManager.Exception(new XSystem(X));
         }
     }

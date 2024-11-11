@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Sct : BQ_Set<Sct> {
     protected override Q_MigrationSet_EvaluateRecord<Sct>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Sct>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Sct> success = new() {
+        Q_MigrationSet_EvaluateRecord<Sct> success = new("Success") {
             Mock = new() {
                 Type = "Type06",
                 Number = "NumberSCTTesting_valueT00",
@@ -17,7 +17,7 @@ public class Q_Sct : BQ_Set<Sct> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Sct> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Sct> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Type = "",

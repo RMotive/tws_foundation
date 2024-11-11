@@ -35,7 +35,6 @@ public partial class Permit
         ];
     }
 
-
     public static void CreateModel(ModelBuilder Builder) {
         Builder.Entity<Permit>(
             (Entity) => {
@@ -43,7 +42,6 @@ public partial class Permit
 
                 Entity.HasIndex(i => new { i.Solution, i.Feature, i.Action })
                     .IsUnique();
-
 
                 Entity.Property(i => i.Id)
                     .IsRequired();
@@ -63,15 +61,30 @@ public partial class Permit
 
 
                 Entity.HasOne(i => i.SolutionNavigation)
-                    .WithOne()
-                    .HasForeignKey<Permit>(i => i.Solution);
+                    .WithMany(i => i.Permits)
+                    .HasForeignKey(i => i.Solution)
+                    .HasConstraintName("FK_Permits_Solutions");
                 Entity.HasOne(i => i.FeatureNavigation)
-                    .WithOne()
-                    .HasForeignKey<Permit>(i => i.Feature);
+                    .WithMany(i => i.Permits)
+                    .HasForeignKey(i => i.Feature)
+                    .HasConstraintName("FK_Permits_Features");
                 Entity.HasOne(i => i.ActionNavigation)
-                    .WithOne()
-                    .HasForeignKey<Permit>(i => i.Action);
+                    .WithMany(i => i.Permits)
+                    .HasForeignKey(i => i.Action)
+                    .HasConstraintName("FK_Permits_Actions");
             }
         );
+    }
+
+    /// <summary>
+    ///     Stores a static catalog of <see cref="Permit"/> references.
+    /// </summary>
+    public enum References {
+        /// <summary>
+        ///     <para> Solution: TWSMF </para>
+        ///     <para> Feature: Development </para>
+        ///     <para> Action: Qualify </para>
+        /// </summary>
+        TWSMFD01,
     }
 }

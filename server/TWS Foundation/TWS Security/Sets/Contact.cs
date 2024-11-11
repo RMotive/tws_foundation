@@ -24,13 +24,13 @@ public partial class Contact
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
-                ..Container,
-                (nameof(Name), [new LengthValidator(1,50)]),
-                (nameof(Lastname), [new LengthValidator(1,50)]),
-                (nameof(Email), [new UniqueValidator(),new LengthValidator(1,30)]),
-                (nameof(Phone), [new UniqueValidator(), new LengthValidator(10,14)]),
+            ..Container,
+            (nameof(Name), [new LengthValidator(1,50)]),
+            (nameof(Lastname), [new LengthValidator(1,50)]),
+            (nameof(Email), [new UniqueValidator(),new LengthValidator(1,30)]),
+            (nameof(Phone), [new UniqueValidator(), new LengthValidator(10,14)]),
 
-            ];
+        ];
 
         return Container;
     }

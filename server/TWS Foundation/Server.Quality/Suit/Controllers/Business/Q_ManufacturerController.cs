@@ -1,7 +1,4 @@
-﻿
-
-
-using System.Net;
+﻿using System.Net;
 
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Server.Quality.Bases;
@@ -15,13 +12,14 @@ using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Middlewares.Frames;
+using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Manufacturer>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_ManufacturerController
-    : BQ_ServerController<Program> {
+    : BQ_CustomServerController {
 
     private class Frame : SuccessFrame<View> { }
 

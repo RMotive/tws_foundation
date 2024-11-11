@@ -16,6 +16,8 @@ public partial class Feature
     public string? Description { get; set; }
     public bool Enabled { get; set; }
 
+    public virtual ICollection<Permit> Permits { get; set; } = [];
+
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
 
         return [

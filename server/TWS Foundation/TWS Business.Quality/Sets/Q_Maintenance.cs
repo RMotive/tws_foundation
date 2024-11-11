@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Maintenance : BQ_Set<Maintenance> {
     protected override Q_MigrationSet_EvaluateRecord<Maintenance>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Maintenance>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Maintenance> success = new() {
+        Q_MigrationSet_EvaluateRecord<Maintenance> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Anual = DateOnly.FromDateTime(new DateTime()),
@@ -16,7 +16,7 @@ public class Q_Maintenance : BQ_Set<Maintenance> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Maintenance> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Maintenance> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0

@@ -2,6 +2,8 @@
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Quality.Records;
 
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 using Xunit;
 
 namespace CSM_Foundation.Database.Quality.Bases;
@@ -49,7 +51,7 @@ public abstract class BQ_Set<TSet>
             } catch (XBMigrationSet_Evaluate x) {
                 (string property, XIValidator_Evaluate[] faults)[] unvalidations = x.Unvalidations;
 
-                Assert.Equal(asserts.Length, unvalidations.Length);
+                Assert.True(asserts.Length.Equals(unvalidations.Length), $"Check ({qualityCheck.Name}) at ({typeof(TSet).Name}) set \nExpected: ({asserts.Length} asserts) \nActual: ({unvalidations.Length} errors)");
 
 
                 unvalidations = [.. unvalidations.OrderBy(x => x.property)];
@@ -73,8 +75,8 @@ public abstract class BQ_Set<TSet>
                         (IValidator Validator, int Code) = reasons[j];
 
 
-                        Assert.Equal(Code, fault.Code);
-                        Assert.IsType(Validator.GetType(), fault.Validator);
+                        Assert.True(Code.Equals(fault.Code), $"Check ({qualityCheck.Name}) at ({typeof(TSet).Name}) set at property ({Property}) \nExpected: ({Code}) \nActual: ({fault.Code})");
+                        Assert.True(Validator.GetType() == fault.Validator.GetType(), $"Check ({qualityCheck.Name}) at ({typeof(TSet).Name}) set at property ({Property}) \nExpected: ({Validator.GetType()}) \nActual: {fault.Validator.GetType()}");
                     }
                 }
             }

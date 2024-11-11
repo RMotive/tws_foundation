@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_TruckExternal : BQ_Set<TruckExternal> {
     protected override Q_MigrationSet_EvaluateRecord<TruckExternal>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TruckExternal>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<TruckExternal> success = new() {
+        Q_MigrationSet_EvaluateRecord<TruckExternal> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Status = 1,
@@ -16,7 +16,7 @@ public class Q_TruckExternal : BQ_Set<TruckExternal> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<TruckExternal> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<TruckExternal> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0,

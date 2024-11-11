@@ -1,6 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/bases/truck_inventory_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../integration_credentials.dart';
