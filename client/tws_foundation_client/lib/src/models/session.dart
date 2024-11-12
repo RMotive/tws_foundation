@@ -3,7 +3,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Defines a privileges model, that stores different session descriptive data, like auth token,
 /// acceptable privileges, etc.
-final class Privileges implements CSMEncodeInterface {
+final class Session implements CSMEncodeInterface {
   /// Services auth token.
   final String token;
 
@@ -19,18 +19,18 @@ final class Privileges implements CSMEncodeInterface {
   /// User contact information.
   final Contact contact;
 
-  /// Generates a new [Privileges] object.
-  const Privileges(this.token, this.expiration, this.identity, this.wildcard, this.contact);
+  /// Generates a new [Session] object.
+  const Session(this.token, this.expiration, this.identity, this.wildcard, this.contact);
 
-  /// Generates a new [Privileges] object based on [JObject] deserealization.
-  factory Privileges.des(JObject json) {
+  /// Generates a new [Session] object based on [JObject] deserealization.
+  factory Session.des(JObject json) {
     String token = json.get('token');
     DateTime expiration = json.get('expiration');
     String identity = json.get('identity');
     bool wildcard = json.getDefault('wildcard', false);
     Contact contact = Contact.des(json.getDefault('contact', <String, dynamic>{}));
 
-    return Privileges(token, expiration, identity, wildcard, contact);
+    return Session(token, expiration, identity, wildcard, contact);
   }
 
   @override
@@ -40,7 +40,7 @@ final class Privileges implements CSMEncodeInterface {
       'expiration': expiration.toString(),
       'identity': identity,
       'wildcard': wildcard,
-      'contact': contact.encode()
+      'contact': contact.encode(),
     };
   }
 }

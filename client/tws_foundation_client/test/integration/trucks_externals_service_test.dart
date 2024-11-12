@@ -38,9 +38,9 @@ void main() {
   setUp(
     () async {
       final TWSFoundationSource source = TWSFoundationSource(false);
-      MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
+      MainResolver<Session> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: Privileges.des,
+        decoder: Session.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -50,7 +50,7 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           throw exception;
         },
-        onSuccess: (SuccessFrame<Privileges> success) {
+        onSuccess: (SuccessFrame<Session> success) {
           auth = success.estela.token;
         },
       );

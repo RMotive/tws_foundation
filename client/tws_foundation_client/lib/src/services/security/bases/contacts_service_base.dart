@@ -1,8 +1,6 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/models/models_module.dart';
-import 'package:tws_foundation_client/src/services/bases/services_bases.module.dart';
 import 'package:tws_foundation_client/src/services/tws_service_base.dart';
-import 'package:tws_foundation_client/src/sets/security/contact.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Contact] entity service base.
 abstract class ContactsServiceBase extends TWSServiceBase {

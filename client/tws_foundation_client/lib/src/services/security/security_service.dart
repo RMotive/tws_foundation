@@ -12,8 +12,8 @@ final class SecurityService extends SecurityServiceBase {
         );
 
   @override
-  Effect<Privileges> authenticate(Credentials credentials) async {
+  Effect<Session> authenticate(Credentials credentials) async {
     CSMActEffect effect = await twsPost('authenticate', credentials);
-    return MainResolver<Privileges>(effect);
+    return MainResolver<Session>(effect);
   }
 }

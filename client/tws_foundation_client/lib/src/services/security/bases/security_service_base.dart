@@ -8,5 +8,5 @@ abstract class SecurityServiceBase extends TWSServiceBase {
     super.client,
   });
 
-  Effect<Privileges> authenticate(Credentials credentials);
+  Effect<Session> authenticate(Credentials credentials);
 }
