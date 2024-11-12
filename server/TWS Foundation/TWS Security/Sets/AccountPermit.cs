@@ -3,13 +3,13 @@
 namespace TWS_Security.Sets;
 
 public partial class AccountPermit {
+
     public int Account { get; set; }
-
-    public int Permit { get; set; }
-
     public virtual Account AccountNavigation { get; init; } = null!;
 
+    public int Permit { get; set; }
     public virtual Permit PermitNavigation { get; init; } = null!;
+
 
 
     public static void CreateModel(ModelBuilder Builder) {
@@ -17,8 +17,13 @@ public partial class AccountPermit {
             entity.ToTable("Accounts_Permits");
             entity.HasNoKey();
 
-            entity.Property(e => e.Account);
-            entity.Property(e => e.Permit);
+            entity.Property(e => e.Account)
+                .IsRequired();
+            entity.Property(e => e.Permit)
+                .IsRequired();
+
+            entity.HasIndex(i => new { i.Account, i.Permit })
+                .IsUnique();
 
             entity.HasOne(d => d.AccountNavigation)
                 .WithMany()

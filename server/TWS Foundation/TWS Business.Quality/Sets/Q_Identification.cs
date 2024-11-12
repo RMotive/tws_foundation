@@ -8,18 +8,17 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Identification : BQ_Set<Identification> {
     protected override Q_MigrationSet_EvaluateRecord<Identification>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Identification>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Identification> success = new() {
+        Q_MigrationSet_EvaluateRecord<Identification> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Status = 1,
                 Name = "",
                 FatherLastname = "",
                 MotherLastName = ""
-
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Identification> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Identification> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0,

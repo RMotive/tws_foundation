@@ -1,24 +1,22 @@
 ﻿using System.Net;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
-
-using TWS_Foundation.Middlewares.Frames;
 
 using TWS_Business.Sets;
 
 using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
+using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Truck>;
-using CSM_Foundation.Database.Models.Out;
-using CSM_Foundation.Core.Utils;
-using Azure;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_TrucksController : BQ_CustomServerController<Truck> {
@@ -44,7 +42,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Name = "SCANIA " + RandomSeed,
             Description = "DESC " + RandomSeed
         };
-        VehiculeModel vehiculeModel = new VehiculeModel() {
+        VehiculeModel vehiculeModel = new() {
             Status = 1,
             Name = "Generic model " + RandomSeed,
             ManufacturerNavigation = manufacturer,
@@ -173,7 +171,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             string iterationTag = testTag + i;
             mockList.Add(MockFactory(iterationTag));
         }
-        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mockList, true);
+        (HttpStatusCode Status, GenericFrame _) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
 
     }

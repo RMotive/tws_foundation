@@ -4,6 +4,15 @@
 
 - Notes:
 
+    1. Updated how [Auth] decorator is configured, no more needed to set [Permits] reference now only needs [Feature] and [Action] name.
+    2. Now [Permit] uses [Action], [Solution] and [Feature] to calculate its privilege level. 
+    3. Changed name from [XMigrationTransaction] to [XSetOperation] to maintina consistency.
+    4. Now [SessionManager] is a singleton dependency in the system, still supporting concurrent calls.
+        - SessionManager got refactorized removing a lot of methods and creating new ones.
+
+    5. Now [AuthAttribute] that is out Authentication middleware catches if the request is being intended for Quality purposes and
+       check if the account has that kind of privileges if not will block the quality context calls.
+
 - Dependencies:
 
 ## 6.0.0 - [03.11-2024]

@@ -12,7 +12,7 @@ public class Q_Solution
         const string successName = "TWS Quality";
         const string successSign = "TWSMQ";
 
-        Q_MigrationSet_EvaluateRecord<Solution> success = new() {
+        Q_MigrationSet_EvaluateRecord<Solution> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = successName,
@@ -20,7 +20,7 @@ public class Q_Solution
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Solution> failure = new() {
+        Q_MigrationSet_EvaluateRecord<Solution> failure = new("All properties fail") {
             Mock = new() { },
             Expectations = [
                 (nameof(Solution.Id), [(new PointerValidator(), 3)]),

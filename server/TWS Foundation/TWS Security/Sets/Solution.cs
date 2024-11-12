@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Security.Sets;
 
-public partial class Solution 
+public partial class Solution
     : BSet {
 
     public override int Id { get; set; }
@@ -43,11 +43,11 @@ public partial class Solution
 
             entity.Property(e => e.Description)
             .IsUnicode(false);
-            
+
             entity.Property(e => e.Name)
             .HasMaxLength(25)
             .IsUnicode(false);
-            
+
             entity.Property(e => e.Sign)
             .HasMaxLength(5)
             .IsUnicode(false);

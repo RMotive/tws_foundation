@@ -65,16 +65,12 @@ public class ISetViewFilterNodeConverter<TSet> : JsonConverter<ISetViewFilterNod
             discriminator = jsonObject.RootElement.GetProperty("discrimination").GetString();
         }
 
-        switch (discriminator) {
-            case var _ when discriminator == SetViewFilterLinearEvaluation<TSet>.Discriminator:
-                return JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options);
-            case var _ when discriminator == SetViewPropertyFilter<TSet>.Discriminator:
-                return JsonSerializer.Deserialize<SetViewPropertyFilter<TSet>>(json, options);
-            case var _ when discriminator == SetViewDateFilter<TSet>.Discriminator:
-                return JsonSerializer.Deserialize<SetViewDateFilter<TSet>>(json, options);
-            default:
-                throw new UnsupportedContentTypeException($"No discriminator recognized for ({discriminator})");
-        }
+        return discriminator switch {
+            var _ when discriminator == SetViewFilterLinearEvaluation<TSet>.Discriminator => JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options),
+            var _ when discriminator == SetViewPropertyFilter<TSet>.Discriminator => JsonSerializer.Deserialize<SetViewPropertyFilter<TSet>>(json, options),
+            var _ when discriminator == SetViewDateFilter<TSet>.Discriminator => JsonSerializer.Deserialize<SetViewDateFilter<TSet>>(json, options),
+            _ => throw new UnsupportedContentTypeException($"No discriminator recognized for ({discriminator})"),
+        };
     }
 
     public override void Write(Utf8JsonWriter writer, ISetViewFilterNode<TSet> value, JsonSerializerOptions options) {

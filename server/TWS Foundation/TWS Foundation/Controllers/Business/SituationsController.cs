@@ -18,12 +18,12 @@ public class SituationsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost("[Action]"), Auth(["ABC1", "ABC2"])]
+    [HttpPost("[Action]"), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<Situation> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth(["ABC1", "ABC2"])]
+    [HttpPost("[Action]"), Auth("", "")]
     public async Task<IActionResult> Create(Situation situation) {
         return Ok(await Service.Create(situation));
     }

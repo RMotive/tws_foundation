@@ -18,7 +18,7 @@ public class TrucksInventoriesController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<TruckInventory> Options) {
         return Ok(await Service.View(Options));
     }

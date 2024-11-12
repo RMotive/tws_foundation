@@ -8,7 +8,7 @@ namespace TWS_Security.Quality.Sets;
 public class Q_Account
     : BQ_Set<Account> {
     protected override Q_MigrationSet_EvaluateRecord<Account>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Account>[] Container) {
-        Q_MigrationSet_EvaluateRecord<Account> success = new() {
+        Q_MigrationSet_EvaluateRecord<Account> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 User = "Q_User",
@@ -18,7 +18,7 @@ public class Q_Account
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Account> failure = new() {
+        Q_MigrationSet_EvaluateRecord<Account> failure = new("All properties fail") {
             Mock = new(),
             Expectations = [
                 (nameof(Account.Id), [(new PointerValidator(), 3)]),

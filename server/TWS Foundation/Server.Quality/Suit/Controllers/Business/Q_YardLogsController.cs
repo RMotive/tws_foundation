@@ -40,7 +40,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Name = "SCANIA " + RandomSeed,
             Description = "DESC " + RandomSeed
         };
-        VehiculeModel vehiculeModel = new VehiculeModel() {
+        VehiculeModel vehiculeModel = new() {
             Status = 1,
             Name = "Generic model " + RandomSeed,
             ManufacturerNavigation = manufacturer,
@@ -168,7 +168,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             mockList.Add(MockFactory(testTag+i));
         }
 
-        (HttpStatusCode Status, GenericFrame Response) = await Post("Create", mockList, true);
+        (HttpStatusCode Status, GenericFrame _) = await Post("Create", mockList, true);
         Assert.Equal(HttpStatusCode.OK, Status);
 
     }

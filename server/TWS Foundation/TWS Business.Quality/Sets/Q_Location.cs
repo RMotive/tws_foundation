@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Location : BQ_Set<Location> {
     protected override Q_MigrationSet_EvaluateRecord<Location>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Location>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Location> success = new() {
+        Q_MigrationSet_EvaluateRecord<Location> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
@@ -18,7 +18,7 @@ public class Q_Location : BQ_Set<Location> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Location> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Location> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Name = "",

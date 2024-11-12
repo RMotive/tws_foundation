@@ -19,14 +19,14 @@ public abstract class BQ_CustomServerController
     : BQ_ServerController<Program> {
 
     protected BQ_CustomServerController(string Service, WebApplicationFactory<Program> hostFactory)
-        : base(Service, hostFactory) {
+        : base(Service, "TWSMF", hostFactory) {
     }
 
     protected override async Task<string> Authentication() {
         (HttpStatusCode Status, GenericFrame Frame) = await XPost<GenericFrame, Credentials>("Security/Authenticate", new Credentials {
             Identity = Account.Identity,
             Password = Account.Password,
-            Sign = "TWSMA",
+            Sign = "TWSMF",
         });
         Dictionary<string, object> estela = Frame.Estela;
         if (Status != HttpStatusCode.OK) {
@@ -37,8 +37,8 @@ public abstract class BQ_CustomServerController
         Assert.True(session.Wildcard, $"User {session.Identity} doesn't have wildcard enabled");
         Assert.Equal(Account.Identity, session.Identity);
 
-        if (!session.Permits.Any(i => i.Reference == "AAA000001")) {
-            Assert.Fail($"Account ({Account.Identity}) doesn't contain (Quality[AAA000001]) permit");
+        if (!session.Permits.Any(i => i.Reference == "TWSMFD01")) {
+            Assert.Fail($"Account ({Account.Identity}) doesn't contain (Development[TWSMFD01]) permit");
         }
 
         return session.Token.ToString();

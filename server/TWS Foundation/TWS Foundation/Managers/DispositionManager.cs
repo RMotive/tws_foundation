@@ -53,8 +53,6 @@ public class DispositionManager
             DispositionStack[db].AddRange(Records);
             return;
         }
-        List<ISet> recordsListed = [.. Records.ToList()];
-        bool wasAdded = DispositionStack.TryAdd(Databases, recordsListed);
     }
 
     public void Status(bool Active) {
@@ -85,7 +83,7 @@ public class DispositionManager
                 try {
                     Database.Remove(record);
                     await Database.SaveChangesAsync();
-                    
+
                     corrects++;
                     AdvisorManager.Success($"Disposed: ({record.GetType()}) | ({record.Id})");
                 } catch (DbUpdateConcurrencyException ex) {

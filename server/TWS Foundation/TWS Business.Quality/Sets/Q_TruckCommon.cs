@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_TruckCommon : BQ_Set<TruckCommon> {
     protected override Q_MigrationSet_EvaluateRecord<TruckCommon>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TruckCommon>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<TruckCommon> success = new() {
+        Q_MigrationSet_EvaluateRecord<TruckCommon> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Economic = "",
@@ -17,7 +17,7 @@ public class Q_TruckCommon : BQ_Set<TruckCommon> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<TruckCommon> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<TruckCommon> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0,

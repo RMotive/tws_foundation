@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_DriverExternal : BQ_Set<DriverExternal> {
     protected override Q_MigrationSet_EvaluateRecord<DriverExternal>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<DriverExternal>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<DriverExternal> success = new() {
+        Q_MigrationSet_EvaluateRecord<DriverExternal> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Status = 0,
@@ -17,7 +17,7 @@ public class Q_DriverExternal : BQ_Set<DriverExternal> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<DriverExternal> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<DriverExternal> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0,

@@ -19,17 +19,17 @@ public class TrucksController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<Truck> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> Create(Truck[] trucks) {
         return Ok(await Service.Create(trucks));
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> Update(Truck Truck) {
         return Ok(await Service.Update(Truck));
     }
