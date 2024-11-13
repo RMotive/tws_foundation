@@ -12,7 +12,7 @@ namespace TWS_Business.Depots;
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="YardLog"/> dataDatabases entity mirror.
 /// </summary>
-public class YardLogsDepot 
+public class YardLogsDepot
     : BDepot<TWSBusinessDatabase, YardLog> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="YardLog"/>.
@@ -20,20 +20,43 @@ public class YardLogsDepot
     public YardLogsDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
-    public YardLogsDepot() 
+    public YardLogsDepot()
         : base(new(), null) {
     }
 
 
     public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {
         IQueryable<YardLog> entries = Set
-            .Include(i => i.TrailerNavigation)
-            .Include(i => i.TrailerExternalNavigation)
+
             .OrderBy(i => i.Timestamp)
             .GroupBy(i => new { i.Trailer, i.TrailerExternal })
             .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
             .Select(i => i.OrderBy(i => i.Timestamp).Last());
 
-        return Processing(Options, entries);
+        return Processing(
+            Options,
+            Include: (query) => {
+                return query
+                .Include(i => i.TrailerNavigation)
+                    .ThenInclude(i => i!.TrailerCommonNavigation)
+                .Include(i => i.TrailerNavigation)
+                    .ThenInclude(i => i!.CarrierNavigation)
+                .Include(i => i.TrailerNavigation)
+                    .ThenInclude(i => i!.Plates)
+                .Include(i => i.TrailerExternalNavigation)
+                    .ThenInclude(i => i!.TrailerCommonNavigation)
+                .Include(i => i.SectionNavigation)
+                    .ThenInclude(i => i!.LocationNavigation);
+            },
+            AfterFilters: (query) => {
+                return query
+                .OrderBy(i => i.Timestamp)
+                .GroupBy(i => new { i.Trailer, i.TrailerExternal })
+                .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
+                .Select(i => i.OrderBy(i => i.Timestamp).Last())
+                .ToList()
+                .OrderBy(i => i.Timestamp)
+                .AsQueryable();        }
+        );
     }
 }
