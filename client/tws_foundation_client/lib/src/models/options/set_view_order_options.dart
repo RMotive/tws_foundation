@@ -11,7 +11,7 @@ final class SetViewOrderOptions implements CSMEncodeInterface {
   JObject encode() {
     return <String, dynamic>{
       'property': property,
-      'behavior': behavior,
+      'behavior': behavior.index,
     };
   }
 }
