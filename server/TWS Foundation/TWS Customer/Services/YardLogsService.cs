@@ -55,7 +55,7 @@ public class YardLogsService
                     .ThenInclude(t => t!.ApproachNavigation)
 
             .Include(t => t.TrailerNavigation)
-                .ThenInclude(t => t!.VehiculesModelsNavigation)
+                .ThenInclude(t => t!.VehiculeModelNavigation)
 
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.TruckCommonNavigation)
@@ -214,14 +214,14 @@ public class YardLogsService
                     Maintenance = y.TrailerNavigation.Maintenance,
                     Carrier = y.TrailerNavigation.Carrier,
                     SctNavigation = y.TrailerNavigation.SctNavigation,
-                    VehiculesModelsNavigation = y.TrailerNavigation.VehiculesModelsNavigation == null ? null : new VehiculeModel() {
-                        Id = y.TrailerNavigation.VehiculesModelsNavigation.Id,
-                        Timestamp = y.TrailerNavigation.VehiculesModelsNavigation.Timestamp,
-                        Status = y.TrailerNavigation.VehiculesModelsNavigation.Status,
-                        Name = y.TrailerNavigation.VehiculesModelsNavigation.Name,
-                        Year = y.TrailerNavigation.VehiculesModelsNavigation.Year,
-                        Manufacturer = y.TrailerNavigation.VehiculesModelsNavigation.Manufacturer,
-                        ManufacturerNavigation = y.TrailerNavigation.VehiculesModelsNavigation.ManufacturerNavigation,
+                    VehiculeModelNavigation = y.TrailerNavigation.VehiculeModelNavigation == null ? null : new VehiculeModel() {
+                        Id = y.TrailerNavigation.VehiculeModelNavigation.Id,
+                        Timestamp = y.TrailerNavigation.VehiculeModelNavigation.Timestamp,
+                        Status = y.TrailerNavigation.VehiculeModelNavigation.Status,
+                        Name = y.TrailerNavigation.VehiculeModelNavigation.Name,
+                        Year = y.TrailerNavigation.VehiculeModelNavigation.Year,
+                        Manufacturer = y.TrailerNavigation.VehiculeModelNavigation.Manufacturer,
+                        ManufacturerNavigation = y.TrailerNavigation.VehiculeModelNavigation.ManufacturerNavigation,
                     },
                     CarrierNavigation = y.TrailerNavigation.CarrierNavigation,
                     TrailerCommonNavigation = y.TrailerNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {

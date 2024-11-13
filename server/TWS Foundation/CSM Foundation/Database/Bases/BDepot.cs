@@ -334,6 +334,7 @@ public abstract class BDepot<TDatabase, TSet>
     /// <summary>
     /// NOTES: 
     ///     1. The incluide method (if is implemented) must contain all the navigation Selections to avoid circular references and unexpected behaviors.
+    ///     2. in sub classes, adding only the navigataion without a select, can avoid some tracking issues.
     /// </summary>
     /// <param name="Set"></param>
     /// <returns></returns>

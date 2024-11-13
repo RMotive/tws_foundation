@@ -21,6 +21,7 @@ public class TrailersService : ITrailersService {
     private static IQueryable<Trailer> Include(IQueryable<Trailer> query) {
         return query
         .Include(t => t.SctNavigation)
+        .Include(t => t.MaintenanceNavigation)
 
         .Include(t => t.CarrierNavigation)
             .ThenInclude(c => c!.AddressNavigation)
@@ -41,10 +42,9 @@ public class TrailersService : ITrailersService {
             .ThenInclude(t => t!.TrailerTypeNavigation)
                 .ThenInclude(t => t!.TrailerClassNavigation)
 
-        .Include(t => t.VehiculesModelsNavigation)
+        .Include(t => t.VehiculeModelNavigation)
             .ThenInclude(t => t!.ManufacturerNavigation)
 
-        .Include(t => t.MaintenanceNavigation)
         .Include(t => t.Plates)
         .Select(p => new Trailer() {
             Id = p.Id,
@@ -55,6 +55,13 @@ public class TrailersService : ITrailersService {
             Model = p.Model,
             Sct = p.Sct,
             Maintenance = p.Maintenance,
+            MaintenanceNavigation = p.MaintenanceNavigation == null? null : new Maintenance() {
+                Id = p.MaintenanceNavigation.Id,
+                Timestamp = p.MaintenanceNavigation.Timestamp,
+                Status = p.MaintenanceNavigation.Status,
+                Anual = p.MaintenanceNavigation.Anual,
+                Trimestral = p.MaintenanceNavigation.Trimestral,
+            },
             CarrierNavigation = p.CarrierNavigation == null ? null : new Carrier() {
                 Id = p.CarrierNavigation.Id,
                 Timestamp = p.CarrierNavigation.Timestamp,
@@ -72,17 +79,7 @@ public class TrailersService : ITrailersService {
                     Alternative = p.CarrierNavigation.ApproachNavigation.Alternative,
                     Email = p.CarrierNavigation.ApproachNavigation.Email,
                 },
-                AddressNavigation = p.CarrierNavigation.AddressNavigation == null ? null : new Address() { 
-                    Id = p.CarrierNavigation.AddressNavigation.Id,
-                    Timestamp = p.CarrierNavigation.AddressNavigation.Timestamp,
-                    State = p.CarrierNavigation.AddressNavigation.State,
-                    Street = p.CarrierNavigation.AddressNavigation.Street,
-                    AltStreet = p.CarrierNavigation.AddressNavigation.AltStreet,
-                    City = p.CarrierNavigation.AddressNavigation.City,
-                    Zip = p.CarrierNavigation.AddressNavigation.Zip,
-                    Country = p.CarrierNavigation.AddressNavigation.Country,
-                    Colonia = p.CarrierNavigation.AddressNavigation.Colonia,
-                },
+                AddressNavigation = p.CarrierNavigation.AddressNavigation,
                 UsdotNavigation = p.CarrierNavigation.UsdotNavigation == null ? null : new Usdot() { 
                     Id = p.CarrierNavigation.UsdotNavigation.Id,
                     Timestamp = p.CarrierNavigation.UsdotNavigation.Timestamp,
@@ -99,18 +96,18 @@ public class TrailersService : ITrailersService {
                 Number = p.SctNavigation.Number,
                 Configuration = p.SctNavigation.Configuration,
             },
-            VehiculesModelsNavigation = p.VehiculesModelsNavigation == null ? null : new VehiculeModel() {
-                Id = p.VehiculesModelsNavigation.Id,
-                Timestamp = p.VehiculesModelsNavigation.Timestamp,
-                Status = p.VehiculesModelsNavigation.Status,
-                Name = p.VehiculesModelsNavigation.Name,
-                Year = p.VehiculesModelsNavigation.Year,
-                Manufacturer = p.VehiculesModelsNavigation.Manufacturer,
-                ManufacturerNavigation = p.VehiculesModelsNavigation.ManufacturerNavigation == null ? null : new Manufacturer() {
-                    Id = p.VehiculesModelsNavigation.ManufacturerNavigation.Id,
-                    Timestamp = p.VehiculesModelsNavigation.ManufacturerNavigation.Timestamp,
-                    Name = p.VehiculesModelsNavigation.ManufacturerNavigation.Name,
-                    Description = p.VehiculesModelsNavigation.ManufacturerNavigation.Description,
+            VehiculeModelNavigation = p.VehiculeModelNavigation == null ? null : new VehiculeModel() {
+                Id = p.VehiculeModelNavigation.Id,
+                Timestamp = p.VehiculeModelNavigation.Timestamp,
+                Status = p.VehiculeModelNavigation.Status,
+                Name = p.VehiculeModelNavigation.Name,
+                Year = p.VehiculeModelNavigation.Year,
+                Manufacturer = p.VehiculeModelNavigation.Manufacturer,
+                ManufacturerNavigation = p.VehiculeModelNavigation.ManufacturerNavigation == null ? null : new Manufacturer() {
+                    Id = p.VehiculeModelNavigation.ManufacturerNavigation.Id,
+                    Timestamp = p.VehiculeModelNavigation.ManufacturerNavigation.Timestamp,
+                    Name = p.VehiculeModelNavigation.ManufacturerNavigation.Name,
+                    Description = p.VehiculeModelNavigation.ManufacturerNavigation.Description,
                 },
             },
             TrailerCommonNavigation = p.TrailerCommonNavigation == null ? null : new TrailerCommon() {
@@ -146,17 +143,7 @@ public class TrailersService : ITrailersService {
                     Status = p.TrailerCommonNavigation.LocationNavigation.Status,
                     Name = p.TrailerCommonNavigation.LocationNavigation.Name,
                     Address = p.TrailerCommonNavigation.LocationNavigation.Address,
-                    AddressNavigation = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation == null ? null : new Address() {
-                        Id = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.Id,
-                        Timestamp = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.Timestamp,
-                        State = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.State,
-                        Street = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.Street,
-                        AltStreet = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.AltStreet,
-                        City = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.City,
-                        Zip = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.Zip,
-                        Country = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.Country,
-                        Colonia = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation.Colonia,
-                    }
+                    AddressNavigation = p.TrailerCommonNavigation.LocationNavigation.AddressNavigation,
                 },
             },
             Plates = (ICollection<Plate>)p.Plates.Select(p => new Plate() {

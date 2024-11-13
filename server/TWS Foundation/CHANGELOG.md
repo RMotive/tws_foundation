@@ -4,6 +4,7 @@
 
 - Notes:
     1. [Trailers] and [TrailersExternals] added the Create and Update depot services.
+    2. Changed [Trailer] property name [VehiculesModelsNavigation] renamed has [VehiculeModelNavigation].
     2. Added sets services:
         - [TrailerClass]
         - [TrailerType]

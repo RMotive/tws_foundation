@@ -104,7 +104,7 @@ public class Q_TrailersController : BQ_CustomServerController<Trailer> {
                     },
                 },
             },
-            VehiculesModelsNavigation = new() {
+            VehiculeModelNavigation = new() {
                 Status = 1,
                 Name = "Generic model " + RandomSeed,
                 ManufacturerNavigation = new() {
