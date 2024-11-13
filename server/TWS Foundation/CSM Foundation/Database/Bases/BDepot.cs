@@ -83,7 +83,17 @@ public abstract class BDepot<TDatabase, TSet>
         }
 
         int start = (page - 1) * range;
-        int records = page == pages ? left : range;
+
+        int records;
+        if(page == pages) {
+            if(left == 0) {
+                records = range;
+            } else {
+                records = left;
+            }
+        } else {
+            records = range;
+        }
 
         Source = Source
             .Skip(start)

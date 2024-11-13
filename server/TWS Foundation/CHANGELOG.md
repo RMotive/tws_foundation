@@ -12,6 +12,10 @@
 
     5. Now [AuthAttribute] that is out Authentication middleware catches if the request is being intended for Quality purposes and
        check if the account has that kind of privileges if not will block the quality context calls.
+    
+- Fixes: 
+
+    1. Fixed a problem when someone tried to fetch the exact amount of data available on a [View] method was causing a 0 records returning due to a miss calculation.
 
 - Dependencies:
 
