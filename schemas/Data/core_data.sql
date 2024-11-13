@@ -22,7 +22,7 @@ begin
 	values
 		('Guard', 'Specifies permits for yard guards');
 
-	insert into Permits(Name, Description, Solution, Reference)
+	insert into Permits(A)
 		select 'Login', 'Permit to login into TWS Guard solution', id, 'TWSMG001' 
 			from Solutions where Sign = 'TWSMG';
 

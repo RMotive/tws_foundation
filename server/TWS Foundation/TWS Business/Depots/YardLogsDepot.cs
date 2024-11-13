@@ -26,13 +26,6 @@ public class YardLogsDepot
 
 
     public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {
-        IQueryable<YardLog> entries = Set
-
-            .OrderBy(i => i.Timestamp)
-            .GroupBy(i => new { i.Trailer, i.TrailerExternal })
-            .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
-            .Select(i => i.OrderBy(i => i.Timestamp).Last());
-
         return Processing(
             Options,
             Include: (query) => {
@@ -55,8 +48,9 @@ public class YardLogsDepot
                 .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
                 .Select(i => i.OrderBy(i => i.Timestamp).Last())
                 .ToList()
-                .OrderBy(i => i.Timestamp)
-                .AsQueryable();        }
+                .OrderByDescending(i => i.Timestamp)
+                .AsQueryable();        
+            }
         );
     }
 }

@@ -1,5 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/enums/migration_view_order_behaviors.dart';
+import 'package:tws_foundation_client/src/enums/set_view_orerings.dart';
 
 final class SetViewOrderOptions implements CSMEncodeInterface {
   final String property;
