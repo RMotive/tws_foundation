@@ -7,17 +7,21 @@ using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
+using TWS_Business.Sets;
+
 using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
+using TWS_Foundation.Controllers.Business;
 using TWS_Foundation.Middlewares.Frames;
+using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.TrailerType>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
-public class Q_TrailersTypesController : BQ_ServerController<Program> {
+public class Q_TrailersTypesController : BQ_CustomServerController<TrailerType> {
 
     public Q_TrailersTypesController(WebApplicationFactory<Program> hostFactory)
         : base("TrailersTypes", hostFactory) {
@@ -47,5 +51,9 @@ public class Q_TrailersTypesController : BQ_ServerController<Program> {
         Assert.True(Estela.Sets.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
+    }
+
+    protected override TrailerType MockFactory(string RandomSeed) {
+        throw new NotImplementedException();
     }
 }

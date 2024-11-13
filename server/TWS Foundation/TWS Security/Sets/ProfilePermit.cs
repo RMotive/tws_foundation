@@ -15,20 +15,29 @@ public partial class ProfilePermit {
 
 
     public static void CreateModel(ModelBuilder Builder) {
-        Builder.Entity<ProfilePermit>(entity => {
-            entity.HasNoKey();
-            entity.ToTable("Profiles_Permits");
+        Builder.Entity<ProfilePermit>(
+            (Entity )=> {
+                Entity.HasNoKey();
+                Entity.ToTable("Profiles_Permits");
 
-            entity.Property(e => e.Permit);
-            entity.Property(e => e.Profile);
+                Entity.Property(e => e.Permit)
+                    .IsRequired();
+                Entity.Property(e => e.Profile)
+                    .IsRequired();
 
-            entity.HasOne(d => d.PermitNavigation).WithMany()
-                .HasForeignKey(d => d.Permit)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                Entity.HasIndex(i => new { i.Profile, i.Permit })
+                    .IsUnique();
 
-            entity.HasOne(d => d.ProfileNavigation).WithMany()
-                .HasForeignKey(d => d.Profile)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                Entity.HasOne(d => d.PermitNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.Permit)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                Entity.HasOne(d => d.ProfileNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.Profile)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            }   
+        );
     }
 }

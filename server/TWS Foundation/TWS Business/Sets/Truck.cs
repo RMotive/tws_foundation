@@ -112,7 +112,7 @@ public partial class Truck
     }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator required = new RequiredValidator();
+        RequiredValidator required = new();
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),

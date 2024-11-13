@@ -8,7 +8,7 @@ namespace TWS_Security.Quality.Sets;
 public class Q_Contact
     : BQ_Set<Contact> {
     protected override Q_MigrationSet_EvaluateRecord<Contact>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Contact>[] Container) {
-        Q_MigrationSet_EvaluateRecord<Contact> success = new() {
+        Q_MigrationSet_EvaluateRecord<Contact> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
@@ -18,7 +18,7 @@ public class Q_Contact
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Contact> failure = new() {
+        Q_MigrationSet_EvaluateRecord<Contact> failure = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Name = "",

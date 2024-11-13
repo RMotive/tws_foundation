@@ -9,7 +9,7 @@ public class Q_Carrier : BQ_Set<Carrier> {
     protected override Q_MigrationSet_EvaluateRecord<Carrier>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Carrier>[] Container) {
         PointerValidator pointer = new(true);
 
-        Q_MigrationSet_EvaluateRecord<Carrier> success = new() {
+        Q_MigrationSet_EvaluateRecord<Carrier> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
@@ -20,7 +20,7 @@ public class Q_Carrier : BQ_Set<Carrier> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Carrier> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Carrier> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = -1,
                 Status = 0,

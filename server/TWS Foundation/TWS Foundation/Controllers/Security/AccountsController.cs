@@ -18,7 +18,7 @@ public class AccountsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<Account> Options) {
         return Ok(await Service.View(Options));
     }

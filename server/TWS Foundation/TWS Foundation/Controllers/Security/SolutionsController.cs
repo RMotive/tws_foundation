@@ -18,22 +18,22 @@ public class SolutionsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<Solution> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> Create(Solution[] Solutions) {
         return Ok(await Service.Create(Solutions));
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> Update(Solution Solution) {
         return Ok(await Service.Update(Solution));
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> Delete(int Id) {
         return Ok(await Service.Delete(Id));
     }

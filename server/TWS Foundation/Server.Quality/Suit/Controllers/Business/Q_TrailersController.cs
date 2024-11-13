@@ -1,10 +1,8 @@
-﻿
-using System.Net;
+﻿using System.Net;
 
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
-using CSM_Foundation.Server.Quality.Bases;
 using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -17,16 +15,13 @@ using TWS_Customer.Services.Records;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Trailer>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
-public class Q_TrailersController : BQ_CustomServerController<Trailer> {
+public class Q_TrailersController
+    : BQ_CustomServerController<Trailer> {
 
     public Q_TrailersController(WebApplicationFactory<Program> hostFactory)
         : base("Trailers", hostFactory) {

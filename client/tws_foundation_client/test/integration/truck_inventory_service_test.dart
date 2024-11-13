@@ -1,6 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/bases/truck_inventory_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../integration_credentials.dart';
@@ -11,9 +10,9 @@ void main() {
   setUp(
     () async {
       final TWSFoundationSource source = TWSFoundationSource(false);
-      MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
+      MainResolver<Session> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: Privileges.des,
+        decoder: Session.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -23,7 +22,7 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           throw exception;
         },
-        onSuccess: (SuccessFrame<Privileges> success) {
+        onSuccess: (SuccessFrame<Session> success) {
           auth = success.estela.token;
         },
       );

@@ -26,10 +26,10 @@ public abstract class BQ_ServerController<TEntry>
     private readonly JsonSerializerOptions SOptions = new();
     private readonly string Service;
     private readonly QM_ServerHost Host;
-    
-    protected BQ_ServerController(string Service, WebApplicationFactory<TEntry> Factory) {
+
+    protected BQ_ServerController(string Service, string Sign, WebApplicationFactory<TEntry> Factory) {
         this.Service = Service;
-        Host = new(Factory.CreateClient());
+        Host = new(Sign, Factory.CreateClient());
         SOptions.Converters.Add(new ISetViewFilterConverterFactory());
         SOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
     }

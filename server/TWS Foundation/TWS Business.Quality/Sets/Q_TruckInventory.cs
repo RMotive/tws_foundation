@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_TruckInventory : BQ_Set<TruckInventory> {
     protected override Q_MigrationSet_EvaluateRecord<TruckInventory>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TruckInventory>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<TruckInventory> success = new() {
+        Q_MigrationSet_EvaluateRecord<TruckInventory> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Section = 0,
@@ -16,7 +16,7 @@ public class Q_TruckInventory : BQ_Set<TruckInventory> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<TruckInventory> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<TruckInventory> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Section = -1,

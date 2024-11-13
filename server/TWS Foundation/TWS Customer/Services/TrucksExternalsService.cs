@@ -17,7 +17,8 @@ public class TrucksExternalsService : ITrucksExternalsService {
     public TrucksExternalsService(TrucksExternalsDepot trucksExternals) {
         TrucksExternals = trucksExternals;
     }
-    private IQueryable<TruckExternal> include(IQueryable<TruckExternal> query) {
+
+    private IQueryable<TruckExternal> Include(IQueryable<TruckExternal> query) {
         return query
             .Include(t => t.TruckCommonNavigation)
                 .ThenInclude(t => t!.SituationNavigation)
@@ -66,7 +67,7 @@ public class TrucksExternalsService : ITrucksExternalsService {
     }
 
     public async Task<SetViewOut<TruckExternal>> View(SetViewOptions<TruckExternal> Options) {
-        return await TrucksExternals.View(Options, include);
+        return await TrucksExternals.View(Options, Include);
     }
 
     public async Task<SetBatchOut<TruckExternal>> Create(TruckExternal[] trucks) {
@@ -74,6 +75,6 @@ public class TrucksExternalsService : ITrucksExternalsService {
     }
 
     public async Task<RecordUpdateOut<TruckExternal>> Update(TruckExternal Truck) {
-        return await TrucksExternals.Update(Truck, include);
+        return await TrucksExternals.Update(Truck, Include);
     }
 }

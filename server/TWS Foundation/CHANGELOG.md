@@ -5,9 +5,19 @@
 - Notes:
     1. [Trailers] and [TrailersExternals] added the Create and Update depot services.
     2. Changed [Trailer] property name [VehiculesModelsNavigation] renamed has [VehiculeModelNavigation].
-    2. Added sets services:
+    
+    3. Added sets services:
         - [TrailerClass]
         - [TrailerType]
+
+    4. Updated how [Auth] decorator is configured, no more needed to set [Permits] reference now only needs [Feature] and [Action] name.
+    5. Now [Permit] uses [Action], [Solution] and [Feature] to calculate its privilege level. 
+    6. Changed name from [XMigrationTransaction] to [XSetOperation] to maintina consistency.
+    7. Now [SessionManager] is a singleton dependency in the system, still supporting concurrent calls.
+        - SessionManager got refactorized removing a lot of methods and creating new ones.
+
+    8. Now [AuthAttribute] that is out Authentication middleware catches if the request is being intended for Quality purposes and
+       check if the account has that kind of privileges if not will block the quality context calls.
 
 - Dependencies:
 

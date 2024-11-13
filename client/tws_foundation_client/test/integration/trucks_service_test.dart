@@ -1,5 +1,3 @@
-
-
 import 'dart:math';
 
 import 'package:csm_client/csm_client.dart';
@@ -12,13 +10,13 @@ void main() {
   late String auth;
   late TrucksServiceBase service;
   late List<Truck> mocks;
-  
-  Truck buildMock(String randomToken){
+
+  Truck buildMock(String randomToken) {
     DateTime time = DateTime.now();
     Plate plateMX = Plate(
       0, //id
       1, //status
-      "MEX$randomToken",//identifier 
+      "MEX$randomToken", //identifier
       "TIJ", //state
       "MEX", //country
       time, //expiration
@@ -31,7 +29,7 @@ void main() {
     Plate plateUSA = Plate(
       0, //id
       1, //status
-      "USA$randomToken",//identifier 
+      "USA$randomToken", //identifier
       "CA", //state
       "USA", //country
       time, //expiration
@@ -51,91 +49,19 @@ void main() {
       null,
       null, //statusNavigation
     );
-    Maintenance maintenance = Maintenance(
-      0, 
-      1, 
-      DateTime.now(), 
-      DateTime.now(), 
-      null, 
-      <Truck>[]
-    );
-    Insurance insurance = Insurance(
-      0, 
-      1, 
-      "P232Policy$randomToken", 
-      DateTime.now(), 
-      "USA", 
-      null, 
-      <Truck>[]
-    );
-    Manufacturer manufacturer = Manufacturer(
-      0, 
-      "manufacturer $randomToken",
-      null
-    );
-    VehiculeModel model = VehiculeModel(
-      0, 
-      1, 
-      0, 
-      "Model name $randomToken", 
-      DateTime.now(), 
-      null, 
-      manufacturer
-    );
-    Approach approach = Approach(
-      0, 
-      1, 
-      "Testemail@$randomToken.com", 
-      null, 
-      null, 
-      null, 
-      null, 
-      <Carrier>[]
-    );
-    Address address = Address(
-      0, 
-      "USA", 
-      null, 
-      null, 
-      null, 
-      null, 
-      null, 
-      null, 
-      <Carrier>[]
-    );
-    USDOT usdot = USDOT(
-      0, 
-      1, 
-      "MCtestT", 
-      "scac", 
-      null
-    );
-    SCT sct = SCT(
-      0, 
-      1, 
-      "type01", 
-      "Number_test_sct:$randomToken", 
-      "C$randomToken", 
-      null
-    );
-    Carrier carrier = Carrier(
-      0, 
-      1, 
-      0, 
-      0, 
-      "Carrier: $randomToken", 
-      "Carrier description: $randomToken", 
-      null, 
-      approach, 
-      address, 
-      usdot, 
-      null, 
-      <Truck>[]
-    );
+    Maintenance maintenance = Maintenance(0, 1, DateTime.now(), DateTime.now(), null, <Truck>[]);
+    Insurance insurance = Insurance(0, 1, "P232Policy$randomToken", DateTime.now(), "USA", null, <Truck>[]);
+    Manufacturer manufacturer = Manufacturer(0, "manufacturer $randomToken", null);
+    VehiculeModel model = VehiculeModel(0, 1, 0, "Model name $randomToken", DateTime.now(), null, manufacturer);
+    Approach approach = Approach(0, 1, "Testemail@$randomToken.com", null, null, null, null, <Carrier>[]);
+    Address address = Address(0, "USA", null, null, null, null, null, null, <Carrier>[]);
+    USDOT usdot = USDOT(0, 1, "MCtestT", "scac", null);
+    SCT sct = SCT(0, 1, "type01", "Number_test_sct:$randomToken", "C$randomToken", null);
+    Carrier carrier = Carrier(0, 1, 0, 0, "Carrier: $randomToken", "Carrier description: $randomToken", null, approach, address, usdot, null, <Truck>[]);
     Truck mock = Truck(
-      0, // id 
+      0, // id
       1, //Status
-      0,//manufacturer
+      0, //manufacturer
       0, //common
       1, //carrier
       "Motor $randomToken", //motor
@@ -150,18 +76,19 @@ void main() {
       insurance, //insuranceNavigation
       sct, //sct
       carrier, //carrierNavigation
-      <Plate>[plateMX,plateUSA]
+      <Plate>[plateMX, plateUSA]
     );
     List<CSMSetValidationResult> evaluation = mock.evaluate();
     assert(evaluation.isEmpty);
     return mock;
   }
+
   setUp(
     () async {
       final TWSFoundationSource source = TWSFoundationSource(true);
-      MainResolver<Privileges> resolver = await source.security.authenticate(testCredentials);
+      MainResolver<Session> resolver = await source.security.authenticate(testCredentials);
       resolver.resolve(
-        decoder: Privileges.des,
+        decoder: Session.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -171,7 +98,7 @@ void main() {
         onException: (Object exception, StackTrace trace) {
           throw exception;
         },
-        onSuccess: (SuccessFrame<Privileges> success) {
+        onSuccess: (SuccessFrame<Session> success) {
           auth = success.estela.token;
         },
       );
@@ -179,15 +106,13 @@ void main() {
       service = source.trucks;
       mocks = <Truck>[];
       for (int i = 0; i < 3; i++) {
-        int rnd = Random().nextInt(900)  + 99;
+        int rnd = Random().nextInt(900) + 99;
         String randomToken = '${i}_qual$rnd';
         Truck mock = buildMock(randomToken);
         mocks.add(mock);
       }
     },
   );
-
-  
 
   test(
     'View',
@@ -197,7 +122,7 @@ void main() {
         auth,
       );
       fact.resolve(
-        decoder: (JObject json) => SetViewOut<Truck>.des(json,Truck.des),
+        decoder: (JObject json) => SetViewOut<Truck>.des(json, Truck.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -227,7 +152,7 @@ void main() {
 
       bool resolved = false;
       fact.resolve(
-        decoder:  (JObject json) => SetBatchOut<Truck>.des(json,Truck.des),
+        decoder: (JObject json) => SetBatchOut<Truck>.des(json, Truck.des),
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
@@ -247,11 +172,11 @@ void main() {
       test(
         'Creates when unexist',
         () async {
-          int rnd = Random().nextInt(900)  + 99;
+          int rnd = Random().nextInt(900) + 99;
           Truck mock = buildMock("U_qual$rnd");
 
           MainResolver<RecordUpdateOut<Truck>> fact = await service.update(mock, auth);
-          RecordUpdateOut<Truck> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Truck>.des(json ,Truck.des));
+          RecordUpdateOut<Truck> actEffect = await fact.act((JObject json) => RecordUpdateOut<Truck>.des(json, Truck.des));
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 
@@ -262,11 +187,11 @@ void main() {
       test(
         'Updates when exist',
         () async {
-          int rnd = Random().nextInt(900)  + 99;
+          int rnd = Random().nextInt(900) + 99;
           Truck mock = creationMock.clone(vin: "UPDATEDVIN_T: $rnd");
           mock.vehiculeModelNavigation!.name = "manufacturer $rnd";
           MainResolver<RecordUpdateOut<Truck>> fact = await service.update(mock, auth);
-          RecordUpdateOut<Truck> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Truck>.des(json ,Truck.des));
+          RecordUpdateOut<Truck> actEffect = await fact.act((JObject json) => RecordUpdateOut<Truck>.des(json, Truck.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.vin != actEffect.previous!.vin);

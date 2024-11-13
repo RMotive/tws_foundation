@@ -20,7 +20,7 @@ using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Tra
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
-public class Q_TrailersClassesController : BQ_ServerController<Program> {
+public class Q_TrailersClassesController : BQ_CustomServerController<TrailerClass> {
     private class Frame : SuccessFrame<View> { }
 
 
@@ -52,5 +52,9 @@ public class Q_TrailersClassesController : BQ_ServerController<Program> {
         Assert.True(Estela.Sets.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
+    }
+
+    protected override TrailerClass MockFactory(string RandomSeed) {
+        throw new NotImplementedException();
     }
 }
