@@ -18,6 +18,15 @@
 
     8. Now [AuthAttribute] that is out Authentication middleware catches if the request is being intended for Quality purposes and
        check if the account has that kind of privileges if not will block the quality context calls.
+    9. Changed [Update] generic [BDepot] method replaced for old generic method and customs [Update] implementations for complex sets models.
+    10. Added an overload method to [Update] implementation in [BDepot]. This overload method implement the a [Include] LINQ query method
+    as parameter to customs data fetch.
+    11. Added customs [Update] service methods on the followings services:
+        - [Trailers].
+        - [TrailersExternals]
+        - [Trucks].
+        - [TrucksExternals]
+        - [Yardlogs].
 
 - Dependencies:
 

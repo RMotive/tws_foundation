@@ -10,6 +10,9 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Internal;
+
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CSM_Foundation.Database.Bases;
 /// <summary>
@@ -328,58 +331,101 @@ public abstract class BDepot<TDatabase, TSet>
 
             }
         }
-
+        
     }
-
     /// <summary>
-    /// NOTES: 
-    ///     1. The incluide method (if is implemented) must contain all the navigation Selections to avoid circular references and unexpected behaviors.
-    ///     2. in sub classes, adding only the navigataion without a select, can avoid some tracking issues.
+    /// Simple generic update method.
+    /// Recomended for simple models updates.
     /// </summary>
-    /// <param name="Set"></param>
+    /// <param name="Set"> The record given to the service controller, the new data to set and update. </param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<RecordUpdateOut<TSet>> Update(TSet Record, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
-        IQueryable<TSet> query = Set;
-        TSet? old = null;
-        TSet? current;
-        Record.EvaluateWrite();
-        if (Include != null) {
-            query = Include(query);
-        }
-        current = await query
+    public async Task<RecordUpdateOut<TSet>> Update(TSet Record) {
+        TSet? previousCopy = null;
+        TSet? lastestRecord = null;
+
+        TSet? previous = await Set
             .Where(i => i.Id == Record.Id)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        if (current != null) {
-            _ = Set.Attach(current);
-            old = current.DeepCopy();
+        //save a deepcopy due the update method modify the data that stores.
+        if (previous != null) previousCopy = previous.DeepCopy();
 
-            Record.Timestamp = old.Timestamp;
-            UpdateHelper(current, Record);
-            _ = await Database.SaveChangesAsync();
-        } else {
-            Record.Timestamp = DateTime.Now;
-            _ = Set.Update(Record);
-            _ = await Database.SaveChangesAsync();
+        Set.Update(Record);
+        await Database.SaveChangesAsync();
 
-            current = await query
-                .Where(i => i.Id == Record.Id)
-                .FirstOrDefaultAsync();
-        }
+        // Getting the lastest record with foreign keys updated.
+        // The [Previous] variable cannot be used due the context data has been loaded on it,
+        // causing that the variable may contain null lists, and useless data.
+        lastestRecord = await Set
+            .Where(i => i.Id == Record.Id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
+        
 
         Disposer?.Push(Database, Record);
         return new RecordUpdateOut<TSet> {
-            Previous = old,
-            Updated = current ?? Record,
+            Previous = previousCopy,
+            Updated = lastestRecord ?? previous ?? Record,
         };
     }
 
-    #endregion
+    /// <summary>
+    ///     Similar to the simple update overload method, but with a [Include] parameter to 
+    ///     configure the query that fetch the lastest record from database. 
+    ///     Ideal to update complex models.
+    /// </summary>
+    /// <param name="Record">The record given to the service controller, the new data to set and update.</param>
+    /// <param name="Include">
+    ///     Query settings to fetch the record. 
+    ///     Ideal to add incluides, selects, etc. to the query.
+    /// </param>
+    /// <returns></returns>
+    public async Task<RecordUpdateOut<TSet>> Update(TSet Record, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
+        TSet? previousCopy = null;
+        TSet? lastestRecord = null;
+        IQueryable<TSet> query = Set;
 
-    #region Delete
+        if (Include != null) {
+            query = Include(query);
+        }
+        TSet? previous = await query
+            .Where(i => i.Id == Record.Id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
 
-    public Task<SetBatchOut<TSet>> Delete(TSet[] Sets) {
+        // Getting the lastest record with foreign keys updated.
+        // The [Previous] variable cannot be used due the context data has been loaded on it,
+        // causing that the variable may contain null lists, and useless data.
+        if (previous != null) {
+            //save a deepcopy due the update method modify the data that stores.
+            previousCopy = previous.DeepCopy();
+        }
+
+        Set.Update(Record);
+        await Database.SaveChangesAsync();
+
+        // Getting the lastest record with foreign keys updated.
+        if(previous == null) {
+            lastestRecord = await query
+                 .Where(i => i.Id == Record.Id)
+                 .FirstOrDefaultAsync();
+        }
+         
+
+        Disposer?.Push(Database, Record);
+        return new RecordUpdateOut<TSet> {
+            Previous = previousCopy,
+            Updated = previous ?? lastestRecord ?? Record,
+        };
+    }
+
+        #endregion
+
+        #region Delete
+
+        public Task<SetBatchOut<TSet>> Delete(TSet[] Sets) {
 
         TSet[] safe = [];
         SetOperationFailure<TSet>[] fails = [];

@@ -1,8 +1,12 @@
-﻿using CSM_Foundation.Database.Models.Options;
+﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Sets;
 using TWS_Customer.Services.Interfaces;
@@ -11,77 +15,16 @@ namespace TWS_Customer.Services;
 public class YardLogsService 
     : IYardLogsService {
     private readonly YardLogsDepot YardLogs;
+    private readonly TWSBusinessDatabase Database;
+    protected readonly IDisposer? Disposer;
 
-    public YardLogsService(
-       YardLogsDepot YardLogs) {
-        
+    public YardLogsService(YardLogsDepot YardLogs, TWSBusinessDatabase Database, IDisposer? Disposer) {
         this.YardLogs = YardLogs;
-   
+        this.Database = Database;
+        this.Disposer = Disposer;
     }
     private IQueryable<YardLog> Include(IQueryable<YardLog> query) {
         return query
-            .Include(t => t.DriverExternalNavigation)
-                .ThenInclude(i => i!.IdentificationNavigation)
-            .Include(t => t.DriverExternalNavigation)
-                .ThenInclude(i => i!.DriverCommonNavigation)
-
-            .Include(t => t.DriverNavigation)
-                .ThenInclude(d => d!.EmployeeNavigation)
-                    .ThenInclude(e => e!.IdentificationNavigation)
-
-            .Include(t => t.DriverNavigation)
-                .ThenInclude(d => d!.DriverCommonNavigation)
-
-            .Include(t => t.TrailerExternalNavigation)
-                .ThenInclude(d => d!.TrailerCommonNavigation)
-                    .ThenInclude(d => d!.TrailerTypeNavigation)
-                        .ThenInclude(d => d!.TrailerClassNavigation)
-                    
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(d => d!.TrailerCommonNavigation)
-                  .ThenInclude(t => t!.TrailerTypeNavigation)
-                    .ThenInclude(t => t!.TrailerClassNavigation)
-
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.AddressNavigation)
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.UsdotNavigation)
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.ApproachNavigation)
-
-            .Include(t => t.TrailerNavigation)
-                .ThenInclude(t => t!.VehiculeModelNavigation)
-
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.TruckCommonNavigation)
-
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.VehiculeModelNavigation)
-
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.AddressNavigation)
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.UsdotNavigation)
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.ApproachNavigation)
-
-            .Include(t => t.TruckExternalNavigation)
-                .ThenInclude(t => t!.TruckCommonNavigation)
-
-            .Include(t => t.LoadTypeNavigation)
-
-            .Include(t => t.SectionNavigation)
-                .ThenInclude(t => t!.LocationNavigation)
             .Select(y => new YardLog() {
                 Id = y.Id,
                 Entry = y.Entry,
@@ -221,9 +164,37 @@ public class YardLogsService
                         Name = y.TrailerNavigation.VehiculeModelNavigation.Name,
                         Year = y.TrailerNavigation.VehiculeModelNavigation.Year,
                         Manufacturer = y.TrailerNavigation.VehiculeModelNavigation.Manufacturer,
-                        ManufacturerNavigation = y.TrailerNavigation.VehiculeModelNavigation.ManufacturerNavigation,
+                        ManufacturerNavigation = y.TrailerNavigation.VehiculeModelNavigation.ManufacturerNavigation == null ? null : new Manufacturer() {
+                            Id = y.TrailerNavigation.VehiculeModelNavigation.ManufacturerNavigation.Id,
+                            Timestamp = y.TrailerNavigation.VehiculeModelNavigation.ManufacturerNavigation.Timestamp,
+                            Name = y.TrailerNavigation.VehiculeModelNavigation.ManufacturerNavigation.Name,
+                            Description = y.TrailerNavigation.VehiculeModelNavigation.ManufacturerNavigation.Description,
+                        },
                     },
-                    CarrierNavigation = y.TrailerNavigation.CarrierNavigation,
+                    CarrierNavigation = y.TrailerNavigation.CarrierNavigation == null ? null : new Carrier() {
+                        Id = y.TrailerNavigation.CarrierNavigation.Id,
+                        Status = y.TrailerNavigation.CarrierNavigation.Status,
+                        Name = y.TrailerNavigation.CarrierNavigation.Name,
+                        Approach = y.TrailerNavigation.CarrierNavigation.Approach,
+                        Address = y.TrailerNavigation.CarrierNavigation.Address,
+                        Usdot = y.TrailerNavigation.CarrierNavigation.Usdot,
+                        ApproachNavigation = y.TrailerNavigation.CarrierNavigation.ApproachNavigation == null ? null : new Approach() {
+                            Id = y.TrailerNavigation.CarrierNavigation.ApproachNavigation.Id,
+                            Timestamp = y.TrailerNavigation.CarrierNavigation.ApproachNavigation.Timestamp,
+                            Status = y.TrailerNavigation.CarrierNavigation.ApproachNavigation.Status,
+                            Enterprise = y.TrailerNavigation.CarrierNavigation.ApproachNavigation.Enterprise,
+                            Personal = y.TrailerNavigation.CarrierNavigation.ApproachNavigation.Personal,
+                            Alternative = y.TrailerNavigation.CarrierNavigation.ApproachNavigation.Alternative,
+                            Email = y.TrailerNavigation.CarrierNavigation.ApproachNavigation.Email,
+                        },
+                        UsdotNavigation = y.TrailerNavigation.CarrierNavigation.UsdotNavigation == null ? null : new Usdot() {
+                            Id = y.TrailerNavigation.CarrierNavigation.UsdotNavigation.Id,
+                            Timestamp = y.TrailerNavigation.CarrierNavigation.UsdotNavigation.Timestamp,
+                            Status = y.TrailerNavigation.CarrierNavigation.UsdotNavigation.Status,
+                            Mc = y.TrailerNavigation.CarrierNavigation.UsdotNavigation.Mc,
+                            Scac = y.TrailerNavigation.CarrierNavigation.UsdotNavigation.Scac,
+                        },
+                    },
                     TrailerCommonNavigation = y.TrailerNavigation.TrailerCommonNavigation == null ? null : new TrailerCommon() {
                         Id = y.TrailerNavigation.TrailerCommonNavigation.Id,
                         Timestamp = y.TrailerNavigation.TrailerCommonNavigation.Timestamp,
@@ -287,7 +258,30 @@ public class YardLogsService
                     Maintenance = y.TruckNavigation.Maintenance,
                     Insurance = y.TruckNavigation.Insurance,
                     Carrier = y.TruckNavigation.Carrier,
-                    CarrierNavigation = y.TruckNavigation.CarrierNavigation,
+                    CarrierNavigation = y.TruckNavigation.CarrierNavigation == null ? null : new Carrier() {
+                        Id = y.TruckNavigation.CarrierNavigation.Id,
+                        Status = y.TruckNavigation.CarrierNavigation.Status,
+                        Name = y.TruckNavigation.CarrierNavigation.Name,
+                        Approach = y.TruckNavigation.CarrierNavigation.Approach,
+                        Address = y.TruckNavigation.CarrierNavigation.Address,
+                        Usdot = y.TruckNavigation.CarrierNavigation.Usdot,
+                        ApproachNavigation = y.TruckNavigation.CarrierNavigation.ApproachNavigation == null ? null : new Approach() {
+                            Id = y.TruckNavigation.CarrierNavigation.ApproachNavigation.Id,
+                            Timestamp = y.TruckNavigation.CarrierNavigation.ApproachNavigation.Timestamp,
+                            Status = y.TruckNavigation.CarrierNavigation.ApproachNavigation.Status,
+                            Enterprise = y.TruckNavigation.CarrierNavigation.ApproachNavigation.Enterprise,
+                            Personal = y.TruckNavigation.CarrierNavigation.ApproachNavigation.Personal,
+                            Alternative = y.TruckNavigation.CarrierNavigation.ApproachNavigation.Alternative,
+                            Email = y.TruckNavigation.CarrierNavigation.ApproachNavigation.Email,
+                        },
+                        UsdotNavigation = y.TruckNavigation.CarrierNavigation.UsdotNavigation == null ? null : new Usdot() {
+                            Id = y.TruckNavigation.CarrierNavigation.UsdotNavigation.Id,
+                            Timestamp = y.TruckNavigation.CarrierNavigation.UsdotNavigation.Timestamp,
+                            Status = y.TruckNavigation.CarrierNavigation.UsdotNavigation.Status,
+                            Mc = y.TruckNavigation.CarrierNavigation.UsdotNavigation.Mc,
+                            Scac = y.TruckNavigation.CarrierNavigation.UsdotNavigation.Scac,
+                        },
+                    },
                     Vin = y.TruckNavigation.Vin,
                     SctNavigation = y.TruckNavigation.SctNavigation,
                     VehiculeModelNavigation = y.TruckNavigation.VehiculeModelNavigation == null? null : new VehiculeModel() {
@@ -297,7 +291,12 @@ public class YardLogsService
                         Name = y.TruckNavigation.VehiculeModelNavigation.Name,
                         Year = y.TruckNavigation.VehiculeModelNavigation.Year,
                         Manufacturer = y.TruckNavigation.VehiculeModelNavigation.Manufacturer,
-                        ManufacturerNavigation = y.TruckNavigation.VehiculeModelNavigation.ManufacturerNavigation,
+                        ManufacturerNavigation = y.TruckNavigation.VehiculeModelNavigation.ManufacturerNavigation == null ? null : new Manufacturer() {
+                            Id = y.TruckNavigation.VehiculeModelNavigation.ManufacturerNavigation.Id,
+                            Timestamp = y.TruckNavigation.VehiculeModelNavigation.ManufacturerNavigation.Timestamp,
+                            Name = y.TruckNavigation.VehiculeModelNavigation.ManufacturerNavigation.Name,
+                            Description = y.TruckNavigation.VehiculeModelNavigation.ManufacturerNavigation.Description,
+                        },
 
                     },
                     TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
@@ -354,9 +353,98 @@ public class YardLogsService
     public async Task<SetBatchOut<YardLog>> Create(YardLog[] yardLog) {
         return await this.YardLogs.Create(yardLog);
     }
-    public async Task<RecordUpdateOut<YardLog>> Update(YardLog yardLog, bool updatePivot = false) {
+    public async Task<RecordUpdateOut<YardLog>> Update(YardLog YardLog) {
+        // Evaluate record.
+        YardLog.EvaluateWrite();
+        // Check if the trailer currently exist in database.
+        // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
+        YardLog? current = await Include(Database.YardLogs)
+            .Where(i => i.Id == YardLog.Id)
+            .FirstOrDefaultAsync();
 
-        return await YardLogs.Update(yardLog, Include) ;
+        // If trailers not exist in database, then use the generic update method.
+        if (current == null) {
+            return await YardLogs.Update(YardLog, Include);
+        }
+        // Save a deep copy before changes.
+        YardLog previousDeepCopy = current.DeepCopy();
+
+        // Clear the navigation to avoid duplicated tracking issues.
+        current.DriverExternalNavigation = null;
+        current.DriverNavigation = null;
+        current.LoadTypeNavigation = null;
+        current.SectionNavigation = null;
+        current.TrailerExternalNavigation = null;
+        current.TrailerNavigation = null;
+        current.TruckExternalNavigation = null;
+        current.TruckNavigation = null;
+
+        // Preserve a copy before modifications.
+        Database.Attach(current);
+
+        // Update the main model properties.
+        EntityEntry previousEntry = Database.Entry(current);
+        previousEntry.CurrentValues.SetValues(YardLog);
+
+        // ---> Update Driver navigation
+        if (YardLog.DriverNavigation != null) {
+            current.Driver = YardLog.DriverNavigation!.Id;
+            current.DriverNavigation = YardLog.DriverNavigation;
+        }
+
+        // ---> Update Driver external navigation
+        if (YardLog.DriverExternalNavigation != null) {
+            current.DriverExternal = YardLog.DriverExternalNavigation!.Id;
+            current.DriverExternalNavigation = YardLog.DriverExternalNavigation;
+        }
+
+        // ---> Update Load Type navigation
+        if (YardLog.LoadTypeNavigation != null) {
+            current.LoadType = YardLog.LoadTypeNavigation!.Id;
+            current.LoadTypeNavigation = YardLog.LoadTypeNavigation;
+        }
+
+        // ---> Update section navigation
+        if (YardLog.SectionNavigation != null) {
+            current.Section = YardLog.SectionNavigation!.Id;
+            current.SectionNavigation = YardLog.SectionNavigation;
+        }
+
+        // ---> Update TrailerExternal navigation
+        if (YardLog.TrailerExternalNavigation != null) {
+            current.TrailerExternal = YardLog.TrailerExternalNavigation!.Id;
+            current.TrailerExternalNavigation = YardLog.TrailerExternalNavigation;
+        }
+
+        // ---> Update Trailer navigation
+        if (YardLog.TrailerNavigation != null) {
+            current.Trailer = YardLog.TrailerNavigation!.Id;
+            current.TrailerNavigation = YardLog.TrailerNavigation;
+        }
+
+        // ---> Update Truck navigation
+        if (YardLog.TruckExternalNavigation != null) {
+            current.Truck = YardLog.TruckNavigation!.Id;
+            current.TruckNavigation = YardLog.TruckNavigation;
+        }
+
+        // ---> Update Truck external navigation
+        if (YardLog.TruckExternalNavigation != null) {
+            current.TruckExternal = YardLog.TruckExternalNavigation!.Id;
+            current.TruckExternalNavigation = YardLog.TruckExternalNavigation;
+        }
+
+        await Database.SaveChangesAsync();
+        Disposer?.Push(Database, YardLog);
+        // Get the lastest record data from database.
+        YardLog? lastestRecord = await Include(Database.YardLogs)
+            .Where(i => i.Id == YardLog.Id)
+            .FirstOrDefaultAsync();
+
+        return new RecordUpdateOut<YardLog> {
+            Previous = previousDeepCopy,
+            Updated = lastestRecord ?? YardLog,
+        };
     }
 
     public async Task<YardLog> Delete(int Id) {

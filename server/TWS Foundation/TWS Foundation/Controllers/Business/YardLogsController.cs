@@ -33,8 +33,8 @@ public class YardLogsController : ControllerBase {
     }
 
     [HttpPost(), Auth("", "")]
-    public async Task<IActionResult> Update(YardLog yardLogs, bool updatePivot = false) {
-        return Ok(await Service.Update(yardLogs, updatePivot));
+    public async Task<IActionResult> Update(YardLog yardLogs) {
+        return Ok(await Service.Update(yardLogs));
     }
 
     [HttpPost(), Auth("", "")]
