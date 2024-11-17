@@ -3,13 +3,21 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes:
+    
+    1. Added creation and update services for [Trailer] and [TrailerExternal] sets.
+    2. Added [Situation] navigation set to [TrailerCommon] set.
+    3. Added default constructor for [TrailerCommon] set.
+    4. Deprecated [Year] property removed from [TrailerType] set.
+    5. Added Services:
+        - [TrailerClass]
+        - [TrailerType]
 
-    1. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
-    2. Added [Contact] entity service.
-    3. Created a new [TWSServiceBase] to override [CSMServiceBase] call behaviors to fulfill new server
+    6. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
+    7. Added [Contact] entity service.
+    8. Created a new [TWSServiceBase] to override [CSMServiceBase] call behaviors to fulfill new server
     authentication behavior where now is requested the auth token followed by the solution sign that requests
     (i.e, authToken@solutionSign).
-    4. Renamed [Privileges] model to [Session] in order to get more parity between client and server.
+    9. Renamed [Privileges] model to [Session] in order to get more parity between client and server.
 
 - Dependencies:
 

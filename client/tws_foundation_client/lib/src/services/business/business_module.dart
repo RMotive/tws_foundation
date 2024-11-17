@@ -12,3 +12,5 @@ export 'bases/trucks_externals_service_base.dart';
 export 'bases/trucks_service_base.dart';
 export 'bases/vehicules_models_service_base.dart';
 export 'bases/yard_log_service_base.dart';
+export 'trailers_classes_service.dart';
+export 'trailers_types_service.dart';

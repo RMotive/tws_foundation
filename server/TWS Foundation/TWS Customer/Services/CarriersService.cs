@@ -18,7 +18,7 @@ public class CarriersService : ICarriersService {
         Carriers = carriers;
     }
 
-    IQueryable<Carrier> Include(IQueryable<Carrier> query) {
+    private IQueryable<Carrier> Include(IQueryable<Carrier> query) {
         return query
             .Include(t => t.AddressNavigation)
             .Include(t => t.ApproachNavigation)

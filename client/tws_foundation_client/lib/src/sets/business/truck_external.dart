@@ -107,7 +107,9 @@ final class TruckExternal implements CSMSetInterface {
     return results;
   }
 
-  TruckExternal.a();
+  TruckExternal.a(){
+    _timestamp = DateTime.now();
+  }
   TruckExternal clone({
     int? id,
     int? status,

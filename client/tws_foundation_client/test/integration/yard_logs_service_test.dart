@@ -87,6 +87,7 @@ void main() {
       "ECT$randomToken", //economic
       null,
       trailerType,
+      null,
       null, //statusNavigation
     );
     
@@ -95,12 +96,15 @@ void main() {
       1, //status
       0, //common
       1, //carrier
+      null,
       null, //model
-      1, //maintenance
+      null, //maintenance
+      null,
       null,
       trailerCommon, //trailerCommonNavigation
       null, //vehiculeModelNavigation
       null, //statusNavigation
+      null,
       <Plate>[plateMX2, plateUSA2] //plates
     );
     TruckCommon truckCommon = TruckCommon(

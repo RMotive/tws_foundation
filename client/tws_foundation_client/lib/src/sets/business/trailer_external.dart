@@ -10,6 +10,10 @@ final class TrailerExternal implements CSMSetInterface {
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
+  
+  TrailerExternal.a(){
+    _timestamp = DateTime.now();
+  }
 
   @override
   int id = 0;
@@ -82,6 +86,7 @@ final class TrailerExternal implements CSMSetInterface {
         isPlate = true;
       }
     }
+    
     if(usaPlate != null){
       if(usaPlate!.trim().isEmpty) results.add(CSMSetValidationResult(kUsaPlate, "Elimine los espacios en blanco de las placas americanas en el trailer externo.", "emptyString()"));
       if((usaPlate!.length < 5 || usaPlate!.length > 12) && usaPlate!.trim().isNotEmpty){
@@ -100,7 +105,6 @@ final class TrailerExternal implements CSMSetInterface {
     }
     return results;
   }
-  TrailerExternal.def();
   TrailerExternal clone({
     int? id,
     int? status,

@@ -10,4 +10,8 @@ abstract class TrailersExternalsServiceBase extends TWSServiceBase {
 
   /// Transaction to generate a set view object.
   Effect<SetViewOut<TrailerExternal>> view(SetViewOptions<TrailerExternal> options, String auth);
+
+  Effect<SetBatchOut<TrailerExternal>> create(List<TrailerExternal> trailers, String auth);
+
+  Effect<RecordUpdateOut<TrailerExternal>> update(TrailerExternal trailer, String auth);
 }

@@ -1,4 +1,6 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/business/bases/trailers_classes_service_base.dart';
+import 'package:tws_foundation_client/src/services/business/bases/trailers_types_service_base.dart';
 import 'package:tws_foundation_client/src/services/business/carriers_service.dart';
 import 'package:tws_foundation_client/src/services/business/drivers_externals_service.dart';
 import 'package:tws_foundation_client/src/services/business/drivers_service.dart';
@@ -11,7 +13,9 @@ import 'package:tws_foundation_client/src/services/business/trailers_externals_s
 import 'package:tws_foundation_client/src/services/business/trucks_externals_service.dart';
 import 'package:tws_foundation_client/src/services/business/trucks_inventories_service.dart';
 import 'package:tws_foundation_client/src/services/business/trucks_service.dart';
+import 'package:tws_foundation_client/src/services/business/trailers_classes_service.dart';
 import 'package:tws_foundation_client/src/services/business/vehicules_models_service.dart';
+import 'package:tws_foundation_client/src/services/business/trailers_types_service.dart';
 import 'package:tws_foundation_client/src/services/business/yard_log_service.dart';
 import 'package:tws_foundation_client/src/services/security/account_service.dart';
 import 'package:tws_foundation_client/src/services/security/contacts_service.dart';
@@ -74,6 +78,10 @@ final class TWSFoundationSource extends CSMSourceBase {
 
   /// Truck Inventory service
   late final TrucksInventoriesServiceBase trucksInventories;
+  // Trailer Type models service
+  late final TrailersTypesServiceBase trailersTypes;
+  // Trailer Class service
+  late final TrailersClassesServiceBase trailersClasses;
 
   /// Contact service
   late final ContactsServiceBase contacts;
@@ -92,7 +100,7 @@ final class TWSFoundationSource extends CSMSourceBase {
   /// Each service implementation can be overriden for a custom one.
   TWSFoundationSource(
     bool debug, {
-    Client? client,
+    Client? client,                                                                                                                                                                                       
     SolutionsServiceBase? solutions,
     AccountsServiceBase? accounts,
     SecurityServiceBase? security,
@@ -111,7 +119,9 @@ final class TWSFoundationSource extends CSMSourceBase {
     CarriersService? carriers,
     VehiculesModelsService? vehiculesModels,
     TrucksInventoriesService? trucksInventories,
-    ContactsServiceBase? contacts,
+    TrailersTypesService? trailersTypes,
+    TrailersClassesService? trailersClasses,
+    ContactsService? contacts,
     CSMUri development = const CSMUri(
       '127.0.0.1',
       '',
@@ -142,6 +152,8 @@ final class TWSFoundationSource extends CSMSourceBase {
     this.carriers = carriers ?? CarriersService(host, client: client);
     this.vehiculesModels = vehiculesModels ?? VehiculesModelsService(host, client: client);
     this.trucksInventories = trucksInventories ?? TrucksInventoriesService(host, client: client);
+    this.trailersTypes = trailersTypes ?? TrailersTypesService(host, client: client);
+    this.trailersClasses = trailersClasses ?? TrailersClassesService(host, client: client);    
     this.contacts = contacts ?? ContactsService(host, client: client);
   }
 }

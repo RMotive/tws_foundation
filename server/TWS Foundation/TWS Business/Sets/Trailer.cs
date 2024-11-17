@@ -32,7 +32,7 @@ public partial class Trailer
 
     public virtual TrailerCommon? TrailerCommonNavigation { get; set; }
 
-    public virtual VehiculeModel? VehiculesModelsNavigation { get; set; }
+    public virtual VehiculeModel? VehiculeModelNavigation { get; set; }
 
     public virtual Maintenance? MaintenanceNavigation { get; set; }
 
@@ -80,7 +80,7 @@ public partial class Trailer
                 .HasForeignKey(d => d.Carrier)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            Entity.HasOne(d => d.VehiculesModelsNavigation)
+            Entity.HasOne(d => d.VehiculeModelNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Model)
                 .OnDelete(DeleteBehavior.ClientSetNull);

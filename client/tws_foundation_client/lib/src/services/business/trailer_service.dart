@@ -16,5 +16,17 @@ final class TrailersService extends TrailersServiceBase {
     CSMActEffect actEffect = await twsPost('view', options, auth: auth);
     return MainResolver<SetViewOut<Trailer>>(actEffect);
   }
+
+  @override
+  Effect<SetBatchOut<Trailer>> create(List<Trailer> trailers, String auth) async {
+    CSMActEffect actEffect = await twsPostList('create', trailers, auth: auth);
+    return MainResolver<SetBatchOut<Trailer>>(actEffect);
+  }
+
+  @override
+  Effect<RecordUpdateOut<Trailer>> update(Trailer trailer, String auth) async {
+    CSMActEffect actEffect = await twsPost('update', trailer, auth: auth);
+    return MainResolver<RecordUpdateOut<Trailer>>(actEffect);
+  }
 }
       

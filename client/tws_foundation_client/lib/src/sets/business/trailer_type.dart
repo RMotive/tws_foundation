@@ -14,7 +14,6 @@ final class TrailerType implements CSMSetInterface {
   int status = 1;
   int trailerClass = 0;
   String size = "";
-  DateTime year = DateTime.now();
   Status? statusNavigation;
   TrailerClass? trailerClassNavigation;
   TrailerType(this.id, this.status, this.trailerClass, this.size, this.statusNavigation, this.trailerClassNavigation, { 

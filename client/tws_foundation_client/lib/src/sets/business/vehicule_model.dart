@@ -78,6 +78,12 @@ final class VehiculeModel implements CSMSetInterface {
     Status? statusNavigation,
     Manufacturer? manufacturerNavigation
   }){
+    
+    if(manufacturer == 0){
+      this.manufacturerNavigation = null;
+      manufacturerNavigation = null;
+    }
+
     return VehiculeModel(
       id ?? this.id, 
       status ?? this.status, 

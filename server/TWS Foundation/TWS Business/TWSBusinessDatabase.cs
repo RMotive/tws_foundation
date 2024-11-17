@@ -74,6 +74,9 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
     public virtual DbSet<TrailerType> TrucksInventories { get; set; }
 
+    public virtual DbSet<TruckExternal> TrucksExternals { get; set; }
+
+
 
 
     protected override void OnModelCreating(ModelBuilder builder) {

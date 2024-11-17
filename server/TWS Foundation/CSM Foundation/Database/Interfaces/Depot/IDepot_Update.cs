@@ -13,5 +13,7 @@ public interface IDepot_Update<TMigrationSet>
     /// </summary>
     /// <param name="Set"></param>
     /// <returns></returns>
+    Task<RecordUpdateOut<TMigrationSet>> Update(TMigrationSet Set);
     Task<RecordUpdateOut<TMigrationSet>> Update(TMigrationSet Set, Func<IQueryable<TMigrationSet>, IQueryable<TMigrationSet>>? Include = null);
+
 }

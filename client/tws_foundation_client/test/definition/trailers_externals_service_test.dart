@@ -6,22 +6,31 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 void main() {
   late TrailersExternalsServiceBase service;
+
   late SetViewOut<TrailerExternal> viewMock;
-  late TrailerExternal createMock;
+  late SetBatchOut<TrailerExternal> createMock;
+  late RecordUpdateOut<TrailerExternal> updateMock;
+
   late SetViewOptions<TrailerExternal> options;
+  late List<TrailerExternal> trailers;
 
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
       options = SetViewOptions<TrailerExternal>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<TrailerExternal>>[]);
       viewMock = SetViewOut<TrailerExternal>(<TrailerExternal>[], 1, DateTime.now(), 3, 0, 20);
-      createMock = TrailerExternal(0, 1, 1,"Carrier test", "12345678", "87654321",null, null);
+      createMock = SetBatchOut<TrailerExternal>(<TrailerExternal>[], <SetOperationFailure<TrailerExternal>>[], 0, 0, 0, false);
+      updateMock = RecordUpdateOut<TrailerExternal>(TrailerExternal.a(), TrailerExternal.a());
+      trailers = <TrailerExternal>[
+        TrailerExternal.a(),
+      ];
 
       Client mockClient = MockClient(
         (Request request) async {
           JObject jObject = switch (request.url.pathSegments.last) {
             'view' => SuccessFrame<SetViewOut<TrailerExternal>>('qTracer', viewMock).encode(),
-            'create' => SuccessFrame<TrailerExternal>('qTracer', createMock).encode(),
+            'create' => SuccessFrame<SetBatchOut<TrailerExternal>>('qTracer', createMock).encode(),
+            'update' => SuccessFrame<RecordUpdateOut<TrailerExternal>>('qTracer', updateMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -65,5 +74,49 @@ void main() {
       expect(passed, true, reason: 'expected the service returned a success');
     },
     timeout: Timeout.factor(5),
+  );
+
+  test(
+    'Create',
+    () async {
+      MainResolver<SetBatchOut<TrailerExternal>> fact = await service.create(trailers, '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<TrailerExternal>.des(json, TrailerExternal.des),
+        onConnectionFailure: () {},
+        onFailure: (FailureFrame failure, int status) {
+          throw failure;
+        },
+        onSuccess: (SuccessFrame<SetBatchOut<TrailerExternal>> success) {
+          pased = true;
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+      );
+      expect(pased, true);
+    },
+  );
+
+  test(
+    'Update',
+    () async {
+      MainResolver<RecordUpdateOut<TrailerExternal>> fact = await service.update(TrailerExternal.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => RecordUpdateOut<TrailerExternal>.des(json, TrailerExternal.des),
+        onConnectionFailure: () {},
+        onFailure: (FailureFrame failure, int status) {
+          throw failure;
+        },
+        onSuccess: (SuccessFrame<RecordUpdateOut<TrailerExternal>> success) {
+          pased = true;
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+      );
+      expect(pased, true);
+    },
   );
 }
