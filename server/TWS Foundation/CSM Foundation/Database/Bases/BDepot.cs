@@ -65,8 +65,6 @@ public abstract class BDepot<TDatabase, TSet>
 
             foreach (ISetViewFilterNode<TSet> filter in filters) {
                 Expression<Func<TSet, bool>> queryExpression = filter.Compose();
-                string lambdaValue = queryExpression.ToString();
-
                 Source = Source.Where(queryExpression);
             }
         }
@@ -78,14 +76,24 @@ public abstract class BDepot<TDatabase, TSet>
 
         int range = Options.Range;
         int page = Options.Page;
-        int amount = Set.Count();
+        int amount = Source.Count();
         (int pages, int left) = Math.DivRem(amount, range);
         if (left > 0) {
             pages++;
         }
 
         int start = (page - 1) * range;
-        int records = page == pages ? left : range;
+
+        int records;
+        if(page == pages) {
+            if(left == 0) {
+                records = range;
+            } else {
+                records = left;
+            }
+        } else {
+            records = range;
+        }
 
         Source = Source
             .Skip(start)
@@ -130,18 +138,19 @@ public abstract class BDepot<TDatabase, TSet>
         return orderingQuery;
     }
 
-    public Task<SetViewOut<TSet>> Processing(SetViewOptions<TSet> Options, IQueryable<TSet> Source, Func<IQueryable<TSet>, IQueryable<TSet>>? inclusions = null) {
-        IQueryable<TSet> query = Source;
+    public Task<SetViewOut<TSet>> Processing(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? AfterFilters = null, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
+        IQueryable<TSet> query = Set.AsNoTracking();
+
+        query = Ordering(Options, query);
 
         query = Filtering(Options, query);
+
+        query = Include?.Invoke(query) ?? query;
+        query = AfterFilters?.Invoke(query) ?? query;
 
         (IQueryable<TSet> source, int amount, int pages, int page) = Paging(Options, query);
 
         query = source;
-
-        query = Ordering(Options, query);
-
-        query = inclusions?.Invoke(query) ?? query;
 
         TSet[] sets = [.. query];
 
@@ -157,8 +166,8 @@ public abstract class BDepot<TDatabase, TSet>
 
     #region View 
 
-    public Task<SetViewOut<TSet>> View(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? include = null) {
-        return Processing(Options, Set, include);
+    public Task<SetViewOut<TSet>> View(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
+        return Processing(Options, Include: Include);
     }
 
     #endregion

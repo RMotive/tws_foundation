@@ -98,7 +98,7 @@ public class Q_SolutionsController
             Page = 1,
             Filters = [
                 new SetViewDateFilter<Solution> {
-                    From = refTimestamp,
+                    From = refTimestamp.AddSeconds(-5),
                 },
             ]
         }, true);

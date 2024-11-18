@@ -15,6 +15,7 @@ public partial class Permit
     public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Solution { get; set; }
+
     [JsonIgnore]
     public virtual Solution? SolutionNavigation { get; set; }
     public int Feature { get; set; }
