@@ -141,6 +141,8 @@ public abstract class BDepot<TDatabase, TSet>
     public Task<SetViewOut<TSet>> Processing(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? AfterFilters = null, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
         IQueryable<TSet> query = Set.AsNoTracking();
 
+        query = Ordering(Options, query);
+
         query = Filtering(Options, query);
 
         query = Include?.Invoke(query) ?? query;
@@ -149,8 +151,6 @@ public abstract class BDepot<TDatabase, TSet>
         (IQueryable<TSet> source, int amount, int pages, int page) = Paging(Options, query);
 
         query = source;
-
-        query = Ordering(Options, query);
 
         TSet[] sets = [.. query];
 
