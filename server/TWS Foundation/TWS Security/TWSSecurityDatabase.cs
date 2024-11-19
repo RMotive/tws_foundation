@@ -18,25 +18,25 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
 
     }
 
-    public virtual DbSet<Account> Accounts { get; set; }
+    public virtual DbSet<Account> Accounts { get; set; } = default!;
 
-    public virtual DbSet<AccountPermit> AccountsPermits { get; set; }
+    public virtual DbSet<AccountPermit> AccountsPermits { get; set; } = default!;
 
-    public virtual DbSet<AccountProfile> AccountsProfiles { get; set; }
+    public virtual DbSet<AccountProfile> AccountsProfiles { get; set; } = default!;
 
-    public virtual DbSet<Contact> Contacts { get; set; }
+    public virtual DbSet<Contact> Contacts { get; set; } = default!;
 
-    public virtual DbSet<Feature> Features { get; set; }
+    public virtual DbSet<Feature> Features { get; set; } = default!;
 
-    public virtual DbSet<Permit> Permits { get; set; }
+    public virtual DbSet<Permit> Permits { get; set; } = default!;
 
-    public virtual DbSet<Profile> Profiles { get; set; }
+    public virtual DbSet<Profile> Profiles { get; set; } = default!;
 
-    public virtual DbSet<ProfilePermit> ProfilesPermits { get; set; }
+    public virtual DbSet<ProfilePermit> ProfilesPermits { get; set; } = default!;
 
-    public virtual DbSet<Solution> Solutions { get; set; }
+    public virtual DbSet<Solution> Solutions { get; set; } = default!;      
 
-    public virtual DbSet<Sets.Action> Actions { get; set; }
+    public virtual DbSet<Sets.Action> Actions { get; set; } = default!;
 
     protected override ISet[] EvaluateFactory() {
         return [

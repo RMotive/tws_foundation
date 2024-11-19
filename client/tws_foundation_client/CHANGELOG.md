@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 6.0.0 - [18.11-2024]
 
 - Notes:
 
@@ -12,6 +12,10 @@
     4. Renamed [Privileges] model to [Session] in order to get more parity between client and server.
 
 - Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | ---              | 7.0.0           |
 
 ## 5.2.0 - [03.11-2024]
 

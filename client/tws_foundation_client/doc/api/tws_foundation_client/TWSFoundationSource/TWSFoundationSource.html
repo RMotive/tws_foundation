@@ -65,7 +65,7 @@
       <span class="name ">TWSFoundationSource</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-debug"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">debug</span>, {</span></li>
 <li><span class="parameter" id="-param-client"><span class="type-annotation"><a href="https://pub.dev/documentation/http/1.2.2/http/Client-class.html">Client</a>?</span> <span class="parameter-name">client</span>, </span></li>
 <li><span class="parameter" id="-param-solutions"><span class="type-annotation"><a href="../../tws_foundation_client/SolutionsServiceBase-class.html">SolutionsServiceBase</a>?</span> <span class="parameter-name">solutions</span>, </span></li>
-<li><span class="parameter" id="-param-accounts"><span class="type-annotation">AccountsServiceBase?</span> <span class="parameter-name">accounts</span>, </span></li>
+<li><span class="parameter" id="-param-accounts"><span class="type-annotation"><a href="../../tws_foundation_client/AccountsServiceBase-class.html">AccountsServiceBase</a>?</span> <span class="parameter-name">accounts</span>, </span></li>
 <li><span class="parameter" id="-param-security"><span class="type-annotation"><a href="../../tws_foundation_client/SecurityServiceBase-class.html">SecurityServiceBase</a>?</span> <span class="parameter-name">security</span>, </span></li>
 <li><span class="parameter" id="-param-headers"><span class="type-annotation">CSMHeaders?</span> <span class="parameter-name">headers</span>, </span></li>
 <li><span class="parameter" id="-param-trucks"><span class="type-annotation"><a href="../../tws_foundation_client/TrucksServiceBase-class.html">TrucksServiceBase</a>?</span> <span class="parameter-name">trucks</span>, </span></li>
@@ -82,6 +82,7 @@
 <li><span class="parameter" id="-param-carriers"><span class="type-annotation">CarriersService?</span> <span class="parameter-name">carriers</span>, </span></li>
 <li><span class="parameter" id="-param-vehiculesModels"><span class="type-annotation">VehiculesModelsService?</span> <span class="parameter-name">vehiculesModels</span>, </span></li>
 <li><span class="parameter" id="-param-trucksInventories"><span class="type-annotation">TrucksInventoriesService?</span> <span class="parameter-name">trucksInventories</span>, </span></li>
+<li><span class="parameter" id="-param-contacts"><span class="type-annotation"><a href="../../tws_foundation_client/ContactsServiceBase-class.html">ContactsServiceBase</a>?</span> <span class="parameter-name">contacts</span>, </span></li>
 <li><span class="parameter" id="-param-development"><span class="type-annotation"><a href="../../tws_foundation_client/CSMUri-class.html">CSMUri</a></span> <span class="parameter-name">development</span> = <span class="default-value">const CSMUri(&#39;127.0.0.1&#39;, &#39;&#39;, port: 5196, protocol: CSMProtocols.http)</span>, </span></li>
 <li><span class="parameter" id="-param-production"><span class="type-annotation"><a href="../../tws_foundation_client/CSMUri-class.html">CSMUri</a>?</span> <span class="parameter-name">production</span>, </span></li>
 </ol>})
@@ -89,8 +90,12 @@
 
     
 <section class="desc markdown">
-  <p>Generates a new data source building its internal
-services.</p>
+  <p><a href="../../tws_foundation_client/TWSFoundationSource-class.html">TWSFoundationSource</a> instance constructor.</p>
+<p><code>debug</code> wheter the current execution context is debugging.</p>
+<p><code>client</code> custom network <a href="https://pub.dev/documentation/http/1.2.2/http/Client-class.html">Client</a> for testing/quality purposes.</p>
+<p><code>development</code> development server address.</p>
+<p><code>production</code> production server address.</p>
+<p>Each service implementation can be overriden for a custom one.</p>
 </section>
 
 
@@ -118,6 +123,7 @@ services.</p>
   CarriersService? carriers,
   VehiculesModelsService? vehiculesModels,
   TrucksInventoriesService? trucksInventories,
+  ContactsServiceBase? contacts,
   CSMUri development = const CSMUri(
     &#39;127.0.0.1&#39;,
     &#39;&#39;,
@@ -148,7 +154,7 @@ services.</p>
   this.carriers = carriers ?? CarriersService(host, client: client);
   this.vehiculesModels = vehiculesModels ?? VehiculesModelsService(host, client: client);
   this.trucksInventories = trucksInventories ?? TrucksInventoriesService(host, client: client);
-
+  this.contacts = contacts ?? ContactsService(host, client: client);
 }</code></pre>
 </section>
 
@@ -183,7 +189,7 @@ services.</p>
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.1.0
+      6.0.0
   </span>
 
   

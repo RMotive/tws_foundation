@@ -1,6 +1,6 @@
 name: tws_foundation_client
 description: A client package for [TWS Foundation] server.
-version: 5.2.0
+version: 6.0.0
 publish_to: none
 
 environment:

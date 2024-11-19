@@ -1,23 +1,38 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 7.0.0 - [18.11-2024]
 
 - Notes:
 
     1. Updated how [Auth] decorator is configured, no more needed to set [Permits] reference now only needs [Feature] and [Action] name.
-    2. Now [Permit] uses [Action], [Solution] and [Feature] to calculate its privilege level. 
+    2. Now [Permit] uses [Action], [Solution] and [Feature] to calculate its privilege level.
     3. Changed name from [XMigrationTransaction] to [XSetOperation] to maintina consistency.
     4. Now [SessionManager] is a singleton dependency in the system, still supporting concurrent calls.
         - SessionManager got refactorized removing a lot of methods and creating new ones.
 
     5. Now [AuthAttribute] that is out Authentication middleware catches if the request is being intended for Quality purposes and
        check if the account has that kind of privileges if not will block the quality context calls.
-    
-- Fixes: 
+
+- Fixes:
 
     1. Fixed a problem when someone tried to fetch the exact amount of data available on a [View] method was causing a 0 records returning due to a miss calculation.
 
+- Remarks:
+
+    1. Updated .Net from 8.0 to 9.0
+
 - Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | coverlet.collector                      | ---              | 6.2.0           |
+    | Microsoft.AspNetCore.Mvc.Testing        | 8.0.10           | 9.0.0           |
+    | Microsoft.EntityFrameworkCore           | 8.0.10           | 9.0.0           |
+    | Microsoft.EntityFrameworkCore.SqlServer | 8.0.10           | 9.0.0           |
+    | Microsoft.IdentityModel.Tokens          | 8.1.2            | 8.2.1           |
+    | Microsoft.NET.Test.Sdk                  | 17.11.1          | 17.11.1         |
+    | xunit                                   | 2.9.2            | 2.9.2           |
+    | xunit.runner.visualstudio               | 2.9.2            | 2.9.2           |
 
 ## 6.0.0 - [03.11-2024]
 
