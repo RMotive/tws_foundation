@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 6.0.0 - [18.11-2024]
+
+- Notes:
+
+    1. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
+    2. Added [Contact] entity service.
+    3. Created a new [TWSServiceBase] to override [CSMServiceBase] call behaviors to fulfill new server
+    authentication behavior where now is requested the auth token followed by the solution sign that requests
+    (i.e, authToken@solutionSign).
+    4. Renamed [Privileges] model to [Session] in order to get more parity between client and server.
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | ---              | 7.0.0           |
+
 ## 5.2.0 - [03.11-2024]
 
 - Notes:

@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Plate : BQ_Set<Plate> {
     protected override Q_MigrationSet_EvaluateRecord<Plate>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Plate>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Plate> success = new() {
+        Q_MigrationSet_EvaluateRecord<Plate> success = new("Succes") {
             Mock = new() {
                 Id = 1,
                 Identifier = "",
@@ -19,7 +19,7 @@ public class Q_Plate : BQ_Set<Plate> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Plate> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Plate> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Identifier = "",

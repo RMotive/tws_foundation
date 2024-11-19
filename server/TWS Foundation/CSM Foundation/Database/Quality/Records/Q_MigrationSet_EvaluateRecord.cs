@@ -7,10 +7,15 @@ public record Q_MigrationSet_EvaluateRecord<TSet>
     public (string, (IValidator, int)[])[] Expectations { get; init; } = [];
     public TSet Mock { get; init; } = default!;
 
-    public Q_MigrationSet_EvaluateRecord() { }
+    public string Name { get; set; }
 
-    public Q_MigrationSet_EvaluateRecord((string, (IValidator, int)[])[] Expectations, TSet Mock) {
-        this.Expectations = Expectations;
+    public Q_MigrationSet_EvaluateRecord(string Name) {
+        this.Name = Name;
+    }
+
+    public Q_MigrationSet_EvaluateRecord(string Name, TSet Mock, (string, (IValidator, int)[])[] Expectations) {
+        this.Name = Name;
         this.Mock = Mock;
+        this.Expectations = Expectations;
     }
 }

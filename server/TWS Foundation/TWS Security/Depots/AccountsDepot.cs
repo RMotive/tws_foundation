@@ -27,7 +27,11 @@ public class AccountsDepot
         : base(new(), null) {
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Account"></param>
+    /// <returns></returns>
     public async Task<Permit[]> GetPermits(int Account) {
         IQueryable<AccountPermit> accountPermits = Database.AccountsPermits
             .Where(i => i.Account == Account)

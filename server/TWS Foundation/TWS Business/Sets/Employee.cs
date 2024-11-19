@@ -45,8 +45,6 @@ public partial class Employee
     public virtual ICollection<Driver> Drivers { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
         Container = [
             ..Container,
             (nameof(Identification), [new PointerValidator(true)]),

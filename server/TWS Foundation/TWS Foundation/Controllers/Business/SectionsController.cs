@@ -17,7 +17,7 @@ public class SectionsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<Section> Options) {
         return Ok(await Service.View(Options));
     }

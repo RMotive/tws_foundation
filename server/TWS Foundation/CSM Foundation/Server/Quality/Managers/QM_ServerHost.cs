@@ -6,7 +6,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 
 namespace CSM_Foundation.Server.Quality.Managers;
-public class QM_ServerHost(HttpClient host) {
+public class QM_ServerHost(string Sign, HttpClient host) {
     private const string AUTH_TOKEN = "CSMAuth";
     private const string DISPOSITION_TOKEN = "CSMDisposition";
     private readonly HttpClient Host = host;
@@ -30,7 +30,7 @@ public class QM_ServerHost(HttpClient host) {
     }
 
     public void Authenticate(string Token) {
-        Host.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_TOKEN, Token);
+        Host.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_TOKEN, $"{Token}@{Sign}");
     }
 
     public void Disposition(string Disposition) {

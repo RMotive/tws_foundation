@@ -17,7 +17,7 @@ public class TrailersExternalsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth([])]
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> View(SetViewOptions<TrailerExternal> Options) {
         return Ok(await Service.View(Options));
     }

@@ -15,10 +15,10 @@ void main() {
   test(
     'Authenticate',
     () async {
-      MainResolver<Privileges> fact = await service.authenticate(testCredentials);
+      MainResolver<Session> fact = await service.authenticate(testCredentials);
 
       fact.resolve(
-        decoder: Privileges.des,
+        decoder: Session.des,
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -28,7 +28,7 @@ void main() {
         onFailure: (FailureFrame failure, int status) {
           throw failure;
         },
-        onSuccess: (SuccessFrame<Privileges> success) {
+        onSuccess: (SuccessFrame<Session> success) {
           expect(success.estela.identity, testCredentials.identity);
         },
       );

@@ -11,28 +11,21 @@ using TWS_Customer.Managers.Records;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Middlewares.Frames;
+using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.TruckExternal>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
-public class Q_TrucksExternalsController : BQ_ServerController<Program> {
+public class Q_TrucksExternalsController 
+    : BQ_CustomServerController {
+
     private class Frame : SuccessFrame<View> { }
 
 
     public Q_TrucksExternalsController(WebApplicationFactory<Program> hostFactory)
         : base("TrucksExternals", hostFactory) {
-    }
-
-    protected override async Task<string> Authentication() {
-        (HttpStatusCode Status, SuccessFrame<Session> Response) = await XPost<SuccessFrame<Session>, Credentials>("Security/Authenticate", new Credentials {
-            Identity = Account.Identity,
-            Password = Account.Password,
-            Sign = "TWSMA"
-        });
-
-        return Status != HttpStatusCode.OK ? throw new ArgumentNullException(nameof(Status)) : Response.Estela.Token.ToString();
     }
 
     [Fact]

@@ -8,17 +8,16 @@ namespace TWS_Business.Quality.Sets;
 public class Q_VehiculeModel : BQ_Set<VehiculeModel> {
     protected override Q_MigrationSet_EvaluateRecord<VehiculeModel>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<VehiculeModel>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<VehiculeModel> success = new() {
+        Q_MigrationSet_EvaluateRecord<VehiculeModel> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "Test name"
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<VehiculeModel> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<VehiculeModel> failAllCases = new("All properties fail") {
             Mock = new() {
-                Id = 0,                
-
+                Id = 0,
             },
             Expectations = [
                 (nameof(VehiculeModel.Id), [(new PointerValidator(), 3)]),

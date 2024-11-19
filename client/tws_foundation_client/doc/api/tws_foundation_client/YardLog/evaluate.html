@@ -98,8 +98,12 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
     if(sealAlt!.trim().isEmpty || sealAlt!.length &gt; 64) results.add(CSMSetValidationResult(kSealAlt, &quot;El campo del sello #2 (alternativo) es muy largo. Maximo 64 caracteres.&quot;, &quot;strictLength(1,64)&quot;));
   }
 
-  if(section &lt;= 0 &amp;&amp; sectionNavigation == null) results.add(CSMSetValidationResult(kSection, &#39;Debe seleccionar una seccion.&#39;, &#39;pointerHandler()&#39;));
+
+  if((section == null || section == 0) &amp;&amp; sectionNavigation == null &amp;&amp; entry) results.add(CSMSetValidationResult(kSection, &#39;Debe seleccionar una seccion.&#39;, &#39;pointerHandler()&#39;));
+
   if(loadType &lt;= 0) results.add(CSMSetValidationResult(kLoadType, &#39;Debe seleccionar el tipo de carga.&#39;, &#39;pointerHandler()&#39;));
+
+  if(section != null) if(section! &lt; 0) results.add(CSMSetValidationResult(kSection, &#39;Section pointer must be equal or greather than 0&#39;, &#39;pointerHandler()&#39;));
 
   if(trailer != null){
     if(trailer! &lt; 0) results.add(CSMSetValidationResult(kTrailer , &#39;Trailer pointer must be equal or greather than 0&#39;, &#39;pointerHandler()&#39;));
@@ -194,7 +198,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.1.0
+      6.0.0
   </span>
 
   

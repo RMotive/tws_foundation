@@ -8,14 +8,14 @@ namespace TWS_Business.Quality.Sets;
 public class Q_Manufacturer : BQ_Set<Manufacturer> {
     protected override Q_MigrationSet_EvaluateRecord<Manufacturer>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Manufacturer>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Manufacturer> success = new() {
+        Q_MigrationSet_EvaluateRecord<Manufacturer> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Manufacturer> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<Manufacturer> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
             },

@@ -8,14 +8,14 @@ namespace TWS_Business.Quality.Sets;
 public class Q_TrailerType : BQ_Set<TrailerType> {
     protected override Q_MigrationSet_EvaluateRecord<TrailerType>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TrailerType>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<TrailerType> success = new() {
+        Q_MigrationSet_EvaluateRecord<TrailerType> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Size = "Test size"
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<TrailerType> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<TrailerType> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 TrailerClass = 0

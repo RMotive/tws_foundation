@@ -8,14 +8,14 @@ namespace TWS_Business.Quality.Sets;
 public class Q_LoadType : BQ_Set<LoadType> {
     protected override Q_MigrationSet_EvaluateRecord<LoadType>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<LoadType>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<LoadType> success = new() {
+        Q_MigrationSet_EvaluateRecord<LoadType> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = ""
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<LoadType> failAllCases = new() {
+        Q_MigrationSet_EvaluateRecord<LoadType> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Name = ""
