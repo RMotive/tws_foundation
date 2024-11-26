@@ -25,6 +25,10 @@ public class LengthValidator
     /// </summary>
     private readonly int? Max;
     /// <summary>
+    /// Set if the property is nulleable, if it´s not null, then use the min and max values to evaluate the property.
+    /// </summary>
+    private readonly bool nulleable;
+    /// <summary>
     ///     <list type="number">
     ///         <listheader> <term> Coding: </term> </listheader>
     ///         <item> Value can't be null </item>
@@ -35,9 +39,10 @@ public class LengthValidator
     /// </summary>
     /// <param name="Min"></param>
     /// <param name="Max"></param>
-    public LengthValidator(int? Min = null, int? Max = null) {
+    public LengthValidator(int? Min = null, int? Max = null, bool nulleable = false) {
         this.Min = Min;
         this.Max = Max;
+        this.nulleable = nulleable;
     }
     /// <summary>
     /// 
@@ -57,7 +62,7 @@ public class LengthValidator
     public void Evaluate(PropertyInfo Property, object? Value) {
         string message = "";
         int code = 0;
-        if (Value is null) {
+        if (Value is null && !nulleable) {
             message = "Value can't be null";
             code = 1;
         } else {
@@ -72,6 +77,8 @@ public class LengthValidator
                     }
                     break;
                 default:
+                    if(Value == null && nulleable) break;
+
                     message = "Unrecognized case";
                     code = 4;
                     break;

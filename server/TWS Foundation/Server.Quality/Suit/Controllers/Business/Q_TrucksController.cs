@@ -1,5 +1,7 @@
 ﻿using System.Net;
 
+using Azure;
+
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
@@ -171,9 +173,11 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             string iterationTag = testTag + i;
             mockList.Add(MockFactory(iterationTag));
         }
-        (HttpStatusCode Status, GenericFrame _) = await Post("Create", mockList, true);
-        Assert.Equal(HttpStatusCode.OK, Status);
 
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mockList, true);
+        SetBatchOut<Truck> estela = Framing<SuccessFrame<SetBatchOut<Truck>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
     }
 
     [Fact]

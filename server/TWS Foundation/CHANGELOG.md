@@ -27,6 +27,10 @@
         - [Trucks].
         - [TrucksExternals]
         - [Yardlogs].
+    12. [LengthValidator] Added the optional [nulleable] parameter. With this parameter can implement and validate nulleable propeties with min and max values.
+    13. Added Update and create controller services for [Drivers] and [DriversExternals].
+    14. Added [Employee] view service.
+    14. Added [Driver] and [Employee] lenth validations.
 
 - Dependencies:
 

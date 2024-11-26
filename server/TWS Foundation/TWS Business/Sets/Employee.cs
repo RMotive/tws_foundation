@@ -20,13 +20,13 @@ public partial class Employee
 
     public int? Approach { get; set; }
 
-    public string? Curp { get; set; } = null!;
+    public string? Curp { get; set; }
 
     public DateOnly? AntecedentesNoPenaleseExp { get; set; }
 
-    public string? Rfc { get; set; } = null!;
+    public string? Rfc { get; set; }
 
-    public string? Nss { get; set; } = null!;
+    public string? Nss { get; set; }
 
     public DateOnly? IMSSRegistrationDate { get; set; }
 
@@ -49,6 +49,9 @@ public partial class Employee
             ..Container,
             (nameof(Identification), [new PointerValidator(true)]),
             (nameof(Status), [new PointerValidator(true)]),
+            (nameof(Curp), [new LengthValidator(Min: 18, Max:18, nulleable: true)]),
+            (nameof(Rfc), [new LengthValidator(Min: 12, Max:12, nulleable: true)]),
+            (nameof(Nss), [new LengthValidator(Min: 11, Max:11, nulleable: true)]),
         ];
 
         return Container;

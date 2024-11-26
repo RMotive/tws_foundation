@@ -21,4 +21,14 @@ public class DriversExternalsController : ControllerBase {
     public async Task<IActionResult> View(SetViewOptions<DriverExternal> Options) {
         return Ok(await Service.View(Options));
     }
+
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> Create(DriverExternal[] Drivers) {
+        return Ok(await Service.Create(Drivers));
+    }
+
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> Update(DriverExternal Driver) {
+        return Ok(await Service.Update(Driver));
+    }
 }

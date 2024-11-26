@@ -21,4 +21,13 @@ public class DriversController : ControllerBase {
     public async Task<IActionResult> View(SetViewOptions<Driver> Options) {
         return Ok(await Service.View(Options));
     }
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> Create(Driver[] Drivers) {
+        return Ok(await Service.Create(Drivers));
+    }
+
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> Update(Driver Driver) {
+        return Ok(await Service.Update(Driver));
+    }
 }

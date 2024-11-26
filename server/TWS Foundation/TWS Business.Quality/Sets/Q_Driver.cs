@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
+﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Quality.Bases;
 using CSM_Foundation.Database.Quality.Records;
 using CSM_Foundation.Database.Validators;
 
@@ -22,10 +23,21 @@ public class Q_Driver : BQ_Set<Driver> {
             Mock = new() {
                 Id = 0,
                 Status = 0,
+                DriverType = RandomUtils.String(17),
+                Twic = RandomUtils.String(13),
+                Visa = RandomUtils.String(13),
+                Fast = RandomUtils.String(15),
+                Anam = RandomUtils.String(25),
             },
             Expectations = [
                 (nameof(Driver.Id), [(new PointerValidator(), 3)]),
                 (nameof(Driver.Status), [(new PointerValidator(true), 3)]),
+                (nameof(Driver.DriverType), [(new LengthValidator(), 3)]),
+                (nameof(Driver.Twic), [(new LengthValidator(), 3)]),
+                (nameof(Driver.Visa), [(new LengthValidator(), 3)]),
+                (nameof(Driver.Fast), [(new LengthValidator(), 3)]),
+                (nameof(Driver.Anam), [(new LengthValidator(), 3)]),
+
             ],
         };
 

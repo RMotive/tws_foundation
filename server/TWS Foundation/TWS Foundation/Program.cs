@@ -156,7 +156,7 @@ public partial class Program {
                 builder.Services.AddScoped<ITrucksInventoriesService, TruckInventoryService>();
                 builder.Services.AddScoped<ITrailersClassesService, TrailersClassesService>();
                 builder.Services.AddScoped<ITrailersTypesService, TrailersTypesService>();
-
+                builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 
             }
             WebApplication app = builder.Build();
