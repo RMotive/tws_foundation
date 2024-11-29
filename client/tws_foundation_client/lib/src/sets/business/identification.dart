@@ -2,30 +2,52 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Identification implements CSMSetInterface {
+  
+  /// [fatherlastname] Property key.
   static const String kFatherLastName = "fatherlastname";
+
+  /// [motherlastname] Property key.
   static const String kMotherLastName = "motherlastname";
+
+  /// [birthday] Property key.
   static const String kBirthday = "birthday";
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
 
+  /// Creates an [Identification] object with default values.
   Identification.a();
 
+  /// Database record pointer.
   @override
   int id = 0;
-  int status = 1;
-  String name = "";
-  String fatherlastname = "";
-  String motherlastname = "";
-  DateTime? birthday;
-  Status? statusNavigation;
 
+  /// Foreign relation [Status] pointer.
+  int status = 1;
+
+  /// Personal names.
+  String name = "";
+  
+  /// Father last name.
+  String fatherlastname = "";
+
+  /// Mother last name.
+  String motherlastname = "";
+
+  /// Birthday date,
+  DateTime? birthday;
+
+  /// [Status] Navigation set.
+  Status? statusNavigation;
+  
+  /// Creates an [Identification] object based on required fields.
   Identification(this.id, this.status, this.name, this.fatherlastname, this.motherlastname, this.birthday, this.statusNavigation, { 
     DateTime? timestamp,
   }){
     _timestamp = timestamp ?? DateTime.now(); 
   }
 
+  /// Creates an [Identification] object based on a serealized JSON.
   factory Identification.des(JObject json) {
     int id = json.get(SCK.kId);
     int status = json.get(SCK.kStatus);
@@ -71,6 +93,7 @@ final class Identification implements CSMSetInterface {
 
     return results;
   }
+  /// Creates an [Identification] overriding the given properties.
   Identification clone({
     int? id,
     int? status,
@@ -80,6 +103,12 @@ final class Identification implements CSMSetInterface {
     DateTime? birthday,
     Status? statusNavigation,
   }) {
+
+    if (birthday == DateTime(0)) {
+      this.birthday = null;
+      birthday = null;
+    }
+    
     return Identification(
       id ?? this.id,
       status ?? this.status,

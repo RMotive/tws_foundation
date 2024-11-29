@@ -2,7 +2,8 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class TruckInventory implements CSMSetInterface {
-   /// [entryDate] property key.
+  
+  /// [entryDate] property key.
   static const String kEntryDate = "entryDate";
 
   /// [section] property key.

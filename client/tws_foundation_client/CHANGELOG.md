@@ -9,15 +9,26 @@
     3. Added default constructor for [TrailerCommon] set.
     4. Deprecated [Year] property removed from [TrailerType] set.
     5. Added Services:
-        - [TrailerClass]
-        - [TrailerType]
+        - [Contact]
+        - [TrailerClass] (View Service)
+        - [TrailerType] (View Service)
+        - [Employees] (View Service)
+        - [Drivers] (Create and update services)
+        - [DriversExternals] (Create and update services)
 
     6. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
-    7. Added [Contact] entity service.
     8. Created a new [TWSServiceBase] to override [CSMServiceBase] call behaviors to fulfill new server
     authentication behavior where now is requested the auth token followed by the solution sign that requests
     (i.e, authToken@solutionSign).
     9. Renamed [Privileges] model to [Session] in order to get more parity between client and server.
+    11. Additions to validations in the followings sets:
+        - [Drivers]
+        - [Address]
+        - [Approach]
+        - [DriverCommon]
+        - [DriverExternal]
+        - [Employee]
+        - [Identification]
 
 - Dependencies:
 
