@@ -30,7 +30,7 @@ public class Q_Truck : BQ_Set<Truck> {
             },
             Expectations = [
                 (nameof(Truck.Id), [(new PointerValidator(), 3) ]),
-                (nameof(Truck.Vin), [(new RequiredValidator(), 1),(new LengthValidator(),2)]),
+                (nameof(Truck.Vin), [(new RequiredValidator(), 1),(new LengthValidator(), 2)]),
                 (nameof(Truck.Status), [(new PointerValidator(), 3) ]),
 
             ],

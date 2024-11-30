@@ -116,7 +116,7 @@ public partial class Truck
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Vin), [required, new UniqueValidator(), new LengthValidator(17, 17)]),
+            (nameof(Vin), [required, new UniqueValidator(), new LengthValidator(Min: 1, Max: 17)]),
         ];
         return Container;
     }
