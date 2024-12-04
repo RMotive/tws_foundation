@@ -6,6 +6,8 @@
 
 - Fixes:
 
+    1. Now the Server exposes correctly the DateTime objects offset as UTC.
+
 - Dependencies:
 
 ## 7.0.0 - [18.11-2024]
