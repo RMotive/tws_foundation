@@ -341,8 +341,8 @@ final class Employee implements CSMSetInterface {
       terminationDate ?? this.terminationDate, 
       identificationNavigation ?? this.identificationNavigation, 
       statusNavigation ?? this.statusNavigation,
-      addressNavigation ?? addressNavigation,
-      approachNavigation ?? approachNavigation,
+      addressNavigation ?? this.addressNavigation,
+      approachNavigation ?? this.approachNavigation,
     );
   }
 }
