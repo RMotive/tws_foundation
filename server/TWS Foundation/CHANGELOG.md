@@ -2,7 +2,7 @@
 
 ## 7.0.1 - [03.12-2024]
 
-- Notes: N/A 
+- Notes: N/A
 
 - Fixes:
 
