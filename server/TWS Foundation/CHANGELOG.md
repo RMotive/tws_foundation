@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 7.0.1 - [03.12-2024]
+
+- Notes: N/A
+
+- Fixes:
+
+    1. Now the Server exposes correctly the DateTime objects offset as UTC.
+
+- Dependencies:
+
+    | Package                                 | Previous Version | New Version     |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | coverlet.collector                      | ---              | 6.2.0           |
+    | Microsoft.AspNetCore.Mvc.Testing        | 8.0.10           | 9.0.0           |
+    | Microsoft.EntityFrameworkCore           | 8.0.10           | 9.0.0           |
+    | Microsoft.EntityFrameworkCore.SqlServer | 8.0.10           | 9.0.0           |
+    | Microsoft.IdentityModel.Tokens          | 8.1.2            | 8.2.1           |
+    | Microsoft.NET.Test.Sdk                  | 17.11.1          | 17.12.0         |
+    | xunit                                   | 2.9.2            | 2.9.2           |
+    | xunit.runner.visualstudio               | 2.9.2            | 2.9.2           |
+
 ## 7.0.0 - [18.11-2024]
 
 - Notes:
