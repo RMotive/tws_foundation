@@ -165,8 +165,8 @@ final class Employee implements CSMSetInterface {
     }
 
     Approach? approachNavigation;
-    if (json[kApproach] != null) {
-      JObject rawNavigation = json.getDefault(kApproach, <String, dynamic>{});
+    if (json[kApproachNavigation] != null) {
+      JObject rawNavigation = json.getDefault(kApproachNavigation, <String, dynamic>{});
       approachNavigation = Approach.des(rawNavigation);
     }
 
@@ -199,7 +199,7 @@ final class Employee implements CSMSetInterface {
     String? d =  terminationDate?.toString().substring(0,10);
 
     return <String, dynamic>{
-      'id': id,
+      SCK.kId: id,
       SCK.kStatus: status,
       kIdentification: identification,
       kAddress: address,

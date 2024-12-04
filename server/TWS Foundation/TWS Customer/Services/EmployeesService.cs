@@ -55,6 +55,15 @@ public class EmployeesService : IEmployeesService {
                         Alternative = p.ApproachNavigation.Alternative,
                         Email = p.ApproachNavigation.Email,
                    },
+                   IdentificationNavigation = p.IdentificationNavigation == null? null : new Identification() {
+                       Id = p.IdentificationNavigation.Id,
+                       Timestamp = p.IdentificationNavigation.Timestamp,
+                       Status = p.IdentificationNavigation.Status,
+                       Name = p.IdentificationNavigation.Name,
+                       FatherLastname = p.IdentificationNavigation.FatherLastname,
+                       MotherLastName = p.IdentificationNavigation.MotherLastName,
+                       Birthday = p.IdentificationNavigation.Birthday,
+                   },
                 });
 
         }
