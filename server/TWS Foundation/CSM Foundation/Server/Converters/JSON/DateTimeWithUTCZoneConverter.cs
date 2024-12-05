@@ -10,6 +10,9 @@ public class DateTimeWithUTCZoneConverter
     }
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options) {
+        if(value.Kind == DateTimeKind.Local) {
+            value = value.ToUniversalTime();
+        }
         DateTimeOffset withTimeZone = new(value, TimeSpan.Zero);
         string writeValue = withTimeZone.ToString("o");
 
