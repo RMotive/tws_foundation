@@ -1,14 +1,25 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 7.0.2 - [04.12-2024]
 
 - Notes:
-    1. Changed the minimun length validation to VIN proterty in [Truck] & [TruckExternal] sets from 17 to 1.
 
+    1. Changed the minimun length validation to [VIN] proterty in [Truck] & [TruckExternal] sets from 17 to 1.
 
-- Fixes:
+- Fixes: N/A
 
 - Dependencies:
+
+    | Package                                 | Previous Version | New Version     |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | coverlet.collector                      | ---              | 6.2.0           |
+    | Microsoft.AspNetCore.Mvc.Testing        | 8.0.10           | 9.0.0           |
+    | Microsoft.EntityFrameworkCore           | 8.0.10           | 9.0.0           |
+    | Microsoft.EntityFrameworkCore.SqlServer | 8.0.10           | 9.0.0           |
+    | Microsoft.IdentityModel.Tokens          | 8.1.2            | 8.2.1           |
+    | Microsoft.NET.Test.Sdk                  | 17.11.1          | 17.12.0         |
+    | xunit                                   | 2.9.2            | 2.9.2           |
+    | xunit.runner.visualstudio               | 2.9.2            | 2.9.2           |
 
 ## 7.0.1 - [03.12-2024]
 
