@@ -65,7 +65,7 @@ void main() {
         0, //common
         1, //carrier
         "Motor $randomToken", //motor
-        "VINtest-$randomToken", //vin
+        "VIN - $randomToken", //vin
         null, //maintenance
         null, //insurance
         null,
@@ -108,6 +108,8 @@ void main() {
         int rnd = Random().nextInt(900) + 99;
         String randomToken = '${i}_qual$rnd';
         Truck mock = buildMock(randomToken);
+        List<CSMSetValidationResult> evaluation = mock.evaluate();
+        assert(evaluation.isEmpty);
         mocks.add(mock);
       }
     },
@@ -187,7 +189,7 @@ void main() {
         'Updates when exist',
         () async {
           int rnd = Random().nextInt(900) + 99;
-          Truck mock = creationMock.clone(vin: "UPDATEDVIN_T: $rnd");
+          Truck mock = creationMock.clone(vin: "UPT_VIN: $rnd");
           mock.vehiculeModelNavigation!.name = "manufacturer $rnd";
           MainResolver<RecordUpdateOut<Truck>> fact = await service.update(mock, auth);
           RecordUpdateOut<Truck> actEffect = await fact.act((JObject json) => RecordUpdateOut<Truck>.des(json, Truck.des));

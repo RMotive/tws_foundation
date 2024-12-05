@@ -135,7 +135,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Common = 0,
             Model = 0,
             Motor = motor,
-            Vin = "VINtestcTbkdew" + RandomSeed,
+            Vin = "VIN " + RandomSeed,
             VehiculeModelNavigation = vehiculeModel,
             CarrierNavigation = carrier,
             InsuranceNavigation = insurance,

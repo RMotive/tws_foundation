@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 6.0.1 - [04.12-2024]
+
+- Notes:
+
+    1. Changed the minimun length validation to VIN proterty in [Truck] & [TruckExternal] sets from 17 to 1.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | 7.0.0            | 7.0.0           |
+
 ## 6.0.0 - [18.11-2024]
 
 - Notes:
