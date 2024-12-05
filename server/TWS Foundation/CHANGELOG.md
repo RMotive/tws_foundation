@@ -3,6 +3,8 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes:
+    1. Changed the minimun length validation to VIN proterty in [Truck] & [TruckExternal] sets from 17 to 1.
+
 
 - Fixes:
 
