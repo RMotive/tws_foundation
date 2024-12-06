@@ -37,22 +37,22 @@ final class Address implements CSMSetInterface {
   String country = "";
 
   /// State name inside city address.
-  String? state = "";
+  String? state;
 
   /// Street name identification.
-  String? street = "";
+  String? street;
 
   /// Alternative street name identification.
-  String? altStreet = "";
+  String? altStreet;
 
   /// City name inside country address.
-  String? city = "";
+  String? city;
 
   /// Internal postal code.
-  String? zip = "";
+  String? zip;
 
   /// Internal demographical identification.
-  String? colonia = "";
+  String? colonia;
 
   /// List of carriers at this [Address]
   List<Carrier> carriers = <Carrier>[];

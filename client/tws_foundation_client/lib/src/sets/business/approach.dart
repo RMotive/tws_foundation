@@ -32,13 +32,13 @@ final class Approach implements CSMSetInterface {
   String email = "";
 
   /// Alternative contact enterprise.
-  String? enterprise = "";
+  String? enterprise;
 
   /// Alternative contact personal.
-  String? personal = "";
+  String? personal;
 
   /// Alternative contact alternative.
-  String? alternative = "";
+  String? alternative;
 
   /// Alternative contact [Status] object.
   Status? statusNavigation;

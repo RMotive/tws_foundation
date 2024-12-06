@@ -74,7 +74,29 @@ public class DriversService : IDriversService {
                     FatherLastname = t.EmployeeNavigation.IdentificationNavigation.FatherLastname,
                     MotherLastName = t.EmployeeNavigation.IdentificationNavigation.MotherLastName,
                     Birthday = t.EmployeeNavigation.IdentificationNavigation.Birthday,
+                },
+                ApproachNavigation = t.EmployeeNavigation.ApproachNavigation == null? null : new Approach() {
+                    Id = t.EmployeeNavigation.ApproachNavigation.Id,
+                    Timestamp = t.EmployeeNavigation.ApproachNavigation.Timestamp,
+                    Status = t.EmployeeNavigation.ApproachNavigation.Status,
+                    Enterprise = t.EmployeeNavigation.ApproachNavigation.Enterprise,
+                    Personal = t.EmployeeNavigation.ApproachNavigation.Personal,
+                    Email = t.EmployeeNavigation.ApproachNavigation.Email,
+                    Alternative = t.EmployeeNavigation.ApproachNavigation.Alternative,
+                },
+                AddressNavigation = t.EmployeeNavigation.AddressNavigation == null? null : new Address() {
+                    Id = t.EmployeeNavigation.AddressNavigation.Id,
+                    Timestamp = t.EmployeeNavigation.AddressNavigation.Timestamp,
+                    State = t.EmployeeNavigation.AddressNavigation.State,
+                    Street = t.EmployeeNavigation.AddressNavigation.Street,
+                    AltStreet = t.EmployeeNavigation.AddressNavigation.AltStreet,
+                    City = t.EmployeeNavigation.AddressNavigation.City,
+                    Zip = t.EmployeeNavigation.AddressNavigation.Zip,
+                    Country = t.EmployeeNavigation.AddressNavigation.Country,
+                    Colonia = t.EmployeeNavigation.AddressNavigation.Colonia,
                 }
+
+
             }
 
         });

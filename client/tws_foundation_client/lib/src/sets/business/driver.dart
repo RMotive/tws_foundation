@@ -270,7 +270,7 @@ final class Driver implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if (driverType != null) {
-      if (driverType!.trim().isEmpty || driverType!.length > 16) results.add(CSMSetValidationResult(kDriverType, 'Driver Type length must be between 1 and 12', 'strictLength(1,12)'));
+      if (driverType!.trim().isEmpty || driverType!.length > 16) results.add(CSMSetValidationResult(kDriverType, 'Driver Type length must be between 1 and 16', 'strictLength(1,16)'));
     }
 
     if (twic != null) {
@@ -282,11 +282,11 @@ final class Driver implements CSMSetInterface {
     }
 
     if (fast != null) {
-      if (fast!.trim().isEmpty || fast!.length != 14) results.add(CSMSetValidationResult(kFast, 'FAST length must be 12', 'strictLength(12)'));
+      if (fast!.trim().isEmpty || fast!.length != 14) results.add(CSMSetValidationResult(kFast, 'FAST length must be 14', 'strictLength(14)'));
     }
 
     if (anam != null) {
-      if (anam!.trim().isEmpty || anam!.length != 24) results.add(CSMSetValidationResult(kAnam, 'ANAM length must be 12', 'strictLength(12)'));
+      if (anam!.trim().isEmpty || anam!.length != 24) results.add(CSMSetValidationResult(kAnam, 'ANAM length must be 24', 'strictLength(24)'));
     }
 
     if (twicExpiration != null && twic == null) results.add(CSMSetValidationResult('$kTwicExpiration & $kTwic' , 'TWIC number must be provided if the TWIC expiration date is selected.', 'fieldConflict()'));
