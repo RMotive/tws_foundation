@@ -30,6 +30,8 @@
         - [Employee]
         - [Identification]
 
+    12. [timestamp] property changed to non-final in [Yardlog] set.
+    
 - Dependencies:
 
 ## 5.2.0 - [03.11-2024]

@@ -178,7 +178,7 @@ void main() {
       null, //trailerExternalNavigation
       null, //loadTypeNavigation
       null, //sectionNavigation
-      null
+      null,
     );
     List<CSMSetValidationResult> evaluation = mock.evaluate();
     assert(evaluation.isEmpty);
@@ -288,12 +288,17 @@ void main() {
       test(
         'Updates when exist',
         () async {
-          YardLog mock = creationMock.clone(gName: 'a new name to test');
+          YardLog mock = creationMock.clone(
+            timestamp: DateTime(1999),
+            gName: 'a new name to test',
+          );
+
           MainResolver<RecordUpdateOut<YardLog>> fact = await service.update(mock, auth);
           RecordUpdateOut<YardLog> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<YardLog>.des(json ,YardLog.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.gName == mock.gName);
+          assert(actEffect.updated.timestamp == DateTime(1999));
         },
       );
     },

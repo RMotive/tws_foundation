@@ -31,7 +31,7 @@ final class YardLog implements CSMSetInterface {
   static const String kSectionNavigation = "SectionNavigation";
   static const String kAccount = "AccountNavigation";
 
-  late final DateTime _timestamp;
+  late DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
 
   @override
@@ -384,6 +384,7 @@ final class YardLog implements CSMSetInterface {
       loadTypeNavigation ?? this.loadTypeNavigation,
       sectionNavigation ?? this.sectionNavigation,
       accountNavigation ?? this.accountNavigation,
+      timestamp: timestamp ?? this.timestamp
     );
   }
 }
