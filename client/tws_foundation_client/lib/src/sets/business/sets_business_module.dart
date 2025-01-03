@@ -27,4 +27,5 @@ export 'truck_external.dart';
 export 'truck_inventory.dart';
 export 'usdot.dart';
 export 'vehicule_model.dart';
+export 'waypoint.dart';
 export 'yard_log.dart';

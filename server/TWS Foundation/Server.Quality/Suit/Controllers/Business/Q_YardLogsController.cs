@@ -1,8 +1,6 @@
 ﻿
 using System.Net;
 
-using Azure;
-
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
@@ -16,8 +14,6 @@ using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using TWS_Security.Sets;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
 

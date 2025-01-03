@@ -31,6 +31,10 @@
         - [Identification]
 
     12. [timestamp] property changed to non-final in [Yardlog] set.
+    13. Added [Waypoint] set.
+    14. Added Waypoint navigation in [Location] set.
+    15. Added [Locations] services.
+    16. Added [Create] and [Update] services to [Sections] service.
     
 - Dependencies:
 

@@ -21,8 +21,6 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         optionsBuilder.UseSqlServer("Server=DESKTOP-M2SPTNQ;Database=TWS Business; Trusted_Connection=True; Encrypt=False");
 
-        optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()))
-                             .EnableSensitiveDataLogging();
     }
     public virtual DbSet<Insurance> Insurances { get; set; }
 
@@ -82,8 +80,7 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
     public virtual DbSet<TruckExternal> TrucksExternals { get; set; }
 
-
-
+    public virtual DbSet<Waypoint> Waypoints { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
         Sct.CreateModel(builder);
@@ -121,6 +118,7 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
         ApproachesH.CreateModel(builder);
         CarrierH.CreateModel(builder);
         TruckInventory.CreateModel(builder);
+        Waypoint.CreateModel(builder);
 
 
         OnModelCreatingPartial(builder);
@@ -157,10 +155,12 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
             new VehiculeModel(),
             new TrailerType(),
             new TruckInventory(),
+            new Waypoint(),
             new UsdotH(),
             new Approach(),
             new ApproachesH(),
             new TruckH()
+
         ];
     }
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

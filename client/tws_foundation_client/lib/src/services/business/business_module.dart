@@ -3,6 +3,7 @@ export 'bases/drivers_externals_service_base.dart';
 export 'bases/drivers_service_base.dart';
 export 'bases/employee_service_base.dart';
 export 'bases/load_type_service_base.dart';
+export 'bases/locations_service_base.dart';
 export 'bases/manufacturers_service_base.dart';
 export 'bases/sections_service_base.dart';
 export 'bases/situations_service_base.dart';
@@ -15,3 +16,4 @@ export 'bases/trucks_externals_service_base.dart';
 export 'bases/trucks_service_base.dart';
 export 'bases/vehicules_models_service_base.dart';
 export 'bases/yard_log_service_base.dart';
+

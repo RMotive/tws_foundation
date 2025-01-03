@@ -17,7 +17,6 @@ using TWS_Customer.Managers;
 using TWS_Customer.Services;
 using TWS_Customer.Services.Interfaces;
 
-using TWS_Foundation.Authentication;
 using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;
 using TWS_Foundation.Models;
@@ -54,6 +53,7 @@ public partial class Program {
 
                     options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
                     options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
+                   
                 });
             builder.Services.AddCors(setup => {
                 setup.AddDefaultPolicy(builder => {
@@ -157,6 +157,7 @@ public partial class Program {
                 builder.Services.AddScoped<ITrailersClassesService, TrailersClassesService>();
                 builder.Services.AddScoped<ITrailersTypesService, TrailersTypesService>();
                 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
+                builder.Services.AddScoped<ILocationsService, LocationsService>();
 
             }
             WebApplication app = builder.Build();

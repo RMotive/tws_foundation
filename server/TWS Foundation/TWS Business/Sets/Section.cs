@@ -22,7 +22,6 @@ public partial class Section
 
     public int Ocupancy { get; set; }
 
-
     public virtual Status? StatusNavigation { get; set; }
 
     public virtual Location? LocationNavigation { get; set; }
@@ -36,7 +35,7 @@ public partial class Section
         Container = [
                 .. Container,
             (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Yard), [new PointerValidator(true)]),
+            (nameof(Yard), [new PointerValidator(true, false)]),
             (nameof(Name), [new LengthValidator(1,32)]),
         ];
 

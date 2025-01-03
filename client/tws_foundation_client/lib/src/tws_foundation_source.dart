@@ -4,6 +4,7 @@ import 'package:tws_foundation_client/src/services/business/drivers_externals_se
 import 'package:tws_foundation_client/src/services/business/drivers_service.dart';
 import 'package:tws_foundation_client/src/services/business/employee_service.dart';
 import 'package:tws_foundation_client/src/services/business/load_type_service.dart';
+import 'package:tws_foundation_client/src/services/business/locations_service.dart';
 import 'package:tws_foundation_client/src/services/business/manufacturers_service.dart';
 import 'package:tws_foundation_client/src/services/business/sections_service.dart';
 import 'package:tws_foundation_client/src/services/business/situations_service.dart';
@@ -90,6 +91,9 @@ final class TWSFoundationSource extends CSMSourceBase {
   /// Employees service
   late final EmployeeService employees;
 
+  /// Locations service
+  late final LocationsService locations;
+
   /// [TWSFoundationSource] instance constructor.
   ///
   /// [debug] wheter the current execution context is debugging.
@@ -127,6 +131,8 @@ final class TWSFoundationSource extends CSMSourceBase {
     TrailersClassesService? trailersClasses,
     ContactsService? contacts,
     EmployeeService? employees,
+    LocationsService? locations,
+
     CSMUri development = const CSMUri(
       '127.0.0.1',
       '',
@@ -161,5 +167,7 @@ final class TWSFoundationSource extends CSMSourceBase {
     this.trailersClasses = trailersClasses ?? TrailersClassesService(host, client: client);    
     this.contacts = contacts ?? ContactsService(host, client: client);
     this.employees = employees ?? EmployeeService(host, client: client);
+    this.locations = locations ?? LocationsService(host, client: client);
+
   }
 }

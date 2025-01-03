@@ -16,5 +16,17 @@ final class SectionsService extends SectionsServiceBase {
     CSMActEffect actEffect = await twsPost('view', options, auth: auth);
     return MainResolver<SetViewOut<Section>>(actEffect);
   }
+  
+  @override
+  Effect<SetBatchOut<Section>> create(List<Section> sections, String auth) async {
+    CSMActEffect actEffect = await twsPostList('create', sections, auth: auth);
+    return MainResolver<SetBatchOut<Section>>(actEffect);
+  }
+
+  @override
+  Effect<RecordUpdateOut<Section>> update(Section section, String auth) async {
+    CSMActEffect actEffect = await twsPost('update', section, auth: auth);
+    return MainResolver<RecordUpdateOut<Section>>(actEffect);
+  }
 }
       

@@ -8,25 +8,18 @@ import '../integration_credentials.dart';
 
 void main() {
   late String auth;
-  late SectionsServiceBase service;
-    late List<Section> mocks;
+  late LocationsServiceBase service;
+    late List<Location> mocks;
 
 
-  Section buildMock(String randomToken){
-    return Section(
+  Location buildMock(String randomToken){
+    return Location(
       0,
       1,
       0,
-      "Section $randomToken",
-      99,
       0,
-      Location(
-        0,
-        1,
-        null,
-        null,
-        "Location $randomToken",
-        Address(
+      "Location $randomToken",
+      Address(
           0,
           "USA",
           null,
@@ -45,11 +38,10 @@ void main() {
           null,
           null,
         ),
-        null,
-      ),
       null,
     );
   }
+
   setUp(
     () async {
       final TWSFoundationSource source = TWSFoundationSource(false);
@@ -70,12 +62,12 @@ void main() {
         },
       );
 
-      service = source.sections;
-      mocks = <Section>[];
+      service = source.locations;
+      mocks = <Location>[];
       for (int i = 0; i < 3; i++) {
         int rnd = Random().nextInt(900)  + 99;
         String randomToken = '${i}_qual$rnd';
-        Section mock = buildMock(randomToken);
+        Location mock = buildMock(randomToken);
         mocks.add(mock);
       }
     },
@@ -84,12 +76,12 @@ void main() {
   test(
     'View',
     () async {
-      MainResolver<SetViewOut<Section>> fact = await service.view(
-        SetViewOptions<Section>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<Section>>[]),
+      MainResolver<SetViewOut<Location>> fact = await service.view(
+        SetViewOptions<Location>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<Location>>[]),
         auth,
       );
       fact.resolve(
-        decoder: (JObject json) => SetViewOut<Section>.des(json, Section.des),
+        decoder: (JObject json) => SetViewOut<Location>.des(json, Location.des),
         onConnectionFailure: () {
           throw 'ConnectionFailure';
         },
@@ -99,8 +91,8 @@ void main() {
         onFailure: (FailureFrame failure, int status) {
           throw failure.estela.system;
         },
-        onSuccess: (SuccessFrame<SetViewOut<Section>> success) {
-          SetViewOut<Section> fact = success.estela;
+        onSuccess: (SuccessFrame<SetViewOut<Location>> success) {
+          SetViewOut<Location> fact = success.estela;
 
           expect(fact.amount >= fact.records, true);
           expect(fact.records >= 0, true);
@@ -115,17 +107,17 @@ void main() {
   test(
     'Create',
     () async {
-      MainResolver<SetBatchOut<Section>> fact =
+      MainResolver<SetBatchOut<Location>> fact =
           await service.create(mocks, auth);
 
       bool resolved = false;
       fact.resolve(
-        decoder: (JObject json) => SetBatchOut<Section>.des(json, Section.des),
+        decoder: (JObject json) => SetBatchOut<Location>.des(json, Location.des),
         onException: (Object exception, StackTrace trace) => throw exception,
         onConnectionFailure: () => throw Exception('Connection failure'),
         onFailure: (FailureFrame failure, int status) =>
             throw Exception(failure.estela.advise),
-        onSuccess: (SuccessFrame<SetBatchOut<Section>> success) {
+        onSuccess: (SuccessFrame<SetBatchOut<Location>> success) {
           resolved = true;
         },
       );
@@ -137,15 +129,15 @@ void main() {
   group(
     'Update',
     () {
-      late Section creationMock;
+      late Location creationMock;
       test(
         'Creates when unexist',
         () async {
           int rnd = Random().nextInt(900)  + 99;
-          Section mock = buildMock("U_qual$rnd");
+          Location mock = buildMock("U_qual$rnd");
 
-          MainResolver<RecordUpdateOut<Section>> fact = await service.update(mock, auth);
-          RecordUpdateOut<Section> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Section>.des(json ,Section.des));
+          MainResolver<RecordUpdateOut<Location>> fact = await service.update(mock, auth);
+          RecordUpdateOut<Location> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Location>.des(json ,Location.des));
           assert(actEffect.previous == null);
           assert(actEffect.updated.id > 0);
 
@@ -158,15 +150,15 @@ void main() {
         () async {
           int rnd = Random().nextInt(900)  + 99;
           creationMock.name = 'UPDT $rnd';
-          creationMock.locationNavigation!.name = 'UPDT $rnd';
-          creationMock.locationNavigation!.addressNavigation!.country = 'MX';
+          creationMock.addressNavigation!.country = 'MX';
+          creationMock.waypointNavigation!.altitude = 4.99;
 
-          MainResolver<RecordUpdateOut<Section>> fact = await service.update(creationMock, auth);
-          RecordUpdateOut<Section> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Section>.des(json ,Section.des));
+          MainResolver<RecordUpdateOut<Location>> fact = await service.update(creationMock, auth);
+          RecordUpdateOut<Location> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Location>.des(json, Location.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
-          assert(actEffect.updated.locationNavigation!.addressNavigation!.country != actEffect.previous!.locationNavigation!.addressNavigation!.country);
-          assert(actEffect.updated.locationNavigation!.name != actEffect.previous!.locationNavigation!.name);
+          assert(actEffect.updated.addressNavigation!.country != actEffect.previous!.addressNavigation!.country);
+          assert(actEffect.updated.waypointNavigation!.altitude != actEffect.previous!.waypointNavigation!.altitude);
 
         },
       );

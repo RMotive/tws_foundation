@@ -30,8 +30,14 @@
     12. [LengthValidator] Added the optional [nulleable] parameter. With this parameter can implement and validate nulleable propeties with min and max values.
     13. Added Update and create controller services for [Drivers] and [DriversExternals].
     14. Added [Employee] view service.
-    14. Added [Driver] and [Employee] lenth validations.
-
+    15. Added [Driver] and [Employee] lenth validations.
+    16. Added schemas for Waypoint table and location table changes 
+    17. Added [Waypoint] set.
+    18. [Address] property changed to nulleable in [Location] set.
+    19. Added Waypoint navigation to [Location] set.
+    20. Added [Locations] service.
+    21. Added Create and update in [Sections] service.
+    
 - Dependencies:
 
 ## 6.0.0 - [03.11-2024]

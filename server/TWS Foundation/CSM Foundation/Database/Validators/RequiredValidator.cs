@@ -30,8 +30,10 @@ public class RequiredValidator
         if (Value is string stringValue && string.IsNullOrWhiteSpace(stringValue)) {
             throw new XIValidator_Evaluate(this, Property, 1, "String value cannot be empty, is required");
         }
+        if(Value is decimal decimalValue && decimalValue == 0 ) {
+            throw new XIValidator_Evaluate(this, Property, 1, "Decimal value cannot be 0, is required");
+        }
         return;
-
     }
     /// <summary>
     /// 
