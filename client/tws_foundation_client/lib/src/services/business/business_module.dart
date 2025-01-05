@@ -1,3 +1,4 @@
+export 'bases/addresses_service_base.dart';
 export 'bases/carriers_service_base.dart';
 export 'bases/drivers_externals_service_base.dart';
 export 'bases/drivers_service_base.dart';

@@ -35,7 +35,8 @@
     14. Added Waypoint navigation in [Location] set.
     15. Added [Locations] services.
     16. Added [Create] and [Update] services to [Sections] service.
-    
+    17. Added [Addresses] service.
+ 
 - Dependencies:
 
 ## 5.2.0 - [03.11-2024]

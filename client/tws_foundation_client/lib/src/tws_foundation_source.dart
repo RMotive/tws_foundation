@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/business/addresses_service.dart';
 import 'package:tws_foundation_client/src/services/business/carriers_service.dart';
 import 'package:tws_foundation_client/src/services/business/drivers_externals_service.dart';
 import 'package:tws_foundation_client/src/services/business/drivers_service.dart';
@@ -94,6 +95,9 @@ final class TWSFoundationSource extends CSMSourceBase {
   /// Locations service
   late final LocationsService locations;
 
+  /// Addresses service
+  late final AddressesService addresses;
+
   /// [TWSFoundationSource] instance constructor.
   ///
   /// [debug] wheter the current execution context is debugging.
@@ -132,7 +136,8 @@ final class TWSFoundationSource extends CSMSourceBase {
     ContactsService? contacts,
     EmployeeService? employees,
     LocationsService? locations,
-
+    AddressesService? addresses,
+    
     CSMUri development = const CSMUri(
       '127.0.0.1',
       '',
@@ -168,6 +173,7 @@ final class TWSFoundationSource extends CSMSourceBase {
     this.contacts = contacts ?? ContactsService(host, client: client);
     this.employees = employees ?? EmployeeService(host, client: client);
     this.locations = locations ?? LocationsService(host, client: client);
+    this.addresses = addresses ?? AddressesService(host, client: client);
 
   }
 }
