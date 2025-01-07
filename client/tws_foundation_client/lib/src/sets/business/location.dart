@@ -114,7 +114,7 @@ final class Location implements CSMSetInterface {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(name.isEmpty || name.length > 30) results.add(CSMSetValidationResult(SCK.kName, "${SCK.kName} must be 25 max lenght and non-empty", "strictLength(1,30)"));
     if(address != null && address! < 0) results.add(CSMSetValidationResult(kAddress, '$kAddress pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(waypoint != null && waypoint! < 0) results.add(CSMSetValidationResult(kWaypoint, '$waypoint pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(waypoint != null && waypoint! < 0) results.add(CSMSetValidationResult(kWaypoint, '$kWaypoint pointer must be equal or greater than 0', 'pointerHandler()'));
 
     if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, '${SCK.kStatus} pointer must be equal or greater than 0', 'pointerHandler()'));
     if(addressNavigation != null) results = <CSMSetValidationResult>[...results, ...addressNavigation!.evaluate()];

@@ -36,6 +36,7 @@
     15. Added [Locations] services.
     16. Added [Create] and [Update] services to [Sections] service.
     17. Added [Addresses] service.
+    18. Added [datetime] & [double] extension files.
  
 - Dependencies:
 

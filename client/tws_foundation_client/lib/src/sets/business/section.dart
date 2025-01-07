@@ -72,8 +72,10 @@ final class Section implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(name.isEmpty || name.length > 30) results.add(CSMSetValidationResult(SCK.kName, "Name must be 25 max lenght and non-empty", "strictLength(1,30)"));
-    if(yard < 0) results.add(CSMSetValidationResult(kYard, 'Yard pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(yard < 0) results.add(CSMSetValidationResult(kYard, '$kYard pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, '${SCK.kStatus} pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(capacity == 0) results.add(CSMSetValidationResult(kCapacity, '$kCapacity cant be equal to zeroor empty', 'pointerHandler()'));
+    if(ocupancy == 0) results.add(CSMSetValidationResult(kOcupancy, '$kOcupancy cant be equal to zero or empty', 'pointerHandler()'));
 
     return results;
   }
@@ -92,7 +94,12 @@ final class Section implements CSMSetInterface {
     Location? locationNavigation,
     Status? statusNavigation,
   }){
-   
+
+    if(yard == 0){
+      this.locationNavigation = null;
+      locationNavigation = null;
+    }
+
     return Section(
       id ?? this.id, 
       status ?? this.status,
