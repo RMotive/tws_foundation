@@ -1,2 +1,2 @@
 export 'datetime.dart';
-export 'double.dart';
+export 'string.dart';
