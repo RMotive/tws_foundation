@@ -1,10 +1,10 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Server.Bases;
+using CSM_Foundation.Core.Bases;
 
 namespace CSM_Foundation.Core.Exceptions;
 public class XSystem
-    : BServerTransactionException<XSystemSituations> {
+    : BException<XSystemSituations> {
     public XSystem(Exception Exception)
         : base("SystemInternal exception caught on transaction operation", HttpStatusCode.InternalServerError, Exception) {
 

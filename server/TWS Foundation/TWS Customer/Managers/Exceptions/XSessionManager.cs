@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
+using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
-using CSM_Foundation.Server.Bases;
 
 namespace TWS_Customer.Managers.Exceptions;
 
@@ -9,7 +9,7 @@ namespace TWS_Customer.Managers.Exceptions;
 ///     Custom <see cref="Exception"/> to handle <see cref="SessionManager"/> exceptions.
 /// </summary>
 public class XSessionManager
-    : BServerTransactionException<XSessionManagerSituations> {
+    : BException<XSessionManagerSituations> {
 
     /// <summary>
     ///     Generates a new <see cref="XSessionManager"/> custom exception.

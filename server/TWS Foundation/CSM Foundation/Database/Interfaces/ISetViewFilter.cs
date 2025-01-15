@@ -32,12 +32,16 @@ public static class ISetArrayExtension {
     public static void Sort<TSet>(this ISetViewFilter<TSet>[] Records)
         where TSet : ISet {
 
-        ISetViewFilter<TSet>[] sorted = [.. Records.OrderBy(i => i.Order)];
-
+        ISetViewFilter<TSet>[] sorted = [
+            ..Records.OrderBy(i => i.Order)
+        ];
         Records = sorted;
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class ISetViewFilterConverterFactory : JsonConverterFactory {
     public override bool CanConvert(Type typeToConvert) {
         if (!typeToConvert.IsGenericType) {
@@ -56,7 +60,20 @@ public class ISetViewFilterConverterFactory : JsonConverterFactory {
     }
 }
 
-public class ISetViewFilterConverter<TSet> : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TSet"></typeparam>
+public class ISetViewFilterConverter<TSet> 
+    : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
+
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <param name="typeToConvert"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public override ISetViewFilterNode<TSet>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
 
 
@@ -66,6 +83,13 @@ public class ISetViewFilterConverter<TSet> : JsonConverter<ISetViewFilterNode<TS
         return JsonSerializer.Deserialize<SetViewPropertyFilter<TSet>>(json, options);
     }
 
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <param name="writer"></param>
+    /// <param name="value"></param>
+    /// <param name="options"></param>
+    /// <exception cref="NotSupportedException"></exception>
     public override void Write(Utf8JsonWriter writer, ISetViewFilterNode<TSet> value, JsonSerializerOptions options) {
         switch (value) {
             case SetViewPropertyFilter<TSet> propertyFilter:

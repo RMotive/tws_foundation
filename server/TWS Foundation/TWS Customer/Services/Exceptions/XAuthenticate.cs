@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
+using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
-using CSM_Foundation.Server.Bases;
 
 namespace TWS_Customer.Services.Exceptions;
 public class XAuthenticate
-    : BServerTransactionException<XAuthenticateSituation> {
+    : BException<XAuthenticateSituation> {
     public XAuthenticate(XAuthenticateSituation Situation)
         : base($"Authentication request has failed", HttpStatusCode.Unauthorized, null) {
 

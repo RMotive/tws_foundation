@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
+using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
-using CSM_Foundation.Server.Bases;
 
 namespace CSM_Foundation.Server.Exceptions;
 public class XAuth
-    : BServerTransactionException<XAuthSituation> {
+    : BException<XAuthSituation> {
 
 
 

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSM_Foundation.Database.Bases;
 public abstract class BDatabaseSQLS<TDatabases>
-    : DbContext, IMigrationDatabases
+    : DbContext, IDatabase
     where TDatabases : DbContext {
 
     protected readonly DatabasesLinkOptions Connection;

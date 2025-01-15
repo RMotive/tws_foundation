@@ -15,8 +15,11 @@ using TWS_Business;
 using TWS_Business.Depots;
 
 using TWS_Customer.Managers;
-using TWS_Customer.Services;
+using TWS_Customer.Services.Administration;
+using TWS_Customer.Services.Business;
+using TWS_Customer.Services.BusinessServices;
 using TWS_Customer.Services.Interfaces;
+using TWS_Customer.Services.SecurityServices;
 
 using TWS_Foundation.Authentication;
 using TWS_Foundation.Managers;

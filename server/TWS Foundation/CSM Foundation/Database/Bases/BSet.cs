@@ -14,10 +14,13 @@ namespace CSM_Foundation.Database.Bases;
 public abstract class BSet
     : BObject<ISet>, ISet {
 
+    public string Discriminator { get; init; }
+
     /// <summary>
     /// 
     /// </summary>
     public abstract int Id { get; set; }
+    
     /// <summary>
     /// 
     /// </summary>
@@ -32,6 +35,10 @@ public abstract class BSet
     /// 
     /// </summary>
     private (string Property, IValidator[] Validators)[]? Validators;
+
+    public BSet() {
+        Discriminator = GetType().Name;
+    }
 
     /// <summary>
     /// 

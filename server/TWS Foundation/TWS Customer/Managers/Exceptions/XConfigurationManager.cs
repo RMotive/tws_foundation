@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
+using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
-using CSM_Foundation.Server.Bases;
 
 namespace TWS_Customer.Managers.Exceptions;
 public class XConfigurationManager
-    : BServerTransactionException<XConfigurationManagerSituation> {
+    : BException<XConfigurationManagerSituation> {
     public XConfigurationManager(XConfigurationManagerSituation Situation, Exception? System = null) 
         : base($"Configuration Manager Exception | [{Situation}]", HttpStatusCode.InternalServerError, System) {
 

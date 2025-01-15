@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Configurations\" />
+    <Folder Include="Services\Common\DataManagement\Out\" />
   </ItemGroup>
 
   <ItemGroup>
