@@ -18,7 +18,4 @@ public class SituationsService : ISituationsService {
         return await Situations.View(options);
     }
 
-    public async Task<Situation> Create(Situation situation) {
-        return await Situations.Create(situation);
-    }
 }

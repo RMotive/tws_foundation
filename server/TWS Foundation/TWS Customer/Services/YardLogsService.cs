@@ -11,6 +11,8 @@ using TWS_Business.Depots;
 using TWS_Business.Sets;
 using TWS_Customer.Services.Interfaces;
 
+using Xunit.Abstractions;
+
 namespace TWS_Customer.Services;
 public class YardLogsService 
     : IYardLogsService {
@@ -345,6 +347,155 @@ public class YardLogsService
 
             });;
     }
+    /// <summary>
+    /// This method calculate the ocupancy values, for previous and new selected sections, 
+    /// based on log type (entry or departure), previous and new section selection, and trucks-trailers selection.
+    /// </summary>
+    /// <param name="newYardlog">
+    /// newest log record.
+    /// </param>
+    /// <param name="previousYardlog">
+    /// previous log record, stored in db.
+    /// </param>
+    private void CalculateSections(YardLog newYardlog, YardLog previousYardlog) {
+
+        // Quantity to sum or subtract to sections, based on truck + trailer.
+        int newLogQuantity = 1;
+        int previousLogQuantity = 1;
+        if (newYardlog.TrailerNavigation != null || newYardlog.TrailerExternalNavigation != null) newLogQuantity++;
+        if (previousYardlog.TrailerNavigation != null || previousYardlog.TrailerExternalNavigation != null) previousLogQuantity++;
+
+        bool isPreviousSection = previousYardlog.SectionNavigation != null;
+        // Check if is necesary update some section value:
+        if ((newYardlog.Entry != previousYardlog.Entry) || (previousYardlog.SectionNavigation?.Id != newYardlog.SectionNavigation?.Id)) {
+            // Attach previous section to the context for value updates.
+            if (isPreviousSection) Database.Attach(previousYardlog.SectionNavigation!);
+
+            //Check if section has changed (selected another section or adding one):
+            if (previousYardlog.SectionNavigation?.Id != newYardlog.SectionNavigation?.Id) {
+                // If Section is different, then update truck and trailer locations.
+
+                if (newYardlog.Entry) {
+                    // If the log is an entry, then change only ocupancy for both sections.
+                    if (previousYardlog.Entry) {
+                        // New section assigned:
+                        newYardlog.SectionNavigation!.Ocupancy += newLogQuantity;
+                        // Previous section:
+                        if (isPreviousSection) previousYardlog.SectionNavigation!.Ocupancy -= previousLogQuantity;
+
+                    } else {
+                        //If previous entry is false, then:
+                        newYardlog.SectionNavigation!.Ocupancy += newLogQuantity;
+                        // Previous section. Sum +1 to ocupancy due the log was marked has departure:
+                        //previousDeepCopy.SectionNavigation.Ocupancy += previousLogQuantity;
+                    }
+                } else {
+                    // If the previous log was an entry,and the new one is a departure, then change only the last section.
+                    if (previousYardlog.Entry) {
+
+                        // Substract quantity to Previous section:
+                        if (isPreviousSection) previousYardlog.SectionNavigation!.Ocupancy -= previousLogQuantity;
+                        // Remove unnecesary section relationship.
+                        newYardlog.Section = null;
+                        newYardlog.SectionNavigation = null;
+
+                    } else {
+                        //Note: For the new section is not necesary update the ocupancy when the new log is set has departure,
+                        //due the truck and trailer never has been registered in that section.
+
+                        // Previous section. set -1 to ocupancy due the log was marked has departure:
+                        if (isPreviousSection) previousYardlog.SectionNavigation!.Ocupancy += previousLogQuantity;
+                    }
+                }
+
+            } else {
+                // If section has no changed:
+                if (newYardlog.Entry) {
+                    if (previousYardlog.Entry) {
+                        //Add the new quantity if has changed.
+                        newYardlog.SectionNavigation!.Ocupancy += -previousLogQuantity + newLogQuantity;
+                    } else {
+                        //revert the previous subtacted quantity and add the new quantity.
+                        newYardlog.SectionNavigation!.Ocupancy += newLogQuantity;
+                    }
+                } else {
+                    if (previousYardlog.Entry) {
+                        //subtract the new quantity if has changed.
+                        if (isPreviousSection) previousYardlog.SectionNavigation!.Ocupancy -= previousLogQuantity;
+                        // Remove unnecesary section relationship.
+                        newYardlog.Section = null;
+                        newYardlog.SectionNavigation = null;
+                    } else {
+                        //revert the previous subtacted quantity and add the new quantity.
+                        // Check for operators issues: ocupancy = - (-X quantity).
+                        newYardlog.SectionNavigation!.Ocupancy -= -previousLogQuantity + newLogQuantity;
+                    }
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// Set the location and situation values for common truck and trailers objects.
+    /// </summary>
+    /// <param name="situation">
+    /// Situation ID to assing in common object.
+    /// </param>
+    /// <param name="common">
+    /// Common object. ONLY trucks and trailers common objects are valid.
+    /// </param>
+    /// <param name="locationID">
+    /// Location id to assign. Can be null.
+    /// </param>
+    private void CommonConfigurator(int situation, Object? common, int? locationID) {
+        if(common != null) {
+            if (common is TruckCommon truckCommon) {
+                truckCommon.Location = locationID;
+                truckCommon.LocationNavigation = null;
+                truckCommon.Situation = situation;
+            }else if(common is TrailerCommon trailerCommon) {
+                trailerCommon.Location = locationID;
+                trailerCommon.LocationNavigation = null;
+                trailerCommon.Situation = situation;
+            }
+            
+        }
+    }
+    /// <summary>
+    /// Update the location and situation based on log section and entry, for trucks and trailers.
+    /// Situation for a log is: situation = 1; "Parked in yard". situation = 2; "In transit".
+    /// Location assignment is based on last section id asigned for an entry log form.
+    /// </summary>
+    /// <param name="newYardlog">
+    /// The newest yardlog record to use has base to override the previous yardlog record version.
+    /// </param>
+    /// <param name="previousYardlog">
+    /// The previous(old) yardlog record version stored in db. This record will be overrided by the newYardlog record
+    /// </param>
+
+    private void setCommonNavigators(YardLog newYardlog, YardLog previousYardlog) {
+        // Check the log type.
+        if (newYardlog.Entry) {
+            //Override location and situation for trucks and trailers.
+            //FIX sometimes the truck situation not updated
+            // --> Setting trucks.
+            CommonConfigurator(1, newYardlog.TruckNavigation?.TruckCommonNavigation, newYardlog.SectionNavigation!.Yard);
+            CommonConfigurator(1, newYardlog.TruckExternalNavigation?.TruckCommonNavigation, newYardlog.SectionNavigation!.Yard);
+            
+            // --> Setting trailers.
+            CommonConfigurator(1, newYardlog.TrailerNavigation?.TrailerCommonNavigation, newYardlog.SectionNavigation!.Yard);
+            CommonConfigurator(1, newYardlog.TrailerExternalNavigation?.TrailerCommonNavigation, newYardlog.SectionNavigation!.Yard);
+
+        } else {
+            //Removing location and setting situation for trailers and trucks.
+            // --> Setting trucks.
+            CommonConfigurator(2, newYardlog.TruckNavigation?.TruckCommonNavigation, null);
+            CommonConfigurator(2, newYardlog.TruckExternalNavigation?.TruckCommonNavigation, null);
+
+            // --> Setting trailers.
+            CommonConfigurator(2, newYardlog.TrailerNavigation?.TrailerCommonNavigation, null);
+            CommonConfigurator(2, newYardlog.TrailerExternalNavigation?.TrailerCommonNavigation, null);
+        }
+    }
     public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
        
         return await YardLogs.View(options, Include);
@@ -353,98 +504,110 @@ public class YardLogsService
     public async Task<SetBatchOut<YardLog>> Create(YardLog[] yardLog) {
         return await this.YardLogs.Create(yardLog);
     }
+
     public async Task<RecordUpdateOut<YardLog>> Update(YardLog YardLog) {
-        // Evaluate record.
-        YardLog.EvaluateWrite();
-        // Check if the trailer currently exist in database.
-        // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
-        YardLog? current = await Include(Database.YardLogs)
-            .Where(i => i.Id == YardLog.Id)
-            .FirstOrDefaultAsync();
 
-        // If trailers not exist in database, then use the generic update method.
-        if (current == null) {
-            return await YardLogs.Update(YardLog, Include);
-        }
-        // Save a deep copy before changes.
-        YardLog previousDeepCopy = current.DeepCopy();
+            // Evaluate record.
+            YardLog.EvaluateWrite();
+            // Check if the trailer currently exist in database.
+            // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
+            YardLog? current = await Include(Database.YardLogs)
+                .Where(i => i.Id == YardLog.Id)
+                .FirstOrDefaultAsync();
 
-        // Clear the navigation to avoid duplicated tracking issues.
-        current.DriverExternalNavigation = null;
-        current.DriverNavigation = null;
-        current.LoadTypeNavigation = null;
-        current.SectionNavigation = null;
-        current.TrailerExternalNavigation = null;
-        current.TrailerNavigation = null;
-        current.TruckExternalNavigation = null;
-        current.TruckNavigation = null;
+            // If yardlog not exist in database, then use the generic update method.
+            if (current == null) {
+                return await YardLogs.Update(YardLog, Include);
+            }
+            // Save a deep copy before changes.
+            YardLog previousDeepCopy = current.DeepCopy();
 
-        // Preserve a copy before modifications.
-        Database.Attach(current);
+            // Clear the navigation to avoid duplicated tracking issues.
+            current.DriverExternalNavigation = null;
+            current.DriverNavigation = null;
+            current.LoadTypeNavigation = null;
+            current.SectionNavigation = null;
+            current.TrailerExternalNavigation = null;
+            current.TrailerNavigation = null;
+            current.TruckExternalNavigation = null;
+            current.TruckNavigation = null;
 
-        // Update the main model properties.
-        EntityEntry previousEntry = Database.Entry(current);
-        previousEntry.CurrentValues.SetValues(YardLog);
+            Database.Attach(current);
 
-        // ---> Update Driver navigation
-        if (YardLog.DriverNavigation != null) {
-            current.Driver = YardLog.DriverNavigation!.Id;
-            current.DriverNavigation = YardLog.DriverNavigation;
-        }
+            // Update the main model properties.
+            EntityEntry previousEntry = Database.Entry(current);
+            previousEntry.CurrentValues.SetValues(YardLog);
 
-        // ---> Update Driver external navigation
-        if (YardLog.DriverExternalNavigation != null) {
-            current.DriverExternal = YardLog.DriverExternalNavigation!.Id;
-            current.DriverExternalNavigation = YardLog.DriverExternalNavigation;
-        }
+            // ---> Update Driver navigation
+            if (YardLog.DriverNavigation != null) {
+                current.Driver = YardLog.DriverNavigation!.Id;
+                current.DriverNavigation = YardLog.DriverNavigation;
+            }
 
-        // ---> Update Load Type navigation
-        if (YardLog.LoadTypeNavigation != null) {
-            current.LoadType = YardLog.LoadTypeNavigation!.Id;
-            current.LoadTypeNavigation = YardLog.LoadTypeNavigation;
-        }
+            // ---> Update Driver external navigation
+            if (YardLog.DriverExternalNavigation != null) {
+                current.DriverExternal = YardLog.DriverExternalNavigation!.Id;
+                current.DriverExternalNavigation = YardLog.DriverExternalNavigation;
+            }
 
-        // ---> Update section navigation
-        if (YardLog.SectionNavigation != null) {
-            current.Section = YardLog.SectionNavigation!.Id;
-            current.SectionNavigation = YardLog.SectionNavigation;
-        }
+            // ---> Update Load Type navigation
+            if (YardLog.LoadTypeNavigation != null) {
+                current.LoadType = YardLog.LoadTypeNavigation!.Id;
+                current.LoadTypeNavigation = YardLog.LoadTypeNavigation;
+            }
 
-        // ---> Update TrailerExternal navigation
-        if (YardLog.TrailerExternalNavigation != null) {
-            current.TrailerExternal = YardLog.TrailerExternalNavigation!.Id;
-            current.TrailerExternalNavigation = YardLog.TrailerExternalNavigation;
-        }
+            // ---> Update TrailerExternal navigation
+            if (YardLog.TrailerExternalNavigation != null) {
+                current.TrailerExternal = YardLog.TrailerExternalNavigation!.Id;
+                current.TrailerExternalNavigation = YardLog.TrailerExternalNavigation;
+            }
 
-        // ---> Update Trailer navigation
-        if (YardLog.TrailerNavigation != null) {
-            current.Trailer = YardLog.TrailerNavigation!.Id;
-            current.TrailerNavigation = YardLog.TrailerNavigation;
-        }
+            // ---> Update Trailer navigation
+            if (YardLog.TrailerNavigation != null) {
+                current.Trailer = YardLog.TrailerNavigation!.Id;
+                current.TrailerNavigation = YardLog.TrailerNavigation;
+            }
 
-        // ---> Update Truck navigation
-        if (YardLog.TruckExternalNavigation != null) {
-            current.Truck = YardLog.TruckNavigation!.Id;
-            current.TruckNavigation = YardLog.TruckNavigation;
-        }
+            // ---> Update Truck navigation
+            if (YardLog.TruckNavigation != null) {
+                // Remove navigations to avoid references issues.
+                YardLog.TruckNavigation!.SctNavigation = null;
+                YardLog.TruckNavigation!.CarrierNavigation = null;
+                current.Truck = YardLog.TruckNavigation!.Id;
+                current.TruckNavigation = YardLog.TruckNavigation;
+            }
 
-        // ---> Update Truck external navigation
-        if (YardLog.TruckExternalNavigation != null) {
-            current.TruckExternal = YardLog.TruckExternalNavigation!.Id;
-            current.TruckExternalNavigation = YardLog.TruckExternalNavigation;
-        }
+            // ---> Update Truck external navigation
+            if (YardLog.TruckExternalNavigation != null) {
+                current.TruckExternal = YardLog.TruckExternalNavigation!.Id;
+                current.TruckExternalNavigation = YardLog.TruckExternalNavigation;
+            }
 
-        await Database.SaveChangesAsync();
-        Disposer?.Push(Database, YardLog);
-        // Get the lastest record data from database.
-        YardLog? lastestRecord = await Include(Database.YardLogs)
-            .Where(i => i.Id == YardLog.Id)
-            .FirstOrDefaultAsync();
+            // ---> Update section navigation
+            if (YardLog.SectionNavigation != null) {
+                // override section navigation values.
+                current.Section = YardLog.SectionNavigation!.Id;
+                current.SectionNavigation = YardLog.SectionNavigation;
+                // --> Change the ocupancy values for sections
+                // Check if yardlog is entry or departure:
+                // Note: For departure logs section navigation is not required.
+                CalculateSections(current, previousDeepCopy);
+            }
 
-        return new RecordUpdateOut<YardLog> {
-            Previous = previousDeepCopy,
-            Updated = lastestRecord ?? YardLog,
-        };
+            setCommonNavigators(current, previousDeepCopy);
+
+            await Database.SaveChangesAsync();
+            Disposer?.Push(Database, YardLog);
+            // Get the lastest record data from database.
+            YardLog? lastestRecord = await Include(Database.YardLogs)
+                .Where(i => i.Id == YardLog.Id)
+                .FirstOrDefaultAsync();
+
+            return new RecordUpdateOut<YardLog> {
+                Previous = previousDeepCopy,
+                Updated = lastestRecord ?? YardLog,
+            };
+        
     }
 
     public async Task<YardLog> Delete(int Id) {

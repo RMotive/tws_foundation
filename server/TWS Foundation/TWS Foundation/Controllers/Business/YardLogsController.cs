@@ -17,27 +17,27 @@ public class YardLogsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("YardlogsInventories", "Read")]
     public async Task<IActionResult> ViewInventory(SetViewOptions<YardLog> Options) {
         return Ok(await Service.ViewInventory(Options));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Yardlogs", "Read")]
     public async Task<IActionResult> View(SetViewOptions<YardLog> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Yardlogs", "Create")]
     public async Task<IActionResult> Create(YardLog[] yardLogs) {
         return Ok(await Service.Create(yardLogs));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Yardlogs", "Update")]
     public async Task<IActionResult> Update(YardLog yardLogs) {
         return Ok(await Service.Update(yardLogs));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Yardlogs", "Delete")]
     public async Task<IActionResult> Delete(int Id) {
         return Ok(await Service.Delete(Id));
     }

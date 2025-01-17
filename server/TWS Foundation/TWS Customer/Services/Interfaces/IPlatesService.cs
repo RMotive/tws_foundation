@@ -8,5 +8,4 @@ public interface IPlatesService {
 
     Task<SetViewOut<Plate>> View(SetViewOptions<Plate> options);
 
-    Task<Plate> Create(Plate plate);
 }

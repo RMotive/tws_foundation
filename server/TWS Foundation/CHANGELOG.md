@@ -38,6 +38,7 @@
     20. Added [Locations] service.
     21. Added Create and update in [Sections] service.
     22. Added [Address] view service.
+    23. Added [Business] permits in service controllers.
     
 - Dependencies:
 

@@ -18,13 +18,9 @@ public class CarriersController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Carriers", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Carrier> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
-    public async Task<IActionResult> Create(Carrier carrier) {
-        return Ok(await Service.Create(carrier));
-    }
 }

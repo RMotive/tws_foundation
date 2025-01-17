@@ -17,7 +17,7 @@ public class EmployeesController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Employee", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Employee> Options) {
         return Ok(await Service.View(Options));
     }

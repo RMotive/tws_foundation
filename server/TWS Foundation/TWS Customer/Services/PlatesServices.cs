@@ -30,7 +30,4 @@ public class PlatesServices
             }));
     }
 
-    public async Task<Plate> Create(Plate plate) {
-        return await Plates.Create(plate);
-    }
 }

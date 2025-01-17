@@ -16,17 +16,17 @@ public class LocationsController : ControllerBase{
         this.Service = Service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Locations", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Location> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Locations", "Create")]
     public async Task<IActionResult> Create(Location[] Locations) {
         return Ok(await Service.Create(Locations));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Locations", "Update")]
     public async Task<IActionResult> Update(Location Location) {
         return Ok(await Service.Update(Location));
     }

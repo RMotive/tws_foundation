@@ -74,8 +74,7 @@ final class Section implements CSMSetInterface {
     if(name.isEmpty || name.length > 30) results.add(CSMSetValidationResult(SCK.kName, "Name must be 25 max lenght and non-empty", "strictLength(1,30)"));
     if(yard < 0) results.add(CSMSetValidationResult(kYard, '$kYard pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, '${SCK.kStatus} pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(capacity == 0) results.add(CSMSetValidationResult(kCapacity, '$kCapacity cant be equal to zeroor empty', 'pointerHandler()'));
-    if(ocupancy == 0) results.add(CSMSetValidationResult(kOcupancy, '$kOcupancy cant be equal to zero or empty', 'pointerHandler()'));
+    if(capacity == 0) results.add(CSMSetValidationResult(kCapacity, '$kCapacity cant be equal to zero or empty', 'pointerHandler()'));
 
     return results;
   }

@@ -29,8 +29,4 @@ public class CarriersService : ICarriersService {
     public async Task<SetViewOut<Carrier>> View(SetViewOptions<Carrier> Options) {
         return await Carriers.View(Options, Include);
     }
-
-    public async Task<Carrier> Create(Carrier carrier) {
-        return await Carriers.Create(carrier);
-    }
 }

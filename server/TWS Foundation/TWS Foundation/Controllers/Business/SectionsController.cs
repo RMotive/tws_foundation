@@ -17,17 +17,17 @@ public class SectionsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Sections", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Section> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Sections", "Create")]
     public async Task<IActionResult> Create(Section[] sections) {
         return Ok(await Service.Create(sections));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Sections", "Update")]
     public async Task<IActionResult> Update(Section section) {
         return Ok(await Service.Update(section));
     }

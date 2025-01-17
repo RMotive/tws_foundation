@@ -17,7 +17,7 @@ public class AddressesController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Addresses", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Address> Options) {
         return Ok(await Service.View(Options));
     }

@@ -18,13 +18,9 @@ public class ManufacturersController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Manufacturers", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Manufacturer> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
-    public async Task<IActionResult> Create(Manufacturer manufacturer) {
-        return Ok(await Service.Create(manufacturer));
-    }
 }
