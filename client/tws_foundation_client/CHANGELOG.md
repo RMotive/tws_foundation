@@ -15,12 +15,6 @@
         - [Employees] (View Service)
         - [Drivers] (Create and update services)
         - [DriversExternals] (Create and update services)
-
-    6. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
-    8. Created a new [TWSServiceBase] to override [CSMServiceBase] call behaviors to fulfill new server
-    authentication behavior where now is requested the auth token followed by the solution sign that requests
-    (i.e, authToken@solutionSign).
-    9. Renamed [Privileges] model to [Session] in order to get more parity between client and server.
     11. Additions to validations in the followings sets:
         - [Drivers]
         - [Address]
@@ -29,7 +23,6 @@
         - [DriverExternal]
         - [Employee]
         - [Identification]
-
     12. [timestamp] property changed to non-final in [Yardlog] set.
     13. Added [Waypoint] set.
     14. Added Waypoint navigation in [Location] set.
@@ -38,8 +31,42 @@
     17. Added [Addresses] service.
     18. Added [datetime] & [string] extension files.
     19. Added extension to export files.
- 
+
+
+- Fixes:
+
 - Dependencies:
+
+## 6.0.1 - [04.12-2024]
+
+- Notes:
+
+    1. Changed the minimun length validation to VIN proterty in [Truck] & [TruckExternal] sets from 17 to 1.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | 7.0.0            | 7.0.0           |
+
+## 6.0.0 - [18.11-2024]
+
+- Notes:
+
+    1. Added [_timestamp] initialization in default constructor method for [Plate] & [Truck] sets.
+    2. Added [Contact] entity service.
+    3. Created a new [TWSServiceBase] to override [CSMServiceBase] call behaviors to fulfill new server
+    authentication behavior where now is requested the auth token followed by the solution sign that requests
+    (i.e, authToken@solutionSign).
+    4. Renamed [Privileges] model to [Session] in order to get more parity between client and server.
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | ---              | 7.0.0           |
 
 ## 5.2.0 - [03.11-2024]
 

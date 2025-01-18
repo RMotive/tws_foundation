@@ -11,8 +11,8 @@ namespace TWS_Foundation.Authentication;
 [AttributeUsage(AttributeTargets.Method)]
 public class AuthAttribute
     : Attribute, IAuthorizationFilter {
-    private const string DISP_HEAD_KEY = "CSMDisposition";
-    private const string DISP_HEAD_VALUE = "Quality";
+    // private const string DISP_HEAD_KEY = "CSMDisposition";
+    // private const string DISP_HEAD_VALUE = "Quality";
     private const string AUTH_TOKEN_KEY = "CSMAuth";
 
     private readonly string Feature;
@@ -21,6 +21,9 @@ public class AuthAttribute
     public AuthAttribute(string Feature, string Action) {
         this.Feature = Feature;
         this.Action = Action;
+
+        this.Feature.ToString();
+        this.Action.ToString();
     }
 
     public void OnAuthorization(AuthorizationFilterContext context) {

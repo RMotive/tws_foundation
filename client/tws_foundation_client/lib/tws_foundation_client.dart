@@ -8,6 +8,7 @@ export 'package:csm_client/src/interfaces/csm_encode_interface.dart';
 export 'package:csm_client/src/models/csm_uri.dart';
 
 export 'src/core/extensions/extensions_module.dart';
+export 'src/enums/enums_module.dart';
 export 'src/frames/frames_module.dart'; // --> Exporting frames
 export 'src/models/models_module.dart'; // --> Exporting modules
 export 'src/resolvers/resolvers_module.dart';

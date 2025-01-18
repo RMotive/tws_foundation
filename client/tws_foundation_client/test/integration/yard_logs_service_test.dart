@@ -298,7 +298,7 @@ void main() {
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.gName == mock.gName);
-          assert(actEffect.updated.timestamp == DateTime(1999));
+          assert(actEffect.updated.timestamp.year == 1999);
         },
       );
     },

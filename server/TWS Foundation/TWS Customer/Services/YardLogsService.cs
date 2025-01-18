@@ -304,7 +304,7 @@ public class YardLogsService
                     TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckNavigation.TruckCommonNavigation.Id,
                         Timestamp = y.TruckNavigation.TruckCommonNavigation.Timestamp,
-                        Status = y.TruckNavigation.TruckCommonNavigation.Id,
+                        Status = y.TruckNavigation.TruckCommonNavigation.Status,
                         Economic = y.TruckNavigation.TruckCommonNavigation.Economic,
                         Location = y.TruckNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckNavigation.TruckCommonNavigation.Situation,

@@ -15,22 +15,28 @@ begin
 	
 	insert into Features(Name, Description) 
 	values
-		( '', '' );
+		( 'Access', 'Access to solutions feature.' );
 
+	insert into Actions(Name, Description)
+	values
+		('Login', 'Login action into solutions.');
 
 	insert into Profiles(Name, Description)
 	values
 		('Guard', 'Specifies permits for yard guards');
 
-	insert into Permits(Name, Description, Solution, Reference)
-		select 'Login', 'Permit to login into TWS Guard solution', id, 'TWSMG001' 
-			from Solutions where Sign = 'TWSMG';
+	insert into Permits(Action, Feature, Solution, Reference)
+	values(
+		( select id from Actions where Name = 'Login' ),
+		( select id from Features where Name = 'Access' ),
+		( select id from Solutions where Sign = 'TWSMG' ),
+		'TWSMG001'
+	);
 
 	insert into Profiles_Permits (Permit, Profile)
-		select p.id, pr.id
-			from Permits p
-				join Solutions s on p.Solution = s.id
-				join Profiles pr ON pr.Name = 'Guard'
-			where s.Sign = 'TWSMG';
+	values(
+		( select id from Permits where Reference = 'TWSMG001' ),
+		( select id from Profiles where name = 'Guard' )
+	);
 end
 go

@@ -80,7 +80,7 @@
   int? trailer = json.getDefault(&#39;trailer&#39;, null);
   int? trailerExternal = json.getDefault(&#39;trailerExternal&#39;, null);
   int loadType = json.get(&#39;loadtype&#39;);
-  int section = json.get(&#39;section&#39;);
+  int? section = json.getDefault(&#39;section&#39;, null);
   int? driver = json.getDefault(&#39;driver&#39;, null);
   int? driverExternal = json.getDefault(&#39;driverExternal&#39;, null);
   DateTime timestamp = json.get(&#39;timestamp&#39;);
@@ -170,7 +170,7 @@
 <footer>
   <span class="no-break">
     tws_foundation_client
-      5.1.0
+      6.0.0
   </span>
 
   

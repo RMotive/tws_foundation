@@ -61,6 +61,8 @@ void main() {
         int rnd = Random().nextInt(900)  + 99;
         String randomToken = '${i}_qual$rnd';
         TruckExternal mock = buildExternalTruck(randomToken);
+        List<CSMSetValidationResult> evaluation = mock.evaluate();
+        assert(evaluation.isEmpty);
         mocks.add(mock);
       }
     },

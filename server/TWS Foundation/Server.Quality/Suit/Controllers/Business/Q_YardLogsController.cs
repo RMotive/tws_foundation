@@ -179,11 +179,11 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.True(HttpStatusCode.OK.Equals(Status));
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
+            RecordUpdateOut<YardLog> creationResult = Framing<SuccessFrame<RecordUpdateOut<YardLog>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
-            Solution updated = creationResult.Updated;
+            YardLog updated = creationResult.Updated;
             Assert.True(updated.Id > 0);
         }
         #endregion
