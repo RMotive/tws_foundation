@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 
+using CSM_Foundation.Convertion;
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Exceptions;
@@ -36,8 +37,11 @@ public abstract class BSet
     /// </summary>
     private (string Property, IValidator[] Validators)[]? Validators;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public BSet() {
-        Discriminator = GetType().Name;
+        Discriminator = $"{GetType().GUID}";
     }
 
     /// <summary>

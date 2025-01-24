@@ -3,8 +3,9 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Customer.Managers;
+using TWS_Customer.Managers.Configuration;
 using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Interfaces;
 using TWS_Customer.Services.Records;
@@ -12,7 +13,7 @@ using TWS_Customer.Services.Records;
 using TWS_Security.Depots;
 using TWS_Security.Sets;
 
-namespace TWS_Customer.Services.SecurityServices;
+namespace TWS_Customer.Services.Administration;
 public class SecurityService
     : ISecurityService {
     private readonly ConfigurationManager Configurations = ConfigurationManager.Manager;

@@ -1,14 +1,35 @@
 ﻿using CSM_Foundation.Database.Interfaces;
 
-using TWS_Customer.Services.Common.DataManagement.Options;
+using TWS_Customer.Managers.Depot;
+using TWS_Customer.Services.Common.DataManagement.Params;
 
 namespace TWS_Customer.Services.Common.DataManagement;
 
-public class DataManagementService 
+/// <summary>
+///     
+/// </summary>
+public class DataManagementService
     : IDataManagementService {
 
+    /// <summary>
+    /// 
+    /// </summary>
+    private readonly DepotManager DepotManager;
 
-    public string ExportView(ExportViewOptions<ISet> Options) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="DepotManager"></param>
+    public DataManagementService(DepotManager DepotManager) {
+        this.DepotManager = DepotManager;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Options"></param>
+    /// <returns></returns>
+    public string ExportView(ExportViewParams<ISet> Options) {
         throw new NotImplementedException();
     }
 }

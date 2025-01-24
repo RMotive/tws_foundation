@@ -1,4 +1,4 @@
-﻿using TWS_Customer.Managers;
+﻿using TWS_Customer.Managers.Configuration;
 
 namespace TWS_Customer.Quality.Suits.Managers;
 

@@ -10,8 +10,7 @@ public class XAuth
 
 
     public XAuth(XAuthSituation Situation)
-        : base($"Unauthorized transaction request", HttpStatusCode.Unauthorized, null) {
-        this.Situation = Situation;
+        : base($"Unauthorized transaction request", Situation, HttpStatusCode.Unauthorized, null) {
         Advise = Situation switch {
             XAuthSituation.Lack => AdvisesConstants.SERVER_CONTACT_ADVISE,
             XAuthSituation.Unauthorized => $"Account is unautorized to the requested feature",

@@ -5,8 +5,7 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Customer.Managers.Exceptions;
-using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.Session.Exceptions;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
@@ -15,7 +14,35 @@ using TWS_Security.Sets;
 
 using CredentialsExpiration = (TWS_Customer.Services.Records.Credentials Credentials, System.DateTime Expiration);
 
-namespace TWS_Customer.Managers;
+namespace TWS_Customer.Managers.Session;
+
+/// <summary>
+/// 
+/// </summary>
+public record Session {
+    public required Guid Token { get; init; }
+    public required DateTime Expiration { get; init; }
+    public required string Identity { get; init; }
+    public required bool Wildcard { get; init; }
+    public required Permit[] Permits { get; init; }
+    public required Contact Contact { get; init; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Session Copy(Guid? Token = null, DateTime? Expiration = null, string? Identity = null, bool? Wildcard = null, Permit[]? Permits = null, Contact? Contact = null) {
+        return new Session {
+            Token = Token ?? this.Token,
+            Expiration = Expiration ?? this.Expiration,
+            Identity = Identity ?? this.Identity,
+            Wildcard = Wildcard ?? this.Wildcard,
+            Permits = Permits ?? this.Permits,
+            Contact = Contact ?? this.Contact
+        };
+    }
+}
+
 /// <summary>
 ///     Manager that handles all the sessions currently operating in all TWS solutions environment.
 /// </summary>

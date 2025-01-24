@@ -7,7 +7,7 @@ namespace TWS_Customer.Services.Exceptions;
 public class XAuthenticate
     : BException<XAuthenticateSituation> {
     public XAuthenticate(XAuthenticateSituation Situation)
-        : base($"Authentication request has failed", HttpStatusCode.Unauthorized, null) {
+        : base($"Authentication request has failed", Situation, HttpStatusCode.Unauthorized, null) {
 
         this.Situation = Situation;
         Advise = Situation switch {

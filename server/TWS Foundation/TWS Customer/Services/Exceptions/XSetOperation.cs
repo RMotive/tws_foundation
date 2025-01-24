@@ -10,8 +10,7 @@ public class XSetOperation<TSet>
     : BException<XTransactionSituation>
     where TSet: ISet {
     public XSetOperation(SetOperationFailure<TSet>[] Failures)
-        : base($"Set operation has failed", HttpStatusCode.InternalServerError, null) {
-        Situation = XTransactionSituation.Failed;
+        : base($"Set operation has failed", XTransactionSituation.Failed, HttpStatusCode.InternalServerError, null) {
         Advise = AdvisesConstants.SERVER_CONTACT_ADVISE;
 
         Factors = Failures.ToDictionary<SetOperationFailure<TSet>, string, dynamic>(i => $"{i.Set.GetType()}({i.Set.Id})", i => i.SystemInternal.Message);

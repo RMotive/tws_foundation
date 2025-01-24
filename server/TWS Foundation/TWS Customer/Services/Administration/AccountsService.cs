@@ -11,7 +11,7 @@ using TWS_Customer.Services.Records;
 using TWS_Security.Depots;
 using TWS_Security.Sets;
 
-namespace TWS_Customer.Services.SecurityServices;
+namespace TWS_Customer.Services.Administration;
 /// <summary>
 /// 
 /// </summary>

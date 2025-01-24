@@ -6,7 +6,7 @@ namespace CSM_Foundation.Server.Exceptions;
 public class XDisposition
     : BException<XDispositionSituation> {
     public XDisposition(XDispositionSituation Situation)
-        : base($"Wrong disposition configuration", HttpStatusCode.BadRequest, null) {
+        : base($"Wrong disposition configuration", Situation, HttpStatusCode.BadRequest, null) {
 
         this.Situation = Situation;
         Advise = Situation switch {

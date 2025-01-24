@@ -9,7 +9,7 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
 
-namespace TWS_Customer.Services.BusinessServices;
+namespace TWS_Customer.Services.Business;
 public class PlatesServices
     : IPlatesService {
     private readonly PlatesDepot Plates;

@@ -1,10 +1,10 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Text.Json;
 
-using TWS_Customer.Managers.Exceptions;
-using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.ConfigurationManager.Exceptions;
 
-namespace TWS_Customer.Managers;
+namespace TWS_Customer.Managers.Configuration;
 
 /// <summary>
 /// 
@@ -13,24 +13,22 @@ public sealed class ConfigurationManager {
     /// <summary>
     /// 
     /// </summary>
-    static ConfigurationManager? Instance; 
+    private static ConfigurationManager? Instance;
     /// <summary>
     /// 
     /// </summary>
     public static ConfigurationManager Manager => Instance ??= new();
 
-
-    readonly string WorkingDirectory;
-
-    readonly string ConfigurationsDirectory;
+    private readonly string WorkingDirectory;
+    private readonly string ConfigurationsDirectory;
 
 
 
     /// <summary>
     /// 
     /// </summary>
-    ConfigurationManager() { 
-        WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;   
+    private ConfigurationManager() {
+        WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         ConfigurationsDirectory = GetConfigurationsDirectory();
     }
 
@@ -42,9 +40,10 @@ public sealed class ConfigurationManager {
     public SolutionConfiguration GetSolution(string Sign) {
         List<SolutionConfiguration> solutionConfigs = GetConfiguration<List<SolutionConfiguration>>("Solutions");
 
-        foreach(SolutionConfiguration solutionConfig in solutionConfigs) {
-            if(solutionConfig.Sign != Sign)
+        foreach (SolutionConfiguration solutionConfig in solutionConfigs) {
+            if (solutionConfig.Sign != Sign) {
                 continue;
+            }
 
             return solutionConfig;
         }
@@ -63,10 +62,10 @@ public sealed class ConfigurationManager {
         string configReference = Configuration.ToLower() + "_configuration.json";
 
         string[] configFiles = Directory.GetFiles(ConfigurationsDirectory);
-        foreach(string configFile in configFiles) {
-            if(!configFile.Contains(configReference))
+        foreach (string configFile in configFiles) {
+            if (!configFile.Contains(configReference)) {
                 continue;
-   
+            }
 
             string fileReader = File.ReadAllText(configFile);
             T configObject = JsonSerializer.Deserialize<T>(fileReader)
@@ -86,11 +85,30 @@ public sealed class ConfigurationManager {
         string[] appDirectories = Directory.GetDirectories(WorkingDirectory);
 
         foreach (string appDirectory in appDirectories) {
-            if(appDirectory.Contains("Configurations")) {
+            if (appDirectory.Contains("Configurations")) {
                 return appDirectory.Split("Configurations")[0] + "Configurations";
             }
         }
 
         throw new XConfigurationManager(XConfigurationManagerSituation.UnfoundDirectory);
     }
+}
+
+/// <summary>
+///     
+/// </summary>
+public record SolutionConfiguration {
+    /// <summary>
+    /// 
+    /// </summary>
+    [MaxLength(5)]
+    public required string Sign { get; init; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public required bool Enabled { get; init; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public required string Login { get; init; }
 }

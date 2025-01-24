@@ -12,7 +12,7 @@ using TWS_Customer.Services.Records;
 using TWS_Security.Depots;
 using TWS_Security.Sets;
 
-namespace TWS_Customer.Services.BusinessServices;
+namespace TWS_Customer.Services.Business;
 /// <summary>
 /// 
 /// </summary>

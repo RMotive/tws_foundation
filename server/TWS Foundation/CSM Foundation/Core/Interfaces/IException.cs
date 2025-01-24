@@ -26,7 +26,7 @@ public interface IException {
     /// </summary>
     public string Advise { get; }
     /// <summary>
-    ///     The SystemInternal exception thrown that arised this Server known exception.
+    ///     The internal system exception object caught.
     /// </summary>
     public Exception? System { get; }
     /// <summary>
@@ -39,8 +39,10 @@ public interface IException {
     public Dictionary<string, dynamic> Factors { get; }
 
     /// <summary>
-    ///     
+    ///     Converts the current exception details into a public information details object. 
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    ///     Public exception details.
+    /// </returns>
     public ExceptionExposition Publish();
 }

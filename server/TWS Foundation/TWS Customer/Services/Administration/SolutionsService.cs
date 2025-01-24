@@ -6,7 +6,7 @@ using TWS_Customer.Services.Interfaces;
 using TWS_Security.Depots;
 using TWS_Security.Sets;
 
-namespace TWS_Customer.Services.SecurityServices;
+namespace TWS_Customer.Services.Administration;
 /// <summary>
 /// 
 /// </summary>

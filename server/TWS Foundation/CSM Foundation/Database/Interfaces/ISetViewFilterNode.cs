@@ -59,7 +59,7 @@ public class ISetViewFilterNodeConverterFactory : JsonConverterFactory {
 /// 
 /// </summary>
 /// <typeparam name="TSet"></typeparam>
-public class ISetViewFilterNodeConverter<TSet> 
+public class ISetViewFilterNodeConverter<TSet>
     : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
 
     /// <summary>
@@ -83,7 +83,7 @@ public class ISetViewFilterNodeConverter<TSet>
         }
 
         return discriminator switch {
-            var _ when discriminator == SetViewFilterLinearEvaluation<TSet>.Discriminator => JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options, ),
+            var _ when discriminator == SetViewFilterLinearEvaluation<TSet>.Discriminator => JsonSerializer.Deserialize<SetViewFilterLinearEvaluation<TSet>>(json, options),
             var _ when discriminator == SetViewPropertyFilter<TSet>.Discriminator => JsonSerializer.Deserialize<SetViewPropertyFilter<TSet>>(json, options),
             var _ when discriminator == SetViewDateFilter<TSet>.Discriminator => JsonSerializer.Deserialize<SetViewDateFilter<TSet>>(json, options),
             _ => throw new UnsupportedContentTypeException($"No discriminator recognized for ({discriminator})"),

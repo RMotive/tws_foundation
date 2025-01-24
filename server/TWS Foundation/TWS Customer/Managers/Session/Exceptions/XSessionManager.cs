@@ -3,7 +3,9 @@
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
 
-namespace TWS_Customer.Managers.Exceptions;
+using TWS_Customer.Managers.Session;
+
+namespace TWS_Customer.Managers.Session.Exceptions;
 
 /// <summary>
 ///     Custom <see cref="Exception"/> to handle <see cref="SessionManager"/> exceptions.
@@ -21,7 +23,7 @@ public class XSessionManager
     ///     Indicates if the cause was due to a unrecognized system exception was caugth.
     /// </param>
     public XSessionManager(XSessionManagerSituations Situation, Exception? System = null)
-        : base($"Session Manager Exception | [{Situation}]", HttpStatusCode.InternalServerError, System) {
+        : base($"Session Manager Exception | [{Situation}]", Situation, HttpStatusCode.InternalServerError, System) {
 
         this.Situation = Situation;
         Advise = AdvisesConstants.SERVER_CONTACT_ADVISE;

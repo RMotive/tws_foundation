@@ -3,11 +3,11 @@
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
 
-namespace TWS_Customer.Managers.Exceptions;
+namespace TWS_Customer.Managers.ConfigurationManager.Exceptions;
 public class XConfigurationManager
     : BException<XConfigurationManagerSituation> {
-    public XConfigurationManager(XConfigurationManagerSituation Situation, Exception? System = null) 
-        : base($"Configuration Manager Exception | [{Situation}]", HttpStatusCode.InternalServerError, System) {
+    public XConfigurationManager(XConfigurationManagerSituation Situation, Exception? System = null)
+        : base($"Configuration Manager Exception | [{Situation}]", Situation, HttpStatusCode.InternalServerError, System) {
 
         this.Situation = Situation;
         Advise = AdvisesConstants.SERVER_CONTACT_ADVISE;

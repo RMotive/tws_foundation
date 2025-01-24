@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Database.Interfaces;
 
-using TWS_Customer.Services.Common.DataManagement.Options;
+using TWS_Customer.Services.Common.DataManagement.Params;
 
 namespace TWS_Customer.Services.Common.DataManagement;
 
@@ -14,5 +14,5 @@ public interface IDataManagementService {
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    string ExportView(ExportViewOptions<ISet> Options);
+    string ExportView(ExportViewParams<ISet> Options);
 }
