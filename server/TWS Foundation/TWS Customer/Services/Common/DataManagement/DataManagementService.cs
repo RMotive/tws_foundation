@@ -1,6 +1,5 @@
 ﻿using CSM_Foundation.Database.Interfaces;
 
-using TWS_Customer.Managers.Depot;
 using TWS_Customer.Services.Common.DataManagement.Params;
 
 namespace TWS_Customer.Services.Common.DataManagement;
@@ -14,14 +13,14 @@ public class DataManagementService
     /// <summary>
     /// 
     /// </summary>
-    private readonly DepotManager DepotManager;
+    //private readonly DepotManager DepotManager;
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="DepotManager"></param>
-    public DataManagementService(DepotManager DepotManager) {
-        this.DepotManager = DepotManager;
+    public DataManagementService() {
+        //this.DepotManager = DepotManager;
     }
 
     /// <summary>

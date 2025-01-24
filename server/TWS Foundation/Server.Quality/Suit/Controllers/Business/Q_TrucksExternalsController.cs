@@ -7,7 +7,7 @@ using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Middlewares.Frames;

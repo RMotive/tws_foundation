@@ -9,16 +9,34 @@ using TWS_Business.Sets;
 using TWS_Customer.Services.Interfaces;
 
 namespace TWS_Customer.Services.Business;
+
+/// <summary>
+/// 
+/// </summary>
 public class YardLogsService
     : IYardLogsService {
+
+    /// <summary>
+    /// 
+    /// </summary>
     private readonly YardLogsDepot YardLogs;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="YardLogs"></param>
     public YardLogsService(
        YardLogsDepot YardLogs) {
 
         this.YardLogs = YardLogs;
 
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
     private IQueryable<YardLog> Include(IQueryable<YardLog> query) {
         return query
             .Include(t => t.DriverExternalNavigation)
@@ -347,6 +365,8 @@ public class YardLogsService
 
             }); ;
     }
+
+
     public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
 
         return await YardLogs.View(options, Include);

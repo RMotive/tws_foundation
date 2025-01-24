@@ -23,7 +23,7 @@ public class ExportViewParams<TSet>
     /// <summary>
     /// 
     /// </summary>
-    public string Set;
+    public required string Set;
 }
 
 

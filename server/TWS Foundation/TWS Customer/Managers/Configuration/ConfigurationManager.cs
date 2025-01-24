@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text.Json;
 
-using TWS_Customer.Managers.ConfigurationManager.Exceptions;
+using TWS_Customer.Managers.Configuration.Exceptions;
 
 namespace TWS_Customer.Managers.Configuration;
 

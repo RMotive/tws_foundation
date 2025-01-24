@@ -3,7 +3,7 @@
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
 
-namespace TWS_Customer.Managers.ConfigurationManager.Exceptions;
+namespace TWS_Customer.Managers.Configuration.Exceptions;
 public class XConfigurationManager
     : BException<XConfigurationManagerSituation> {
     public XConfigurationManager(XConfigurationManagerSituation Situation, Exception? System = null)
