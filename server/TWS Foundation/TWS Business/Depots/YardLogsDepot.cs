@@ -39,7 +39,13 @@ public class YardLogsDepot
                 .Include(i => i.TrailerExternalNavigation)
                     .ThenInclude(i => i!.TrailerCommonNavigation)
                 .Include(i => i.SectionNavigation)
-                    .ThenInclude(i => i!.LocationNavigation);
+                    .ThenInclude(i => i!.LocationNavigation)
+                .Include(i => i.TruckNavigation)
+                    .ThenInclude(i => i!.TruckCommonNavigation)
+                .Include(i => i.TruckNavigation)
+                    .ThenInclude(i => i!.Plates)
+                .Include(i => i.TruckExternalNavigation)
+                    .ThenInclude(i => i!.TruckCommonNavigation);
             },
             AfterFilters: (query) => {
                 return query
