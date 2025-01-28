@@ -31,6 +31,9 @@
     17. Added [Addresses] service.
     18. Added [datetime] & [string] extension files.
     19. Added extension to export files.
+    20. Added [Account] creation and update services.
+    21. Added [Account] wildcard and password properties.
+    22. Added the byte list support to [DeepCopy] Util.
 
 
 - Fixes:

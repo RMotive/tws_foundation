@@ -19,13 +19,14 @@ public class Q_Account
             Expectations = [],
         };
         Q_MigrationSet_EvaluateRecord<Account> failure = new("All properties fail") {
-            Mock = new(),
+            Mock = new() {
+                Contact = -1,
+            },
             Expectations = [
                 (nameof(Account.Id), [(new PointerValidator(), 3)]),
-                (nameof(Account.User), [(new RequiredValidator(), 1)]),
+                (nameof(Account.User), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
                 (nameof(Account.Password), [(new RequiredValidator(), 1)]),
                 (nameof(Account.Contact), [(new PointerValidator(true), 3)]),
-
             ],
         };
 

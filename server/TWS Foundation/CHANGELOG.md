@@ -31,6 +31,7 @@
     16. Added Create and update in [Sections] service.
     17. Added [Address] view service.
     18. Added [Business] permits in service controllers.
+    19. Added [Contact] create and update controllers.
 
 - Fixes:
 
