@@ -18,13 +18,9 @@ public class PlatesController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Plates", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Plate> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
-    public async Task<IActionResult> Create(Plate plate) {
-        return Ok(await Service.Create(plate));
-    }
 }

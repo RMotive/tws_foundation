@@ -8,6 +8,7 @@ final class TrailerCommon implements CSMSetInterface {
   static const String kEconomic = "economic";
   static const String kTrailerTypeNavigation = 'TrailerTypeNavigation';
   static const String kLocationNavigation = "LocationNavigation";
+  static const String kSituationNavigation = 'SituationNavigation';
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp;
@@ -21,11 +22,24 @@ final class TrailerCommon implements CSMSetInterface {
   String economic = "";
   Location? locationNavigation;
   TrailerType? trailerTypeNavigation;
+  Situation? situationNavigation;
   Status? statusNavigation;
-  
-  TrailerCommon(this.id, this.status, this.type, this.situation, this.location, this.economic,  this.locationNavigation, this.trailerTypeNavigation, this.statusNavigation, { 
+
+  TrailerCommon.a();
+
+  TrailerCommon(
+    this.id,
+    this.status,
+    this.type,
+    this.situation,
+    this.location,
+    this.economic,
+    this.locationNavigation,
+    this.trailerTypeNavigation,
+    this.situationNavigation,
+    this.statusNavigation, {
     DateTime? timestamp,
-  }){
+  }) {
     _timestamp = timestamp ?? DateTime.now(); 
   }
 
@@ -54,8 +68,14 @@ final class TrailerCommon implements CSMSetInterface {
       JObject rawNavigation = json.getDefault(kLocationNavigation, <String, dynamic>{});
       locationNavigation = Location.des(rawNavigation);
     }
+
+    Situation? situationNavigation;
+    if (json[kSituationNavigation] != null) {
+      JObject rawNavigation = json.getDefault(kSituationNavigation, <String, dynamic>{});
+      situationNavigation = Situation.des(rawNavigation);
+    }
         
-    return TrailerCommon(id, status, type, situation, location, economic, locationNavigation, trailerTypeNavigation, statusNavigation, timestamp: timestamp);
+    return TrailerCommon(id, status, type, situation, location, economic, locationNavigation, trailerTypeNavigation, situationNavigation, statusNavigation, timestamp: timestamp);
   }
 
   @override
@@ -73,6 +93,7 @@ final class TrailerCommon implements CSMSetInterface {
       SCK.kTimestamp: timestamp.toIso8601String(),
       kLocationNavigation: locationNav,
       kTrailerTypeNavigation: trailerTypeNavigation?.encode(),
+      kSituationNavigation: situationNavigation?.encode(),
       SCK.kStatusNavigation: statusNavigation?.encode()
     };
   }
@@ -85,6 +106,9 @@ final class TrailerCommon implements CSMSetInterface {
     if(type != null){
       if(type! < 0) results.add(CSMSetValidationResult(kType, 'Trailer Type pointer must be empty, equal or greater than 0', 'pointerHandler()'));
     }
+    if(situation != null){
+      if(situation! < 0) results.add(CSMSetValidationResult(kSituation, 'Situation pointer must be empty, equal or greater than 0', 'pointerHandler()'));
+    }
     return results;
   }
   TrailerCommon clone({
@@ -96,26 +120,39 @@ final class TrailerCommon implements CSMSetInterface {
     String? economic,
     Location? locationNavigation,
     TrailerType? trailerTypeNavigation,
+    Situation? situationNavigation,
     Status? statusNavigation,
   }){
-    Location? locationNav = locationNavigation ?? this.locationNavigation;
-    if(type == 0) locationNav = null;
+    if(situation == 0){
+      this.situation = null;
+      this.situationNavigation = null;
+      situation = null;
+      situationNavigation = null;
+    }
 
-    int? tType = type ?? this.type;
-    TrailerType? typeNav = trailerTypeNavigation ?? this.trailerTypeNavigation;
+    if(location == 0){
+      this.location = null;
+      this.locationNavigation = null;
+      location = null;
+      locationNavigation = null;
+    }
+   
     if(type == 0){
-      tType = null;
-      typeNav = null;
+      this.type = null;
+      this.trailerTypeNavigation = null;
+      type = null;
+      trailerTypeNavigation = null;
     }
     return TrailerCommon(
       id ?? this.id, 
       status ?? this.status, 
-      tType, 
+      type ?? this.type, 
       situation ?? this.situation, 
       location ?? this.location,
       economic ?? this.economic, 
-      locationNav,
-      typeNav, 
+      locationNavigation ?? this.locationNavigation,
+      trailerTypeNavigation ?? this.trailerTypeNavigation, 
+      situationNavigation ?? this.situationNavigation,
       statusNavigation ?? this.statusNavigation,
     );
   }

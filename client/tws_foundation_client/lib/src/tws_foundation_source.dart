@@ -1,13 +1,18 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/business/addresses_service.dart';
 import 'package:tws_foundation_client/src/services/business/carriers_service.dart';
 import 'package:tws_foundation_client/src/services/business/drivers_externals_service.dart';
 import 'package:tws_foundation_client/src/services/business/drivers_service.dart';
+import 'package:tws_foundation_client/src/services/business/employee_service.dart';
 import 'package:tws_foundation_client/src/services/business/load_type_service.dart';
+import 'package:tws_foundation_client/src/services/business/locations_service.dart';
 import 'package:tws_foundation_client/src/services/business/manufacturers_service.dart';
 import 'package:tws_foundation_client/src/services/business/sections_service.dart';
 import 'package:tws_foundation_client/src/services/business/situations_service.dart';
 import 'package:tws_foundation_client/src/services/business/trailer_service.dart';
+import 'package:tws_foundation_client/src/services/business/trailers_classes_service.dart';
 import 'package:tws_foundation_client/src/services/business/trailers_externals_service.dart';
+import 'package:tws_foundation_client/src/services/business/trailers_types_service.dart';
 import 'package:tws_foundation_client/src/services/business/trucks_externals_service.dart';
 import 'package:tws_foundation_client/src/services/business/trucks_inventories_service.dart';
 import 'package:tws_foundation_client/src/services/business/trucks_service.dart';
@@ -75,8 +80,23 @@ final class TWSFoundationSource extends CSMSourceBase {
   /// Truck Inventory service
   late final TrucksInventoriesServiceBase trucksInventories;
 
+  // Trailer Type models service
+  late final TrailersTypesServiceBase trailersTypes;
+  
+  // Trailer Class service
+  late final TrailersClassesServiceBase trailersClasses;
+
   /// Contact service
   late final ContactsServiceBase contacts;
+
+  /// Employees service
+  late final EmployeeService employees;
+
+  /// Locations service
+  late final LocationsService locations;
+
+  /// Addresses service
+  late final AddressesService addresses;
 
   /// [TWSFoundationSource] instance constructor.
   ///
@@ -92,7 +112,7 @@ final class TWSFoundationSource extends CSMSourceBase {
   /// Each service implementation can be overriden for a custom one.
   TWSFoundationSource(
     bool debug, {
-    Client? client,
+    Client? client,                                                                                                                                                                                       
     SolutionsServiceBase? solutions,
     AccountsServiceBase? accounts,
     SecurityServiceBase? security,
@@ -111,7 +131,13 @@ final class TWSFoundationSource extends CSMSourceBase {
     CarriersService? carriers,
     VehiculesModelsService? vehiculesModels,
     TrucksInventoriesService? trucksInventories,
-    ContactsServiceBase? contacts,
+    TrailersTypesService? trailersTypes,
+    TrailersClassesService? trailersClasses,
+    ContactsService? contacts,
+    EmployeeService? employees,
+    LocationsService? locations,
+    AddressesService? addresses,
+    
     CSMUri development = const CSMUri(
       '127.0.0.1',
       '',
@@ -142,6 +168,12 @@ final class TWSFoundationSource extends CSMSourceBase {
     this.carriers = carriers ?? CarriersService(host, client: client);
     this.vehiculesModels = vehiculesModels ?? VehiculesModelsService(host, client: client);
     this.trucksInventories = trucksInventories ?? TrucksInventoriesService(host, client: client);
+    this.trailersTypes = trailersTypes ?? TrailersTypesService(host, client: client);
+    this.trailersClasses = trailersClasses ?? TrailersClassesService(host, client: client);    
     this.contacts = contacts ?? ContactsService(host, client: client);
+    this.employees = employees ?? EmployeeService(host, client: client);
+    this.locations = locations ?? LocationsService(host, client: client);
+    this.addresses = addresses ?? AddressesService(host, client: client);
+
   }
 }

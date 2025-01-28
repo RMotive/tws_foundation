@@ -26,7 +26,4 @@ public class VehiculeModelService : IVehiculesModelsService {
         return await VehiculesModels.View(Options, Include);
     }
 
-    public async Task<VehiculeModel> Create(VehiculeModel vehiculeModel) {
-        return await VehiculesModels.Create(vehiculeModel);
-    }
 }

@@ -5,34 +5,57 @@ final class Trailer implements CSMSetInterface {
   static const String kCommon = "common";
   static const String kModel = "model";
   static const String kCarrier = "carrier";
+  static const String kSct = "sct";
   static const String kMaintenance = "maintenance";
+  static const String kSctNavigation = "SctNavigation";
   static const String kVehiculeModelNavigation = "VehiculeModelNavigation";
   static const String kTrailerCommonNavigation = 'TrailerCommonNavigation';
   static const String kCarrierNavigation = "CarrierNavigation";
+  static const String kMaintenanceNavigation = 'MaintenanceNavigation';
   static const String kPlates = 'plates';
 
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
+
+  Trailer.a(){
+    _timestamp = DateTime.now();
+  }
 
   @override
   int id = 0;
   int status = 1;
   int common = 0;
   int carrier = 0;
+  int? sct;
   int? model;
   int? maintenance;
+  SCT? sctNavigation;
   Carrier? carrierNavigation;
   TrailerCommon? trailerCommonNavigation;
   VehiculeModel? vehiculeModelNavigation;
+  Maintenance? maintenanceNavigation;
   Status? statusNavigation;
   // List default initialization data for clone method.
   List<Plate> plates = <Plate>[
     Plate.a(),
-    Plate.a()
   ];
-  Trailer(this.id, this.status, this.common, this.carrier, this.model, this.maintenance, this.carrierNavigation, this.trailerCommonNavigation, this.vehiculeModelNavigation, this.statusNavigation, this.plates, { 
+  Trailer(
+    this.id,
+    this.status,
+    this.common,
+    this.carrier,
+    this.sct,
+    this.model,
+    this.maintenance,
+    this.carrierNavigation,
+    this.sctNavigation,
+    this.trailerCommonNavigation,
+    this.vehiculeModelNavigation,
+    this.maintenanceNavigation,
+    this.statusNavigation,
+    this.plates, {
     DateTime? timestamp,
-  }){
+  }) {
     _timestamp = timestamp ?? DateTime.now(); 
   }
 
@@ -42,6 +65,7 @@ final class Trailer implements CSMSetInterface {
     int common = json.get(kCommon);
     DateTime timestamp = json.get(SCK.kTimestamp);
     int carrier = json.get(kCarrier);
+    int? sct = json.getDefault(kSct, null);
     int? model = json.getDefault(kModel, null);
     int? maintenance = json.getDefault(kMaintenance, null);
   
@@ -73,7 +97,19 @@ final class Trailer implements CSMSetInterface {
       carrierNavigation = Carrier.des(rawNavigation);
     }
 
-    return Trailer(id, status, common, carrier, model, maintenance, carrierNavigation, trailerCommonNavigation, vehiculeModelNavigation, statusNavigation, plates, timestamp: timestamp);
+    SCT? sctNavigation;
+    if (json[kSctNavigation] != null) {
+      JObject rawNavigation = json.getDefault(kSctNavigation, <String, dynamic>{});
+      sctNavigation = SCT.des(rawNavigation);
+    }
+    
+    Maintenance? maintenanceNavigation;
+    if (json[kMaintenanceNavigation] != null) {
+      JObject rawNavigation = json.getDefault(kMaintenanceNavigation, <String, dynamic>{});
+      maintenanceNavigation = Maintenance.des(rawNavigation);
+    }
+
+    return Trailer(id, status, common, carrier, sct, model, maintenance, carrierNavigation, sctNavigation ,trailerCommonNavigation, vehiculeModelNavigation, maintenanceNavigation, statusNavigation, plates, timestamp: timestamp);
   }
 
   Trailer clone({
@@ -83,17 +119,57 @@ final class Trailer implements CSMSetInterface {
     int? carrier,
     int? model,
     int? maintenance,
+    int? sct,
     Carrier? carrierNavigation,
     TrailerCommon? trailerCommonNavigation,
     VehiculeModel? vehiculeModelNavigation,
+    SCT? sctNavigation,
+    Maintenance? maintenanceNavigation,
     Status? statusNavigation,
     List<Plate>? plates
   }){
-    Carrier? carrierNav = carrierNavigation ?? this.carrierNavigation;
-    if((carrier ?? this.carrier) == 0) carrierNav = null;
+    if(carrier == 0){
+      this.carrierNavigation = null;
+      carrierNavigation = null;
+    }
 
-    return Trailer(id ?? this.id, status ?? this.status, common ?? this.common, carrier ?? this.carrier, model ?? this.model, maintenance ?? this.maintenance, carrierNav,
-    trailerCommonNavigation ?? this.trailerCommonNavigation,  vehiculeModelNavigation ?? this.vehiculeModelNavigation, statusNavigation ?? this.statusNavigation, plates ?? this.plates);
+    if(model == 0){
+      this.model = null;
+      this.vehiculeModelNavigation = null;
+      model = null;
+      vehiculeModelNavigation = null;
+    }
+
+    if(sct == 0){
+      this.sct = null;
+      this.sctNavigation = null;
+      sct = null;
+      sctNavigation = null;
+    }
+
+    if(maintenance == 0){
+      this.maintenance = null;
+      this.maintenanceNavigation = null;
+      maintenance = null;
+      maintenanceNavigation = null;
+    }
+
+    return Trailer(
+      id ?? this.id,
+      status ?? this.status,
+      common ?? this.common,
+      carrier ?? this.carrier,
+      sct ?? this.sct,
+      model ?? this.model,
+      maintenance ?? this.maintenance,
+      carrierNavigation ?? this.carrierNavigation,
+      sctNavigation ?? this.sctNavigation,
+      trailerCommonNavigation ?? this.trailerCommonNavigation,
+      vehiculeModelNavigation ?? this.vehiculeModelNavigation,
+      maintenanceNavigation ?? this.maintenanceNavigation,
+      statusNavigation ?? this.statusNavigation,
+      plates ?? this.plates,
+    );
   }
 
   @override
@@ -106,11 +182,14 @@ final class Trailer implements CSMSetInterface {
       SCK.kStatus: status,
       kCommon: common,
       kCarrier: carrier,
+      kSct: sct,
       kModel: model,
       kMaintenance: maintenance,
       SCK.kTimestamp: timestamp.toIso8601String(),
       kCarrierNavigation: carrierNav,
+      kSctNavigation: sctNavigation?.encode(),
       kVehiculeModelNavigation: vehiculeModelNavigation?.encode(),
+      kMaintenanceNavigation: maintenanceNavigation?.encode(),
       kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
       SCK.kStatusNavigation: statusNavigation?.encode(),
       kPlates: plates.map((Plate i) => i.encode()).toList(),
@@ -123,10 +202,14 @@ final class Trailer implements CSMSetInterface {
     if(common < 0) results.add(CSMSetValidationResult(kCommon, 'Common pointer must be equal or greater than 0', 'pointerHandler()'));
     if(carrier < 0) results.add(CSMSetValidationResult(kCarrier, 'Carrier pointer must be equal or greater than 0', 'pointerHandler()'));
     if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(sct != null) if(sct! < 0) results.add(CSMSetValidationResult(kSct, 'SCT pointer must be equal, greater than 0 or null', 'pointerHandler()'));
+    if(maintenance != null) if(maintenance! < 0 ) results.add(CSMSetValidationResult(kMaintenance, 'Maintenance pointer must be equal, greater than 0 or null', 'pointerHandler()'));
     if(plates.isEmpty) results.add(CSMSetValidationResult(kPlates, 'Trailer must have 1 plate at least', 'listLength()'));
+    
     for(Plate plate in plates){
       results = <CSMSetValidationResult>[...results, ...plate.evaluate()];
     }
+
     if(trailerCommonNavigation != null){
       results = <CSMSetValidationResult>[...results, ...trailerCommonNavigation!.evaluate()];
     }
@@ -139,9 +222,16 @@ final class Trailer implements CSMSetInterface {
       results = <CSMSetValidationResult>[...results, ...carrierNavigation!.evaluate()];
     }
 
+    if(sctNavigation != null){
+      results = <CSMSetValidationResult>[...results, ...sctNavigation!.evaluate()];
+    }
+
+    if(maintenanceNavigation != null){
+      results = <CSMSetValidationResult>[...results, ...maintenanceNavigation!.evaluate()];
+    }
+
     return results;
   }
-  Trailer.def();
   
 }
 

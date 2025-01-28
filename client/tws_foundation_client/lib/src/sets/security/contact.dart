@@ -76,7 +76,7 @@ final class Contact implements CSMSetInterface {
   @override
   JObject encode() {
     return <String, dynamic>{
-      'id': id,
+      SCK.kId: id,
       kName: name,
       kLastName: lastName,
       kEmail: email,
@@ -87,6 +87,12 @@ final class Contact implements CSMSetInterface {
 
   @override
   List<CSMSetValidationResult> evaluate() {
-    return <CSMSetValidationResult>[];
+    List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
+    if(name.trim().isEmpty) results.add(CSMSetValidationResult(kName , 'Name length must be between 1 and 50 characters.', 'strictLength(1, 50)'));
+    if(lastName.trim().isEmpty) results.add(CSMSetValidationResult(kLastName , 'Last Name length must be between 1 and 50 characters.', 'strictLength(1, 50)'));
+    if(email.trim().isEmpty) results.add(CSMSetValidationResult(kEmail , 'Email length must be between 1 and 30 characters.', 'strictLength(1, 30)'));
+    if(phone.trim().isEmpty) results.add(CSMSetValidationResult(kPhone , 'Phone number length must be between 10 and 14 characters.', 'strictLength(10, 14)'));
+
+    return results;
   }
 }

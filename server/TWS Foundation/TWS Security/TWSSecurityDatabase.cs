@@ -55,40 +55,20 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
         Feature.CreateModel(modelBuilder);
         Solution.CreateModel(modelBuilder);
         Sets.Action.CreateModel(modelBuilder);
-
-
-        modelBuilder.Entity<Account>(entity => {
-            _ = entity.HasKey(e => e.Id);
-
-            _ = entity.HasIndex(e => e.User).IsUnique();
-
-            _ = entity.HasIndex(e => e.Contact).IsUnique();
-
-            _ = entity.Property(e => e.Id);
-            _ = entity.Property(e => e.Password);
-            _ = entity.Property(e => e.User)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            _ = entity.HasOne(d => d.ContactNavigation).WithOne(p => p.Account)
-                .HasForeignKey<Account>(d => d.Contact)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
-
-
+        Account.CreateModel(modelBuilder);
         AccountPermit.CreateModel(modelBuilder);
         AccountProfile.CreateModel(modelBuilder);
         ProfilePermit.CreateModel(modelBuilder);
 
         modelBuilder.Entity<Profile>(entity => {
-            _ = entity.HasKey(e => e.Id);
+            entity.HasKey(e => e.Id);
 
-            _ = entity.HasIndex(e => e.Name).IsUnique();
+            entity.HasIndex(e => e.Name).IsUnique();
 
-            _ = entity.Property(e => e.Id);
-            _ = entity.Property(e => e.Description)
+            entity.Property(e => e.Id);
+            entity.Property(e => e.Description)
                 .IsUnicode(false);
-            _ = entity.Property(e => e.Name)
+            entity.Property(e => e.Name)
                 .HasMaxLength(25)
                 .IsUnicode(false);
         });

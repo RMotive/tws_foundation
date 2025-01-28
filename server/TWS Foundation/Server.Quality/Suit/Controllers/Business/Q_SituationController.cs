@@ -51,22 +51,4 @@ public class Q_SituationController
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }
-
-    [Fact]
-    public async Task Create() {
-        string testTag = Guid.NewGuid().ToString()[..3];
-        string name = " name ctl" + testTag;
-        string description = "desc ctl" + testTag;
-
-        Situation mock = new() {
-            Name = name,
-            Description = description
-        };
-
-        (HttpStatusCode Status, GenericFrame Response) = await Post("Create", mock, true);
-
-        _ = Response.Estela.TryGetValue("Advise", out object? value);
-        Assert.Null(value);
-        Assert.Equal(HttpStatusCode.OK, Status);
-    }
 }

@@ -17,8 +17,17 @@ public class TrailersController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Trailers", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Trailer> Options) {
         return Ok(await Service.View(Options));
+    }
+    [HttpPost(), Auth("Trailers", "Create")]
+    public async Task<IActionResult> Create(Trailer[] Trailers) {
+        return Ok(await Service.Create(Trailers));
+    }
+
+    [HttpPost(), Auth("Trailers","Update")]
+    public async Task<IActionResult> Update(Trailer Trailer) {
+        return Ok(await Service.Update(Trailer));
     }
 }

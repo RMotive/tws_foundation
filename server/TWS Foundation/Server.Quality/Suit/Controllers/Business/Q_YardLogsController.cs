@@ -1,8 +1,6 @@
 ﻿
 using System.Net;
 
-using Azure;
-
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
@@ -16,8 +14,6 @@ using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using TWS_Security.Sets;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
 
@@ -183,11 +179,11 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.True(HttpStatusCode.OK.Equals(Status));
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
+            RecordUpdateOut<YardLog> creationResult = Framing<SuccessFrame<RecordUpdateOut<YardLog>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
-            Solution updated = creationResult.Updated;
+            YardLog updated = creationResult.Updated;
             Assert.True(updated.Id > 0);
         }
         #endregion

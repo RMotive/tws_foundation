@@ -21,7 +21,7 @@ final class Approach implements CSMSetInterface {
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
 
-   /// Record database pointer.
+  /// Record database pointer.
   @override
   int id = 0;
 
@@ -32,13 +32,13 @@ final class Approach implements CSMSetInterface {
   String email = "";
 
   /// Alternative contact enterprise.
-  String? enterprise = "";
+  String? enterprise;
 
   /// Alternative contact personal.
-  String? personal = "";
+  String? personal;
 
   /// Alternative contact alternative.
-  String? alternative = "";
+  String? alternative;
 
   /// Alternative contact [Status] object.
   Status? statusNavigation;
@@ -122,6 +122,22 @@ final class Approach implements CSMSetInterface {
     Status? statusNavigation,
     List<Carrier>? carriers
   }){
+
+    if(enterprise != null && enterprise.trim().isEmpty){
+      this.enterprise = null;
+      enterprise = null;
+    }
+
+    if(personal != null && personal.trim().isEmpty){
+      this.personal = null;
+      personal = null;
+    }
+
+    if(alternative != null && alternative.trim().isEmpty){
+      this.alternative = null;
+      alternative = null;
+    }
+
     return Approach(
       id ?? this.id, 
       status ?? this.status, 

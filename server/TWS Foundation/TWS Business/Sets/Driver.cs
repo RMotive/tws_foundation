@@ -55,6 +55,12 @@ public partial class Driver
         Container = [
             ..Container,
             (nameof(Status), [new PointerValidator(true)]),
+            (nameof(DriverType), [new LengthValidator(Max: 16, nulleable: true)]),
+            (nameof(Twic), [new LengthValidator(Min: 12, Max: 12, nulleable: true)]),
+            (nameof(Visa), [new LengthValidator(Min: 12, Max: 12, nulleable: true)]),
+            (nameof(Fast), [new LengthValidator(Min:14, Max: 14, nulleable: true)]),
+            (nameof(Anam), [new LengthValidator(Min: 24, Max: 24, nulleable: true)]),
+
         ];
 
         return Container;

@@ -17,8 +17,18 @@ public class DriversExternalsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Drivers", "Read")]
     public async Task<IActionResult> View(SetViewOptions<DriverExternal> Options) {
         return Ok(await Service.View(Options));
+    }
+
+    [HttpPost(), Auth("Drivers", "Create")]
+    public async Task<IActionResult> Create(DriverExternal[] Drivers) {
+        return Ok(await Service.Create(Drivers));
+    }
+
+    [HttpPost(), Auth("Drivers", "Update")]
+    public async Task<IActionResult> Update(DriverExternal Driver) {
+        return Ok(await Service.Update(Driver));
     }
 }

@@ -53,8 +53,8 @@ final class Section implements CSMSetInterface {
   @override
   JObject encode() {
     // Avoiding EF tracking issues.
-    JObject? locationNav = locationNavigation?.encode();
-    if(yard != 0) locationNav = null;
+    // JObject? locationNav = locationNavigation?.encode();
+    // if(yard != 0) locationNav = null;
     return <String, dynamic>{
       SCK.kId: id,
       SCK.kStatus: status,
@@ -63,7 +63,7 @@ final class Section implements CSMSetInterface {
       kCapacity: capacity,
       kOcupancy: ocupancy,
       SCK.kTimestamp: timestamp.toIso8601String(),
-      kLocationNavigation: locationNav,
+      kLocationNavigation: locationNavigation?.encode(),
       SCK.kStatusNavigation: statusNavigation?.encode(),
     };
   }
@@ -72,12 +72,17 @@ final class Section implements CSMSetInterface {
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(name.isEmpty || name.length > 30) results.add(CSMSetValidationResult(SCK.kName, "Name must be 25 max lenght and non-empty", "strictLength(1,30)"));
-    if(yard < 0) results.add(CSMSetValidationResult(kYard, 'Yard pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(yard < 0) results.add(CSMSetValidationResult(kYard, '$kYard pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(status < 0) results.add(CSMSetValidationResult(SCK.kStatus, '${SCK.kStatus} pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(capacity == 0) results.add(CSMSetValidationResult(kCapacity, '$kCapacity cant be equal to zero or empty', 'pointerHandler()'));
 
     return results;
   }
-  Section.def();
+  
+  Section.a(){
+    _timestamp = DateTime.now();
+  }
+
   Section clone({
     int? id,
     int? status,
@@ -88,7 +93,12 @@ final class Section implements CSMSetInterface {
     Location? locationNavigation,
     Status? statusNavigation,
   }){
-   
+
+    if(yard == 0){
+      this.locationNavigation = null;
+      locationNavigation = null;
+    }
+
     return Section(
       id ?? this.id, 
       status ?? this.status,

@@ -16,5 +16,17 @@ final class TrailersExternalsService extends TrailersExternalsServiceBase {
     CSMActEffect actEffect = await twsPost('view', options, auth: auth);
     return MainResolver<SetViewOut<TrailerExternal>>(actEffect);
   }
+
+  @override
+  Effect<SetBatchOut<TrailerExternal>> create(List<TrailerExternal> trailers, String auth) async {
+    CSMActEffect actEffect = await twsPostList('create', trailers, auth: auth);
+    return MainResolver<SetBatchOut<TrailerExternal>>(actEffect);
+  }
+
+  @override
+  Effect<RecordUpdateOut<TrailerExternal>> update(TrailerExternal trailer, String auth) async {
+    CSMActEffect actEffect = await twsPost('update', trailer, auth: auth);
+    return MainResolver<RecordUpdateOut<TrailerExternal>>(actEffect);
+  }
 }
       

@@ -22,7 +22,7 @@ public class Q_Section : BQ_Set<Section> {
             Mock = new() {
                 Id = 0,
                 Name = "",
-                Yard = 0,
+                Yard = -1,
                 Status = 0
             },
             Expectations = [

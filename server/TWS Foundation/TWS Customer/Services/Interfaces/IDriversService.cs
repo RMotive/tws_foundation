@@ -6,4 +6,7 @@ using TWS_Business.Sets;
 namespace TWS_Customer.Services.Interfaces;
 public interface IDriversService {
     Task<SetViewOut<Driver>> View(SetViewOptions<Driver> Options);
+    Task<SetBatchOut<Driver>> Create(Driver[] Driver);
+    Task<RecordUpdateOut<Driver>> Update(Driver Driver);
+
 }

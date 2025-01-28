@@ -18,7 +18,6 @@ using TWS_Customer.Managers;
 using TWS_Customer.Services;
 using TWS_Customer.Services.Interfaces;
 
-using TWS_Foundation.Authentication;
 using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;
 using TWS_Foundation.Models;
@@ -156,7 +155,11 @@ public partial class Program {
                 builder.Services.AddScoped<ICarriersService, CarriersService>();
                 builder.Services.AddScoped<IVehiculesModelsService, VehiculeModelService>();
                 builder.Services.AddScoped<ITrucksInventoriesService, TruckInventoryService>();
-
+                builder.Services.AddScoped<ITrailersClassesService, TrailersClassesService>();
+                builder.Services.AddScoped<ITrailersTypesService, TrailersTypesService>();
+                builder.Services.AddScoped<IEmployeesService, EmployeesService>();
+                builder.Services.AddScoped<ILocationsService, LocationsService>();
+                builder.Services.AddScoped<IAddressesService, AddressesService>();
 
             }
             WebApplication app = builder.Build();

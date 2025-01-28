@@ -7,5 +7,4 @@ namespace TWS_Customer.Services.Interfaces;
 public interface IVehiculesModelsService {
     Task<SetViewOut<VehiculeModel>> View(SetViewOptions<VehiculeModel> Options);
 
-    Task<VehiculeModel> Create(VehiculeModel vehiculeModel);
 }

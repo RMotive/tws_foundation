@@ -26,11 +26,23 @@ public static class GenericUtils {
                 continue;
 
             object? OriginalValue = PropertyInfo.GetValue(target);
+
             if (OriginalValue == null) {
                 PropertyInfo.SetValue(Cloned, null);
             } else if (PropertyInfo.PropertyType.IsValueType || PropertyInfo.PropertyType == typeof(string)) {
                 PropertyInfo.SetValue(Cloned, OriginalValue);
             } else if (typeof(IEnumerable).IsAssignableFrom(PropertyInfo.PropertyType)) {
+                // Check special cases for bytes[] arrays.
+                if (OriginalValue is IList<byte> list && list.Count > 0) {
+                    // new list reference.
+                    List<byte> byteList = [.. list];
+
+                    // convert to bytes array.
+                    var byteArray = byteList.ToArray();
+
+                    PropertyInfo.SetValue(Cloned, byteArray);
+                    continue;
+                }
                 var clonedCollection = CloneCollection((IEnumerable)OriginalValue, PropertyInfo.PropertyType, visited);
                 PropertyInfo.SetValue(Cloned, clonedCollection);
             } else {

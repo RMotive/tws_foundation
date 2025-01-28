@@ -2,7 +2,7 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Address implements CSMSetInterface {
-   /// [country] property key.
+  /// [country] property key.
   static const String kCountry = "country";
 
   /// [state] property key.
@@ -29,7 +29,7 @@ final class Address implements CSMSetInterface {
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
 
-   /// Record database pointer.
+  /// Record database pointer.
   @override
   int id = 0;
 
@@ -37,25 +37,27 @@ final class Address implements CSMSetInterface {
   String country = "";
 
   /// State name inside city address.
-  String? state = "";
+  String? state;
 
   /// Street name identification.
-  String? street = "";
+  String? street;
 
   /// Alternative street name identification.
-  String? altStreet = "";
+  String? altStreet;
 
   /// City name inside country address.
-  String? city = "";
+  String? city;
 
   /// Internal postal code.
-  String? zip = "";
+  String? zip;
 
   /// Internal demographical identification.
-  String? colonia = "";
+  String? colonia;
 
   /// List of carriers at this [Address]
   List<Carrier> carriers = <Carrier>[];
+
+  Address.a();
 
   /// Creates an [Address] object with required properties
   Address(this.id, this.country, this.state, this.street, this.altStreet, this.city, this.zip, this.colonia, this.carriers, { 
@@ -83,7 +85,6 @@ final class Address implements CSMSetInterface {
     return Address(id, country, state, street, altStreet, city, zip, colonia, carriers, timestamp: timestamp);
   }
 
-  /// Creates an [Address] overriding the given properties.
   @override
   JObject encode() {
     return <String, dynamic>{
@@ -116,8 +117,8 @@ final class Address implements CSMSetInterface {
 
     return results;
   }
-  Address.def();
 
+  /// Creates an [Address] overriding the given properties.
   Address clone({
     int? id,
     String? country,
@@ -129,6 +130,37 @@ final class Address implements CSMSetInterface {
     String? colonia,
     List<Carrier>? carriers
   }){
+
+    if(state != null && state.trim().isEmpty){
+      this.state = null;
+      state = null;
+    }
+
+    if(street != null && street.trim().isEmpty){
+      this.street = null;
+      street = null;
+    }
+
+    if(altStreet != null && altStreet.trim().isEmpty){
+      this.altStreet = null;
+      altStreet = null;
+    }
+
+    if(city != null && city.trim().isEmpty){
+      this.city = null;
+      city = null;
+    }
+
+    if(zip != null && zip.trim().isEmpty){
+      this.zip = null;
+      zip = null;
+    }
+
+    if(colonia != null && colonia.trim().isEmpty){
+      this.colonia = null;
+      colonia = null;
+    }
+
     return Address(
       id ?? this.id, 
       country ?? this.country, 

@@ -22,4 +22,14 @@ public class AccountsController
     public async Task<IActionResult> View(SetViewOptions<Account> Options) {
         return Ok(await Service.View(Options));
     }
+
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> Create(Account[] Accounts) {
+        return Ok(await Service.Create(Accounts));
+    }
+
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> Update(Account Account) {
+        return Ok(await Service.Update(Account));
+    }
 }

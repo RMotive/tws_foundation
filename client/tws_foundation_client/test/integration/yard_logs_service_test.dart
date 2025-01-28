@@ -87,6 +87,7 @@ void main() {
       "ECT$randomToken", //economic
       null,
       trailerType,
+      null,
       null, //statusNavigation
     );
     
@@ -95,12 +96,15 @@ void main() {
       1, //status
       0, //common
       1, //carrier
+      null,
       null, //model
-      1, //maintenance
+      null, //maintenance
+      null,
       null,
       trailerCommon, //trailerCommonNavigation
       null, //vehiculeModelNavigation
       null, //statusNavigation
+      null,
       <Plate>[plateMX2, plateUSA2] //plates
     );
     TruckCommon truckCommon = TruckCommon(
@@ -174,7 +178,7 @@ void main() {
       null, //trailerExternalNavigation
       null, //loadTypeNavigation
       null, //sectionNavigation
-      null
+      null,
     );
     List<CSMSetValidationResult> evaluation = mock.evaluate();
     assert(evaluation.isEmpty);
@@ -284,12 +288,17 @@ void main() {
       test(
         'Updates when exist',
         () async {
-          YardLog mock = creationMock.clone(gName: 'a new name to test');
+          YardLog mock = creationMock.clone(
+            timestamp: DateTime(1999),
+            gName: 'a new name to test',
+          );
+
           MainResolver<RecordUpdateOut<YardLog>> fact = await service.update(mock, auth);
           RecordUpdateOut<YardLog> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<YardLog>.des(json ,YardLog.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.gName == mock.gName);
+          assert(actEffect.updated.timestamp.year == 1999);
         },
       );
     },

@@ -14,31 +14,31 @@ void main() {
   Truck buildMock(String randomToken) {
     DateTime time = DateTime.now();
     Plate plateMX = Plate(
-        0, //id
-        1, //status
-        "MEX$randomToken", //identifier
-        "TIJ", //state
-        "MEX", //country
-        time, //expiration
-        0, //truck
-        null, //trailer
-        null, //statusNavigation
-        null, //truckCommonNavigation
-        null //trailerCommonNavigation
-        );
+      0, //id
+      1, //status
+      "MEX$randomToken", //identifier
+      "TIJ", //state
+      "MEX", //country
+      time, //expiration
+      0, //truck
+      null, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
     Plate plateUSA = Plate(
-        0, //id
-        1, //status
-        "USA$randomToken", //identifier
-        "CA", //state
-        "USA", //country
-        time, //expiration
-        0, //truck
-        null, //trailer
-        null, //statusNavigation
-        null, //truckCommonNavigation
-        null //trailerCommonNavigation
-        );
+      0, //id
+      1, //status
+      "USA$randomToken", //identifier
+      "CA", //state
+      "USA", //country
+      time, //expiration
+      0, //truck
+      null, //trailer
+      null, //statusNavigation
+      null, //truckCommonNavigation
+      null //trailerCommonNavigation
+    );
     TruckCommon truckCommon = TruckCommon(
       0, //id
       1, //status
@@ -59,24 +59,25 @@ void main() {
     SCT sct = SCT(0, 1, "type01", "Number_test_sct:$randomToken", "C$randomToken", null);
     Carrier carrier = Carrier(0, 1, 0, 0, "Carrier: $randomToken", "Carrier description: $randomToken", null, approach, address, usdot, null, <Truck>[]);
     Truck mock = Truck(
-        0, // id
-        1, //Status
-        0, //manufacturer
-        0, //common
-        1, //carrier
-        "Motor $randomToken", //motor
-        "VIN - $randomToken", //vin
-        null, //maintenance
-        null, //insurance
-        null,
-        null, //statusNavigation
-        model, //manufacturerNavigation
-        truckCommon, //truckCommonNavigation
-        maintenance, //maintenanceNavigation
-        insurance, //insuranceNavigation
-        sct, //sct
-        carrier, //carrierNavigation
-        <Plate>[plateMX, plateUSA]);
+      0, // id
+      1, //Status
+      0, //manufacturer
+      0, //common
+      1, //carrier
+      "Motor $randomToken", //motor
+      "VINtest-$randomToken", //vin
+      null, //maintenance
+      null, //insurance
+      null,
+      null, //statusNavigation
+      model, //manufacturerNavigation
+      truckCommon, //truckCommonNavigation
+      maintenance, //maintenanceNavigation
+      insurance, //insuranceNavigation
+      sct, //sct
+      carrier, //carrierNavigation
+      <Plate>[plateMX, plateUSA]
+    );
     List<CSMSetValidationResult> evaluation = mock.evaluate();
     assert(evaluation.isEmpty);
     return mock;

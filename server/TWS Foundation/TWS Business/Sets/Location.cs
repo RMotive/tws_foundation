@@ -16,9 +16,13 @@ public partial class Location
 
     public string Name { get; set; } = null!;
 
-    public int Address { get; set; }
+    public int? Address { get; set; }
+
+    public int? Waypoint { get; set; }
 
     public virtual Address? AddressNavigation { get; set; }
+
+    public virtual Waypoint? WaypointNavigation { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
 
@@ -55,6 +59,10 @@ public partial class Location
             Entity.Property(e => e.Name)
                 .HasMaxLength(30)
                 .IsUnicode(false);
+
+            Entity.HasOne(d => d.WaypointNavigation)
+               .WithMany(p => p.Locations)
+               .HasForeignKey(d => d.Waypoint);
 
             Entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.Locations)
