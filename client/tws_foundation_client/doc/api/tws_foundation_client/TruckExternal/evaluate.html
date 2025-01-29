@@ -16,15 +16,11 @@
   <link rel="stylesheet" href="../../static-assets/github.css?v1">
   <link rel="stylesheet" href="../../static-assets/styles.css?v1">
   <link rel="icon" href="../../static-assets/favicon.png?v1">
-
   
 </head>
 
-
 <body data-base-href="../../" data-using-base-href="false" class="light-theme">
-
 <div id="overlay-under-drawer"></div>
-
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
@@ -50,7 +46,6 @@
   </div>
 </header>
 <main>
-
 <div
     id="dartdoc-main-content"
     class="main-content"
@@ -64,11 +59,10 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.5.4/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.6.0/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-
-<span class="returntype"><a href="https://api.dart.dev/stable/3.5.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.6.0/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">CSMSetValidationResult</span>&gt;</span></span>
 <span class="name ">evaluate</span>(<wbr>)
 
       
@@ -111,7 +105,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   }
   if(!isPlate) results.add(CSMSetValidationResult(kMxPlate, &quot;Debe agregar alguna placa al camión externo.&quot;, &quot;fieldConflict()&quot;));
   if(vin != null){
-    if(vin!.length != 17 &amp;&amp; vin!.trim().isNotEmpty) results.add(CSMSetValidationResult(kVin, &#39;External Truck VIN number must be 17 length&#39;, &#39;strictLength(17)&#39;));
+    if(vin!.length &gt; 17 &amp;&amp; vin!.trim().isNotEmpty) results.add(CSMSetValidationResult(kVin, &#39;External Truck VIN number must be empty or max 17 length.&#39;, &#39;strictLength(1, 17)&#39;));
   }
 
   if(truckCommonNavigation != null){
@@ -125,7 +119,6 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
 
 
   </div> <!-- /.main-content -->
-
   <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
     <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
 <header id="header-search-sidebar" class="hidden-l">
@@ -133,7 +126,6 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
     <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
 </header>
-
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">tws_foundation_client</a></li>
     <li><a href="../../tws_foundation_client/tws_foundation_client-library.html">tws_foundation_client</a></li>
@@ -141,33 +133,24 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
     <li class="self-crumb">evaluate method</li>
 </ol>
 
-
     <h5>TruckExternal class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
-
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
 </div><!--/.sidebar-offcanvas-->
-
 </main>
-
 <footer>
   <span class="no-break">
     tws_foundation_client
-      6.0.0
+      6.1.0
   </span>
-
   
 </footer>
-
 
 
 <script src="../../static-assets/highlight.pack.js?v1"></script>
 <script src="../../static-assets/docs.dart.js"></script>
 
-
-
 </body>
-
 </html>
 

@@ -16,15 +16,11 @@
   <link rel="stylesheet" href="../../static-assets/github.css?v1">
   <link rel="stylesheet" href="../../static-assets/styles.css?v1">
   <link rel="icon" href="../../static-assets/favicon.png?v1">
-
   
 </head>
 
-
 <body data-base-href="../../" data-using-base-href="false" class="light-theme">
-
 <div id="overlay-under-drawer"></div>
-
 <header id="title">
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
@@ -50,7 +46,6 @@
   </div>
 </header>
 <main>
-
 <div
     id="dartdoc-main-content"
     class="main-content"
@@ -62,19 +57,18 @@
 
     <section class="multi-line-signature">
       
-
 <span class="returntype">void</span>
-<span class="name ">resolve</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="resolve-param-onConnectionFailure"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onConnectionFailure</span>(), </span></li>
-<li><span class="parameter" id="resolve-param-onException"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onException</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-exception"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">exception</span>, </span></li>
-<li><span class="parameter" id="param-trace"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">trace</span></span></li>
-</ol>), </span></li>
-<li><span class="parameter" id="resolve-param-onFailure"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onFailure</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-failure"><span class="type-annotation"><a href="../../tws_foundation_client/FailureFrame-class.html">FailureFrame</a></span> <span class="parameter-name">failure</span>, </span></li>
-<li><span class="parameter" id="param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.5.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span></span></li>
+<span class="name ">resolve</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="resolve-param-decoder"><span>required</span> <span class="type-annotation">TSuccess</span> <span class="parameter-name">decoder</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-json"><span class="type-annotation">JObject</span> <span class="parameter-name">json</span></span></li>
 </ol>), </span></li>
 <li><span class="parameter" id="resolve-param-onSuccess"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onSuccess</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-success"><span class="type-annotation"><a href="../../tws_foundation_client/SuccessFrame-class.html">SuccessFrame</a><span class="signature">&lt;<wbr><span class="type-parameter">TSuccess</span>&gt;</span></span> <span class="parameter-name">success</span></span></li>
 </ol>), </span></li>
-<li><span class="parameter" id="resolve-param-decoder"><span>required</span> <span class="type-annotation">TSuccess</span> <span class="parameter-name">decoder</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-json"><span class="type-annotation">JObject</span> <span class="parameter-name">json</span></span></li>
+<li><span class="parameter" id="resolve-param-onFailure"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onFailure</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-failure"><span class="type-annotation"><a href="../../tws_foundation_client/FailureFrame-class.html">FailureFrame</a></span> <span class="parameter-name">failure</span>, </span></li>
+<li><span class="parameter" id="param-status"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.6.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">status</span></span></li>
 </ol>), </span></li>
+<li><span class="parameter" id="resolve-param-onException"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onException</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-exception"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.6.0/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">exception</span>, </span></li>
+<li><span class="parameter" id="param-trace"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.6.0/dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">trace</span></span></li>
+</ol>), </span></li>
+<li><span class="parameter" id="resolve-param-onConnectionFailure"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onConnectionFailure</span>(), </span></li>
 <li><span class="parameter" id="resolve-param-onFinally"><span class="type-annotation">void</span> <span class="parameter-name">onFinally</span>()?, </span></li>
 </ol>})
 
@@ -88,11 +82,11 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void resolve({
-  required void Function() onConnectionFailure,
-  required void Function(Object exception, StackTrace trace) onException,
-  required void Function(FailureFrame failure, int status) onFailure,
-  required void Function(SuccessFrame&lt;TSuccess&gt; success) onSuccess,
   required TSuccess Function(JObject json) decoder,
+  required void Function(SuccessFrame&lt;TSuccess&gt; success) onSuccess,
+  required void Function(FailureFrame failure, int status) onFailure,
+  required void Function(Object exception, StackTrace trace) onException,
+  required void Function() onConnectionFailure,
   void Function()? onFinally,
 }) {
   result.resolve(
@@ -118,7 +112,6 @@
 
 
   </div> <!-- /.main-content -->
-
   <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
     <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
 <header id="header-search-sidebar" class="hidden-l">
@@ -126,7 +119,6 @@
     <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
 </header>
-
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">tws_foundation_client</a></li>
     <li><a href="../../tws_foundation_client/tws_foundation_client-library.html">tws_foundation_client</a></li>
@@ -134,33 +126,24 @@
     <li class="self-crumb">resolve method</li>
 </ol>
 
-
     <h5>MainResolver class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
-
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
 </div><!--/.sidebar-offcanvas-->
-
 </main>
-
 <footer>
   <span class="no-break">
     tws_foundation_client
-      6.0.0
+      6.1.0
   </span>
-
   
 </footer>
-
 
 
 <script src="../../static-assets/highlight.pack.js?v1"></script>
 <script src="../../static-assets/docs.dart.js"></script>
 
-
-
 </body>
-
 </html>
 
