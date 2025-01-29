@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Models.Options;
+﻿using ClosedXML.Excel;
+
+using CSM_Foundation.Advisor.Managers;
+using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
@@ -387,4 +390,86 @@ public class YardLogsService
     public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {
         return YardLogs.ViewInventory(Options);
     }
+
+    public async Task<ExportInventoryOut> ExportInventory(SetViewOptions<YardLog> Options) {
+        (string, string, Func<YardLog, string?>)[] exportFields = [
+            ("Trailer NO", "A", (YardLog i) => i.Economic),
+            ("Placa USA", "B", (YardLog i) => i.PlateUSA),
+            ("Placa MEX", "C", (YardLog i) => i.PlateMEX),
+            ("Truck NO.", "D", (YardLog i) => i.TruckEconomic),
+            ("Truck Placa USA", "E", (YardLog i) => i.TruckPlateUSA),
+            ("Truck Placa MEX", "F", (YardLog i) => i.TruckPlateMEX),
+            ("Entrada", "G", (YardLog i) => $"{i.Timestamp.ToShortDateString()} {i.Timestamp.ToShortTimeString()} UTC"),
+            ("Sección", "H", (YardLog i) => i.SectionDisplay),
+            ("Compañía", "I", (YardLog i) => i.Carrier),
+            ("Posesión", "J", (YardLog i) => i.Truck != null ? "Interno" : i.TruckExternal != null ? "Externo" : "No Identificable"),  
+        ];
+
+        string tempFileStore = $"{Path.GetTempPath()}exports_yardlog_view\\yardlog_export_{Guid.NewGuid()}.xlsx";
+
+        using XLWorkbook book = new();
+        using FileStream fileStream = new(tempFileStore, FileMode.OpenOrCreate);
+
+
+        IXLWorksheet bookSheet = book.Worksheets.Add("YardLog Inventory");
+
+        DateTime timestamp = DateTime.UtcNow;
+        IXLCell titleCell = bookSheet.Cell("A1");
+        IXLCell timeCell = bookSheet.Cell("B2");
+
+        titleCell.Value = "YardLog Inventory";
+        titleCell.Style.Fill.BackgroundColor = XLColor.WhiteSmoke;
+
+        timeCell.Value = $"{timestamp.ToShortDateString()} {timestamp.ToShortTimeString()} (UTC)";
+
+        SetViewOut<YardLog> viewOut = await YardLogs.ViewInventory(Options);
+        for(int recordPointer = 0; recordPointer <= viewOut.Sets.Length; recordPointer++) {
+            YardLog record = viewOut.Sets[recordPointer];
+
+            foreach((string, string Column, Func<YardLog, string?> ComposeValue) field in exportFields) {
+
+                bookSheet.Cell($"{field.Column}{3 + recordPointer}").Value = field.ComposeValue(record) ?? "";
+            }
+        }
+
+        foreach ((string Name, string Column, Func<YardLog, string?>) field in exportFields) {
+
+            IXLCell fieldCell = bookSheet.Cell($"{field.Column}2");
+            
+            fieldCell.Value = field.Name;
+            fieldCell.Style.Fill.BackgroundColor = XLColor.WhiteSmoke;
+            fieldCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+            bookSheet.Column(field.Column).AdjustToContents();
+        }
+
+        book.SaveAs(fileStream);
+        fileStream.Position = 0;
+
+        using BinaryReader reader = new(fileStream);
+
+        AdvisorManager.Success(
+                "Excel file export",
+                new Dictionary<string, dynamic> {
+                    { "Path", tempFileStore },
+                }
+            );
+
+        return new ExportInventoryOut {
+            Content = reader.ReadBytes((int)fileStream.Length),
+            Name = $"YardLog Inventory ({DateTime.UtcNow.ToShortDateString()})",
+            Type = "xlsx"
+        };
+    }
+}
+
+
+public class ExportInventoryOut {
+
+
+    public required byte[] Content;
+
+    public required string Name;
+
+    public required string Type;
 }

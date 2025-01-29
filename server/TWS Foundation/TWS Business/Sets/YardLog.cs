@@ -63,6 +63,110 @@ public partial class YardLog
 
     public virtual Section? SectionNavigation { get; set; }
 
+    /// <summary>
+    ///     
+    /// </summary>
+    public string? Economic {
+        get {
+            return TrailerNavigation?.TrailerCommonNavigation?.Economic 
+                ?? TrailerExternalNavigation?.TrailerCommonNavigation?.Economic;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? PlateMEX {
+        get {
+            if(TrailerNavigation != null) {
+                return TrailerNavigation.Plates.LastOrDefault(i => i.Country == "MEX")?.Identifier;
+            } 
+            if (TrailerExternalNavigation != null) {
+                return TrailerExternalNavigation.MxPlate;
+            }
+
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? PlateUSA {
+        get {
+            if (TrailerNavigation != null) {
+                return TrailerNavigation.Plates.LastOrDefault(i => i.Country == "USA")?.Identifier;
+            }
+            else {
+                return TrailerExternalNavigation?.UsaPlate;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? TruckEconomic {
+        get {
+            if (TruckNavigation != null) {
+                return TruckNavigation.TruckCommonNavigation?.Economic;
+            } else {
+                return TruckExternalNavigation?.TruckCommonNavigation?.Economic;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? TruckPlateUSA {
+        get {
+            if (TruckNavigation != null) {
+                return TruckNavigation.Plates.LastOrDefault(i => i.Country == "USA")?.Identifier;
+            } else {
+                return TruckExternalNavigation?.UsaPlate;
+            }
+        } 
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? TruckPlateMEX {
+        get {
+            if (TruckNavigation != null) {
+                return TruckNavigation.Plates.LastOrDefault(i => i.Country == "MEX")?.Identifier;
+            } else {
+                return TruckExternalNavigation?.MxPlate;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     
+    /// </summary>
+    public string? Carrier {
+        get {
+            if (TrailerNavigation != null) {
+                return TrailerNavigation.CarrierNavigation?.Name;
+            } else {
+                return TrailerExternalNavigation?.Carrier;
+            }
+        }
+    }
+
+    public string? SectionDisplay {
+        get {
+            return $"{SectionNavigation?.LocationNavigation?.Name} - {SectionNavigation?.Name}";
+        }
+    }
+
+
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <param name="Container"></param>
+    /// <returns></returns>
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator required = new();
         Container = [
@@ -76,6 +180,10 @@ public partial class YardLog
         return Container;
     }
 
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <param name="builder"></param>
     public static void Set(ModelBuilder builder) {
         builder.Entity<YardLog>(entity => {
             entity.HasKey(e => e.Id);

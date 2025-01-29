@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CSM_Foundation.Convertion;
 
@@ -15,6 +16,6 @@ public interface IConverterVariation {
     ///         property to be converted.
     ///     </para>
     /// </summary>
-    [JsonPropertyOrder(0)]
+    [JsonPropertyOrder(0), NotMapped]
     string Discriminator { get; init; }
 }

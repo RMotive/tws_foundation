@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 
 using CSM_Foundation.Convertion;
 using CSM_Foundation.Core.Bases;
@@ -15,6 +16,7 @@ namespace CSM_Foundation.Database.Bases;
 public abstract class BSet
     : BObject<ISet>, ISet {
 
+    [NotMapped]
     public string Discriminator { get; init; }
 
     /// <summary>

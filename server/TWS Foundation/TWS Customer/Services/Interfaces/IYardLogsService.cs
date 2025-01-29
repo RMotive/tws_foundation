@@ -3,6 +3,8 @@ using CSM_Foundation.Database.Models.Out;
 
 using TWS_Business.Sets;
 
+using TWS_Customer.Services.Business;
+
 namespace TWS_Customer.Services.Interfaces;
 
 /// <summary>
@@ -51,5 +53,5 @@ public interface IYardLogsService {
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    Task<SetViewOptions<YardLog>> ExportInventory(SetViewOptions<YardLog> Options);
+    Task<ExportInventoryOut> ExportInventory(SetViewOptions<YardLog> Options);
 }

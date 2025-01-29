@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/models/out/export_inventory_out.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
@@ -36,6 +37,13 @@ final class YardLogsService extends YardLogServiceBase {
   Effect<RecordUpdateOut<YardLog>> update(YardLog yardlog, String auth) async {
     CSMActEffect actEffect = await twsPost('update', yardlog, auth: auth);
     return MainResolver<RecordUpdateOut<YardLog>>(actEffect);
+  }
+
+  @override
+  Effect<ExportInventoryOut> exportInventory(SetViewOptions<YardLog> options, String auth) async {
+    CSMActEffect actEffect = await twsPost('exportInventory', options, auth: auth);
+
+    return MainResolver<ExportInventoryOut>(actEffect);
   }
 }
       

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using TWS_Business.Sets;
 
+using TWS_Customer.Services.Business;
 using TWS_Customer.Services.Interfaces;
 
 using TWS_Foundation.Authentication;
@@ -40,5 +41,10 @@ public class YardLogsController : ControllerBase {
     [HttpPost(), Auth("", "")]
     public async Task<IActionResult> Delete(int Id) {
         return Ok(await Service.Delete(Id));
+    }
+
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> ExportInventory(SetViewOptions<YardLog> Options) {
+        return Ok(await Service.ExportInventory(Options));
     }
 }

@@ -1,7 +1,10 @@
+import 'package:tws_foundation_client/src/models/out/export_inventory_out.dart';
 import 'package:tws_foundation_client/src/services/tws_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
+///
 abstract class YardLogServiceBase extends TWSServiceBase {
+  ///
   YardLogServiceBase(
     super.host,
     super.servicePath, {
@@ -12,9 +15,16 @@ abstract class YardLogServiceBase extends TWSServiceBase {
   /// Transaction to generate a set view object.
   Effect<SetViewOut<YardLog>> view(SetViewOptions<YardLog> options, String auth);
 
+  ///
   Effect<SetViewOut<YardLog>> viewInventory(SetViewOptions<YardLog> options, String auth);
 
+  ///
   Effect<SetBatchOut<YardLog>> create(List<YardLog> yardlogs, String auth);
 
+  ///
   Effect<RecordUpdateOut<YardLog>> update(YardLog yardlog, String auth);
+
+  ///
+  Effect<ExportInventoryOut> exportInventory(SetViewOptions<YardLog> options, String auth);
 }
+
