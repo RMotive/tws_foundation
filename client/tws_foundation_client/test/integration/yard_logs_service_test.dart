@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/models/out/export_inventory_out.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../integration_credentials.dart';
