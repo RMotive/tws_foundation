@@ -1,4 +1,3 @@
-import 'package:tws_foundation_client/src/models/out/export_inventory_out.dart';
 import 'package:tws_foundation_client/src/services/tws_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 

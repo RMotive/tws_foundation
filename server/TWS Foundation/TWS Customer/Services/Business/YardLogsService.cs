@@ -405,7 +405,7 @@ public class YardLogsService
             ("Posesión", "J", (YardLog i) => i.Truck != null ? "Interno" : i.TruckExternal != null ? "Externo" : "No Identificable"),  
         ];
 
-        string tempFileStore = $"{Path.GetTempPath()}exports_yardlog_view\\yardlog_export_{Guid.NewGuid()}.xlsx";
+        string tempFileStore = $"{Path.GetTempPath()}yardlog_export_{Guid.NewGuid()}.xlsx";
 
         using XLWorkbook book = new();
         using FileStream fileStream = new(tempFileStore, FileMode.OpenOrCreate);
@@ -415,15 +415,15 @@ public class YardLogsService
 
         DateTime timestamp = DateTime.UtcNow;
         IXLCell titleCell = bookSheet.Cell("A1");
-        IXLCell timeCell = bookSheet.Cell("B2");
+        IXLCell timeCell = bookSheet.Cell("B1");
 
         titleCell.Value = "YardLog Inventory";
-        titleCell.Style.Fill.BackgroundColor = XLColor.WhiteSmoke;
+        titleCell.Style.Fill.BackgroundColor = XLColor.AshGrey;
 
         timeCell.Value = $"{timestamp.ToShortDateString()} {timestamp.ToShortTimeString()} (UTC)";
 
         SetViewOut<YardLog> viewOut = await YardLogs.ViewInventory(Options);
-        for(int recordPointer = 0; recordPointer <= viewOut.Sets.Length; recordPointer++) {
+        for(int recordPointer = 0; recordPointer < viewOut.Sets.Length; recordPointer++) {
             YardLog record = viewOut.Sets[recordPointer];
 
             foreach((string, string Column, Func<YardLog, string?> ComposeValue) field in exportFields) {
@@ -437,7 +437,7 @@ public class YardLogsService
             IXLCell fieldCell = bookSheet.Cell($"{field.Column}2");
             
             fieldCell.Value = field.Name;
-            fieldCell.Style.Fill.BackgroundColor = XLColor.WhiteSmoke;
+            fieldCell.Style.Fill.BackgroundColor = XLColor.AshGrey;
             fieldCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
             bookSheet.Column(field.Column).AdjustToContents();

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:csm_client/csm_client.dart';
@@ -20,7 +21,7 @@ final class ExportInventoryOut implements CSMEncodeInterface {
     return ExportInventoryOut(
       json.get('name'),
       json.get('type'),
-      Uint8List(2),
+      base64Decode(json.get('content')),
     );
   }
 
