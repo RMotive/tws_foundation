@@ -1,12 +1,26 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## 7.1.0 - [28.01-2025]
 
 - Notes:
 
-- Fixes:
+    1. Included [ExportViewInventory] service, allowing to generate an excel file based on a [ViewInventory] results. 
+
+- Fixes: N/A
 
 - Dependencies:
+
+    | Package                                 | Previous Version | New Version     |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | ClosedXML                               | ---              | 0.104.2         |
+    | coverlet.collector                      | 6.2.0            | 6.2.4           |
+    | Microsoft.AspNetCore.Mvc.Testing        | 9.0.0            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore           | 9.0.0            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore.SqlServer | 9.0.0            | 9.0.1           |
+    | Microsoft.IdentityModel.Tokens          | 8.2.1            | 8.3.1           |
+    | Microsoft.NET.Test.Sdk                  | 17.12.0          | 17.12.0         |
+    | xunit                                   | 2.9.2            | 2.9.3           |
+    | xunit.runner.visualstudio               | 2.9.2            | 3.0.1           |
 
 ## 7.0.2 - [04.12-2024]
 
