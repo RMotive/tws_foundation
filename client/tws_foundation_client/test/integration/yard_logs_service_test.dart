@@ -210,6 +210,8 @@ void main() {
       }
     }
   );
+
+
   test(
     'View',
     () async {
@@ -261,6 +263,28 @@ void main() {
     },
   );
 
+  test(
+    'Export Inventory',
+    () async {
+      MainResolver<ExportInventoryOut> fact = await service.exportInventory(
+        SetViewOptions<YardLog>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<YardLog>>[]),
+        auth,
+      );
+
+      fact.resolve(
+        decoder: ExportInventoryOut.des,
+        onSuccess: (SuccessFrame<ExportInventoryOut> success) {
+          ExportInventoryOut fact = success.estela;
+
+          expect(fact.type, 'xlsx');
+        },
+        onFailure: (FailureFrame failure, int _) => throw failure.estela.system,
+        onException: (Object exception, StackTrace _) => throw exception,
+        onConnectionFailure: () => throw 'connection failure',
+      );
+    },
+  );
+
   group(
     'Update',
     () {
@@ -294,4 +318,5 @@ void main() {
       );
     },
   );
+  
 }

@@ -37,5 +37,12 @@ final class YardLogsService extends YardLogServiceBase {
     CSMActEffect actEffect = await twsPost('update', yardlog, auth: auth);
     return MainResolver<RecordUpdateOut<YardLog>>(actEffect);
   }
+
+  @override
+  Effect<ExportInventoryOut> exportInventory(SetViewOptions<YardLog> options, String auth) async {
+    CSMActEffect actEffect = await twsPost('exportInventory', options, auth: auth);
+
+    return MainResolver<ExportInventoryOut>(actEffect);
+  }
 }
       

@@ -7,12 +7,12 @@ using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Quality.Secrets;
 
-using PrivilegesFrame = TWS_Foundation.Middlewares.Frames.SuccessFrame<TWS_Customer.Managers.Records.Session>;
+using PrivilegesFrame = TWS_Foundation.Middlewares.Frames.SuccessFrame<TWS_Customer.Managers.Session.Session>;
 
 namespace TWS_Foundation.Quality.Bases;
 public abstract class BQ_CustomServerController
@@ -30,7 +30,7 @@ public abstract class BQ_CustomServerController
         });
         Dictionary<string, object> estela = Frame.Estela;
         if (Status != HttpStatusCode.OK) {
-            Assert.Fail($"Failed request with: {estela[nameof(ServerExceptionPublish.System)]} \ndue to: {estela[nameof(ServerExceptionPublish.Advise)]} \nTried with: {Account.Identity}");
+            Assert.Fail($"Failed request with: {estela[nameof(ExceptionExposition.System)]} \ndue to: {estela[nameof(ExceptionExposition.Advise)]} \nTried with: {Account.Identity}");
         }
         PrivilegesFrame successFrame = Framing<PrivilegesFrame>(Frame);
         Session session = successFrame.Estela;

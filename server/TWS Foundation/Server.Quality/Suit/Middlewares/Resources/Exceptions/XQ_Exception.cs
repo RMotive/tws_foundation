@@ -1,12 +1,12 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Server.Bases;
+using CSM_Foundation.Core.Bases;
 
 namespace TWS_Foundation.Quality.Suit.Middlewares.Resources.Exceptions;
 public class XQ_Exception
-    : BServerTransactionException<XQ_ExceptionSituation> {
+    : BException<XQ_ExceptionSituation> {
     public XQ_Exception()
-        : base("quality exception mock", HttpStatusCode.BadRequest, null) {
+        : base("quality exception mock", XQ_ExceptionSituation.Quality, HttpStatusCode.BadRequest, null) {
     }
 }
 

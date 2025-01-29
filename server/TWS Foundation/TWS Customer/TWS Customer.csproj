@@ -16,10 +16,12 @@
 
   <ItemGroup>
     <Folder Include="Configurations\" />
+    <Folder Include="Services\Common\DataManagement\Out\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>

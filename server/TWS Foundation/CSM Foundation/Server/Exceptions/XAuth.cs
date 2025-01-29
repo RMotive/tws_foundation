@@ -1,17 +1,16 @@
 ﻿using System.Net;
 
+using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
-using CSM_Foundation.Server.Bases;
 
 namespace CSM_Foundation.Server.Exceptions;
 public class XAuth
-    : BServerTransactionException<XAuthSituation> {
+    : BException<XAuthSituation> {
 
 
 
     public XAuth(XAuthSituation Situation)
-        : base($"Unauthorized transaction request", HttpStatusCode.Unauthorized, null) {
-        this.Situation = Situation;
+        : base($"Unauthorized transaction request", Situation, HttpStatusCode.Unauthorized, null) {
         Advise = Situation switch {
             XAuthSituation.Lack => AdvisesConstants.SERVER_CONTACT_ADVISE,
             XAuthSituation.Unauthorized => $"Account is unautorized to the requested feature",

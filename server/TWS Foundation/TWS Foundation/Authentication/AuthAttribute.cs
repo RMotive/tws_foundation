@@ -3,7 +3,7 @@ using CSM_Foundation.Server.Exceptions;
 
 using Microsoft.AspNetCore.Mvc.Filters;
 
-using TWS_Customer.Managers;
+using TWS_Customer.Managers.Session;
 
 namespace TWS_Foundation.Authentication;
 

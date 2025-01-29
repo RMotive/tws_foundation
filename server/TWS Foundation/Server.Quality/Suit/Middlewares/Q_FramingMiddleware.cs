@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 
-using CSM_Foundation.Server.Bases;
+using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Server.Quality.Bases;
 using CSM_Foundation.Server.Records;
 
@@ -21,7 +21,7 @@ namespace TWS_Foundation.Quality.Suit.Middlewares;
 /// </summary>
 public class Q_FramingMiddleware
     : BQ_ServerMiddleware {
-    private const string SYSTEM_PROPERTY_REFERENCE = nameof(BServerTransactionException<Enum>.System);
+    private const string SYSTEM_PROPERTY_REFERENCE = nameof(BException<Enum>.System);
 
     /// <summary>
     ///     Reference for the endpoint configured to test the catching of unspeficied exceptions.

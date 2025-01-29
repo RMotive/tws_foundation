@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 
+using CSM_Foundation.Convertion;
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Exceptions;
@@ -14,10 +16,14 @@ namespace CSM_Foundation.Database.Bases;
 public abstract class BSet
     : BObject<ISet>, ISet {
 
+    [NotMapped]
+    public string Discriminator { get; init; }
+
     /// <summary>
     /// 
     /// </summary>
     public abstract int Id { get; set; }
+    
     /// <summary>
     /// 
     /// </summary>
@@ -32,6 +38,13 @@ public abstract class BSet
     /// 
     /// </summary>
     private (string Property, IValidator[] Validators)[]? Validators;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public BSet() {
+        Discriminator = $"{GetType().GUID}";
+    }
 
     /// <summary>
     /// 
