@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 6.1.0 - [28.01-2025]
+
+- Notes:
+
+    1. Included the [ExportViewInventory] for [YardLogs] service, this adds [ExportInventoryOut] object to store the service result.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | 7.0.0            | 7.0.0           |
+
 ## 6.0.1 - [04.12-2024]
 
 - Notes:
