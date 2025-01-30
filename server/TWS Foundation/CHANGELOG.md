@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## X.X.X - [XX.XX-2025]
+
+- Notes:
+
+- Fixes:
+
+- Dependencies:
+
 ## 7.1.1 - [29.01-2025]
 
 - Notes: 
