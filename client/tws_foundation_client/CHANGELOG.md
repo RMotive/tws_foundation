@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 6.1.1 - [29.01-2025]
+
+- Notes:
+
+    1. Changes on [ExportInventoryOut] -> [ExportOut]
+        - Changed property [type] -> [extension]: also now is a enumerator to create a bound for the available extensions [ExportOutExtensions].
+        - Improved documentation.
+
+    2. Added [ExportView] service for [YardLog] to generate an exportable for the generic [View] operation.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | 7.0.0            | 7.0.0           |
+
 ## 6.1.0 - [28.01-2025]
 
 - Notes:

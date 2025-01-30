@@ -76,6 +76,11 @@ public abstract class BDepot<TDatabase, TSet>
 
         int range = Options.Range;
         int page = Options.Page;
+        if(Options.Export) {
+            page = 1;
+            range = Source.Count();
+        }
+
         int amount = Source.Count();
         (int pages, int left) = Math.DivRem(amount, range);
         if (left > 0) {
