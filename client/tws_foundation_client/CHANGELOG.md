@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## X.X.X - [XX.XX-2025]
+## 6.1.1 - [29.01-2025]
 
 - Notes:
 
@@ -10,9 +10,13 @@
 
     2. Added [ExportView] service for [YardLog] to generate an exportable for the generic [View] operation.
 
-- Fixes:
+- Fixes: N/A
 
 - Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | 7.0.0            | 7.0.0           |
 
 ## 6.1.0 - [28.01-2025]
 

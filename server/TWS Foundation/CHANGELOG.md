@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## CURRENT - [XX.XX-XXXX]
+## 7.1.1 - [29.01-2025]
 
 - Notes: 
 
@@ -10,9 +10,21 @@
 
     2. Added [ExportView] service for [YardLog] to generate an exportable for the generic [View] operation.
 
-- Fixes:
+- Fixes: N/A
 
 - Dependencies:
+
+    | Package                                 | Previous Version | New Version     |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | ClosedXML                               | 0.104.2          | 0.104.2         |
+    | coverlet.collector                      | 6.2.4            | 6.2.4           |
+    | Microsoft.AspNetCore.Mvc.Testing        | 9.0.1            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore           | 9.0.1            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore.SqlServer | 9.0.1            | 9.0.1           |
+    | Microsoft.IdentityModel.Tokens          | 8.3.1            | 8.3.1           |
+    | Microsoft.NET.Test.Sdk                  | 17.12.0          | 17.12.0         |
+    | xunit                                   | 2.9.3            | 2.9.3           |
+    | xunit.runner.visualstudio               | 3.0.1            | 3.0.1           |
 
 ## 7.1.0 - [28.01-2025]
 
