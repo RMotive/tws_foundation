@@ -264,19 +264,41 @@ void main() {
   );
 
   test(
-    'Export Inventory',
+    'Export View',
     () async {
-      MainResolver<ExportInventoryOut> fact = await service.exportInventory(
+      MainResolver<ExportOut> fact = await service.exportView(
         SetViewOptions<YardLog>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<YardLog>>[]),
         auth,
       );
 
       fact.resolve(
-        decoder: ExportInventoryOut.des,
-        onSuccess: (SuccessFrame<ExportInventoryOut> success) {
-          ExportInventoryOut fact = success.estela;
+        decoder: ExportOut.des,
+        onSuccess: (SuccessFrame<ExportOut> success) {
+          ExportOut fact = success.estela;
 
-          expect(fact.type, 'xlsx');
+          expect(fact.extension, ExportOutExtensions.xlsx);
+        },
+        onFailure: (FailureFrame failure, int _) => throw failure.estela.system,
+        onException: (Object exception, StackTrace _) => throw exception,
+        onConnectionFailure: () => throw 'connection failure',
+      );
+    },
+  );
+
+  test(
+    'Export Inventory',
+    () async {
+      MainResolver<ExportOut> fact = await service.exportInventory(
+        SetViewOptions<YardLog>(false, 10, 1, null, <SetViewOrderOptions>[], <SetViewFilterNodeInterface<YardLog>>[]),
+        auth,
+      );
+
+      fact.resolve(
+        decoder: ExportOut.des,
+        onSuccess: (SuccessFrame<ExportOut> success) {
+          ExportOut fact = success.estela;
+
+          expect(fact.extension, ExportOutExtensions.xlsx);
         },
         onFailure: (FailureFrame failure, int _) => throw failure.estela.system,
         onException: (Object exception, StackTrace _) => throw exception,

@@ -44,6 +44,11 @@ public class YardLogsController : ControllerBase {
     }
 
     [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> ExportView(SetViewOptions<YardLog> Options) {
+        return Ok(await Service.ExportView(Options));
+    }
+
+    [HttpPost(), Auth("", "")]
     public async Task<IActionResult> ExportInventory(SetViewOptions<YardLog> Options) {
         return Ok(await Service.ExportInventory(Options));
     }
