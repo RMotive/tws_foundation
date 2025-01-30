@@ -430,7 +430,7 @@ public class YardLogsService
         timeCell.Value = $"{timestamp.ToShortDateString()} {timestamp.ToShortTimeString()} (UTC)";
 
         Options.Export = true;
-        SetViewOut<YardLog> viewOut = await YardLogs.ViewInventory(Options);
+        SetViewOut<YardLog> viewOut = await YardLogs.View(Options, Include);
         for (int recordPointer = 0; recordPointer < viewOut.Sets.Length; recordPointer++) {
             YardLog record = viewOut.Sets[recordPointer];
 
