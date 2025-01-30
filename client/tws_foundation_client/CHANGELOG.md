@@ -4,6 +4,12 @@
 
 - Notes:
 
+    1. Changes on [ExportInventoryOut] -> [ExportOut]
+        - Changed property [type] -> [extension]: also now is a enumerator to create a bound for the available extensions [ExportOutExtensions].
+        - Improved documentation.
+
+    2. Added [ExportView] service for [YardLog] to generate an exportable for the generic [View] operation.
+
 - Fixes:
 
 - Dependencies:

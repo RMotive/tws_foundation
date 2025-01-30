@@ -155,12 +155,47 @@ public partial class YardLog
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string? SectionDisplay {
         get {
             return $"{SectionNavigation?.LocationNavigation?.Name} - {SectionNavigation?.Name}";
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? DriverLicence {
+        get {
+            if (DriverNavigation != null) {
+                return DriverNavigation.DriverCommonNavigation?.License;
+            } else {
+                return DriverExternalNavigation?.DriverCommonNavigation?.License;
+            }
+        }
+    }
+
+    /// <summary>
+    ///     
+    /// </summary>
+    public string? DriverName {
+        get {
+            Identification? ident;
+
+            if(DriverNavigation != null) {
+                ident = DriverNavigation.EmployeeNavigation?.IdentificationNavigation;
+            } else {
+                ident = DriverExternalNavigation?.IdentificationNavigation;
+            }
+
+            if(ident != null) {
+                return $"{ident.Name} {ident.FatherLastname} {ident.MotherLastName}";
+            }
+            return null;
+        }
+    }
 
     /// <summary>
     ///     

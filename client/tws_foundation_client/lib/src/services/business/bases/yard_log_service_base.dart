@@ -24,6 +24,9 @@ abstract class YardLogServiceBase extends TWSServiceBase {
   Effect<RecordUpdateOut<YardLog>> update(YardLog yardlog, String auth);
 
   ///
-  Effect<ExportInventoryOut> exportInventory(SetViewOptions<YardLog> options, String auth);
+  Effect<ExportOut> exportView(SetViewOptions<YardLog> options, String auth);
+
+  ///
+  Effect<ExportOut> exportInventory(SetViewOptions<YardLog> options, String auth);
 }
 
