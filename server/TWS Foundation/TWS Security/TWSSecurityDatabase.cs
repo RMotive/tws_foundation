@@ -2,6 +2,7 @@
 using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 using TWS_Security.Sets;
 
@@ -16,6 +17,13 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
     public TWSSecurityDatabase()
     : base("TWSS") {
 
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        optionsBuilder.UseSqlServer("Server=DESKTOP-M2SPTNQ;Database=TWS Security; Trusted_Connection=True; Encrypt=False");
+
+        optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()))
+                             .EnableSensitiveDataLogging();
     }
 
     public virtual DbSet<Account> Accounts { get; set; } = default!;
@@ -45,6 +53,7 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
             new Account(),
             new Feature(),
             new Solution(),
+            new Profile(),
             new Sets.Action(),
         ];
     }
@@ -59,19 +68,7 @@ public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
         AccountPermit.CreateModel(modelBuilder);
         AccountProfile.CreateModel(modelBuilder);
         ProfilePermit.CreateModel(modelBuilder);
-
-        modelBuilder.Entity<Profile>(entity => {
-            entity.HasKey(e => e.Id);
-
-            entity.HasIndex(e => e.Name).IsUnique();
-
-            entity.Property(e => e.Id);
-            entity.Property(e => e.Description)
-                .IsUnicode(false);
-            entity.Property(e => e.Name)
-                .HasMaxLength(25)
-                .IsUnicode(false);
-        });
+        Profile.CreateModel(modelBuilder);
 
         OnModelCreatingPartial(modelBuilder);
     }

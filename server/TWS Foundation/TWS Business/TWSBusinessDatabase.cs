@@ -11,6 +11,7 @@ namespace TWS_Business;
 public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     public TWSBusinessDatabase(DbContextOptions<TWSBusinessDatabase> options)
         : base("TWSB", options) {
+
     }
 
     public TWSBusinessDatabase()
@@ -71,11 +72,11 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
     public virtual DbSet<TrailerType> TrailersTypes { get; set; } = default!;
 
-    public virtual DbSet<TrailerType> TrucksInventories { get; set; } = default!;   
+    public virtual DbSet<TrailerType> TrucksInventories { get; set; } = default!;
 
-    public virtual DbSet<TruckExternal> TrucksExternals { get; set; }
+    public virtual DbSet<TruckExternal> TrucksExternals { get; set; } = default!;
 
-    public virtual DbSet<Waypoint> Waypoints { get; set; }
+    public virtual DbSet<Waypoint> Waypoints { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder) {
         Sct.CreateModel(builder);

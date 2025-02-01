@@ -8,14 +8,28 @@
     2. Added [Situation] navigation set to [TrailerCommon] set.
     3. Added default constructor for [TrailerCommon] set.
     4. Deprecated [Year] property removed from [TrailerType] set.
-    5. Added Services:
+    5. Added the following [Security] sets:
+        - [Permit]
+        - [Profiles]
+        - [Action]
+        - [AccountPermit]
+        - [AccountProfile]
+    6. Added the following [Business] sets: 
+        - [Waypoint]
+    7. Added Services:
         - [Contact]
         - [TrailerClass] (View Service)
         - [TrailerType] (View Service)
         - [Employees] (View Service)
         - [Drivers] (Create and update services)
         - [DriversExternals] (Create and update services)
-    11. Additions to validations in the followings sets:
+        - [Accounts] (Create and update services)
+        - [Locations] (View, create and update services)
+        - [Addresses] (View service)
+        - [Sections] (Create and update service)
+        - [Permits] (View service)
+        - [Profiles] (View service)
+    8. Additions to validations in the followings sets:
         - [Drivers]
         - [Address]
         - [Approach]
@@ -23,17 +37,14 @@
         - [DriverExternal]
         - [Employee]
         - [Identification]
-    12. [timestamp] property changed to non-final in [Yardlog] set.
-    13. Added [Waypoint] set.
-    14. Added Waypoint navigation in [Location] set.
-    15. Added [Locations] services.
-    16. Added [Create] and [Update] services to [Sections] service.
-    17. Added [Addresses] service.
-    18. Added [datetime] & [string] extension files.
-    19. Added extension to export files.
-    20. Added [Account] creation and update services.
-    21. Added [Account] wildcard and password properties.
-    22. Added the byte list support to [DeepCopy] Util.
+    9. [timestamp] property changed to non-final in [Yardlog] set.
+    10. Added Waypoint navigation in [Location] set.
+    11. Added [datetime] & [string] extension files.
+    12. Added extension to export files.
+    13. Added [Account] wildcard and password properties.
+    14. Added the byte list support to [DeepCopy] Util.
+    
+    
 
 
 - Fixes:

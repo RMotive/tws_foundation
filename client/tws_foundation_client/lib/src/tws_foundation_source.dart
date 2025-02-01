@@ -20,6 +20,8 @@ import 'package:tws_foundation_client/src/services/business/vehicules_models_ser
 import 'package:tws_foundation_client/src/services/business/yard_log_service.dart';
 import 'package:tws_foundation_client/src/services/security/account_service.dart';
 import 'package:tws_foundation_client/src/services/security/contacts_service.dart';
+import 'package:tws_foundation_client/src/services/security/permits_service.dart';
+import 'package:tws_foundation_client/src/services/security/profile_service.dart';
 import 'package:tws_foundation_client/src/services/security/security_service.dart';
 import 'package:tws_foundation_client/src/services/security/solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -98,6 +100,12 @@ final class TWSFoundationSource extends CSMSourceBase {
   /// Addresses service
   late final AddressesService addresses;
 
+  /// Permits service
+  late final PermitsService permits;
+
+  /// Profiles service
+  late final ProfileService profiles;
+
   /// [TWSFoundationSource] instance constructor.
   ///
   /// [debug] wheter the current execution context is debugging.
@@ -137,6 +145,8 @@ final class TWSFoundationSource extends CSMSourceBase {
     EmployeeService? employees,
     LocationsService? locations,
     AddressesService? addresses,
+    PermitsService? permits,
+    ProfileService? profiles,
     
     CSMUri development = const CSMUri(
       '127.0.0.1',
@@ -174,6 +184,7 @@ final class TWSFoundationSource extends CSMSourceBase {
     this.employees = employees ?? EmployeeService(host, client: client);
     this.locations = locations ?? LocationsService(host, client: client);
     this.addresses = addresses ?? AddressesService(host, client: client);
-
+    this.permits = permits ?? PermitsService(host, client: client);
+    this.profiles = profiles ?? ProfileService(host, client: client);
   }
 }

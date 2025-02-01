@@ -16,18 +16,21 @@ public partial class Permit
 
     public int Solution { get; set; }
 
-    [JsonIgnore]
-    public virtual Solution? SolutionNavigation { get; set; }
     public int Feature { get; set; }
-    [JsonIgnore]
-    public virtual Feature? FeatureNavigation { get; set; }
+
     public int Action { get; set; }
-    [JsonIgnore]
-    public virtual Action? ActionNavigation { get; set; }
 
     public string Reference { get; set; } = default!;
+
     public bool Enabled { get; set; }
 
+    public virtual Solution? SolutionNavigation { get; set; }
+
+    public virtual Feature? FeatureNavigation { get; set; }
+
+    public virtual Action? ActionNavigation { get; set; }
+
+    public ICollection<AccountPermit> AccountPermits { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         return [

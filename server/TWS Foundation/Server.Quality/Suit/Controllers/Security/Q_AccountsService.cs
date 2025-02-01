@@ -28,7 +28,9 @@ public class Q_AccountsService
     public Q_AccountsService(WebApplicationFactory<Program> hostFactory)
         : base("Accounts", hostFactory) {
     }
-
+    // ---> Change this values for valids permits from your db instance.
+    int validPermit = 58; 
+    int updatedValidPermit = 69; // existent new permit to assign in the upd test.
     protected override Account MockFactory(string RandomSeed) {
         Account mock = new() {
             User = "mock " + RandomSeed,
@@ -38,9 +40,22 @@ public class Q_AccountsService
             ContactNavigation = new() {
                 Name = "name " + RandomSeed,
                 Lastname = "lastname" + RandomSeed,
-                Email = "email@" + RandomSeed ,
-                Phone = "6647151"+ RandomSeed,
+                Email = "email@" + RandomUtils.String(5) + "."  + RandomSeed,
+                Phone = "664" + RandomUtils.String(4) + RandomSeed,
             },
+            AccountPermits = [
+                new(){
+                    Permit = validPermit,
+                },
+            ],
+            AccountProfiles = [
+                new(){
+                    ProfileNavigation = new(){
+                        Name = "testing profile: " + RandomSeed 
+                    }
+                }
+            ],
+            
         };
         return mock;
     }
@@ -133,6 +148,15 @@ public class Q_AccountsService
 
             mock.User = updatedTag + RandomUtils.String(7);
             mock.ContactNavigation!.Name = updatedTag + RandomUtils.String(7);
+
+            // Remove the initial mock permit and add a new one.
+            mock.AccountPermits = [
+                new() {
+                    Account = mock.Id,
+                    Permit = updatedValidPermit,
+                }
+            ];
+
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
@@ -144,8 +168,11 @@ public class Q_AccountsService
             Account previousRecord = updateResult.Previous;
             Assert.Multiple([
                 () => Assert.Equal(creationRecord.Id, updateRecord.Id),
+                () => Assert.Equal(updateRecord.AccountProfiles.Count, previousRecord.AccountProfiles.Count),
                 () => Assert.NotEqual(previousRecord.User, updateRecord.User),
                 () => Assert.NotEqual(previousRecord.ContactNavigation!.Name, updateRecord.ContactNavigation!.Name),
+                () => Assert.True(updateRecord.AccountPermits.Count == 1 && updateRecord.AccountPermits.First().Permit == updatedValidPermit && previousRecord.AccountPermits.First().Permit == validPermit),
+
             ]);
             #endregion
         }

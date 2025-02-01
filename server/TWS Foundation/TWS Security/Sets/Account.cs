@@ -22,6 +22,10 @@ public partial class Account
 
     public virtual Contact? ContactNavigation { get; set; } = null!;
 
+    public virtual ICollection<AccountPermit> AccountPermits { get; set; } = [];
+
+    public virtual ICollection<AccountProfile> AccountProfiles { get; set; } = [];
+
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
             ..Container,
@@ -45,9 +49,11 @@ public partial class Account
             entity.Property(e => e.User)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
             entity.HasOne(d => d.ContactNavigation).WithOne(p => p.Account)
                  .HasForeignKey<Account>(d => d.Contact)
                  .OnDelete(DeleteBehavior.ClientSetNull);
+
         });
     }
 

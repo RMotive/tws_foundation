@@ -18,6 +18,12 @@ final class Account implements CSMSetInterface {
   /// [contactNavigation] property key.
   static const String kContactNavigation = 'ContactNavigation';
 
+  /// [accountPermits] property key.
+  static const String kAccountPermits = 'accountPermits';
+
+  /// [accountProfiles] property key.
+  static const String kAccountProfiles = 'accountProfiles';
+
   /// Private timestamp property.
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
@@ -41,6 +47,12 @@ final class Account implements CSMSetInterface {
   /// Foreign relation [contactNavigation] record entity.
   Contact? contactNavigation;
 
+  /// [AccountPermit] collection.
+  List<AccountPermit> accountPermits = <AccountPermit>[];
+
+  /// [AccountProfile] collection.
+  List<AccountProfile> accountProfiles = <AccountProfile>[];
+
   /// Creates a new [Account] object with the required properties.
   Account(
     this.id,
@@ -48,7 +60,9 @@ final class Account implements CSMSetInterface {
     this.user,
     this.password,
     this.wildcard,
-    this.contactNavigation, {
+    this.contactNavigation,
+    this.accountPermits,
+    this.accountProfiles, {
     DateTime? timestamp,
   }) {
     _timestamp = timestamp ?? DateTime.now();
@@ -74,7 +88,15 @@ final class Account implements CSMSetInterface {
       contactNavigation = Contact.des(rawNavigation);
     }
 
-    return Account(id, contact, user, password, wildcard, contactNavigation, timestamp: timestamp);
+    List<AccountPermit> accountPermits = <AccountPermit>[];
+    List<JObject> rawAccountPermitsArray = json.getList(kAccountPermits);
+    accountPermits = rawAccountPermitsArray.map<AccountPermit>(AccountPermit.des).toList();
+
+    List<AccountProfile> accountProfiles = <AccountProfile>[];
+    List<JObject> rawAccountProfilesArray = json.getList(kAccountProfiles);
+    accountProfiles = rawAccountProfilesArray.map<AccountProfile>(AccountProfile.des).toList();
+
+    return Account(id, contact, user, password, wildcard, contactNavigation, accountPermits, accountProfiles, timestamp: timestamp);
   }
 
   /// Creates an [Account] object cloning the current object with new overriden properties.
@@ -93,6 +115,8 @@ final class Account implements CSMSetInterface {
     String? password,
     bool? wildcard,
     Contact? contactNavigation,
+    List<AccountPermit>? accountPermits,
+    List<AccountProfile>? accountProfiles,
   }) {
 
     if(contact == 0){
@@ -107,6 +131,8 @@ final class Account implements CSMSetInterface {
       password ?? this.password,
       wildcard ?? this.wildcard,
       contactNavigation ?? this.contactNavigation,
+      accountPermits ?? this.accountPermits,
+      accountProfiles ?? this.accountProfiles,
     );
   }
 
@@ -120,6 +146,8 @@ final class Account implements CSMSetInterface {
       kWildcard: wildcard,
       SCK.kTimestamp: timestamp.toIso8601String(),
       kContactNavigation: contactNavigation?.encode(),
+      kAccountPermits: accountPermits.map((AccountPermit i) => i.encode()).toList(),
+      kAccountProfiles: accountProfiles.map((AccountProfile i) => i.encode()).toList()
     };
   }
 
@@ -130,6 +158,14 @@ final class Account implements CSMSetInterface {
     if(id < 0) results.add(CSMSetValidationResult(SCK.kId, 'Account pointer cannot be less than 0', 'pointerHandler()'));
     if(contact < 0) results.add(CSMSetValidationResult(kContact, 'Contact pointer cannot be less than 0', 'pointerHandler()'));
     if(contactNavigation != null) results = <CSMSetValidationResult>[...results, ...contactNavigation!.evaluate()];
+    
+    for(AccountPermit accountPermit in accountPermits){
+      results = <CSMSetValidationResult>[...results, ...accountPermit.evaluate()];
+    }
+    
+    for(AccountProfile accountProfile in accountProfiles){
+      results = <CSMSetValidationResult>[...results, ...accountProfile.evaluate()];
+    }
 
     return results;
   }

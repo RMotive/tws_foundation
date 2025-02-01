@@ -1,36 +1,40 @@
+
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-final class Feature implements CSMSetInterface {
-
+final class Profile implements CSMSetInterface {
+  
   late final DateTime _timestamp;
   DateTime get timestamp => _timestamp; 
 
+  /// Creates an [Profile] object with default values.
+  Profile.a();
+
   /// Database record pointer.
   @override
-  int id;
-  /// Feature name.
-  String name;
-  /// Feature description
+  int id = 0;
+
+  /// Profile name.
+  String name = "";
+  
+  /// profile description.
   String? description;
 
-  Feature(
-    this.id,
-    this.name,
-    this.description, {
+  /// Creates an [Permit] object based on required fields.
+  Profile(this.id, this.name, this.description, { 
     DateTime? timestamp,
-  }) {
-    _timestamp = timestamp ?? DateTime.now();
+  }){
+    _timestamp = timestamp ?? DateTime.now(); 
   }
 
-  /// Creates an [Feature] object based on a serealized JSON.
-  factory Feature.des(JObject json) {
+  /// Creates an [Profile] object based on a serealized JSON.
+  factory Profile.des(JObject json) {
     int id = json.get(SCK.kId);
     String name = json.get(SCK.kName);
     String? description = json.getDefault(SCK.kDescription, null);
     DateTime timestamp = json.get(SCK.kTimestamp);
         
-    return Feature(id, name, description, timestamp: timestamp);
+    return Profile(id, name, description, timestamp: timestamp);
   }
 
   @override
@@ -42,28 +46,29 @@ final class Feature implements CSMSetInterface {
       SCK.kTimestamp: timestamp.toIso8601String(),
     };
   }
-
+  
   @override
   List<CSMSetValidationResult> evaluate() {
     List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
     if(name.trim().isEmpty && name.trim().length > 25) results.add(CSMSetValidationResult(SCK.kName, '${SCK.kName} cannot be empty and higher than 25 character length.', 'strictLength(1,25)'));
-
+    
     return results;
   }
-
-  /// Creates an [Feature] overriding the given properties.
-  Feature clone({
+  
+  /// Creates an [Profile] overriding the given properties.
+  Profile clone({
     int? id,
     String? name,
     String? description,
-  }){
+  }) {
     if(description == ""){
       this.description = null;
       description = null;
     }
-    return Feature(
-      id ?? this.id, 
-      name ?? this.name, 
+
+    return Profile(
+      id ?? this.id,
+      name ?? this.name,
       description ?? this.description,
     );
   }

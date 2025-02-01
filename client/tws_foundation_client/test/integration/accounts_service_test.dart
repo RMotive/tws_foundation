@@ -9,6 +9,9 @@ void main() {
   late String auth;
   late AccountsServiceBase service;
   late List<Account> mocks;
+  
+  final int validPermit = 58;
+  final int updatedValidPermit = 69;
 
   Account buildMock(String randomToken){
     return Account(
@@ -21,9 +24,29 @@ void main() {
         0,
         "name $randomToken",
         "fatherlastname $randomToken",
-        "motherlastname $randomToken",
         "email@$randomToken",
+        "664$randomToken",
       ),
+      <AccountPermit>[
+        AccountPermit(
+          0,
+          validPermit, 
+          null,
+          null,
+        )
+      ],
+      <AccountProfile>[
+        AccountProfile(
+          0,
+          0, 
+          null, 
+          Profile(
+            0,
+            'client test profile $randomToken',
+            null,
+          ),
+        ),
+      ]
     );
   }
 
@@ -133,12 +156,22 @@ void main() {
           int rnd = Random().nextInt(900)  + 99;
           creationMock.user = 'UPDT_USER$rnd';
           creationMock.contactNavigation!.name = 'UPDT_name_$rnd';
+          creationMock.accountPermits = <AccountPermit>[
+            AccountPermit(
+              creationMock.id,
+              69,
+              null,
+              null,
+            ),
+          ];
           MainResolver<RecordUpdateOut<Account>> fact = await service.update(creationMock, auth);
           RecordUpdateOut<Account> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Account>.des(json ,Account.des));
           assert(actEffect.previous != null);
           assert(actEffect.updated.id == creationMock.id);
           assert(actEffect.updated.user != actEffect.previous!.user);
           assert(actEffect.updated.contactNavigation!.name != actEffect.previous!.contactNavigation!.name);
+          assert(actEffect.updated.accountPermits.length == 1 && actEffect.updated.accountPermits.first.permit == updatedValidPermit && actEffect.previous!.accountPermits.first.permit == validPermit);
+          assert(actEffect.updated.accountProfiles.length == 1 && actEffect.updated.accountProfiles.first.profile == actEffect.previous!.accountProfiles.first.profile);
         },
       );
     },

@@ -24,6 +24,7 @@ using TWS_Foundation.Models;
 
 using TWS_Security;
 using TWS_Security.Depots;
+using TWS_Security.Sets;
 
 namespace TWS_Foundation;
 
@@ -132,6 +133,9 @@ public partial class Program {
                 builder.Services.AddScoped<VehiculesModelsDepot>();
                 builder.Services.AddScoped<TrucksInventoriesDepot>();
                 builder.Services.AddScoped<YardLogsDepot>();
+                builder.Services.AddScoped<PermitsDepot>();
+                builder.Services.AddScoped<ProfilesDepot>();
+
                 builder.Services.AddScoped<TrucksHDepot>();
 
                 // --> Services
@@ -160,6 +164,9 @@ public partial class Program {
                 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
                 builder.Services.AddScoped<ILocationsService, LocationsService>();
                 builder.Services.AddScoped<IAddressesService, AddressesService>();
+                builder.Services.AddScoped<IPermitsService, PermitsService>();
+                builder.Services.AddScoped<IProfileService, ProfilesService>();
+
 
             }
             WebApplication app = builder.Build();

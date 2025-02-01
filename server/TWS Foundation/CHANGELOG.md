@@ -32,6 +32,10 @@
     17. Added [Address] view service.
     18. Added [Business] permits in service controllers.
     19. Added [Contact] create and update controllers.
+    20. Added the folowing [TWSSecurity] depots:
+        - [AccountsPermits]
+        - [AccountsProfiles]
+        - [Permits]
 
 - Fixes:
 

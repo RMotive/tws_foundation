@@ -38,7 +38,7 @@ public class AccountsDepot
                 .Include(i => i.PermitNavigation);
 
         IQueryable<Permit> permits = accountPermits
-            .Select(i => i.PermitNavigation);
+            .Select(i => i.PermitNavigation!);
 
         Permit[] directPermits = await permits.ToArrayAsync();
 
@@ -46,7 +46,7 @@ public class AccountsDepot
         Profile[] accountProfiles = await Database.AccountsProfiles
             .Where(i => i.Account == Account)
                 .Include(i => i.ProfileNavigation)
-            .Select(i => i.ProfileNavigation)
+            .Select(i => i.ProfileNavigation!)
             .ToArrayAsync();
 
         Permit[] totalPermits = [..directPermits];

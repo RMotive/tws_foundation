@@ -1,4 +1,9 @@
 export 'account.dart';
+export 'account_permit.dart';
+export 'account_profile.dart';
+export 'action.dart';
 export 'contact.dart';
 export 'feature.dart';
+export 'permit.dart';
+export 'profile.dart';
 export 'solution.dart';
