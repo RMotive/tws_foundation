@@ -47,7 +47,7 @@ public class Q_SolutionsController
         Assert.Equal(HttpStatusCode.OK, Status);
 
         View Estela = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(Estela.Sets.Length > 0);
+        Assert.True(Estela.Records.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }
@@ -77,8 +77,8 @@ public class Q_SolutionsController
         Assert.Equal(HttpStatusCode.OK, Status);
 
         View view = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.NotEmpty(view.Sets);
-        Assert.All(view.Sets, i => {
+        Assert.NotEmpty(view.Records);
+        Assert.All(view.Records, i => {
             Assert.Contains(refMock.Name, i.Name);
         });
     }
@@ -107,8 +107,8 @@ public class Q_SolutionsController
 
         View view = Framing<SuccessFrame<View>>(Response).Estela;
 
-        Assert.NotEmpty(view.Sets);
-        Assert.All(view.Sets, i => {
+        Assert.NotEmpty(view.Records);
+        Assert.All(view.Records, i => {
             DateTime refTime = refMock.Timestamp.Trim();
             DateTime actTime = i.Timestamp.Trim();
 
@@ -153,11 +153,11 @@ public class Q_SolutionsController
 
         Assert.Equal(HttpStatusCode.OK, Status);
         View view = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(view.Sets.Length >= 2);
+        Assert.True(view.Records.Length >= 2);
         Assert.Equal(1, view.Page);
         Assert.True(view.Pages > 0);
 
-        Assert.All(view.Sets, i => {
+        Assert.All(view.Records, i => {
             Assert.True(i.Name == mocks[0].Name || i.Name == mocks[1].Name);
         });
     }

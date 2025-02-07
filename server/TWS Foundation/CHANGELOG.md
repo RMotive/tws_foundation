@@ -4,6 +4,22 @@
 
 - Notes:
 
+    1. Now the Customer project implementations are going to be tested.
+        
+        - Creates a new [BQ_Service] to facilitate Quality Suits for Service implementations.
+
+    2. Changes on [SetViewOut] model.
+        
+        - [SetViewOut.Amount] changed to [SetViewOut.Count].
+
+        - [SetViewOut.Records] changed to [SetViewOut.Length].
+
+        - [SetViewOut.Sets] changed to [SetViewOut.Records].
+
+    3. Added [Q_SecurityService] quality suit.
+
+    4. Added [IService] as an interface for Customer services common operations as Create, View, Update, Delete.
+
 - Fixes:
 
 - Dependencies:

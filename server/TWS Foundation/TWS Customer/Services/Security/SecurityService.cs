@@ -9,10 +9,10 @@ using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Interfaces;
 using TWS_Customer.Services.Records;
 
-using TWS_Security.Depots;
+using TWS_Security.Depots.Accounts;
 using TWS_Security.Sets;
 
-namespace TWS_Customer.Services.Administration;
+namespace TWS_Customer.Services.Security;
 public class SecurityService
     : ISecurityService {
     private readonly ConfigurationManager Configurations = ConfigurationManager.Manager;

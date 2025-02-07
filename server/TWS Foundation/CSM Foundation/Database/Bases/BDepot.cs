@@ -161,10 +161,10 @@ public abstract class BDepot<TDatabase, TSet>
 
         return Task.FromResult(
             new SetViewOut<TSet>() {
-                Amount = amount,
+                Count = amount,
                 Pages = pages,
                 Page = page,
-                Sets = sets,
+                Records = sets,
             }
         );
     }
@@ -229,8 +229,8 @@ public abstract class BDepot<TDatabase, TSet>
                 record.Timestamp = DateTime.UtcNow;
                 record.EvaluateWrite();
                 Database.ChangeTracker.Clear();
-                _ = Set.Attach(record);
-                _ = await Database.SaveChangesAsync();
+                Set.Attach(record);
+                await Database.SaveChangesAsync();
                 saved = [.. saved, record];
             } catch (Exception excep) {
                 if (Sync) {
@@ -242,6 +242,7 @@ public abstract class BDepot<TDatabase, TSet>
             }
         }
 
+        Database.ChangeTracker.Clear();
         Disposer?.Push(Database, Sets);
         return new(saved, fails);
     }
@@ -425,8 +426,8 @@ public abstract class BDepot<TDatabase, TSet>
             .FirstOrDefaultAsync()
             ?? throw new Exception("Trying to remove an unexist record");
 
-        _ = Set.Remove(record);
-        _ = await Database.SaveChangesAsync();
+        Set.Remove(record);
+        await Database.SaveChangesAsync();
 
         return record;
     }

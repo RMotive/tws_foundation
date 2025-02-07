@@ -10,7 +10,7 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]")]
+[ApiController, Feature("Plates"), Route("[Controller]/[Action]")]
 public class PlatesController : ControllerBase {
     private readonly IPlatesService Service;
 
@@ -18,12 +18,12 @@ public class PlatesController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Plate> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(Plate plate) {
         return Ok(await Service.Create(plate));
     }

@@ -10,23 +10,23 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("External Trucks"), Route("[Controller]/[Action]")]
 public class TrucksExternalsController : ControllerBase {
     private readonly ITrucksExternalsService Service;
     public TrucksExternalsController(ITrucksExternalsService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<TruckExternal> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(TruckExternal[] trucks)
         => Ok(await Service.Create(trucks));
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(TruckExternal Truck) {
         return Ok(await Service.Update(Truck));
     }

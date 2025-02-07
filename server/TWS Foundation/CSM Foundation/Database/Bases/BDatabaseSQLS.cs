@@ -37,7 +37,7 @@ public abstract class BDatabaseSQLS<TDatabases>
     /// </summary>
     public void Evaluate() {
         ISet[] sets = EvaluateFactory();
-        AdvisorManager.Announce($"[{GetType().Name}] Evaluating Sets definitions...", new() { { "Amount", sets.Length } });
+        AdvisorManager.Announce($"[{GetType().Name}] Evaluating Records definitions...", new() { { "Count", sets.Length } });
 
         Exception[] evResults = [];
         foreach (ISet set in sets) {
@@ -56,9 +56,9 @@ public abstract class BDatabaseSQLS<TDatabases>
         }
 
         if(evResults.Length > 0) {
-            throw new Exception("Database Sets definitions caugth exceptions");
+            throw new Exception("Database Records definitions caugth exceptions");
         } else {
-            AdvisorManager.Success($"[{GetType().Name}] Sets definition evaluation finished");
+            AdvisorManager.Success($"[{GetType().Name}] Records definition evaluation finished");
         }
     }
     /// <summary>

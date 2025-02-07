@@ -10,14 +10,14 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("External Trailers"), Route("[Controller]/[Action]")]
 public class TrailersExternalsController : ControllerBase {
     private readonly ITrailersExternalsService Service;
     public TrailersExternalsController(ITrailersExternalsService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<TrailerExternal> Options) {
         return Ok(await Service.View(Options));
     }

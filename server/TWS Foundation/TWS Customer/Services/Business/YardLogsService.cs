@@ -431,8 +431,8 @@ public class YardLogsService
 
         Options.Export = true;
         SetViewOut<YardLog> viewOut = await YardLogs.ViewInventory(Options);
-        for (int recordPointer = 0; recordPointer < viewOut.Sets.Length; recordPointer++) {
-            YardLog record = viewOut.Sets[recordPointer];
+        for (int recordPointer = 0; recordPointer < viewOut.Records.Length; recordPointer++) {
+            YardLog record = viewOut.Records[recordPointer];
 
             foreach ((string, string Column, Func<YardLog, string?> ComposeValue) field in exportFields) {
 
@@ -503,8 +503,8 @@ public class YardLogsService
 
         Options.Export = true;
         SetViewOut<YardLog> viewOut = await YardLogs.ViewInventory(Options);
-        for(int recordPointer = 0; recordPointer < viewOut.Sets.Length; recordPointer++) {
-            YardLog record = viewOut.Sets[recordPointer];
+        for(int recordPointer = 0; recordPointer < viewOut.Records.Length; recordPointer++) {
+            YardLog record = viewOut.Records[recordPointer];
 
             foreach((string, string Column, Func<YardLog, string?> ComposeValue) field in exportFields) {
 

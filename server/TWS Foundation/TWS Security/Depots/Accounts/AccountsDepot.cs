@@ -3,10 +3,9 @@ using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Security.Depots.Interfaces;
 using TWS_Security.Sets;
 
-namespace TWS_Security.Depots;
+namespace TWS_Security.Depots.Accounts;
 /// <summary>
 ///     Implements a new depot to handle <see cref="Account"/> entity
 ///     transactions. 
@@ -49,7 +48,7 @@ public class AccountsDepot
             .Select(i => i.ProfileNavigation)
             .ToArrayAsync();
 
-        Permit[] totalPermits = [..directPermits];
+        Permit[] totalPermits = [.. directPermits];
         foreach (Profile accountProfile in accountProfiles) {
 
             Permit[] profilePermits = await Database.ProfilesPermits
@@ -59,10 +58,10 @@ public class AccountsDepot
                 .ToArrayAsync();
 
             foreach (Permit profilePermit in profilePermits) {
-                if(totalPermits.Any(i => i.Id == profilePermit.Id)) 
+                if (totalPermits.Any(i => i.Id == profilePermit.Id))
                     continue;
 
-                totalPermits = [..totalPermits, profilePermit];
+                totalPermits = [.. totalPermits, profilePermit];
             }
         }
 

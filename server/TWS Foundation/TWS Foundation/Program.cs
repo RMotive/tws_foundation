@@ -17,9 +17,10 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Managers.Depot;
 using TWS_Customer.Managers.Session;
-using TWS_Customer.Services.Administration;
 using TWS_Customer.Services.Business;
 using TWS_Customer.Services.Interfaces;
+using TWS_Customer.Services.Security;
+using TWS_Customer.Services.Security.Solutions;
 
 using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;
@@ -27,6 +28,8 @@ using TWS_Foundation.Models;
 
 using TWS_Security;
 using TWS_Security.Depots;
+using TWS_Security.Depots.Accounts;
+using TWS_Security.Depots.Solutions;
 
 namespace TWS_Foundation;
 
@@ -110,8 +113,8 @@ public partial class Program {
                 builder.Services.AddDbContext<TWSBusinessDatabase>();
 
                 // --> Depots
-                builder.Services.AddScoped<SolutionsDepot>();
-                builder.Services.AddScoped<AccountsDepot>();
+                builder.Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
+                builder.Services.AddScoped<IAccountsDepot, AccountsDepot>();
                 builder.Services.AddScoped<AddressesDepot>();
                 builder.Services.AddScoped<UsdotsDepot>();
                 builder.Services.AddScoped<CarriersDepot>();

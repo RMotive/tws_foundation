@@ -10,14 +10,14 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Sections"), Route("[Controller]/[Action]")]
 public class SectionsController : ControllerBase {
     private readonly ISectionsService Service;
     public SectionsController(ISectionsService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Section> Options) {
         return Ok(await Service.View(Options));
     }

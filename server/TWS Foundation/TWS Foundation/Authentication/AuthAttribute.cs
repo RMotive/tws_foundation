@@ -1,34 +1,39 @@
-﻿
-using CSM_Foundation.Server.Exceptions;
+﻿using CSM_Foundation.Server.Exceptions;
 
 using Microsoft.AspNetCore.Mvc.Filters;
 
 using TWS_Customer.Managers.Session;
 
+using TWS_Security.Depots.Accounts;
+using TWS_Security.Depots.Solutions;
+using TWS_Security.Sets;
+
 namespace TWS_Foundation.Authentication;
 
-
+/// <summary>
+///     
+/// </summary>
 [AttributeUsage(AttributeTargets.Method)]
 public class AuthAttribute
-    : Attribute, IAuthorizationFilter {
+    : Attribute, IAsyncAuthorizationFilter {
     // private const string DISP_HEAD_KEY = "CSMDisposition";
     // private const string DISP_HEAD_VALUE = "Quality";
     private const string AUTH_TOKEN_KEY = "CSMAuth";
 
-    private readonly string Feature;
-    private readonly string Action;
+    /// <summary>
+    ///     Action that specifies the permit.
+    /// </summary>
+    readonly string Action;
 
-    public AuthAttribute(string Feature, string Action) {
-        this.Feature = Feature;
+    public AuthAttribute(string Action) {
         this.Action = Action;
-
-        this.Feature.ToString();
-        this.Action.ToString();
     }
 
-    public void OnAuthorization(AuthorizationFilterContext context) {
-        SessionManager sessionManager = context.HttpContext.RequestServices.GetRequiredService<SessionManager>();
-        IHeaderDictionary headers = context.HttpContext.Request.Headers;
+    public async Task OnAuthorizationAsync(AuthorizationFilterContext context) {
+        HttpContext callContext = context.HttpContext;
+        IServiceProvider serProvider = callContext.RequestServices;
+
+        IHeaderDictionary headers = callContext.Request.Headers;
 
         string authHedaer = headers.Authorization
             .Where(i => i is not null && i.Contains(AUTH_TOKEN_KEY))
@@ -39,5 +44,31 @@ public class AuthAttribute
 
         string token = authToken[0];
         string sign = authToken[1];
+
+        SessionManager sessionManager = serProvider.GetRequiredService<SessionManager>();
+        IAccountsDepot accounts = serProvider.GetRequiredService<IAccountsDepot>();
+        ISolutionsDepot solutions = serProvider.GetRequiredService<ISolutionsDepot>();
+
+        Session session = await sessionManager.Get(Guid.Parse(token), accounts, true)
+            ?? throw new XAuth(XAuthSituation.Expired);
+
+        if (session.Wildcard) {
+            return;
+        }
+
+        Solution runningSolution = (await solutions.Read(
+                (solution) => solution.Sign == sign,
+                CSM_Foundation.Database.Enumerators.SetReadBehaviors.First
+            )).Successes[0];
+
+        Permit[] permits = session.Permits;
+        Permit targetPermit = permits.Where(i => i.Solution == runningSolution.Id).FirstOrDefault()
+            ?? throw new XAuth(XAuthSituation.Unauthorized);
+
+        if (!targetPermit.Enabled) {
+            throw new XAuth(XAuthSituation.Unauthorized);
+        }
+
+        Action.ToString();
     }
 }

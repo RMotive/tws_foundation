@@ -8,10 +8,10 @@ using TWS_Business.Sets;
 using TWS_Customer.Services.Interfaces;
 using TWS_Customer.Services.Records;
 
-using TWS_Security.Depots;
+using TWS_Security.Depots.Accounts;
 using TWS_Security.Sets;
 
-namespace TWS_Customer.Services.Administration;
+namespace TWS_Customer.Services.Security;
 /// <summary>
 /// 
 /// </summary>

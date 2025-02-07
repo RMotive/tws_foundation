@@ -12,24 +12,24 @@ namespace TWS_Foundation.Controllers.Business;
 /// <summary>
 ///     Represents the controller to perform trucks operations.
 /// </summary>
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Trucks"), Route("[Controller]/[Action]")]
 public class TrucksController : ControllerBase {
     private readonly ITrucksService Service;
     public TrucksController(ITrucksService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Truck> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(Truck[] trucks) {
         return Ok(await Service.Create(trucks));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(Truck Truck) {
         return Ok(await Service.Update(Truck));
     }

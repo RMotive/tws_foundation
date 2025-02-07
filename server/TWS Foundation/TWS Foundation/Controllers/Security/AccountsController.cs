@@ -10,7 +10,7 @@ using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers.Security;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Accounts"), Route("[Controller]/[Action]")]
 public class AccountsController
     : ControllerBase {
     private readonly IAccountsService Service;
@@ -18,7 +18,7 @@ public class AccountsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Account> Options) {
         return Ok(await Service.View(Options));
     }

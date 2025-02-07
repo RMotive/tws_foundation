@@ -39,7 +39,7 @@ public class Q_TrucksExternalsController
         Assert.Equal(HttpStatusCode.OK, Status);
 
         View Estela = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(Estela.Sets.Length > 0);
+        Assert.True(Estela.Records.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }
