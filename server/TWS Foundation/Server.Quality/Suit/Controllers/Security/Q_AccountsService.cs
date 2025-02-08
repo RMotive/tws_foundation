@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.ObjectModel;
+using System.Net;
 using System.Text;
 
 using CSM_Foundation.Core.Utils;
@@ -29,8 +30,8 @@ public class Q_AccountsService
         : base("Accounts", hostFactory) {
     }
     // ---> Change this values for valids permits from your db instance.
-    int validPermit = 58; 
-    int updatedValidPermit = 69; // existent new permit to assign in the upd test.
+    private readonly int validPermit = 58;
+    private readonly int updatedValidPermit = 69; // existent new permit to assign in the upd test.
     protected override Account MockFactory(string RandomSeed) {
         Account mock = new() {
             User = "mock " + RandomSeed,
@@ -69,6 +70,21 @@ public class Q_AccountsService
 
         return Status != HttpStatusCode.OK ? throw new ArgumentNullException(nameof(Status)) : Response.Estela.Token.ToString();
     }
+
+    [Fact]
+    public async Task GetPermits() {
+        //Change the account ID for a valid db instance account.
+        (HttpStatusCode Status, _) = await Post("GetPermits",
+           new Account() {
+               Id = 14,
+               User = RandomUtils.String(5),
+               Password = Encoding.UTF8.GetBytes("mock"),
+           }, true
+        );
+
+        Assert.Equal(HttpStatusCode.OK, Status);
+    }
+
     [Fact]
     public async Task View() {
         (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {

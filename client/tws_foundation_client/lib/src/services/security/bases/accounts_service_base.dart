@@ -16,4 +16,7 @@ abstract class AccountsServiceBase extends TWSServiceBase {
 
   /// Transaction to update a set object.
   Effect<RecordUpdateOut<Account>> update(Account account, String auth);
+
+  /// Get efective permits for the account.
+  Effect<SetViewOut<Permit>> getPermits(Account account, String auth);
 }

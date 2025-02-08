@@ -36,6 +36,7 @@ public class AccountsDepot
         IQueryable<AccountPermit> accountPermits = Database.AccountsPermits
             .Where(i => i.Account == Account)
                 .Include(i => i.PermitNavigation);
+                   
 
         IQueryable<Permit> permits = accountPermits
             .Select(i => i.PermitNavigation!);
@@ -55,6 +56,7 @@ public class AccountsDepot
             Permit[] profilePermits = await Database.ProfilesPermits
                 .Where(i => i.Profile == accountProfile.Id)
                     .Include(i => i.PermitNavigation)
+                       
                 .Select(i => i.PermitNavigation)
                 .ToArrayAsync();
 

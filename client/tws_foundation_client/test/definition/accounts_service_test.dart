@@ -10,6 +10,8 @@ void main() {
   late SetViewOptions<Account> options;
   late SetBatchOut<Account> createMock;
   late RecordUpdateOut<Account> updateMock;  
+  late SetViewOut<Permit> permitsMock;
+
   late List<Account> accounts;
 
   setUp(
@@ -19,6 +21,8 @@ void main() {
       viewMock = SetViewOut<Account>(<Account>[], 1, DateTime.now(), 3, 0, 20);
       createMock = SetBatchOut<Account>(<Account>[], <SetOperationFailure<Account>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<Account>(Account.a(), Account.a());
+      permitsMock = SetViewOut<Permit>(<Permit>[], 1, DateTime.now(), 3, 0, 20);
+
       accounts = <Account>[
         Account.a(),
       ];
@@ -28,6 +32,7 @@ void main() {
             'view' => SuccessFrame<SetViewOut<Account>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<SetBatchOut<Account>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<RecordUpdateOut<Account>>('qTracer', updateMock).encode(),
+            'getPermits' => SuccessFrame<SetViewOut<Permit>>('qTracer', permitsMock).encode(),
             _ => <String, dynamic>{},
           };
 
@@ -106,6 +111,28 @@ void main() {
           throw failure;
         },
         onSuccess: (SuccessFrame<RecordUpdateOut<Account>> success) {
+          pased = true;
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+      );
+      expect(pased, true);
+    },
+  );
+
+  test(
+    'getPermits',
+    () async {
+      MainResolver<SetViewOut<Permit>> fact = await service.getPermits(Account.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => SetViewOut<Permit>.des(json, Permit.des),
+        onConnectionFailure: () {},
+        onFailure: (FailureFrame failure, int status) {
+          throw failure;
+        },
+        onSuccess: (SuccessFrame<SetViewOut<Permit>> success) {
           pased = true;
         },
         onException: (Object exception, StackTrace trace) {

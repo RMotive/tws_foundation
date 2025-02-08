@@ -78,6 +78,13 @@ public class AccountsService
                         Description = p.PermitNavigation.ActionNavigation.Description,
                         Enabled = p.PermitNavigation.ActionNavigation.Enabled,
                     } : null,
+                    SolutionNavigation = p.PermitNavigation.SolutionNavigation != null? new Solution() {
+                        Id = p.PermitNavigation.SolutionNavigation.Id,
+                        Timestamp = p.PermitNavigation.SolutionNavigation.Timestamp,
+                        Name = p.PermitNavigation.SolutionNavigation.Name,
+                        Sign = p.PermitNavigation.SolutionNavigation.Sign,
+                        Description = p.PermitNavigation.SolutionNavigation.Description,
+                    } : null,
                 } : null,
             }).ToList(),
             AccountProfiles = t.AccountProfiles.Where(p => p.Account == t.Id).Select(p => new AccountProfile() {
@@ -165,7 +172,7 @@ public class AccountsService
         //    }
         //}
 
-        //// Remove permits/profiles
+        //// Remove permits/proaaaaafiles
         //foreach (AccountPermit permit in Original) {
         //    bool founded = false;
         //    foreach (AccountPermit updatedPermit in Updated) {
@@ -183,6 +190,16 @@ public class AccountsService
         return result;
     }
 
+    public async Task<SetViewOut<Permit>> GetPermits(Account Account) {
+        return new SetViewOut<Permit>() {
+            Page = 0,
+            Pages = 0,
+            Records = 0,
+            Amount = 0,
+            Sets = await Accounts.GetPermits(Account.Id),
+        };
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -192,8 +209,8 @@ public class AccountsService
         return await Accounts.View(Options, Include);
     }
 
-    public Task<SetBatchOut<Account>> Create(Account[] accounts) {
-        return this.Accounts.Create(accounts);
+    public async Task<SetBatchOut<Account>> Create(Account[] accounts) {
+        return await Accounts.Create(accounts);
     }
 
     public async Task<RecordUpdateOut<Account>> Update(Account Account) {

@@ -12,6 +12,8 @@ void main() {
   
   final int validPermit = 58;
   final int updatedValidPermit = 69;
+  final int validAccount = 14;
+
 
   Account buildMock(String randomToken){
     return Account(
@@ -172,6 +174,33 @@ void main() {
           assert(actEffect.updated.contactNavigation!.name != actEffect.previous!.contactNavigation!.name);
           assert(actEffect.updated.accountPermits.length == 1 && actEffect.updated.accountPermits.first.permit == updatedValidPermit && actEffect.previous!.accountPermits.first.permit == validPermit);
           assert(actEffect.updated.accountProfiles.length == 1 && actEffect.updated.accountProfiles.first.profile == actEffect.previous!.accountProfiles.first.profile);
+        },
+      );
+    },
+  );
+
+  test(
+    'GetPermits',
+    () async {
+      MainResolver<SetViewOut<Permit>> fact = await service.getPermits(
+        Account.a().clone(id: validAccount),
+        auth,
+      );
+      fact.resolve(
+        decoder: (JObject json) => SetViewOut<Permit>.des(json, Permit.des),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<SetViewOut<Permit>> success) {
+          SetViewOut<Permit> fact = success.estela;
+
+          expect(fact.records >= 0, true);
         },
       );
     },

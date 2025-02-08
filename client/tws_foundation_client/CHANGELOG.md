@@ -23,12 +23,13 @@
         - [Employees] (View Service)
         - [Drivers] (Create and update services)
         - [DriversExternals] (Create and update services)
-        - [Accounts] (Create and update services)
+        - [Accounts] (Create, update & getPermits services)
         - [Locations] (View, create and update services)
         - [Addresses] (View service)
         - [Sections] (Create and update service)
         - [Permits] (View service)
         - [Profiles] (View service)
+        
     8. Additions to validations in the followings sets:
         - [Drivers]
         - [Address]
