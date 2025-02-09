@@ -7,7 +7,7 @@ import 'package:csm_client/csm_client.dart';
 /// [TSet] : The type of live database mirror set from to build the [View].
 final class SetViewOut<TSet extends CSMEncodeInterface> implements CSMEncodeInterface {
   /// Records resolved.
-  final List<TSet> sets;
+  final List<TSet> records;
 
   /// Total amount of pages available.
   final int pages;
@@ -19,13 +19,13 @@ final class SetViewOut<TSet extends CSMEncodeInterface> implements CSMEncodeInte
   final DateTime creation;
 
   /// The quantity of records resolved.
-  final int records;
+  final int length;
 
-  /// The total quantity of available records at the live database.
-  final int amount;
+  /// The total quantity of available records at the data storage.
+  final int count;
 
   /// Creates a new [SetViewOut] object.
-  const SetViewOut(this.sets, this.page, this.creation, this.pages, this.records, this.amount);
+  const SetViewOut(this.records, this.page, this.creation, this.pages, this.length, this.count);
 
   /// Creates a new [SetViewOut] object based on deserealization from a [JObject].
   ///
@@ -33,30 +33,30 @@ final class SetViewOut<TSet extends CSMEncodeInterface> implements CSMEncodeInte
   /// [setDecode] : Optional [CSMDecodeInterface] implementation to use on environment cases.
   factory SetViewOut.des(JObject json, TSet Function(JObject json) decoder) {
 
-    List<JObject> rawSetsArray = json.getDefault('sets', <dynamic>[]).cast();
-    List<TSet> setsObjects = rawSetsArray
+    List<JObject> rawRecords = json.getDefault('records', <dynamic>[]).cast();
+    List<TSet> records = rawRecords
         .map<TSet>(decoder)
         .toList();
 
     int pages = json.get('pages');
     int page = json.get('page');
-    int records = json.get('records');
-    int amount = json.get('amount');
+    int length = json.get('length');
+    int count = json.get('count');
 
     DateTime creation = json.get('creation');
 
-    return SetViewOut<TSet>(setsObjects, page, creation, pages, records, amount);
+    return SetViewOut<TSet>(records, page, creation, pages, length, count);
   }
 
   @override
   JObject encode() {
     return <String, dynamic>{
-      'sets': sets.map((TSet e) => e.encode()).toList(),
+      'records': records.map((TSet e) => e.encode()).toList(),
       'pages': pages,
       'page': page,
       'creation': creation.toString(),
-      'records': records,
-      'amount': amount,
+      'length': length,
+      'count': count,
     };
   }
 }
