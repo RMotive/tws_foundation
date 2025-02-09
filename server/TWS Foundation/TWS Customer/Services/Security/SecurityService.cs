@@ -17,9 +17,9 @@ public class SecurityService
     : ISecurityService {
     private readonly ConfigurationManager Configurations = ConfigurationManager.Manager;
     private readonly SessionManager SessionManager;
-    private readonly AccountsDepot Accounts;
+    private readonly IAccountsDepot Accounts;
 
-    public SecurityService(AccountsDepot Accounts, SessionManager SessionManager) {
+    public SecurityService(IAccountsDepot Accounts, SessionManager SessionManager) {
         this.Accounts = Accounts;
         this.SessionManager = SessionManager;
     }

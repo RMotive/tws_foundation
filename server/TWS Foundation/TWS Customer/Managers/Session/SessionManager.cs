@@ -104,7 +104,7 @@ public sealed class SessionManager {
             SetReadBehaviors.First,
             (query) => {
                 return query
-                    .Include(i => i.Contact);
+                    .Include(i => i.ContactNavigation);
             }
         );
 

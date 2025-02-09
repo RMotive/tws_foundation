@@ -14,7 +14,7 @@ public class SolutionsService
     /// <summary>
     ///     <see cref="Solution"/> data storage depot to perform basic generic operations.
     /// </summary>
-    private readonly SolutionsDepot SolutionsDepot;
+    private readonly ISolutionsDepot SolutionsDepot;
 
     /// <summary>
     ///     Creates a new <see cref="SolutionsService"/> instance. Service implementation for <see cref="Solution"/> set.
@@ -22,7 +22,7 @@ public class SolutionsService
     /// <param name="Solutions"> 
     ///     Required Depot implementation to perform complex internal operations.
     /// </param>
-    public SolutionsService(SolutionsDepot Solutions) {
+    public SolutionsService(ISolutionsDepot Solutions) {
         SolutionsDepot = Solutions;
     }
 

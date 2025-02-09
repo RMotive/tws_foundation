@@ -20,12 +20,12 @@ public class AccountsService
     /// <summary>
     /// 
     /// </summary>
-    private readonly AccountsDepot AccountsDepot;
+    private readonly IAccountsDepot AccountsDepot;
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Solutions"></param>
-    public AccountsService(AccountsDepot Accounts) {
+    public AccountsService(IAccountsDepot Accounts) {
         AccountsDepot = Accounts;
     }
     /// <summary>
