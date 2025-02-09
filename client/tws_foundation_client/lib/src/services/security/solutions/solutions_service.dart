@@ -1,8 +1,10 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-
+/// [SolutionsServiceBase] implementation.
 final class SolutionsService extends SolutionsServiceBase {
+  /// Generates a new [SolutionsService] instance, and implementation of [SolutionsServiceBase] providing methods to handle
+  /// [Solution] set records and its data.
   SolutionsService(
     CSMUri host, {
     Client? client,

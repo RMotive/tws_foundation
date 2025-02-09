@@ -1,5 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/constants/context_constants.dart';
+import 'package:tws_foundation_client/src/constants.dart';
 
 /// Custom [CSMServiceBase] implementation for [TWS] business services base.
 abstract class TWSServiceBase extends CSMServiceBase {

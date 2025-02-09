@@ -7,7 +7,7 @@ final class Solution implements CSMSetInterface {
   static const String kTimestamp = "timestamp";
 
   late final DateTime _timestamp;
-  DateTime get timestamp => _timestamp; 
+  DateTime get timestamp => _timestamp;
 
   @override
   int id = 0;
@@ -15,22 +15,36 @@ final class Solution implements CSMSetInterface {
   String sign = '';
   String? description;
 
-  Solution.a({ 
+  /// Generates a new [Solution] instance with default values.
+  Solution.a({
     DateTime? timestamp,
-  }){
-    _timestamp = timestamp ?? DateTime.now(); 
+  }) {
+    _timestamp = timestamp ?? DateTime.now();
   }
 
-  Solution.b(this.name, this.sign, {this.id = 0, this.description, DateTime? timestamp,
-  }){
-    _timestamp = timestamp ?? DateTime.now(); 
+  /// Generates a new [Solution] instance from mandatory values.
+  Solution.b(
+    this.name,
+    this.sign, {
+    this.id = 0,
+    this.description,
+    DateTime? timestamp,
+  }) {
+    _timestamp = timestamp ?? DateTime.now();
   }
 
-  Solution(this.id, this.name, this.sign, this.description, { 
+  /// Generates a new [Solution] instance.
+  Solution(
+    this.id,
+    this.name,
+    this.sign,
+    this.description, {
     DateTime? timestamp,
-  }){
-    _timestamp = timestamp ?? DateTime.now(); 
+  }) {
+    _timestamp = timestamp ?? DateTime.now();
   }
+
+  /// Geneates a new [Solution] instance based on a [JObject] data.
   factory Solution.des(JObject json) {
     int id = json.get('id');
     String name = json.get('name');
