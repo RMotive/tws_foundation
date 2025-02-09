@@ -4,13 +4,29 @@
 
 - Notes:
 
+    1. Now the Customer project implementations are going to be tested.
+
+        - Creates a new [BQ_Service] to facilitate Quality Suits for Service implementations.
+
+    2. Changes on [SetViewOut] model.
+
+        - [SetViewOut.Amount] changed to [SetViewOut.Count].
+
+        - [SetViewOut.Records] changed to [SetViewOut.Length].
+
+        - [SetViewOut.Sets] changed to [SetViewOut.Records].
+
+    3. Added [Q_SecurityService] quality suit.
+
+    4. Added [IService] as an interface for Customer services common operations as Create, View, Update, Delete.
+
 - Fixes:
 
 - Dependencies:
 
 ## 7.1.1 - [29.01-2025]
 
-- Notes: 
+- Notes:
 
     1. Changes on [ExportInventoryOut] -> [ExportOut]
         - Changed property [type] -> [extension]: also now is a enumerator to create a bound for the available extensions [ExportOutExtensions].
@@ -38,7 +54,7 @@
 
 - Notes:
 
-    1. Included [ExportViewInventory] service, allowing to generate an excel file based on a [ViewInventory] results. 
+    1. Included [ExportViewInventory] service, allowing to generate an excel file based on a [ViewInventory] results.
 
 - Fixes: N/A
 

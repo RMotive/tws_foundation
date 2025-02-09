@@ -10,14 +10,14 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Drivers"), Route("[Controller]/[Action]")]
 public class DriversController : ControllerBase {
     private readonly IDriversService Service;
     public DriversController(IDriversService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("")]
     public async Task<IActionResult> View(SetViewOptions<Driver> Options) {
         return Ok(await Service.View(Options));
     }

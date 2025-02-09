@@ -4,6 +4,25 @@
 
 - Notes:
 
+    1. Now the test folder has changed the way to run and define tests:
+
+        - changed [definiton] and [integration] folder for Feature based folders like [business/trucks] or [security/accounts] and inside the features are defined:
+
+            - [def_*_service_test.dart] Service definition test file.
+            - [int_*_service_test.dart] Service integration test file.
+            - [*_test.dart] Feature set model test file, currently used to test [des] and [encode] methods and see that [JObject] convertions work as expected.
+
+    2. Now the [src] folder, the main library content for the package, nesting has changed for a Feature based folder management, now we will be able to see inside the [services] folder the [security] and [business] that work as a category folders and inside them
+    the features like [accounts], [trucks], etc. There will be hold the set model file, the service base API and the service implementation, and all items related to the feature itself will be set in this folder.
+
+    3. Changes on [SetViewOut] model.
+
+        - [SetViewOut.Amount] changed to [SetViewOut.Count].
+
+        - [SetViewOut.Records] changed to [SetViewOut.Length].
+
+        - [SetViewOut.Sets] changed to [SetViewOut.Records].
+
 - Fixes:
 
 - Dependencies:

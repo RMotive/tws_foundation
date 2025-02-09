@@ -9,7 +9,7 @@ using TWS_Customer.Managers.Session.Exceptions;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
-using TWS_Security.Depots;
+using TWS_Security.Depots.Accounts;
 using TWS_Security.Sets;
 
 using CredentialsExpiration = (TWS_Customer.Services.Records.Credentials Credentials, System.DateTime Expiration);
@@ -88,7 +88,7 @@ public sealed class SessionManager {
     ///     <paramref name="Refresh"/> by default is false indicating that the expiration won't be refreshed.
     /// </remarks>
     /// <exception cref="XSetOperation{TSet}"></exception>
-    public async Task<Session?> Get(Guid Token, AccountsDepot Accounts, bool Refresh = false) {
+    public async Task<Session?> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
         if (!CurrentSessions.TryGetValue(Token, out CredentialsExpiration Session)) {
             return null;
         }

@@ -10,7 +10,7 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]")]
+[ApiController, Feature("Manufacturers"), Route("[Controller]/[Action]")]
 public class ManufacturersController : ControllerBase {
     private readonly IManufacturersService Service;
 
@@ -18,12 +18,12 @@ public class ManufacturersController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Manufacturer> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost("[Action]"), Auth("Create")]
     public async Task<IActionResult> Create(Manufacturer manufacturer) {
         return Ok(await Service.Create(manufacturer));
     }

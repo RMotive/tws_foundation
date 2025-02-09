@@ -12,35 +12,39 @@ namespace CSM_Foundation.Database.Models.Out;
 public class SetViewOut<TMigrationSet>
     where TMigrationSet : ISet {
 
-    private TMigrationSet[] _Sets = [];
+    private TMigrationSet[] _Records = [];
     /// <summary>
-    ///     The collection of items gathered
+    ///     The collection of items gathered.
     /// </summary>
-    public required TMigrationSet[] Sets {
-        get => _Sets;
+    public required TMigrationSet[] Records {
+        get => _Records;
         init {
-            _Sets = value;
-            Records = value.Length;
+            _Records = value;
+            Length = value.Length;
         }
     }
     /// <summary>
     ///     The available pages.
     /// </summary>
     public required int Pages { get; init; }
+
     /// <summary>
     ///     The current page.
     /// </summary>
     public required int Page { get; init; }
+
     /// <summary>
-    ///     Indicates the timemark of time when was created.
+    ///     Indicates the timemark when was created.
     /// </summary>
     public DateTime Creation { get; init; } = DateTime.UtcNow;
+
     /// <summary>
-    ///     Indicates the amount of records that this result contains.
+    ///     Indicates the quantity of records that this result contains.
     /// </summary>
-    public int Records { get; init; }
+    public int Length { get; init; }
+
     /// <summary>
-    ///     Amount of total records that currently exist at the live database
+    ///     Count of total records that currently exist at the live database
     /// </summary>
-    public required int Amount { get; init; }
+    public required int Count { get; init; }
 }

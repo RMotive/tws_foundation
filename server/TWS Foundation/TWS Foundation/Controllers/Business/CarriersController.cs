@@ -10,7 +10,7 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]")]
+[ApiController, Feature("Carriers"), Route("[Controller]/[Action]")]
 public class CarriersController : ControllerBase {
     private readonly ICarriersService Service;
 
@@ -18,12 +18,12 @@ public class CarriersController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Carrier> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("", "")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(Carrier carrier) {
         return Ok(await Service.Create(carrier));
     }
