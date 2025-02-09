@@ -20,7 +20,13 @@
 
     4. Added [IService] as an interface for Customer services common operations as Create, View, Update, Delete.
 
+    5. Added [Interfaces] for [Depots] and updating depedency injection management for them.
+
+    6. Added the [Delete(int Id)] overload method for [IDepot_Delete] interface as was present in the [BDepot] but not in an interface and logic wasn't able to call that method.
+
 - Fixes:
+
+    1. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].
 
 - Dependencies:
 
