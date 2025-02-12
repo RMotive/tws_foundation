@@ -65,7 +65,7 @@ public partial class TruckH
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<TruckH>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Trucks_H");

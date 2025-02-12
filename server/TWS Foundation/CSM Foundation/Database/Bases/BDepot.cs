@@ -302,8 +302,8 @@ public abstract class BDepot<TDatabase, TSet>
                 object? newNavigationValue = Database.Entry(Record).Navigation(navigation.Metadata.Name).CurrentValue;
                 // Validate if navigation is a collection.
                 if (navigation.CurrentValue is IEnumerable<object> previousCollection && newNavigationValue is IEnumerable<object> newCollection) {
-                    List<object> previousList = previousCollection.ToList();
-                    List<object> newList = newCollection.ToList();
+                    List<object> previousList = [.. previousCollection];
+                    List<object> newList = [.. newCollection];
                     // Perform a search for new items to add in the collection.
                     // NOTE: the followings iterations must be performed in diferent code segments to avoid index length conflicts.
                     for (int i = 0; i < newList.Count; i++) {

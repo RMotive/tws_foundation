@@ -43,7 +43,7 @@ public partial class Section
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Section>(Entity => {
             Entity.ToTable("Sections");
             Entity.HasKey(e => e.Id);

@@ -30,7 +30,7 @@ public partial class Sct
     public virtual ICollection<SctH> SctsH { get; set; } = [];
 
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Sct>(Entity => {
             Entity.ToTable("SCT");
             Entity.HasKey(e => e.Id);

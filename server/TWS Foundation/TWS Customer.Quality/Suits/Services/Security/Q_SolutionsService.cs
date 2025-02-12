@@ -4,9 +4,8 @@ using CSM_Foundation.Database.Models.Out;
 using TWS_Customer.Services.Security.Solutions;
 
 using TWS_Security;
+using TWS_Security.Depots.Solutions;
 using TWS_Security.Sets;
-
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TWS_Customer.Quality.Suits.Services.Security;
 
@@ -17,7 +16,7 @@ public class Q_SolutionsService
     : BQ_Service<Solution, SolutionsService, TWSSecurityDatabase> {
 
     public Q_SolutionsService()
-        : base(new(new())) {
+        : base(new(new SolutionsDepot())) {
 
     }
 
@@ -72,7 +71,7 @@ public class Q_SolutionsService
         sample.Id = reference.Id;
 
         RecordUpdateOut<Solution> updateOut = await Service.Update(sample);
-        
+
         Solution? previous = updateOut.Previous;
         Solution updated = updateOut.Updated;
 

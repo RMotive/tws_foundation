@@ -44,7 +44,7 @@ public partial class TruckExternal
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<TruckExternal>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Trucks_Externals");

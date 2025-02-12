@@ -40,7 +40,7 @@ public partial class VehiculeModel
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<VehiculeModel>(Entity => {
             Entity.ToTable("Vehicules_Models");
             Entity.HasKey(e => e.Id);

@@ -23,7 +23,7 @@ public abstract class BQ_Set<TSet>
     [Fact]
     public void EvaluateDefinition() {
         TSet mock = new();
-        _ = mock.EvaluateDefinition();
+        mock.EvaluateDefinition();
     }
 
     [Fact]

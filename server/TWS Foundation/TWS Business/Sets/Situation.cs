@@ -24,7 +24,7 @@ public partial class Situation
 
     public virtual ICollection<TruckH> TrucksH { get; set; } = [];
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Situation>(Entity => {
             Entity.HasKey(e => e.Id);
 

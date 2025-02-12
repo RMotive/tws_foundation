@@ -52,8 +52,8 @@ public partial class PlateH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<PlateH>(entity => {
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<PlateH>(entity => {
             entity.ToTable("Plate_H");
             entity.HasKey(e => e.Id);
 

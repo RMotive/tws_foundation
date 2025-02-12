@@ -34,7 +34,7 @@ public partial class Plate
 
     public virtual ICollection<PlateH> PlatesH { get; set; } = [];
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Plate>(Entity => {
             Entity.HasKey(e => e.Id);
 

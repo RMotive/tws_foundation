@@ -27,7 +27,7 @@ public partial class Maintenance
     public virtual ICollection<MaintenanceH> MaintenancesH { get; set; } = [];
 
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Maintenance>(Entity => {
             Entity.HasKey(e => e.Id);
 

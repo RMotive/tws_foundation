@@ -44,41 +44,43 @@ public partial class Address
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
-        Builder.Entity<Address>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Addresses");
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<Address>(
+            (Entity) => {
+                Entity.HasKey(e => e.Id);
+                Entity.ToTable("Addresses");
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                Entity.Property(e => e.Timestamp)
+                    .HasColumnType("datetime");
 
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
+                Entity.Property(e => e.Id)
+                    .HasColumnName("id");
 
-            Entity.Property(e => e.Street)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+                Entity.Property(e => e.Street)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
-            Entity.Property(e => e.AltStreet)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+                Entity.Property(e => e.AltStreet)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
-            Entity.Property(e => e.City)
-                .HasMaxLength(30)
-                .IsUnicode(false);
+                Entity.Property(e => e.City)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
 
-            Entity.Property(e => e.Zip)
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("ZIP");
+                Entity.Property(e => e.Zip)
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
+                    .HasColumnName("ZIP");
 
-            Entity.Property(e => e.Country)
-                .HasMaxLength(3)
-                .IsUnicode(false);
+                Entity.Property(e => e.Country)
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
 
-            Entity.Property(e => e.Colonia)
-                .HasMaxLength(30)
-                .IsUnicode(false);
-        });
+                Entity.Property(e => e.Colonia)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+            }
+        );
     }
 }

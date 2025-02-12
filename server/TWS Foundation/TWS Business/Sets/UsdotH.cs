@@ -42,7 +42,7 @@ public partial class UsdotH
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<UsdotH>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.Property(e => e.Id)

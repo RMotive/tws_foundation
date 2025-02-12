@@ -26,7 +26,7 @@ public partial class Feature
         ];
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Feature>(
             (Entity) => {
                 Entity.HasKey(x => x.Id);

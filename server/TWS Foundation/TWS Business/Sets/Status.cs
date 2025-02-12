@@ -86,7 +86,7 @@ public partial class Status
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Status>(Entity => {
             Entity.HasKey(e => e.Id);
 

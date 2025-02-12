@@ -45,10 +45,14 @@ public interface ISet
     /// </summary>
     void EvaluateWrite();
 
+
+
+
+
     /// <summary>
     ///     This method is used to evaluate the implementation definition, this means will evaluate
     ///     if the <see cref="EvaluateRead"/> and <see cref="EvaluateWrite"/> operations work as expected
-    ///     before the system start its engine, this function might break the system set up and stop advising
+    ///     before the system start its engine, this function might break the system rawSet up and stop advising
     ///     about the found exceptions.
     /// </summary>
     /// <returns>

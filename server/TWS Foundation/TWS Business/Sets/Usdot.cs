@@ -39,8 +39,8 @@ public partial class Usdot
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder builder) {
-        builder.Entity<Usdot>(entity => {
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<Usdot>(entity => {
             entity.ToTable("USDOT");
             entity.HasKey(e => e.Id);
 

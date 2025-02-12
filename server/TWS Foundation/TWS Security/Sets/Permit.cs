@@ -36,7 +36,7 @@ public partial class Permit
         ];
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Permit>(
             (Entity) => {
                 Entity.HasKey(i => i.Id);

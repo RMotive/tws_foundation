@@ -94,8 +94,8 @@ public partial class Program {
             });
 
             // --> Checking Database Health
-            new TWSSecurityDatabase().ValidateHealth();
-            new TWSBusinessDatabase().ValidateHealth();
+            new TWSSecurityDatabase().ValidateConnection();
+            new TWSBusinessDatabase().ValidateConnection();
 
             // --> Adding customer services
             {

@@ -48,7 +48,7 @@ public partial class TrailerCommon
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<TrailerCommon>(Entity => {
             Entity.ToTable("Trailers_Commons");
             Entity.HasKey(e => e.Id);

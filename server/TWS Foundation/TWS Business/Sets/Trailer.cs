@@ -50,7 +50,7 @@ public partial class Trailer
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Trailer>(Entity => {
             Entity.ToTable("Trailers");
             Entity.HasKey(e => e.Id);

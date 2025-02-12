@@ -29,7 +29,7 @@ public partial class Identification
     public virtual ICollection<Employee> Employees { get; set; } = [];
 
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Identification>(Entity => {
             Entity.ToTable("Identifications");
             Entity.HasKey(e => e.Id);

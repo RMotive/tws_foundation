@@ -219,8 +219,8 @@ public partial class YardLog
     ///     
     /// </summary>
     /// <param name="builder"></param>
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<YardLog>(entity => {
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<YardLog>(entity => {
             entity.HasKey(e => e.Id);
             entity.ToTable("Yard_Logs", tb => tb.HasTrigger("YardLogs_InsertInto_TrucksInventories"));
 

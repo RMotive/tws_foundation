@@ -48,7 +48,7 @@ public partial class Carrier
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Carrier>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Carriers");

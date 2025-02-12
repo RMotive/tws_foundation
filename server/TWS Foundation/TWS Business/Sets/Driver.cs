@@ -60,7 +60,7 @@ public partial class Driver
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Driver>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Drivers");

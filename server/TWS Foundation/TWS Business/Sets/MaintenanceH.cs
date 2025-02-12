@@ -42,8 +42,8 @@ public partial class MaintenanceH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<MaintenanceH>(entity => {
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<MaintenanceH>(entity => {
             entity.ToTable("Maintenances_H");
             entity.HasKey(e => e.Id);
 

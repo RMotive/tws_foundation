@@ -37,7 +37,7 @@ public partial class DriverExternal
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<DriverExternal>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Drivers_Externals");

@@ -92,7 +92,7 @@ public abstract class BQ_Service<TSet, TService, TDatabase>
         if (Store) {
             Database.Set<TSet>().AddRange(samples);
             Database.SaveChanges();
-            Disposer.Push(samples.Cast<ISet>().ToArray());
+            Disposer.Push([..samples.Cast<ISet>()]);
         }
         return samples;
     }

@@ -11,9 +11,11 @@ using CSM_Foundation.Database.Validators;
 namespace CSM_Foundation.Database.Bases;
 
 /// <summary>
+///     [Abstract] class for <see cref="BSet"/> implementations.
 ///     
+///     A Set is a table into a data storage, defining properties and relations stored.
 /// </summary>
-public abstract class BSet
+public abstract partial class BSet
     : BObject<ISet>, ISet {
 
     [NotMapped]
@@ -108,10 +110,7 @@ public abstract class BSet
             (nameof(Timestamp), [new RequiredValidator()])
         ]);
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
+
     public Exception[] EvaluateDefinition() {
         if (Defined) {
             return [];

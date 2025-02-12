@@ -36,7 +36,7 @@ public partial class Contact
     }
 
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Contact>(entity => {
             entity.HasKey(e => e.Id);
 

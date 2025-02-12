@@ -22,6 +22,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWS Customer.Quality", "TWS Customer.Quality\TWS Customer.Quality.csproj", "{0F41936F-8DF0-4AB7-A686-308191137FCD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWS Business.Quality", "TWS Business.Quality\TWS Business.Quality.csproj", "{B683624F-74FF-44E6-9197-630A3614543E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{52263862-47EE-4C78-97B8-87D4C443A305} = {52263862-47EE-4C78-97B8-87D4C443A305}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWS Security", "TWS Security\TWS Security.csproj", "{0F1EC7A1-B0B6-4C7E-8309-B3350002DB89}"
 EndProject

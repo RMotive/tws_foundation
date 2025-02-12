@@ -41,7 +41,7 @@ public partial class Approach
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Approach>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Approaches");

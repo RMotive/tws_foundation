@@ -43,30 +43,37 @@ public partial class Solution
         return Container;
     }
 
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<Solution>(
+            (Entity) => {
+                Entity
+                    .HasKey(e => e.Id);
 
-    public static void CreateModel(ModelBuilder Builder) {
-        Builder.Entity<Solution>(entity => {
-            entity.HasKey(e => e.Id);
+                Entity
+                    .HasIndex(e => e.Sign)
+                    .IsUnique();
+                Entity.Property(e => e.Sign)
+                    .IsFixedLength(true)
+                    .HasMaxLength(5)
+                    .IsRequired();
 
-            entity.HasIndex(e => e.Sign)
-            .IsUnique();
+                Entity
+                    .HasIndex(e => e.Name)
+                    .IsUnique();
+                Entity
+                    .Property(e => e.Name)
+                    .IsFixedLength(true)
+                    .HasMaxLength(25)
+                    .IsRequired();
 
-            entity.HasIndex(e => e.Name)
-            .IsUnique();
+                Entity
+                    .Property(e => e.Description);
 
-            entity.Property(e => e.Description)
-            .IsUnicode(false);
-
-            entity.Property(e => e.Name)
-            .HasMaxLength(25)
-            .IsUnicode(false);
-
-            entity.Property(e => e.Sign)
-            .HasMaxLength(5)
-            .IsUnicode(false);
-
-            entity.Property(e => e.Timestamp)
-            .HasColumnType("datetime");
-        });
+                Entity
+                    .Property(e => e.Timestamp)
+                    .IsRequired()
+                    .HasColumnType("datetime");
+            }
+        );
     }
 }

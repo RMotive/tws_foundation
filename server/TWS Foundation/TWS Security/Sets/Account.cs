@@ -2,6 +2,8 @@
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace TWS_Security.Sets;
 
 public partial class Account
@@ -30,4 +32,23 @@ public partial class Account
         return Container;
     }
 
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<Account>(entity => {
+            entity.HasKey(e => e.Id);
+
+            entity.HasIndex(e => e.User).IsUnique();
+
+            entity.HasIndex(e => e.Contact).IsUnique();
+
+            entity.Property(e => e.Id);
+            entity.Property(e => e.Password);
+            entity.Property(e => e.User)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.ContactNavigation).WithOne(p => p.Account)
+                .HasForeignKey<Account>(d => d.Contact)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+    }
 }

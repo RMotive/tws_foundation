@@ -38,7 +38,7 @@ public partial class DriverCommon
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<DriverCommon>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Drivers_Commons");

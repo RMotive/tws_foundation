@@ -46,8 +46,8 @@ public partial class InsuranceH
         return Container;
     }
 
-    public static void Set(ModelBuilder builder) {
-        builder.Entity<InsuranceH>(entity => {
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<InsuranceH>(entity => {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                 .HasColumnName("id");

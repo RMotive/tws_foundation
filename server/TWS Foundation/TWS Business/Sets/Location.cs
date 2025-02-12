@@ -41,7 +41,7 @@ public partial class Location
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Location>(Entity => {
             Entity.ToTable("Locations");
             Entity.HasKey(e => e.Id);

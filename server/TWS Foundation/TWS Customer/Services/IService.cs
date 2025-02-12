@@ -7,7 +7,7 @@ using TWS_Security.Sets;
 namespace TWS_Customer.Services;
 
 /// <summary>
-///     Behavior for Service implementations.
+///     Interface for Customer Service implementations.
 /// </summary>
 /// <typeparam name="TSet">
 ///     The <see cref="Type"/> of [Set] context for the service implementation.

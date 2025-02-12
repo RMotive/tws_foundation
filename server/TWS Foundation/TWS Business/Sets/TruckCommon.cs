@@ -42,7 +42,7 @@ public partial class TruckCommon
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<TruckCommon>(Entity => {
             Entity.ToTable("Trucks_Commons");
             Entity.HasKey(e => e.Id);

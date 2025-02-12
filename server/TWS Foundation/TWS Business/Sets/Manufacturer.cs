@@ -18,7 +18,7 @@ public partial class Manufacturer
 
     public virtual ICollection<VehiculeModel> Models { get; set; } = [];
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Manufacturer>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Manufacturers");

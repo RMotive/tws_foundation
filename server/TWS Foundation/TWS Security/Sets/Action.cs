@@ -37,7 +37,9 @@ public class Action
                 Entity.Property(i => i.Description);
                 Entity.Property(i => i.Timestamp);
                 Entity.Property(i => i.Enabled);
-            }    
+            }
         );
     }
+
+    protected override void DescribeSet(ModelBuilder Builder) { }
 }

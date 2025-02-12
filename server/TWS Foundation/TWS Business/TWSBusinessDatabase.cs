@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
 
 
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +7,7 @@ using TWS_Business.Sets;
 
 namespace TWS_Business;
 
-public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
+public class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     public TWSBusinessDatabase(DbContextOptions<TWSBusinessDatabase> options)
         : base("TWSB", options) {
     }
@@ -39,7 +38,7 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
     public virtual DbSet<Approach> Approaches { get; set; } = default!;
 
-    public virtual DbSet<Usdot> Usdots { get; set; } = default!;    
+    public virtual DbSet<Usdot> Usdots { get; set; } = default!;
 
     public virtual DbSet<Address> Addresses { get; set; } = default!;
 
@@ -71,87 +70,5 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
 
     public virtual DbSet<TrailerType> TrailersTypes { get; set; } = default!;
 
-    public virtual DbSet<TrailerType> TrucksInventories { get; set; } = default!;   
-
-
-
-    protected override void OnModelCreating(ModelBuilder builder) {
-        Sct.CreateModel(builder);
-        Plate.CreateModel(builder);
-        Truck.CreateModel(builder);
-        Situation.CreateModel(builder);
-        Insurance.CreateModel(builder);
-        Maintenance.CreateModel(builder);
-        Manufacturer.CreateModel(builder);
-        Trailer.CreateModel(builder);
-        TrailerClass.CreateModel(builder);
-        TrailerCommon.CreateModel(builder);
-        TrailerExternal.CreateModel(builder);
-        Status.CreateModel(builder);
-        Address.CreateModel(builder);
-        Approach.CreateModel(builder);
-        Carrier.CreateModel(builder);
-        Location.CreateModel(builder);
-        TruckExternal.CreateModel(builder);
-        TruckCommon.CreateModel(builder);
-        Identification.CreateModel(builder);
-        Employee.CreateModel(builder);
-        Driver.CreateModel(builder);
-        DriverCommon.CreateModel(builder);
-        DriverExternal.CreateModel(builder);
-        LoadType.CreateModel(builder);
-        Section.CreateModel(builder);
-        YardLog.Set(builder);
-        TrailerType.CreateModel(builder);
-        VehiculeModel.CreateModel(builder);
-        TruckH.CreateModel(builder);
-        Usdot.CreateModel(builder);
-        Usdot.CreateModel(builder);
-        UsdotH.CreateModel(builder);
-        ApproachesH.CreateModel(builder);
-        CarrierH.CreateModel(builder);
-        TruckInventory.CreateModel(builder);
-
-
-        OnModelCreatingPartial(builder);
-    }
-
-    protected override ISet[] EvaluateFactory() {
-        return [
-            new Plate(),
-            new Manufacturer(),
-            new Maintenance(),
-            new Insurance(),
-            new Situation(),
-            new Truck(),
-            new TruckCommon(),
-            new TruckExternal(),
-            new Sct(),
-            new Status(),
-            new Carrier(),
-            new Usdot(),
-            new Address(),
-            new Trailer(),
-            new TrailerClass(),
-            new TrailerCommon(),
-            new TrailerExternal(),
-            new Location(),
-            new Identification(),
-            new Employee(),
-            new Driver(),
-            new DriverCommon(),
-            new DriverExternal(),
-            new LoadType(),
-            new Section(),
-            new YardLog(),
-            new VehiculeModel(),
-            new TrailerType(),
-            new TruckInventory(),
-            new UsdotH(),
-            new Approach(),
-            new ApproachesH(),
-            new TruckH()
-        ];
-    }
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    public virtual DbSet<TrailerType> TrucksInventories { get; set; } = default!;
 }

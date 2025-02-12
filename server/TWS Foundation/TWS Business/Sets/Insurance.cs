@@ -40,7 +40,7 @@ public partial class Insurance
         return Container;
     }
 
-    public static void CreateModel(ModelBuilder Builder) {
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Insurance>(Entity => {
             Entity.HasKey(e => e.Id);
 
