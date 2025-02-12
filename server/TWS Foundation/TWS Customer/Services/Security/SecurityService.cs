@@ -9,8 +9,9 @@ using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Interfaces;
 using TWS_Customer.Services.Records;
 
-using TWS_Security.Depots.Accounts;
 using TWS_Security.Sets;
+using TWS_Security.Sets.Accounts;
+using TWS_Security.Sets.Contacts;
 
 namespace TWS_Customer.Services.Security;
 public class SecurityService

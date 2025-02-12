@@ -9,9 +9,9 @@ namespace TWS_Business.Sets;
 public partial class TruckInventory
     : BSet {
 
-    public override int Id { get; set; }
+    
 
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    
 
     public DateTime EntryDate { get; set; }
 

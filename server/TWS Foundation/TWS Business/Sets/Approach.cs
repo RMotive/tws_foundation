@@ -8,10 +8,6 @@ namespace TWS_Business.Sets;
 
 public partial class Approach
     : BSet {
-    public override int Id { get; set; }
-
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
-
     public int Status { get; set; }
 
     public string? Enterprise { get; set; }

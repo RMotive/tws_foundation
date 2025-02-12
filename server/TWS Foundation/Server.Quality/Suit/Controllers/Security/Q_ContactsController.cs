@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets;
+using TWS_Security.Sets.Contacts;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Security;
 public class Q_ContactsController

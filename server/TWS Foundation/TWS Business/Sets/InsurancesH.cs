@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -9,15 +8,12 @@ namespace TWS_Business.Sets;
 
 public partial class InsuranceH
     : BSet {
-    public override int Id { get; set; }
-
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public int Sequence { get; set; }
 
     public int Status { get; set; }
 
-    public int Entity {  get; set; }
+    public int Entity { get; set; }
 
     public string Policy { get; set; } = null!;
 

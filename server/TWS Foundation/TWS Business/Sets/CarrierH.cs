@@ -9,17 +9,15 @@ namespace TWS_Business.Sets;
 
 public partial class CarrierH
     : BSet {
-    public override int Id { get; set; }
+    
 
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    
 
     public int Sequence { get; set; }
 
     public int Status { get; set; }
 
     public int Entity { get; set; }
-
-    public string Name { get; set; } = null!;
 
     public int? ApproachH { get; set; }
     

@@ -27,9 +27,9 @@ using TWS_Foundation.Middlewares;
 using TWS_Foundation.Models;
 
 using TWS_Security;
-using TWS_Security.Depots;
-using TWS_Security.Depots.Accounts;
-using TWS_Security.Depots.Solutions;
+using TWS_Security.Sets.Accounts;
+using TWS_Security.Sets.Contacts;
+using TWS_Security.Sets.Solutions;
 
 namespace TWS_Foundation;
 

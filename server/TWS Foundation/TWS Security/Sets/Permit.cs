@@ -6,13 +6,16 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
+using TWS_Security.Sets.Accounts;
+using TWS_Security.Sets.Solutions;
+
 namespace TWS_Security.Sets;
 
 public partial class Permit
     : BSet {
-    public override int Id { get; set; }
+    
 
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    
 
     public int Solution { get; set; }
 
@@ -27,6 +30,10 @@ public partial class Permit
 
     public string Reference { get; set; } = default!;
     public bool Enabled { get; set; }
+
+
+    public ICollection<Profile> Profiles { get; set; } = default!;
+    public ICollection<Account> Accounts { get; set; } = default!;
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {

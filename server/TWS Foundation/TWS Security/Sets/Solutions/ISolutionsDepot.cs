@@ -1,8 +1,6 @@
 ﻿using CSM_Foundation.Database.Interfaces;
 
-using TWS_Security.Sets;
-
-namespace TWS_Security.Depots.Solutions;
+namespace TWS_Security.Sets.Solutions;
 
 /// <summary>
 ///     

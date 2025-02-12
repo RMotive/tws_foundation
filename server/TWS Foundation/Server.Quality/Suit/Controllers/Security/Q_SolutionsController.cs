@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets;
+using TWS_Security.Sets.Solutions;
 
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Sets.Solution>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Sets.Solutions.Solution>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Security;
 

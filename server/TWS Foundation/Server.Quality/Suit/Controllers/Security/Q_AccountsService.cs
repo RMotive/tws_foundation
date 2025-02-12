@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using Account = TWS_Security.Sets.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Sets.Account>;
+using Account = TWS_Security.Sets.Accounts.Account;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Sets.Accounts.Account>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Security;
 
@@ -27,7 +27,7 @@ public class Q_AccountsService
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,

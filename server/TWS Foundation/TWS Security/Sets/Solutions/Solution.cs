@@ -4,24 +4,10 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace TWS_Security.Sets;
+namespace TWS_Security.Sets.Solutions;
 
 public partial class Solution
     : BSet {
-
-    public override int Id { get; set; }
-
-    public override DateTime Timestamp { get; set; } = DateTime.Now;
-
-
-    /// <summary>
-    ///     Solution name identification.
-    /// </summary>
-    /// <remarks>
-    ///     Must be Unique along records. 1 - 40 length.
-    /// </remarks>
-    public string Name { get; set; } = null!;
-
     /// <summary>
     ///     Solution unique sign to reference easyly the solution along operations.
     /// </summary>

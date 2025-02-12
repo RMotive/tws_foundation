@@ -7,10 +7,6 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Security.Sets;
 public class Action
     : BSet {
-    public override int Id { get; set; }
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
-
-    public string Name { get; set; } = default!;
     public string? Description { get; set; }
     public bool Enabled { get; set; }
 

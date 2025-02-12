@@ -1,9 +1,7 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
 
-using TWS_Security.Sets;
-
-namespace TWS_Security.Depots;
+namespace TWS_Security.Sets.Contacts;
 
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>

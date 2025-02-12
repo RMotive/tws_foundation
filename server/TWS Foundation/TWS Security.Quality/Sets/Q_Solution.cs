@@ -2,7 +2,7 @@
 using CSM_Foundation.Database.Quality.Records;
 using CSM_Foundation.Database.Validators;
 
-using TWS_Security.Sets;
+using TWS_Security.Sets.Solutions;
 
 
 namespace TWS_Security.Quality.Sets;

@@ -16,6 +16,11 @@ public interface ISet
     int Id { get; set; }
 
     /// <summary>
+    ///     Base unique [Set] property to identify the record (user-friendly).
+    /// </summary>
+    string Name { get; set; }
+
+    /// <summary>
     ///     The exact moment where the record was created and stored in the storage system. 
     /// </summary>
     DateTime Timestamp { get; set; }

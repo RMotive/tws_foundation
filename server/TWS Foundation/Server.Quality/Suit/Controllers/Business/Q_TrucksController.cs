@@ -148,7 +148,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
     }
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Accounts.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,

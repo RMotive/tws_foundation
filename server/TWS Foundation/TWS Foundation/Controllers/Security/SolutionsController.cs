@@ -7,6 +7,7 @@ using TWS_Customer.Services.Security.Solutions;
 using TWS_Foundation.Authentication;
 
 using TWS_Security.Sets;
+using TWS_Security.Sets.Solutions;
 
 namespace TWS_Foundation.Controllers.Security;
 

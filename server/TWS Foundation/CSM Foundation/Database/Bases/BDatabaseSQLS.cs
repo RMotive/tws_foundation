@@ -230,13 +230,31 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        (BSet[] sets, BConnector<ISet, ISet>[] connectors) = ValidateSets();
+        (BSet[] sets, BConnector<ISet, ISet>[] _) = ValidateSets();
 
         foreach (BSet set in sets) {
+            modelBuilder.Entity(
+                set.GetType(),
+                (EntityBuilder) => {
+                    EntityBuilder.HasKey(nameof(ISet.Id));
+
+                    EntityBuilder
+                        .HasIndex(nameof(ISet.Name))
+                        .IsUnique();
+
+                    EntityBuilder
+                        .Property(nameof(ISet.Name))
+                        .HasMaxLength(25)
+                        .IsRequired();
+
+                    EntityBuilder
+                        .Property(nameof(ISet.Timestamp))
+                        .HasColumnType("datetime");
+                }
+            );
+
             set.DescribeSet(modelBuilder);
         }
-
-
 
         OnModelCreatingPartial(modelBuilder);
     }
@@ -259,6 +277,9 @@ public abstract partial class BSet
     /// <param name="Builder">
     ///     Proxy object to configure Set Model to Entity Framework Core.
     /// </param>
+    /// <remarks>
+    ///     Don't describe <see cref="ISet"/> properties they are being auto-described by the [CSM] engine, <see cref="ISet.Id"/>, <see cref="ISet.Timestamp"/> and <see cref="ISet.Name"/>.
+    /// </remarks>
     protected internal abstract void DescribeSet(ModelBuilder Builder);
 }
 

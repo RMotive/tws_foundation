@@ -2,7 +2,7 @@
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 
-using TWS_Security.Sets;
+using TWS_Security.Sets.Solutions;
 
 namespace TWS_Customer.Services;
 

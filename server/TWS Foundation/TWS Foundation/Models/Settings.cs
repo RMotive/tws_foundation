@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Advisor.Interfaces;
 
-using TWS_Security.Sets;
+using TWS_Security.Sets.Solutions;
 
 namespace TWS_Foundation.Models;
 

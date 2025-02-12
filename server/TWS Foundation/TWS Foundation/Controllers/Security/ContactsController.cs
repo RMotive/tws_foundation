@@ -6,7 +6,7 @@ using TWS_Customer.Services.Interfaces;
 
 using TWS_Foundation.Authentication;
 
-using TWS_Security.Sets;
+using TWS_Security.Sets.Contacts;
 
 namespace TWS_Foundation.Controllers.Security;
 

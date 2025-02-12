@@ -8,13 +8,11 @@ namespace TWS_Business.Sets;
 
 public partial class Section
     : BSet {
-    public override int Id { get; set; }
+    
 
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    
 
     public int Status { get; set; }
-
-    public string Name { get; set; } = null!;
 
     public int Yard { get; set; }
 

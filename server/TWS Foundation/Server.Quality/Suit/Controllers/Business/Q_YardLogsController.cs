@@ -15,7 +15,8 @@ using TWS_Business.Sets;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets;
+using TWS_Security.Sets.Accounts;
+using TWS_Security.Sets.Solutions;
 
 using static System.Runtime.InteropServices.JavaScript.JSType;
 

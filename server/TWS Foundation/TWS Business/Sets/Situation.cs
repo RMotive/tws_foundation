@@ -8,12 +8,6 @@ namespace TWS_Business.Sets;
 
 public partial class Situation
     : BSet {
-    public override int Id { get; set; }
-
-    public override DateTime Timestamp { get; set; } = DateTime.UtcNow;
-
-    public string Name { get; set; } = null!;
-
     public string? Description { get; set; }
 
     public virtual ICollection<DriverCommon>? DriversCommons { get; set; } = [];

@@ -4,16 +4,12 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace TWS_Security.Sets;
+using TWS_Security.Sets.Accounts;
+
+namespace TWS_Security.Sets.Contacts;
 
 public partial class Contact
     : BSet {
-    public override int Id { get; set; }
-
-    public override DateTime Timestamp { get; set; } = DateTime.Now;
-
-    public string Name { get; set; } = null!;
-
     public string Lastname { get; set; } = null!;
 
     public string Email { get; set; } = null!;

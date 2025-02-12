@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
-using CSM_Foundation.Convertion;
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Exceptions;
@@ -24,18 +24,25 @@ public abstract partial class BSet
     /// <summary>
     /// 
     /// </summary>
-    public abstract int Id { get; set; }
-    
+    public int Id { get; set; }
+
     /// <summary>
     /// 
     /// </summary>
-    public abstract DateTime Timestamp { get; set; }
+    [StringLength(25)]
+    public virtual string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public DateTime Timestamp { get; set; } = DateTime.MinValue;
+
 
     /// <summary>
     /// 
     /// </summary>
     private bool Defined = false;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -62,7 +69,7 @@ public abstract partial class BSet
     protected void Evaluate((string Propety, IValidator[] Validators)[] Custom) {
         Validators ??= Validations([]);
 
-        (string Propety, IValidator[] Validators)[] validators = [..Custom, ..Validators];
+        (string Propety, IValidator[] Validators)[] validators = [.. Custom, .. Validators];
         (string property, XIValidator_Evaluate[] faults)[] unvalidations = [];
         int quantity = validators.Length;
         for (int i = 0; i < quantity; i++) {

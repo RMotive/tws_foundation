@@ -1,4 +1,4 @@
-﻿using TWS_Security.Sets;
+﻿using TWS_Security.Sets.Solutions;
 
 namespace TWS_Customer.Services.Security.Solutions;
 

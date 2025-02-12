@@ -4,8 +4,7 @@ using CSM_Foundation.Database.Models.Out;
 using TWS_Customer.Services.Security.Solutions;
 
 using TWS_Security;
-using TWS_Security.Depots.Solutions;
-using TWS_Security.Sets;
+using TWS_Security.Sets.Solutions;
 
 namespace TWS_Customer.Quality.Suits.Services.Security;
 
