@@ -23,7 +23,7 @@ public abstract class BQ_Service<TSet, TService, TDatabase>
     : IDisposable
     where TSet : class, ISet
     where TService : IService<TSet>
-    where TDatabase : BDatabaseSQLS<TDatabase>, new() {
+    where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
 
     /// <summary>
     ///     Quality suit implementation service.

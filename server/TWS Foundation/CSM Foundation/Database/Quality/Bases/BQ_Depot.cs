@@ -27,7 +27,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     : IQ_Depot, IDisposable
     where TSet : class, ISet, new()
     where TDepot : IDepot<TSet>, new()
-    where TDatabase : BDatabaseSQLS<TDatabase>, new() {
+    where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
 
     protected readonly QDisposer Disposer;
 

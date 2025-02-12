@@ -28,7 +28,7 @@ namespace CSM_Foundation.Database.Bases;
 /// </typeparam>
 public abstract class BDepot<TDatabase, TSet>
     : IDepot<TSet>
-    where TDatabase : BDatabaseSQLS<TDatabase>
+    where TDatabase : BDatabase_SQLServer<TDatabase>
     where TSet : class, ISet {
 
     /// <summary>

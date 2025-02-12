@@ -18,7 +18,7 @@ namespace CSM_Foundation.Database.Bases;
 /// <typeparam name="TDatabases">
 ///     Runtime Type of the <see cref="DbContext"/> implementation to handle
 /// </typeparam>
-public abstract partial class BDatabaseSQLS<TDatabases>
+public abstract partial class BDatabase_SQLServer<TDatabases>
     : DbContext, IDatabase
     where TDatabases : DbContext {
 
@@ -40,7 +40,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     private string _Sign = "";
 
     /// <summary>
-    ///     Generates a <see cref="BDatabaseSQLS{TDatabases}"/> instance that handles specific database connection
+    ///     Generates a <see cref="BDatabase_SQLServer{TDatabases}"/> instance that handles specific database connection
     ///     and configuration properties/methods. 
     /// </summary>
     /// <param name="Sign">
@@ -49,7 +49,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     /// <remarks> 
     ///     This method gathers the <see cref="Connection"/> options from ./<see cref="Sign"/>(Upper)>/*.json files automatically.
     /// </remarks>
-    public BDatabaseSQLS([StringLength(5, MinimumLength = 5)] string Sign)
+    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign)
         : base() {
 
         this.Sign = Sign;
@@ -57,7 +57,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     }
 
     /// <summary>
-    ///     Generates a <see cref="BDatabaseSQLS{TDatabases}"/> instance that handles specific database connection
+    ///     Generates a <see cref="BDatabase_SQLServer{TDatabases}"/> instance that handles specific database connection
     ///     and configuration properties/methods. 
     /// </summary>
     /// <param name="Sign">
@@ -66,7 +66,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     /// <param name="Connection">
     ///     Database connection options.
     /// </param>
-    public BDatabaseSQLS([StringLength(5, MinimumLength = 5)] string Sign, DatabasesLinkOptions Connection)
+    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign, DatabasesLinkOptions Connection)
         : base() {
 
         this.Sign = Sign;
@@ -74,7 +74,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     }
 
     /// <summary>
-    ///     Generates a <see cref="BDatabaseSQLS{TDatabases}"/> instance that handles specific database connection
+    ///     Generates a <see cref="BDatabase_SQLServer{TDatabases}"/> instance that handles specific database connection
     ///     and configuration properties/methods. 
     /// </summary>
     /// <param name="Sign">
@@ -86,7 +86,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     /// <remarks> 
     ///     This method gathers the <see cref="Connection"/> options from ./<see cref="Sign"/>(Upper)>/*.json files automatically.
     /// </remarks>
-    public BDatabaseSQLS([StringLength(5, MinimumLength = 5)] string Sign, DbContextOptions<TDatabases> Options)
+    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign, DbContextOptions<TDatabases> Options)
         : base(Options) {
 
         this.Sign = Sign;
@@ -94,7 +94,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     }
 
     /// <summary>
-    ///     Generates a <see cref="BDatabaseSQLS{TDatabases}"/> instance that handles specific database connection
+    ///     Generates a <see cref="BDatabase_SQLServer{TDatabases}"/> instance that handles specific database connection
     ///     and configuration properties/methods. 
     /// </summary>
     /// <param name="Sign">
@@ -106,7 +106,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     /// <param name="Options">
     ///     Native EntityFrameworkCore <see cref="DbContext"/> implementation options.
     /// </param>
-    public BDatabaseSQLS([StringLength(5, MinimumLength = 5)] string Sign, DatabasesLinkOptions Connection, DbContextOptions<TDatabases> Options)
+    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign, DatabasesLinkOptions Connection, DbContextOptions<TDatabases> Options)
         : base(Options) {
 
         this.Sign = Sign;
@@ -166,7 +166,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     public void ValidateConnection() {
         AdvisorManager.Announce($"ORM Setting up *^____^*", new() {
             {"Database", GetType().Name },
-            {"Base", nameof(BDatabaseSQLS<TDatabases>) }
+            {"Base", nameof(BDatabase_SQLServer<TDatabases>) }
         });
 
         if (Database.CanConnect()) {
@@ -216,8 +216,8 @@ public abstract partial class BDatabaseSQLS<TDatabases>
     #region EF Native Methods
 
     /// <summary>
-    ///     This is overriden from <see cref="BDatabaseSQLS{TDatabases}"/> to Configure an SQL Server Connection using
-    ///     <see cref="Connection"/> generated string, this natively has another behavior but using <see cref="BDatabaseSQLS{TDatabases}"/>
+    ///     This is overriden from <see cref="BDatabase_SQLServer{TDatabases}"/> to Configure an SQL Server Connection using
+    ///     <see cref="Connection"/> generated string, this natively has another behavior but using <see cref="BDatabase_SQLServer{TDatabases}"/>
     ///     will automatically configure the SQL Server connection.
     /// </summary>
     /// <param name="optionsBuilder">
@@ -265,7 +265,7 @@ public abstract partial class BDatabaseSQLS<TDatabases>
 }
 
 /// <summary>
-///     [Abstract] Partial implementation to expose generation/validation methods to <see cref="BDatabaseSQLS{TDatabases}"/> handler.
+///     [Abstract] Partial implementation to expose generation/validation methods to <see cref="BDatabase_SQLServer{TDatabases}"/> handler.
 /// </summary>
 public abstract partial class BSet
     : BObject<ISet>, ISet {

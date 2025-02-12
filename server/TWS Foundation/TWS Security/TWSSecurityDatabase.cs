@@ -9,7 +9,7 @@ using TWS_Security.Sets.Solutions;
 
 namespace TWS_Security;
 
-public partial class TWSSecurityDatabase : BDatabaseSQLS<TWSSecurityDatabase> {
+public partial class TWSSecurityDatabase : BDatabase_SQLServer<TWSSecurityDatabase> {
     public TWSSecurityDatabase(DbContextOptions<TWSSecurityDatabase> options)
         : base("TWSS", options) {
     }

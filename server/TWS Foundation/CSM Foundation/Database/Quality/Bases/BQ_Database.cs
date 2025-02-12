@@ -18,7 +18,7 @@ namespace CSM_Foundation.Database.Quality.Bases;
 /// </typeparam>
 public abstract class BQ_MigrationDatabases<TDatabases>
     : IQ_MigrationDatabases
-    where TDatabases : BDatabaseSQLS<TDatabases> {
+    where TDatabases : BDatabase_SQLServer<TDatabases> {
     /// <summary>
     ///     EF [MigrationDatabases]. 
     /// </summary>

@@ -7,7 +7,7 @@ using TWS_Business.Sets;
 
 namespace TWS_Business;
 
-public class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
+public class TWSBusinessDatabase : BDatabase_SQLServer<TWSBusinessDatabase> {
     public TWSBusinessDatabase(DbContextOptions<TWSBusinessDatabase> options)
         : base("TWSB", options) {
     }
