@@ -9,6 +9,7 @@ namespace TWS_Business.Quality.Depots;
 /// </summary>
 public class Q_SectionsDepot
     : BQ_Depot<Section, SectionsDepot, TWSBusinessDatabase> {
+
     public Q_SectionsDepot()
         : base(nameof(Section.Id)) {
     }

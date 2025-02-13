@@ -9,7 +9,7 @@ using TWS_Security.Sets.Contacts;
 namespace TWS_Security.Sets.Accounts;
 
 public partial class Account
-    : BSet {
+    : BEntity {
     
 
     

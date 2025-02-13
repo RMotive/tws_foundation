@@ -1,8 +1,9 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Interfaces;
 
 namespace CSM_Foundation.Database.Quality.Records;
 public record Q_MigrationSet_EvaluateRecord<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
 
     public (string, (IValidator, int)[])[] Expectations { get; init; } = [];
     public TSet Mock { get; init; } = default!;

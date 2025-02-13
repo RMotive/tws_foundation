@@ -1,11 +1,12 @@
 ﻿using System.Linq.Expressions;
 
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 
 namespace CSM_Foundation.Database.Models.Options.Filters;
 public class SetViewFilterLinearEvaluation<TSet> 
     : ISetViewFilterNode<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
 
     public readonly static string Discriminator = typeof(SetViewFilterLinearEvaluation<TSet>).Name;
 

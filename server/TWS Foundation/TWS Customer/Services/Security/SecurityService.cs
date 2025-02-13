@@ -1,3 +1,4 @@
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Enumerators;
 using CSM_Foundation.Database.Models.Out;
 
@@ -46,7 +47,7 @@ public class SecurityService
                 });
         }
 
-        SetBatchOut<Account> result = await Accounts.Read(i => i.User == Credentials.Identity, SetReadBehaviors.First, Include);
+        SetBatchOut<Account> result = await Accounts.Read(ReadBehaviors.First, i => i.User == Credentials.Identity, Include);
         if (result.Failed) {
             throw new XSetOperation<Account>(result.Failures);
         }

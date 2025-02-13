@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models.Options;
 
 namespace TWS_Customer.Services.Common.DataManagement.Params;
@@ -8,7 +8,7 @@ namespace TWS_Customer.Services.Common.DataManagement.Params;
 /// </summary>
 /// <typeparam name="TSet"></typeparam>
 public class ExportViewParams<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
 
     /// <summary>
     ///     

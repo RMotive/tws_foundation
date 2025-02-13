@@ -8,7 +8,7 @@
 ///     This [Converter] concepto is composed to create a self-managed object convertion for complex
 ///     data structures.
 /// </summary>
-public interface IConverter {
+public interface IConverter<T> {
     /// <summary>
     ///     Stores all the derived <see cref="Type"/> information from this <see cref="IConverter"/>
     ///     implementation.

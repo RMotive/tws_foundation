@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Server.Exceptions;
+﻿using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Server.Exceptions;
 
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -57,8 +58,8 @@ public class AuthAttribute
         }
 
         Solution runningSolution = (await solutions.Read(
-                (solution) => solution.Sign == sign,
-                CSM_Foundation.Database.Enumerators.SetReadBehaviors.First
+                ReadBehaviors.First,
+                (solution) => solution.Sign == sign
             )).Successes[0];
 
         Permit[] permits = session.Permits;

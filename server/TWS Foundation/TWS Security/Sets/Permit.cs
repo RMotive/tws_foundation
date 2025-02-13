@@ -12,7 +12,7 @@ using TWS_Security.Sets.Solutions;
 namespace TWS_Security.Sets;
 
 public partial class Permit
-    : BSet {
+    : BEntity {
     
 
     

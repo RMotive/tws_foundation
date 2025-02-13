@@ -2,13 +2,13 @@
 
 using CSM_Foundation.Core.Constants;
 using CSM_Foundation.Database.Models;
-using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Core.Bases;
+using CSM_Foundation.Database.Entity;
 
 namespace TWS_Customer.Services.Exceptions;
 public class XSetOperation<TSet>
     : BException<XTransactionSituation>
-    where TSet: ISet {
+    where TSet: IEntity {
     public XSetOperation(SetOperationFailure<TSet>[] Failures)
         : base($"Set operation has failed", XTransactionSituation.Failed, HttpStatusCode.InternalServerError, null) {
         Advise = AdvisesConstants.SERVER_CONTACT_ADVISE;

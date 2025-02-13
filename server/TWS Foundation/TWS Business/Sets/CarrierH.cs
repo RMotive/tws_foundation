@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Core.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
@@ -8,10 +9,10 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class CarrierH
-    : BSet {
-    
+    : BEntity {
 
-    
+    [StringLength(100)]
+    public string Name { get; set; } = string.Empty;
 
     public int Sequence { get; set; }
 
@@ -20,7 +21,7 @@ public partial class CarrierH
     public int Entity { get; set; }
 
     public int? ApproachH { get; set; }
-    
+
 
     public int Address { get; set; }
 

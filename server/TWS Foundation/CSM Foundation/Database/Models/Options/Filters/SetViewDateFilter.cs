@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 
 namespace CSM_Foundation.Database.Models.Options.Filters;
@@ -10,7 +11,7 @@ namespace CSM_Foundation.Database.Models.Options.Filters;
 /// <typeparam name="TSet"></typeparam>
 public class SetViewDateFilter<TSet>
    : ISetViewFilter<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
     public static readonly string Discriminator = typeof(SetViewDateFilter<TSet>).Name;
     public string Discrimination { get; init; } = Discriminator;
     

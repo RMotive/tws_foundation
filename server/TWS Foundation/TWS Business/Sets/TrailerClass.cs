@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -7,7 +8,10 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class TrailerClass
-    : BSet {
+    : BEntity, IEntity_Name {
+
+    public string Name { get; set; } = default!;
+
     public string? Description { get; set; }
 
     public virtual ICollection<TrailerType> TrailersTypesCommons { get; set; } = [];

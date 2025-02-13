@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text.Json;
 
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Enumerators;
 using CSM_Foundation.Database.Interfaces;
 
@@ -9,7 +10,7 @@ namespace CSM_Foundation.Database.Models.Options.Filters;
 
 public class SetViewPropertyFilter<TSet>
     : ISetViewFilter<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
 
     public required string Property { get; set; }
     public int Order { get; set; }

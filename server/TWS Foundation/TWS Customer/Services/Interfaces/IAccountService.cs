@@ -4,8 +4,16 @@ using CSM_Foundation.Database.Models.Out;
 using TWS_Security.Sets.Accounts;
 
 namespace TWS_Customer.Services.Interfaces;
+
+/// <summary>
+/// 
+/// </summary>
 public interface IAccountsService {
 
-    Task<SetViewOut<Account>> View(SetViewOptions<Account> options);
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Options"></param>
+    /// <returns></returns>
+    Task<SetViewOut<Account>> View(SetViewOptions<Account> Options);
 }

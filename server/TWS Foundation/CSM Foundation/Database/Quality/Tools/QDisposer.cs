@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Quality.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
@@ -21,14 +21,14 @@ public class QDisposer
     /// <summary>
     /// 
     /// </summary>
-    private readonly ConcurrentQueue<ISet> Teardown = new();
+    private readonly ConcurrentQueue<IEntity> Teardown = new();
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Databases"></param>
     /// <param name="Set"></param>
-    public void Push(ISet Set) {
+    public void Push(IEntity Set) {
         Teardown.Enqueue(Set);
     }
 
@@ -38,8 +38,8 @@ public class QDisposer
     /// <param name="Databases"></param>
     /// <param name="Records"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public void Push(ISet[] Records) {
-        foreach (ISet record in Records) {
+    public void Push(IEntity[] Records) {
+        foreach (IEntity record in Records) {
             Teardown.Enqueue(record);
         }
     }

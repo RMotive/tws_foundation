@@ -1,12 +1,12 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 
 namespace CSM_Foundation.Database.Quality.Interfaces;
 public interface IQ_Disposer {
 
 
-    void Push(ISet Record);
+    void Push(IEntity Record);
 
-    void Push(ISet[] Records);
+    void Push(IEntity[] Records);
 
     void Dispose();
 }

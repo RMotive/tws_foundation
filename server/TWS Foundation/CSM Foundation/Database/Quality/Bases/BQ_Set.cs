@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Exceptions;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Exceptions;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Quality.Records;
 
@@ -16,7 +17,7 @@ namespace CSM_Foundation.Database.Quality.Bases;
 ///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
 public abstract class BQ_Set<TSet>
-    where TSet : ISet, new() {
+    where TSet : IEntity, new() {
 
     protected abstract Q_MigrationSet_EvaluateRecord<TSet>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TSet>[] Container);
 

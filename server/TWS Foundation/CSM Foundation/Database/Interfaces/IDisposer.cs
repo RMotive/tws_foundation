@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSM_Foundation.Database.Entity;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace CSM_Foundation.Database.Interfaces;
 /// <summary>
@@ -10,13 +12,13 @@ public interface IDisposer {
     /// </summary>
     /// <param name="Databases"></param>
     /// <param name="Set"></param>
-    void Push(DbContext Databases, ISet Set);
+    void Push(DbContext Databases, IEntity Set);
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Databases"></param>
     /// <param name="Sets"></param>
-    void Push(DbContext Databases, ISet[] Sets);
+    void Push(DbContext Databases, IEntity[] Sets);
     /// <summary>
     /// 
     /// </summary>

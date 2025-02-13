@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Quality.Tools;
 
 using TWS_Customer.Services;
@@ -17,11 +17,11 @@ namespace TWS_Customer.Quality.Suits.Services;
 ///     Service type implementation based on.
 /// </typeparam>
 /// <typeparam name="TDatabase">
-///     Database that holds the <see cref="ISet"/> related to the <see cref="TService"/>.
+///     Database that holds the <see cref="IEntity"/> related to the <see cref="TService"/>.
 /// </typeparam>
 public abstract class BQ_Service<TSet, TService, TDatabase>
     : IDisposable
-    where TSet : class, ISet
+    where TSet : class, IEntity
     where TService : IService<TSet>
     where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
 
@@ -36,7 +36,7 @@ public abstract class BQ_Service<TSet, TService, TDatabase>
     protected readonly QDisposer Disposer;
 
     /// <summary>
-    ///     Database that holds the <see cref="ISet"/> this implementation is based on. Usually to handle test data creation and direct disposition.
+    ///     Database that holds the <see cref="IEntity"/> this implementation is based on. Usually to handle test data creation and direct disposition.
     /// </summary>
     protected readonly TDatabase Database = new();
 
@@ -66,7 +66,7 @@ public abstract class BQ_Service<TSet, TService, TDatabase>
     /// </param>
     /// </param>
     /// <returns> 
-    ///     A <see cref="TSet"/> object to store and use as test data.
+    ///     A <see cref="TEntity"/> object to store and use as test data.
     /// </returns>
     protected abstract TSet ComposeSample(string Entropy);
 
@@ -92,7 +92,7 @@ public abstract class BQ_Service<TSet, TService, TDatabase>
         if (Store) {
             Database.Set<TSet>().AddRange(samples);
             Database.SaveChanges();
-            Disposer.Push([..samples.Cast<ISet>()]);
+            Disposer.Push([..samples.Cast<IEntity>()]);
         }
         return samples;
     }

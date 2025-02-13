@@ -1,13 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity;
 
 namespace CSM_Foundation.Database.Models;
 /// <summary>
 /// 
 /// </summary>
 public record SetOperationFailure<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
     /// <summary>
     /// 
     /// </summary>

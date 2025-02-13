@@ -3,6 +3,7 @@ using System.Reflection;
 
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Enumerators;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models.Options;
@@ -25,7 +26,7 @@ namespace CSM_Foundation.Database.Quality.Bases;
 /// <typeparam name="TDatabase"></typeparam>
 public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     : IQ_Depot, IDisposable
-    where TSet : class, ISet, new()
+    where TSet : class, IEntity, new()
     where TDepot : IDepot<TSet>, new()
     where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
 

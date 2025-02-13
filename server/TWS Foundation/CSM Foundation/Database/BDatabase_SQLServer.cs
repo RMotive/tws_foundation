@@ -3,7 +3,8 @@ using System.Reflection;
 
 using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Connector;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Utilitites;
 
@@ -114,17 +115,17 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     /// <summary>
-    ///     Validates if all the <see cref="Sets"/> <see cref="Type"/>s are <see cref="BSet"/> assuring contains the correct
+    ///     Validates if all the <see cref="Sets"/> <see cref="Type"/>s are <see cref="BEntity"/> assuring contains the correct
     ///     methods needed.
     /// </summary>
     /// <returns>
-    ///     The strict validated collection of [<see cref="BSet"/>]s and [<see cref="BConnector{TSource, TTarget}"/>]s.
+    ///     The strict validated collection of [<see cref="BEntity"/>]s and [<see cref="BConnector{TSource, TTarget}"/>]s.
     /// </returns>
-    private (BSet[] Sets, BConnector<ISet, ISet>[] Connectors) ValidateSets() {
+    private (BEntity[] Sets, BConnector<IEntity, IEntity>[] Connectors) ValidateSets() {
         Type databaseType = GetType();
 
-        BSet[] sets = [];
-        BConnector<ISet, ISet>[] connectors = [];
+        BEntity[] sets = [];
+        BConnector<IEntity, IEntity>[] connectors = [];
         IEnumerable<PropertyInfo> dbSets = databaseType
            .GetProperties()
            .Where(
@@ -139,20 +140,20 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             Type generic = dbSet.PropertyType.GetGenericArguments()[0]
                 ?? throw new Exception($"DBSet [{dbSet.Name}] generic gathering failure");
 
-            bool isSet = generic.IsAssignableTo(typeof(BSet));
+            bool isSet = generic.IsAssignableTo(typeof(BEntity));
             bool isConnector = generic.IsAssignableTo(typeof(BConnector<,>));
 
             if (!(isSet || isConnector))
-                throw new Exception($"BSet [{dbSet.Name}] doesn't implement the correct bases (BSet || BConnector) unable to define its function");
+                throw new Exception($"BEntity [{dbSet.Name}] doesn't implement the correct bases (BEntity || BConnector) unable to define its function");
 
             if (isSet) {
                 sets = [
                         ..sets,
-                        (BSet)Activator.CreateInstance(generic)!,
+                        (BEntity)Activator.CreateInstance(generic)!,
                     ];
             } else {
                 connectors = [
-                        (BConnector<ISet, ISet>)Activator.CreateInstance(generic)!,
+                        (BConnector<IEntity, IEntity>)Activator.CreateInstance(generic)!,
                     ];
             }
         }
@@ -186,15 +187,21 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     ///     Evaluates if <see cref="Sets"/> are correctly configured and translated to the internal framework handler.
     /// </summary>
     public void Evaluate() {
-        AdvisorManager.Announce($"[{GetType().Name}] Evaluating Records definitions...", new() { { "Count", 0 } });
+        (BEntity[] sets, _) = ValidateSets();
 
-        (BSet[] sets, _) = ValidateSets();
+        AdvisorManager.Announce(
+            $"[{GetType().Name}] Validatig Sets...",
+            new() {
+                { "Count", sets.Length }
+            }
+        );
+
         Exception[] evResults = [];
-        foreach (BSet set in sets) {
+        foreach (BEntity set in sets) {
             Exception[] result = set.EvaluateDefinition();
             if (result.Length > 0) {
                 AdvisorManager.Warning(
-                    "Wrong Set definition",
+                    "Wrong [Set] definition",
                     new() {
                         { "Set", set.GetType().Name },
                         { "Exceptions", result },
@@ -206,9 +213,9 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
         }
 
         if (evResults.Length > 0) {
-            throw new Exception("Database Records definitions caugth exceptions");
+            throw new Exception("Database [Set] definition failures");
         } else {
-            AdvisorManager.Success($"[{GetType().Name}] Records definition evaluation finished");
+            AdvisorManager.Success($"[{GetType().Name}] Set validation succeeded");
         }
     }
 
@@ -230,25 +237,29 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        (BSet[] sets, BConnector<ISet, ISet>[] _) = ValidateSets();
+        (BEntity[] sets, BConnector<IEntity, IEntity>[] _) = ValidateSets();
 
-        foreach (BSet set in sets) {
+        foreach (BEntity set in sets) {
             modelBuilder.Entity(
                 set.GetType(),
                 (EntityBuilder) => {
-                    EntityBuilder.HasKey(nameof(ISet.Id));
+                    EntityBuilder.HasKey(nameof(IEntity.Id));
+
+                    if(set is IEntity_Name) {
+                        PropertyInfo nameProperty = set.GetProperty(nameof(IEntity_Name.Name));
+
+                        EntityBuilder
+                            .HasIndex(nameProperty.Name)
+                            .IsUnique();
+
+                        EntityBuilder
+                            .Property(nameProperty.Name)
+                            .HasMaxLength(25)
+                            .IsRequired();
+                    }
 
                     EntityBuilder
-                        .HasIndex(nameof(ISet.Name))
-                        .IsUnique();
-
-                    EntityBuilder
-                        .Property(nameof(ISet.Name))
-                        .HasMaxLength(25)
-                        .IsRequired();
-
-                    EntityBuilder
-                        .Property(nameof(ISet.Timestamp))
+                        .Property(nameof(IEntity.Timestamp))
                         .HasColumnType("datetime");
                 }
             );
@@ -267,8 +278,8 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
 /// <summary>
 ///     [Abstract] Partial implementation to expose generation/validation methods to <see cref="BDatabase_SQLServer{TDatabases}"/> handler.
 /// </summary>
-public abstract partial class BSet
-    : BObject<ISet>, ISet {
+public abstract partial class BEntity
+    : BObject<IEntity>, IEntity {
 
     /// <summary>
     ///     Describe to the Entity Framework manager how to handle the [Set] object, its proeprties and relations, instructing
@@ -278,7 +289,7 @@ public abstract partial class BSet
     ///     Proxy object to configure Set Model to Entity Framework Core.
     /// </param>
     /// <remarks>
-    ///     Don't describe <see cref="ISet"/> properties they are being auto-described by the [CSM] engine, <see cref="ISet.Id"/>, <see cref="ISet.Timestamp"/> and <see cref="ISet.Name"/>.
+    ///     Don't describe <see cref="IEntity"/> properties they are being auto-described by the [CSM] engine, <see cref="IEntity.Id"/>, <see cref="IEntity.Timestamp"/> and <see cref="IEntity.Name"/>.
     /// </remarks>
     protected internal abstract void DescribeSet(ModelBuilder Builder);
 }
@@ -288,8 +299,8 @@ public abstract partial class BSet
 /// </summary>
 public abstract partial class BConnector<TSource, TTarget>
     : IConnector<TSource, TTarget>
-    where TSource : class, ISet
-    where TTarget : class, ISet {
+    where TSource : class, IEntity
+    where TTarget : class, IEntity {
 
     /// <summary>
     ///     Describe to the Entity Framework manager how to handle the [Connector] object, its proeprties, instructing

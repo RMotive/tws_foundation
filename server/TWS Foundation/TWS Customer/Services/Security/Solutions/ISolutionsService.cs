@@ -7,7 +7,4 @@ namespace TWS_Customer.Services.Security.Solutions;
 /// </summary>
 public interface ISolutionsService
     : IService<Solution> {
-
-
-
 }

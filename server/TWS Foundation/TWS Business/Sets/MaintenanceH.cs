@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class MaintenanceH
-    : BSet {
+    : BEntity {
 
     public int Sequence { get; set; }
 

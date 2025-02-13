@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models.Options.Filters;
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -13,7 +14,7 @@ namespace CSM_Foundation.Database.Interfaces;
 /// </summary>
 
 public interface ISetViewFilterNode<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
 
     /// <summary>
     /// 
@@ -60,7 +61,7 @@ public class ISetViewFilterNodeConverterFactory : JsonConverterFactory {
 /// </summary>
 /// <typeparam name="TSet"></typeparam>
 public class ISetViewFilterNodeConverter<TSet>
-    : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
+    : JsonConverter<ISetViewFilterNode<TSet>> where TSet : IEntity {
 
     /// <summary>
     /// 

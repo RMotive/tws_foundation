@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 
 namespace CSM_Foundation.Database.Models.Out;
 
@@ -10,7 +10,7 @@ namespace CSM_Foundation.Database.Models.Out;
 ///     <typeparamref name="TMigrationSet"/> that this view handles results.
 /// </typeparam>
 public class SetViewOut<TMigrationSet>
-    where TMigrationSet : ISet {
+    where TMigrationSet : IEntity {
 
     private TMigrationSet[] _Records = [];
     /// <summary>

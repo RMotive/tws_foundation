@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class TrailerExternal
-    : BSet {
+    : BEntity {
     
 
     

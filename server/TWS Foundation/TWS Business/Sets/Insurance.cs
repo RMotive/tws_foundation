@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class Insurance
-    : BSet {
+    : BEntity {
 
     public int Status { get; set; }
 

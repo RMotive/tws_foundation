@@ -2,6 +2,7 @@
 
 using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Extensions;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +14,14 @@ public class DispositionManager
     : IDisposer {
 
     private readonly IServiceProvider Servicer;
-    private readonly ConcurrentDictionary<DbContext, List<ISet>> DispositionStack = new();
+    private readonly ConcurrentDictionary<DbContext, List<IEntity>> DispositionStack = new();
     private bool Active = false;
 
     public DispositionManager(IServiceProvider Servicer) {
         this.Servicer = Servicer;
     }
 
-    public void Push(DbContext Databases, ISet Record) {
+    public void Push(DbContext Databases, IEntity Record) {
         if (!Active) {
             return;
         }
@@ -35,10 +36,10 @@ public class DispositionManager
             DispositionStack[db].Add(Record);
             return;
         }
-        List<ISet> recordsListed = [Record];
+        List<IEntity> recordsListed = [Record];
         DispositionStack.TryAdd(Databases, recordsListed);
     }
-    public void Push(DbContext Databases, ISet[] Records) {
+    public void Push(DbContext Databases, IEntity[] Records) {
         if (!Active) {
             return;
         }
@@ -63,7 +64,7 @@ public class DispositionManager
         if (DispositionStack.Empty()) {
             AdvisorManager.Announce($"No records to dispose");
         }
-        foreach (KeyValuePair<DbContext, List<ISet>> disposeLine in DispositionStack) {
+        foreach (KeyValuePair<DbContext, List<IEntity>> disposeLine in DispositionStack) {
             using IServiceScope servicerScope = Servicer.CreateScope();
             DbContext Database = disposeLine.Key;
             try {
@@ -79,7 +80,7 @@ public class DispositionManager
             }
             int corrects = 0;
             int incorrects = 0;
-            foreach (ISet record in disposeLine.Value) {
+            foreach (IEntity record in disposeLine.Value) {
                 try {
                     Database.Remove(record);
                     await Database.SaveChangesAsync();

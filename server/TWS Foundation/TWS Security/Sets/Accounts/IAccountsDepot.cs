@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 
 namespace TWS_Security.Sets.Accounts;
 public interface IAccountsDepot 

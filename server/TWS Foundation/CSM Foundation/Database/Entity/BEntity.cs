@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Extensions;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Exceptions;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
@@ -11,12 +11,12 @@ using CSM_Foundation.Database.Validators;
 namespace CSM_Foundation.Database.Bases;
 
 /// <summary>
-///     [Abstract] class for <see cref="BSet"/> implementations.
+///     [Abstract] class for <see cref="BEntity"/> implementations.
 ///     
 ///     A Set is a table into a data storage, defining properties and relations stored.
 /// </summary>
-public abstract partial class BSet
-    : BObject<ISet>, ISet {
+public abstract partial class BEntity
+    : BObject<IEntity>, IEntity {
 
     [NotMapped]
     public string Discriminator { get; init; }
@@ -25,12 +25,6 @@ public abstract partial class BSet
     /// 
     /// </summary>
     public int Id { get; set; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [StringLength(25)]
-    public virtual string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// 
@@ -51,7 +45,7 @@ public abstract partial class BSet
     /// <summary>
     /// 
     /// </summary>
-    public BSet() {
+    public BEntity() {
         Discriminator = $"{GetType().GUID}";
     }
 

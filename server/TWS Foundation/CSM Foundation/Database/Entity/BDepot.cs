@@ -2,6 +2,8 @@
 using System.Reflection;
 
 using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Enumerators;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models;
@@ -11,25 +13,25 @@ using CSM_Foundation.Database.Models.Out;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace CSM_Foundation.Database.Bases;
+namespace CSM_Foundation.Database.Entity;
 /// <summary>
 ///     Defines base behaviors for a <see cref="IDepot{TMigrationSet}"/>
 ///     implementation describing <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     shared behaviors.
 ///     
 ///     A <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> provides methods to 
-///     serve dataDatabases saved transactions for <see cref="TSet"/>.
+///     serve dataDatabases saved transactions for <see cref="TEntity"/>.
 /// </summary>
 /// <typeparam name="TDatabase">
 ///     What Database implementation belongs this depot.
 /// </typeparam>
-/// <typeparam name="TSet">
+/// <typeparam name="TEntity">
 ///     Migration mirror concept that this depot handles.
 /// </typeparam>
-public abstract class BDepot<TDatabase, TSet>
-    : IDepot<TSet>
+public abstract class BDepot<TDatabase, TEntity>
+    : IDepot<TEntity>
     where TDatabase : BDatabase_SQLServer<TDatabase>
-    where TSet : class, ISet {
+    where TEntity : class, IEntity {
 
     /// <summary>
     /// 
@@ -42,29 +44,29 @@ public abstract class BDepot<TDatabase, TSet>
     protected readonly TDatabase Database;
 
     /// <summary>
-    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TSet"/> 
+    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TEntity"/> 
     /// </summary>
-    protected readonly DbSet<TSet> Set;
+    protected readonly DbSet<TEntity> Set;
 
     /// <summary>
     ///     Generates a new instance of a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> base.
     /// </summary>
     /// <param name="Database">
-    ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TSet"/> concept.
+    ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TEntity"/> concept.
     /// </param>
     public BDepot(TDatabase Database, IDisposer? Disposer) {
         this.Database = Database;
         this.Disposer = Disposer;
-        Set = Database.Set<TSet>();
+        Set = Database.Set<TEntity>();
     }
 
-    protected IQueryable<TSet> Filtering(SetViewOptions<TSet> Options, IQueryable<TSet> Source) {
-        ISetViewFilterNode<TSet>[] filters = Options.Filters;
+    protected IQueryable<TEntity> Filtering(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
+        ISetViewFilterNode<TEntity>[] filters = Options.Filters;
         if (filters.Length > 0) {
             filters = [.. filters.OrderBy(x => x.Order)];
 
-            foreach (ISetViewFilterNode<TSet> filter in filters) {
-                Expression<Func<TSet, bool>> queryExpression = filter.Compose();
+            foreach (ISetViewFilterNode<TEntity> filter in filters) {
+                Expression<Func<TEntity, bool>> queryExpression = filter.Compose();
                 Source = Source.Where(queryExpression);
             }
         }
@@ -72,7 +74,7 @@ public abstract class BDepot<TDatabase, TSet>
         return Source;
     }
 
-    public (IQueryable<TSet>, int Amount, int Pages, int Page) Paging(SetViewOptions<TSet> Options, IQueryable<TSet> Source) {
+    public (IQueryable<TEntity>, int Amount, int Pages, int Page) Paging(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
 
         int range = Options.Range;
         int page = Options.Page;
@@ -107,14 +109,14 @@ public abstract class BDepot<TDatabase, TSet>
         return (Source, amount, pages, page);
     }
 
-    public IQueryable<TSet> Ordering(SetViewOptions<TSet> Options, IQueryable<TSet> Source) {
+    public IQueryable<TEntity> Ordering(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
         int orderActions = Options.Orderings.Length;
         if (orderActions <= 0) {
             return Source;
         }
 
-        Type setType = typeof(TSet);
-        IOrderedQueryable<TSet> orderingQuery = default!;
+        Type setType = typeof(TEntity);
+        IOrderedQueryable<TEntity> orderingQuery = default!;
 
         for (int i = 0; i < orderActions; i++) {
             ParameterExpression parameterExpression = Expression.Parameter(setType, $"X{i}");
@@ -124,7 +126,7 @@ public abstract class BDepot<TDatabase, TSet>
                 ?? throw new Exception($"Unexisted property ({ordering.Property}) on ({setType})");
             MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
             UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
-            Expression<Func<TSet, object>> orderingExpression = Expression.Lambda<Func<TSet, object>>(translationExpression, parameterExpression);
+            Expression<Func<TEntity, object>> orderingExpression = Expression.Lambda<Func<TEntity, object>>(translationExpression, parameterExpression);
             if (i == 0) {
                 orderingQuery = ordering.Behavior switch {
                     SetViewOrders.Ascending => Source.OrderBy(orderingExpression),
@@ -143,24 +145,23 @@ public abstract class BDepot<TDatabase, TSet>
         return orderingQuery;
     }
 
-    public Task<SetViewOut<TSet>> Processing(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? AfterFilters = null, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
-        IQueryable<TSet> query = Set.AsNoTracking();
+    public Task<SetViewOut<TEntity>> Processing(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
+        IQueryable<TEntity> query = Set.AsNoTracking();
 
         query = Ordering(Options, query);
 
         query = Filtering(Options, query);
 
-        query = Include?.Invoke(query) ?? query;
-        query = AfterFilters?.Invoke(query) ?? query;
+        query = Accumulate?.Invoke(query) ?? query;
 
-        (IQueryable<TSet> source, int amount, int pages, int page) = Paging(Options, query);
+        (IQueryable<TEntity> source, int amount, int pages, int page) = Paging(Options, query);
 
         query = source;
 
-        TSet[] sets = [.. query];
+        TEntity[] sets = [.. query];
 
         return Task.FromResult(
-            new SetViewOut<TSet>() {
+            new SetViewOut<TEntity>() {
                 Count = amount,
                 Pages = pages,
                 Page = page,
@@ -169,10 +170,11 @@ public abstract class BDepot<TDatabase, TSet>
         );
     }
 
+
     #region View 
 
-    public Task<SetViewOut<TSet>> View(SetViewOptions<TSet> Options, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
-        return Processing(Options, Include: Include);
+    public Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
+        return Processing(Options, Accumulate);
     }
 
     #endregion
@@ -184,12 +186,12 @@ public abstract class BDepot<TDatabase, TSet>
     ///     Creates a new record into the dataDatabases.
     /// </summary>
     /// <param name="Set">
-    ///     <see cref="TSet"/> to store.
+    ///     <see cref="TEntity"/> to store.
     /// </param>
     /// <returns> 
     ///     The stored object. (Object Id is always auto-generated)
     /// </returns>
-    public async Task<TSet> Create(TSet Set) {
+    public async Task<TEntity> Create(TEntity Set) {
         Set.Timestamp = DateTime.UtcNow;
         Set.EvaluateWrite();
 
@@ -220,11 +222,11 @@ public abstract class BDepot<TDatabase, TSet>
     /// <returns>
     ///     A <see cref="SetBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public async Task<SetBatchOut<TSet>> Create(TSet[] Sets, bool Sync = false) {
-        TSet[] saved = [];
-        SetOperationFailure<TSet>[] fails = [];
+    public async Task<SetBatchOut<TEntity>> Create(TEntity[] Sets, bool Sync = false) {
+        TEntity[] saved = [];
+        SetOperationFailure<TEntity>[] fails = [];
 
-        foreach (TSet record in Sets) {
+        foreach (TEntity record in Sets) {
             try {
                 record.Timestamp = DateTime.UtcNow;
                 record.EvaluateWrite();
@@ -237,7 +239,7 @@ public abstract class BDepot<TDatabase, TSet>
                     throw;
                 }
 
-                SetOperationFailure<TSet> fail = new(record, excep);
+                SetOperationFailure<TEntity> fail = new(record, excep);
                 fails = [.. fails, fail];
             }
         }
@@ -250,34 +252,34 @@ public abstract class BDepot<TDatabase, TSet>
     #endregion
 
     #region Read
-    public async Task<SetBatchOut<TSet>> Read(Expression<Func<TSet, bool>> Predicate, SetReadBehaviors Behavior, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
-        IQueryable<TSet> query = Set.Where(Predicate);
+    public async Task<SetBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
+        IQueryable<TEntity> query = Set.Where(Filter);
 
-        if (Include != null) {
-            query = Include(query);
+        if (Accumulate != null) {
+            query = Accumulate(query);
         }
 
         if (!query.Any()) {
-            return new SetBatchOut<TSet>([], []);
+            return new SetBatchOut<TEntity>([], []);
         }
 
-        TSet[] items = Behavior switch {
-            SetReadBehaviors.First => [await query.FirstAsync()],
-            SetReadBehaviors.Last => [await query.LastAsync()],
-            SetReadBehaviors.All => await query.ToArrayAsync(),
+        TEntity[] items = Behavior switch {
+            ReadBehaviors.First => [await query.FirstAsync()],
+            ReadBehaviors.Last => [await query.LastAsync()],
+            ReadBehaviors.All => await query.ToArrayAsync(),
             _ => throw new NotImplementedException()
         };
 
 
-        TSet[] successes = [];
-        SetOperationFailure<TSet>[] failures = [];
-        foreach (TSet item in items) {
+        TEntity[] successes = [];
+        SetOperationFailure<TEntity>[] failures = [];
+        foreach (TEntity item in items) {
             try {
                 item.EvaluateRead();
 
                 successes = [.. successes, item];
             } catch (Exception excep) {
-                SetOperationFailure<TSet> failure = new(item, excep);
+                SetOperationFailure<TEntity> failure = new(item, excep);
                 failures = [.. failures, failure];
             }
         }
@@ -293,7 +295,7 @@ public abstract class BDepot<TDatabase, TSet>
     /// </summary>
     /// <param name="current"> Lastest data set stored in db sorce. </param>
     /// <param name="Record"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
-    private void UpdateHelper(ISet current, ISet Record) {
+    private void UpdateHelper(IEntity current, IEntity Record) {
         EntityEntry previousEntry = Database.Entry(current);
         if (previousEntry.State == EntityState.Unchanged) {
             // Update the non-navigation properties.
@@ -307,7 +309,7 @@ public abstract class BDepot<TDatabase, TSet>
                     // Perform a search for new items to add in the collection.
                     // NOTE: the followings iterations must be performed in diferent code segments to avoid index length conflicts.
                     for (int i = 0; i < newList.Count; i++) {
-                        ISet? newItemSet = (ISet)newList[i];
+                        IEntity? newItemSet = (IEntity)newList[i];
                         if (newItemSet != null && newItemSet.Id <= 0) {
                             // Getting the item type to add.
                             Type itemType = newItemSet.GetType();
@@ -322,7 +324,7 @@ public abstract class BDepot<TDatabase, TSet>
                     for (int i = 0; i < previousList.Count; i++) {
                         // For each new item stored in record collection, will search for an ID match and update the record.
                         foreach (object newitem in newList) {
-                            if (previousList[i] is ISet previousItem && newitem is ISet newItemSet && previousItem.Id == newItemSet.Id) {
+                            if (previousList[i] is IEntity previousItem && newitem is IEntity newItemSet && previousItem.Id == newItemSet.Id) {
                                 UpdateHelper(previousItem, newItemSet);
                             }
                         }
@@ -336,7 +338,7 @@ public abstract class BDepot<TDatabase, TSet>
                     navigation.CurrentValue = newNavigationValue;
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
                     // Update the existing navigation entity
-                    if (navigation.CurrentValue is ISet currentItemSet && newNavigationValue is ISet newItemSet) {
+                    if (navigation.CurrentValue is IEntity currentItemSet && newNavigationValue is IEntity newItemSet) {
                         UpdateHelper(currentItemSet, newItemSet);
                     }
                 }
@@ -352,13 +354,13 @@ public abstract class BDepot<TDatabase, TSet>
     /// <param name="Set"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<RecordUpdateOut<TSet>> Update(TSet Record, Func<IQueryable<TSet>, IQueryable<TSet>>? Include = null) {
-        IQueryable<TSet> query = Set;
-        TSet? old = null;
-        TSet? current;
+    public async Task<RecordUpdateOut<TEntity>> Update(TEntity Record, AccumulateDelegate<TEntity>? Accumulate = null) {
+        IQueryable<TEntity> query = Set;
+        TEntity? old = null;
+        TEntity? current;
         Record.EvaluateWrite();
-        if (Include != null) {
-            query = Include(query);
+        if (Accumulate != null) {
+            query = Accumulate(query);
         }
         current = await query
             .Where(i => i.Id == Record.Id)
@@ -382,7 +384,7 @@ public abstract class BDepot<TDatabase, TSet>
         }
 
         Disposer?.Push(Database, Record);
-        return new RecordUpdateOut<TSet> {
+        return new RecordUpdateOut<TEntity> {
             Previous = old,
             Updated = current ?? Record,
         };
@@ -392,26 +394,26 @@ public abstract class BDepot<TDatabase, TSet>
 
     #region Delete
 
-    public Task<SetBatchOut<TSet>> Delete(TSet[] Sets) {
+    public Task<SetBatchOut<TEntity>> Delete(TEntity[] Sets) {
 
-        TSet[] safe = [];
-        SetOperationFailure<TSet>[] fails = [];
+        TEntity[] safe = [];
+        SetOperationFailure<TEntity>[] fails = [];
 
-        foreach (TSet set in Sets) {
+        foreach (TEntity set in Sets) {
             try {
                 set.EvaluateWrite();
                 safe = [.. safe, set];
             } catch (Exception excep) {
-                SetOperationFailure<TSet> fail = new(set, excep);
+                SetOperationFailure<TEntity> fail = new(set, excep);
                 fails = [.. fails, fail];
             }
         }
 
         Set.RemoveRange(safe);
-        return Task.FromResult<SetBatchOut<TSet>>(new(safe, []));
+        return Task.FromResult<SetBatchOut<TEntity>>(new(safe, []));
     }
 
-    public async Task<TSet> Delete(TSet Set) {
+    public async Task<TEntity> Delete(TEntity Set) {
         Set.EvaluateWrite();
         _ = this.Set.Remove(Set);
         _ = await Database.SaveChangesAsync();
@@ -419,8 +421,8 @@ public abstract class BDepot<TDatabase, TSet>
         return Set;
     }
 
-    public async Task<TSet> Delete(int Id) {
-        TSet record = await Set
+    public async Task<TEntity> Delete(int Id) {
+        TEntity record = await Set
             .AsNoTracking()
             .Where(r => r.Id == Id)
             .FirstOrDefaultAsync()

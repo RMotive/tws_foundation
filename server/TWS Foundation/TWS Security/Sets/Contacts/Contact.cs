@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -9,7 +12,11 @@ using TWS_Security.Sets.Accounts;
 namespace TWS_Security.Sets.Contacts;
 
 public partial class Contact
-    : BSet {
+    : BEntity, IEntity_Name {
+
+    [StringLength(100)]
+    public string Name { get; set; } = default!;
+
     public string Lastname { get; set; } = null!;
 
     public string Email { get; set; } = null!;

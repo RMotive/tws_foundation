@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 
@@ -13,7 +13,7 @@ namespace TWS_Customer.Services;
 ///     The <see cref="Type"/> of [Set] context for the service implementation.
 /// </typeparam>
 public interface IService<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
 
     /// <summary>
     ///     Generates a View for <see cref="TSet"/> set,

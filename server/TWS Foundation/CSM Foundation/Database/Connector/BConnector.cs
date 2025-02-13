@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Connector;
+using CSM_Foundation.Database.Entity;
 
 namespace CSM_Foundation.Database.Bases;
 
@@ -9,12 +10,12 @@ namespace CSM_Foundation.Database.Bases;
 ///     Type of the source [Set] that holds the relation.
 /// </typeparam>
 /// <typeparam name="TTarget">
-///     Type of the property related to the [TSet] relation.
+///     Type of the property related to the [TEntity] relation.
 /// </typeparam>
 public abstract partial class BConnector<TSource, TTarget>
     : IConnector<TSource, TTarget>
-    where TSource : class, ISet
-    where TTarget : class, ISet {
+    where TSource : class, IEntity
+    where TTarget : class, IEntity {
 
     public int SourcePointer { get; set; }
     public virtual TSource Source { get; set; } = default!;

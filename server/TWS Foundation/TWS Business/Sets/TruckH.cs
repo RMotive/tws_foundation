@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
 public partial class TruckH
-: BSet {
+: BEntity {
     
 
     

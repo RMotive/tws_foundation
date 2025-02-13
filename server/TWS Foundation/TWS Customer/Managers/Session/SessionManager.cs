@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Enumerators;
 using CSM_Foundation.Database.Models.Out;
 
@@ -101,8 +102,8 @@ public sealed class SessionManager {
 
         Credentials safeCredentials = safeSession.Credentials;
         SetBatchOut<Account> readAccountOut = await Accounts.Read(
-            (i) => i.User == safeCredentials.Identity,
-            SetReadBehaviors.First,
+            ReadBehaviors.First,
+            (Account i) => i.User == safeCredentials.Identity,
             (query) => {
                 return query
                     .Include(i => i.ContactNavigation);

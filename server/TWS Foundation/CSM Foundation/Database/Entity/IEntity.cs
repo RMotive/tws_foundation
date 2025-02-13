@@ -1,24 +1,21 @@
-﻿using CSM_Foundation.Convertion;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Convertion;
+
+namespace CSM_Foundation.Database.Entity;
 
 /// <summary>
 ///     Interface to determine the required behavior for a [Database] Set, this concept (Set) referrs to a
 ///     table in the [Database] storage system specifying the base properties and methods that the implementation
 ///     must have.
 /// </summary>
-public interface ISet
+public interface IEntity
     : IConverterVariation {
 
     /// <summary>
     ///     Base unique [Database] property to identify the record easily.
     /// </summary>
     int Id { get; set; }
-
-    /// <summary>
-    ///     Base unique [Set] property to identify the record (user-friendly).
-    /// </summary>
-    string Name { get; set; }
 
     /// <summary>
     ///     The exact moment where the record was created and stored in the storage system. 
@@ -50,10 +47,6 @@ public interface ISet
     /// </summary>
     void EvaluateWrite();
 
-
-
-
-
     /// <summary>
     ///     This method is used to evaluate the implementation definition, this means will evaluate
     ///     if the <see cref="EvaluateRead"/> and <see cref="EvaluateWrite"/> operations work as expected
@@ -67,10 +60,23 @@ public interface ISet
 }
 
 /// <summary>
-///     [Converter] concept implementation for complex data structures that are derived from <see cref="ISet"/>, this converter manager must
+///     [Interface] for [Entity] objects that have [Name].
+/// </summary>
+public interface IEntity_Name {
+
+    /// <summary>
+    ///     [Entity] name.
+    /// </summary>
+    [StringLength(100)]
+    string Name { get; set; }
+}
+
+/// <summary>
+///     [Converter] concept implementation for complex data structures that are derived from <see cref="IEntity"/>, this converter manager must
 ///     be injected into the [JsonSerializerOptions] from you server implementation.
 /// </summary>
-public class ISetConverter
-    : BConverter<ISet> {
+public class IEntityConvertor
+    : BConverter<IEntity> {
+
     public override required Type[] Variations { get; init; }
 }

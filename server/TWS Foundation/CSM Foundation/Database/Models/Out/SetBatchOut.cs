@@ -1,8 +1,8 @@
-﻿ using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 
 namespace CSM_Foundation.Database.Models.Out;
 public record SetBatchOut<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
     public TSet[] Successes { get; init; }
     public SetOperationFailure<TSet>[] Failures { get; init; }
     public int QTransactions { get; private set; }

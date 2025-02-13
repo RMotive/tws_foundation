@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 
 namespace CSM_Foundation.Database.Models.Out;
 
@@ -7,7 +7,7 @@ namespace CSM_Foundation.Database.Models.Out;
 /// </summary>
 /// <typeparam name="TMigrationSet"></typeparam>
 public class RecordUpdateOut<TMigrationSet>
-    where TMigrationSet : ISet {
+    where TMigrationSet : IEntity {
     /// <summary>
     /// 
     /// </summary>

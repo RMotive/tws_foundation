@@ -8,7 +8,7 @@ namespace CSM_Foundation.Convertion;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public abstract class BConverter<T>
-    : JsonConverter<T>, IConverter
+    : JsonConverter<T>, IConverter<T>
     where T : IConverterVariation {
 
 
@@ -42,8 +42,8 @@ public abstract class BConverter<T>
         }
 
         foreach (Type variation in Variations) {
-            if (discriminator == variation.Name) {
-                return (T?)JsonSerializer.Deserialize(element, variation, options);
+            if (discriminator == variation.GetType().Name) {
+                return (T?)JsonSerializer.Deserialize(element, variation.GetType(), options);
             }
         }
 
@@ -58,6 +58,7 @@ public abstract class BConverter<T>
     /// <param name="options"></param>
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options) {
         foreach (Type variation in Variations) {
+
             if (value.GetType().GUID == variation.GUID) {
                 JsonSerializer.Serialize(writer, variation, options);
             }

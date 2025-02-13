@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Interfaces;
 
 namespace CSM_Foundation.Database.Models.Options;
 
@@ -7,7 +8,7 @@ namespace CSM_Foundation.Database.Models.Options;
 ///     specifing the behavior to the builder.
 /// </summary>
 public class SetViewOptions<TSet> 
-    where TSet : ISet {
+    where TSet : IEntity {
     
     /// <summary>
     ///     On <see langword="true"/> indicate that the builder should consider all the new items added 

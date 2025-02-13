@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 
 using TWS_Customer.Services.Common.DataManagement.Params;
 
@@ -28,7 +28,7 @@ public class DataManagementService
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    public string ExportView(ExportViewParams<ISet> Options) {
+    public string ExportView(ExportViewParams<IEntity> Options) {
         throw new NotImplementedException();
     }
 }

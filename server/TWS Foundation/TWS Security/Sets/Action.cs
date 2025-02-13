@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -6,7 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Security.Sets;
 public class Action
-    : BSet {
+    : BEntity, IEntity_Name {
+
+    [StringLength(100)]
+    public string Name { get; set; } = default!;
+
     public string? Description { get; set; }
     public bool Enabled { get; set; }
 

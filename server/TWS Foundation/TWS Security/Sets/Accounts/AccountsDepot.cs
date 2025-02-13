@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Enumerators;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Exceptions;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models.Out;
@@ -34,8 +34,8 @@ public class AccountsDepot
     /// <returns></returns>
     public async Task<Permit[]> GetPermits(int AccountPointer) {
         SetBatchOut<Account> accountReadOut = await Read(
+                ReadBehaviors.First,
                 (Account record) => record.Id == AccountPointer,
-                SetReadBehaviors.First,
                 (IQueryable<Account> query) => {
                     query
                         .Include(i => i.Permits);

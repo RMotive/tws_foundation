@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Sets;
 
 public partial class UsdotH
-    : BSet {
+    : BEntity {
 
     
 

@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -14,7 +15,10 @@ namespace TWS_Security.Sets;
 ///     A Profile stores a relation between a collection of <see cref="Permit"/> with an <see cref="Account"/>
 /// </summary>
 public partial class Profile
-    : BSet {
+    : BEntity, IEntity_Name {
+
+    public string Name { get; set; } = default!;
+
     public string? Description { get; set; }
 
     public ICollection<Permit> Permits { get; set; } = default!;

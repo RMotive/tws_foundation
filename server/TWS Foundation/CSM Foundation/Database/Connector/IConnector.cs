@@ -1,4 +1,6 @@
-﻿namespace CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
+
+namespace CSM_Foundation.Database.Connector;
 
 /// <summary>
 ///     [Interface] for <see cref="IConnector"/> implementation.
@@ -9,12 +11,12 @@
 ///     Type of the source [Set] that holds the relation.
 /// </typeparam>
 /// <typeparam name="TTarget">
-///     Type of the property related to the [TSet] relation.
+///     Type of the property related to the [TEntity] relation.
 /// </typeparam>
 public interface IConnector<TSource, TTarget>
     : IConnector
-    where TSource : class, ISet 
-    where TTarget : class, ISet {
+    where TSource : class, IEntity 
+    where TTarget : class, IEntity {
 
     /// <summary>
     ///     Source relation record.

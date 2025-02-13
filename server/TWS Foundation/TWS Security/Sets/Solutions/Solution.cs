@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
@@ -7,7 +8,10 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Security.Sets.Solutions;
 
 public partial class Solution
-    : BSet {
+    : BEntity, IEntity_Name {
+
+    public string Name { get; set; } = default!;
+
     /// <summary>
     ///     Solution unique sign to reference easyly the solution along operations.
     /// </summary>

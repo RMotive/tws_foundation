@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
@@ -28,34 +28,31 @@ public class YardLogsDepot
     public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {
         return Processing(
             Options,
-            Include: (query) => {
+            (query) => {
                 return query
-                .Include(i => i.TrailerNavigation)
-                    .ThenInclude(i => i!.TrailerCommonNavigation)
-                .Include(i => i.TrailerNavigation)
-                    .ThenInclude(i => i!.CarrierNavigation)
-                .Include(i => i.TrailerNavigation)
-                    .ThenInclude(i => i!.Plates)
-                .Include(i => i.TrailerExternalNavigation)
-                    .ThenInclude(i => i!.TrailerCommonNavigation)
-                .Include(i => i.SectionNavigation)
-                    .ThenInclude(i => i!.LocationNavigation)
-                .Include(i => i.TruckNavigation)
-                    .ThenInclude(i => i!.TruckCommonNavigation)
-                .Include(i => i.TruckNavigation)
-                    .ThenInclude(i => i!.Plates)
-                .Include(i => i.TruckExternalNavigation)
-                    .ThenInclude(i => i!.TruckCommonNavigation);
-            },
-            AfterFilters: (query) => {
-                return query
-                .OrderBy(i => i.Timestamp)
-                .GroupBy(i => new { i.Trailer, i.TrailerExternal })
-                .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
-                .Select(i => i.OrderBy(i => i.Timestamp).Last())
-                .ToList()
-                .OrderByDescending(i => i.Timestamp)
-                .AsQueryable();        
+                    .Include(i => i.TrailerNavigation)
+                        .ThenInclude(i => i!.TrailerCommonNavigation)
+                    .Include(i => i.TrailerNavigation)
+                        .ThenInclude(i => i!.CarrierNavigation)
+                    .Include(i => i.TrailerNavigation)
+                        .ThenInclude(i => i!.Plates)
+                    .Include(i => i.TrailerExternalNavigation)
+                        .ThenInclude(i => i!.TrailerCommonNavigation)
+                    .Include(i => i.SectionNavigation)
+                        .ThenInclude(i => i!.LocationNavigation)
+                    .Include(i => i.TruckNavigation)
+                        .ThenInclude(i => i!.TruckCommonNavigation)
+                    .Include(i => i.TruckNavigation)
+                        .ThenInclude(i => i!.Plates)
+                    .Include(i => i.TruckExternalNavigation)
+                        .ThenInclude(i => i!.TruckCommonNavigation)
+                    .OrderBy(i => i.Timestamp)
+                    .GroupBy(i => new { i.Trailer, i.TrailerExternal })
+                    .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
+                    .Select(i => i.OrderBy(i => i.Timestamp).Last())
+                    .ToList()
+                    .OrderByDescending(i => i.Timestamp)
+                    .AsQueryable();
             }
         );
     }

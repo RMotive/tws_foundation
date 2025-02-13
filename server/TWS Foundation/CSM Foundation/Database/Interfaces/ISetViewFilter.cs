@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models.Options.Filters;
 
 namespace CSM_Foundation.Database.Interfaces;
@@ -10,7 +11,7 @@ namespace CSM_Foundation.Database.Interfaces;
 /// </summary>
 public interface ISetViewFilter<TSet>
     : ISetViewFilterNode<TSet>
-    where TSet : ISet {
+    where TSet : IEntity {
     /// <summary>
     /// 
     /// </summary>
@@ -30,7 +31,7 @@ public static class ISetArrayExtension {
     ///     </para>
     /// </summary>
     public static void Sort<TSet>(this ISetViewFilter<TSet>[] Records)
-        where TSet : ISet {
+        where TSet : IEntity {
 
         ISetViewFilter<TSet>[] sorted = [
             ..Records.OrderBy(i => i.Order)
@@ -65,7 +66,7 @@ public class ISetViewFilterConverterFactory : JsonConverterFactory {
 /// </summary>
 /// <typeparam name="TSet"></typeparam>
 public class ISetViewFilterConverter<TSet> 
-    : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
+    : JsonConverter<ISetViewFilterNode<TSet>> where TSet : IEntity {
 
     /// <summary>
     ///     
