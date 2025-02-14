@@ -25,9 +25,9 @@ public partial class Account
     public Contact? ContactNavigation { get; set; } = default!;
 
 
-    public ICollection<Permit> Permits { get; set; } = default!;
+    public ICollection<Permit> Permits { get; set; } = [];
 
-    public ICollection<Profile> Profiles { get; set; } = default!;
+    public ICollection<Profile> Profiles { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
@@ -43,24 +43,18 @@ public partial class Account
         Builder.Entity<Account>(
             (EntityBuilder) => {
                 EntityBuilder
-                    .HasKey(e => e.Id);
-
-                EntityBuilder
                     .HasIndex(e => e.User)
                     .IsUnique();
-
-                EntityBuilder
-                    .HasIndex(e => e.Contact)
-                    .IsUnique();
-
-                EntityBuilder
-                    .Property(e => e.Id);
-                EntityBuilder
-                    .Property(e => e.Password);
                 EntityBuilder
                     .Property(e => e.User)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                EntityBuilder
+                    .HasIndex(e => e.Contact);
+
+                EntityBuilder
+                    .Property(e => e.Password);
 
                 EntityBuilder
                     .HasOne(d => d.ContactNavigation)
@@ -72,18 +66,18 @@ public partial class Account
                     .HasMany(i => i.Permits)
                     .WithMany(i => i.Accounts)
                     .UsingEntity<Dictionary<string, object>>(
-                        "AccountsPermits",
-                        con => con.HasOne<Permit>().WithMany().HasForeignKey("Permit"),
-                        con => con.HasOne<Account>().WithMany().HasForeignKey("Account")
+                        ConnectorsConstants.AccountsPermits.Connector,
+                        con => con.HasOne<Permit>().WithMany().HasForeignKey(ConnectorsConstants.AccountsPermits.Permit),
+                        con => con.HasOne<Account>().WithMany().HasForeignKey(ConnectorsConstants.AccountsPermits.Account)
                     );
 
                 EntityBuilder
                     .HasMany(i => i.Profiles)
                     .WithMany(i => i.Accounts)
                     .UsingEntity<Dictionary<string, object>>(
-                        "AccountsProfiles",
-                        con => con.HasOne<Profile>().WithMany().HasForeignKey("Profile"),
-                        con => con.HasOne<Account>().WithMany().HasForeignKey("Account")
+                        ConnectorsConstants.AccountsProfiles.Connector,
+                        con => con.HasOne<Profile>().WithMany().HasForeignKey(ConnectorsConstants.AccountsProfiles.Profile),
+                        con => con.HasOne<Account>().WithMany().HasForeignKey(ConnectorsConstants.AccountsProfiles.Account)
                     );
             }
         );

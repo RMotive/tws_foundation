@@ -29,7 +29,7 @@ public abstract partial class BEntity
     /// <summary>
     /// 
     /// </summary>
-    public DateTime Timestamp { get; set; } = DateTime.MinValue;
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
 
     /// <summary>

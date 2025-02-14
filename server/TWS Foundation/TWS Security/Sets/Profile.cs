@@ -47,7 +47,7 @@ public partial class Profile
                     .HasMany(i => i.Permits)
                     .WithMany(i => i.Profiles)
                     .UsingEntity<Dictionary<string, object>>(
-                        "ProfilesPermits",
+                        "Profiles_Permits",
                         con => con.HasOne<Permit>().WithMany().HasForeignKey("Permit"),
                         con => con.HasOne<Profile>().WithMany().HasForeignKey("Profile")
                     );
@@ -56,7 +56,7 @@ public partial class Profile
                     .HasMany(i => i.Accounts)
                     .WithMany(i => i.Profiles)
                     .UsingEntity<Dictionary<string, object>>(
-                        "AccountsProfiles",
+                        "Accounts_Profiles",
                         con => con.HasOne<Account>().WithMany().HasForeignKey("Account"),
                         con => con.HasOne<Profile>().WithMany().HasForeignKey("Profile")
                     );

@@ -37,12 +37,10 @@ public class AccountsDepot
                 ReadBehaviors.First,
                 (Account record) => record.Id == AccountPointer,
                 (IQueryable<Account> query) => {
-                    query
-                        .Include(i => i.Permits);
-                    query
-                        .Include(i => i.Profiles)
-                        .ThenInclude(i => i.Permits);
-                    return query;
+                    return query
+                        .Include(a => a.Permits)
+                        .Include(a => a.Profiles)
+                            .ThenInclude(p => p.Permits);
                 }
             );
 

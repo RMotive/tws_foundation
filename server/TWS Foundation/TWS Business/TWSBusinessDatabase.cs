@@ -1,6 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
 
-
 using Microsoft.EntityFrameworkCore;
 
 using TWS_Business.Sets;
@@ -15,6 +14,14 @@ public class TWSBusinessDatabase : BDatabase_SQLServer<TWSBusinessDatabase> {
     public TWSBusinessDatabase()
         : base("TWSB") {
     }
+
+    public virtual DbSet<TruckInventory> TruckInventory { get; set; } = default!;
+
+    public virtual DbSet<TruckExternal> TruckExternal { get; set; } = default!;
+
+    public virtual DbSet<TruckCommon> TruckCommons { get; set; } = default!;
+
+    public virtual DbSet<Employee> Employees { get; set; } = default!;
 
     public virtual DbSet<Insurance> Insurances { get; set; } = default!;
 

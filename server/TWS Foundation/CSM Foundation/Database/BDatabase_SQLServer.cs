@@ -9,6 +9,7 @@ using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CSM_Foundation.Database.Bases;
 
