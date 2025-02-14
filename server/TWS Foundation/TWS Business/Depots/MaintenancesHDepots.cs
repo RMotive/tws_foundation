@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Depots;
 /// <summary>
@@ -9,11 +9,11 @@ namespace TWS_Business.Depots;
 ///     representing a depot to handle <see cref="MaintenancesHDepot"/> dataDatabases entity mirror.
 /// </summary>
 public class MaintenancesHDepot
-: BDepot<TWSBusinessDatabase, MaintenanceH> {
+: BDepot<BusinessDatabase, MaintenanceH> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="MaintenancesHDepot"/>.
     /// </summary>
-    public MaintenancesHDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+    public MaintenancesHDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     public MaintenancesHDepot() : base(new(), null) {

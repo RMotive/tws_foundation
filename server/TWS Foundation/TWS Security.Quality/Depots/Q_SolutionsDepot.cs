@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality.Bases;
 
-using TWS_Security.Sets.Solutions;
+using TWS_Security.Entities.Solutions;
 
 namespace TWS_Security.Quality.Depots;
 
@@ -9,7 +9,7 @@ namespace TWS_Security.Quality.Depots;
 ///     Qualifies the <see cref="SolutionsDepot"/>.
 /// </summary>
 public class Q_SolutionsDepot
-    : BQ_Depot<Solution, SolutionsDepot, TWSSecurityDatabase> {
+    : BQ_Depot<Solution, SolutionsDepot, SecurityDatabase> {
     public Q_SolutionsDepot()
         : base(nameof(Solution.Name)) {
     }

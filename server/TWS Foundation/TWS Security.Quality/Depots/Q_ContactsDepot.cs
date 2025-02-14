@@ -2,7 +2,7 @@
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality.Bases;
 
-using TWS_Security.Sets.Contacts;
+using TWS_Security.Entities.Contacts;
 
 namespace TWS_Security.Quality.Depots;
 
@@ -10,7 +10,7 @@ namespace TWS_Security.Quality.Depots;
 ///     Qualifies the <see cref="ContactsDepot"/>.
 /// </summary>
 public class Q_ContactsDepot
-    : BQ_Depot<Contact, ContactsDepot, TWSSecurityDatabase> {
+    : BQ_Depot<Contact, ContactsDepot, SecurityDatabase> {
     public Q_ContactsDepot()
         : base(nameof(Contact.Name)) {
     }

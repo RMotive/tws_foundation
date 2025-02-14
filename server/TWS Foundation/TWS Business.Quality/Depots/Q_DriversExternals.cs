@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="DriversExternalsDepot"/>.
 /// </summary>
 public class Q_DriversExternals
-    : BQ_Depot<DriverExternal, DriversExternalsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<DriverExternal, DriversExternalsDepot, BusinessDatabase> {
     public Q_DriversExternals()
         : base(nameof(DriverExternal.Id)) {
     }

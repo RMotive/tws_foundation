@@ -6,14 +6,14 @@ using CSM_Foundation.Database.Quality.Bases;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 // <summary>
 ///     Qualifies the <see cref="PlatesDepot"/>.
 /// </summary>
 public class Q_PlatesDepot
-    : BQ_Depot<Plate, PlatesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Plate, PlatesDepot, BusinessDatabase> {
     public Q_PlatesDepot()
         : base(nameof(Plate.Identifier)) {
     }

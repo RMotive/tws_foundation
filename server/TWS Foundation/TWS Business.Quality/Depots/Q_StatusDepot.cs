@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="StatusesDepot"/>.
 /// </summary>
 public class Q_StatusDepot
-    : BQ_Depot<Status, StatusesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Status, StatusesDepot, BusinessDatabase> {
     public Q_StatusDepot()
         : base(nameof(Status.Name)) {
     }

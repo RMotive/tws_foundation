@@ -4,7 +4,7 @@ using CSM_Foundation.Database.Models.Out;
 
 using TWS_Customer.Services.Interfaces;
 
-using TWS_Security.Sets.Contacts;
+using TWS_Security.Entities.Contacts;
 
 namespace TWS_Customer.Services.Security;
 public class ContactsService

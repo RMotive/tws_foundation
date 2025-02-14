@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 using TWS_Customer.Managers.Session;
 
-using TWS_Security.Sets;
-using TWS_Security.Sets.Accounts;
-using TWS_Security.Sets.Solutions;
+using TWS_Security.Entities;
+using TWS_Security.Entities.Accounts;
+using TWS_Security.Entities.Solutions;
 
 namespace TWS_Foundation.Authentication;
 

@@ -12,7 +12,7 @@ using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Trailer>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Trailer>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
@@ -38,7 +38,7 @@ public class Q_TrailersController
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Accounts.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Entities.Accounts.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,

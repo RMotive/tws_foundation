@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="TrailersExternalsDepot"/>.
 /// </summary>
 public class Q_TrailersExternalsDepot
-    : BQ_Depot<TrailerExternal, TrailersExternalsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<TrailerExternal, TrailersExternalsDepot, BusinessDatabase> {
     public Q_TrailersExternalsDepot()
         : base(nameof(TrailerExternal.Id)) {
     }

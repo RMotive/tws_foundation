@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="SctsDepot"/>.
 /// </summary>
 public class Q_SctsDepot
-    : BQ_Depot<Sct, SctsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Sct, SctsDepot, BusinessDatabase> {
     public Q_SctsDepot()
         : base(nameof(Sct.Type)) {
     }

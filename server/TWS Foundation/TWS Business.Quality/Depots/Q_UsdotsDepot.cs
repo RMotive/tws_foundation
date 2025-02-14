@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="UsdotsDepot"/>.
 /// </summary>
 public class Q_UsdotsDepot
-    : BQ_Depot<Usdot, UsdotsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Usdot, UsdotsDepot, BusinessDatabase> {
     public Q_UsdotsDepot()
         : base(nameof(Usdot.Mc)) {
     }

@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="DriversCommonsDepot"/>.
 /// </summary>
 public class Q_DriversCommons
-    : BQ_Depot<DriverCommon, DriversCommonsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<DriverCommon, DriversCommonsDepot, BusinessDatabase> {
     public Q_DriversCommons()
         : base(nameof(DriverCommon.Id)) {
     }

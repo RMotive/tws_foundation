@@ -1,0 +1,40 @@
+﻿using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
+
+using TWS_Security.Entities.Contacts;
+
+namespace TWS_Security.Quality.Entities;
+public class Q_Contact
+    : BQ_Set<Contact> {
+    protected override Q_MigrationSet_EvaluateRecord<Contact>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Contact>[] Container) {
+        Q_MigrationSet_EvaluateRecord<Contact> success = new("Success") {
+            Mock = new() {
+                Id = 1,
+                Name = "",
+                Lastname = "",
+                Email = "",
+                Phone = ""
+            },
+            Expectations = [],
+        };
+        Q_MigrationSet_EvaluateRecord<Contact> failure = new("All properties fail") {
+            Mock = new() {
+                Id = 0,
+                Name = "",
+                Lastname = "",
+                Email = "",
+                Phone = ""
+            },
+            Expectations = [
+                (nameof(Contact.Id), [(new PointerValidator(), 3)]),
+                (nameof(Contact.Name), [(new LengthValidator(), 2)]),
+                (nameof(Contact.Lastname), [(new LengthValidator(), 2)]),
+                (nameof(Contact.Email), [(new LengthValidator(), 2)]),
+                (nameof(Contact.Phone), [(new LengthValidator(), 2)])
+            ],
+        };
+
+        return [.. Container, success, failure];
+    }
+}

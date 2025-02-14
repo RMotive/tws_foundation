@@ -10,9 +10,9 @@ using TWS_Customer.Managers.Session.Exceptions;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
-using TWS_Security.Sets;
-using TWS_Security.Sets.Accounts;
-using TWS_Security.Sets.Contacts;
+using TWS_Security.Entities;
+using TWS_Security.Entities.Accounts;
+using TWS_Security.Entities.Contacts;
 
 using CredentialsExpiration = (TWS_Customer.Services.Records.Credentials Credentials, System.DateTime Expiration);
 

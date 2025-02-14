@@ -2,6 +2,6 @@
 
 namespace TWS_Security.Quality;
 public class Q_TWSSecurityDatabases
-    : BQ_MigrationDatabases<TWSSecurityDatabase> {
+    : BQ_MigrationDatabases<SecurityDatabase> {
     public Q_TWSSecurityDatabases() : base(new()) { }
 }

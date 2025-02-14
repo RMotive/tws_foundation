@@ -1,14 +1,14 @@
 ﻿using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="IdentificationsDepot"/>.
 /// </summary>
 public class Q_IdentificationsDepot
-    : BQ_Depot<Identification, IdentificationsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Identification, IdentificationsDepot, BusinessDatabase> {
     public Q_IdentificationsDepot()
         : base(nameof(Identification.Id)) {
     }

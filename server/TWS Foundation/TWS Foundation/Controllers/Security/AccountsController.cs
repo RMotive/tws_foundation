@@ -6,8 +6,7 @@ using TWS_Customer.Services.Interfaces;
 
 using TWS_Foundation.Authentication;
 
-using TWS_Security.Sets;
-using TWS_Security.Sets.Accounts;
+using TWS_Security.Entities.Accounts;
 
 namespace TWS_Foundation.Controllers.Security;
 

@@ -7,7 +7,8 @@ using CSM_Foundation.Database.Models.Out;
 using Microsoft.EntityFrameworkCore;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
+using TWS_Business.Entities.Employees;
 
 using TWS_Customer.Models.Outs;
 using TWS_Customer.Services.Interfaces;
@@ -481,7 +482,7 @@ public class YardLogsService
             ("Entrada", "G", (YardLog i) => $"{i.Timestamp.ToShortDateString()} {i.Timestamp.ToShortTimeString()} UTC"),
             ("Sección", "H", (YardLog i) => i.SectionDisplay),
             ("Compañía", "I", (YardLog i) => i.Carrier),
-            ("Posesión", "J", (YardLog i) => i.Truck != null ? "Interno" : i.TruckExternal != null ? "Externo" : "No Identificable"),  
+            ("Posesión", "J", (YardLog i) => i.Truck != null ? "Interno" : i.TruckExternal != null ? "Externo" : "No Identificable"),
         ];
 
         string tempFileStore = $"{Path.GetTempPath()}yardlog_export_{Guid.NewGuid()}.xlsx";
@@ -503,10 +504,10 @@ public class YardLogsService
 
         Options.Export = true;
         SetViewOut<YardLog> viewOut = await YardLogs.ViewInventory(Options);
-        for(int recordPointer = 0; recordPointer < viewOut.Records.Length; recordPointer++) {
+        for (int recordPointer = 0; recordPointer < viewOut.Records.Length; recordPointer++) {
             YardLog record = viewOut.Records[recordPointer];
 
-            foreach((string, string Column, Func<YardLog, string?> ComposeValue) field in exportFields) {
+            foreach ((string, string Column, Func<YardLog, string?> ComposeValue) field in exportFields) {
 
                 bookSheet.Cell($"{field.Column}{3 + recordPointer}").Value = field.ComposeValue(record) ?? "";
             }
@@ -515,7 +516,7 @@ public class YardLogsService
         foreach ((string Name, string Column, Func<YardLog, string?>) field in exportFields) {
 
             IXLCell fieldCell = bookSheet.Cell($"{field.Column}2");
-            
+
             fieldCell.Value = field.Name;
             fieldCell.Style.Fill.BackgroundColor = XLColor.AshGrey;
             fieldCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;

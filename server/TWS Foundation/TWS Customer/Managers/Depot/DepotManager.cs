@@ -3,7 +3,7 @@
 using Microsoft.Extensions.DependencyInjection;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Customer.Managers.Depot;
 public sealed class DepotManager {

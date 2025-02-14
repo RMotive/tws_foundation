@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using Account = TWS_Security.Sets.Accounts.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Sets.Accounts.Account>;
+using Account = TWS_Security.Entities.Accounts.Account;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Entities.Accounts.Account>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Security;
 

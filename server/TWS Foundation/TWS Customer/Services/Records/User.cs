@@ -1,4 +1,4 @@
-﻿using TWS_Security.Sets.Contacts;
+﻿using TWS_Security.Entities.Contacts;
 
 namespace TWS_Customer.Services.Records;
 public class User {

@@ -233,7 +233,6 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     /// </param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         string connectionString = Connection.GenerateConnectionString();
-
         optionsBuilder.UseSqlServer(connectionString);
     }
 

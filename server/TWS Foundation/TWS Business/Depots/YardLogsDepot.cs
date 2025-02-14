@@ -5,7 +5,7 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Depots;
 /// <summary>
@@ -13,11 +13,11 @@ namespace TWS_Business.Depots;
 ///     representing a depot to handle <see cref="YardLog"/> dataDatabases entity mirror.
 /// </summary>
 public class YardLogsDepot
-    : BDepot<TWSBusinessDatabase, YardLog> {
+    : BDepot<BusinessDatabase, YardLog> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="YardLog"/>.
     /// </summary>
-    public YardLogsDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+    public YardLogsDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public YardLogsDepot()

@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="YardLogsDepot"/>.
 /// </summary>
 public class Q_YardLogsDepot
-    : BQ_Depot<YardLog, YardLogsDepot, TWSBusinessDatabase> {
+    : BQ_Depot<YardLog, YardLogsDepot, BusinessDatabase> {
     public Q_YardLogsDepot()
         : base(nameof(YardLog.Id)) {
     }
@@ -37,7 +37,7 @@ public class Q_YardLogsDepot
                 MxPlate = "12345678",
                 Carrier = "truck carrier qlty"
             }
-    };
+        };
     }
 
     protected override (string Property, string? Value)? FactorizeProperty(YardLog Mock) {

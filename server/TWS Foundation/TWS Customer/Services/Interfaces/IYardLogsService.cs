@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 using TWS_Customer.Models.Outs;
 using TWS_Customer.Services.Business;

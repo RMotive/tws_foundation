@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="CarriersDepot"/>.
 /// </summary>
 public class Q_CarriersDepot
-    : BQ_Depot<Carrier, CarriersDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Carrier, CarriersDepot, BusinessDatabase> {
     public Q_CarriersDepot()
         : base(nameof(Carrier.Id)) {
     }

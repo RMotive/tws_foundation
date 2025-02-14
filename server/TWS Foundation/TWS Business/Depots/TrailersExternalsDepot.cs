@@ -1,18 +1,18 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Interfaces;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Depots;
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="TrailerExternal"/> dataDatabases entity mirror.
 /// </summary>
-public class TrailersExternalsDepot : BDepot<TWSBusinessDatabase, TrailerExternal> {
+public class TrailersExternalsDepot : BDepot<BusinessDatabase, TrailerExternal> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="TrailerExternal"/>.
     /// </summary>
-    public TrailersExternalsDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+    public TrailersExternalsDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public TrailersExternalsDepot() : base(new(), null) {

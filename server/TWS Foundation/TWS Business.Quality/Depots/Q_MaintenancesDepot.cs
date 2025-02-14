@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 
@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="MaintenacesDepot"/>.
 /// </summary>
 public class Q_MaintenancesDepot
-    : BQ_Depot<Maintenance, MaintenacesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Maintenance, MaintenacesDepot, BusinessDatabase> {
     public Q_MaintenancesDepot()
         : base(nameof(Maintenance.Trimestral)) {
     }

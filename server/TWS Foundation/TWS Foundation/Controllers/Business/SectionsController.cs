@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 using TWS_Customer.Services.Interfaces;
 

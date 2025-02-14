@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets.Accounts;
+using TWS_Security.Entities.Accounts;
 
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Driver>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Driver>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_DriversController

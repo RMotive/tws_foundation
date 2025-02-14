@@ -2,14 +2,14 @@
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="InsurancesDepot"/>.
 /// </summary>
 public class Q_InsurancesDepot
-    : BQ_Depot<Insurance, InsurancesDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Insurance, InsurancesDepot, BusinessDatabase> {
     public Q_InsurancesDepot()
         : base(nameof(Insurance.Policy)) {
     }

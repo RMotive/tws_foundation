@@ -10,17 +10,17 @@ using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets.Accounts;
-using TWS_Security.Sets.Solutions;
+using TWS_Security.Entities.Accounts;
+using TWS_Security.Entities.Solutions;
 
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.YardLog>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;

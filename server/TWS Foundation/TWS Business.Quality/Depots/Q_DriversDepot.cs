@@ -4,14 +4,14 @@ using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="DriversDepot"/>.
 /// </summary>
 public class Q_DriversDepot
-    : BQ_Depot<Driver, DriversDepot, TWSBusinessDatabase> {
+    : BQ_Depot<Driver, DriversDepot, BusinessDatabase> {
     public Q_DriversDepot()
         : base(nameof(Driver.Id)) {
     }

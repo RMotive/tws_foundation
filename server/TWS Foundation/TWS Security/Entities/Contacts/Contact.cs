@@ -1,0 +1,69 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
+
+using Microsoft.EntityFrameworkCore;
+
+using TWS_Security.Entities.Accounts;
+
+namespace TWS_Security.Entities.Contacts;
+
+public partial class Contact
+    : BEntity, IEntity_Name {
+
+    [StringLength(100)]
+    public string Name { get; set; } = default!;
+
+    public string Lastname { get; set; } = null!;
+
+    public string Email { get; set; } = null!;
+
+    public string Phone { get; set; } = null!;
+
+    public virtual Account? Account { get; set; }
+
+    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        Container = [
+            ..Container,
+            (nameof(Name), [new LengthValidator(1,50)]),
+            (nameof(Lastname), [new LengthValidator(1,50)]),
+            (nameof(Email), [new UniqueValidator(),new LengthValidator(1,30)]),
+            (nameof(Phone), [new UniqueValidator(), new LengthValidator(10,14)]),
+
+        ];
+
+        return Container;
+    }
+
+
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<Contact>(entity => {
+            entity.HasKey(e => e.Id);
+
+            entity.HasIndex(e => e.Phone)
+                .IsUnique();
+
+            entity.HasIndex(e => e.Email)
+                .IsUnique();
+
+            entity.Property(e => e.Id);
+            entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+            entity.Property(e => e.Email)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.Lastname)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Phone)
+                .HasMaxLength(14)
+                .IsUnicode(false);
+        });
+    }
+}
