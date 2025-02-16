@@ -1,15 +1,14 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_Carrier : BQ_Set<Carrier> {
-    protected override Q_MigrationSet_EvaluateRecord<Carrier>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Carrier>[] Container) {
+public class Q_Carrier : BQ_Entity<Carrier> {
+    protected override Q_EntityEvaluation<Carrier>[] EvaluateFactory(Q_EntityEvaluation<Carrier>[] Container) {
         PointerValidator pointer = new(true);
 
-        Q_MigrationSet_EvaluateRecord<Carrier> success = new("Success") {
+        Q_EntityEvaluation<Carrier> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
@@ -20,7 +19,7 @@ public class Q_Carrier : BQ_Set<Carrier> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Carrier> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Carrier> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = -1,
                 Status = 0,

@@ -2,9 +2,8 @@
 
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Enumerators;
-using CSM_Foundation.Database.Models.Options;
-using CSM_Foundation.Database.Models.Options.Filters;
+using CSM_Foundation.Database.Entity.Filters;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
@@ -70,7 +69,7 @@ public class Q_SolutionsController
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
                     Property = nameof(Solution.Name),
                     Value = refMock.Name,
-                },    
+                },
             ],
         }, true);
 

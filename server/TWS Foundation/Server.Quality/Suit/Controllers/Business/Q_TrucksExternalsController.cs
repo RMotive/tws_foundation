@@ -1,6 +1,7 @@
 ﻿
 using System.Net;
 
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Server.Quality.Bases;
 using CSM_Foundation.Server.Records;

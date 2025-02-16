@@ -13,6 +13,11 @@ public interface IEntity
     : IConverterVariation {
 
     /// <summary>
+    ///     Stores the <see cref="Type"/> for the database owning from this <see cref="IEntity"/> implementation.
+    /// </summary>
+    Type Database { get; init; } 
+
+    /// <summary>
     ///     Base unique [Database] property to identify the record easily.
     /// </summary>
     int Id { get; set; }

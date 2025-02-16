@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +7,7 @@ using TWS_Security.Entities.Contacts;
 namespace TWS_Security.Entities.Accounts;
 
 public partial class Account
-    : BEntity {    
+    : BSecurityDatabaseEntity {
 
     public string User { get; set; } = null!;
 

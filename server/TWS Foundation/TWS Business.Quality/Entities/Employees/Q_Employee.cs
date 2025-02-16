@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities.Employees;
@@ -7,10 +6,10 @@ using TWS_Business.Entities.Employees;
 namespace TWS_Business.Quality.Entities.Employees;
 
 public class Q_Employee 
-    : BQ_Set<Employee> {
-    protected override Q_MigrationSet_EvaluateRecord<Employee>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Employee>[] Container) {
+    : BQ_Entity<Employee> {
+    protected override Q_EntityEvaluation<Employee>[] EvaluateFactory(Q_EntityEvaluation<Employee>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Employee> success = new("Success") {
+        Q_EntityEvaluation<Employee> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Status = 1,
@@ -20,7 +19,7 @@ public class Q_Employee
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Employee> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Employee> failAllCases = new("All properties fail") {
             Mock = new() {
                 Status = 0,
                 Identification = 0,

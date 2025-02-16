@@ -1,11 +1,4 @@
-﻿using System.Reflection;
-using CSM_Foundation.Database.Exceptions;
-using CSM_Foundation.Database.Interfaces;
-using CSM_Foundation.Database.Validators;
-
-using Microsoft.IdentityModel.Tokens;
-
-namespace CSM_Foundation.Core.Bases;
+﻿namespace CSM_Foundation.Core.Bases;
 //public abstract class BHistoryDatabasesSet
 //    : BObject<IHistoryDatabasesSet>, IHistoryDatabasesSet {
 //    public abstract int Id { get; set; }

@@ -1,21 +1,20 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_YardLog : BQ_Set<YardLog> {
-    protected override Q_MigrationSet_EvaluateRecord<YardLog>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<YardLog>[] Container) {
+public class Q_YardLog : BQ_Entity<YardLog> {
+    protected override Q_EntityEvaluation<YardLog>[] EvaluateFactory(Q_EntityEvaluation<YardLog>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<YardLog> success = new("Success") {
+        Q_EntityEvaluation<YardLog> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 LoadType = 0,
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<YardLog> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<YardLog> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 LoadType = 0,

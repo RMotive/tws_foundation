@@ -1,9 +1,8 @@
 ﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Quality.Interfaces;
 
 using Xunit;
 
-namespace CSM_Foundation.Database.Quality.Bases;
+namespace CSM_Foundation.Database.Quality;
 
 /// <summary>
 ///     Base Quality for [MigrationDatabases].

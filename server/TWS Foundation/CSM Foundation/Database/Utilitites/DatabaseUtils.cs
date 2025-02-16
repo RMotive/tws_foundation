@@ -29,9 +29,9 @@ public class DatabaseUtilities {
     ///     the correct dataDatabases project root path.
     /// </param>
     /// <returns>
-    ///     <see cref="DataDatabasesConnectionModel"/>: The dataDatabases connection properties gathered and retrieved from the found private properties file.
+    ///     <see cref="DatabasesLinkOptions"/>: The dataDatabases connection properties gathered and retrieved from the found private properties file.
     /// </returns>
-    /// <exception cref="XDataDatabasesConnectionLoad">
+    /// <exception cref="Exception">
     ///     When something gone wrong during the IO connection properties gather operation.
     /// </exception>
     public static DatabasesLinkOptions Retrieve(string DatabaseSign) {

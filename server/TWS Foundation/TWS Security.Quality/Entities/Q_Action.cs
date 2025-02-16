@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using Action = TWS_Security.Entities.Action;
 
 namespace TWS_Security.Quality.Entities;
 public class Q_Action
-    : BQ_Set<Action> {
-    protected override Q_MigrationSet_EvaluateRecord<Action>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Action>[] Container) {
-        Q_MigrationSet_EvaluateRecord<Action> noErrors = new("Success") {
+    : BQ_Entity<Action> {
+    protected override Q_EntityEvaluation<Action>[] EvaluateFactory(Q_EntityEvaluation<Action>[] Container) {
+        Q_EntityEvaluation<Action> noErrors = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "A",
@@ -16,7 +15,7 @@ public class Q_Action
             Expectations = [],
         };
 
-        Q_MigrationSet_EvaluateRecord<Action> nameMinValue = new("Name min value unreached") {
+        Q_EntityEvaluation<Action> nameMinValue = new("Name min value unreached") {
             Mock = new() {
                 Id = 0,
                 Name = "",
@@ -27,7 +26,7 @@ public class Q_Action
             ],
         };
 
-        Q_MigrationSet_EvaluateRecord<Action> nameMaxValue = new("Name max value overrided") {
+        Q_EntityEvaluation<Action> nameMaxValue = new("Name max value overrided") {
             Mock = new() {
                 Id = 0,
                 Name = "SWFDBWZZUEVWQIXSXZZAAXNTXI",

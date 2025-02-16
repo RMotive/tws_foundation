@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_Insurance : BQ_Set<Insurance> {
-    protected override Q_MigrationSet_EvaluateRecord<Insurance>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Insurance>[] Container) {
+public class Q_Insurance : BQ_Entity<Insurance> {
+    protected override Q_EntityEvaluation<Insurance>[] EvaluateFactory(Q_EntityEvaluation<Insurance>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Insurance> success = new("Success") {
+        Q_EntityEvaluation<Insurance> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Policy = "",
@@ -18,7 +17,7 @@ public class Q_Insurance : BQ_Set<Insurance> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Insurance> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Insurance> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Policy = "",

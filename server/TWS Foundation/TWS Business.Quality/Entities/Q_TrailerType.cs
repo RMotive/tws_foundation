@@ -1,21 +1,20 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_TrailerType : BQ_Set<TrailerType> {
-    protected override Q_MigrationSet_EvaluateRecord<TrailerType>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TrailerType>[] Container) {
+public class Q_TrailerType : BQ_Entity<TrailerType> {
+    protected override Q_EntityEvaluation<TrailerType>[] EvaluateFactory(Q_EntityEvaluation<TrailerType>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<TrailerType> success = new("Success") {
+        Q_EntityEvaluation<TrailerType> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Size = "Test size"
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<TrailerType> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<TrailerType> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 TrailerClass = 0

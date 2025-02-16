@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +13,7 @@ namespace TWS_Security.Entities;
 ///     A Profile stores a relation between a collection of <see cref="Permit"/> with an <see cref="Account"/>
 /// </summary>
 public partial class Profile
-    : BEntity, IEntity_Name {
+    : BSecurityDatabaseEntity, IEntity_Name {
 
     public string Name { get; set; } = default!;
 
@@ -32,7 +30,7 @@ public partial class Profile
         ];
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) { 
+    protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Profile>(
             (EntityBuilder) => {
 

@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_Approach : BQ_Set<Approach> {
-    protected override Q_MigrationSet_EvaluateRecord<Approach>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Approach>[] Container) {
+public class Q_Approach : BQ_Entity<Approach> {
+    protected override Q_EntityEvaluation<Approach>[] EvaluateFactory(Q_EntityEvaluation<Approach>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Approach> success = new("Success") {
+        Q_EntityEvaluation<Approach> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Status = 1
@@ -16,7 +15,7 @@ public class Q_Approach : BQ_Set<Approach> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Approach> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Approach> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0

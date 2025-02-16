@@ -5,18 +5,19 @@ using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Exceptions;
-using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 namespace CSM_Foundation.Database.Bases;
 
 /// <summary>
-///     [Abstract] class for <see cref="BEntity"/> implementations.
+///     [Abstract] class for <see cref="BBusinessDatabaseEntity"/> implementations.
 ///     
 ///     A Set is a table into a data storage, defining properties and relations stored.
 /// </summary>
 public abstract partial class BEntity
     : BObject<IEntity>, IEntity {
+
+    public abstract Type Database { get; init; }
 
     [NotMapped]
     public string Discriminator { get; init; }

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Server.Quality.Managers;
 using CSM_Foundation.Server.Records;
 

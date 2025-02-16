@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Validators;
 
 namespace CSM_Foundation.Database.Exceptions;
 

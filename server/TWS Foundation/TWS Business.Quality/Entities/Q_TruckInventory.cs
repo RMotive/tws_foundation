@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_TruckInventory : BQ_Set<TruckInventory> {
-    protected override Q_MigrationSet_EvaluateRecord<TruckInventory>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TruckInventory>[] Container) {
+public class Q_TruckInventory : BQ_Entity<TruckInventory> {
+    protected override Q_EntityEvaluation<TruckInventory>[] EvaluateFactory(Q_EntityEvaluation<TruckInventory>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<TruckInventory> success = new("Success") {
+        Q_EntityEvaluation<TruckInventory> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Section = 0,
@@ -16,7 +15,7 @@ public class Q_TruckInventory : BQ_Set<TruckInventory> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<TruckInventory> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<TruckInventory> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Section = -1,

@@ -1,9 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
-
-namespace CSM_Foundation.Database.Models.Options.Filters;
+namespace CSM_Foundation.Database.Entity.Filters;
 
 /// <summary>
 /// 
@@ -14,8 +11,8 @@ public class SetViewDateFilter<TSet>
     where TSet : IEntity {
     public static readonly string Discriminator = typeof(SetViewDateFilter<TSet>).Name;
     public string Discrimination { get; init; } = Discriminator;
-    
-    
+
+
     public string Property { get; set; } = "Timestamp";
     public int Order { get; set; }
 

@@ -1,4 +1,4 @@
-using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality;
 
 namespace TWS_Business.Quality;
 

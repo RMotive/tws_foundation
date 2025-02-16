@@ -116,11 +116,11 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     /// <summary>
-    ///     Validates if all the <see cref="Sets"/> <see cref="Type"/>s are <see cref="BEntity"/> assuring contains the correct
+    ///     Validates if all the <see cref="Sets"/> <see cref="Type"/>s are <see cref="BBusinessDatabaseEntity"/> assuring contains the correct
     ///     methods needed.
     /// </summary>
     /// <returns>
-    ///     The strict validated collection of [<see cref="BEntity"/>]s and [<see cref="BConnector{TSource, TTarget}"/>]s.
+    ///     The strict validated collection of [<see cref="BBusinessDatabaseEntity"/>]s and [<see cref="BConnector{TSource, TTarget}"/>]s.
     /// </returns>
     private (BEntity[] Sets, BConnector<IEntity, IEntity>[] Connectors) ValidateSets() {
         Type databaseType = GetType();
@@ -145,7 +145,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             bool isConnector = generic.IsAssignableTo(typeof(BConnector<,>));
 
             if (!(isSet || isConnector))
-                throw new Exception($"BEntity [{dbSet.Name}] doesn't implement the correct bases (BEntity || BConnector) unable to define its function");
+                throw new Exception($"BBusinessDatabaseEntity [{dbSet.Name}] doesn't implement the correct bases (BBusinessDatabaseEntity || BConnector) unable to define its function");
 
             if (isSet) {
                 sets = [

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;

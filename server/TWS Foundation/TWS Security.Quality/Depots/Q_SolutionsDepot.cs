@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality;
 
 using TWS_Security.Entities.Solutions;
 

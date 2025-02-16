@@ -1,4 +1,4 @@
-﻿namespace CSM_Foundation.Database.Quality.Interfaces;
+﻿namespace CSM_Foundation.Database.Quality;
 /// <summary>
 ///     Interface Quality for [MigrationDatabases].
 ///     

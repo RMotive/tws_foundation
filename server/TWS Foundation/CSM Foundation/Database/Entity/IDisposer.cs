@@ -1,8 +1,6 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
-
-namespace CSM_Foundation.Database.Interfaces;
+namespace CSM_Foundation.Database.Entity;
 /// <summary>
 /// 
 /// </summary>

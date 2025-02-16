@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Security.Entities.Solutions;
 
 public partial class Solution
-    : BEntity, IEntity_Name {
+    : BSecurityDatabaseEntity, IEntity_Name {
 
     public string Name { get; set; } = default!;
 

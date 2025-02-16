@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Security.Entities.Solutions;
@@ -7,12 +6,12 @@ using TWS_Security.Entities.Solutions;
 
 namespace TWS_Security.Quality.Entities;
 public class Q_Solution
-    : BQ_Set<Solution> {
-    protected override Q_MigrationSet_EvaluateRecord<Solution>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Solution>[] Container) {
+    : BQ_Entity<Solution> {
+    protected override Q_EntityEvaluation<Solution>[] EvaluateFactory(Q_EntityEvaluation<Solution>[] Container) {
         const string successName = "TWS Quality";
         const string successSign = "TWSMQ";
 
-        Q_MigrationSet_EvaluateRecord<Solution> success = new("Success") {
+        Q_EntityEvaluation<Solution> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = successName,
@@ -20,7 +19,7 @@ public class Q_Solution
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Solution> failure = new("All properties fail") {
+        Q_EntityEvaluation<Solution> failure = new("All properties fail") {
             Mock = new() { },
             Expectations = [
                 (nameof(Solution.Id), [(new PointerValidator(), 3)]),

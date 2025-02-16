@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_DriverExternal : BQ_Set<DriverExternal> {
-    protected override Q_MigrationSet_EvaluateRecord<DriverExternal>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<DriverExternal>[] Container) {
+public class Q_DriverExternal : BQ_Entity<DriverExternal> {
+    protected override Q_EntityEvaluation<DriverExternal>[] EvaluateFactory(Q_EntityEvaluation<DriverExternal>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<DriverExternal> success = new("Success") {
+        Q_EntityEvaluation<DriverExternal> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Status = 0,
@@ -17,7 +16,7 @@ public class Q_DriverExternal : BQ_Set<DriverExternal> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<DriverExternal> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<DriverExternal> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0,

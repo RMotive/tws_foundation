@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,7 @@ using TWS_Business.Entities;
 namespace TWS_Business.Entities.Employees;
 
 public partial class Employee
-    : BEntity {
+    : BBusinessDatabaseEntity {
 
     public int Status { get; set; }
 

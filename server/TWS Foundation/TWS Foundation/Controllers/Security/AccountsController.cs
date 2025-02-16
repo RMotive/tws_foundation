@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Models.Options;
+﻿using CSM_Foundation.Database.Entity.Models;
 
 using Microsoft.AspNetCore.Mvc;
 

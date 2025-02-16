@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_Plate : BQ_Set<Plate> {
-    protected override Q_MigrationSet_EvaluateRecord<Plate>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Plate>[] Container) {
+public class Q_Plate : BQ_Entity<Plate> {
+    protected override Q_EntityEvaluation<Plate>[] EvaluateFactory(Q_EntityEvaluation<Plate>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Plate> success = new("Succes") {
+        Q_EntityEvaluation<Plate> success = new("Succes") {
             Mock = new() {
                 Id = 1,
                 Identifier = "",
@@ -19,7 +18,7 @@ public class Q_Plate : BQ_Set<Plate> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Plate> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Plate> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Identifier = "",

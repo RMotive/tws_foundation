@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Models.Options;
+﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
 using TWS_Customer.Services.Security.Solutions;
@@ -19,7 +20,9 @@ public class Q_SolutionsService
 
     }
 
-    protected override Solution ComposeSample(string Entropy) {
+    Solution SolutionFactory(string? Entropy = null) {
+        Entropy ??= RandomUtils.String(16);
+
         return new Solution {
             Name = Entropy,
             Description = $" Testing Record {Entropy}",
@@ -37,8 +40,7 @@ public class Q_SolutionsService
             Export = false,
         };
 
-        ComposeSamples(10, true);
-
+        Store(10, SolutionFactory);
         SetViewOut<Solution> viewOut = await Service.View(options);
 
         Assert.True(viewOut.Count >= 10);
@@ -48,7 +50,7 @@ public class Q_SolutionsService
     [Fact(DisplayName = "[Create]: Correctly creates a new Solution")]
     public async Task Create() {
 
-        Solution sample = ComposeSamples(1)[0];
+        Solution sample = SolutionFactory();
         Disposer.Push(sample);
 
         SetBatchOut<Solution> batchOut = await Service.Create([sample]);
@@ -65,8 +67,8 @@ public class Q_SolutionsService
 
     [Fact(DisplayName = "[Update]: Correctly updates a Solution")]
     public async Task Update() {
-        Solution reference = ComposeSamples(1, true)[0];
-        Solution sample = ComposeSamples(1)[0];
+        Solution reference = Store(SolutionFactory);
+        Solution sample = SolutionFactory();
         sample.Id = reference.Id;
 
         RecordUpdateOut<Solution> updateOut = await Service.Update(sample);
@@ -87,7 +89,7 @@ public class Q_SolutionsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes a Solution")]
     public async Task Delete() {
-        Solution sample = ComposeSamples(1)[0];
+        Solution sample = SolutionFactory();
         await Service.Create([sample]);
 
         Solution deleted = await Service.Delete(sample.Id);

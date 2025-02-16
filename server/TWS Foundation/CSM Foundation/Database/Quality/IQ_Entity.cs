@@ -1,4 +1,4 @@
-﻿namespace CSM_Foundation.Database.Quality.Interfaces;
+﻿namespace CSM_Foundation.Database.Quality;
 
 /// <summary>
 ///     Interface Quality for [Q_Entity].
@@ -8,7 +8,7 @@
 ///     [Q_Entity] concept: determines a quality implementation to qualify 
 ///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
-public interface IQ_Set {
+public interface IQ_Entity {
     /// <summary>
     ///     Qualifies:
     ///         - [Entity] EvaluateRead success.

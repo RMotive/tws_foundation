@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Security.Entities.Accounts;
 
 namespace TWS_Security.Quality.Entities;
 public class Q_Account
-    : BQ_Set<Account> {
-    protected override Q_MigrationSet_EvaluateRecord<Account>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Account>[] Container) {
-        Q_MigrationSet_EvaluateRecord<Account> success = new("Success") {
+    : BQ_Entity<Account> {
+    protected override Q_EntityEvaluation<Account>[] EvaluateFactory(Q_EntityEvaluation<Account>[] Container) {
+        Q_EntityEvaluation<Account> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 User = "Q_User",
@@ -18,7 +17,7 @@ public class Q_Account
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Account> failure = new("All properties fail") {
+        Q_EntityEvaluation<Account> failure = new("All properties fail") {
             Mock = new(),
             Expectations = [
                 (nameof(Account.Id), [(new PointerValidator(), 3)]),

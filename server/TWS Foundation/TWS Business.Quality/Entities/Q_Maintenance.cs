@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_Maintenance : BQ_Set<Maintenance> {
-    protected override Q_MigrationSet_EvaluateRecord<Maintenance>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Maintenance>[] Container) {
+public class Q_Maintenance : BQ_Entity<Maintenance> {
+    protected override Q_EntityEvaluation<Maintenance>[] EvaluateFactory(Q_EntityEvaluation<Maintenance>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Maintenance> success = new("Success") {
+        Q_EntityEvaluation<Maintenance> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Anual = DateOnly.FromDateTime(new DateTime()),
@@ -16,7 +15,7 @@ public class Q_Maintenance : BQ_Set<Maintenance> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Maintenance> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Maintenance> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Status = 0

@@ -1,6 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,7 @@ using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities;
 public partial class Status
-: BEntity, IEntity_Name {
+: BBusinessDatabaseEntity, IEntity_Name {
 
     public string Name { get; set; } = default!;
     public string? Description { get; set; }

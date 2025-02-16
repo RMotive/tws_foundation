@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
 
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
 
-namespace CSM_Foundation.Database.Models.Options.Filters;
+namespace CSM_Foundation.Database.Entity.Filters;
 public class SetViewFilterLinearEvaluation<TSet> 
     : ISetViewFilterNode<TSet>
     where TSet : IEntity {

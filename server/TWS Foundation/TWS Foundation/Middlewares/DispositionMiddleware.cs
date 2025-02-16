@@ -1,8 +1,8 @@
 ﻿
 using CSM_Foundation.Server.Exceptions;
-using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.Extensions.Primitives;
+using CSM_Foundation.Database.Entity;
 
 namespace TWS_Foundation.Middlewares;
 

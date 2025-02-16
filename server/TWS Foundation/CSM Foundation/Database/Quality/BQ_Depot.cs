@@ -4,19 +4,16 @@ using System.Reflection;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Enumerators;
-using CSM_Foundation.Database.Interfaces;
-using CSM_Foundation.Database.Models.Options;
-using CSM_Foundation.Database.Models.Options.Filters;
+using CSM_Foundation.Database.Entity.Filters;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
-using CSM_Foundation.Database.Quality.Interfaces;
-using CSM_Foundation.Database.Quality.Tools;
+using CSM_Foundation.Database.Quality.Disposing;
 
 using Microsoft.EntityFrameworkCore;
 
 using Xunit;
 
-namespace CSM_Foundation.Database.Quality.Bases;
+namespace CSM_Foundation.Database.Quality;
 
 /// <summary>
 /// 
@@ -30,7 +27,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     where TDepot : IDepot<TSet>, new()
     where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
 
-    protected readonly QDisposer Disposer;
+    protected readonly Q_Disposer Disposer;
 
     private readonly string Ordering;
 
@@ -55,9 +52,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     public BQ_Depot(string Ordering) {
         this.Ordering = Ordering;
 
-        Disposer = new QDisposer {
-            Factory = () => Database,
-        };
+        Disposer = new Q_Disposer();
         StoredMocks = StoreMocks(30);
     }
     public void Dispose() {
@@ -103,7 +98,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
             TSet mock = MockFactory(seed);
             mock.Timestamp = DateTime.UtcNow;
 
-            storedMocks = [..storedMocks, mock];
+            storedMocks = [.. storedMocks, mock];
         }
 
         return storedMocks;
@@ -169,7 +164,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
             Orderings = [
                 new SetViewOrderOptions {
                         Property = Ordering,
-                        Behavior = SetViewOrders.Descending,
+                        Order = SetViewOrders.Descending,
                 },
             ],
         };
@@ -226,11 +221,11 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
     [Fact(DisplayName = "[View]: Using Property filter (Contains)")]
     public async Task ViewE() {
-        TSet mock  = StoredMocks[5];
+        TSet mock = StoredMocks[5];
         (string Property, string? Value)? factorization = FactorizeProperty(mock);
 
-        if(factorization is null) { 
-            return;    
+        if (factorization is null) {
+            return;
         }
 
 
@@ -243,7 +238,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
                     Property = factorization.Value.Property,
                     Value = factorization.Value.Value,
-                }    
+                }
             ],
         };
 
@@ -267,13 +262,13 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
         ISetViewFilter<TSet>[] filters = [];
         string property = "";
         string?[] values = [];
-        foreach(TSet mock in mocks) {
+        foreach (TSet mock in mocks) {
             (string Property, string? Value)? factorization = FactorizeProperty(mock);
-            if(factorization is null || factorization.Value.Property is null)
+            if (factorization is null || factorization.Value.Property is null)
                 return;
 
             property = factorization.Value.Property;
-            values = [..values, factorization.Value.Value];
+            values = [.. values, factorization.Value.Value];
             filters = [
                 new SetViewPropertyFilter<TSet> {
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
@@ -282,7 +277,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
                 },
             ];
         }
-        
+
         SetViewOptions<TSet> qViewOptions = new() {
             Retroactive = false,
             Range = 20,
@@ -302,8 +297,8 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
         Assert.All(qOut.Records, i => {
             object? value = propMirror.GetValue(i);
 
-            foreach(string? refValue in values) {
-                if(refValue == (string?)value) 
+            foreach (string? refValue in values) {
+                if (refValue == (string?)value)
                     return;
             }
             Assert.True(false);

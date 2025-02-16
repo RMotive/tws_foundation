@@ -1,32 +1,31 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity.Filters;
 
-namespace CSM_Foundation.Database.Models.Options;
+namespace CSM_Foundation.Database.Entity.Models;
 
 /// <summary>
-///     Defines options to build a <see cref="MigrationView"/> 
+///     Defines options to build a [View]
 ///     specifing the behavior to the builder.
 /// </summary>
-public class SetViewOptions<TSet> 
-    where TSet : IEntity {
-    
+public class SetViewOptions<TEntity>
+    where TEntity : IEntity {
+
     /// <summary>
     ///     On <see langword="true"/> indicate that the builder should consider all the new items added 
     ///     after the <see cref="Creation"/> if it is null then won't consider the limitation will behave
     ///     as this property is <see langword="true"/>
     /// </summary>
     public required bool Retroactive { get; init; }
-    
+
     /// <summary>
     ///     Specifies the amount of items expected per page
     /// </summary>
     public required int Range { get; init; }
-    
+
     /// <summary>
     ///     Specifies the current desired page.
     /// </summary>
     public required int Page { get; init; }
-    
+
     /// <summary>
     ///     Specifies the last time this view was created, this works to limit the new entries 
     ///     on demand by <see cref="Retroactive"/>
@@ -37,7 +36,7 @@ public class SetViewOptions<TSet>
     ///     Indicates if the current options are to generate an [Export] result.
     /// </summary>
     public bool Export { get; set; } = false;
-    
+
     /// <summary>
     ///     Indicates order actions to perform to the current view building.
     ///     <br>
@@ -47,7 +46,7 @@ public class SetViewOptions<TSet>
     public SetViewOrderOptions[] Orderings { get; init; } = [];
 
     /// <summary>
-    /// 
+    ///     How the [View] data will be filtered.
     /// </summary>
-    public ISetViewFilterNode<TSet>[] Filters { get; init; } = [];
+    public ISetViewFilterNode<TEntity>[] Filters { get; init; } = [];
 }

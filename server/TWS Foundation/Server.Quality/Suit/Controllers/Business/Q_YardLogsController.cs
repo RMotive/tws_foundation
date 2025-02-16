@@ -4,6 +4,7 @@ using System.Net;
 using Azure;
 
 using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;

@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Models.Options;
+﻿using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
 using TWS_Business;
@@ -14,13 +14,6 @@ public class Q_EmployeesService
     public Q_EmployeesService()
         : base(new(new EmployeesDepot())) {
 
-    }
-
-    protected override Employee ComposeSample(string Entropy) {
-        return new Employee {
-            Identification = 1,
-            Status = 1,
-        };
     }
 
 

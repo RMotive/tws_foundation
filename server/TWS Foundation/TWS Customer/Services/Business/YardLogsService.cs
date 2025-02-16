@@ -1,7 +1,7 @@
 ﻿using ClosedXML.Excel;
 
 using CSM_Foundation.Advisor.Managers;
-using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;

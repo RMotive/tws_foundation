@@ -1,13 +1,12 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Exceptions;
-using CSM_Foundation.Database.Interfaces;
-using CSM_Foundation.Database.Quality.Records;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 using Xunit;
 
-namespace CSM_Foundation.Database.Quality.Bases;
+namespace CSM_Foundation.Database.Quality;
 /// <summary>
 ///     Base Quality for [Q_Entity].
 ///     
@@ -16,10 +15,10 @@ namespace CSM_Foundation.Database.Quality.Bases;
 ///     [Q_Entity] concept: determines a quality implementation to qualify 
 ///     a [MigrationDatabases] [Entity] implementation.
 /// </summary>
-public abstract class BQ_Set<TSet>
+public abstract class BQ_Entity<TSet>
     where TSet : IEntity, new() {
 
-    protected abstract Q_MigrationSet_EvaluateRecord<TSet>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<TSet>[] Container);
+    protected abstract Q_EntityEvaluation<TSet>[] EvaluateFactory(Q_EntityEvaluation<TSet>[] Container);
 
     [Fact]
     public void EvaluateDefinition() {
@@ -29,10 +28,10 @@ public abstract class BQ_Set<TSet>
 
     [Fact]
     public void Evaluate() {
-        Q_MigrationSet_EvaluateRecord<TSet>[] checks = EvaluateFactory([]);
+        Q_EntityEvaluation<TSet>[] checks = EvaluateFactory([]);
 
 
-        foreach (Q_MigrationSet_EvaluateRecord<TSet> qualityCheck in checks) {
+        foreach (Q_EntityEvaluation<TSet> qualityCheck in checks) {
             TSet mock = qualityCheck.Mock;
             (string property, (IValidator validator, int code)[] reasons)[] asserts = qualityCheck.Expectations;
 

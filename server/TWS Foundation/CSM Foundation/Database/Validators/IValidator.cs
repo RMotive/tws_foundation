@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace CSM_Foundation.Database.Interfaces;
+namespace CSM_Foundation.Database.Validators;
 /// <summary>
 /// TODO
 /// </summary>

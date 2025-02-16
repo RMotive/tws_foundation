@@ -2,11 +2,7 @@
 using System.Reflection;
 using System.Text.Json;
 
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Enumerators;
-using CSM_Foundation.Database.Interfaces;
-
-namespace CSM_Foundation.Database.Models.Options.Filters;
+namespace CSM_Foundation.Database.Entity.Filters;
 
 public class SetViewPropertyFilter<TSet>
     : ISetViewFilter<TSet>
@@ -54,7 +50,7 @@ public class SetViewPropertyFilter<TSet>
                 }
                 break;
             case SetViewFilterEvaluations.EQUAL: {
-                    if(Value is JsonElement element) {
+                    if (Value is JsonElement element) {
                         Value = element.GetString();
                     }
 

@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +11,7 @@ using TWS_Security.Entities.Solutions;
 namespace TWS_Security.Entities;
 
 public partial class Permit
-    : BEntity {
-
-
-
-
+    : BSecurityDatabaseEntity {
     public int Solution { get; set; }
 
     [JsonIgnore]

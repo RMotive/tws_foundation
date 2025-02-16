@@ -2,9 +2,38 @@
 using System.Text.Json.Serialization;
 
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Models.Options.Filters;
 
-namespace CSM_Foundation.Database.Interfaces;
+namespace CSM_Foundation.Database.Entity.Filters;
+
+/// <summary>
+///     Stores the available options for [View] [Filter] behavior.
+/// </summary>
+public enum SetViewFilterEvaluations {
+    /// <summary>
+    ///     The property is the same given referece.
+    /// </summary>
+    EQUAL,
+    /// <summary>
+    ///     When the property contains all or a segment of the given reference.
+    /// </summary>
+    CONTAINS,
+    /// <summary>
+    ///     On Scalar types when the value is less than the reference value.
+    /// </summary>
+    LESS_THAN,
+    /// <summary>
+    ///     On scalar types when the value is less or equal than the reference
+    /// </summary>
+    LESS_THAN_EQUAL,
+    /// <summary>
+    ///     On scalar types when the value is greater than the reference.
+    /// </summary>
+    GREATER_THAN,
+    /// <summary>
+    ///     On scalar types when the value is greater or equal than the reference.
+    /// </summary>
+    GREATER_THAN_EQUAL,
+}
 
 /// <summary>
 /// 

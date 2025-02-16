@@ -3,11 +3,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Models.Options.Filters;
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace CSM_Foundation.Database.Interfaces;
+namespace CSM_Foundation.Database.Entity.Filters;
 
 /// <summary>
 /// 

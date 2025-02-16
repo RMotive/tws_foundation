@@ -1,14 +1,13 @@
-﻿using CSM_Foundation.Database.Quality.Bases;
-using CSM_Foundation.Database.Quality.Records;
+﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_Situation : BQ_Set<Situation> {
-    protected override Q_MigrationSet_EvaluateRecord<Situation>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Situation>[] Container) {
+public class Q_Situation : BQ_Entity<Situation> {
+    protected override Q_EntityEvaluation<Situation>[] EvaluateFactory(Q_EntityEvaluation<Situation>[] Container) {
 
-        Q_MigrationSet_EvaluateRecord<Situation> success = new("Success") {
+        Q_EntityEvaluation<Situation> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Name = "",
@@ -16,7 +15,7 @@ public class Q_Situation : BQ_Set<Situation> {
             },
             Expectations = [],
         };
-        Q_MigrationSet_EvaluateRecord<Situation> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Situation> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Name = "Situation validation test, max lengh 25 characters",

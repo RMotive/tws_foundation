@@ -6,7 +6,7 @@ using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Server.Converters.JSON;
 using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;

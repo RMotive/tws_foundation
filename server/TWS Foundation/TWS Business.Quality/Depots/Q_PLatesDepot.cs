@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality.Bases;
+using CSM_Foundation.Database.Quality;
 
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 

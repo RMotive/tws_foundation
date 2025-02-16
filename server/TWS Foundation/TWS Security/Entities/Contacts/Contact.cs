@@ -2,7 +2,6 @@
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,7 @@ using TWS_Security.Entities.Accounts;
 namespace TWS_Security.Entities.Contacts;
 
 public partial class Contact
-    : BEntity, IEntity_Name {
+    : BSecurityDatabaseEntity, IEntity_Name {
 
     [StringLength(100)]
     public string Name { get; set; } = default!;

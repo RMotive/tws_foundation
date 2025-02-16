@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Entity.Models;
 
 namespace TWS_Customer.Services.Common.DataManagement.Params;
 

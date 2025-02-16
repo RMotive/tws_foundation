@@ -4,10 +4,9 @@ using System.Reflection;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Enumerators;
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity.Filters;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models;
-using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
@@ -78,7 +77,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
         int range = Options.Range;
         int page = Options.Page;
-        if(Options.Export) {
+        if (Options.Export) {
             page = 1;
             range = Source.Count();
         }
@@ -92,8 +91,8 @@ public abstract class BDepot<TDatabase, TEntity>
         int start = (page - 1) * range;
 
         int records;
-        if(page == pages) {
-            if(left == 0) {
+        if (page == pages) {
+            if (left == 0) {
                 records = range;
             } else {
                 records = left;
@@ -128,7 +127,7 @@ public abstract class BDepot<TDatabase, TEntity>
             UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
             Expression<Func<TEntity, object>> orderingExpression = Expression.Lambda<Func<TEntity, object>>(translationExpression, parameterExpression);
             if (i == 0) {
-                orderingQuery = ordering.Behavior switch {
+                orderingQuery = ordering.Order switch {
                     SetViewOrders.Ascending => Source.OrderBy(orderingExpression),
                     SetViewOrders.Descending => Source.OrderByDescending(orderingExpression),
                     _ => Source.OrderBy(orderingExpression),
@@ -136,7 +135,7 @@ public abstract class BDepot<TDatabase, TEntity>
                 continue;
             }
 
-            orderingQuery = ordering.Behavior switch {
+            orderingQuery = ordering.Order switch {
                 SetViewOrders.Ascending => orderingQuery.ThenBy(orderingExpression),
                 SetViewOrders.Descending => orderingQuery.ThenByDescending(orderingExpression),
                 _ => orderingQuery.ThenBy(orderingExpression),
