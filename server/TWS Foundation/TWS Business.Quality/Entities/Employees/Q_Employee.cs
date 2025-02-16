@@ -4,8 +4,10 @@ using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities.Employees;
 
-namespace TWS_Business.Quality.Entities;
-public class Q_Employee : BQ_Set<Employee> {
+namespace TWS_Business.Quality.Entities.Employees;
+
+public class Q_Employee 
+    : BQ_Set<Employee> {
     protected override Q_MigrationSet_EvaluateRecord<Employee>[] EvaluateFactory(Q_MigrationSet_EvaluateRecord<Employee>[] Container) {
 
         Q_MigrationSet_EvaluateRecord<Employee> success = new("Success") {

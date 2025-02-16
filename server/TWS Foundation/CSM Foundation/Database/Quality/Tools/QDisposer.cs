@@ -16,7 +16,7 @@ public class QDisposer
     /// <summary>
     /// 
     /// </summary>
-    required public Func<DbContext> Factory { private get; init; }
+    public required Func<DbContext> Factory { private get; init; }
 
     /// <summary>
     /// 

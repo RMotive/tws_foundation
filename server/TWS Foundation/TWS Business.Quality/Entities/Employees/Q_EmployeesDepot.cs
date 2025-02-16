@@ -3,7 +3,7 @@ using CSM_Foundation.Database.Quality.Bases;
 
 using TWS_Business.Entities.Employees;
 
-namespace TWS_Business.Quality.Depots;
+namespace TWS_Business.Quality.Entities.Employees;
 /// <summary>
 ///     Qualifies the <see cref="EmployeesDepot"/>.
 /// </summary>

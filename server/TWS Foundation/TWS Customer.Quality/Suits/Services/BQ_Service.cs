@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Quality.Tools;
 
@@ -10,7 +9,7 @@ namespace TWS_Customer.Quality.Suits.Services;
 /// <summary>
 ///     Base Quality Implementation for a Service Quality Suit.
 /// </summary>
-/// <typeparam name="TSet">
+/// <typeparam name="TEntity">
 ///     Set service is based on.
 /// </typeparam>
 /// <typeparam name="TService">
@@ -19,10 +18,9 @@ namespace TWS_Customer.Quality.Suits.Services;
 /// <typeparam name="TDatabase">
 ///     Database that holds the <see cref="IEntity"/> related to the <see cref="TService"/>.
 /// </typeparam>
-public abstract class BQ_Service<TSet, TService, TDatabase>
+public abstract class BQ_Service<TService, TDatabase>
     : IDisposable
-    where TSet : class, IEntity
-    where TService : IService<TSet>
+    where TService : IService<IEntity>
     where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
 
     /// <summary>
@@ -58,42 +56,13 @@ public abstract class BQ_Service<TSet, TService, TDatabase>
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    ///     Proxy to determine the way to generate samplers, handled from the implementation itself.
-    /// </summary>
-    /// <param name="Entropy">
-    ///     Rangom generated entropy value (16 digits) to use for unique properties.
-    /// </param>
-    /// </param>
-    /// <returns> 
-    ///     A <see cref="TEntity"/> object to store and use as test data.
-    /// </returns>
-    protected abstract TSet ComposeSample(string Entropy);
+    public TEntity Store<TEntity>(TEntity Entity)
+        where TEntity : class, IEntity {
 
-    /// <summary>
-    ///     Compose a bundle of Samples. 
-    /// </summary>
-    /// <param name="Quantity">
-    ///     The number of samples composed.
-    /// </param>
-    /// <param name="Store">
-    ///     Wheter the Samples must be stored directly in the data storage.
-    /// </param>
-    /// <returns>
-    ///     The collection of samples.
-    /// </returns>
-    protected TSet[] ComposeSamples(int Quantity, bool Store = false) {
+        Database.Set<TEntity>().Add(Entity);
+        Database.SaveChanges();
+        Disposer.Push(Entity);
 
-        TSet[] samples = [];
-        for (int i = 0; i < Quantity; i++) {
-            samples = [.. samples, ComposeSample(RandomUtils.String(16))];
-        }
-
-        if (Store) {
-            Database.Set<TSet>().AddRange(samples);
-            Database.SaveChanges();
-            Disposer.Push([..samples.Cast<IEntity>()]);
-        }
-        return samples;
+        return Entity;
     }
 }

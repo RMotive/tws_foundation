@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using TWS_Business.Entities;
-using TWS_Business.Entities.Employee;
+using TWS_Business.Entities.Employees;
 
 namespace TWS_Business;
 
