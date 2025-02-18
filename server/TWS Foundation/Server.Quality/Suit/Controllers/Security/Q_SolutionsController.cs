@@ -197,7 +197,7 @@ public class Q_SolutionsController
             }, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
+            EntityUpdateOut<Solution> creationResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
@@ -217,7 +217,7 @@ public class Q_SolutionsController
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Response).Estela;
+            EntityUpdateOut<Solution> creationResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(Response).Estela;
             Assert.Null(creationResult.Previous);
 
             Solution creationRecord = creationResult.Updated;
@@ -233,7 +233,7 @@ public class Q_SolutionsController
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-            RecordUpdateOut<Solution> updateResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(updateResponse.Response).Estela;
+            EntityUpdateOut<Solution> updateResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(updateResponse.Response).Estela;
 
             Assert.NotNull(updateResult.Previous);
 

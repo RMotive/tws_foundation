@@ -24,14 +24,6 @@ public delegate TEntity EntityFactory<TEntity>(string Entropy)
     where TEntity : class, IEntity;
 
 /// <summary>
-///     Public Delegate for [database] factory [Quality] purposes.
-/// </summary>
-/// <returns>
-///     The database context instance.
-/// </returns>
-public delegate DbContext DatabaseFactory();
-
-/// <summary>
 ///     Base Quality Implementation for a Service Quality Suit.
 /// </summary>
 /// <typeparam name="TEntity">
@@ -72,7 +64,7 @@ public abstract class BQ_Service<TEntity, TService, TDatabase>
     public BQ_Service(TService Service, params DatabaseFactory[] Factories) {
         this.Service = Service;
 
-        Disposer = new Q_Disposer();
+        Disposer = new(Factories);
         foreach (DatabaseFactory factory in Factories) {
 
             using DbContext dbContext = factory();
@@ -120,7 +112,10 @@ public abstract class BQ_Service<TEntity, TService, TDatabase>
     public TEntity2 Store<TEntity2>(TEntity2 Entity)
         where TEntity2 : class, IEntity {
 
-        DatabaseFactory factory = Factories[Entity.Database];
+        if(!Factories.TryGetValue(Entity.Database, out DatabaseFactory? factory)) {
+            throw new Exception($"No factory subscribed for [({Entity.Database.Name})]");
+        }
+
         DbContext database = factory();
 
         database.Set<TEntity2>().Add(Entity);
@@ -185,7 +180,11 @@ public abstract class BQ_Service<TEntity, TService, TDatabase>
             if (database != null) {
                 continue;
             }
-            DatabaseFactory dbFactory = Factories[entity.Database];
+
+            if (!Factories.TryGetValue(entity.Database, out DatabaseFactory? dbFactory)) {
+                throw new Exception($"No factory subscribed for [({entity.Database.Name})]");
+            }
+
             database = dbFactory();
         }
 

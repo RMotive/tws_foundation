@@ -126,7 +126,7 @@ public class TrucksService : ITrucksService {
     public async Task<SetBatchOut<Truck>> Create(Truck[] trucks) {
         return await Trucks.Create(trucks);
     }
-    public async Task<RecordUpdateOut<Truck>> Update(Truck Truck) {
+    public async Task<EntityUpdateOut<Truck>> Update(Truck Truck) {
         return await Trucks.Update(Truck, Include);
     }
 

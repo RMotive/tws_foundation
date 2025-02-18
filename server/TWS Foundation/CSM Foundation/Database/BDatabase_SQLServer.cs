@@ -9,7 +9,6 @@ using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace CSM_Foundation.Database.Bases;
 
@@ -34,10 +33,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     /// </summary>
     [StringLength(5, MinimumLength = 5)]
     protected string Sign {
-        get => _Sign;
-        init {
-            _Sign = value.ToUpper();
-        }
+        get => _Sign; init => _Sign = value.ToUpper();
     }
     private string _Sign = "";
 
@@ -237,15 +233,18 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        modelBuilder.Ignore<CustomAttributeData>();
+
         (BEntity[] sets, BConnector<IEntity, IEntity>[] _) = ValidateSets();
 
         foreach (BEntity set in sets) {
+            Type setType = set.GetType();
             modelBuilder.Entity(
-                set.GetType(),
+                setType,
                 (EntityBuilder) => {
                     EntityBuilder.HasKey(nameof(IEntity.Id));
 
-                    if(set is IEntity_Name) {
+                    if (set is IEntity_Name) {
                         PropertyInfo nameProperty = set.GetProperty(nameof(IEntity_Name.Name));
 
                         EntityBuilder
@@ -267,10 +266,8 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             set.DescribeSet(modelBuilder);
         }
 
-        OnModelCreatingPartial(modelBuilder);
+        base.OnModelCreating(modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
     #endregion
 }
@@ -313,5 +310,5 @@ public abstract partial class BConnector<TSource, TTarget>
     ///     [Connector] Description only must describe its properties, ignoring <see cref="BConnector{TSource, TTarget}.Target"/> and <see cref="BConnector{TSource, TTarget}.Source"/> properties implementations.
     ///     They are auto described by the engine.
     /// </remarks>
-    protected virtual internal void DescribeConnector(ModelBuilder Builder) { }
+    protected internal virtual void DescribeConnector(ModelBuilder Builder) { }
 }

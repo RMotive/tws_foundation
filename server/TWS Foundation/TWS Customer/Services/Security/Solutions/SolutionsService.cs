@@ -31,7 +31,7 @@ public class SolutionsService
     public Task<SetBatchOut<Solution>> Create(Solution[] Solutions)
     => SolutionsDepot.Create(Solutions);
 
-    public Task<RecordUpdateOut<Solution>> Update(Solution Solution)
+    public Task<EntityUpdateOut<Solution>> Update(Solution Solution)
     => SolutionsDepot.Update(Solution);
 
     public Task<Solution> Delete(int Id)

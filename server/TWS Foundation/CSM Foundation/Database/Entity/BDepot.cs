@@ -56,7 +56,7 @@ public abstract class BDepot<TDatabase, TEntity>
     public BDepot(TDatabase Database, IDisposer? Disposer) {
         this.Database = Database;
         this.Disposer = Disposer;
-        Set = Database.Set<TEntity>();
+        Set = Database.Set<TEntity>(typeof(TEntity).Name);
     }
 
     protected IQueryable<TEntity> Filtering(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
@@ -353,7 +353,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <param name="Set"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<RecordUpdateOut<TEntity>> Update(TEntity Record, AccumulateDelegate<TEntity>? Accumulate = null) {
+    public async Task<EntityUpdateOut<TEntity>> Update(TEntity Record, AccumulateDelegate<TEntity>? Accumulate = null) {
         IQueryable<TEntity> query = Set;
         TEntity? old = null;
         TEntity? current;
@@ -383,7 +383,7 @@ public abstract class BDepot<TDatabase, TEntity>
         }
 
         Disposer?.Push(Database, Record);
-        return new RecordUpdateOut<TEntity> {
+        return new EntityUpdateOut<TEntity> {
             Previous = old,
             Updated = current ?? Record,
         };

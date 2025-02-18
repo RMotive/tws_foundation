@@ -7,5 +7,5 @@ namespace TWS_Customer.Services.Interfaces;
 public interface ITrucksExternalsService {
     Task<SetViewOut<TruckExternal>> View(SetViewOptions<TruckExternal> Options);
     Task<SetBatchOut<TruckExternal>> Create(TruckExternal[] trucks);
-    Task<RecordUpdateOut<TruckExternal>> Update(TruckExternal Truck);
+    Task<EntityUpdateOut<TruckExternal>> Update(TruckExternal Truck);
 }

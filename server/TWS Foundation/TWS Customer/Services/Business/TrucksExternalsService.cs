@@ -74,7 +74,7 @@ public class TrucksExternalsService : ITrucksExternalsService {
         return await TrucksExternals.Create(trucks);
     }
 
-    public async Task<RecordUpdateOut<TruckExternal>> Update(TruckExternal Truck) {
+    public async Task<EntityUpdateOut<TruckExternal>> Update(TruckExternal Truck) {
         return await TrucksExternals.Update(Truck, Include);
     }
 }

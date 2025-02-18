@@ -21,13 +21,24 @@ public class BusinessDatabase
         : base("TWSB") {
     }
 
-    public virtual DbSet<TruckInventory> TruckInventory { get; set; } = default!;
+    public virtual DbSet<Employee> Employees { get; set; }
 
+    public virtual DbSet<Truck> Trucks { get; set; } = default!;
+    public virtual DbSet<TruckCommon> TruckCommons { get; set; } = default!;
     public virtual DbSet<TruckExternal> TruckExternal { get; set; } = default!;
 
-    public virtual DbSet<TruckCommon> TruckCommons { get; set; } = default!;
 
-    public virtual DbSet<Employee> Employees { get; set; } = default!;
+    public virtual DbSet<Trailer> Trailers { get; set; } = default!;
+    public virtual DbSet<TrailerCommon> TrailersCommons { get; set; } = default!;
+    public virtual DbSet<TrailerExternal> TrailersExternals { get; set; } = default!;
+
+
+    public virtual DbSet<Driver> Drivers { get; set; } = default!;
+    public virtual DbSet<DriverCommon> DriversCommons { get; set; } = default!;
+    public virtual DbSet<DriverExternal> DriverExternals { get; set; } = default!;
+
+
+    public virtual DbSet<Plate> Plates { get; set; } = default!;
 
     public virtual DbSet<Insurance> Insurances { get; set; } = default!;
 
@@ -35,7 +46,6 @@ public class BusinessDatabase
 
     public virtual DbSet<Manufacturer> Manufacturers { get; set; } = default!;
 
-    public virtual DbSet<Plate> Plates { get; set; } = default!;
 
     public virtual DbSet<Sct> Scts { get; set; } = default!;
 
@@ -45,8 +55,6 @@ public class BusinessDatabase
 
     public virtual DbSet<TruckH> HPTrucks { get; set; } = default!;
 
-    public virtual DbSet<Truck> Trucks { get; set; } = default!;
-
     public virtual DbSet<Carrier> Carriers { get; set; } = default!;
 
     public virtual DbSet<Approach> Approaches { get; set; } = default!;
@@ -55,19 +63,7 @@ public class BusinessDatabase
 
     public virtual DbSet<Address> Addresses { get; set; } = default!;
 
-    public virtual DbSet<Trailer> Trailers { get; set; } = default!;
-
-    public virtual DbSet<TrailerCommon> TrailersCommons { get; set; } = default!;
-
-    public virtual DbSet<TrailerExternal> TrailersExternals { get; set; } = default!;
-
     public virtual DbSet<Identification> Identifications { get; set; } = default!;
-
-    public virtual DbSet<Driver> Drivers { get; set; } = default!;
-
-    public virtual DbSet<DriverCommon> DriversCommons { get; set; } = default!;
-
-    public virtual DbSet<DriverExternal> DriverExternals { get; set; } = default!;
 
     public virtual DbSet<TrailerClass> TrailerClasses { get; set; } = default!;
 
@@ -83,5 +79,5 @@ public class BusinessDatabase
 
     public virtual DbSet<TrailerType> TrailersTypes { get; set; } = default!;
 
-    public virtual DbSet<TrailerType> TrucksInventories { get; set; } = default!;
+    public virtual DbSet<TruckInventory> TrucksInventories { get; set; } = default!;
 }

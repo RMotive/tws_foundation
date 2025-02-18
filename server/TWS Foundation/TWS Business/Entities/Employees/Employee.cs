@@ -1,22 +1,22 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Entities;
-
 namespace TWS_Business.Entities.Employees;
 
-public partial class Employee
+public class Employee
     : BBusinessDatabaseEntity {
 
     public int Status { get; set; }
-
-    public int Identification { get; set; }
-
-    public int? Address { get; set; }
+    public Status? Status_ { get; set; }
 
     public int? Approach { get; set; }
+    public Approach? Approach_ { get; set; }
+
+    public int Identification { get; set; }
+    public Identification? IdentificationNavigation { get; set; }
+
+    public int? Address { get; set; }
 
     public string? Curp { get; set; } = null!;
 
@@ -32,15 +32,7 @@ public partial class Employee
 
     public DateOnly? TerminationDate { get; set; }
 
-    public virtual Status? StatusNavigation { get; set; }
-
-    public virtual Approach? ApproachNavigation { get; set; }
-
     public virtual Address? AddressNavigation { get; set; }
-
-    public virtual Identification? IdentificationNavigation { get; set; }
-
-    public virtual ICollection<Driver> Drivers { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
@@ -53,50 +45,6 @@ public partial class Employee
     }
 
     protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Employee>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Employees");
 
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Curp)
-               .HasColumnName("CURP");
-            Entity.Property(e => e.Curp)
-                .HasMaxLength(32)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Rfc)
-               .HasColumnName("RFC");
-            Entity.Property(e => e.Rfc)
-                .HasMaxLength(32)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Nss)
-               .HasColumnName("NSS");
-            Entity.Property(e => e.Nss)
-                .HasMaxLength(32)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.IdentificationNavigation)
-             .WithMany(p => p.Employees)
-             .HasForeignKey(d => d.Identification);
-
-            Entity.HasOne(d => d.ApproachNavigation)
-              .WithMany(p => p.Employees)
-              .HasForeignKey(d => d.Approach);
-
-            Entity.HasOne(d => d.AddressNavigation)
-                .WithMany(p => p.Employees)
-                .HasForeignKey(d => d.Address);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Employees)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
     }
 }

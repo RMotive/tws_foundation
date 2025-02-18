@@ -7,7 +7,7 @@ namespace TWS_Customer.Services.Interfaces;
 public interface ITrucksService {
     Task<SetViewOut<Truck>> View(SetViewOptions<Truck> options);
     Task<SetBatchOut<Truck>> Create(Truck[] trucks);
-    Task<RecordUpdateOut<Truck>> Update(Truck Truck);
+    Task<EntityUpdateOut<Truck>> Update(Truck Truck);
 
 
 }

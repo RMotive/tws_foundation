@@ -8,10 +8,6 @@ namespace TWS_Business.Entities;
 
 public partial class YardLog
     : BBusinessDatabaseEntity {
-    
-
-    
-
     public bool Entry { get; set; }
 
     public int? Truck { get; set; }

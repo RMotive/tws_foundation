@@ -380,7 +380,7 @@ public class YardLogsService
     public async Task<SetBatchOut<YardLog>> Create(YardLog[] yardLog) {
         return await YardLogs.Create(yardLog);
     }
-    public async Task<RecordUpdateOut<YardLog>> Update(YardLog yardLog, bool updatePivot = false) {
+    public async Task<EntityUpdateOut<YardLog>> Update(YardLog yardLog, bool updatePivot = false) {
 
         return await YardLogs.Update(yardLog, Include);
     }

@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +6,7 @@ using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities;
 
-public partial class Driver
+public class Driver
     : BBusinessDatabaseEntity {
 
     public int Status { get; set; }
@@ -60,14 +59,6 @@ public partial class Driver
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Driver>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Drivers");
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
 
             Entity.Property(e => e.DriverType)
                 .HasMaxLength(12)
@@ -104,14 +95,9 @@ public partial class Driver
             Entity.HasIndex(e => e.Common)
                .IsUnique();
 
-            Entity.HasOne(d => d.EmployeeNavigation)
-                .WithMany(p => p.Drivers)
-                .HasForeignKey(d => d.Employee);
-
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Drivers)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .HasForeignKey(d => d.Status);
         });
     }
 }

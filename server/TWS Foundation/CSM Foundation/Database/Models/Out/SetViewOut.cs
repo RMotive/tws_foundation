@@ -6,17 +6,17 @@ namespace CSM_Foundation.Database.Models.Out;
 ///     Stores a result <see cref="SetViewOut{TMigrationSet}"/> 
 ///     after a build operation determining paging, filtering and ordering.
 /// </summary>
-/// <typeparam name="TMigrationSet">
-///     <typeparamref name="TMigrationSet"/> that this view handles results.
+/// <typeparam name="TEntity">
+///     <typeparamref name="TEntity"/> that this view handles results.
 /// </typeparam>
-public class SetViewOut<TMigrationSet>
-    where TMigrationSet : IEntity {
+public class SetViewOut<TEntity>
+    where TEntity : IEntity {
 
-    private TMigrationSet[] _Records = [];
+    TEntity[] _Records = [];
     /// <summary>
     ///     The collection of items gathered.
     /// </summary>
-    public required TMigrationSet[] Records {
+    public required TEntity[] Records {
         get => _Records;
         init {
             _Records = value;
@@ -36,7 +36,7 @@ public class SetViewOut<TMigrationSet>
     /// <summary>
     ///     Indicates the timemark when was created.
     /// </summary>
-    public DateTime Creation { get; init; } = DateTime.UtcNow;
+    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
 
     /// <summary>
     ///     Indicates the quantity of records that this result contains.

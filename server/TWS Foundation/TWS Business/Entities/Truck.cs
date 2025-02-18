@@ -9,10 +9,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 namespace TWS_Business.Entities;
 
 public partial class Truck
-    : BBusinessDatabaseEntity {
-    
-
-    
+    : BBusinessDatabaseEntity {    
 
     public int Status { get; set; }
 
@@ -32,43 +29,39 @@ public partial class Truck
 
     public int? Insurance { get; set; }
 
-    public virtual Carrier? CarrierNavigation { get; set; }
+    public Carrier? CarrierNavigation { get; set; }
 
-    public virtual TruckCommon? TruckCommonNavigation { get; set; }
+    public TruckCommon? TruckCommonNavigation { get; set; }
 
-    public virtual Sct? SctNavigation { get; set; }
+    public Sct? SctNavigation { get; set; }
 
-    public virtual Insurance? InsuranceNavigation { get; set; }
+    public Insurance? InsuranceNavigation { get; set; }
 
-    public virtual Maintenance? MaintenanceNavigation { get; set; }
+    public Maintenance? MaintenanceNavigation { get; set; }
+        
+    public VehiculeModel? VehiculeModelNavigation { get; set; }
 
-    public virtual VehiculeModel? VehiculeModelNavigation { get; set; }
+    public Status? StatusNavigation { get; set; }
 
-    public virtual Status? StatusNavigation { get; set; }
+    public ICollection<Plate> Plates { get; set; } = [];
 
-    public virtual ICollection<Plate> Plates { get; set; } = [];
+    public ICollection<YardLog> YardLogs { get; set; } = [];
 
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
+    public ICollection<TruckH> TrucksH { get; set; } = [];
 
-    public virtual ICollection<TruckInventory> TrucksInventories { get; set; } = [];
+    public ICollection<PlateH> PlatesH { get; set; } = [];
 
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
-
-    public virtual ICollection<PlateH> PlatesH { get; set; } = [];
+    public ICollection<TruckInventory> TrucksInventories { get; set; } = [];
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Truck>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Trucks");
 
+            Entity
+                .HasIndex(e => e.Common)
+                .IsUnique();
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.Motor)
+            Entity
+                .Property(e => e.Motor)
                 .HasMaxLength(16)
                 .IsUnicode(false);
 
@@ -105,8 +98,6 @@ public partial class Truck
             Entity.HasOne(d => d.TruckCommonNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Common);
-            Entity.HasIndex(e => e.Common)
-               .IsUnique();
         });
     }
 

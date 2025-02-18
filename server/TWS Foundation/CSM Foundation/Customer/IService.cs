@@ -1,19 +1,14 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using System.Linq.Expressions;
+
+using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
-using TWS_Security.Entities.Solutions;
+namespace CSM_Foundation.Customer;
 
-namespace TWS_Customer.Services;
-
-/// <summary>
-///     Interface for Customer Service implementations.
-/// </summary>
-/// <typeparam name="TEntity">
-///     The <see cref="Type"/> of [Set] context for the service implementation.
-/// </typeparam>
 public interface IService<TEntity>
-    where TEntity : IEntity {
+    where TEntity : class, IEntity {
 
     /// <summary>
     ///     Generates a View for <see cref="TEntity"/> set,
@@ -24,7 +19,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     The complex View results, a View is a paged and ordered collection of records based on the given <paramref name="Options"/>
     /// </returns>
-    Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options);
+    Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Creates a new <see cref="TEntity"/> set records into the data storage.
@@ -40,7 +35,9 @@ public interface IService<TEntity>
     /// <returns>
     ///     A complex batch result that provides information related to exceptions catched, record that belongs to the exception and successes.
     /// </returns>
-    Task<SetBatchOut<TEntity>> Create(TEntity[] Solutions);
+    Task<SetBatchOut<TEntity>> Create(TEntity[] Entities, bool Sync = false);
+
+    Task<SetBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Updates the given record, this is based on the <see cref="TEntity.Id"/> pointer to identify the record to update and override the given <paramref name="Solution"/> object.
@@ -51,7 +48,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     Complex update operation result.
     /// </returns>
-    Task<RecordUpdateOut<TEntity>> Update(TEntity Solution);
+    Task<EntityUpdateOut<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Removes from the data storage the <see cref="TEntity"/> record based on the <paramref name="Id"/> pointer.
@@ -62,5 +59,5 @@ public interface IService<TEntity>
     /// <returns>
     ///     The removed record object.
     /// </returns>
-    Task<TEntity> Delete(int Id);
+    Task<SetBatchOut<TEntity>> Delete(TEntity[] Entities);
 }

@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +29,6 @@ public partial class Identification
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Identification>(Entity => {
-            Entity.ToTable("Identifications");
-            Entity.HasKey(e => e.Id);
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
 
             Entity.Property(e => e.Name)
                 .HasMaxLength(32)

@@ -186,7 +186,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
-            RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Respone).Estela;
+            EntityUpdateOut<Truck> creationResult = Framing<SuccessFrame<EntityUpdateOut<Truck>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
@@ -205,7 +205,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
-            RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Response).Estela;
+            EntityUpdateOut<Truck> creationResult = Framing<SuccessFrame<EntityUpdateOut<Truck>>>(Response).Estela;
             Assert.Null(creationResult.Previous);
 
             Truck creationRecord = creationResult.Updated;
@@ -231,7 +231,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-            RecordUpdateOut<Truck> updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;
+            EntityUpdateOut<Truck> updateResult = Framing<SuccessFrame<EntityUpdateOut<Truck>>>(updateResponse.Response).Estela;
 
             Assert.NotNull(updateResult.Previous);
 

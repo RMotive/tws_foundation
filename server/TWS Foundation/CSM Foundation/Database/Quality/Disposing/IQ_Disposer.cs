@@ -1,7 +1,8 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-namespace CSM_Foundation.Database.Quality.Disposing;
+using Microsoft.EntityFrameworkCore;
 
+namespace CSM_Foundation.Database.Quality.Disposing;
 
 /// <summary>
 ///     [Interface] for [Quality] purposes [Disposer] implementations.

@@ -71,7 +71,7 @@ public class Q_SolutionsService
         Solution sample = SolutionFactory();
         sample.Id = reference.Id;
 
-        RecordUpdateOut<Solution> updateOut = await Service.Update(sample);
+        EntityUpdateOut<Solution> updateOut = await Service.Update(sample);
 
         Solution? previous = updateOut.Previous;
         Solution updated = updateOut.Updated;

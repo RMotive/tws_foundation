@@ -17,6 +17,7 @@ namespace CSM_Foundation.Database.Bases;
 public abstract partial class BEntity
     : BObject<IEntity>, IEntity {
 
+    [NotMapped]
     public abstract Type Database { get; init; }
 
     [NotMapped]
@@ -36,7 +37,7 @@ public abstract partial class BEntity
     /// <summary>
     /// 
     /// </summary>
-    private bool Defined = false;
+    private static bool Defined = false;
 
     /// <summary>
     /// 

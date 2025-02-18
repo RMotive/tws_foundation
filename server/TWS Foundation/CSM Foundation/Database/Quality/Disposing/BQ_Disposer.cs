@@ -7,6 +7,14 @@ using Microsoft.EntityFrameworkCore;
 namespace CSM_Foundation.Database.Quality.Disposing;
 
 /// <summary>
+///     Public Delegate for [database] factory [Quality] purposes.
+/// </summary>
+/// <returns>
+///     The database context instance.
+/// </returns>
+public delegate DbContext DatabaseFactory();
+
+/// <summary>
 ///     [Abstract] base class to handle [Quality] purposes [Disposer]s implementations.
 /// </summary>
 public abstract class BQ_Disposer
@@ -15,7 +23,7 @@ public abstract class BQ_Disposer
     /// <summary>
     ///     Current [Disposer] Database factories available.  
     /// </summary>
-    protected Dictionary<Type, Func<DbContext>> Factories { get; private init; } = [];
+    protected Dictionary<Type, DatabaseFactory> Factories { get; private init; } = [];
 
     /// <summary>
     ///     Current [Disposer] queue entities to dispose related with their databases owners.
@@ -26,8 +34,8 @@ public abstract class BQ_Disposer
     ///     Creates a new <see cref="BQ_Disposer"/> instance, an abtract class handling [Quality] pusposes [Disposing] data behaviors.
     /// </summary>
     /// <param name="Factories"></param>
-    public BQ_Disposer(params Func<DbContext>[] Factories) {
-        foreach (Func<DbContext> Factory in Factories) {
+    public BQ_Disposer(params DatabaseFactory[] Factories) {
+        foreach (DatabaseFactory Factory in Factories) {
             using DbContext instance = Factory();
 
             Type dbType = instance.GetType();
@@ -60,7 +68,7 @@ public abstract class BQ_Disposer
     public void Dispose() {
         foreach (KeyValuePair<Type, IEntity[]> Database in Queue) {
             Type dbType = Database.Key;
-            Func<DbContext> factory = Factories[dbType];
+            DatabaseFactory factory = Factories[dbType];
 
             using DbContext database = factory();
             database.RemoveRange(Database.Value);

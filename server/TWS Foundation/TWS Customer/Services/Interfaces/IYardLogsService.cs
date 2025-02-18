@@ -40,7 +40,7 @@ public interface IYardLogsService {
     /// <param name="YardLog"></param>
     /// <param name="updatePivot"></param>
     /// <returns></returns>
-    Task<RecordUpdateOut<YardLog>> Update(YardLog YardLog, bool updatePivot);
+    Task<EntityUpdateOut<YardLog>> Update(YardLog YardLog, bool updatePivot);
 
     /// <summary>
     /// 

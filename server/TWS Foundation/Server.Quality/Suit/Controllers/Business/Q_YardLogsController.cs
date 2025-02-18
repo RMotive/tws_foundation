@@ -185,7 +185,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.True(HttpStatusCode.OK.Equals(Status));
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
+            EntityUpdateOut<Solution> creationResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
@@ -202,7 +202,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
-            RecordUpdateOut<YardLog> creationResult = Framing<SuccessFrame<RecordUpdateOut<YardLog>>>(Response).Estela;
+            EntityUpdateOut<YardLog> creationResult = Framing<SuccessFrame<EntityUpdateOut<YardLog>>>(Response).Estela;
             Assert.Null(creationResult.Previous);
 
             YardLog creationRecord = creationResult.Updated;
@@ -219,7 +219,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-            RecordUpdateOut<YardLog> updateResult = Framing<SuccessFrame<RecordUpdateOut<YardLog>>>(updateResponse.Response).Estela;
+            EntityUpdateOut<YardLog> updateResult = Framing<SuccessFrame<EntityUpdateOut<YardLog>>>(updateResponse.Response).Estela;
 
             Assert.NotNull(updateResult.Previous);
 
