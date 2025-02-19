@@ -24,11 +24,11 @@ public class TrailersService : ITrailersService {
             .Include(t => t.TrailerCommonNavigation)
 
             .Include(t => t.CarrierNavigation)
-                .ThenInclude(c => c!.AddressNavigation)
+                .ThenInclude(c => c!.Address)
             .Include(t => t.CarrierNavigation)
-                .ThenInclude(c => c!.ApproachNavigation)
+                .ThenInclude(c => c!.Approach)
             .Include(t => t.CarrierNavigation)
-                .ThenInclude(c => c!.UsdotNavigation)
+                .ThenInclude(c => c!.USDOT)
 
             .Include(t => t.VehiculesModelsNavigation)
             .Select(p => new Trailer() {
@@ -46,10 +46,7 @@ public class TrailersService : ITrailersService {
                     Name = p.CarrierNavigation.Name,
                     Approach = p.CarrierNavigation.Approach,
                     Address = p.CarrierNavigation.Address,
-                    Usdot = p.CarrierNavigation.Usdot,
-                    ApproachNavigation = p.CarrierNavigation.ApproachNavigation,
-                    AddressNavigation = p.CarrierNavigation.AddressNavigation,
-                    UsdotNavigation = p.CarrierNavigation.UsdotNavigation,
+                    USDOT = p.CarrierNavigation.USDOT,
                 },
                 SctNavigation = p.SctNavigation == null ? null : new Sct() {
                     Id = p.SctNavigation.Id,

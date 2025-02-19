@@ -16,7 +16,7 @@ public class BService<TEntity, TDepot>
     /// <summary>
     /// 
     /// </summary>
-    readonly TDepot Depot;
+    protected readonly TDepot Depot;
 
     readonly AccumulateDelegate<TEntity>? Accumulator;
 
@@ -43,5 +43,9 @@ public class BService<TEntity, TDepot>
 
     public virtual Task<SetBatchOut<TEntity>> Delete(TEntity[] Entities) {
         return Depot.Delete(Entities);
+    }
+
+    public virtual Task<TEntity> Delete(long Pointer) {
+        return Depot.Delete(Pointer);
     }
 }

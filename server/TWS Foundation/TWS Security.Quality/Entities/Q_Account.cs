@@ -13,7 +13,9 @@ public class Q_Account
                 User = "Q_User",
                 Wildcard = true,
                 Password = [1, 2, 3],
-                Contact = 0
+                Contact = new TWS_Security.Entities.Contacts.Contact {
+                    Id = 0,
+                }
             },
             Expectations = [],
         };

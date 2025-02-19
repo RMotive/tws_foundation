@@ -59,7 +59,7 @@ public class BusinessDatabase
 
     public virtual DbSet<Approach> Approaches { get; set; } = default!;
 
-    public virtual DbSet<Usdot> Usdots { get; set; } = default!;
+    public virtual DbSet<USDOT> Usdots { get; set; } = default!;
 
     public virtual DbSet<Address> Addresses { get; set; } = default!;
 

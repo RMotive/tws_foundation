@@ -103,10 +103,10 @@ public sealed class SessionManager {
         SetBatchOut<Account> readAccountOut = await Accounts.Read(
             ReadBehaviors.First,
             (Account i) => i.User == safeCredentials.Identity,
-            (query) => {
-                return query
-                    .Include(i => i.ContactNavigation);
-            }
+            (CSM_Foundation.Database.Entity.AccumulateDelegate<Account>?)((query) => {
+                return (IQueryable<Account>)query
+                    .Include((System.Linq.Expressions.Expression<Func<Account, Contact?>>)(i => (Contact)i.Contact));
+            })
         );
 
         if (readAccountOut.Failed) {
@@ -119,7 +119,7 @@ public sealed class SessionManager {
         return new Session {
             Token = Token,
             Permits = permits,
-            Contact = account.ContactNavigation!,
+            Contact = account.Contact!,
             Wildcard = account.Wildcard,
             Identity = Session.Credentials.Identity,
             Expiration = safeSession.Expiration,
@@ -171,7 +171,7 @@ public sealed class SessionManager {
         return new Session {
             Token = Token,
             Permits = Permits,
-            Contact = Account.ContactNavigation!,
+            Contact = Account.Contact!,
             Wildcard = Account.Wildcard,
             Identity = Session.Credentials.Identity,
             Expiration = safeSession.Expiration,

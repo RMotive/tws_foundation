@@ -2,7 +2,6 @@
 
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -87,15 +86,15 @@ public class Q_PlatesController
                     }
                 },
                 CarrierNavigation = new() {
-                    Status = 1,
                     Name = RandomUtils.String(10),
-                    Approach = 0,
-                    Address = 0,
-                    ApproachNavigation = new() {
+                    Status = new Status {
+                        Id = 1,
+                    },
+                    Approach = new() {
                         Status = 1,
                         Email = RandomUtils.String(30)
                     },
-                    AddressNavigation = new() {
+                    Address = new() {
                         Country = "USA"
                     }
                 }

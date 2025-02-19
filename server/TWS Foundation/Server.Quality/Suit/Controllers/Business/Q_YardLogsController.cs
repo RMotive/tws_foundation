@@ -1,11 +1,8 @@
 ﻿
 using System.Net;
 
-using Azure;
-
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
@@ -18,8 +15,6 @@ using TWS_Foundation.Quality.Bases;
 
 using TWS_Security.Entities.Accounts;
 using TWS_Security.Entities.Solutions;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.YardLog>;
 
@@ -47,7 +42,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Name = "Generic model " + RandomSeed,
             ManufacturerNavigation = manufacturer,
         };
-        
+
         Sct sct = new() {
             Status = 1,
             Type = "TypT14",
@@ -65,12 +60,12 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         Carrier carrier = new() {
-            Status = 1,
             Name = "Carrier " + RandomSeed,
-            Approach = 0,
-            Address = 0,
-            AddressNavigation = addressCommon,
-            ApproachNavigation = contact,
+            Status = new Status {
+                Id = 1,
+            },
+            Address = addressCommon,
+            Approach = contact,
         };
 
         Plate plateMX = new() {
@@ -167,7 +162,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         string testTag = Guid.NewGuid().ToString()[..2];
 
         for (int i = 0; i < 3; i++) {
-            mockList.Add(MockFactory(testTag+i));
+            mockList.Add(MockFactory(testTag + i));
         }
 
         (HttpStatusCode Status, GenericFrame _) = await Post("Create", mockList, true);

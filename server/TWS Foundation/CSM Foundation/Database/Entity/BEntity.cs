@@ -26,7 +26,7 @@ public abstract partial class BEntity
     /// <summary>
     /// 
     /// </summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// 
@@ -56,7 +56,10 @@ public abstract partial class BEntity
     /// </summary>
     /// <param name="Container"></param>
     /// <returns></returns>
-    protected abstract (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container);
+    protected virtual (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        return Container;
+    }
+
     /// <summary>
     /// 
     /// </summary>

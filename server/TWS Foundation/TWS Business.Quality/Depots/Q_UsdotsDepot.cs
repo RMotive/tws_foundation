@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="UsdotsDepot"/>.
 /// </summary>
 public class Q_UsdotsDepot
-    : BQ_Depot<Usdot, UsdotsDepot, BusinessDatabase> {
+    : BQ_Depot<USDOT, UsdotsDepot, BusinessDatabase> {
     public Q_UsdotsDepot()
-        : base(nameof(Usdot.Mc)) {
+        : base(nameof(USDOT.Mc)) {
     }
 
-    protected override Usdot MockFactory(string RandomSeed) {
+    protected override USDOT MockFactory(string RandomSeed) {
         return new() {
             Status = 1,
             Mc = "MCtestT",
@@ -22,7 +22,7 @@ public class Q_UsdotsDepot
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(Usdot Mock) {
-        return (nameof(Usdot.Mc), Mock.Mc);
+    protected override (string Property, string? Value)? FactorizeProperty(USDOT Mock) {
+        return (nameof(USDOT.Mc), Mock.Mc);
     }
 }

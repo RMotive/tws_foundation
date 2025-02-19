@@ -30,11 +30,11 @@ public class TrucksService : ITrucksService {
             .ThenInclude(c => c!.SituationNavigation)
 
         .Include(t => t.CarrierNavigation)
-            .ThenInclude(c => c!.AddressNavigation)
+            .ThenInclude(c => c!.Address)
         .Include(t => t.CarrierNavigation)
-            .ThenInclude(c => c!.ApproachNavigation)
+            .ThenInclude(c => c!.Approach)
         .Include(t => t.CarrierNavigation)
-            .ThenInclude(c => c!.UsdotNavigation).Select(t => new Truck() {
+            .ThenInclude(c => c!.USDOT).Select(t => new Truck() {
                 Id = t.Id,
                 Status = t.Status,
                 Model = t.Model,
@@ -63,10 +63,6 @@ public class TrucksService : ITrucksService {
                     Name = t.CarrierNavigation.Name,
                     Approach = t.CarrierNavigation.Approach,
                     Address = t.CarrierNavigation.Address,
-                    Usdot = t.CarrierNavigation.Usdot,
-                    ApproachNavigation = t.CarrierNavigation.ApproachNavigation,
-                    AddressNavigation = t.CarrierNavigation.AddressNavigation,
-                    UsdotNavigation = t.CarrierNavigation.UsdotNavigation,
                 },
                 TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
                     Id = t.TruckCommonNavigation.Id,
@@ -79,7 +75,6 @@ public class TrucksService : ITrucksService {
                         Status = t.TruckCommonNavigation.LocationNavigation.Status,
                         Name = t.TruckCommonNavigation.LocationNavigation.Name,
                         Address = t.TruckCommonNavigation.LocationNavigation.Address,
-                        AddressNavigation = t.TruckCommonNavigation.LocationNavigation.AddressNavigation
                     },
                     SituationNavigation = t.TruckCommonNavigation.SituationNavigation == null ? null : new Situation() {
                         Id = t.TruckCommonNavigation.SituationNavigation.Id,
@@ -129,7 +124,4 @@ public class TrucksService : ITrucksService {
     public async Task<EntityUpdateOut<Truck>> Update(Truck Truck) {
         return await Trucks.Update(Truck, Include);
     }
-
-
-
 }

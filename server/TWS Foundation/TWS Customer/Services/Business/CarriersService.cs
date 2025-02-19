@@ -20,10 +20,10 @@ public class CarriersService : ICarriersService {
 
     IQueryable<Carrier> Include(IQueryable<Carrier> query) {
         return query
-            .Include(t => t.AddressNavigation)
-            .Include(t => t.ApproachNavigation)
-            .Include(t => t.UsdotNavigation)
-            .Include(t => t.StatusNavigation);
+            .Include(t => t.Address)
+            .Include(t => t.Approach)
+            .Include(t => t.USDOT)
+            .Include(t => t.Status);
     }
 
     public async Task<SetViewOut<Carrier>> View(SetViewOptions<Carrier> Options) {

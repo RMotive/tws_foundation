@@ -20,7 +20,7 @@ public partial class UsdotH
     public string Mc { get; set; } = null!;
 
     public string Scac { get; set; } = null!;
-    public virtual Usdot? UsdotNavigation { get; set; }
+    public virtual USDOT? UsdotNavigation { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
 

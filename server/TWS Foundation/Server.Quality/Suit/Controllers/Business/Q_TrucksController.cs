@@ -2,7 +2,6 @@
 
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
@@ -78,7 +77,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Country = "USA"
         };
 
-        Usdot usdot = new() {
+        USDOT usdot = new() {
             Status = 1,
             Mc = "mc- " + RandomSeed,
             Scac = "s" + RandomSeed
@@ -90,13 +89,13 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         };
 
         Carrier carrier = new() {
-            Status = 1,
             Name = "Carrier " + RandomSeed,
-            Approach = 0,
-            Address = 0,
-            AddressNavigation = addressCommon,
-            ApproachNavigation = contact,
-            UsdotNavigation = usdot,
+            Status = new Status {
+                Id = 1,
+            },
+            Address = addressCommon,
+            Approach = contact,
+            USDOT = usdot,
         };
 
         Plate plateMX = new() {
@@ -115,9 +114,10 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         };
         Location location = new() {
             Name = "random location: " + RandomSeed,
-            Status = 1,
-            Address = 0,
-            AddressNavigation = address,
+            Status = new Status {
+                Id = 1,
+            },
+            Address = address,
         };
         TruckCommon common = new() {
             Status = 1,

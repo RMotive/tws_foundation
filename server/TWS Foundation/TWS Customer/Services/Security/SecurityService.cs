@@ -11,7 +11,6 @@ using TWS_Customer.Services.Records;
 
 using TWS_Security.Entities;
 using TWS_Security.Entities.Accounts;
-using TWS_Security.Entities.Contacts;
 
 namespace TWS_Customer.Services.Security;
 public class SecurityService
@@ -28,22 +27,7 @@ public class SecurityService
     public async Task<Session> Authenticate(Credentials Credentials) {
 
         static IQueryable<Account> Include(IQueryable<Account> query) {
-            return query
-                .Include(c => c.ContactNavigation)
-                .Select(a => new Account() {
-                    Id = a.Id,
-                    User = a.User,
-                    Password = a.Password,
-                    Wildcard = a.Wildcard,
-                    Contact = a.Contact,
-                    ContactNavigation = new Contact() {
-                        Id = a.ContactNavigation!.Id,
-                        Name = a.ContactNavigation.Name,
-                        Lastname = a.ContactNavigation.Lastname,
-                        Email = a.ContactNavigation.Email,
-                        Phone = a.ContactNavigation.Phone
-                    },
-                });
+            return query.Include(c => c.Contact);
         }
 
         SetBatchOut<Account> result = await Accounts.Read(ReadBehaviors.First, i => i.User == Credentials.Identity, Include);

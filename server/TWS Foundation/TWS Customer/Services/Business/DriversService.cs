@@ -24,7 +24,7 @@ public class DriversService : IDriversService {
             return query
             .Include(t => t.DriverCommonNavigation)
             .Include(t => t.EmployeeNavigation)
-                .ThenInclude(i => i!.IdentificationNavigation)
+                .ThenInclude(i => i!.Identification)
             .Select(t => new Driver() {
                 Id = t.Id,
                 Status = t.Status,
@@ -59,21 +59,9 @@ public class DriversService : IDriversService {
                     Identification = t.EmployeeNavigation.Identification,
                     Address = t.EmployeeNavigation.Address,
                     Approach = t.EmployeeNavigation.Approach,
-                    Curp = t.EmployeeNavigation.Curp,
-                    AntecedentesNoPenaleseExp = t.EmployeeNavigation.AntecedentesNoPenaleseExp,
-                    Rfc = t.EmployeeNavigation.Rfc,
-                    Nss = t.EmployeeNavigation.Nss,
-                    IMSSRegistrationDate = t.EmployeeNavigation.IMSSRegistrationDate,
-                    HiringDate = t.EmployeeNavigation.HiringDate,
-                    TerminationDate = t.EmployeeNavigation.TerminationDate,
-                    IdentificationNavigation = t.EmployeeNavigation.IdentificationNavigation == null ? null : new Identification() {
-                        Id = t.EmployeeNavigation.IdentificationNavigation.Id,
-                        Status = t.EmployeeNavigation.IdentificationNavigation.Status,
-                        Name = t.EmployeeNavigation.IdentificationNavigation.Name,
-                        FatherLastname = t.EmployeeNavigation.IdentificationNavigation.FatherLastname,
-                        MotherLastName = t.EmployeeNavigation.IdentificationNavigation.MotherLastName,
-                        Birthday = t.EmployeeNavigation.IdentificationNavigation.Birthday
-                    }
+                    CURP = t.EmployeeNavigation.CURP,
+                    RFC = t.EmployeeNavigation.RFC,
+                    NSS = t.EmployeeNavigation.NSS,
                 }
 
             });

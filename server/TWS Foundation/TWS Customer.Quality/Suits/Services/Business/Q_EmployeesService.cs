@@ -34,8 +34,10 @@ public class Q_EmployeesService
             );
 
         return new() {
-            Identification = identification.Id,
-            Status = 1,
+            Identification = identification,
+            Status = new Status {
+                Id = 1,
+            },
         };
     }
 

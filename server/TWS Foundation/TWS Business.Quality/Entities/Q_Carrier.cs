@@ -12,17 +12,23 @@ public class Q_Carrier : BQ_Entity<Carrier> {
             Mock = new() {
                 Id = 1,
                 Name = "",
-                Status = 1,
-                Approach = 1,
-                Address = 1
-               
+                Status = new Status {
+                    Id = 1,
+                },
+                Approach = new Approach {
+                    Id = 1,
+                },
+                Address = new Address {
+                    Id = 1,
+                }
+
             },
             Expectations = [],
         };
         Q_EntityEvaluation<Carrier> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = -1,
-                Status = 0,
+                Status = new(),
             },
             Expectations = [
                 (nameof(Carrier.Id), [(new PointerValidator(), 3) ]),

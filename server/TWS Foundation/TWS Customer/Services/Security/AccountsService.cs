@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using TWS_Customer.Services.Interfaces;
 
 using TWS_Security.Entities.Accounts;
-using TWS_Security.Entities.Contacts;
 
 namespace TWS_Customer.Services.Security;
 /// <summary>
@@ -33,22 +32,7 @@ public class AccountsService
     public async Task<SetViewOut<Account>> View(SetViewOptions<Account> Options) {
 
         static IQueryable<Account> include(IQueryable<Account> query) {
-            return query
-            .Include(t => t.ContactNavigation)
-            .Select(t => new Account() {
-                Id = t.Id,
-                User = t.User,
-                Contact = t.Contact,
-                ContactNavigation = t.ContactNavigation == null ? null : new Contact() {
-                    Id = t.ContactNavigation.Id,
-                    Name = t.ContactNavigation.Name,
-                    Lastname = t.ContactNavigation.Lastname,
-                    Email = t.ContactNavigation.Email,
-                    Phone = t.ContactNavigation.Phone
-                }
-            });
-
-
+            return query.Include(t => t.Contact);
         }
 
         return await AccountsDepot.View(Options, include);

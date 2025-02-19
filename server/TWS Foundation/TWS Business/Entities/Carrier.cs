@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -10,77 +8,91 @@ namespace TWS_Business.Entities;
 public partial class Carrier
     : BBusinessDatabaseEntity, IEntity_Name {
 
-    [StringLength(100)]
     public string Name { get; set; } = string.Empty;
 
-    public int Status { get; set; }
+    public string? Description { get; set; }
 
-    public int Approach { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    public Status Status { get; set; } = default!;
 
-    public int Address { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Approach"/> information.
+    /// </summary>
+    public Approach Approach { get; set; } = default!;
 
-    public int? Usdot { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Address"/> information.
+    /// </summary>
+    public Address Address { get; set; } = default!;
 
-    public virtual Status? StatusNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.USDOT"/> information.
+    /// </summary>
+    public USDOT? USDOT { get; set; }
 
-    public virtual Approach? ApproachNavigation { get; set; }
 
-    public virtual Address? AddressNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Truck"/>s referencing this <see cref="Carrier"/>
+    /// </summary>
+    public ICollection<Truck> Trucks { get; set; } = [];
 
-    public virtual Usdot? UsdotNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Trailer"/>s referencing this <see cref="Carrier"/>. 
+    /// </summary>
+    public ICollection<Trailer> Trailers { get; set; } = [];
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
-
-    public virtual ICollection<Trailer> Trailers { get; set; } = [];
-
-    public virtual ICollection<CarrierH> CarriersH { get; set; } = [];
+    /// <summary>
+    ///     The <see cref="Carrier"/> history entries.
+    /// </summary>
+    public ICollection<CarrierH> Histories { get; set; } = [];
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator required = new();
         Container = [
             ..Container,
-            (nameof(Name), [required, new LengthValidator(Max: 20)]),
-            (nameof(Status), [new PointerValidator(true)]),
+            (nameof(Name), [required, new LengthValidator(Max: 100)]),
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Carrier>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Carriers");
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Carrier>(
+            (etBuilder) => {
 
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
+                etBuilder.Property<long>("StatusShadow").HasColumnName("Status").IsRequired();
+                etBuilder
+                    .HasOne(d => d.Status)
+                    .WithMany(p => p.Carriers)
+                    .HasForeignKey("StatusShadow")
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                etBuilder.Property<long>("ApproachShadow").HasColumnName("Approach").IsRequired();
+                etBuilder
+                    .HasOne(d => d.Approach)
+                    .WithMany(p => p.Carriers)
+                    .HasForeignKey("ApproachShadow")
+                    .OnDelete(DeleteBehavior.Cascade);
 
-            Entity.Property(e => e.Name)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+                etBuilder.Property<long>("AddressShadow").HasColumnName("Address").IsRequired();
+                etBuilder
+                    .HasOne(c => c.Address)
+                    .WithMany(a => a.Carriers)
+                    .HasForeignKey("AddressShadow")
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
 
-            Entity.HasOne(d => d.ApproachNavigation)
-              .WithMany(p => p.Carriers)
-              .HasForeignKey(d => d.Approach);
-
-            Entity.HasOne(d => d.AddressNavigation)
-                .WithMany(p => p.Carriers)
-                .HasForeignKey(d => d.Address)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.Property(e => e.Usdot)
-                .HasColumnName("USDOT");
-            Entity.HasOne(d => d.UsdotNavigation)
-               .WithMany(p => p.Carriers)
-               .HasForeignKey(d => d.Usdot);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Carriers)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Property<long?>("USDOTShadow").HasColumnName("USDOT");
+                etBuilder
+                    .HasOne(c => c.USDOT)
+                    .WithMany(u => u.Carriers)
+                    .HasForeignKey("USDOTShadow")
+                    .OnDelete(DeleteBehavior.Cascade);
+            }
+        );
     }
 }

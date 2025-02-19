@@ -51,7 +51,7 @@ public class YardLogsService
 
             .Include(t => t.DriverNavigation)
                 .ThenInclude(d => d!.EmployeeNavigation)
-                    .ThenInclude(e => e!.IdentificationNavigation)
+                    .ThenInclude(e => e!.Identification)
 
             .Include(t => t.DriverNavigation)
                 .ThenInclude(d => d!.DriverCommonNavigation)
@@ -70,13 +70,13 @@ public class YardLogsService
                 .ThenInclude(t => t!.CarrierNavigation)
             .Include(t => t.TrailerNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.AddressNavigation)
+                    .ThenInclude(t => t!.Address)
             .Include(t => t.TrailerNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.UsdotNavigation)
+                    .ThenInclude(t => t!.USDOT)
             .Include(t => t.TrailerNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.ApproachNavigation)
+                    .ThenInclude(t => t!.Approach)
 
             .Include(t => t.TrailerNavigation)
                 .ThenInclude(t => t!.VehiculesModelsNavigation)
@@ -91,13 +91,13 @@ public class YardLogsService
                 .ThenInclude(t => t!.CarrierNavigation)
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.AddressNavigation)
+                    .ThenInclude(t => t!.Address)
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.UsdotNavigation)
+                    .ThenInclude(t => t!.USDOT)
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.CarrierNavigation)
-                    .ThenInclude(t => t!.ApproachNavigation)
+                    .ThenInclude(t => t!.Approach)
 
             .Include(t => t.TruckExternalNavigation)
                 .ThenInclude(t => t!.TruckCommonNavigation)
@@ -173,22 +173,9 @@ public class YardLogsService
                         Identification = y.DriverNavigation.EmployeeNavigation.Identification,
                         Address = y.DriverNavigation.EmployeeNavigation.Address,
                         Approach = y.DriverNavigation.EmployeeNavigation.Approach,
-                        Curp = y.DriverNavigation.EmployeeNavigation.Curp,
-                        AntecedentesNoPenaleseExp = y.DriverNavigation.EmployeeNavigation.AntecedentesNoPenaleseExp,
-                        Rfc = y.DriverNavigation.EmployeeNavigation.Rfc,
-                        Nss = y.DriverNavigation.EmployeeNavigation.Nss,
-                        IMSSRegistrationDate = y.DriverNavigation.EmployeeNavigation.IMSSRegistrationDate,
-                        HiringDate = y.DriverNavigation.EmployeeNavigation.HiringDate,
-                        TerminationDate = y.DriverNavigation.EmployeeNavigation.TerminationDate,
-                        IdentificationNavigation = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation == null ? null : new Identification() {
-                            Id = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Id,
-                            Timestamp = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Timestamp,
-                            Status = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Status,
-                            Name = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Name,
-                            FatherLastname = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.FatherLastname,
-                            MotherLastName = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.MotherLastName,
-                            Birthday = y.DriverNavigation.EmployeeNavigation.IdentificationNavigation.Birthday
-                        }
+                        CURP = y.DriverNavigation.EmployeeNavigation.CURP,
+                        RFC = y.DriverNavigation.EmployeeNavigation.RFC,
+                        NSS = y.DriverNavigation.EmployeeNavigation.NSS,
                     },
                     DriverCommonNavigation = y.DriverNavigation.DriverCommonNavigation == null ? null : new DriverCommon() {
                         Id = y.DriverNavigation.DriverCommonNavigation.Id,
@@ -294,7 +281,6 @@ public class YardLogsService
                     TruckCommonNavigation = y.TruckExternalNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckExternalNavigation.TruckCommonNavigation.Id,
                         Timestamp = y.TruckExternalNavigation.TruckCommonNavigation.Timestamp,
-                        Status = y.TruckExternalNavigation.TruckCommonNavigation.Id,
                         Economic = y.TruckExternalNavigation.TruckCommonNavigation.Economic,
                         Location = y.TruckExternalNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckExternalNavigation.TruckCommonNavigation.Situation,
@@ -327,7 +313,6 @@ public class YardLogsService
                     TruckCommonNavigation = y.TruckNavigation.TruckCommonNavigation == null ? null : new TruckCommon() {
                         Id = y.TruckNavigation.TruckCommonNavigation.Id,
                         Timestamp = y.TruckNavigation.TruckCommonNavigation.Timestamp,
-                        Status = y.TruckNavigation.TruckCommonNavigation.Id,
                         Economic = y.TruckNavigation.TruckCommonNavigation.Economic,
                         Location = y.TruckNavigation.TruckCommonNavigation.Location,
                         Situation = y.TruckNavigation.TruckCommonNavigation.Situation,

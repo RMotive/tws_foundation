@@ -31,7 +31,7 @@ public class AccountsDepot
     /// </summary>
     /// <param name="AccountPointer"></param>
     /// <returns></returns>
-    public async Task<Permit[]> GetPermits(int AccountPointer) {
+    public async Task<Permit[]> GetPermits(long AccountPointer) {
         SetBatchOut<Account> accountReadOut = await Read(
                 ReadBehaviors.First,
                 (record) => record.Id == AccountPointer,

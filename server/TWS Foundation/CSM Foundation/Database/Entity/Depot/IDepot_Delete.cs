@@ -60,5 +60,5 @@ public interface IDepot_Delete<TEntity>
     /// <returns>
     ///     Deleted <see cref="TEntity"/> record.
     /// </returns>
-    public Task<TEntity> Delete(int Id);
+    public Task<TEntity> Delete(long Id);
 }

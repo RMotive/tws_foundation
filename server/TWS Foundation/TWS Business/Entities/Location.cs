@@ -1,28 +1,43 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Entities;
 
-public partial class Location
+public class Location
     : BBusinessDatabaseEntity, IEntity_Name {
-    
-    public string Name { get; set; } = default!;
-    public int Status { get; set; }
 
-    public int Address { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public virtual Address? AddressNavigation { get; set; }
+    public string? Description { get; set; }
 
-    public virtual Status? StatusNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    public Status Status { get; set; } = default!;
 
-    public virtual ICollection<Section> Sections { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Address"/> information.
+    /// </summary>
+    public Address Address { get; set; } = default!;
 
-    public virtual ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
 
-    public virtual ICollection<TruckCommon> TrucksCommons { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Section"/>s referencing this <see cref="Location"/>
+    /// </summary>
+    public ICollection<Section> Sections { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="TruckCommon"/>s referencing this <see cref="Location"/>
+    /// </summary>
+    public ICollection<TruckCommon> TrucksCommons { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="TrailerCommon"/>s referencing this <see cref="Location"/>
+    /// </summary>
+    public ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
+
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
@@ -31,35 +46,31 @@ public partial class Location
         Container = [
                 .. Container,
             (nameof(Name), [Required, new LengthValidator(1, 30)]),
-            (nameof(Status), [new PointerValidator(true)])
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Location>(Entity => {
-            Entity.ToTable("Locations");
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Location>(
+            (etBuilder) => {
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                etBuilder.Property<long>("StatusShadow").HasColumnName("Status").IsRequired();
+                etBuilder
+                    .HasOne(l => l.Status)
+                    .WithMany(s => s.Locations)
+                    .HasForeignKey("StatusShadow")
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
 
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.Name)
-                .HasMaxLength(30)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.AddressNavigation)
-                .WithMany(p => p.Locations)
-                .HasForeignKey(d => d.Address);
-
-            Entity.HasOne(d => d.StatusNavigation)
-               .WithMany(p => p.Locations)
-               .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Property<long>("AddressShadow").HasColumnName("Address").IsRequired();
+                etBuilder
+                    .HasOne(l => l.Address)
+                    .WithMany(a => a.Locations)
+                    .HasForeignKey("AddressShadow")
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+            }
+        );
     }
 }

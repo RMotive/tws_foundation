@@ -180,7 +180,7 @@ public partial class YardLog
             Identification? ident;
 
             if(DriverNavigation != null) {
-                ident = DriverNavigation.EmployeeNavigation?.IdentificationNavigation;
+                ident = DriverNavigation.EmployeeNavigation?.Identification;
             } else {
                 ident = DriverExternalNavigation?.IdentificationNavigation;
             }

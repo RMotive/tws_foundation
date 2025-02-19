@@ -1,50 +1,93 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Microsoft.EntityFrameworkCore;
+using TWS_Business.Entities.Employees_Dates;
 
 namespace TWS_Business.Entities.Employees;
 
 public class Employee
     : BBusinessDatabaseEntity {
 
-    public int Status { get; set; }
-    public Status? Status_ { get; set; }
+    /// <summary>
+    ///     Mexico's unique people identifier (Clave Única de Registro de Población / Unique Population Registry Code).
+    /// </summary>
+    public string? CURP { get; set; }
 
-    public int? Approach { get; set; }
-    public Approach? Approach_ { get; set; }
+    /// <summary>
+    ///     Mexico's unique taxpayer identifier (Registro Federal de Contribuyentes / Federal Taxpaying Registry).
+    /// </summary>
+    public string? RFC { get; set; } = null!;
 
-    public int Identification { get; set; }
-    public Identification? IdentificationNavigation { get; set; }
+    /// <summary>
+    ///     Mexico's unqiue people social security identifier (Número de Seguro Social / Social Security Number.)
+    /// </summary>
+    public string? NSS { get; set; } = null!;
 
-    public int? Address { get; set; }
+    /// <summary>
+    ///     Identification information.
+    /// </summary>
+    public Identification Identification { get; set; } = default!;
 
-    public string? Curp { get; set; } = null!;
+    /// <summary>
+    ///     Status information.
+    /// </summary>
+    public Status Status { get; set; } = default!;
 
-    public DateOnly? AntecedentesNoPenaleseExp { get; set; }
+    /// <summary>
+    ///     Important <see cref="Employee"/> dates information.
+    /// </summary>
+    public Employee_Dates Dates { get; set; } = default!;
 
-    public string? Rfc { get; set; } = null!;
+    /// <summary>
+    ///     Approaching contact information.
+    /// </summary>
+    public Approach? Approach { get; set; }
 
-    public string? Nss { get; set; } = null!;
+    /// <summary>
+    ///     Address information.
+    /// </summary>
+    public Address? Address { get; set; }
 
-    public DateOnly? IMSSRegistrationDate { get; set; }
+    protected override void DescribeSet(ModelBuilder ModelBuilder) {
+        ModelBuilder.Entity(
+                (EntityTypeBuilder<Employee> etBuilder) => {
+                    etBuilder.Property(e => e.CURP).HasMaxLength(18);
+                    etBuilder.Property(e => e.RFC).HasMaxLength(13);
+                    etBuilder.Property(e => e.NSS).HasMaxLength(11);
 
-    public DateOnly? HiringDate { get; set; }
+                    etBuilder
+                        .HasOne(e => e.Identification)
+                        .WithOne(i => i.Employee)
+                        .HasForeignKey<Employee>("IdentificationShadow")
+                        .IsRequired();
+                    etBuilder.Property<int>("IdentificationShadow").HasColumnName("Identification");
 
-    public DateOnly? TerminationDate { get; set; }
+                    etBuilder
+                        .HasOne(e => e.Status)
+                        .WithMany(s => s.Employees)
+                        .HasForeignKey("StatusShadow")
+                        .IsRequired();
+                    etBuilder.Property<int>("StatusShadow").HasColumnName("Status");
 
-    public virtual Address? AddressNavigation { get; set; }
+                    etBuilder
+                        .HasOne(e => e.Dates)
+                        .WithOne(ed => ed.Employee)
+                        .HasForeignKey<Employee>("DatesShadow")
+                        .IsRequired();
+                    etBuilder.Property<long>("DatesShadow").HasColumnName("Dates").HasColumnType("bigint");
 
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        Container = [
-            ..Container,
-            (nameof(Identification), [new PointerValidator(true)]),
-            (nameof(Status), [new PointerValidator(true)]),
-        ];
+                    etBuilder
+                        .HasOne(e => e.Address)
+                        .WithMany(a => a.Employees)
+                        .HasForeignKey("AddressShadow");
+                    etBuilder.Property<long>("AddressShadow").HasColumnName("Address");
 
-        return Container;
-    }
-
-    protected override void DescribeSet(ModelBuilder Builder) {
-
+                    etBuilder
+                        .HasOne(e => e.Approach)
+                        .WithMany(a => a.Employees)
+                        .HasForeignKey("ApproachShadow");
+                    etBuilder.Property<long>("ApproachShadow").HasColumnName("Approach");
+                }
+            );
     }
 }

@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality;
+﻿using CSM_Foundation.Database.Quality;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -18,12 +17,19 @@ public class Q_CarriersDepot
 
         return new() {
             Name = "Carrier name",
-            Approach = 1,
-            Address = 1,
-            Status = 1,
+            Approach = new Approach {
+                Id = 1,
+            },
+            Address = new Address {
+                Id = 1,
+            },
+            Status = new Status {
+                Id = 1,
+            },
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(Carrier Mock) 
-    => (nameof(Carrier.Name), Mock.Name);
+    protected override (string Property, string? Value)? FactorizeProperty(Carrier Mock) {
+        return (nameof(Carrier.Name), Mock.Name);
+    }
 }

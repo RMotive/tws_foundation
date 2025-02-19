@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +7,10 @@ namespace TWS_Business.Entities;
 
 public partial class Section
     : BBusinessDatabaseEntity, IEntity_Name {
-    
-    public string Name { get; set; } = default!;
+
+    public string Name { get; set; } = string.Empty;
+
+    public string? Description { get; set; } = string.Empty;
 
     public int Status { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Customer;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Quality.Disposing;
 
@@ -37,7 +38,7 @@ public delegate TEntity EntityFactory<TEntity>(string Entropy)
 /// </typeparam>
 public abstract class BQ_Service<TEntity, TService, TDatabase>
     : IDisposable
-    where TEntity : IEntity
+    where TEntity : class, IEntity
     where TService : IService<TEntity> {
 
     /// <summary>

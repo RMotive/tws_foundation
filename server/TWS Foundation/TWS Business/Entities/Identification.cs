@@ -10,7 +10,9 @@ namespace TWS_Business.Entities;
 public partial class Identification
     : BBusinessDatabaseEntity, IEntity_Name {
 
-    public string Name { get; set; } = default!;
+    public string Name { get; set; } = string.Empty;
+
+    public string? Description { get; set; }
 
     public int Status { get; set; }
 
@@ -24,8 +26,7 @@ public partial class Identification
 
     public virtual ICollection<DriverExternal> DriversExternals { get; set; } = [];
 
-    public virtual ICollection<Employee> Employees { get; set; } = [];
-
+    public Employee? Employee { get; set; }
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Identification>(Entity => {

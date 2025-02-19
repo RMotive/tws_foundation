@@ -63,7 +63,7 @@ public class AuthAttribute
             )).Successes[0];
 
         Permit[] permits = session.Permits;
-        Permit targetPermit = permits.Where(i => i.Solution == runningSolution.Id).FirstOrDefault()
+        Permit targetPermit = permits.Where(i => i.Solution.Id == runningSolution.Id).FirstOrDefault()
             ?? throw new XAuth(XAuthSituation.Unauthorized);
 
         if (!targetPermit.Enabled) {

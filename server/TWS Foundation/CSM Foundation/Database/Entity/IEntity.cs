@@ -20,7 +20,7 @@ public interface IEntity
     /// <summary>
     ///     Base unique [Database] property to identify the record easily.
     /// </summary>
-    int Id { get; set; }
+    long Id { get; set; }
 
     /// <summary>
     ///     The exact moment where the record was created and stored in the storage system. 
@@ -74,6 +74,11 @@ public interface IEntity_Name {
     /// </summary>
     [StringLength(100)]
     string Name { get; set; }
+
+    /// <summary>
+    ///     [Entity] description.
+    /// </summary>
+    string? Description { get; set; }
 }
 
 /// <summary>

@@ -25,7 +25,7 @@ public class TrucksExternalsService : ITrucksExternalsService {
 
             .Include(t => t.TruckCommonNavigation)
                 .ThenInclude(t => t!.LocationNavigation)
-                    .ThenInclude(t => t!.AddressNavigation)
+                    .ThenInclude(t => t!.Address)
 
             .Select(t => new TruckExternal() {
                 Id = t.Id,
@@ -51,16 +51,6 @@ public class TrucksExternalsService : ITrucksExternalsService {
                         Status = t.TruckCommonNavigation.LocationNavigation.Status,
                         Name = t.TruckCommonNavigation.LocationNavigation.Name,
                         Address = t.TruckCommonNavigation.LocationNavigation.Address,
-                        AddressNavigation = t.TruckCommonNavigation.LocationNavigation.AddressNavigation == null ? null : new Address() {
-                            Id = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.Id,
-                            State = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.State,
-                            Street = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.Street,
-                            AltStreet = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.AltStreet,
-                            City = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.City,
-                            Zip = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.Zip,
-                            Country = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.Country,
-                            Colonia = t.TruckCommonNavigation.LocationNavigation.AddressNavigation.Colonia
-                        }
                     },
                 },
             });

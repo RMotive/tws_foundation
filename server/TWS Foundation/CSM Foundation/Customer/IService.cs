@@ -50,6 +50,8 @@ public interface IService<TEntity>
     /// </returns>
     Task<EntityUpdateOut<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null);
 
+    Task<TEntity> Delete(long Pointer);
+    
     /// <summary>
     ///     Removes from the data storage the <see cref="TEntity"/> record based on the <paramref name="Id"/> pointer.
     /// </summary>

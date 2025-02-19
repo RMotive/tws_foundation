@@ -16,16 +16,13 @@ public class Q_EmployeesDepot
     protected override Employee MockFactory(string RandomSeed) {
 
         return new() {
-            Identification = 1,
-            Status = 1,
-            Approach = 1,
-            Address = 1,
-            Curp = RandomUtils.String(18),
-            Rfc = RandomUtils.String(12),
-            Nss = RandomUtils.String(11)
+            CURP = RandomUtils.String(18),
+            RFC = RandomUtils.String(12),
+            NSS = RandomUtils.String(11)
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(Employee Mock)
-    => (nameof(Employee.Curp), Mock.Curp);
+    protected override (string Property, string? Value)? FactorizeProperty(Employee Mock) {
+        return (nameof(Employee.CURP), Mock.CURP);
+    }
 }

@@ -18,8 +18,12 @@ public class Q_LocationsDepot
 
         return new() {
             Name = RandomUtils.String(10),
-            Address = 1,
-            Status = 1
+            Address = new Address {
+                Id = 1,
+            },
+            Status = new Status {
+                Id = 1,
+            }
         };
     }
 

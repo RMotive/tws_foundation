@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +8,15 @@ namespace TWS_Business.Entities;
 public partial class VehiculeModel
     : BBusinessDatabaseEntity, IEntity_Name {
 
-    public string Name { get; set; } = default!;
+    public string Name { get; set; } = string.Empty;
+
+    public string? Description { get; set; }
 
     public int Status { get; set; }
 
     public DateOnly Year { get; set; }
 
-    public int Manufacturer {  get; set; }
+    public int Manufacturer { get; set; }
 
     public virtual Manufacturer? ManufacturerNavigation { get; set; }
 

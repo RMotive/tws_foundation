@@ -82,7 +82,7 @@ public partial class CarrierH
               .HasForeignKey(d => d.ApproachH);
 
             Entity.HasOne(d => d.CarrierNavigation)
-              .WithMany(p => p.CarriersH)
+              .WithMany(p => p.Histories)
               .HasForeignKey(d => d.Entity);
 
             Entity.HasOne(d => d.AddressNavigation)

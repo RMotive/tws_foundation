@@ -41,7 +41,7 @@ public partial class Status
 
     public virtual ICollection<Carrier> Carriers { get; set; } = [];
 
-    public virtual ICollection<Usdot> Usdots { get; set; } = [];
+    public virtual ICollection<USDOT> Usdots { get; set; } = [];
 
     public virtual ICollection<Approach> Contacts { get; set; } = [];
 

@@ -1,16 +1,15 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Entities;
 
-public partial class Usdot
+public class USDOT
     : BBusinessDatabaseEntity {
 
-    
 
-    
+
+
 
     public int Status { get; set; }
 
@@ -39,7 +38,7 @@ public partial class Usdot
     }
 
     protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Usdot>(entity => {
+        Builder.Entity<USDOT>(entity => {
             entity.ToTable("USDOT");
             entity.HasKey(e => e.Id);
 

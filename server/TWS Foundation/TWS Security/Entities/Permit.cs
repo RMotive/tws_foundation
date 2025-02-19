@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -10,26 +7,44 @@ using TWS_Security.Entities.Solutions;
 
 namespace TWS_Security.Entities;
 
-public partial class Permit
+public class Permit
     : BSecurityDatabaseEntity {
-    public int Solution { get; set; }
 
-    [JsonIgnore]
-    public virtual Solution? SolutionNavigation { get; set; }
-    public int Feature { get; set; }
-    [JsonIgnore]
-    public virtual Feature? FeatureNavigation { get; set; }
-    public int Action { get; set; }
-    [JsonIgnore]
-    public virtual Action? ActionNavigation { get; set; }
 
-    public string Reference { get; set; } = default!;
+    /// <summary>
+    ///     Solution information.
+    /// </summary>
+    public Solution Solution { get; set; } = default!;
+
+    /// <summary>
+    ///     Feature information.
+    /// </summary>
+    public Feature Feature { get; set; } = default!;
+
+    /// <summary>
+    ///     Action information.
+    /// </summary>
+    public Action Action { get; set; } = default!;
+
+    /// <summary>
+    ///     Unique identifier reference.
+    /// </summary>
+    public string Reference { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Wheter the Permit is globally enabled.
+    /// </summary>
     public bool Enabled { get; set; }
 
+    /// <summary>
+    ///     <see cref="Profile"/>s that references this <see cref="Permit"/>.
+    /// </summary>
+    public ICollection<Profile> Profiles { get; set; } = [];
 
-    public ICollection<Profile> Profiles { get; set; } = default!;
-    public ICollection<Account> Accounts { get; set; } = default!;
-
+    /// <summary>
+    ///     <see cref="Account"/>s that references this <see cref="Permit"/>.
+    /// </summary>
+    public ICollection<Account> Accounts { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         return [
@@ -38,43 +53,36 @@ public partial class Permit
         ];
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Permit>(
-            (Entity) => {
-                Entity.HasKey(i => i.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Permit>(
+            (etBuilder) => {
 
-                Entity.HasIndex(i => new { i.Solution, i.Feature, i.Action })
+                etBuilder.HasIndex(p => p.Reference).IsUnique();
+
+                etBuilder.Property(p => p.Enabled).IsRequired();
+
+                etBuilder.Property<long>("SolutionShadow").HasColumnName("Solution").IsRequired();
+                etBuilder.Property<long>("FeatureShadow").HasColumnName("Feature").IsRequired();
+                etBuilder.Property<long>("ActionShadow").HasColumnName("Action").IsRequired();
+                etBuilder.HasIndex("ActionShadow", "SolutionShadow", "FeatureShadow")
                     .IsUnique();
-
-                Entity.Property(i => i.Id)
+                etBuilder
+                    .HasOne(p => p.Solution)
+                    .WithMany(s => s.Permits)
+                    .HasForeignKey("SolutionShadow")
                     .IsRequired();
-                Entity.Property(i => i.Timestamp)
-                    .IsRequired();
-                Entity.Property(i => i.Solution)
-                    .IsRequired();
-                Entity.Property(i => i.Feature)
-                    .IsRequired();
-                Entity.Property(i => i.Action)
-                    .IsRequired();
-                Entity.Property(i => i.Reference)
-                    .IsRequired()
-                    .HasMaxLength(8);
-                Entity.Property(i => i.Enabled)
+                
+                etBuilder
+                    .HasOne(p => p.Feature)
+                    .WithMany(f => f.Permits)
+                    .HasForeignKey("FeatureShadow")
                     .IsRequired();
 
-
-                Entity.HasOne(i => i.SolutionNavigation)
-                    .WithMany(i => i.Permits)
-                    .HasForeignKey(i => i.Solution)
-                    .HasConstraintName("FK_Permits_Solutions");
-                Entity.HasOne(i => i.FeatureNavigation)
-                    .WithMany(i => i.Permits)
-                    .HasForeignKey(i => i.Feature)
-                    .HasConstraintName("FK_Permits_Features");
-                Entity.HasOne(i => i.ActionNavigation)
-                    .WithMany(i => i.Permits)
-                    .HasForeignKey(i => i.Action)
-                    .HasConstraintName("FK_Permits_Actions");
+                etBuilder
+                    .HasOne(p => p.Action)
+                    .WithMany(a => a.Permits)
+                    .HasForeignKey("ActionShadow")
+                    .IsRequired();
             }
         );
     }

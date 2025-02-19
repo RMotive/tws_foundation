@@ -11,8 +11,12 @@ public class Q_Location : BQ_Entity<Location> {
             Mock = new() {
                 Id = 1,
                 Name = "",
-                Address = 1,
-                Status = 1
+                Address = new Address {
+                    Id = 1,
+                },
+                Status = new Status {
+                    Id = 1,
+                }
 
             },
             Expectations = [],
@@ -21,8 +25,12 @@ public class Q_Location : BQ_Entity<Location> {
             Mock = new() {
                 Id = 0,
                 Name = "",
-                Address = 0,
-                Status = 0,
+                Address = new Address {
+                    Id = 1,
+                },
+                Status = new Status {
+                    Id = 1,
+                },
             },
             Expectations = [
                 (nameof(Location.Id), [(new PointerValidator(), 3)]),

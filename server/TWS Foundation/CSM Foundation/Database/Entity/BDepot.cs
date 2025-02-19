@@ -420,7 +420,7 @@ public abstract class BDepot<TDatabase, TEntity>
         return Set;
     }
 
-    public async Task<TEntity> Delete(int Id) {
+    public async Task<TEntity> Delete(long Id) {
         TEntity record = await Set
             .AsNoTracking()
             .Where(r => r.Id == Id)
