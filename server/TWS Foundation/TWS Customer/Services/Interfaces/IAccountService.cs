@@ -10,5 +10,6 @@ public interface IAccountsService {
     Task<SetBatchOut<Account>> Create(Account[] Accounts);
     Task<RecordUpdateOut<Account>> Update(Account Account);
     Task<SetViewOut<Permit>> GetPermits(Account Account);
+    Task<Account> Delete(Account Account);
 
 }

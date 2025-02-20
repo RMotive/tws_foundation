@@ -71,14 +71,15 @@ public partial class TruckExternal
               .HasMaxLength(12)
               .IsUnicode(false);
 
-            Entity.HasOne(d => d.TruckCommonNavigation)
-               .WithMany(p => p.TrucksExternals)
-               .HasForeignKey(d => d.Common);
-
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrucksExternals)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            Entity.HasOne(d => d.TruckCommonNavigation)
+              .WithOne(p => p.TrucksExternal)
+              .HasForeignKey<TruckExternal>(d => d.Common)
+              .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

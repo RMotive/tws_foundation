@@ -14,4 +14,6 @@ abstract class TrucksServiceBase extends TWSServiceBase {
   Effect<SetBatchOut<Truck>> create(List<Truck> trucks, String auth);
 
   Effect<RecordUpdateOut<Truck>> update(Truck truck, String auth);
+  /// Delete record.
+  Effect<Truck> delete(Truck truck, String auth);
 }

@@ -58,6 +58,7 @@ public class AccountsService
                 Account = p.Account,
                 Permit = p.Permit,
                 PermitNavigation = p.PermitNavigation != null ? new Permit() {
+                    Id = p.PermitNavigation.Id,
                     Timestamp = p.PermitNavigation.Timestamp,
                     Solution = p.PermitNavigation.Solution,
                     Feature = p.PermitNavigation.Feature,
@@ -100,7 +101,7 @@ public class AccountsService
         });
     }
     private ICollection<AccountProfile> EvaluateCollections(ICollection<AccountProfile> Original, ICollection<AccountProfile> Updated) {
-        
+        // Filtering data
         ICollection<AccountProfile> added = Updated.Except(Original).ToList();
         ICollection<AccountProfile> removed = Original.Except(Updated).ToList();
         // Removing the original reference
@@ -108,7 +109,6 @@ public class AccountsService
 
         // Adding profiles to account
         foreach (AccountProfile profile in added) {
-          
             result.Add(profile);
         }
 
@@ -118,30 +118,6 @@ public class AccountsService
             result.Remove(profile);
             Database.Remove(profile);
         }
-
-        //// Add new profiles
-        //foreach (AccountProfile profile in Updated) {
-        //    foreach (AccountProfile originalProfile in Original) {
-        //        if (profile.Profile == originalProfile.Profile) continue;
-        //        result.Add(profile);
-        //    }
-        //}
-
-        //// Remove permits/profiles
-        //foreach (AccountProfile profile in Original) {
-        //    bool founded = false;
-        //    foreach (AccountProfile updatedProfile in Updated) {
-        //        if (profile.Profile == updatedProfile.Profile) founded = true;
-        //    }
-
-        //    if(founded == false) {
-        //        // Removing the navigation tracker
-        //        profile.ProfileNavigation = null;
-        //        result.Remove(profile);
-        //        Database.Remove(profile);
-        //    }
-
-        //}
 
         return result;
     }
@@ -155,6 +131,7 @@ public class AccountsService
 
         // Adding new permits to account
         foreach (AccountPermit permit in added) {
+            if(permit.Permit != 0) permit.PermitNavigation = null;
             result.Add(permit);
         }
         
@@ -164,29 +141,7 @@ public class AccountsService
             result.Remove(permit);
             Database.Remove(permit);
         }
-        //// Add new permits/profiles
-        //foreach (AccountPermit permit in Updated) {
-        //    foreach(AccountPermit originalPermit in Original) {
-        //        if(permit.Permit == originalPermit.Permit) continue;
-        //        result.Add(permit);
-        //    }
-        //}
-
-        //// Remove permits/proaaaaafiles
-        //foreach (AccountPermit permit in Original) {
-        //    bool founded = false;
-        //    foreach (AccountPermit updatedPermit in Updated) {
-        //        if (permit.Permit == updatedPermit.Permit) founded = true;
-        //    }
-
-        //    if (founded == false) {
-        //        // Removing the navigation tracker
-        //        permit.PermitNavigation = null;
-        //        result.Remove(permit);
-        //        Database.Remove(permit);
-        //    }
-
-        //}
+   
         return result;
     }
 
@@ -210,6 +165,20 @@ public class AccountsService
     }
 
     public async Task<SetBatchOut<Account>> Create(Account[] accounts) {
+        /// Removing navigation trackers.
+        foreach(Account account in accounts) {
+            foreach(AccountPermit ap in account.AccountPermits) {
+                if(ap.PermitNavigation != null && ap.PermitNavigation.Id > 0) {
+                    ap.PermitNavigation = null;
+                } else {
+                    Permit? permit = ap.PermitNavigation;
+                    if (permit?.ActionNavigation != null && permit.ActionNavigation.Id > 0) permit.ActionNavigation = null;
+                    if (permit?.FeatureNavigation != null && permit.FeatureNavigation.Id > 0) permit.FeatureNavigation = null;
+                    if (permit?.SolutionNavigation != null && permit.SolutionNavigation.Id > 0) permit.SolutionNavigation = null;
+                }
+            }
+        }
+
         return await Accounts.Create(accounts);
     }
 
@@ -264,4 +233,17 @@ public class AccountsService
             Updated = lastestRecord ?? Account,
         };
     }
+    public async Task<Account> Delete(Account Account) {
+        //Removing one to many relationships.
+        List<AccountPermit> accountPermits = [.. Database.AccountsPermits.Where(ap => ap.Account == Account.Id)];
+        List<AccountProfile> accountProfiles = [.. Database.AccountsProfiles.Where(ap => ap.Account == Account.Id)];
+        Database.RemoveRange(accountPermits);
+        Database.RemoveRange(accountProfiles);
+
+        Contact? contact = await Database.Contacts.Where(e => e.Id == Account.Contact).FirstOrDefaultAsync();
+        if(contact != null) Database.Remove(contact);
+
+        return await Accounts.Delete(Account);
+    }
+
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace TWS_Security.Sets;
 
@@ -27,12 +26,13 @@ public partial class AccountPermit {
             entity.HasOne(d => d.AccountNavigation)
                 .WithMany(p => p.AccountPermits)
                 .HasForeignKey(d => d.Account)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.PermitNavigation)
                 .WithMany(p => p.AccountPermits)
                 .HasForeignKey(d => d.Permit)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
+
         });
     }
 }

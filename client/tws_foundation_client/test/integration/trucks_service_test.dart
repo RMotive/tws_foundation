@@ -49,15 +49,87 @@ void main() {
       null,
       null, //statusNavigation
     );
-    Maintenance maintenance = Maintenance(0, 1, DateTime.now(), DateTime.now(), null, <Truck>[]);
-    Insurance insurance = Insurance(0, 1, "P232Policy$randomToken", DateTime.now(), "USA", null, <Truck>[]);
-    Manufacturer manufacturer = Manufacturer(0, "manufacturer $randomToken", null);
-    VehiculeModel model = VehiculeModel(0, 1, 0, "Model name $randomToken", DateTime.now(), null, manufacturer);
-    Approach approach = Approach(0, 1, "Testemail@$randomToken.com", null, null, null, null, <Carrier>[]);
-    Address address = Address(0, "USA", null, null, null, null, null, null, <Carrier>[]);
-    USDOT usdot = USDOT(0, 1, "MCtestT", "scac", null);
-    SCT sct = SCT(0, 1, "type01", "Number_test_sct:$randomToken", "C$randomToken", null);
-    Carrier carrier = Carrier(0, 1, 0, 0, "Carrier: $randomToken", "Carrier description: $randomToken", null, approach, address, usdot, null, <Truck>[]);
+    Maintenance maintenance = Maintenance(
+      0,
+      1,
+      DateTime.now(),
+      DateTime.now(),
+      null,
+      <Truck>[],
+    );
+    Insurance insurance = Insurance(
+      0,
+      1,
+      "P232Policy$randomToken",
+      DateTime.now(),
+      "USA",
+      null,
+      <Truck>[],
+    );
+    Manufacturer manufacturer = Manufacturer(
+      0,
+      "manufacturer $randomToken",
+      null,
+    );
+    VehiculeModel model = VehiculeModel(
+      0,
+      1,
+      0,
+      "Model name $randomToken",
+      DateTime.now(),
+      null,
+      manufacturer,
+    );
+    Approach approach = Approach(
+      0,
+      1,
+      "Testemail@$randomToken.com",
+      null,
+      null,
+      null,
+      null,
+      <Carrier>[],
+    );
+    Address address = Address(
+      0,
+      "USA",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      <Carrier>[],
+    );
+    USDOT usdot = USDOT(
+      0,
+      1,
+      "MCtestT",
+      "scac",
+      null,
+    );
+    SCT sct = SCT(
+      0,
+      1,
+      "type01",
+      "Number_test_sct:$randomToken",
+      "C$randomToken",
+      null,
+    );
+    Carrier carrier = Carrier(
+      0,
+      1,
+      0,
+      0,
+      "Carrier: $randomToken",
+      "Carrier description: $randomToken",
+      null,
+      approach,
+      address,
+      usdot,
+      null,
+      <Truck>[],
+    );
     Truck mock = Truck(
       0, // id
       1, //Status
@@ -200,6 +272,53 @@ void main() {
           assert(actEffect.updated.vehiculeModelNavigation!.name != actEffect.previous!.vehiculeModelNavigation!.name);
         },
       );
+    },
+  );
+  test(
+    'Delete',
+    () async {
+      List<Truck>  deleteMocks = <Truck>[];
+      int rnd = Random().nextInt(900)  + 99;
+      String randomToken = 'D_qual$rnd';
+      deleteMocks.add(buildMock(randomToken));
+      late Truck newMock;
+
+      MainResolver<SetBatchOut<Truck>> fact = await service.create(deleteMocks, auth);
+      bool resolved = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<Truck>.des(json, Truck.des),
+        onException: (Object exception, StackTrace trace) => throw exception,
+        onConnectionFailure: () => throw Exception('Connection failure'),
+        onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
+        onSuccess: (SuccessFrame<SetBatchOut<Truck>> success) {
+          resolved = true;
+          newMock = success.estela.successes.first;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+      resolved = false;
+
+      MainResolver<Truck> deleteFact = await service.delete(
+        newMock,
+        auth,
+      );
+      deleteFact.resolve(
+        decoder: (JObject json) => Truck.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Truck> success) {
+          resolved = true;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+
     },
   );
 }

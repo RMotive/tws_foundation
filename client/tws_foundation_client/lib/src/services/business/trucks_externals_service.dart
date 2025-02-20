@@ -28,5 +28,11 @@ final class TrucksExternalsService extends TrucksExternalsServiceBase {
     CSMActEffect actEffect = await twsPost('update', truck, auth: auth);
     return MainResolver<RecordUpdateOut<TruckExternal>>(actEffect);
   }
+
+  @override
+  Effect<TruckExternal> delete(TruckExternal truck, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', truck, auth: auth);
+    return MainResolver<TruckExternal>(actEffect);
+  }
 }
       

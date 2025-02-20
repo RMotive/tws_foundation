@@ -3,42 +3,43 @@
 ## CURRENT - [xx.xx-xxxx]
 
 - Notes:
-    1. [Trailers] and [TrailersExternals] added the Create and Update depot services.
-    2. Changed [Trailer] property name [VehiculesModelsNavigation] renamed has [VehiculeModelNavigation].
-    
-    3. Added sets services:
-        - [TrailerClass]
-        - [TrailerType]
-
-    4. Changed [Update] generic [BDepot] method replaced for old generic method and customs [Update] implementations for complex sets models.
-    5. Added an overload method to [Update] implementation in [BDepot]. This overload method implement the a [Include] LINQ query method
+    1. Changed [Trailer] property name [VehiculesModelsNavigation] renamed has [VehiculeModelNavigation].
+    2. Changed [Update] generic [BDepot] method replaced for old generic method and customs [Update] implementations for complex sets models.
+    3. Added an overload method to [Update] implementation in [BDepot]. This overload method implement the a [Include] LINQ query method
     as parameter to customs data fetch.
-    6. Added customs [Update] service methods on the followings services:
-        - [Trailers].
-        - [TrailersExternals]
-        - [Trucks].
-        - [TrucksExternals]
-        - [Yardlogs].
-    7. [LengthValidator] Added the optional [nulleable] parameter. With this parameter can implement and validate nulleable propeties with min and max values.
-    8. Added Update and create controller services for [Drivers] and [DriversExternals].
-    9. Added [Employee] view service.
-    10. Added [Driver] and [Employee] lenth validations.
-    11. Added schemas for Waypoint table and location table changes 
-    12. Added [Waypoint] set.
-    13. [Address] property changed to nulleable in [Location] set.
-    14. Added Waypoint navigation to [Location] set.
-    15. Added [Locations] service.
-    16. Added Create and update in [Sections] service.
-    17. Added [Address] view service.
-    18. Added [Business] permits in service controllers.
-    19. Added [Contact] create and update controllers.
-    20. Added [Accounts] [GetPermits] controller.
-    21. Added the folowing [TWSSecurity] depots:
+    4. Added controllers methods to the following Services:
+        - [Trailers] added custom [Update].
+        - [TrailersExternals] added custom [Update].
+        - [Trucks] added custom [Update] and [Delete].
+        - [TrucksExternals] added custom [Update] and [Delete].
+        - [Yardlogs] added custom [Update].
+        - [Accounts] added [View], custom [Update], [Create] and [Delete].
+        - [Locations] added custom [Update], [Create].
+        - [Sections] added  custom [Update], [Create].
+        - [Employee] added [View].
+        - [Address] added [View].
+        - [TrailerClass] added [View].
+        - [TrailerType] added [View].
+    5. [LengthValidator] Added the optional [nulleable] parameter. With this parameter can implement and validate nulleable propeties with min and max values.
+    6. Added Update and create controller services for [Drivers] and [DriversExternals].
+    7. Added [Driver] and [Employee] lenth validations.
+    8. Added schemas for Waypoint table and location table changes 
+    9. Added [Waypoint] set.
+    10. [Address] property changed to nulleable in [Location] set.
+    11. Added Waypoint navigation to [Location] set.
+    12. Added Create and update in [Sections] service.
+    13. Added [Business] permits in service controllers.
+    14. Added [Accounts] [GetPermits] controller.
+    15. Added the folowing [TWSSecurity] depots:
         - [AccountsPermits]
         - [AccountsProfiles]
         - [Permits]
+        - [Accounts]
+    
 
 - Fixes:
+    1. Fixed [Truck] and [TruckExternal] relationships (Check scheme #6).
+    2. Fixed [BDepot] [Delete] [Tset] overcharged method.
 
 - Dependencies:
 

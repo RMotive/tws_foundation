@@ -26,15 +26,12 @@ public partial class Sct
 
     public virtual ICollection<Trailer> Trailers { get; set; } = [];
 
-
     public virtual ICollection<SctH> SctsH { get; set; } = [];
-
 
     public static void CreateModel(ModelBuilder Builder) {
         Builder.Entity<Sct>(Entity => {
             Entity.ToTable("SCT");
             Entity.HasKey(e => e.Id);
-
 
             Entity.Property(e => e.Timestamp)
                 .HasColumnType("datetime");
@@ -55,7 +52,7 @@ public partial class Sct
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Scts)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 

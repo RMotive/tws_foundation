@@ -1,7 +1,5 @@
 ﻿using System.Net;
 
-using Azure;
-
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
@@ -22,7 +20,6 @@ using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Tru
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_TrucksController : BQ_CustomServerController<Truck> {
-
 
     public Q_TrucksController(WebApplicationFactory<Program> hostFactory) : base("Trucks", hostFactory) {
     }
@@ -75,7 +72,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Country = "USA"
         };
         Address addressCommon = new() {
-            Street = "Truck Location " + RandomSeed,
+            Street = "Trucks Location " + RandomSeed,
             Country = "USA"
         };
 
@@ -253,4 +250,21 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         }
     }
     #endregion
+
+    [Fact]
+    public async Task Delete() {
+        string testTag = Guid.NewGuid().ToString()[..3];
+        List<Truck> mock = [MockFactory(testTag)];
+
+        // Create a new record to delete.
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mock, true);
+        SetBatchOut<Truck> estela = Framing<SuccessFrame<SetBatchOut<Truck>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
+
+        // Deleting the previous record.
+        Truck newAccount = estela.Successes.First();
+        (HttpStatusCode DeleteStatus, _) = await Post("Delete", newAccount, true);
+        Assert.Equal(HttpStatusCode.OK, DeleteStatus);
+    }
 }

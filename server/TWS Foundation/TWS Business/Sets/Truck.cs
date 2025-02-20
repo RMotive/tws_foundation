@@ -1,11 +1,8 @@
-﻿using System.Reflection;
-
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace TWS_Business.Sets;
 
@@ -57,11 +54,20 @@ public partial class Truck
 
     public virtual ICollection<PlateH> PlatesH { get; set; } = [];
 
+    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        RequiredValidator required = new();
+        Container = [
+            ..Container,
+            (nameof(Status), [new PointerValidator(true)]),
+            (nameof(Vin), [required, new UniqueValidator(), new LengthValidator(Min: 1, Max: 17)]),
+        ];
+        return Container;
+    }
+
     public static void CreateModel(ModelBuilder Builder) {
         Builder.Entity<Truck>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Trucks");
-
 
             Entity.Property(e => e.Timestamp)
                 .HasColumnType("datetime");
@@ -76,48 +82,45 @@ public partial class Truck
             Entity.Property(e => e.Sct)
                 .HasColumnName("SCT");
 
+            Entity.HasIndex(e => e.Common)
+                .IsUnique();
+
             Entity.HasOne(d => d.CarrierNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Carrier)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.SctNavigation)
-              .WithMany(p => p.Trucks)
-              .HasForeignKey(d => d.Sct);
-
-            Entity.HasOne(d => d.InsuranceNavigation)
                 .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Insurance);
-
-            Entity.HasOne(d => d.MaintenanceNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Maintenance);
+                .HasForeignKey(d => d.Sct)
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.VehiculeModelNavigation)
                 .WithMany(p => p.Trucks)
                 .HasForeignKey(d => d.Model)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.TruckCommonNavigation)
+                .WithOne(p => p.Truck)
+                .HasForeignKey<Truck>(d => d.Common)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            Entity.HasOne(d => d.MaintenanceNavigation)
                 .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Common);
-            Entity.HasIndex(e => e.Common)
-               .IsUnique();
+                .HasForeignKey(d => d.Maintenance)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            Entity.HasOne(d => d.InsuranceNavigation)
+                .WithMany(p => p.Trucks)
+                .HasForeignKey(d => d.Insurance)
+                .OnDelete(DeleteBehavior.Cascade);
+
         });
     }
 
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator required = new();
-        Container = [
-            ..Container,
-            (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Vin), [required, new UniqueValidator(), new LengthValidator(Min: 1, Max: 17)]),
-        ];
-        return Container;
-    }
 }

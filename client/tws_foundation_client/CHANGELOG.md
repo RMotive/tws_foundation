@@ -16,14 +16,16 @@
         - [AccountProfile]
     6. Added the following [Business] sets: 
         - [Waypoint]
-    7. Added Services:
-        - [Contact]
+    7. Added controllers:
+        - [Truck] (Delete service)
+        - [TruckExternal] (Delete service)
+        - [Contact] (View, Create, Update services)
         - [TrailerClass] (View Service)
         - [TrailerType] (View Service)
         - [Employees] (View Service)
         - [Drivers] (Create and update services)
         - [DriversExternals] (Create and update services)
-        - [Accounts] (Create, update & getPermits services)
+        - [Accounts] (Create, update & getPermits and delete services )
         - [Locations] (View, create and update services)
         - [Addresses] (View service)
         - [Sections] (Create and update service)

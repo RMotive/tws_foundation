@@ -3,11 +3,13 @@ using CSM_Foundation.Database.Models.Out;
 
 using TWS_Business.Sets;
 
+using TWS_Security.Sets;
+
 namespace TWS_Customer.Services.Interfaces;
 public interface ITrucksService {
     Task<SetViewOut<Truck>> View(SetViewOptions<Truck> options);
     Task<SetBatchOut<Truck>> Create(Truck[] trucks);
     Task<RecordUpdateOut<Truck>> Update(Truck Truck);
-
+    Task<Truck> Delete(Truck Truck);
 
 }

@@ -35,8 +35,13 @@ public class AccountsDepot
     public async Task<Permit[]> GetPermits(int Account) {
         IQueryable<AccountPermit> accountPermits = Database.AccountsPermits
             .Where(i => i.Account == Account)
-                .Include(i => i.PermitNavigation);
-                   
+                .Include(i => i.PermitNavigation)
+                    .ThenInclude(i => i!.ActionNavigation)
+                .Include(i => i.PermitNavigation)
+                    .ThenInclude(i => i!.FeatureNavigation)
+                .Include(i => i.PermitNavigation)
+                    .ThenInclude(i => i!.SolutionNavigation);
+
 
         IQueryable<Permit> permits = accountPermits
             .Select(i => i.PermitNavigation!);
@@ -55,7 +60,12 @@ public class AccountsDepot
 
             Permit[] profilePermits = await Database.ProfilesPermits
                 .Where(i => i.Profile == accountProfile.Id)
-                    .Include(i => i.PermitNavigation)
+                      .Include(i => i.PermitNavigation)
+                    .ThenInclude(i => i.ActionNavigation)
+                .Include(i => i.PermitNavigation)
+                    .ThenInclude(i => i.FeatureNavigation)
+                .Include(i => i.PermitNavigation)
+                    .ThenInclude(i => i.SolutionNavigation)
                        
                 .Select(i => i.PermitNavigation)
                 .ToArrayAsync();

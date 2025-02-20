@@ -8,6 +8,8 @@ using TWS_Customer.Services.Interfaces;
 
 using TWS_Foundation.Authentication;
 
+using TWS_Security.Sets;
+
 namespace TWS_Foundation.Controllers.Business;
 
 [ApiController, Route("[Controller]/[Action]")]
@@ -17,17 +19,22 @@ public class TrucksExternalsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth("TrucksExternals", "Read")]
+    [HttpPost(), Auth("TrucksExternal", "Read")]
     public async Task<IActionResult> View(SetViewOptions<TruckExternal> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("TrucksExternals", "Create")]
+    [HttpPost(), Auth("TrucksExternal", "Create")]
     public async Task<IActionResult> Create(TruckExternal[] trucks)
         => Ok(await Service.Create(trucks));
 
-    [HttpPost(), Auth("TrucksExternals", "Update")]
+    [HttpPost(), Auth("TrucksExternal", "Update")]
     public async Task<IActionResult> Update(TruckExternal Truck) {
         return Ok(await Service.Update(Truck));
+    }
+
+    [HttpPost(), Auth("TrucksExternal", "Delete")]
+    public async Task<IActionResult> Delete(TruckExternal Truck) {
+        return Ok(await Service.Delete(Truck));
     }
 }

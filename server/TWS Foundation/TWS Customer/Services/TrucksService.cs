@@ -12,6 +12,8 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
 
+using TWS_Security.Sets;
+
 namespace TWS_Customer.Services;
 public class TrucksService : ITrucksService {
     private readonly TruckDepot Trucks;
@@ -170,7 +172,7 @@ public class TrucksService : ITrucksService {
         current.SctNavigation = null;
         current.TruckCommonNavigation = null;
         current.VehiculeModelNavigation = null;
-        current.StatusNavigation = null;    
+        current.StatusNavigation = null;
         current.InsuranceNavigation = null;
 
         // Preserve a copy before modifications.
@@ -234,7 +236,7 @@ public class TrucksService : ITrucksService {
             currentPlates = [.. currentPlates.OrderBy(plate => plate.Id)];
         }
 
-        // Search new items to add in the given Trailer record.
+        // Search new items to add in the given Trailers record.
         for (int i = 0; i < plates.Count; i++) {
             Plate plate = plates[i];
             //Add new plate.
@@ -264,6 +266,23 @@ public class TrucksService : ITrucksService {
         };
     }
 
+    public async Task<Truck> Delete(Truck Truck) {
+        List<Plate> plates = [.. Database.Plates.Where(p => p.Truck == Truck.Id)];
+        List<YardLog> yardLogs = [.. Database.YardLogs.Where(p => p.Truck == Truck.Id)];
+        List<TruckInventory> inventory = [.. Database.TrucksInventories.Where(p => p.Truck == Truck.Id)];
+        Database.RemoveRange(plates);
+        Database.RemoveRange(yardLogs);
+        Database.RemoveRange(inventory);
 
+        TruckCommon? common = await Database.TrucksCommons.Where(e => e.Id == Truck.Common).FirstOrDefaultAsync();
+        if (common != null) Database.Remove(common);
 
+        Insurance? insurance = await Database.Insurances.Where(e => e.Id == Truck.Insurance).FirstOrDefaultAsync();
+        if (insurance != null) Database.Remove(insurance);
+
+        Maintenance? maintenance = await Database.Maintenances.Where(e => e.Id == Truck.Maintenance).FirstOrDefaultAsync();
+        if (maintenance != null) Database.Remove(maintenance);
+
+        return await Trucks.Delete(Truck);
+    }
 }

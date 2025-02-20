@@ -61,7 +61,7 @@ public partial class Insurance
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Insurances)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

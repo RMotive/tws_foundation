@@ -26,9 +26,9 @@ public partial class TruckCommon
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
+    public virtual Truck? Truck { get; set; }
 
-    public virtual ICollection<TruckExternal> TrucksExternals { get; set; } = [];
+    public virtual TruckExternal? TrucksExternal { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
@@ -59,17 +59,19 @@ public partial class TruckCommon
 
             Entity.HasOne(d => d.SituationNavigation)
                .WithMany(p => p.TrucksCommons)
-               .HasForeignKey(d => d.Situation);
+               .HasForeignKey(d => d.Situation)
+               .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.LocationNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Location)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+               .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.TrucksCommons)
                .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+               .OnDelete(DeleteBehavior.Restrict);
+            
         });
     }
 }

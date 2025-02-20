@@ -454,10 +454,21 @@ public abstract class BDepot<TDatabase, TSet>
     }
 
     public async Task<TSet> Delete(TSet Set) {
-        Set.EvaluateWrite();
-        _ = this.Set.Remove(Set);
-        _ = await Database.SaveChangesAsync();
-        Database.ChangeTracker.Clear();
+        //Set.EvaluateWrite();
+        //this.Set.Remove(Set);
+        //await Database.SaveChangesAsync();
+        //Database.ChangeTracker.Clear();
+        //return Set;
+
+        TSet record = await this.Set
+            .AsNoTracking()
+            .Where(r => r.Id == Set.Id)
+            .FirstOrDefaultAsync()
+            ?? throw new Exception("Trying to remove an unexist record");
+
+        this.Set.Remove(record);
+        await Database.SaveChangesAsync();
+
         return Set;
     }
 
@@ -468,8 +479,8 @@ public abstract class BDepot<TDatabase, TSet>
             .FirstOrDefaultAsync()
             ?? throw new Exception("Trying to remove an unexist record");
 
-        _ = Set.Remove(record);
-        _ = await Database.SaveChangesAsync();
+        Set.Remove(record);
+        await Database.SaveChangesAsync();
 
         return record;
     }

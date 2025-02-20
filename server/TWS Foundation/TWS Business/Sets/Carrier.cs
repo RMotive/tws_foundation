@@ -65,23 +65,26 @@ public partial class Carrier
 
             Entity.HasOne(d => d.ApproachNavigation)
               .WithMany(p => p.Carriers)
-              .HasForeignKey(d => d.Approach);
+              .HasForeignKey(d => d.Approach)
+              .OnDelete(DeleteBehavior.Cascade);
 
             Entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.Carriers)
                 .HasForeignKey(d => d.Address)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             Entity.Property(e => e.Usdot)
                 .HasColumnName("USDOT");
             Entity.HasOne(d => d.UsdotNavigation)
                .WithMany(p => p.Carriers)
-               .HasForeignKey(d => d.Usdot);
+               .HasForeignKey(d => d.Usdot)
+               .OnDelete(DeleteBehavior.Cascade);
+
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Carriers)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

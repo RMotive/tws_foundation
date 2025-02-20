@@ -34,4 +34,10 @@ final class AccountService extends AccountsServiceBase {
     CSMActEffect actEffect = await twsPost('getPermits', account, auth: auth);
     return MainResolver<SetViewOut<Permit>>(actEffect);
   }
+
+  @override
+  Effect<Account> delete(Account account, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', account, auth: auth);
+    return MainResolver<Account>(actEffect);
+  }
 }

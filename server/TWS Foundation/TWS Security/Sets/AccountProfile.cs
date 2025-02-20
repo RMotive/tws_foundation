@@ -3,7 +3,7 @@
 namespace TWS_Security.Sets;
 
 
-public class AccountProfile {
+public partial class AccountProfile {
 
     public int Account { get; init; }
 
@@ -17,20 +17,24 @@ public class AccountProfile {
         Builder.Entity<AccountProfile>(entity => {
             entity.ToTable("Accounts_Profiles");
 
-            entity.Property(e => e.Account);
-            entity.Property(e => e.Profile);
+            entity.Property(e => e.Account)
+                .IsRequired();
+
+            entity.Property(e => e.Profile)
+                 .IsRequired();
 
             entity.HasKey(i => new { i.Account, i.Profile });
 
             entity.HasOne(d => d.AccountNavigation)
                 .WithMany(p => p.AccountProfiles)
                 .HasForeignKey(d => d.Account)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.ProfileNavigation)
                 .WithMany(p => p.AccountProfiles)
                 .HasForeignKey(d => d.Profile)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
         });
     }
 }

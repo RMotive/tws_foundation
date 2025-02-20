@@ -28,5 +28,11 @@ final class TrucksService extends TrucksServiceBase {
     CSMActEffect actEffect = await twsPost('update', truck, auth: auth);
     return MainResolver<RecordUpdateOut<Truck>>(actEffect);
   }
+
+  @override
+  Effect<Truck> delete(Truck truck, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', truck, auth: auth);
+    return MainResolver<Truck>(actEffect);
+  }
 }
       

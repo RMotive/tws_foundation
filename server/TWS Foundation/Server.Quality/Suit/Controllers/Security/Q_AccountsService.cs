@@ -194,4 +194,21 @@ public class Q_AccountsService
         }
         #endregion
     }
+    [Fact]
+    public async Task Delete() {
+        string testTag = Guid.NewGuid().ToString()[..4];
+        List<Account> mock = [MockFactory(testTag)];
+
+        // Create a new record to delete.
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mock, true);
+        SetBatchOut<Account> estela = Framing<SuccessFrame<SetBatchOut<Account>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
+
+        // Deleting the previous record.
+        Account newAccount = estela.Successes.First();
+        (HttpStatusCode DeleteStatus, _) = await Post("Delete", newAccount, true);
+        Assert.Equal(HttpStatusCode.OK, DeleteStatus);
+
+    }
 }

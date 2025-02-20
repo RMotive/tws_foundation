@@ -248,7 +248,7 @@ public class TrailersService : ITrailersService {
             currentPlates = [.. currentPlates.OrderBy(plate => plate.Id)];
         }
 
-        // Search new items to add in the given Trailer record.
+        // Search new items to add in the given Trailers record.
         for (int i = 0; i < plates.Count; i++) {
             Plate plate = plates[i];
             //Add new plate.

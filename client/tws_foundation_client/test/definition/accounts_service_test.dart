@@ -11,7 +11,7 @@ void main() {
   late SetBatchOut<Account> createMock;
   late RecordUpdateOut<Account> updateMock;  
   late SetViewOut<Permit> permitsMock;
-
+  late Account deleteMock;
   late List<Account> accounts;
 
   setUp(
@@ -22,6 +22,8 @@ void main() {
       createMock = SetBatchOut<Account>(<Account>[], <SetOperationFailure<Account>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<Account>(Account.a(), Account.a());
       permitsMock = SetViewOut<Permit>(<Permit>[], 1, DateTime.now(), 3, 0, 20);
+      deleteMock = Account.a();
+
 
       accounts = <Account>[
         Account.a(),
@@ -33,6 +35,8 @@ void main() {
             'create' => SuccessFrame<SetBatchOut<Account>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<RecordUpdateOut<Account>>('qTracer', updateMock).encode(),
             'getPermits' => SuccessFrame<SetViewOut<Permit>>('qTracer', permitsMock).encode(),
+            'delete' => SuccessFrame<Account>('qTracer', deleteMock).encode(),
+
             _ => <String, dynamic>{},
           };
 
@@ -140,6 +144,30 @@ void main() {
         },
       );
       expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<Account> fact = await service.delete(Account.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => Account.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Account> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
     },
   );
 }

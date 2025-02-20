@@ -85,10 +85,6 @@ public partial class Trailer
                 .HasForeignKey(d => d.Model)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            Entity.HasOne(d => d.MaintenanceNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Maintenance);
-
             Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Trailers)
                .HasForeignKey(d => d.Status)

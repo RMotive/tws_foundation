@@ -14,6 +14,8 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
 
+using TWS_Security.Sets;
+
 namespace TWS_Customer.Services;
 public class TrucksExternalsService : ITrucksExternalsService {
     private readonly TrucksExternalsDepot TrucksExternals;
@@ -132,5 +134,18 @@ public class TrucksExternalsService : ITrucksExternalsService {
             Previous = previousDeepCopy,
             Updated = lastestRecord ?? Truck,
         };
+    }
+    
+    public async Task<TruckExternal> Delete(TruckExternal Truck) {
+        //Removing one to many relationships.
+        List<YardLog> yardlogs = [.. Database.YardLogs.Where(ap => ap.TruckExternal == Truck.Id)];
+        List<TruckInventory> inventory = [.. Database.TrucksInventories.Where(ap => ap.TruckExternal == Truck.Id)];
+        Database.RemoveRange(inventory);
+        Database.RemoveRange(yardlogs);
+
+        TruckCommon? common = await Database.TrucksCommons.Where(e => e.Id == Truck.Common).FirstOrDefaultAsync();
+        if (common != null) Database.Remove(common);
+
+        return await TrucksExternals.Delete(Truck);
     }
 }

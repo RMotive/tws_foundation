@@ -14,7 +14,6 @@ void main() {
   final int updatedValidPermit = 69;
   final int validAccount = 14;
 
-
   Account buildMock(String randomToken){
     return Account(
       0,
@@ -44,7 +43,7 @@ void main() {
           null, 
           Profile(
             0,
-            'client test profile $randomToken',
+            'client profile $randomToken',
             null,
           ),
         ),
@@ -203,6 +202,54 @@ void main() {
           expect(fact.records >= 0, true);
         },
       );
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      List<Account>  deleteMocks = <Account>[];
+      int rnd = Random().nextInt(900)  + 99;
+      String randomToken = 'D_qual$rnd';
+      deleteMocks.add(buildMock(randomToken));
+      late Account newMock;
+
+      MainResolver<SetBatchOut<Account>> fact = await service.create(deleteMocks, auth);
+      bool resolved = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<Account>.des(json, Account.des),
+        onException: (Object exception, StackTrace trace) => throw exception,
+        onConnectionFailure: () => throw Exception('Connection failure'),
+        onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
+        onSuccess: (SuccessFrame<SetBatchOut<Account>> success) {
+          resolved = true;
+          newMock = success.estela.successes.first;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+      resolved = false;
+
+      MainResolver<Account> deleteFact = await service.delete(
+        newMock,
+        auth,
+      );
+      deleteFact.resolve(
+        decoder: (JObject json) => Account.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Account> success) {
+          resolved = true;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+
     },
   );
 }

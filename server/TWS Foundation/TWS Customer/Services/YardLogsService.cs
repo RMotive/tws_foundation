@@ -562,13 +562,13 @@ public class YardLogsService
                 current.TrailerExternalNavigation = YardLog.TrailerExternalNavigation;
             }
 
-            // ---> Update Trailer navigation
+            // ---> Update Trailers navigation
             if (YardLog.TrailerNavigation != null) {
                 current.Trailer = YardLog.TrailerNavigation!.Id;
                 current.TrailerNavigation = YardLog.TrailerNavigation;
             }
 
-            // ---> Update Truck navigation
+            // ---> Update Trucks navigation
             if (YardLog.TruckNavigation != null) {
                 // Remove navigations to avoid references issues.
                 YardLog.TruckNavigation!.SctNavigation = null;
@@ -577,7 +577,7 @@ public class YardLogsService
                 current.TruckNavigation = YardLog.TruckNavigation;
             }
 
-            // ---> Update Truck external navigation
+            // ---> Update Trucks external navigation
             if (YardLog.TruckExternalNavigation != null) {
                 current.TruckExternal = YardLog.TruckExternalNavigation!.Id;
                 current.TruckExternalNavigation = YardLog.TruckExternalNavigation;

@@ -19,4 +19,7 @@ abstract class AccountsServiceBase extends TWSServiceBase {
 
   /// Get efective permits for the account.
   Effect<SetViewOut<Permit>> getPermits(Account account, String auth);
+    
+  /// Delete record.
+  Effect<Account> delete(Account account, String auth);
 }

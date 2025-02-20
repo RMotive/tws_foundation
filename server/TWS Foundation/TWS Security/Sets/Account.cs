@@ -50,9 +50,10 @@ public partial class Account
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.ContactNavigation).WithOne(p => p.Account)
-                 .HasForeignKey<Account>(d => d.Contact)
-                 .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(e => e.ContactNavigation)
+                .WithOne(e => e.Account)
+                .HasForeignKey<Account>(e => e.Contact)
+                .OnDelete(DeleteBehavior.Cascade);
 
         });
     }

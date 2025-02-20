@@ -33,4 +33,9 @@ public class TrucksController : ControllerBase {
     public async Task<IActionResult> Update(Truck Truck) {
         return Ok(await Service.Update(Truck));
     }
+
+    [HttpPost(), Auth("Trucks", "Delete")]
+    public async Task<IActionResult> Delete(Truck Truck) {
+        return Ok(await Service.Delete(Truck));
+    }
 }

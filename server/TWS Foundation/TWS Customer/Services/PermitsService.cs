@@ -41,7 +41,14 @@ public class PermitsService
                     Description = p.FeatureNavigation.Description,
                     Enabled = p.FeatureNavigation.Enabled,
                 }: null,
-                
+                ActionNavigation = p.ActionNavigation != null ? new TWS_Security.Sets.Action() {
+                    Id = p.ActionNavigation.Id,
+                    Timestamp = p.ActionNavigation.Timestamp,
+                    Name = p.ActionNavigation.Name,
+                    Description = p.ActionNavigation.Description,
+                    Enabled = p.ActionNavigation.Enabled,
+                } : null,
+
             });
     }
 

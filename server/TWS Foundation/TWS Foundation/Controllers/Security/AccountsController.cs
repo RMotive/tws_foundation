@@ -37,4 +37,9 @@ public class AccountsController
     public async Task<IActionResult> GetPermits(Account Account) {
         return Ok(await Service.GetPermits(Account));
     }
+
+    [HttpPost(), Auth("", "")]
+    public async Task<IActionResult> Delete(Account Account) {
+        return Ok(await Service.Delete(Account));
+    }
 }
