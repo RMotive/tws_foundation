@@ -8,8 +8,8 @@
     3. Added an overload method to [Update] implementation in [BDepot]. This overload method implement the a [Include] LINQ query method
     as parameter to customs data fetch.
     4. Added controllers methods to the following Services:
-        - [Trailers] added custom [Update].
-        - [TrailersExternals] added custom [Update].
+        - [Trailers] added custom [Update] and [Delete].
+        - [TrailersExternals] added custom [Update] and [Delete].
         - [Trucks] added custom [Update] and [Delete].
         - [TrucksExternals] added custom [Update] and [Delete].
         - [Yardlogs] added custom [Update].
@@ -39,7 +39,8 @@
 
 - Fixes:
     1. Fixed [Truck] and [TruckExternal] relationships (Check scheme #6).
-    2. Fixed [BDepot] [Delete] [Tset] overcharged method.
+    2. Fixed [Trailer] and [TrailerExternal] relationships (Check scheme #6).
+    3. Fixed [BDepot] [Delete] [Tset] overcharged method.
 
 - Dependencies:
 

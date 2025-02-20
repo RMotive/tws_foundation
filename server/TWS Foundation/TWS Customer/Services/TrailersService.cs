@@ -280,4 +280,19 @@ public class TrailersService : ITrailersService {
 
 
     }
+    public async Task<Trailer> Delete(Trailer Trailer) {
+        //Removing one to many relationships.
+        List<Plate> plates = [.. Database.Plates.Where(ap => ap.Trailer == Trailer.Id)];
+        List<YardLog> yardlogs = [.. Database.YardLogs.Where(ap => ap.Trailer == Trailer.Id)];
+        Database.RemoveRange(plates);
+        Database.RemoveRange(yardlogs);
+
+        Maintenance? maintenance = await Database.Maintenances.Where(e => e.Id == Trailer.Maintenance).FirstOrDefaultAsync();
+        TrailerCommon? common = await Database.TrailersCommons.Where(e => e.Id == Trailer.Common).FirstOrDefaultAsync();
+
+        if (maintenance != null) Database.Remove(maintenance);
+        if (common != null) Database.Remove(common);
+
+        return await Trailers.Delete(Trailer);
+    }
 }

@@ -26,8 +26,13 @@ public class TrailersController : ControllerBase {
         return Ok(await Service.Create(Trailers));
     }
 
-    [HttpPost(), Auth("Trailers","Update")]
+    [HttpPost(), Auth("Trailers", "Update")]
     public async Task<IActionResult> Update(Trailer Trailer) {
         return Ok(await Service.Update(Trailer));
+    }
+
+    [HttpPost(), Auth("Trailers", "Delete")]
+    public async Task<IActionResult> Delete(Trailer Trailer) {
+        return Ok(await Service.Delete(Trailer));
     }
 }

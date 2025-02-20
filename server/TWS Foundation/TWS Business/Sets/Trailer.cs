@@ -64,31 +64,39 @@ public partial class Trailer
             Entity.Property(e => e.Sct)
               .HasColumnName("SCT");
 
-            Entity.HasOne(d => d.TrailerCommonNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Common);
-
             Entity.HasIndex(e => e.Common)
                .IsUnique();
 
             Entity.HasOne(d => d.SctNavigation)
-             .WithMany(p => p.Trailers)
-             .HasForeignKey(d => d.Sct);
+                .WithMany(p => p.Trailers)
+                .HasForeignKey(d => d.Sct)
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.CarrierNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Carrier)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.VehiculeModelNavigation)
                 .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Model)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Trailers)
                .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+               .OnDelete(DeleteBehavior.Restrict);
+
+            Entity.HasOne(d => d.MaintenanceNavigation)
+               .WithMany(p => p.Trailers)
+               .HasForeignKey(d => d.Maintenance)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            Entity.HasOne(d => d.TrailerCommonNavigation)
+                .WithOne(p => p.Trailer)
+                .HasForeignKey<Trailer>(d => d.Common)
+                .OnDelete(DeleteBehavior.Cascade);
+
         });
     }
 }

@@ -67,8 +67,6 @@ final class Permit implements CSMSetInterface {
   /// [Action] Navigation set.
   Action? actionNavigation;
   
-  List<Plate> plates = <Plate>[];
-
   /// Creates an [Identification] object based on required fields.
   Permit(
     this.id,

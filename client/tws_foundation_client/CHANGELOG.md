@@ -31,6 +31,8 @@
         - [Sections] (Create and update service)
         - [Permits] (View service)
         - [Profiles] (View service)
+        - [Trailer] (Delete service)
+        - [TrailerExternal] (Delete service)
         
     8. Additions to validations in the followings sets:
         - [Drivers]

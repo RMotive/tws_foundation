@@ -28,5 +28,11 @@ final class TrailersService extends TrailersServiceBase {
     CSMActEffect actEffect = await twsPost('update', trailer, auth: auth);
     return MainResolver<RecordUpdateOut<Trailer>>(actEffect);
   }
+
+  @override
+  Effect<Trailer> delete(Trailer trailer, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', trailer, auth: auth);
+    return MainResolver<Trailer>(actEffect);
+  }
 }
       

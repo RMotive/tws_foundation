@@ -186,4 +186,22 @@ public class Q_TrailersExternalsController
         }
         #endregion
     }
+
+    [Fact]
+    public async Task Delete() {
+        string testTag = Guid.NewGuid().ToString()[..3];
+        List<TrailerExternal> mock = [MockFactory(testTag)];
+
+        // Create a new record to delete.
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mock, true);
+        SetBatchOut<TrailerExternal> estela = Framing<SuccessFrame<SetBatchOut<TrailerExternal>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
+
+        // Deleting the previous record.
+        TrailerExternal newAccount = estela.Successes.First();
+        (HttpStatusCode DeleteStatus, _) = await Post("Delete", newAccount, true);
+        Assert.Equal(HttpStatusCode.OK, DeleteStatus);
+
+    }
 }

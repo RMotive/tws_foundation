@@ -65,9 +65,6 @@ public partial class TrailerExternal
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            Entity.HasOne(d => d.TrailerCommonNavigation)
-                .WithMany(p => p.TrailersExternals)
-                .HasForeignKey(d => d.Common);
             Entity.HasIndex(e => e.Common)
                 .IsUnique();
 
@@ -75,6 +72,11 @@ public partial class TrailerExternal
                 .WithMany(p => p.TrailersExternals)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            Entity.HasOne(d => d.TrailerCommonNavigation)
+                .WithOne(p => p.TrailerExternal)
+                .HasForeignKey<TrailerExternal>(d => d.Common)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

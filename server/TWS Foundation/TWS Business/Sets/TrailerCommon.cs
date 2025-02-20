@@ -30,11 +30,9 @@ public partial class TrailerCommon
 
     public virtual Location? LocationNavigation { get; set; }
 
-    public virtual ICollection<Trailer> Trailers { get; set; } = [];
+    public virtual Trailer? Trailer { get; set; }
 
-    public virtual ICollection<TrailerExternal> TrailersExternals { get; set; } = [];
-
-
+    public virtual TrailerExternal? TrailerExternal { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
@@ -65,21 +63,23 @@ public partial class TrailerCommon
 
             Entity.HasOne(d => d.TrailerTypeNavigation)
                 .WithMany(p => p.TrailersCommons)
-                .HasForeignKey(d => d.Type);
+                .HasForeignKey(d => d.Type)
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.TrailersCommons)
-                .HasForeignKey(d => d.Situation);
+                .HasForeignKey(d => d.Situation)
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.LocationNavigation)
                 .WithMany(p => p.TrailersCommons)
                 .HasForeignKey(d => d.Location)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrailersCommons)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

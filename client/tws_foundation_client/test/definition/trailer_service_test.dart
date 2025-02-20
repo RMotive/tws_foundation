@@ -10,7 +10,7 @@ void main() {
   late SetViewOut<Trailer> viewMock;
   late SetBatchOut<Trailer> createMock;
   late RecordUpdateOut<Trailer> updateMock;
-  
+  late Trailer deleteMock;
   late SetViewOptions<Trailer> options;
   late List<Trailer> trailers;
 
@@ -21,6 +21,7 @@ void main() {
       viewMock = SetViewOut<Trailer>(<Trailer>[], 1, DateTime.now(), 3, 0, 20);
       createMock = SetBatchOut<Trailer>(<Trailer>[], <SetOperationFailure<Trailer>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<Trailer>(Trailer.a(), Trailer.a());
+      deleteMock = Trailer.a();
       trailers = <Trailer>[
         Trailer.a(),
       ];
@@ -30,6 +31,8 @@ void main() {
             'view' => SuccessFrame<SetViewOut<Trailer>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<SetBatchOut<Trailer>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<RecordUpdateOut<Trailer>>('qTracer', updateMock).encode(),
+            'delete' => SuccessFrame<Trailer>('qTracer', deleteMock).encode(),
+
             _ => <String, dynamic>{},
           };
 
@@ -116,6 +119,30 @@ void main() {
         },
       );
       expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<Trailer> fact = await service.delete(Trailer.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => Trailer.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Trailer> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
     },
   );
 }

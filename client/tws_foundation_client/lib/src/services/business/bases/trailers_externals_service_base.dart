@@ -14,4 +14,6 @@ abstract class TrailersExternalsServiceBase extends TWSServiceBase {
   Effect<SetBatchOut<TrailerExternal>> create(List<TrailerExternal> trailers, String auth);
 
   Effect<RecordUpdateOut<TrailerExternal>> update(TrailerExternal trailer, String auth);
+  /// Delete record.
+  Effect<TrailerExternal> delete(TrailerExternal trailer, String auth);
 }

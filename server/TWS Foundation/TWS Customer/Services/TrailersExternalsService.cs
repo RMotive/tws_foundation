@@ -14,8 +14,6 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
 
-using Xunit;
-
 namespace TWS_Customer.Services;
 public class TrailersExternalsService : ITrailersExternalsService {
     private readonly TrailersExternalsDepot TrailersExternals;
@@ -97,7 +95,7 @@ public class TrailersExternalsService : ITrailersExternalsService {
     public async Task<RecordUpdateOut<TrailerExternal>> Update(TrailerExternal Trailer) {
         // Evaluate record.
         Trailer.EvaluateWrite();
-       
+
         // Check if the trailer currently exist in database.
         // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
         TrailerExternal? current = await Include(Database.TrailersExternals)
@@ -148,5 +146,15 @@ public class TrailersExternalsService : ITrailersExternalsService {
             Previous = previousDeepCopy,
             Updated = lastestRecord ?? Trailer,
         };
+    }
+    public async Task<TrailerExternal> Delete(TrailerExternal TrailerExternal) {
+        //Removing one to many relationships.
+        List<YardLog> yardlogs = [.. Database.YardLogs.Where(ap => ap.Trailer == TrailerExternal.Id)];
+        Database.RemoveRange(yardlogs);
+
+        TrailerCommon? common = await Database.TrailersCommons.Where(e => e.Id == TrailerExternal.Common).FirstOrDefaultAsync();
+        if (common != null) Database.Remove(common);
+
+        return await TrailersExternals.Delete(TrailerExternal);
     }
 }

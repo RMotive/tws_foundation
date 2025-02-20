@@ -8,4 +8,6 @@ public interface ITrailersService {
     Task<SetViewOut<Trailer>> View(SetViewOptions<Trailer> Options);
     Task<SetBatchOut<Trailer>> Create(Trailer[] Trailers);
     Task<RecordUpdateOut<Trailer>> Update(Trailer trailer);
+    Task<Trailer> Delete(Trailer Trailer);
+
 }

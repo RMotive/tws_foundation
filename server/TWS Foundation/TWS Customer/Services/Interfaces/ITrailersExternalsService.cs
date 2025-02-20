@@ -8,4 +8,6 @@ public interface ITrailersExternalsService {
     Task<SetViewOut<TrailerExternal>> View(SetViewOptions<TrailerExternal> Options);
     Task<SetBatchOut<TrailerExternal>> Create(TrailerExternal[] TrailersExternal);
     Task<RecordUpdateOut<TrailerExternal>> Update(TrailerExternal TrailerExternal);
+    Task<TrailerExternal> Delete(TrailerExternal TrailerExternal);
+
 }

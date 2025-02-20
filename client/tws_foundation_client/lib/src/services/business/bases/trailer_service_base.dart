@@ -14,5 +14,7 @@ abstract class TrailersServiceBase extends TWSServiceBase {
   Effect<SetBatchOut<Trailer>> create(List<Trailer> trailers, String auth);
 
   Effect<RecordUpdateOut<Trailer>> update(Trailer trailer, String auth);
+  /// Delete record.
+  Effect<Trailer> delete(Trailer trailer, String auth);
 
 }

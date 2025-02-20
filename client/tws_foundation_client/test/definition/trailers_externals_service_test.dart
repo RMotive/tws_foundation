@@ -10,7 +10,7 @@ void main() {
   late SetViewOut<TrailerExternal> viewMock;
   late SetBatchOut<TrailerExternal> createMock;
   late RecordUpdateOut<TrailerExternal> updateMock;
-
+  late TrailerExternal deleteMock;
   late SetViewOptions<TrailerExternal> options;
   late List<TrailerExternal> trailers;
 
@@ -21,6 +21,7 @@ void main() {
       viewMock = SetViewOut<TrailerExternal>(<TrailerExternal>[], 1, DateTime.now(), 3, 0, 20);
       createMock = SetBatchOut<TrailerExternal>(<TrailerExternal>[], <SetOperationFailure<TrailerExternal>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<TrailerExternal>(TrailerExternal.a(), TrailerExternal.a());
+      deleteMock = TrailerExternal.a();
       trailers = <TrailerExternal>[
         TrailerExternal.a(),
       ];
@@ -31,6 +32,8 @@ void main() {
             'view' => SuccessFrame<SetViewOut<TrailerExternal>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<SetBatchOut<TrailerExternal>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<RecordUpdateOut<TrailerExternal>>('qTracer', updateMock).encode(),
+            'delete' => SuccessFrame<TrailerExternal>('qTracer', deleteMock).encode(),
+
             _ => <String, dynamic>{},
           };
 
@@ -117,6 +120,30 @@ void main() {
         },
       );
       expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<TrailerExternal> fact = await service.delete(TrailerExternal.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => TrailerExternal.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<TrailerExternal> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
     },
   );
 }
