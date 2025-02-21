@@ -14,6 +14,8 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
 
+using TWS_Security.Sets;
+
 namespace TWS_Customer.Services;
 public class SectionsService : ISectionsService {
     private readonly SectionsDepot Sections;
@@ -121,5 +123,14 @@ public class SectionsService : ISectionsService {
             Previous = previousDeepCopy,
             Updated = lastestRecord ?? Section,
         };
+    }
+    public async Task<Section> Delete(Section Section) {
+        //Removing one to many relationships.
+        List<YardLog> yardlogs = [.. Database.YardLogs.Where(ap => ap.Section == Section.Id)];
+        List<TruckInventory> inventory = [.. Database.TrucksInventories.Where(ap => ap.Section == Section.Id)];
+        Database.RemoveRange(yardlogs);
+        Database.RemoveRange(inventory);
+
+        return await Sections.Delete(Section);
     }
 }

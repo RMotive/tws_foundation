@@ -16,4 +16,7 @@ abstract class LocationsServiceBase extends TWSServiceBase {
 
   /// Transaction to update a set object.
   Effect<RecordUpdateOut<Location>> update(Location location, String auth);
+
+  /// Delete record.
+  Effect<Location> delete(Location location, String auth);
 }

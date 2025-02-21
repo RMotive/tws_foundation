@@ -164,5 +164,22 @@ public class Q_SectionsController
         #endregion
     }
 
+    [Fact]
+    public async Task Delete() {
+        string testTag = Guid.NewGuid().ToString()[..4];
+        List<Section> mock = [MockFactory(testTag)];
+
+        // Create a new record to delete.
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mock, true);
+        SetBatchOut<Section> estela = Framing<SuccessFrame<SetBatchOut<Section>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
+
+        // Deleting the previous record.
+        Section newAccount = estela.Successes.First();
+        (HttpStatusCode DeleteStatus, _) = await Post("Delete", newAccount, true);
+        Assert.Equal(HttpStatusCode.OK, DeleteStatus);
+
+    }
 
 }

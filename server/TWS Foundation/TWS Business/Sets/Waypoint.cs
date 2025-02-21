@@ -1,15 +1,11 @@
-﻿
-
-using System.Diagnostics.Metrics;
-
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Sets;
-public class Waypoint 
+public class Waypoint
     : BSet {
     public override int Id { get; set; }
 

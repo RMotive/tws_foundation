@@ -20,14 +20,24 @@ public class Q_DriversDepot
 
         return new() {
            Status = 1,
-           Employee = 1,
+           Employee = 0,
            DriverType = RandomUtils.String(12),
            Common = 0,
            DriverCommonNavigation = new() {
                Timestamp = DateTime.Now,
                Status = 1,
                License = RandomUtils.String(12)
-           }
+           },
+           EmployeeNavigation = new() {
+               Status = 1,
+               Identification = 0,
+               IdentificationNavigation = new() {
+                   Status = 1,
+                   Name = RandomUtils.String(10),
+                   FatherLastname = RandomUtils.String(10),
+                   MotherLastName = RandomUtils.String(10),
+               },
+           },
         };
     }
 

@@ -8,7 +8,7 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]")]
+[ApiController, Route("[Controller]/[Action]")]
 public class LocationsController : ControllerBase{
     private readonly ILocationsService Service;
 
@@ -16,18 +16,24 @@ public class LocationsController : ControllerBase{
         this.Service = Service;
     }
 
-    [HttpPost("[Action]"), Auth("Locations", "Read")]
+    [HttpPost(), Auth("Locations", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Location> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost("[Action]"), Auth("Locations", "Create")]
+    [HttpPost(), Auth("Locations", "Create")]
     public async Task<IActionResult> Create(Location[] Locations) {
         return Ok(await Service.Create(Locations));
     }
 
-    [HttpPost("[Action]"), Auth("Locations", "Update")]
+    [HttpPost(), Auth("Locations", "Update")]
     public async Task<IActionResult> Update(Location Location) {
         return Ok(await Service.Update(Location));
     }
+
+    [HttpPost(), Auth("Locations", "Delete")]
+    public async Task<IActionResult> Delete(Location Location) {
+        return Ok(await Service.Delete(Location));
+    }
+
 }

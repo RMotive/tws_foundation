@@ -228,4 +228,22 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         }
         #endregion
     }
+
+    [Fact]
+    public async Task Delete() {
+        string testTag = Guid.NewGuid().ToString()[..3];
+        List<YardLog> mock = [MockFactory(testTag)];
+
+        // Create a new record to delete.
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mock, true);
+        SetBatchOut<YardLog> estela = Framing<SuccessFrame<SetBatchOut<YardLog>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
+
+        // Deleting the previous record.
+        YardLog newAccount = estela.Successes.First();
+        (HttpStatusCode DeleteStatus, _) = await Post("Delete", newAccount, true);
+        Assert.Equal(HttpStatusCode.OK, DeleteStatus);
+
+    }
 }

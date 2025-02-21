@@ -5,9 +5,13 @@ using CSM_Foundation.Database.Models.Out;
 
 using TWS_Business.Sets;
 
+using TWS_Security.Sets;
+
 namespace TWS_Customer.Services.Interfaces;
 public interface ILocationsService {
     Task<SetViewOut<Location>> View(SetViewOptions<Location> Options);
     Task<SetBatchOut<Location>> Create(Location[] Locations);
     Task<RecordUpdateOut<Location>> Update(Location Location);
+    Task<Location> Delete(Location Location);
+
 }

@@ -62,16 +62,18 @@ public partial class Location
 
             Entity.HasOne(d => d.WaypointNavigation)
                .WithMany(p => p.Locations)
-               .HasForeignKey(d => d.Waypoint);
+               .HasForeignKey(d => d.Waypoint)
+               .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.AddressNavigation)
                 .WithMany(p => p.Locations)
-                .HasForeignKey(d => d.Address);
+                .HasForeignKey(d => d.Address)
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Locations)
                .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+               .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

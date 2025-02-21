@@ -11,6 +11,8 @@ void main() {
   late RecordUpdateOut<Location> updateMock;
   late SetViewOptions<Location> options;
   late List<Location> locations;
+  late Location deleteMock;
+
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
@@ -18,6 +20,8 @@ void main() {
       viewMock = SetViewOut<Location>(<Location>[], 1, DateTime.now(), 3, 0, 20);
       createMock = SetBatchOut<Location>(<Location>[], <SetOperationFailure<Location>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<Location>(Location.a(), Location.a());
+      deleteMock = Location.a();
+
       locations = <Location>[
         Location.a(),
       ];
@@ -27,6 +31,8 @@ void main() {
             'view' => SuccessFrame<SetViewOut<Location>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<SetBatchOut<Location>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<RecordUpdateOut<Location>>('qTracer', updateMock).encode(),
+            'delete' => SuccessFrame<Location>('qTracer', deleteMock).encode(),
+
             _ => <String, dynamic>{},
           };
 
@@ -112,6 +118,30 @@ void main() {
         },
       );
       expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<Location> fact = await service.delete(Location.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => Location.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Location> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
     },
   );
 }

@@ -21,7 +21,7 @@ public class Q_Employee : BQ_Set<Employee> {
         Q_MigrationSet_EvaluateRecord<Employee> failAllCases = new("All properties fail") {
             Mock = new() {
                 Status = 0,
-                Identification = 0,
+                Identification = -1,
             },
             Expectations = [
                 (nameof(Employee.Id), [(new PointerValidator(), 3)]),

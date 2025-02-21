@@ -164,4 +164,52 @@ void main() {
       );
     },
   );
+
+   test(
+    'Delete',
+    () async {
+      List<Location>  deleteMocks = <Location>[];
+      int rnd = Random().nextInt(900)  + 99;
+      String randomToken = 'D_qual$rnd';
+      deleteMocks.add(buildMock(randomToken));
+      late Location newMock;
+
+      MainResolver<SetBatchOut<Location>> fact = await service.create(deleteMocks, auth);
+      bool resolved = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<Location>.des(json, Location.des),
+        onException: (Object exception, StackTrace trace) => throw exception,
+        onConnectionFailure: () => throw Exception('Connection failure'),
+        onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
+        onSuccess: (SuccessFrame<SetBatchOut<Location>> success) {
+          resolved = true;
+          newMock = success.estela.successes.first;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+      resolved = false;
+
+      MainResolver<Location> deleteFact = await service.delete(
+        newMock,
+        auth,
+      );
+      deleteFact.resolve(
+        decoder: (JObject json) => Location.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Location> success) {
+          resolved = true;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+
+    },
+  );
 }

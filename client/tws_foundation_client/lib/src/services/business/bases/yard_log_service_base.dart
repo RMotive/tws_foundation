@@ -17,4 +17,6 @@ abstract class YardLogServiceBase extends TWSServiceBase {
   Effect<SetBatchOut<YardLog>> create(List<YardLog> yardlogs, String auth);
 
   Effect<RecordUpdateOut<YardLog>> update(YardLog yardlog, String auth);
+  /// Delete record.
+  Effect<YardLog> delete(YardLog yardLog, String auth);
 }

@@ -143,7 +143,7 @@ public partial class YardLog
             entity.HasOne(d => d.LoadTypeNavigation)
                .WithMany(p => p.YardLogs)
                .HasForeignKey(d => d.LoadType)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+               .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(d => d.SectionNavigation)
                .WithMany(p => p.YardLogs)

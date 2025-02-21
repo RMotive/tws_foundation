@@ -252,7 +252,9 @@ final class YardLog implements CSMSetInterface {
 
     return results;
   }
-  YardLog.a();
+  YardLog.a(){
+    _timestamp = DateTime.now();
+  }
   YardLog clone({
     int? id,
     bool? entry,

@@ -16,5 +16,8 @@ abstract class SectionsServiceBase extends TWSServiceBase {
 
   /// Transaction to update a set object.
   Effect<RecordUpdateOut<Section>> update(Section section, String auth);
+  
+  /// Delete record.
+  Effect<Section> delete(Section section, String auth);
 
 }

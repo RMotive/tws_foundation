@@ -273,7 +273,7 @@ void main() {
         'Creates when unexist',
         () async {
           int rnd = Random().nextInt(900) + 99;
-          String randomToken = '_quali$rnd';
+          String randomToken = 'U_qual$rnd';
           YardLog mock = buildMock(randomToken);
 
           MainResolver<RecordUpdateOut<YardLog>> fact = await service.update(mock, auth);
@@ -301,6 +301,54 @@ void main() {
           assert(actEffect.updated.timestamp.year == 1999);
         },
       );
+    },
+  );
+
+   test(
+    'Delete',
+    () async {
+      List<YardLog>  deleteMocks = <YardLog>[];
+      int rnd = Random().nextInt(900)  + 99;
+      String randomToken = 'D_qual$rnd';
+      deleteMocks.add(buildMock(randomToken));
+      late YardLog newMock;
+
+      MainResolver<SetBatchOut<YardLog>> fact = await service.create(deleteMocks, auth);
+      bool resolved = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<YardLog>.des(json, YardLog.des),
+        onException: (Object exception, StackTrace trace) => throw exception,
+        onConnectionFailure: () => throw Exception('Connection failure'),
+        onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
+        onSuccess: (SuccessFrame<SetBatchOut<YardLog>> success) {
+          resolved = true;
+          newMock = success.estela.successes.first;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+      resolved = false;
+
+      MainResolver<YardLog> deleteFact = await service.delete(
+        newMock,
+        auth,
+      );
+      deleteFact.resolve(
+        decoder: (JObject json) => YardLog.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<YardLog> success) {
+          resolved = true;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+
     },
   );
 }

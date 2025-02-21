@@ -50,6 +50,9 @@ public partial class Account
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
+            entity.Property(e => e.Timestamp)
+                .HasColumnType("datetime");
+
             entity.HasOne(e => e.ContactNavigation)
                 .WithOne(e => e.Account)
                 .HasForeignKey<Account>(e => e.Contact)

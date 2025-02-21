@@ -26,13 +26,14 @@
         - [Drivers] (Create, update and delete services)
         - [DriversExternals] (Create update and delete services)
         - [Accounts] (Create, update & getPermits and delete services)
-        - [Locations] (View, create and update services)
+        - [Locations] (View, create, update and delete services)
         - [Addresses] (View service)
-        - [Sections] (Create and update service)
+        - [Sections] (Create, update and delete service)
         - [Permits] (View service)
         - [Profiles] (View service)
         - [Trailer] (Delete service)
         - [TrailerExternal] (Delete service)
+        - [Yardlogs] (Delete service)
     8. Additions to validations in the followings sets:
         - [Drivers]
         - [Address]

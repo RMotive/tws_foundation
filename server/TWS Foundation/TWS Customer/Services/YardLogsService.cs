@@ -9,12 +9,13 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Sets;
+
 using TWS_Customer.Services.Interfaces;
 
-using Xunit.Abstractions;
+using TWS_Security.Sets;
 
 namespace TWS_Customer.Services;
-public class YardLogsService 
+public class YardLogsService
     : IYardLogsService {
     private readonly YardLogsDepot YardLogs;
     private readonly TWSBusinessDatabase Database;
@@ -135,13 +136,13 @@ public class YardLogsService
                         Type = y.TrailerExternalNavigation.TrailerCommonNavigation.Type,
                         Situation = y.TrailerExternalNavigation.TrailerCommonNavigation.Situation,
                         Location = y.TrailerExternalNavigation.TrailerCommonNavigation.Location,
-                        TrailerTypeNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation == null? null : new TrailerType() {
+                        TrailerTypeNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation == null ? null : new TrailerType() {
                             Id = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Id,
                             Timestamp = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Timestamp,
                             Status = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Status,
                             Size = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.Size,
                             TrailerClass = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClass,
-                            TrailerClassNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation == null? null : new TrailerClass() {
+                            TrailerClassNavigation = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation == null ? null : new TrailerClass() {
                                 Id = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Id,
                                 Timestamp = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Timestamp,
                                 Name = y.TrailerExternalNavigation.TrailerCommonNavigation.TrailerTypeNavigation.TrailerClassNavigation.Name,
@@ -286,7 +287,7 @@ public class YardLogsService
                     },
                     Vin = y.TruckNavigation.Vin,
                     SctNavigation = y.TruckNavigation.SctNavigation,
-                    VehiculeModelNavigation = y.TruckNavigation.VehiculeModelNavigation == null? null : new VehiculeModel() {
+                    VehiculeModelNavigation = y.TruckNavigation.VehiculeModelNavigation == null ? null : new VehiculeModel() {
                         Id = y.TruckNavigation.VehiculeModelNavigation.Id,
                         Timestamp = y.TruckNavigation.VehiculeModelNavigation.Timestamp,
                         Status = y.TruckNavigation.VehiculeModelNavigation.Status,
@@ -345,7 +346,7 @@ public class YardLogsService
                 }
 
 
-            });;
+            }); ;
     }
     /// <summary>
     /// This method calculate the ocupancy values, for previous and new selected sections, 
@@ -447,17 +448,17 @@ public class YardLogsService
     /// Location id to assign. Can be null.
     /// </param>
     private void CommonConfigurator(int situation, Object? common, int? locationID) {
-        if(common != null) {
+        if (common != null) {
             if (common is TruckCommon truckCommon) {
                 truckCommon.Location = locationID;
                 truckCommon.LocationNavigation = null;
                 truckCommon.Situation = situation;
-            }else if(common is TrailerCommon trailerCommon) {
+            } else if (common is TrailerCommon trailerCommon) {
                 trailerCommon.Location = locationID;
                 trailerCommon.LocationNavigation = null;
                 trailerCommon.Situation = situation;
             }
-            
+
         }
     }
     /// <summary>
@@ -480,7 +481,7 @@ public class YardLogsService
             // --> Setting trucks.
             CommonConfigurator(1, newYardlog.TruckNavigation?.TruckCommonNavigation, newYardlog.SectionNavigation!.Yard);
             CommonConfigurator(1, newYardlog.TruckExternalNavigation?.TruckCommonNavigation, newYardlog.SectionNavigation!.Yard);
-            
+
             // --> Setting trailers.
             CommonConfigurator(1, newYardlog.TrailerNavigation?.TrailerCommonNavigation, newYardlog.SectionNavigation!.Yard);
             CommonConfigurator(1, newYardlog.TrailerExternalNavigation?.TrailerCommonNavigation, newYardlog.SectionNavigation!.Yard);
@@ -497,7 +498,7 @@ public class YardLogsService
         }
     }
     public async Task<SetViewOut<YardLog>> View(SetViewOptions<YardLog> options) {
-       
+
         return await YardLogs.View(options, Include);
     }
 
@@ -507,111 +508,111 @@ public class YardLogsService
 
     public async Task<RecordUpdateOut<YardLog>> Update(YardLog YardLog) {
 
-            // Evaluate record.
-            YardLog.EvaluateWrite();
-            // Check if the trailer currently exist in database.
-            // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
-            YardLog? current = await Include(Database.YardLogs)
-                .Where(i => i.Id == YardLog.Id)
-                .FirstOrDefaultAsync();
+        // Evaluate record.
+        YardLog.EvaluateWrite();
+        // Check if the trailer currently exist in database.
+        // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
+        YardLog? current = await Include(Database.YardLogs)
+            .Where(i => i.Id == YardLog.Id)
+            .FirstOrDefaultAsync();
 
-            // If yardlog not exist in database, then use the generic update method.
-            if (current == null) {
-                return await YardLogs.Update(YardLog, Include);
-            }
-            // Save a deep copy before changes.
-            YardLog previousDeepCopy = current.DeepCopy();
+        // If yardlog not exist in database, then use the generic update method.
+        if (current == null) {
+            return await YardLogs.Update(YardLog, Include);
+        }
+        // Save a deep copy before changes.
+        YardLog previousDeepCopy = current.DeepCopy();
 
-            // Clear the navigation to avoid duplicated tracking issues.
-            current.DriverExternalNavigation = null;
-            current.DriverNavigation = null;
-            current.LoadTypeNavigation = null;
-            current.SectionNavigation = null;
-            current.TrailerExternalNavigation = null;
-            current.TrailerNavigation = null;
-            current.TruckExternalNavigation = null;
-            current.TruckNavigation = null;
+        // Clear the navigation to avoid duplicated tracking issues.
+        current.DriverExternalNavigation = null;
+        current.DriverNavigation = null;
+        current.LoadTypeNavigation = null;
+        current.SectionNavigation = null;
+        current.TrailerExternalNavigation = null;
+        current.TrailerNavigation = null;
+        current.TruckExternalNavigation = null;
+        current.TruckNavigation = null;
 
-            Database.Attach(current);
+        Database.Attach(current);
 
-            // Update the main model properties.
-            EntityEntry previousEntry = Database.Entry(current);
-            previousEntry.CurrentValues.SetValues(YardLog);
+        // Update the main model properties.
+        EntityEntry previousEntry = Database.Entry(current);
+        previousEntry.CurrentValues.SetValues(YardLog);
 
-            // ---> Update Driver navigation
-            if (YardLog.DriverNavigation != null) {
-                current.Driver = YardLog.DriverNavigation!.Id;
-                current.DriverNavigation = YardLog.DriverNavigation;
-            }
+        // ---> Update Driver navigation
+        if (YardLog.DriverNavigation != null) {
+            current.Driver = YardLog.DriverNavigation!.Id;
+            current.DriverNavigation = YardLog.DriverNavigation;
+        }
 
-            // ---> Update Driver external navigation
-            if (YardLog.DriverExternalNavigation != null) {
-                current.DriverExternal = YardLog.DriverExternalNavigation!.Id;
-                current.DriverExternalNavigation = YardLog.DriverExternalNavigation;
-            }
+        // ---> Update Driver external navigation
+        if (YardLog.DriverExternalNavigation != null) {
+            current.DriverExternal = YardLog.DriverExternalNavigation!.Id;
+            current.DriverExternalNavigation = YardLog.DriverExternalNavigation;
+        }
 
-            // ---> Update Load Type navigation
-            if (YardLog.LoadTypeNavigation != null) {
-                current.LoadType = YardLog.LoadTypeNavigation!.Id;
-                current.LoadTypeNavigation = YardLog.LoadTypeNavigation;
-            }
+        // ---> Update Load Type navigation
+        if (YardLog.LoadTypeNavigation != null) {
+            current.LoadType = YardLog.LoadTypeNavigation!.Id;
+            current.LoadTypeNavigation = YardLog.LoadTypeNavigation;
+        }
 
-            // ---> Update TrailerExternal navigation
-            if (YardLog.TrailerExternalNavigation != null) {
-                current.TrailerExternal = YardLog.TrailerExternalNavigation!.Id;
-                current.TrailerExternalNavigation = YardLog.TrailerExternalNavigation;
-            }
+        // ---> Update TrailerExternal navigation
+        if (YardLog.TrailerExternalNavigation != null) {
+            current.TrailerExternal = YardLog.TrailerExternalNavigation!.Id;
+            current.TrailerExternalNavigation = YardLog.TrailerExternalNavigation;
+        }
 
-            // ---> Update Trailers navigation
-            if (YardLog.TrailerNavigation != null) {
-                current.Trailer = YardLog.TrailerNavigation!.Id;
-                current.TrailerNavigation = YardLog.TrailerNavigation;
-            }
+        // ---> Update Trailers navigation
+        if (YardLog.TrailerNavigation != null) {
+            current.Trailer = YardLog.TrailerNavigation!.Id;
+            current.TrailerNavigation = YardLog.TrailerNavigation;
+        }
 
-            // ---> Update Trucks navigation
-            if (YardLog.TruckNavigation != null) {
-                // Remove navigations to avoid references issues.
-                YardLog.TruckNavigation!.SctNavigation = null;
-                YardLog.TruckNavigation!.CarrierNavigation = null;
-                current.Truck = YardLog.TruckNavigation!.Id;
-                current.TruckNavigation = YardLog.TruckNavigation;
-            }
+        // ---> Update Trucks navigation
+        if (YardLog.TruckNavigation != null) {
+            // Remove navigations to avoid references issues.
+            YardLog.TruckNavigation!.SctNavigation = null;
+            YardLog.TruckNavigation!.CarrierNavigation = null;
+            current.Truck = YardLog.TruckNavigation!.Id;
+            current.TruckNavigation = YardLog.TruckNavigation;
+        }
 
-            // ---> Update Trucks external navigation
-            if (YardLog.TruckExternalNavigation != null) {
-                current.TruckExternal = YardLog.TruckExternalNavigation!.Id;
-                current.TruckExternalNavigation = YardLog.TruckExternalNavigation;
-            }
+        // ---> Update Trucks external navigation
+        if (YardLog.TruckExternalNavigation != null) {
+            current.TruckExternal = YardLog.TruckExternalNavigation!.Id;
+            current.TruckExternalNavigation = YardLog.TruckExternalNavigation;
+        }
 
-            // ---> Update section navigation
-            if (YardLog.SectionNavigation != null) {
-                // override section navigation values.
-                current.Section = YardLog.SectionNavigation!.Id;
-                current.SectionNavigation = YardLog.SectionNavigation;
-                // --> Change the ocupancy values for sections
-                // Check if yardlog is entry or departure:
-                // Note: For departure logs section navigation is not required.
-                CalculateSections(current, previousDeepCopy);
-            }
+        // ---> Update section navigation
+        if (YardLog.SectionNavigation != null) {
+            // override section navigation values.
+            current.Section = YardLog.SectionNavigation!.Id;
+            current.SectionNavigation = YardLog.SectionNavigation;
+            // --> Change the ocupancy values for sections
+            // Check if yardlog is entry or departure:
+            // Note: For departure logs section navigation is not required.
+            CalculateSections(current, previousDeepCopy);
+        }
 
-            setCommonNavigators(current, previousDeepCopy);
+        setCommonNavigators(current, previousDeepCopy);
 
-            await Database.SaveChangesAsync();
-            Disposer?.Push(Database, YardLog);
-            // Get the lastest record data from database.
-            YardLog? lastestRecord = await Include(Database.YardLogs)
-                .Where(i => i.Id == YardLog.Id)
-                .FirstOrDefaultAsync();
+        await Database.SaveChangesAsync();
+        Disposer?.Push(Database, YardLog);
+        // Get the lastest record data from database.
+        YardLog? lastestRecord = await Include(Database.YardLogs)
+            .Where(i => i.Id == YardLog.Id)
+            .FirstOrDefaultAsync();
 
-            return new RecordUpdateOut<YardLog> {
-                Previous = previousDeepCopy,
-                Updated = lastestRecord ?? YardLog,
-            };
-        
+        return new RecordUpdateOut<YardLog> {
+            Previous = previousDeepCopy,
+            Updated = lastestRecord ?? YardLog,
+        };
+
     }
 
-    public async Task<YardLog> Delete(int Id) {
-        return await YardLogs.Delete(Id);
+    public async Task<YardLog> Delete(YardLog YardLog) {
+        return await YardLogs.Delete(YardLog);
     }
 
     public Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options) {

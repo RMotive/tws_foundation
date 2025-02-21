@@ -38,7 +38,7 @@ public class YardLogsController : ControllerBase {
     }
 
     [HttpPost(), Auth("Yardlogs", "Delete")]
-    public async Task<IActionResult> Delete(int Id) {
-        return Ok(await Service.Delete(Id));
+    public async Task<IActionResult> Delete(YardLog yardLog) {
+        return Ok(await Service.Delete(yardLog));
     }
 }

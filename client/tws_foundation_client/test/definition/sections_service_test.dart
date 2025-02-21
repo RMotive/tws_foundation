@@ -11,6 +11,8 @@ void main() {
   late RecordUpdateOut<Section> updateMock;
   late SetViewOptions<Section> options;
   late List<Section> sections;
+  late Section deleteMock;
+
   setUp(
     () {
       List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
@@ -18,6 +20,8 @@ void main() {
       viewMock = SetViewOut<Section>(<Section>[], 1, DateTime.now(), 3, 0, 20);
       createMock = SetBatchOut<Section>(<Section>[], <SetOperationFailure<Section>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<Section>(Section.a(), Section.a());
+      deleteMock = Section.a();
+
       sections = <Section>[
         Section.a(),
       ];
@@ -27,6 +31,8 @@ void main() {
             'view' => SuccessFrame<SetViewOut<Section>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<SetBatchOut<Section>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<RecordUpdateOut<Section>>('qTracer', updateMock).encode(),
+            'delete' => SuccessFrame<Section>('qTracer', deleteMock).encode(),
+
             _ => <String, dynamic>{},
           };
 
@@ -112,6 +118,30 @@ void main() {
         },
       );
       expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<Section> fact = await service.delete(Section.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => Section.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Section> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
     },
   );
 }

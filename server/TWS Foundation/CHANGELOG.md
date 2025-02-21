@@ -12,10 +12,10 @@
         - [TrailersExternals] added custom [Update] and [Delete].
         - [Trucks] added custom [Update] and [Delete].
         - [TrucksExternals] added custom [Update] and [Delete].
-        - [Yardlogs] added custom [Update].
+        - [Yardlogs] added custom [Update] and [Delete].
         - [Accounts] added [View], custom [Update], [Create] and [Delete].
-        - [Locations] added custom [Update], [Create].
-        - [Sections] added  custom [Update], [Create].
+        - [Locations] added custom [Update], [Create] and [Delete].
+        - [Sections] added  custom [Update], [Create] and [Delete].
         - [Employee] added [View].
         - [Address] added [View].
         - [TrailerClass] added [View].

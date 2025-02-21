@@ -28,5 +28,11 @@ final class SectionsService extends SectionsServiceBase {
     CSMActEffect actEffect = await twsPost('update', section, auth: auth);
     return MainResolver<RecordUpdateOut<Section>>(actEffect);
   }
+
+  @override
+  Effect<Section> delete(Section section, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', section, auth: auth);
+    return MainResolver<Section>(actEffect);
+  }
 }
       

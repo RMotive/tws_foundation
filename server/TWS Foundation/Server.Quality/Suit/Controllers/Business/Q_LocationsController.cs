@@ -151,6 +151,24 @@ public class Q_LocationsController
         }
         #endregion
     }
+
+    [Fact]
+    public async Task Delete() {
+        string testTag = Guid.NewGuid().ToString()[..3];
+        List<Location> mock = [MockFactory(testTag)];
+
+        // Create a new record to delete.
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mock, true);
+        SetBatchOut<Location> estela = Framing<SuccessFrame<SetBatchOut<Location>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
+
+        // Deleting the previous record.
+        Location newAccount = estela.Successes.First();
+        (HttpStatusCode DeleteStatus, _) = await Post("Delete", newAccount, true);
+        Assert.Equal(HttpStatusCode.OK, DeleteStatus);
+
+    }
 }
 
 

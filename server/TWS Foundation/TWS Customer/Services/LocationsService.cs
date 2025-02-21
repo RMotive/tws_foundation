@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Core.Utils;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using TWS_Security.Sets;
 
 
 namespace TWS_Customer.Services;
@@ -115,5 +116,16 @@ public class LocationsService : ILocationsService {
             Previous = previousDeepCopy,
             Updated = lastestRecord ?? Location,
         };
+    }
+
+    public async Task<Location> Delete(Location Location) {
+
+        Waypoint? waypoint = await Database.Waypoints.Where(e => e.Id == Location.Waypoint).FirstOrDefaultAsync();
+        if (waypoint != null) Database.Remove(waypoint);
+
+        Address? address = await Database.Addresses.Where(e => e.Id == Location.Address).FirstOrDefaultAsync();
+        if (address != null) Database.Remove(address);
+
+        return await Locations.Delete(Location);
     }
 }

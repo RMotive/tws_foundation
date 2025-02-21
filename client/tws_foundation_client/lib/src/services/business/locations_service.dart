@@ -29,6 +29,11 @@ final class LocationsService extends LocationsServiceBase {
     return MainResolver<RecordUpdateOut<Location>>(actEffect);
   }
 
+  @override
+  Effect<Location> delete(Location location, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', location, auth: auth);
+    return MainResolver<Location>(actEffect);
+  }
   
 }
       

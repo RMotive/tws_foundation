@@ -10,6 +10,6 @@ public interface IYardLogsService {
     Task<SetViewOut<YardLog>> ViewInventory(SetViewOptions<YardLog> Options);
     Task<SetBatchOut<YardLog>> Create(YardLog[] Trucks);
     Task<RecordUpdateOut<YardLog>> Update(YardLog YardLog);
-    Task<YardLog> Delete(int Id);
+    Task<YardLog> Delete(YardLog YardLog);
 
 }

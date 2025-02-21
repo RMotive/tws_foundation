@@ -17,10 +17,15 @@ public class Q_EmployeesDepot
     protected override Employee MockFactory(string RandomSeed) {
 
         return new() {
-            Identification = 1,
             Status = 1,
             Approach = 1,
             Address = 1,
+            IdentificationNavigation = new() {
+                Status = 1,
+                Name = RandomUtils.String(10),
+                FatherLastname = RandomUtils.String(10),
+                MotherLastName = RandomUtils.String(10),
+            },
             Curp = RandomUtils.String(18),
             Rfc = RandomUtils.String(12),
             Nss = RandomUtils.String(11)

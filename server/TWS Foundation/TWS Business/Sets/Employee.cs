@@ -47,7 +47,7 @@ public partial class Employee
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
             ..Container,
-            (nameof(Identification), [new PointerValidator(true)]),
+            (nameof(Identification), [new PointerValidator(true,false)]),
             (nameof(Status), [new PointerValidator(true)]),
             (nameof(Curp), [new LengthValidator(Min: 18, Max:18, nulleable: true)]),
             (nameof(Rfc), [new LengthValidator(Min: 12, Max:12, nulleable: true)]),

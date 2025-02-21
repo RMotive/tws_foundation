@@ -454,12 +454,6 @@ public abstract class BDepot<TDatabase, TSet>
     }
 
     public async Task<TSet> Delete(TSet Set) {
-        //Set.EvaluateWrite();
-        //this.Set.Remove(Set);
-        //await Database.SaveChangesAsync();
-        //Database.ChangeTracker.Clear();
-        //return Set;
-
         TSet record = await this.Set
             .AsNoTracking()
             .Where(r => r.Id == Set.Id)

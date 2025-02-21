@@ -37,5 +37,11 @@ final class YardLogsService extends YardLogServiceBase {
     CSMActEffect actEffect = await twsPost('update', yardlog, auth: auth);
     return MainResolver<RecordUpdateOut<YardLog>>(actEffect);
   }
+
+  @override
+  Effect<YardLog> delete(YardLog yardLog, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', yardLog, auth: auth);
+    return MainResolver<YardLog>(actEffect);
+  }
 }
       
