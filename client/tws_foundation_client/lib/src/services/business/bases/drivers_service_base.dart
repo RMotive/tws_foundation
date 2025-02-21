@@ -16,4 +16,8 @@ abstract class DriversServiceBase extends TWSServiceBase {
 
   /// Transaction to update a set object.
   Effect<RecordUpdateOut<Driver>> update(Driver driver, String auth);
+
+  /// Delete record.
+  Effect<Driver> delete(Driver driver, String auth);
+
 }

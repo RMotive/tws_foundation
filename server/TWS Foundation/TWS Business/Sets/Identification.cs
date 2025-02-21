@@ -24,9 +24,9 @@ public partial class Identification
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<DriverExternal> DriversExternals { get; set; } = [];
+    public virtual DriverExternal? DriverExternal { get; set; }
 
-    public virtual ICollection<Employee> Employees { get; set; } = [];
+    public virtual Employee? Employee { get; set; }
 
 
     public static void CreateModel(ModelBuilder Builder) {
@@ -55,7 +55,7 @@ public partial class Identification
             Entity.HasOne(d => d.StatusNavigation)
                .WithMany(p => p.Identifications)
                .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
+               .OnDelete(DeleteBehavior.Restrict);
         });
     }
 

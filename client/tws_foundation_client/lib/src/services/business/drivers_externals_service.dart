@@ -28,5 +28,11 @@ final class DriversExternalsService extends DriversExternalsServiceBase {
     CSMActEffect actEffect = await twsPost('update', driver, auth: auth);
     return MainResolver<RecordUpdateOut<DriverExternal>>(actEffect);
   }
+
+  @override
+  Effect<DriverExternal> delete(DriverExternal driver, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', driver, auth: auth);
+    return MainResolver<DriverExternal>(actEffect);
+  }
 }
       

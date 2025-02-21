@@ -71,6 +71,9 @@ public partial class TruckExternal
               .HasMaxLength(12)
               .IsUnicode(false);
 
+            Entity.HasIndex(e => e.Common)
+            .IsUnique();
+
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrucksExternals)
                 .HasForeignKey(d => d.Status)

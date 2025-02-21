@@ -18,22 +18,22 @@ void main() {
       1, 
       0, 
       0, 
-      "driver t $randomToken", 
+      "driver_$randomToken", 
       time, 
       time, 
       time, 
-      "twic num $randomToken", 
+      "twi$randomToken", 
       time, 
-      "visa num $randomToken", 
+      "vis$randomToken", 
       time, 
-      "fast_numb: $randomToken", 
+      "fast_$randomToken", 
       time, 
-      "anam number testing: $randomToken", 
+      "anam_number_t: $randomToken", 
       time, 
       DriverCommon(
         0, 
         1, 
-        "licencia $randomToken", 
+        "lic$randomToken", 
         null, 
         null,
         null,
@@ -44,10 +44,10 @@ void main() {
         0, // identification
         null, // address 
         null, // approach
-        "curp_testing_d_$randomToken", // curp
+        "curp_test$randomToken", // curp
         time, // antecedentesNoPenalesExp
-        "rfc_test_$randomToken", // RFC
-        "nss_tes_$randomToken", // NSS
+        "rfc$randomToken", // RFC
+        "ns$randomToken", // NSS
         time, // ImssRegistrationDate 
         time, // hiringDate
         time, // TerminationDate
@@ -178,7 +178,7 @@ void main() {
         'Creates when unexist',
         () async {
           int rnd = Random().nextInt(900)  + 99;
-          Driver mock = buildMock("$rnd");
+          Driver mock = buildMock("U_qual$rnd");
 
           MainResolver<RecordUpdateOut<Driver>> fact = await service.update(mock, auth);
           RecordUpdateOut<Driver> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<Driver>.des(json, Driver.des));
@@ -206,6 +206,54 @@ void main() {
 
         },
       );
+    },
+  );
+  test(
+    'Delete',
+    () async {
+      List<Driver>  deleteMocks = <Driver>[];
+      int rnd = Random().nextInt(900)  + 99;
+      String randomToken = 'D_qual$rnd';
+      deleteMocks.add(buildMock(randomToken));
+      late Driver newMock;
+
+      MainResolver<SetBatchOut<Driver>> fact = await service.create(deleteMocks, auth);
+      bool resolved = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<Driver>.des(json, Driver.des),
+        onException: (Object exception, StackTrace trace) => throw exception,
+        onConnectionFailure: () => throw Exception('Connection failure'),
+        onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
+        onSuccess: (SuccessFrame<SetBatchOut<Driver>> success) {
+          resolved = true;
+          expect(success.estela.failures.isEmpty, true, reason: 'Mock creation failure');
+          newMock = success.estela.successes.first;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+      resolved = false;
+
+      MainResolver<Driver> deleteFact = await service.delete(
+        newMock,
+        auth,
+      );
+      deleteFact.resolve(
+        decoder: (JObject json) => Driver.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Driver> success) {
+          resolved = true;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+
     },
   );
 }

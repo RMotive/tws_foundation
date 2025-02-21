@@ -8,6 +8,8 @@ using TWS_Customer.Services.Interfaces;
 
 using TWS_Foundation.Authentication;
 
+using TWS_Security.Sets;
+
 namespace TWS_Foundation.Controllers.Business;
 
 [ApiController, Route("[Controller]/[Action]")]
@@ -30,4 +32,10 @@ public class DriversController : ControllerBase {
     public async Task<IActionResult> Update(Driver Driver) {
         return Ok(await Service.Update(Driver));
     }
+
+    [HttpPost(), Auth("Drivers", "Delete")]
+    public async Task<IActionResult> Delete(Driver Driver) {
+        return Ok(await Service.Delete(Driver));
+    }
+
 }

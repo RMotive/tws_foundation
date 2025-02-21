@@ -14,6 +14,8 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
 
+using TWS_Security.Sets;
+
 namespace TWS_Customer.Services;
 public class DriversService : IDriversService {
     private readonly DriversDepot Drivers;
@@ -160,5 +162,26 @@ public class DriversService : IDriversService {
 
     public async Task<SetViewOut<Driver>> View(SetViewOptions<Driver> Options) {
         return await Drivers.View(Options, Include);
+    }
+
+    public async Task<Driver> Delete(Driver Driver) {
+        //Removing one to many relationships.
+        List<YardLog> yardlogs = [.. Database.YardLogs.Where(ap => ap.Driver == Driver.Id)];
+        Database.RemoveRange(yardlogs);
+
+        DriverCommon? common = await Database.DriversCommons.Where(e => e.Id == Driver.Common).FirstOrDefaultAsync();
+        if (common != null) Database.Remove(common);
+
+        Employee? employee = await Database.Employees.Where(e => e.Id == Driver.Employee).FirstOrDefaultAsync();
+        if (employee != null) {
+            Database.Remove(employee);
+            Approach? approach = await Database.Approaches.Where(e => e.Id == employee.Approach).FirstOrDefaultAsync();
+            if (approach != null) Database.Remove(approach);
+            Address? address = await Database.Addresses.Where(e => e.Id == employee.Address).FirstOrDefaultAsync();
+            if (address != null) Database.Remove(address);
+            Identification? identification = await Database.Identifications.Where(e => e.Id == employee.Identification).FirstOrDefaultAsync();
+            if (identification != null) Database.Remove(identification);
+        }
+        return await Drivers.Delete(Driver);
     }
 }

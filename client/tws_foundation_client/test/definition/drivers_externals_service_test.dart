@@ -10,6 +10,7 @@ void main() {
   late SetBatchOut<DriverExternal> createMock;
   late RecordUpdateOut<DriverExternal> updateMock;  
   late SetViewOptions<DriverExternal> options;
+  late DriverExternal deleteMock;
   late List<DriverExternal> drivers;
 
 
@@ -20,6 +21,7 @@ void main() {
       viewMock = SetViewOut<DriverExternal>(<DriverExternal>[], 1, DateTime.now(), 3, 0, 20);
       createMock = SetBatchOut<DriverExternal>(<DriverExternal>[], <SetOperationFailure<DriverExternal>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<DriverExternal>(DriverExternal.a(), DriverExternal.a());
+      deleteMock = DriverExternal.a();
       drivers = <DriverExternal>[
         DriverExternal.a(),
       ];
@@ -28,7 +30,8 @@ void main() {
           JObject jObject = switch (request.url.pathSegments.last) {
             'view' => SuccessFrame<SetViewOut<DriverExternal>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<SetBatchOut<DriverExternal>>('qTracer', createMock).encode(),
-             'update' => SuccessFrame<RecordUpdateOut<DriverExternal>>('qTracer', updateMock).encode(),
+            'update' => SuccessFrame<RecordUpdateOut<DriverExternal>>('qTracer', updateMock).encode(),
+            'delete' => SuccessFrame<DriverExternal>('qTracer', deleteMock).encode(),
 
             _ => <String, dynamic>{},
           };
@@ -116,6 +119,30 @@ void main() {
         },
       );
       expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<DriverExternal> fact = await service.delete(DriverExternal.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => DriverExternal.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<DriverExternal> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
     },
   );
 

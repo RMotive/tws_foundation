@@ -80,6 +80,9 @@ public partial class TWSBusinessDatabase : BDatabaseSQLS<TWSBusinessDatabase> {
     
     public virtual DbSet<TruckCommon> TrucksCommons { get; set; } = default!;
 
+    public virtual DbSet<Employee> Employees { get; set; } = default!;
+
+
 
     protected override void OnModelCreating(ModelBuilder builder) {
         Sct.CreateModel(builder);

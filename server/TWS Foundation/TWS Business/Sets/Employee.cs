@@ -42,7 +42,7 @@ public partial class Employee
 
     public virtual Identification? IdentificationNavigation { get; set; }
 
-    public virtual ICollection<Driver> Drivers { get; set; } = [];
+    public virtual Driver? Driver { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
@@ -82,26 +82,33 @@ public partial class Employee
 
             Entity.Property(e => e.Nss)
                .HasColumnName("NSS");
+
             Entity.Property(e => e.Nss)
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            Entity.HasOne(d => d.IdentificationNavigation)
-             .WithMany(p => p.Employees)
-             .HasForeignKey(d => d.Identification);
-
-            Entity.HasOne(d => d.ApproachNavigation)
-              .WithMany(p => p.Employees)
-              .HasForeignKey(d => d.Approach);
-
-            Entity.HasOne(d => d.AddressNavigation)
-                .WithMany(p => p.Employees)
-                .HasForeignKey(d => d.Address);
+            Entity.HasIndex(e => e.Identification)
+            .IsUnique();
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Employees)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            Entity.HasOne(d => d.ApproachNavigation)
+              .WithMany(p => p.Employees)
+              .HasForeignKey(d => d.Approach)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            Entity.HasOne(d => d.AddressNavigation)
+                .WithMany(p => p.Employees)
+                .HasForeignKey(d => d.Address)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            Entity.HasOne(d => d.IdentificationNavigation)
+                .WithOne(p => p.Employee)
+                .HasForeignKey<Employee>(d => d.Identification)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

@@ -105,21 +105,27 @@ public partial class Driver
                 .HasMaxLength(24)
                 .IsUnicode(false);
 
-            Entity.HasOne(d => d.DriverCommonNavigation)
-                .WithMany(p => p.Drivers)
-                .HasForeignKey(d => d.Common);
-
             Entity.HasIndex(e => e.Common)
                .IsUnique();
 
-            Entity.HasOne(d => d.EmployeeNavigation)
-                .WithMany(p => p.Drivers)
-                .HasForeignKey(d => d.Employee);
+            Entity.HasIndex(e => e.Employee)
+              .IsUnique();
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            Entity.HasOne(d => d.DriverCommonNavigation)
+                .WithOne(p => p.Driver)
+                .HasForeignKey<Driver>(d => d.Common)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            Entity.HasOne(d => d.EmployeeNavigation)
+                .WithOne(p => p.Driver)
+                .HasForeignKey<Driver>(d => d.Employee)
+                .OnDelete(DeleteBehavior.Cascade);
+
         });
     }
 }

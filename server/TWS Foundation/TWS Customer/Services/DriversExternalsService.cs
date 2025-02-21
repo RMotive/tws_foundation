@@ -14,6 +14,8 @@ using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
 
+using TWS_Security.Sets;
+
 namespace TWS_Customer.Services;
 public class DriversExternalsService : IDriversExternalsService {
     private readonly DriversExternalsDepot DriversExternals;
@@ -116,4 +118,15 @@ public class DriversExternalsService : IDriversExternalsService {
             Updated = lastestRecord ?? Driver,
         };
     }
+    public async Task<DriverExternal> Delete(DriverExternal DriverExternal) {
+
+        DriverCommon? common = await Database.DriversCommons.Where(e => e.Id == DriverExternal.Common).FirstOrDefaultAsync();
+        Identification? identification = await Database.Identifications.Where(e => e.Id == DriverExternal.Identification).FirstOrDefaultAsync();
+
+        if (common != null) Database.Remove(common);
+        if (identification != null) Database.Remove(identification);
+
+        return await DriversExternals.Delete(DriverExternal);
+    }
+
 }

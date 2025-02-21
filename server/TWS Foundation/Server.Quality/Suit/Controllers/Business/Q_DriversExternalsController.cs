@@ -29,7 +29,6 @@ public class Q_DriversExternalsController : BQ_CustomServerController<DriverExte
 
     protected override DriverExternal MockFactory(string RandomSeed) {
         DateTime time = DateTime.Now;
-        DateOnly date = DateOnly.MaxValue;
         return new DriverExternal {
             Id = 0,
             Timestamp = time,
@@ -159,5 +158,23 @@ public class Q_DriversExternalsController : BQ_CustomServerController<DriverExte
             #endregion
         }
         #endregion
+    }
+
+    [Fact]
+    public async Task Delete() {
+        string testTag = Guid.NewGuid().ToString()[..3];
+        List<DriverExternal> mock = [MockFactory(testTag)];
+
+        // Create a new record to delete.
+        (HttpStatusCode Status, GenericFrame response) = await Post("Create", mock, true);
+        SetBatchOut<DriverExternal> estela = Framing<SuccessFrame<SetBatchOut<DriverExternal>>>(response).Estela;
+        Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Empty(estela.Failures);
+
+        // Deleting the previous record.
+        DriverExternal newAccount = estela.Successes.First();
+        (HttpStatusCode DeleteStatus, _) = await Post("Delete", newAccount, true);
+        Assert.Equal(HttpStatusCode.OK, DeleteStatus);
+
     }
 }

@@ -20,6 +20,8 @@
         - [Address] added [View].
         - [TrailerClass] added [View].
         - [TrailerType] added [View].
+        - [Drivers] added custom [Update] and [Delete].
+        - [DrversExternal] added custom [Update] and [Delete].
     5. [LengthValidator] Added the optional [nulleable] parameter. With this parameter can implement and validate nulleable propeties with min and max values.
     6. Added Update and create controller services for [Drivers] and [DriversExternals].
     7. Added [Driver] and [Employee] lenth validations.
@@ -40,7 +42,9 @@
 - Fixes:
     1. Fixed [Truck] and [TruckExternal] relationships (Check scheme #6).
     2. Fixed [Trailer] and [TrailerExternal] relationships (Check scheme #6).
-    3. Fixed [BDepot] [Delete] [Tset] overcharged method.
+    3. Fixed [Driver] and [DriverExternal] relationships (Check scheme #6).
+
+    4. Fixed [BDepot] [Delete] [Tset] overcharged method.
 
 - Dependencies:
 

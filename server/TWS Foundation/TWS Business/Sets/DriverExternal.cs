@@ -48,21 +48,24 @@ public partial class DriverExternal
             Entity.Property(e => e.Timestamp)
                 .HasColumnType("datetime");
 
-            Entity.HasOne(d => d.DriverCommonNavigation)
-                .WithMany(p => p.DriversExternals)
-                .HasForeignKey(d => d.Common);
-
             Entity.HasIndex(e => e.Common)
                .IsUnique();
-
-            Entity.HasOne(d => d.IdentificationNavigation)
-                .WithMany(p => p.DriversExternals)
-                .HasForeignKey(d => d.Identification);
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.DriversExternals)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
+
+            Entity.HasOne(d => d.IdentificationNavigation)
+                .WithOne(p => p.DriverExternal)
+                .HasForeignKey<DriverExternal>(d => d.Identification)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            Entity.HasOne(d => d.DriverCommonNavigation)
+              .WithOne(p => p.DriverExternal)
+              .HasForeignKey<DriverExternal>(d => d.Common)
+              .OnDelete(DeleteBehavior.Cascade);
+            
         });
     }
 }

@@ -22,9 +22,9 @@ public partial class DriverCommon
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<Driver> Drivers { get; set; } = [];
+    public virtual Driver? Driver { get; set; }
 
-    public virtual ICollection<DriverExternal> DriversExternals { get; set; } = [];
+    public virtual DriverExternal? DriverExternal { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
@@ -56,12 +56,12 @@ public partial class DriverCommon
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.DriversCommons)
                 .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             Entity.HasOne(d => d.SituationNavigation)
                 .WithMany(p => p.DriversCommons)
                 .HasForeignKey(d => d.Situation)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

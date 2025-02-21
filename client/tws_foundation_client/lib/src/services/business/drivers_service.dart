@@ -29,6 +29,10 @@ final class DriversService extends DriversServiceBase {
     return MainResolver<RecordUpdateOut<Driver>>(actEffect);
   }
 
-  
+  @override
+  Effect<Driver> delete(Driver driver, String auth) async {
+    CSMActEffect actEffect = await twsPost('delete', driver, auth: auth);
+    return MainResolver<Driver>(actEffect);
+  }
 }
       

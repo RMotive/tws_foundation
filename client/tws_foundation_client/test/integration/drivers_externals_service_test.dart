@@ -21,7 +21,7 @@ void main() {
       DriverCommon(
         0, 
         1, 
-        "licencia $randomToken", 
+        "lic$randomToken", 
         null, 
         null,
         null,
@@ -130,7 +130,8 @@ void main() {
         'Creates when unexist',
         () async {
           int rnd = Random().nextInt(900)  + 99;
-          DriverExternal mock = buildMock("$rnd");
+          
+          DriverExternal mock = buildMock("U_qual$rnd");
 
           MainResolver<RecordUpdateOut<DriverExternal>> fact = await service.update(mock, auth);
           RecordUpdateOut<DriverExternal> actEffect = await fact.act((JObject json) =>  RecordUpdateOut<DriverExternal>.des(json, DriverExternal.des));
@@ -156,6 +157,55 @@ void main() {
 
         },
       );
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      List<DriverExternal>  deleteMocks = <DriverExternal>[];
+      int rnd = Random().nextInt(900)  + 99;
+      String randomToken = 'D_qual$rnd';
+      deleteMocks.add(buildMock(randomToken));
+      late DriverExternal newMock;
+
+      MainResolver<SetBatchOut<DriverExternal>> fact = await service.create(deleteMocks, auth);
+      bool resolved = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<DriverExternal>.des(json, DriverExternal.des),
+        onException: (Object exception, StackTrace trace) => throw exception,
+        onConnectionFailure: () => throw Exception('Connection failure'),
+        onFailure: (FailureFrame failure, int status) => throw Exception(failure.estela.advise),
+        onSuccess: (SuccessFrame<SetBatchOut<DriverExternal>> success) {
+          resolved = true;
+          expect(success.estela.failures.isEmpty, true, reason: 'Mock creation failure');
+          newMock = success.estela.successes.first;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+      resolved = false;
+
+      MainResolver<DriverExternal> deleteFact = await service.delete(
+        newMock,
+        auth,
+      );
+      deleteFact.resolve(
+        decoder: (JObject json) => DriverExternal.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<DriverExternal> success) {
+          resolved = true;
+        },
+      );
+      expect(true, resolved, reason: 'The action wasn\'t resolved');
+
     },
   );
 }

@@ -10,6 +10,7 @@ void main() {
   late SetBatchOut<Driver> createMock;
   late RecordUpdateOut<Driver> updateMock;  
   late SetViewOptions<Driver> options;
+  late Driver deleteMock;
   late List<Driver> drivers;
 
 
@@ -20,6 +21,7 @@ void main() {
       viewMock = SetViewOut<Driver>(<Driver>[], 1, DateTime.now(), 3, 0, 20);
       createMock = SetBatchOut<Driver>(<Driver>[], <SetOperationFailure<Driver>>[], 0, 0, 0, false);
       updateMock = RecordUpdateOut<Driver>(Driver.a(), Driver.a());
+      deleteMock = Driver.a();
       drivers = <Driver>[
         Driver.a(),
       ];
@@ -29,6 +31,7 @@ void main() {
             'view' => SuccessFrame<SetViewOut<Driver>>('qTracer', viewMock).encode(),
             'create' => SuccessFrame<SetBatchOut<Driver>>('qTracer', createMock).encode(),
             'update' => SuccessFrame<RecordUpdateOut<Driver>>('qTracer', updateMock).encode(),
+            'delete' => SuccessFrame<Driver>('qTracer', deleteMock).encode(),
 
             _ => <String, dynamic>{},
           };
@@ -116,6 +119,30 @@ void main() {
         },
       );
       expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<Driver> fact = await service.delete(Driver.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => Driver.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Driver> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
     },
   );
 }
