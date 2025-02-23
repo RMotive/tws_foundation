@@ -1,6 +1,4 @@
-﻿
-
-using CSM_Foundation.Core.Utils;
+﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Interfaces;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Models.Out;
@@ -13,8 +11,6 @@ using TWS_Business.Depots;
 using TWS_Business.Sets;
 
 using TWS_Customer.Services.Interfaces;
-
-using TWS_Security.Sets;
 
 namespace TWS_Customer.Services;
 public class DriversExternalsService : IDriversExternalsService {
@@ -119,6 +115,9 @@ public class DriversExternalsService : IDriversExternalsService {
         };
     }
     public async Task<DriverExternal> Delete(DriverExternal DriverExternal) {
+        //Removing one to many relationships.
+        List<YardLog> yardlogs = [.. Database.YardLogs.Where(ap => ap.DriverExternal == DriverExternal.Id)];
+        Database.RemoveRange(yardlogs);
 
         DriverCommon? common = await Database.DriversCommons.Where(e => e.Id == DriverExternal.Common).FirstOrDefaultAsync();
         Identification? identification = await Database.Identifications.Where(e => e.Id == DriverExternal.Identification).FirstOrDefaultAsync();

@@ -30,70 +30,74 @@ BEGIN TRANSACTION
 	('VehiculesModels', 'Suit of actions related to vehicule models records', SYSDATETIME(), 1),
 	('Yardlogs', 'Suit of actions related to yard logs records', SYSDATETIME(), 1),
 	('YardlogsInventories', 'Suit of actions related to yard logs inventory records', SYSDATETIME(), 1);
-
-
+	DECLARE @solution INT = ( select id from Solutions where Sign = 'TWSMA' );
+	DECLARE @read INT = (select id from Actions where Name = 'Read');
+	DECLARE @create INT = (select id from Actions where Name = 'Create');
+	DECLARE @update INT = (select id from Actions where Name = 'Update');
+	DECLARE @delete INT = (select id from Actions where Name = 'Delete');
+			
 	-- Check that the foreign keys are correct in your SQL database instance.
 	-- solution = TWSMA (TWS administration).
 	INSERT INTO Permits(Solution, Feature, [Action], Reference, [Timestamp], [Enabled])
-	VALUES(2, 22, 3, 'TWSFA001', SYSDATETIME(), 1), -- Addesses/read permit;
-	(2, 23, 3, 'TWSFC001', SYSDATETIME(), 1), -- carriers/read permit;
+	VALUES(@solution,(select id from Features where Name = 'Addresses'), @read, 'TWSFA001', SYSDATETIME(), 1), -- Addesses/read permit;
+	(@solution, (select id from Features where Name = 'Carriers'), @read, 'TWSFC001', SYSDATETIME(), 1), -- carriers/read permit;
 
-	(2, 24, 3, 'TWSFDV01', SYSDATETIME(), 1), -- drivers/read permit;
-	(2, 24, 4, 'TWSFDV02', SYSDATETIME(), 1), -- drivers/create permit;
-	(2, 24, 5, 'TWSFDV03', SYSDATETIME(), 1), -- drivers/update permit;
+	(@solution, (select id from Features where Name = 'Drivers'), @read, 'TWSFDV01', SYSDATETIME(), 1), -- drivers/read permit;
+	(@solution, (select id from Features where Name = 'Drivers'), @create, 'TWSFDV02', SYSDATETIME(), 1), -- drivers/create permit;
+	(@solution, (select id from Features where Name = 'Drivers'), @update, 'TWSFDV03', SYSDATETIME(), 1), -- drivers/update permit;
 
-	(2, 25, 3, 'TWSFDE01', SYSDATETIME(), 1), -- driversExternal/read permit;
-	(2, 25, 4, 'TWSFDE02', SYSDATETIME(), 1), -- driversExternal/create permit;
-	(2, 25, 5, 'TWSFDE03', SYSDATETIME(), 1), -- driversExternal/update permit;
+	(@solution, (select id from Features where Name = 'DriversExternals'), @read, 'TWSFDE01', SYSDATETIME(), 1), -- driversExternal/read permit;
+	(@solution, (select id from Features where Name = 'DriversExternals'), @create, 'TWSFDE02', SYSDATETIME(), 1), -- driversExternal/create permit;
+	(@solution, (select id from Features where Name = 'DriversExternals'), @update, 'TWSFDE03', SYSDATETIME(), 1), -- driversExternal/update permit;
 
-	(2, 26, 3, 'TWSFE001', SYSDATETIME(), 1), -- employees/read permit;
-	(2, 27, 3, 'TWSFLT01', SYSDATETIME(), 1), -- loadType/read permit;
+	(@solution, (select id from Features where Name = 'Employees'), @read, 'TWSFE001', SYSDATETIME(), 1), -- employees/read permit;
+	(@solution, (select id from Features where Name = 'LoadTypes'), @read, 'TWSFLT01', SYSDATETIME(), 1), -- loadType/read permit;
 
-	(2, 28, 3, 'TWSFL001', SYSDATETIME(), 1), -- locations/read permit;
-	(2, 28, 4, 'TWSFL002', SYSDATETIME(), 1), -- locations/create permit;
-	(2, 28, 5, 'TWSFL003', SYSDATETIME(), 1), -- locations/update permit;
+	(@solution, (select id from Features where Name = 'Locations'), @read, 'TWSFL001', SYSDATETIME(), 1), -- locations/read permit;
+	(@solution, (select id from Features where Name = 'Locations'), @create, 'TWSFL002', SYSDATETIME(), 1), -- locations/create permit;
+	(@solution, (select id from Features where Name = 'Locations'), @update, 'TWSFL003', SYSDATETIME(), 1), -- locations/update permit;
 
-	(2, 29, 3, 'TWSFM001', SYSDATETIME(), 1), -- manufacturers/read permit;
-	(2, 30, 3, 'TWSFP001', SYSDATETIME(), 1), -- plates/read permit;
+	(@solution, (select id from Features where Name = 'Manufacturers'), @read, 'TWSFM001', SYSDATETIME(), 1), -- manufacturers/read permit;
+	(@solution, (select id from Features where Name = 'Plates'), @read, 'TWSFP001', SYSDATETIME(), 1), -- plates/read permit;
 
-	(2, 31, 3, 'TWSFS001', SYSDATETIME(), 1), -- sections/read permit;
-	(2, 31, 4, 'TWSFS002', SYSDATETIME(), 1), -- sections/create permit;
-	(2, 31, 5, 'TWSFS003', SYSDATETIME(), 1), -- sections/update permit;
+	(@solution, (select id from Features where Name = 'Sections'), @read, 'TWSFS001', SYSDATETIME(), 1), -- sections/read permit;
+	(@solution, (select id from Features where Name = 'Sections'), @create, 'TWSFS002', SYSDATETIME(), 1), -- sections/create permit;
+	(@solution, (select id from Features where Name = 'Sections'), @update, 'TWSFS003', SYSDATETIME(), 1), -- sections/update permit;
 
-	(2, 32, 3, 'TWSFST01', SYSDATETIME(), 1), -- situations/read permit;
-	(2, 32, 4, 'TWSFST02', SYSDATETIME(), 1), -- situations/create permit;
-	(2, 32, 5, 'TWSFST03', SYSDATETIME(), 1), -- situations/update permit;
+	(@solution, (select id from Features where Name = 'Situations'), @read, 'TWSFST01', SYSDATETIME(), 1), -- situations/read permit;
+	(@solution, (select id from Features where Name = 'Situations'), @create, 'TWSFST02', SYSDATETIME(), 1), -- situations/create permit;
+	(@solution, (select id from Features where Name = 'Situations'), @update, 'TWSFST03', SYSDATETIME(), 1), -- situations/update permit;
 
-	(2, 33, 5, 'TWSFTC01', SYSDATETIME(), 1), -- trailerClasses/read permit;
+	(@solution, (select id from Features where Name = 'TrailerClasses'), 5, 'TWSFTC01', SYSDATETIME(), 1), -- trailerClasses/read permit;
 
-	(2, 34, 3, 'TWSFT001', SYSDATETIME(), 1), -- trailers/read permit;
-	(2, 34, 4, 'TWSFT002', SYSDATETIME(), 1), -- trailers/create permit;
-	(2, 34, 5, 'TWSFT003', SYSDATETIME(), 1), -- trailers/update permit;
+	(@solution, (select id from Features where Name = 'Trailers'), @read, 'TWSFT001', SYSDATETIME(), 1), -- trailers/read permit;
+	(@solution, (select id from Features where Name = 'Trailers'), @create, 'TWSFT002', SYSDATETIME(), 1), -- trailers/create permit;
+	(@solution, (select id from Features where Name = 'Trailers'), @update, 'TWSFT003', SYSDATETIME(), 1), -- trailers/update permit;
 
-	(2, 35, 3, 'TWSFTE01', SYSDATETIME(), 1), -- trailerExternal/read permit;
-	(2, 35, 4, 'TWSFTE02', SYSDATETIME(), 1), -- trailerExternal/create permit;
-	(2, 35, 5, 'TWSFTE03', SYSDATETIME(), 1), -- trailerExternal/update permit;
+	(@solution, (select id from Features where Name = 'TrailersExternals'), @read, 'TWSFTE01', SYSDATETIME(), 1), -- trailerExternal/read permit;
+	(@solution, (select id from Features where Name = 'TrailersExternals'), @create, 'TWSFTE02', SYSDATETIME(), 1), -- trailerExternal/create permit;
+	(@solution, (select id from Features where Name = 'TrailersExternals'), @update, 'TWSFTE03', SYSDATETIME(), 1), -- trailerExternal/update permit;
 
-	(2, 36, 3, 'TWSFTT01', SYSDATETIME(), 1), -- trailerTypes/read permit;
+	(@solution, (select id from Features where Name = 'TrailerTypes'), @read, 'TWSFTT01', SYSDATETIME(), 1), -- trailerTypes/read permit;
 
-	(2, 37, 3, 'TWSFTK01', SYSDATETIME(), 1), -- trucks/read permit;
-	(2, 37, 4, 'TWSFTK02', SYSDATETIME(), 1), -- trucks/create permit;
-	(2, 37, 5, 'TWSFTK03', SYSDATETIME(), 1), -- trucks/update permit;
+	(@solution, (select id from Features where Name = 'Trucks'), @read, 'TWSFTK01', SYSDATETIME(), 1), -- trucks/read permit;
+	(@solution, (select id from Features where Name = 'Trucks'), @create, 'TWSFTK02', SYSDATETIME(), 1), -- trucks/create permit;
+	(@solution, (select id from Features where Name = 'Trucks'), @update, 'TWSFTK03', SYSDATETIME(), 1), -- trucks/update permit;
 
-	(2, 38, 3, 'TWSFTX01', SYSDATETIME(), 1), -- trucksExternal/read permit;
-	(2, 38, 4, 'TWSFTX02', SYSDATETIME(), 1), -- trucksExternal/create permit;
-	(2, 38, 5, 'TWSFTX03', SYSDATETIME(), 1), -- trucksExternal/update permit;
+	(@solution, (select id from Features where Name = 'TrucksExternals'), @read, 'TWSFTX01', SYSDATETIME(), 1), -- trucksExternal/read permit;
+	(@solution, (select id from Features where Name = 'TrucksExternals'), @create, 'TWSFTX02', SYSDATETIME(), 1), -- trucksExternal/create permit;
+	(@solution, (select id from Features where Name = 'TrucksExternals'), @update, 'TWSFTX03', SYSDATETIME(), 1), -- trucksExternal/update permit;
 
-	(2, 39, 3, 'TWSFTI01', SYSDATETIME(), 1), -- trucksInventories/read permit;
-	(2, 40, 3, 'TWSFVM01', SYSDATETIME(), 1), -- vehiculesModels/read permit;
+	(@solution, (select id from Features where Name = 'TrucksInventories'), @read, 'TWSFTI01', SYSDATETIME(), 1), -- trucksInventories/read permit;
+	(@solution, (select id from Features where Name = 'VehiculesModels'), @read, 'TWSFVM01', SYSDATETIME(), 1), -- vehiculesModels/read permit;
 
-	(2, 41, 3, 'TWSFYL01', SYSDATETIME(), 1), -- yardlogs/read permit;
+	(@solution, (select id from Features where Name = 'Yardlogs'), @read, 'TWSFYL01', SYSDATETIME(), 1), -- yardlogs/read permit;
 
-	(2, 42, 3, 'TWSFYI01', SYSDATETIME(), 1), -- yardlogsInventories/read permit;
+	(@solution, (select id from Features where Name = 'YardlogsInventories'), @read, 'TWSFYI01', SYSDATETIME(), 1), -- yardlogsInventories/read permit;
 
-	(2, 41, 4, 'TWSFYL02', SYSDATETIME(), 1), -- yardlogs/create permit;
-	(2, 41, 5, 'TWSFYL03', SYSDATETIME(), 1), -- yardlogs/update permit;
-	(2, 41, 6, 'TWSFYL04', SYSDATETIME(), 1); -- yardlogs/delete permit;
+	(@solution, (select id from Features where Name = 'Yardlogs'), @create, 'TWSFYL02', SYSDATETIME(), 1), -- yardlogs/create permit;
+	(@solution, (select id from Features where Name = 'Yardlogs'), @update, 'TWSFYL03', SYSDATETIME(), 1), -- yardlogs/update permit;
+	(@solution, (select id from Features where Name = 'Yardlogs'), @delete, 'TWSFYL04', SYSDATETIME(), 1); -- yardlogs/delete permit;
 
 
 

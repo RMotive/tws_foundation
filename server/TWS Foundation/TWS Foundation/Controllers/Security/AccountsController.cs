@@ -18,27 +18,27 @@ public class AccountsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Accounts", "Read")]
     public async Task<IActionResult> View(SetViewOptions<Account> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Accounts", "Create")]
     public async Task<IActionResult> Create(Account[] Accounts) {
         return Ok(await Service.Create(Accounts));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Accounts", "Update")]
     public async Task<IActionResult> Update(Account Account) {
         return Ok(await Service.Update(Account));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Accounts", "Read")]
     public async Task<IActionResult> GetPermits(Account Account) {
         return Ok(await Service.GetPermits(Account));
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("Accounts", "Delete")]
     public async Task<IActionResult> Delete(Account Account) {
         return Ok(await Service.Delete(Account));
     }

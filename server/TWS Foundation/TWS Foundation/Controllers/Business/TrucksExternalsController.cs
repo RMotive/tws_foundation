@@ -19,21 +19,21 @@ public class TrucksExternalsController : ControllerBase {
         Service = service;
     }
 
-    [HttpPost(), Auth("TrucksExternal", "Read")]
+    [HttpPost(), Auth("TrucksExternals", "Read")]
     public async Task<IActionResult> View(SetViewOptions<TruckExternal> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("TrucksExternal", "Create")]
+    [HttpPost(), Auth("TrucksExternals", "Create")]
     public async Task<IActionResult> Create(TruckExternal[] trucks)
         => Ok(await Service.Create(trucks));
 
-    [HttpPost(), Auth("TrucksExternal", "Update")]
+    [HttpPost(), Auth("TrucksExternals", "Update")]
     public async Task<IActionResult> Update(TruckExternal Truck) {
         return Ok(await Service.Update(Truck));
     }
 
-    [HttpPost(), Auth("TrucksExternal", "Delete")]
+    [HttpPost(), Auth("TrucksExternals", "Delete")]
     public async Task<IActionResult> Delete(TruckExternal Truck) {
         return Ok(await Service.Delete(Truck));
     }
