@@ -10,7 +10,7 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController,Feature("TrailerTypes"), Route("[Controller]/[Action]")]
 public class TrailersTypesController : ControllerBase {
     private readonly ITrailersTypesService Service;
 
@@ -18,7 +18,7 @@ public class TrailersTypesController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("TrailerTypes", "Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> View(SetViewOptions<TrailerType> Options) {
         return Ok(await Service.View(Options));
     }

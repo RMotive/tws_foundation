@@ -13,10 +13,15 @@ using CSM_Foundation.Server.Utils;
 
 using TWS_Business;
 using TWS_Business.Depots;
+using TWS_Business.Sets;
 
-using TWS_Customer.Managers;
+using TWS_Customer.Managers.Depot;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services;
+using TWS_Customer.Services.Business;
 using TWS_Customer.Services.Interfaces;
+using TWS_Customer.Services.Security;
+using TWS_Customer.Services.Security.Solutions;
 
 using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;
@@ -24,7 +29,8 @@ using TWS_Foundation.Models;
 
 using TWS_Security;
 using TWS_Security.Depots;
-using TWS_Security.Sets;
+using TWS_Security.Depots.Accounts;
+using TWS_Security.Depots.Solutions;
 
 namespace TWS_Foundation;
 
@@ -48,15 +54,26 @@ public partial class Program {
 
             builder.Logging.ClearProviders();
             builder.Services.AddControllers()
-                .AddJsonOptions(options => {
-                    options.JsonSerializerOptions.IncludeFields = true;
-                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                .AddJsonOptions(
+                    (options) => {
+                        options.JsonSerializerOptions.IncludeFields = true;
+                        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-                    options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
-                    options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
-                    options.JsonSerializerOptions.Converters.Add(new DateTimeWithUTCZoneConverter());
-                });
+                        options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
+                        options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
+                        options.JsonSerializerOptions.Converters.Add(new DateTimeWithUTCZoneConverter());
+
+                        // --> JSON Converter for [ISet] objects.
+                        options.JsonSerializerOptions.Converters.Add(
+                                new ISetConverter {
+                                    Variations = [
+                                        typeof(YardLog),
+                                    ],
+                                }
+                            );
+                    }
+                );
             builder.Services.AddCors(setup => {
                 setup.AddDefaultPolicy(builder => {
                     builder.AllowAnyHeader();
@@ -85,6 +102,7 @@ public partial class Program {
             {
                 // --> Application
                 builder.Services.AddSingleton<SessionManager>();
+                builder.Services.AddSingleton<DepotManager>();
                 builder.Services.AddSingleton<AnalyticsMiddleware>();
                 builder.Services.AddSingleton<AdvisorMiddleware>();
                 builder.Services.AddSingleton<FramingMiddleware>();
@@ -96,8 +114,8 @@ public partial class Program {
                 builder.Services.AddDbContext<TWSBusinessDatabase>();
 
                 // --> Depots
-                builder.Services.AddScoped<SolutionsDepot>();
-                builder.Services.AddScoped<AccountsDepot>();
+                builder.Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
+                builder.Services.AddScoped<IAccountsDepot, AccountsDepot>();
                 builder.Services.AddScoped<AddressesDepot>();
                 builder.Services.AddScoped<UsdotsDepot>();
                 builder.Services.AddScoped<CarriersDepot>();

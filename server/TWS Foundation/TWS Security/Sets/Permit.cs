@@ -63,7 +63,8 @@ public partial class Permit
                 Entity.Property(i => i.Enabled)
                     .IsRequired();
 
-
+                Entity.Property(e => e.Timestamp)
+                    .HasColumnType("datetime");
                 Entity.HasOne(i => i.SolutionNavigation)
                     .WithMany(i => i.Permits)
                     .HasForeignKey(i => i.Solution)

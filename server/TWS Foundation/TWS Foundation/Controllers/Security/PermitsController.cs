@@ -10,7 +10,7 @@ using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers.Security;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Permits"),Route("[Controller]/[Action]")]
 public class PermitsController
     : ControllerBase {
     private readonly IPermitsService Service;
@@ -18,7 +18,7 @@ public class PermitsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Permit> Options) {
         return Ok(await Service.View(Options));
     }

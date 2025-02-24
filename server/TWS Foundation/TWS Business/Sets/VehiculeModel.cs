@@ -64,7 +64,6 @@ public partial class VehiculeModel
                 .WithMany(p => p.VehiculeModels)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-
         });
     }
 }

@@ -79,6 +79,11 @@ public abstract class BDepot<TDatabase, TSet>
 
         int range = Options.Range;
         int page = Options.Page;
+        if(Options.Export) {
+            page = 1;
+            range = Source.Count();
+        }
+
         int amount = Source.Count();
         (int pages, int left) = Math.DivRem(amount, range);
         if (left > 0) {
@@ -159,10 +164,10 @@ public abstract class BDepot<TDatabase, TSet>
 
         return Task.FromResult(
             new SetViewOut<TSet>() {
-                Amount = amount,
+                Count = amount,
                 Pages = pages,
                 Page = page,
-                Sets = sets,
+                Records = sets,
             }
         );
     }
@@ -227,8 +232,8 @@ public abstract class BDepot<TDatabase, TSet>
                 record.Timestamp = DateTime.UtcNow;
                 record.EvaluateWrite();
                 Database.ChangeTracker.Clear();
-                _ = Set.Attach(record);
-                _ = await Database.SaveChangesAsync();
+                Set.Attach(record);
+                await Database.SaveChangesAsync();
                 saved = [.. saved, record];
             } catch (Exception excep) {
                 if (Sync) {
@@ -240,6 +245,7 @@ public abstract class BDepot<TDatabase, TSet>
             }
         }
 
+        Database.ChangeTracker.Clear();
         Disposer?.Push(Database, Sets);
         return new(saved, fails);
     }

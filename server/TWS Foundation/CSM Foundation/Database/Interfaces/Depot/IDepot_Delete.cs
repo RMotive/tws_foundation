@@ -7,4 +7,6 @@ public interface IDepot_Delete<TMigrationSet>
     public Task<SetBatchOut<TMigrationSet>> Delete(TMigrationSet[] migrations);
 
     public Task<TMigrationSet> Delete(TMigrationSet Set);
+
+    public Task<TMigrationSet> Delete(int Id);
 }

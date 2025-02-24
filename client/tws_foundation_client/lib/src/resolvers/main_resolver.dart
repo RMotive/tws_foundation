@@ -22,11 +22,11 @@ class MainResolver<TSuccess extends CSMEncodeInterface> extends CSMServiceResolv
     return actResult;
   }
   void resolve({
-    required void Function() onConnectionFailure,
-    required void Function(Object exception, StackTrace trace) onException,
-    required void Function(FailureFrame failure, int status) onFailure,
-    required void Function(SuccessFrame<TSuccess> success) onSuccess,
     required TSuccess Function(JObject json) decoder,
+    required void Function(SuccessFrame<TSuccess> success) onSuccess,
+    required void Function(FailureFrame failure, int status) onFailure,
+    required void Function(Object exception, StackTrace trace) onException,
+    required void Function() onConnectionFailure,
     void Function()? onFinally,
   }) {
     result.resolve(

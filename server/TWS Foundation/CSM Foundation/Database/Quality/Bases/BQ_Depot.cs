@@ -125,9 +125,9 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
         Assert.Multiple(
             () => Assert.True(qOut.Pages > 1),
-            () => Assert.True(qOut.Records > 0),
+            () => Assert.True(qOut.Length > 0),
             () => Assert.Equal(qOut.Page, qOut.Page),
-            () => Assert.Equal(qOut.Records, qOut.Sets.Length)
+            () => Assert.Equal(qOut.Length, qOut.Records.Length)
         );
     }
 
@@ -147,9 +147,9 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
         Assert.Multiple(
             () => Assert.True(qOut.Pages > 1),
-            () => Assert.True(qOut.Records > 0),
+            () => Assert.True(qOut.Length > 0),
             () => Assert.Equal(qViewOptions.Page, qOut.Page),
-            () => Assert.Equal(qOut.Records, qOut.Sets.Length)
+            () => Assert.Equal(qOut.Length, qOut.Records.Length)
         );
     }
 
@@ -177,7 +177,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
         SetViewOut<TSet> qUnorderedOut = await Depot.View(qUnorderedViewOptions);
 
         // --> Manual ordering undordered result for reference.
-        TSet[] orderedReferenceRecords = qUnorderedOut.Sets;
+        TSet[] orderedReferenceRecords = qUnorderedOut.Records;
         {
             Type setType = typeof(TSet);
             ParameterExpression parameterExpression = Expression.Parameter(setType, $"X0");
@@ -218,7 +218,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
         SetViewOut<TSet> qOut = await Depot.View(qViewOptions);
 
 
-        Assert.All(qOut.Sets, (i) => {
+        Assert.All(qOut.Records, (i) => {
             Assert.True(DateTime.Compare(i.Timestamp, DateTime.UtcNow.Date) > 0);
         });
     }
@@ -252,7 +252,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
         PropertyInfo? pInfo = typeof(TSet).GetProperty(factorization.Value.Property);
         Assert.NotNull(pInfo);
-        Assert.All(qOut.Sets, i => {
+        Assert.All(qOut.Records, i => {
             object? value = pInfo.GetValue(i);
 
             Assert.Equal(value, factorization.Value.Value);
@@ -298,7 +298,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
         PropertyInfo? propMirror = typeof(TSet).GetProperty(property);
         Assert.NotNull(propMirror);
 
-        Assert.All(qOut.Sets, i => {
+        Assert.All(qOut.Records, i => {
             object? value = propMirror.GetValue(i);
 
             foreach(string? refValue in values) {

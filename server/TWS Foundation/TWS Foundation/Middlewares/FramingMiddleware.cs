@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 using CSM_Foundation.Core.Exceptions;
-using CSM_Foundation.Server.Interfaces;
+using CSM_Foundation.Core.Interfaces;
 using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Http.Extensions;
@@ -25,13 +25,13 @@ public class FramingMiddleware
 
         using MemoryStream bufferingStream = new();
 
-        IServerTransactionException? failure = null;
+        IException? failure = null;
         string ContentType = "application/json";
 
         try {
             context.Response.Body = bufferingStream;
             await next.Invoke(context);
-        } catch (Exception ex) when (ex is IServerTransactionException Exception) {
+        } catch (Exception ex) when (ex is IException Exception) {
             failure = Exception;
         } catch (Exception ex) {
             XSystem systemEx = new(ex);
@@ -44,7 +44,7 @@ public class FramingMiddleware
                 _ = bufferingStream.Seek(0, SeekOrigin.Begin);
                 string encodedContent = "";
                 if (failure is not null) {
-                    ServerExceptionPublish exPublish = failure.Publish();
+                    ExceptionExposition exPublish = failure.Publish();
 
                     FailureFrame frame = new() {
                         Tracer = Tracer,
@@ -60,7 +60,7 @@ public class FramingMiddleware
                             encodedContent = "{}";
                             break;
                         case 405: {
-                                ServerExceptionPublish publish = new XSystem(new MethodAccessException()).Publish();
+                                ExceptionExposition publish = new XSystem(new MethodAccessException()).Publish();
                                 FailureFrame frame = new() {
                                     Tracer = Tracer,
                                     Estela = publish,
@@ -69,7 +69,7 @@ public class FramingMiddleware
                             }
                             break;
                         case 404: {
-                                ServerExceptionPublish publish = new XSystem(new Exception($"{context.Request.GetDisplayUrl()} not found")).Publish();
+                                ExceptionExposition publish = new XSystem(new Exception($"{context.Request.GetDisplayUrl()} not found")).Publish();
                                 FailureFrame frame = new() {
                                     Tracer = Tracer,
                                     Estela = publish,

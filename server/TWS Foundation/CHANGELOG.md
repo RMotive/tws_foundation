@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## X.X.X - [XX.XX-2025]
 
 - Notes:
     1. Changed [Trailer] property name [VehiculesModelsNavigation] renamed has [VehiculeModelNavigation].
@@ -39,6 +39,26 @@
         - [Accounts]
     
 
+    1. Now the Customer project implementations are going to be tested.
+
+        - Creates a new [BQ_Service] to facilitate Quality Suits for Service implementations.
+
+    2. Changes on [SetViewOut] model.
+
+        - [SetViewOut.Amount] changed to [SetViewOut.Count].
+
+        - [SetViewOut.Records] changed to [SetViewOut.Length].
+
+        - [SetViewOut.Sets] changed to [SetViewOut.Records].
+
+    3. Added [Q_SecurityService] quality suit.
+
+    4. Added [IService] as an interface for Customer services common operations as Create, View, Update, Delete.
+
+    5. Added [Interfaces] for [Depots] and updating depedency injection management for them.
+
+    6. Added the [Delete(int Id)] overload method for [IDepot_Delete] interface as was present in the [BDepot] but not in an interface and logic wasn't able to call that method.
+
 - Fixes:
     1. Fixed [Truck] and [TruckExternal] relationships (Check scheme #6).
     2. Fixed [Trailer] and [TrailerExternal] relationships (Check scheme #6).
@@ -46,7 +66,57 @@
 
     4. Fixed [BDepot] [Delete] [Tset] overcharged method.
 
+    1. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].
+
 - Dependencies:
+
+## 7.1.1 - [29.01-2025]
+
+- Notes:
+
+    1. Changes on [ExportInventoryOut] -> [ExportOut]
+        - Changed property [type] -> [extension]: also now is a enumerator to create a bound for the available extensions [ExportOutExtensions].
+        - Improved documentation.
+
+    2. Added [ExportView] service for [YardLog] to generate an exportable for the generic [View] operation.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | New Version     |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | ClosedXML                               | 0.104.2          | 0.104.2         |
+    | coverlet.collector                      | 6.2.4            | 6.2.4           |
+    | Microsoft.AspNetCore.Mvc.Testing        | 9.0.1            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore           | 9.0.1            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore.SqlServer | 9.0.1            | 9.0.1           |
+    | Microsoft.IdentityModel.Tokens          | 8.3.1            | 8.3.1           |
+    | Microsoft.NET.Test.Sdk                  | 17.12.0          | 17.12.0         |
+    | xunit                                   | 2.9.3            | 2.9.3           |
+    | xunit.runner.visualstudio               | 3.0.1            | 3.0.1           |
+
+## 7.1.0 - [28.01-2025]
+
+- Notes:
+
+    1. Included [ExportViewInventory] service, allowing to generate an excel file based on a [ViewInventory] results.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | New Version     |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | ClosedXML                               | ---              | 0.104.2         |
+    | coverlet.collector                      | 6.2.0            | 6.2.4           |
+    | Microsoft.AspNetCore.Mvc.Testing        | 9.0.0            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore           | 9.0.0            | 9.0.1           |
+    | Microsoft.EntityFrameworkCore.SqlServer | 9.0.0            | 9.0.1           |
+    | Microsoft.IdentityModel.Tokens          | 8.2.1            | 8.3.1           |
+    | Microsoft.NET.Test.Sdk                  | 17.12.0          | 17.12.0         |
+    | xunit                                   | 2.9.2            | 2.9.3           |
+    | xunit.runner.visualstudio               | 2.9.2            | 3.0.1           |
 
 ## 7.0.2 - [04.12-2024]
 

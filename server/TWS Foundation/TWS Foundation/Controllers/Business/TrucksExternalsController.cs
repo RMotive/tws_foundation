@@ -12,28 +12,28 @@ using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("TrucksExternals"), Route("[Controller]/[Action]")]
 public class TrucksExternalsController : ControllerBase {
     private readonly ITrucksExternalsService Service;
     public TrucksExternalsController(ITrucksExternalsService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("TrucksExternals", "Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> View(SetViewOptions<TruckExternal> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("TrucksExternals", "Create")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(TruckExternal[] trucks)
         => Ok(await Service.Create(trucks));
 
-    [HttpPost(), Auth("TrucksExternals", "Update")]
+    [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(TruckExternal Truck) {
         return Ok(await Service.Update(Truck));
     }
 
-    [HttpPost(), Auth("TrucksExternals", "Delete")]
+    [HttpPost(), Auth("Delete")]
     public async Task<IActionResult> Delete(TruckExternal Truck) {
         return Ok(await Service.Delete(Truck));
     }

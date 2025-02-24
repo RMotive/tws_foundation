@@ -9,9 +9,11 @@ BEGIN TRANSACTION
 	('Passkey_Grant', 'Action of grant passkeys accounts permits', SYSDATETIME(), 1);
 
 	INSERT INTO Features([Name], [Description], [Timestamp], [Enabled])
-	VALUES('Accounts', 'Suit of actions related to accounts records', SYSDATETIME(), 1);
+	VALUES ('Accounts', 'Suit of actions related to accounts records', SYSDATETIME(), 1),
+	('Permits', 'Suit of actions related to permits records', SYSDATETIME(), 1),
+	('Profiles', 'Suit of actions related to profiles records', SYSDATETIME(), 1);
 	
-	DECLARE @read INT = (select id from Actions where Name = 'Read');
+	DECLARE @read INT = (select id from Actions where Name = 'View');
 	DECLARE @create INT = (select id from Actions where Name = 'Create');
 	DECLARE @update INT = (select id from Actions where Name = 'Update');
 	DECLARE @delete INT = (select id from Actions where Name = 'Delete');
@@ -46,7 +48,11 @@ BEGIN TRANSACTION
 	(@solution, (select id from Features where Name = 'Accounts'), @update, 'TWSFAC03', SYSDATETIME(), 1), -- accounts/update permit;
 	(@solution, (select id from Features where Name = 'Accounts'), @passRead, 'TWSFAC05', SYSDATETIME(), 1), -- accounts/pass read permit;
 	(@solution, (select id from Features where Name = 'Accounts'), @passUpdate, 'TWSFAC06', SYSDATETIME(), 1), -- accounts/pass updt permit;
-	(@solution, (select id from Features where Name = 'Accounts'), @passGrant, 'TWSFAC07', SYSDATETIME(), 1); -- drivers/pass grant permit;
+	(@solution, (select id from Features where Name = 'Accounts'), @passGrant, 'TWSFAC07', SYSDATETIME(), 1), -- accounts/pass grant permit;
+
+	(@solution, (select id from Features where Name = 'Permits'), @read, 'TWSFPM01', SYSDATETIME(), 1), -- permits/read permit;
+	
+	(@solution, (select id from Features where Name = 'Profiles'), @read, 'TWSFPF01', SYSDATETIME(), 1);-- profiles/read permit;
 
 COMMIT TRANSACTION
 END TRY

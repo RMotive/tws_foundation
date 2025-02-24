@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## CURRENT - [xx.xx-xxxx]
+## X.X.X - [XX.XX-2025]
 
 - Notes:
     
@@ -52,9 +52,60 @@
     
 
 
+    1. Now the test folder has changed the way to run and define tests:
+
+        - changed [definiton] and [integration] folder for Feature based folders like [business/trucks] or [security/accounts] and inside the features are defined:
+
+            - [def_*_service_test.dart] Service definition test file.
+            - [int_*_service_test.dart] Service integration test file.
+            - [*_test.dart] Feature set model test file, currently used to test [des] and [encode] methods and see that [JObject] convertions work as expected.
+
+    2. Now the [src] folder, the main library content for the package, nesting has changed for a Feature based folder management, now we will be able to see inside the [services] folder the [security] and [business] that work as a category folders and inside them
+    the features like [accounts], [trucks], etc. There will be hold the set model file, the service base API and the service implementation, and all items related to the feature itself will be set in this folder.
+
+    3. Changes on [SetViewOut] model.
+
+        - [SetViewOut.Amount] changed to [SetViewOut.Count].
+
+        - [SetViewOut.Records] changed to [SetViewOut.Length].
+
+        - [SetViewOut.Sets] changed to [SetViewOut.Records].
+
 - Fixes:
 
 - Dependencies:
+
+## 6.1.1 - [29.01-2025]
+
+- Notes:
+
+    1. Changes on [ExportInventoryOut] -> [ExportOut]
+        - Changed property [type] -> [extension]: also now is a enumerator to create a bound for the available extensions [ExportOutExtensions].
+        - Improved documentation.
+
+    2. Added [ExportView] service for [YardLog] to generate an exportable for the generic [View] operation.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | 7.0.0            | 7.0.0           |
+
+## 6.1.0 - [28.01-2025]
+
+- Notes:
+
+    1. Included the [ExportViewInventory] for [YardLogs] service, this adds [ExportInventoryOut] object to store the service result.
+
+- Fixes: N/A
+
+- Dependencies:
+
+    | Package                                 | Previous Version | Current Version |
+    |:----------------------------------------|:----------------:|:---------------:|
+    | csm_client                              | 7.0.0            | 7.0.0           |
 
 ## 6.0.1 - [04.12-2024]
 

@@ -12,28 +12,28 @@ using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Drivers"), Route("[Controller]/[Action]")]
 public class DriversController : ControllerBase {
     private readonly IDriversService Service;
     public DriversController(IDriversService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("Drivers", "Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> View(SetViewOptions<Driver> Options) {
         return Ok(await Service.View(Options));
     }
-    [HttpPost(), Auth("Drivers", "Create")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(Driver[] Drivers) {
         return Ok(await Service.Create(Drivers));
     }
 
-    [HttpPost(), Auth("Drivers", "Update")]
+    [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(Driver Driver) {
         return Ok(await Service.Update(Driver));
     }
 
-    [HttpPost(), Auth("Drivers", "Delete")]
+    [HttpPost(), Auth("Delete")]
     public async Task<IActionResult> Delete(Driver Driver) {
         return Ok(await Service.Delete(Driver));
     }

@@ -31,11 +31,11 @@ BEGIN TRANSACTION
 	('Yardlogs', 'Suit of actions related to yard logs records', SYSDATETIME(), 1),
 	('YardlogsInventories', 'Suit of actions related to yard logs inventory records', SYSDATETIME(), 1);
 	DECLARE @solution INT = ( select id from Solutions where Sign = 'TWSMA' );
-	DECLARE @read INT = (select id from Actions where Name = 'Read');
+	DECLARE @read INT = (select id from Actions where Name = 'View');
 	DECLARE @create INT = (select id from Actions where Name = 'Create');
 	DECLARE @update INT = (select id from Actions where Name = 'Update');
 	DECLARE @delete INT = (select id from Actions where Name = 'Delete');
-			
+		
 	-- Check that the foreign keys are correct in your SQL database instance.
 	-- solution = TWSMA (TWS administration).
 	INSERT INTO Permits(Solution, Feature, [Action], Reference, [Timestamp], [Enabled])

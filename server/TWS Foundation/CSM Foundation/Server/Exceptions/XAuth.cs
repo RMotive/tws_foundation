@@ -1,23 +1,25 @@
 ﻿using System.Net;
 
+using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
-using CSM_Foundation.Server.Bases;
 
 namespace CSM_Foundation.Server.Exceptions;
 public class XAuth
-    : BServerTransactionException<XAuthSituation> {
-
-
+    : BException<XAuthSituation> {
 
     public XAuth(XAuthSituation Situation)
-        : base($"Unauthorized transaction request", HttpStatusCode.Unauthorized, null) {
-        this.Situation = Situation;
-        Advise = Situation switch {
-            XAuthSituation.Lack => AdvisesConstants.SERVER_CONTACT_ADVISE,
-            XAuthSituation.Unauthorized => $"Account is unautorized to the requested feature",
-            XAuthSituation.Format => $"Wrong authentication format {AdvisesConstants.SERVER_CONTACT_ADVISE}",
-            XAuthSituation.SystemUCL | XAuthSituation.SystemACL => $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}",
-            _ => AdvisesConstants.SERVER_CONTACT_ADVISE,
+        : base($"Unauthorized transaction request", Situation, HttpStatusCode.Unauthorized, null) {
+    }
+
+    protected override Dictionary<XAuthSituation, string> AdviseFactory() {
+
+        return new Dictionary<XAuthSituation, string> {
+            { XAuthSituation.Lack, AdvisesConstants.SERVER_CONTACT_ADVISE },
+            { XAuthSituation.Format,  $"Wrong authentication format {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
+            { XAuthSituation.Unauthorized, $"Account is unautorized to the requested feature" },
+            { XAuthSituation.SystemUCL, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
+            { XAuthSituation.SystemACL, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
+            { XAuthSituation.Expired, $"Your session token is expired" },
         };
     }
 }
@@ -43,4 +45,8 @@ public enum XAuthSituation {
     ///     When a system recognized exception is catched
     /// </summary>
     SystemACL,
+    /// <summary>
+    ///     Session token expired.
+    /// </summary>
+    Expired,
 }

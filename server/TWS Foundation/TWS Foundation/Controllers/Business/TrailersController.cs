@@ -10,28 +10,28 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Trailers"), Route("[Controller]/[Action]")]
 public class TrailersController : ControllerBase {
     private readonly ITrailersService Service;
     public TrailersController(ITrailersService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("Trailers", "Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> View(SetViewOptions<Trailer> Options) {
         return Ok(await Service.View(Options));
     }
-    [HttpPost(), Auth("Trailers", "Create")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(Trailer[] Trailers) {
         return Ok(await Service.Create(Trailers));
     }
 
-    [HttpPost(), Auth("Trailers", "Update")]
+    [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(Trailer Trailer) {
         return Ok(await Service.Update(Trailer));
     }
 
-    [HttpPost(), Auth("Trailers", "Delete")]
+    [HttpPost(), Auth("Delete")]
     public async Task<IActionResult> Delete(Trailer Trailer) {
         return Ok(await Service.Delete(Trailer));
     }

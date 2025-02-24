@@ -23,7 +23,7 @@ import 'package:tws_foundation_client/src/services/security/contacts_service.dar
 import 'package:tws_foundation_client/src/services/security/permits_service.dart';
 import 'package:tws_foundation_client/src/services/security/profile_service.dart';
 import 'package:tws_foundation_client/src/services/security/security_service.dart';
-import 'package:tws_foundation_client/src/services/security/solutions_service.dart';
+import 'package:tws_foundation_client/src/services/security/solutions/solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Source that exposes the configured services dependencies for each

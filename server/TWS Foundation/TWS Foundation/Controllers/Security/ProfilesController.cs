@@ -10,7 +10,7 @@ using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers.Security;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Profiles"), Route("[Controller]/[Action]")]
 public class ProfilesController
     : ControllerBase {
     private readonly IProfileService Service;
@@ -18,7 +18,7 @@ public class ProfilesController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("", "")]
+    [HttpPost(), Auth("View")]
     public async Task<IActionResult> View(SetViewOptions<Profile> Options) {
         return Ok(await Service.View(Options));
     }

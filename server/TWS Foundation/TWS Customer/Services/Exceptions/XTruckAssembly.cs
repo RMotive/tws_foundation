@@ -1,13 +1,13 @@
 ﻿
 using System.Net;
 
-using CSM_Foundation.Server.Bases;
+using CSM_Foundation.Core.Bases;
 
 namespace TWS_Customer.Services.Exceptions;
-public class XTruckAssembly : BServerTransactionException<XTruckAssemblySituation> {
+public class XTruckAssembly : BException<XTruckAssemblySituation> {
 
     public XTruckAssembly(XTruckAssemblySituation Situation)
-        : base($"", HttpStatusCode.BadRequest, null) {
+        : base($"", Situation, HttpStatusCode.BadRequest, null) {
         this.Situation = Situation;
         Advise = Situation switch {
             XTruckAssemblySituation.RequiredManufacturer => $"None Model data found.",

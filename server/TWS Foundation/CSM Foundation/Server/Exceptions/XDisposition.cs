@@ -1,12 +1,12 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Server.Bases;
+using CSM_Foundation.Core.Bases;
 
 namespace CSM_Foundation.Server.Exceptions;
 public class XDisposition
-    : BServerTransactionException<XDispositionSituation> {
+    : BException<XDispositionSituation> {
     public XDisposition(XDispositionSituation Situation)
-        : base($"Wrong disposition configuration", HttpStatusCode.BadRequest, null) {
+        : base($"Wrong disposition configuration", Situation, HttpStatusCode.BadRequest, null) {
 
         this.Situation = Situation;
         Advise = Situation switch {

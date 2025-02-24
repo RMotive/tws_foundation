@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Sets;
 
-using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Controllers.Business;
@@ -48,7 +48,7 @@ public class Q_TrailersTypesController : BQ_CustomServerController<TrailerType> 
         Assert.Equal(HttpStatusCode.OK, Status);
 
         View Estela = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(Estela.Sets.Length > 0);
+        Assert.True(Estela.Records.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }

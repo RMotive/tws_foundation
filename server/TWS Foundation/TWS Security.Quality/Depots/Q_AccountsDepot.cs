@@ -1,10 +1,8 @@
 ﻿using System.Text;
-using System.Text.Unicode;
 
-using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality.Bases;
 
-using TWS_Security.Depots;
+using TWS_Security.Depots.Accounts;
 using TWS_Security.Sets;
 
 namespace TWS_Security.Quality.Depots;
@@ -28,7 +26,7 @@ public class Q_AccountsDepot
                 Name = "nameDepot" + RandomSeed,
                 Lastname = "lastnamedepot" + RandomSeed,
                 Email = "email@depot." + RandomSeed,
-                Phone =  RandomSeed.Substring(0,14),
+                Phone =  RandomSeed[..14],
             }
         };
     }

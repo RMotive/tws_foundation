@@ -30,13 +30,15 @@ public partial class Profile: BSet {
             entity.HasKey(e => e.Id);
 
             entity.HasIndex(e => e.Name).IsUnique();
-
+            entity.Property(e => e.Timestamp)
+                    .HasColumnType("datetime");
             entity.Property(e => e.Id);
             entity.Property(e => e.Description)
                 .IsUnicode(false);
             entity.Property(e => e.Name)
                 .HasMaxLength(25)
                 .IsUnicode(false);
+
         });
     }
 }

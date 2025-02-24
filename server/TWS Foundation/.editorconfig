@@ -114,7 +114,7 @@ csharp_prefer_braces = true:silent
 csharp_prefer_simple_using_statement = true:suggestion
 csharp_style_namespace_declarations = file_scoped:warning
 csharp_style_prefer_method_group_conversion = false:suggestion
-csharp_style_prefer_primary_constructors = false:suggestion
+csharp_style_prefer_primary_constructors = false:error
 csharp_style_prefer_top_level_statements = false:warning
 
 # Expression-level preferences
@@ -231,6 +231,7 @@ dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 csharp_prefer_static_anonymous_function = true:suggestion
+csharp_prefer_system_threading_lock = true:suggestion
 
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion

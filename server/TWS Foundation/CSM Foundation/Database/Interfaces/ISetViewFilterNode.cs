@@ -34,6 +34,9 @@ public interface ISetViewFilterNode<TSet>
     Expression<Func<TSet, bool>> Compose();
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class ISetViewFilterNodeConverterFactory : JsonConverterFactory {
     public override bool CanConvert(Type typeToConvert) {
         if (!typeToConvert.IsGenericType) {
@@ -52,7 +55,21 @@ public class ISetViewFilterNodeConverterFactory : JsonConverterFactory {
     }
 }
 
-public class ISetViewFilterNodeConverter<TSet> : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TSet"></typeparam>
+public class ISetViewFilterNodeConverter<TSet>
+    : JsonConverter<ISetViewFilterNode<TSet>> where TSet : ISet {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <param name="typeToConvert"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    /// <exception cref="UnsupportedContentTypeException"></exception>
     public override ISetViewFilterNode<TSet>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         JsonDocument jsonObject = JsonDocument.ParseValue(ref reader);
         string json = jsonObject.RootElement.GetRawText();
@@ -73,6 +90,13 @@ public class ISetViewFilterNodeConverter<TSet> : JsonConverter<ISetViewFilterNod
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="writer"></param>
+    /// <param name="value"></param>
+    /// <param name="options"></param>
+    /// <exception cref="NotSupportedException"></exception>
     public override void Write(Utf8JsonWriter writer, ISetViewFilterNode<TSet> value, JsonSerializerOptions options) {
         switch (value) {
             case SetViewPropertyFilter<TSet> propertyFilter:

@@ -10,7 +10,7 @@ using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers.Security;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("Accounts"), Route("[Controller]/[Action]")]
 public class AccountsController
     : ControllerBase {
     private readonly IAccountsService Service;
@@ -18,27 +18,27 @@ public class AccountsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("Accounts", "Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> View(SetViewOptions<Account> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("Accounts", "Create")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(Account[] Accounts) {
         return Ok(await Service.Create(Accounts));
     }
 
-    [HttpPost(), Auth("Accounts", "Update")]
+    [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(Account Account) {
         return Ok(await Service.Update(Account));
     }
 
-    [HttpPost(), Auth("Accounts", "Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> GetPermits(Account Account) {
         return Ok(await Service.GetPermits(Account));
     }
 
-    [HttpPost(), Auth("Accounts", "Delete")]
+    [HttpPost(), Auth("Delete")]
     public async Task<IActionResult> Delete(Account Account) {
         return Ok(await Service.Delete(Account));
     }

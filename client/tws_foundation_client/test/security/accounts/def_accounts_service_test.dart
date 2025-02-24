@@ -1,0 +1,173 @@
+import 'dart:convert';
+
+import 'package:csm_client/csm_client.dart';
+import 'package:test/test.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+
+void main() {
+  late AccountsServiceBase service;
+  late SetViewOut<Account> viewMock;
+  late SetViewOptions<Account> options;
+  late SetBatchOut<Account> createMock;
+  late RecordUpdateOut<Account> updateMock;  
+  late SetViewOut<Permit> permitsMock;
+  late Account deleteMock;
+  late List<Account> accounts;
+
+  setUp(
+    () {
+      List<SetViewOrderOptions> noOrderigns = <SetViewOrderOptions>[];
+      options = SetViewOptions<Account>(false, 10, 1, null, noOrderigns, <SetViewFilterNodeInterface<Account>>[]);
+      viewMock = SetViewOut<Account>(<Account>[], 1, DateTime.now(), 3, 0, 20);
+      createMock = SetBatchOut<Account>(<Account>[], <SetOperationFailure<Account>>[], 0, 0, 0, false);
+      updateMock = RecordUpdateOut<Account>(Account.a(), Account.a());
+      permitsMock = SetViewOut<Permit>(<Permit>[], 1, DateTime.now(), 3, 0, 20);
+      deleteMock = Account.a();
+
+
+      accounts = <Account>[
+        Account.a(),
+      ];
+      Client mockClient = MockClient(
+        (Request request) async {
+          JObject jObject = switch (request.url.pathSegments.last) {
+            'view' => SuccessFrame<SetViewOut<Account>>('qTracer', viewMock).encode(),
+            'create' => SuccessFrame<SetBatchOut<Account>>('qTracer', createMock).encode(),
+            'update' => SuccessFrame<RecordUpdateOut<Account>>('qTracer', updateMock).encode(),
+            'getPermits' => SuccessFrame<SetViewOut<Permit>>('qTracer', permitsMock).encode(),
+            'delete' => SuccessFrame<Account>('qTracer', deleteMock).encode(),
+
+            _ => <String, dynamic>{},
+          };
+
+          String object = jsonEncode(jObject);
+          return Response(object, 200);
+        },
+      );
+      service = TWSFoundationSource(
+        true,
+        client: mockClient,
+      ).accounts;
+    },
+  );
+
+  test(
+    'View',
+    () async {
+      MainResolver<SetViewOut<Account>> fact = await service.view(options, '');
+
+      bool passed = false;
+      fact.resolve(
+        decoder: (JObject json) => SetViewOut<Account>.des(json, Account.des),
+        onConnectionFailure: () {},
+        onFailure: (FailureFrame failure, int status) {
+          assert(false, 'server returned a success $status');
+        },
+        onException: (Object exception, StackTrace trace) {
+          assert(false, 'server returned a success');
+        },
+        onSuccess: (SuccessFrame<SetViewOut<Account>> success) {
+          passed = true;
+
+          SetViewOut<Account> fact = success.estela;
+          expect(viewMock.page, fact.page);
+          expect(viewMock.pages, fact.pages);
+          expect(viewMock.length, fact.length);
+          expect(viewMock.creation, fact.creation);
+        },
+      );
+
+      expect(passed, true, reason: 'expected the service returned a success');
+    },
+    timeout: Timeout.factor(5),
+  );
+  test(
+    'Create',
+    () async {
+      MainResolver<SetBatchOut<Account>> fact = await service.create(accounts, '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => SetBatchOut<Account>.des(json, Account.des),
+        onConnectionFailure: () {},
+        onFailure: (FailureFrame failure, int status) {
+          throw failure;
+        },
+        onSuccess: (SuccessFrame<SetBatchOut<Account>> success) {
+          pased = true;
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+      );
+      expect(pased, true);
+    },
+  );
+
+  test(
+    'Update',
+    () async {
+      MainResolver<RecordUpdateOut<Account>> fact = await service.update(Account.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => RecordUpdateOut<Account>.des(json, Account.des),
+        onConnectionFailure: () {},
+        onFailure: (FailureFrame failure, int status) {
+          throw failure;
+        },
+        onSuccess: (SuccessFrame<RecordUpdateOut<Account>> success) {
+          pased = true;
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+      );
+      expect(pased, true);
+    },
+  );
+
+  test(
+    'getPermits',
+    () async {
+      MainResolver<SetViewOut<Permit>> fact = await service.getPermits(Account.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => SetViewOut<Permit>.des(json, Permit.des),
+        onConnectionFailure: () {},
+        onFailure: (FailureFrame failure, int status) {
+          throw failure;
+        },
+        onSuccess: (SuccessFrame<SetViewOut<Permit>> success) {
+          pased = true;
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+      );
+      expect(pased, true);
+    },
+  );
+
+  test(
+    'Delete',
+    () async {
+      MainResolver<Account> fact = await service.delete(Account.a(), '');
+      bool pased = false;
+      fact.resolve(
+        decoder: (JObject json) => Account.des(json),
+        onConnectionFailure: () {
+          throw 'ConnectionFailure';
+        },
+        onException: (Object exception, StackTrace trace) {
+          throw exception;
+        },
+        onFailure: (FailureFrame failure, int status) {
+          throw failure.estela.system;
+        },
+        onSuccess: (SuccessFrame<Account> success) {
+          pased = true;
+          expect(pased, true);
+        },
+      );
+    },
+  );
+}

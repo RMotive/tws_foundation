@@ -40,12 +40,12 @@ public class Q_ContactsController
             Assert.Equal(HttpStatusCode.OK, Status);
 
             SetBatchOut<Contact> creationResult = Framing<SuccessFrame<SetBatchOut<Contact>>>(Frame).Estela;
-            
+
             Assert.Multiple([
                 () => Assert.Equal(mocks.Length, creationResult.QTransactions),
                 () => Assert.Equal(mocks.Length, creationResult.QSuccesses),
                 () => Assert.All(creationResult.Successes, (i) => {
-                    Assert.True(i.Id > 0);    
+                    Assert.True(i.Id > 0);
                 }),
             ]);
         }

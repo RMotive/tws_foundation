@@ -13,8 +13,21 @@ public partial class Solution
 
     public override DateTime Timestamp { get; set; } = DateTime.Now;
 
+
+    /// <summary>
+    ///     Solution name identification.
+    /// </summary>
+    /// <remarks>
+    ///     Must be Unique along records. 1 - 40 length.
+    /// </remarks>
     public string Name { get; set; } = null!;
 
+    /// <summary>
+    ///     Solution unique sign to reference easyly the solution along operations.
+    /// </summary>
+    /// <remarks>
+    ///     Must be unique along records. 5 Restricted Length.
+    /// </remarks>
     public string Sign { get; set; } = null!;
 
     public string? Description { get; set; }

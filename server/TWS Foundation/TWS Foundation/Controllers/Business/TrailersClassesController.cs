@@ -18,7 +18,7 @@ public class TrailersClassesController : ControllerBase {
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("TrailerClassses","Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> View(SetViewOptions<TrailerClass> Options) {
         return Ok(await Service.View(Options));
     }

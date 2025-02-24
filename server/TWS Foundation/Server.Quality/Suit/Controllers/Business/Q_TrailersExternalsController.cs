@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Sets;
 
-using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Middlewares.Frames;
@@ -59,11 +59,11 @@ public class Q_TrailersExternalsController
                     TrailerClass = 0,
                     TrailerClassNavigation = new() {
                         Id = 0,
-                        Timestamp= DateTime.Now,
+                        Timestamp = DateTime.Now,
                         Name = RandomUtils.String(10) + RandomSeed,
                     }
                 },
-                SituationNavigation = new() { 
+                SituationNavigation = new() {
                     Id = 0,
                     Timestamp = DateTime.Now,
                     Name = RandomUtils.String(10) + RandomSeed,
@@ -74,7 +74,7 @@ public class Q_TrailersExternalsController
                     Name = RandomUtils.String(10) + RandomSeed,
                     Status = 1,
                     Address = 0,
-                    AddressNavigation = new() { 
+                    AddressNavigation = new() {
                         Id = 0,
                         Timestamp = DateTime.Now,
                         Country = "USA"
@@ -96,7 +96,7 @@ public class Q_TrailersExternalsController
         Assert.Equal(HttpStatusCode.OK, Status);
 
         View Estela = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(Estela.Sets.Length > 0);
+        Assert.True(Estela.Records.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }
@@ -157,7 +157,7 @@ public class Q_TrailersExternalsController
             #region update only main properties
             // Validate main properties changes to the previous record.
             string updatedTag = "UPDTE";
-            string modifiedCarrier = updatedTag + "Carrier" +RandomUtils.String(12);
+            string modifiedCarrier = updatedTag + "Carrier" + RandomUtils.String(12);
             string modifiedUsaPlate = updatedTag + RandomUtils.String(7);
             string modifiedEco = updatedTag + "ECO" + RandomUtils.String(8);
 

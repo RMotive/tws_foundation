@@ -31,6 +31,11 @@ public class SetViewOptions<TSet>
     ///     on demand by <see cref="Retroactive"/>
     /// </summary>
     public DateTime? Creation { get; init; }
+
+    /// <summary>
+    ///     Indicates if the current options are to generate an [Export] result.
+    /// </summary>
+    public bool Export { get; set; } = false;
     
     /// <summary>
     ///     Indicates order actions to perform to the current view building.

@@ -34,6 +34,8 @@ public class Action
                 Entity.Property(i => i.Name)
                     .IsRequired()
                     .HasMaxLength(25);
+                Entity.Property(e => e.Timestamp)
+                    .HasColumnType("datetime");
                 Entity.Property(i => i.Description);
                 Entity.Property(i => i.Timestamp);
                 Entity.Property(i => i.Enabled);

@@ -1,14 +1,11 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Business.Sets;
-
-using TWS_Customer.Managers.Records;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
 
 using TWS_Foundation.Middlewares.Frames;
@@ -49,7 +46,7 @@ public class Q_PlatesController
         Assert.Equal(HttpStatusCode.OK, Status);
 
         View Estela = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(Estela.Sets.Length > 0);
+        Assert.True(Estela.Records.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }

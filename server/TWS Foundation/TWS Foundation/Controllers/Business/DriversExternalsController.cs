@@ -10,29 +10,29 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Business;
 
-[ApiController, Route("[Controller]/[Action]")]
+[ApiController, Feature("DriversExternals"), Route("[Controller]/[Action]")]
 public class DriversExternalsController : ControllerBase {
     private readonly IDriversExternalsService Service;
     public DriversExternalsController(IDriversExternalsService service) {
         Service = service;
     }
 
-    [HttpPost(), Auth("DriversExternals", "Read")]
+    [HttpPost(), Auth("Read")]
     public async Task<IActionResult> View(SetViewOptions<DriverExternal> Options) {
         return Ok(await Service.View(Options));
     }
 
-    [HttpPost(), Auth("DriversExternals", "Create")]
+    [HttpPost(), Auth("Create")]
     public async Task<IActionResult> Create(DriverExternal[] Drivers) {
         return Ok(await Service.Create(Drivers));
     }
 
-    [HttpPost(), Auth("DriversExternals", "Update")]
+    [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(DriverExternal Driver) {
         return Ok(await Service.Update(Driver));
     }
 
-    [HttpPost(), Auth("DriversExternals", "Delete")]
+    [HttpPost(), Auth("Delete")]
     public async Task<IActionResult> Delete(DriverExternal Driver) {
         return Ok(await Service.Delete(Driver));
     }
