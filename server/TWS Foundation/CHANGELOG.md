@@ -39,11 +39,11 @@
         - [Accounts]
     
 
-    1. Now the Customer project implementations are going to be tested.
+    16. Now the Customer project implementations are going to be tested.
 
         - Creates a new [BQ_Service] to facilitate Quality Suits for Service implementations.
 
-    2. Changes on [SetViewOut] model.
+    17. Changes on [SetViewOut] model.
 
         - [SetViewOut.Amount] changed to [SetViewOut.Count].
 
@@ -51,13 +51,13 @@
 
         - [SetViewOut.Sets] changed to [SetViewOut.Records].
 
-    3. Added [Q_SecurityService] quality suit.
+    18. Added [Q_SecurityService] quality suit.
 
-    4. Added [IService] as an interface for Customer services common operations as Create, View, Update, Delete.
+    19. Added [IService] as an interface for Customer services common operations as Create, View, Update, Delete.
 
-    5. Added [Interfaces] for [Depots] and updating depedency injection management for them.
+    20. Added [Interfaces] for [Depots] and updating depedency injection management for them.
 
-    6. Added the [Delete(int Id)] overload method for [IDepot_Delete] interface as was present in the [BDepot] but not in an interface and logic wasn't able to call that method.
+    21. Added the [Delete(int Id)] overload method for [IDepot_Delete] interface as was present in the [BDepot] but not in an interface and logic wasn't able to call that method.
 
 - Fixes:
     1. Fixed [Truck] and [TruckExternal] relationships (Check scheme #6).
@@ -66,7 +66,7 @@
 
     4. Fixed [BDepot] [Delete] [Tset] overcharged method.
 
-    1. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].
+    5. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].
 
 - Dependencies:
 
