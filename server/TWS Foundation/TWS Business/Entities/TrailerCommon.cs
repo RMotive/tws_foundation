@@ -98,11 +98,11 @@ public partial class TrailerCommon
                 .HasForeignKey(d => d.Type);
 
             Entity.HasOne(d => d.SituationNavigation)
-                .WithMany(p => p.TrailersCommons)
+                .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Situation);
 
             Entity.HasOne(d => d.LocationNavigation)
-                .WithMany(p => p.TrailersCommons)
+                .WithMany(p => p.Trailers)
                 .HasForeignKey(d => d.Location)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 

@@ -11,7 +11,9 @@ public class Q_TruckCommon : BQ_Entity<TruckCommon> {
             Mock = new() {
                 Id = 1,
                 Economic = "",
-                Situation = 1,
+                Situation = new Situation {
+                    Id = 1,
+                }
 
             },
             Expectations = [],
@@ -19,8 +21,6 @@ public class Q_TruckCommon : BQ_Entity<TruckCommon> {
         Q_EntityEvaluation<TruckCommon> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
-                Status = 0,
-                Situation = 0,
                 Economic = "",
             },
             Expectations = [

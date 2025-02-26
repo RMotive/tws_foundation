@@ -3,8 +3,6 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Entities.Employees;
-
 namespace TWS_Business.Entities;
 
 public partial class Identification
@@ -23,10 +21,6 @@ public partial class Identification
     public DateOnly? Birthday { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
-
-    public virtual ICollection<DriverExternal> DriversExternals { get; set; } = [];
-
-    public Employee? Employee { get; set; }
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Identification>(Entity => {

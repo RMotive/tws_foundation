@@ -64,15 +64,10 @@ public class Q_PlatesController
             State = "ABC",
             Country = "MXN",
             Expiration = date,
-            Truck = 0,
             TruckNavigation = new() {
-                Id = 0,
-                Status = new TWS_Business.Entities.Status {
-                    Id = 1,
-                },
                 VIN = RandomUtils.String(17),
                 Common = new() {
-                    Status = 1,
+                    Status = new Status { Id = 1 },
                     Economic = RandomUtils.String(16)
                 },
                 Model = new() {

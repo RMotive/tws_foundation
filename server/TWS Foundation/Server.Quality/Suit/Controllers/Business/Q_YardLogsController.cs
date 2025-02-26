@@ -104,9 +104,6 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Common = trailerCommon,
         };
         Truck truck = new() {
-            Status = new Status {
-                Id = 1,
-            },
             Motor = motor,
             VIN = "VINtestcTbkd" + RandomSeed,
             Model = vehiculeModel,

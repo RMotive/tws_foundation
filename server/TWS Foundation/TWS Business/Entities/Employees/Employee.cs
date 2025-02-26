@@ -57,7 +57,7 @@ public class Employee
 
                     etBuilder
                         .HasOne(e => e.Identification)
-                        .WithOne(i => i.Employee)
+                        .WithOne()
                         .HasForeignKey<Employee>("IdentificationShadow")
                         .IsRequired();
                     etBuilder.Property<int>("IdentificationShadow").HasColumnName("Identification");

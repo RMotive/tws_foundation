@@ -10,22 +10,23 @@ public class Q_TruckExternal : BQ_Entity<TruckExternal> {
         Q_EntityEvaluation<TruckExternal> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Status = 1,
-                Common = 1
+                Common = new TruckCommon {
+                    Id = 1,
+                    Status = new Status {
+                        Id  =1,
+                    }
+                }
             },
             Expectations = [],
         };
         Q_EntityEvaluation<TruckExternal> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
-                Status = 0,
-                Common = 0,
                 Carrier = "",
                 MxPlate = ""
             },
             Expectations = [
                 (nameof(TruckExternal.Id), [(new PointerValidator(), 3)]),
-                (nameof(TruckExternal.Status), [(new PointerValidator(), 3)]),
             ],
         };
 

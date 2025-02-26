@@ -17,17 +17,16 @@ namespace CSM_Foundation.Database.Bases;
 /// 
 /// </summary>
 public static class EntityTypeBuilderExtension {
-
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Builder"></param>
     /// <param name="Relation"></param>
-    /// <param name="Reference"></param>
+    /// <param name="SourceReference"></param>
     /// <param name="Required"></param>
     /// <param name="Auto"></param>
     /// <param name="Deletion"></param>
-    public static void LinkMany(this EntityTypeBuilder Builder, (Type Source, Type Target) Relation, string Reference, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.Cascade) {
+    public static void Link(this EntityTypeBuilder Builder, (Type Source, Type Target) Relation, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.Cascade) {
         Type source = Relation.Source;
         Type target = Relation.Target;
 
@@ -36,11 +35,11 @@ public static class EntityTypeBuilderExtension {
             throw new Exception($"[SourceT ({source.Name})] or [Target ({target.Name})] Relation configuration is not an [IEntity]");
         }
 
-        string shadow = $"{Reference}Shadow";
+        string shadow = $"{SourceReference}Shadow";
 
         Type propType = Required ? typeof(long) : typeof(long?);
 
-        string targetReference = $"{source.Name}s";
+        string targetReference = TargetReference ?? $"{source.Name}s";
         if (source.Name.EndsWith('H')) {
             if (source.Name.Replace("H", "").Equals(target.Name)) {
                 targetReference = $"History";
@@ -53,34 +52,33 @@ public static class EntityTypeBuilderExtension {
             }
         }
 
-        Builder.Property(propType, shadow).HasColumnName(Reference).HasColumnType("bigint").IsRequired(Required);
+        Builder.Property(propType, shadow).HasColumnName(SourceReference).HasColumnType("bigint").IsRequired(Required);
         Builder
-            .HasOne(Relation.Target, Reference)
+            .HasOne(Relation.Target, SourceReference)
             .WithMany(targetReference)
             .HasForeignKey(shadow)
             .IsRequired(Required)
             .OnDelete(Deletion);
 
-        if(Auto) {
-            Builder.Navigation(Reference).AutoInclude();
+        if (Auto) {
+            Builder.Navigation(SourceReference).AutoInclude();
         }
     }
-
     /// <summary>
     ///     
     /// </summary>
-    /// <typeparam name="TSource"></typeparam>
-    /// <typeparam name="TTarget"></typeparam>
+    /// <typeparam name="SourceT"></typeparam>
+    /// <typeparam name="TargetT"></typeparam>
     /// <param name="Builder"></param>
-    /// <param name="Reference"></param>
+    /// <param name="SourceReference"></param>
     /// <param name="Required"></param>
     /// <param name="Auto"></param>
     /// <param name="Deletion"></param>
-    public static void LinkMany<TSource, TTarget>(this EntityTypeBuilder Builder, string Reference, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.ClientCascade)
-        where TSource : class, IEntity
-        where TTarget : class, IEntity {
+    public static void Link<SourceT, TargetT>(this EntityTypeBuilder Builder, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.ClientCascade)
+        where SourceT : class, IEntity
+        where TargetT : class, IEntity {
 
-        LinkMany(Builder, (typeof(TSource), typeof(TTarget)), Reference, Required, Auto, Deletion);
+        Link(Builder, (typeof(SourceT), typeof(TargetT)), SourceReference, TargetReference, Required, Auto, Deletion);
     }
 }
 
@@ -334,7 +332,11 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                     if (set is BEntity<IEntity>) {
                         PropertyInfo commonProperty = set.GetProperty(nameof(BEntity<IEntity>.Common));
 
-                        etBuilder.LinkMany((setType, commonProperty.PropertyType), commonProperty.Name, true);
+                        etBuilder.Link(
+                                (setType, commonProperty.PropertyType),
+                                commonProperty.Name,
+                                Required: true
+                            );
                     }
 
                     etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime");

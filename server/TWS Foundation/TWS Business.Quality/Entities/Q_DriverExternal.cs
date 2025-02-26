@@ -10,19 +10,13 @@ public class Q_DriverExternal : BQ_Entity<DriverExternal> {
         Q_EntityEvaluation<DriverExternal> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Status = 0,
-                Common = 0,
             },
             Expectations = [],
         };
         Q_EntityEvaluation<DriverExternal> failAllCases = new("All properties fail") {
-            Mock = new() {
-                Id = 0,
-                Status = 0,
-            },
+            Mock = new(),
             Expectations = [
                 (nameof(DriverExternal.Id), [(new PointerValidator(), 3)]),
-                (nameof(DriverExternal.Status), [(new PointerValidator(), 3)]),
             ],
         };
 

@@ -12,16 +12,16 @@ public partial class Situation
 
     public string? Description { get; set; }
 
-    public virtual ICollection<DriverCommon>? DriversCommons { get; set; } = [];
+    public ICollection<DriverCommon> Drivers { get; set; } = [];
 
-    public virtual ICollection<TruckCommon>? TrucksCommons { get; set; } = [];
+    public ICollection<TruckCommon> Trucks { get; set; } = [];
 
-    public virtual ICollection<TrailerCommon>? TrailersCommons { get; set; } = [];
+    public ICollection<TrailerCommon> Trailers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="TruckH"/> history entries referencing this <see cref="Situation"/>
     /// </summary>
-    public virtual ICollection<TruckH> TrucksHistories { get; set; } = [];
+    public ICollection<TruckH> TrucksHistories { get; set; } = [];
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Situation>(Entity => {

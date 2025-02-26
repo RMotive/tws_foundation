@@ -3,8 +3,6 @@
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
-using Microsoft.EntityFrameworkCore;
-
 using TWS_Business.Depots;
 using TWS_Business.Entities;
 
@@ -19,12 +17,6 @@ public class DriversExternalsService : IDriversExternalsService {
     }
 
     public async Task<SetViewOut<DriverExternal>> View(SetViewOptions<DriverExternal> Options) {
-        static IQueryable<DriverExternal> include(IQueryable<DriverExternal> query) {
-            return query
-            .Include(t => t.DriverCommonNavigation)
-            .Include(t => t.Identification);
-
-        }
-        return await DriversExternals.View(Options, include);
+        return await DriversExternals.View(Options);
     }
 }

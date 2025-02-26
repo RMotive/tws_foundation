@@ -8,51 +8,40 @@ namespace TWS_Business.Entities;
 public partial class DriverExternal
     : BBusinessEntity {
 
-    public int Status { get; set; }
+    /// <summary>
+    ///     <see cref="DriverCommon"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public DriverCommon Common { get; set; } = default!;
 
+    /// <summary>
+    ///     <see cref="Entities.Identification"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Identification Identification { get; set; } = default!;
 
-    public int Common { get; set; }
-
-    public virtual Status? StatusNavigation { get; set; }
-
-    public virtual DriverCommon? DriverCommonNavigation { get; set; }
-
-
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-
-        Container = [
-            ..Container,
-            (nameof(Status), [new PointerValidator(true)]),
-        ];
-
-        return Container;
-    }
-
     protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<DriverExternal>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Drivers_Externals");
+        Builder.Entity<DriverExternal>(
+            (Entity) => {
+                Entity.ToTable("Drivers_Externals");
 
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.HasIndex(e => e.Common)
-               .IsUnique();
-
-            Entity.HasOne(d => d.Identification)
-                .WithMany(p => p.DriversExternals)
-                .HasForeignKey(d => d.Identification);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.DriversExternals)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                Entity.Link<DriverExternal, DriverCommon>(
+                        nameof(Common),
+                        TargetReference: nameof(DriverCommon.External),
+                        Required: true,
+                        Auto: true
+                    );
+                Entity.Link<DriverExternal, Identification>(
+                        nameof(Identification),
+                        TargetReference: "",
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

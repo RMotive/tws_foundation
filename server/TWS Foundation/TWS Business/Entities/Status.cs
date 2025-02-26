@@ -12,11 +12,13 @@ public partial class Status
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
 
+    public ICollection<TruckCommon> Trucks { get; set; } = [];
+
+
     public virtual ICollection<VehiculeModel> VehiculeModels { get; set; } = [];
 
     public virtual ICollection<TrailerType> TrailerTypes { get; set; } = [];
 
-    public virtual ICollection<TruckCommon> TrucksCommons { get; set; } = [];
 
     public virtual ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
 
@@ -54,8 +56,6 @@ public partial class Status
 
     public virtual ICollection<Trailer> Trailers { get; set; } = [];
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
-
     public virtual ICollection<TruckH> TrucksHistories { get; set; } = [];
 
     public virtual ICollection<CarrierH> CarriersH { get; set; } = [];
@@ -85,23 +85,6 @@ public partial class Status
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Status>(Entity => {
-            Entity.HasKey(e => e.Id);
-
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.HasIndex(e => e.Name)
-                .IsUnique();
-
-            Entity.Property(e => e.Name)
-                .HasMaxLength(25);
-
-            Entity.Property(e => e.Description)
-                .HasMaxLength(150);
         });
     }
 }

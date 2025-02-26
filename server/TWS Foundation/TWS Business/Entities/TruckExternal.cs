@@ -1,5 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -7,73 +8,57 @@ namespace TWS_Business.Entities;
 
 public partial class TruckExternal
     : BBusinessEntity {
-    
 
-    
+    /// <summary>
+    ///     External truck vehicule number identifier.
+    /// </summary>
+    [StringLength(17)]
+    public string? VIN { get; set; }
 
-    public int Status { get; set; }
-
-    public int Common { get; set; }
-
-    public string Carrier { get; set; } = null!;
-
-    public string? Vin { get; set; }
-
+    /// <summary>
+    ///     External truck usa plate.
+    /// </summary>
+    [StringLength(12)]
     public string? UsaPlate { get; set; }
 
-    public string? MxPlate { get; set; } = null!;
+    /// <summary>
+    ///     External truck mex plate.
+    /// </summary>
+    [StringLength(12)]
+    public string? MxPlate { get; set; }
 
-    public virtual Status? StatusNavigation { get; set; }
+    /// <summary>
+    ///     External carrier identification.
+    /// </summary>
+    [StringLength(100, MinimumLength = 1)]
+    public string Carrier { get; set; } = string.Empty;
 
-    public virtual TruckCommon? TruckCommonNavigation { get; set; }
-
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
-
-    public virtual ICollection<TruckInventory> TrucksInventories { get; set; } = [];
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
-        Container = [
-                .. Container,
-            (nameof(Common), [new UniqueValidator()]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
-        ];
-
-        return Container;
-    }
+    /// <summary>
+    ///     <see cref="TruckCommon"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public TruckCommon Common { get; set; } = default!;
 
     protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<TruckExternal>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Trucks_Externals");
+        Builder.Entity<TruckExternal>(
+            (Entity) => {
+                Entity.ToTable("Trucks_Externals");
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                Entity.Property(e => e.VIN).HasMaxLength(17);
+                Entity.Property(e => e.UsaPlate).HasMaxLength(12);
+                Entity.Property(e => e.MxPlate).HasMaxLength(12);
 
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
+                Entity.Property(e => e.Carrier).HasMaxLength(100).IsRequired();
 
-            Entity.Property(e => e.Vin)
-                 .HasColumnName("VIN")
-                 .HasMaxLength(17);
-
-            Entity.Property(e => e.UsaPlate)
-              .HasMaxLength(12)
-              .IsUnicode(false);
-
-            Entity.Property(e => e.Carrier)
-              .HasMaxLength(100)
-              .IsUnicode(false);
-
-            Entity.Property(e => e.MxPlate)
-              .HasMaxLength(12)
-              .IsUnicode(false);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.TrucksExternals)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                Entity.Link<TruckExternal, TruckCommon>(
+                        nameof(Common),
+                        TargetReference: nameof(TruckCommon.External),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

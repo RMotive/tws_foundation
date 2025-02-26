@@ -120,20 +120,15 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Address = address,
         };
         TruckCommon common = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Economic = "EconomicTbkd" + RandomSeed,
-            Location = 0,
-            Situation = 0,
-            LocationNavigation = location,
-            SituationNavigation = situation
+            Location = location,
+            Situation = situation
 
         };
 
         List<Plate> plateList = [plateMX, plateUSA];
         Truck truck = new() {
-            Status = new Status {
-                Id = 1,
-            },
             Motor = motor,
             VIN = "VIN " + RandomSeed,
             Model = vehiculeModel,
@@ -225,7 +220,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             mock.VIN = modifiedVin;
             mock.Motor = modifiedMotor;
             mock.Common.Economic = modifiedMotor;
-            Plate plate = mock.Plates.First();
+            Plate plate = mock.Plates?.First() ?? new Plate();
             plate.Identifier = "identfy" + updatedTag;
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 

@@ -79,13 +79,21 @@ public partial class TruckCommon
 
             Entity.Property(e => e.Economic).HasMaxLength(16).IsRequired();
 
-            Entity.LinkMany<TruckCommon, Location>(nameof(Location));
-            Entity.LinkMany<TruckCommon, Situation>(nameof(Situation));
+            Entity.Link<TruckCommon, Location>(
+                    nameof(Location), 
+                    TargetReference: nameof(Entities.Location.Trucks)
+                );
+            Entity.Link<TruckCommon, Situation>(
+                    nameof(Situation),
+                    TargetReference: nameof(Entities.Situation.Trucks)
+                );
 
-            Entity.LinkMany<TruckCommon, Truck>(nameof(Internal), Auto: true);
-            Entity.LinkMany<TruckCommon, TruckExternal>(nameof(External), Auto: true);
-
-            Entity.LinkMany<TruckCommon, Status>(nameof(Status), true, true);
+            Entity.Link<TruckCommon, Status>(
+                    nameof(Status),
+                    TargetReference: nameof(Entities.Status.Trucks),
+                    Required: true, 
+                    Auto: true
+                );
         });
     }
 

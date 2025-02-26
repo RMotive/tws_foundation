@@ -20,40 +20,12 @@ public class TrucksExternalsService : ITrucksExternalsService {
 
     private IQueryable<TruckExternal> Include(IQueryable<TruckExternal> query) {
         return query
-            .Include(t => t.TruckCommonNavigation)
-                .ThenInclude(t => t!.SituationNavigation)
+            .Include(t => t.Common)
+                .ThenInclude(t => t!.Situation)
 
-            .Include(t => t.TruckCommonNavigation)
-                .ThenInclude(t => t!.LocationNavigation)
-                    .ThenInclude(t => t!.Address)
-
-            .Select(t => new TruckExternal() {
-                Id = t.Id,
-                Status = t.Status,
-                Common = t.Common,
-                UsaPlate = t.UsaPlate,
-                MxPlate = t.MxPlate,
-                Carrier = t.Carrier,
-                Vin = t.Vin,
-                TruckCommonNavigation = t.TruckCommonNavigation == null ? null : new TruckCommon() {
-                    Id = t.TruckCommonNavigation.Id,
-                    Status = t.TruckCommonNavigation.Status,
-                    Economic = t.TruckCommonNavigation.Economic,
-                    Location = t.TruckCommonNavigation.Location,
-                    Situation = t.TruckCommonNavigation.Situation,
-                    SituationNavigation = t.TruckCommonNavigation.SituationNavigation == null ? null : new Situation() {
-                        Id = t.TruckCommonNavigation.SituationNavigation.Id,
-                        Name = t.TruckCommonNavigation.SituationNavigation.Name,
-                        Description = t.TruckCommonNavigation.SituationNavigation.Description
-                    },
-                    LocationNavigation = t.TruckCommonNavigation.LocationNavigation == null ? null : new Location() {
-                        Id = t.TruckCommonNavigation.LocationNavigation.Id,
-                        Status = t.TruckCommonNavigation.LocationNavigation.Status,
-                        Name = t.TruckCommonNavigation.LocationNavigation.Name,
-                        Address = t.TruckCommonNavigation.LocationNavigation.Address,
-                    },
-                },
-            });
+            .Include(t => t.Common)
+                .ThenInclude(t => t!.Location)
+                    .ThenInclude(t => t!.Address);
     }
 
     public async Task<SetViewOut<TruckExternal>> View(SetViewOptions<TruckExternal> Options) {

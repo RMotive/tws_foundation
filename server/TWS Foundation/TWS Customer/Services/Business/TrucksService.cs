@@ -23,11 +23,11 @@ public class TrucksService : ITrucksService {
         .Include(t => t.Model)
         .Include(t => t.Maintenance)
         .Include(t => t.Common)
-        .Include(t => t.Status)
+            .ThenInclude(t => t.Status)
         .Include(t => t.SCT)
 
         .Include(t => t.Common)
-            .ThenInclude(c => c.SituationNavigation)
+            .ThenInclude(c => c.Situation)
 
         .Include(t => t.Carrier)
             .ThenInclude(c => c.Address)

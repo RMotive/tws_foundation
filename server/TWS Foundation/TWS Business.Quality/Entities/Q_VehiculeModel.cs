@@ -20,7 +20,6 @@ public class Q_VehiculeModel : BQ_Entity<VehiculeModel> {
             },
             Expectations = [
                 (nameof(VehiculeModel.Id), [(new PointerValidator(), 3)]),
-                (nameof(Truck.Status), [(new PointerValidator(), 3) ]),
                 (nameof(VehiculeModel.Name), [(new RequiredValidator(), 1),(new LengthValidator(), 1)]),
             ],
         };

@@ -90,7 +90,7 @@ public partial class DriverCommon
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             Entity.HasOne(d => d.SituationNavigation)
-                .WithMany(p => p.DriversCommons)
+                .WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.Situation)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });

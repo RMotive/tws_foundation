@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -21,11 +20,6 @@ public class Truck
     ///     Vehicule identifier number.
     /// </summary>
     public string VIN { get; set; } = string.Empty;
-
-    /// <summary>
-    ///     <see cref="Entities.Status"/> information.
-    /// </summary>
-    public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Carrier"/> information.
@@ -56,7 +50,7 @@ public class Truck
     /// <summary>
     ///     <see cref="Plate"/>s referencing this <see cref="Truck"/>.
     /// </summary>
-    public ICollection<Plate>? Plates { get; set; } = [];
+    public ICollection<Plate> Plates { get; set; } = [];
 
     /// <summary>
     ///     <see cref="YardLog"/>s referencing this <see cref="Truck"/>
@@ -83,12 +77,11 @@ public class Truck
                     etBuilder.Property(t => t.Motor).HasMaxLength(16);
                     etBuilder.Property(t => t.VIN).HasMaxLength(17).IsRequired();
 
-                    etBuilder.LinkMany<Truck, Status>(nameof(Status), true);
-                    etBuilder.LinkMany<Truck, Carrier>(nameof(Carrier), true);
-                    etBuilder.LinkMany<Truck, VehiculeModel>(nameof(Model), true);
+                    etBuilder.Link<Truck, Carrier>(nameof(Carrier), Required: true);
+                    etBuilder.Link<Truck, VehiculeModel>(nameof(Model), Required: true);
 
-                    etBuilder.LinkMany<Truck, SCT>(nameof(SCT));
-                    etBuilder.LinkMany<Truck, Maintenance>(nameof(Maintenance));
+                    etBuilder.Link<Truck, SCT>(nameof(SCT));
+                    etBuilder.Link<Truck, Maintenance>(nameof(Maintenance));
                 }
         );
     }

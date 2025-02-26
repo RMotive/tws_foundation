@@ -11,6 +11,9 @@ public class Q_Truck : BQ_Entity<Truck> {
                 Id = 1,
                 Common = new TruckCommon {
                     Id = 1,
+                    Status = new Status {
+                        Id = 1,
+                    }
                 },
                 Model = new VehiculeModel {
                     Id = 3,
@@ -21,9 +24,6 @@ public class Q_Truck : BQ_Entity<Truck> {
                 Insurance = new Insurance {
                     Id = 5,
                 },
-                Status = new Status {
-                    Id = 1,
-                }
             },
             Expectations = [],
         };
@@ -32,7 +32,6 @@ public class Q_Truck : BQ_Entity<Truck> {
             Expectations = [
                 (nameof(Truck.Id), [(new PointerValidator(), 3) ]),
                 (nameof(Truck.VIN), [(new RequiredValidator(), 1),(new LengthValidator(), 2)]),
-                (nameof(Truck.Status), [(new PointerValidator(), 3) ]),
 
             ],
         };

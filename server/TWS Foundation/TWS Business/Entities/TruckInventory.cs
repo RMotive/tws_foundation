@@ -54,16 +54,6 @@ public partial class TruckInventory
             Entity.Property(e => e.TruckExternal)
                 .HasColumnName("truckExternal");
 
-            Entity.HasOne(d => d.TruckExternalNavigation)
-                .WithMany(p => p.TrucksInventories)
-                .HasForeignKey(d => d.TruckExternal)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.SectionNavigation)
-               .WithMany(p => p.TrucksInventories)
-               .HasForeignKey(d => d.Section)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-
         });
     }
 }

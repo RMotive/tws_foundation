@@ -90,20 +90,20 @@ public class TruckH
                 (EntityTypeBuilder<TruckH> etBuilder) => {
                     etBuilder.Property(th => th.Sequence).IsRequired();
 
-                    etBuilder.LinkMany<TruckH, Truck>(nameof(Entity), true);
+                    etBuilder.Link<TruckH, Truck>(nameof(Entity), Required: true);
                     etBuilder.HasIndex("EntityShadow", nameof(Sequence)).IsUnique();
 
                     etBuilder.Property(tH => tH.VIN).HasMaxLength(17).IsRequired();
                     etBuilder.Property(tH => tH.Economic).HasMaxLength(16).IsRequired();
 
                     etBuilder.Property(tH => tH.Motor).HasMaxLength(16);
-                    etBuilder.LinkMany<TruckH, Status>(nameof(Status), true);
-                    etBuilder.LinkMany<TruckH, Manufacturer>(nameof(Manufacturer), true);
+                    etBuilder.Link<TruckH, Status>(nameof(Status), Required: true);
+                    etBuilder.Link<TruckH, Manufacturer>(nameof(Manufacturer), Required: true);
 
-                    etBuilder.LinkMany<TruckH, CarrierH>(nameof(CarrierH));
-                    etBuilder.LinkMany<TruckH, Situation>(nameof(Situation));
-                    etBuilder.LinkMany<TruckH, InsuranceH>(nameof(InsuranceH));
-                    etBuilder.LinkMany<TruckH, MaintenanceH>(nameof(MaintenanceH));
+                    etBuilder.Link<TruckH, CarrierH>(nameof(CarrierH));
+                    etBuilder.Link<TruckH, Situation>(nameof(Situation));
+                    etBuilder.Link<TruckH, InsuranceH>(nameof(InsuranceH));
+                    etBuilder.Link<TruckH, MaintenanceH>(nameof(MaintenanceH));
                 }
             );
     }

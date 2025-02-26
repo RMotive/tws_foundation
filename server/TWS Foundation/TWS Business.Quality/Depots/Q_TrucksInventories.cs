@@ -20,12 +20,10 @@ public class Q_TrucksInventories
             EntryDate = DateTime.Now,
             Section = 1,
             TruckExternalNavigation = new() {
-                Common = 0,
-                Status = 1,
                 Carrier = "Carrier " + RandomUtils.String(5),
                 MxPlate = RandomUtils.String(10),
-                TruckCommonNavigation = new() {
-                    Status = 1,
+                Common = new() {
+                    Status = new Status { Id = 1 },
                     Economic = RandomUtils.String(16),
                 }
             }

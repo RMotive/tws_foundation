@@ -17,11 +17,9 @@ public class Q_TrucksExternalsDepot
     protected override TruckExternal MockFactory(string RandomSeed) {
 
         return new() {
-            Status = 1,
-            Common = 0,
-            TruckCommonNavigation = new() {
+            Common = new() {
                 Timestamp = DateTime.Now,
-                Status = 1,
+                Status = new Status { Id = 1 },
                 Economic = RandomUtils.String(16),
             },
             MxPlate = "12345678",

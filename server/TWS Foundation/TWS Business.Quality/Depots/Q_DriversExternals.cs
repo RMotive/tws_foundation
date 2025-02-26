@@ -17,12 +17,10 @@ public class Q_DriversExternals
     protected override DriverExternal MockFactory(string RandomSeed) {
 
         return new() {
-            Status = 1,
-            Common = 0,
             Identification = new Identification {
                 Id = 1,
             },
-            DriverCommonNavigation = new() {
+            Common = new() {
                 Timestamp = DateTime.Now,
                 Status = 1,
                 License = RandomUtils.String(12)

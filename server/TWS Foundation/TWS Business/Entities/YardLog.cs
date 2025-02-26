@@ -92,12 +92,12 @@ public class YardLog
             entity.Property(y => y.Evidence).IsRequired();
             entity.Property(y => y.Damage);
 
-            entity.LinkMany<YardLog, LoadType>(nameof(LoadType), true);
-            entity.LinkMany<YardLog, Employee>(nameof(Guard), true);
-            entity.LinkMany<YardLog, Section>(nameof(Section), true);
-            entity.LinkMany<YardLog, DriverCommon>(nameof(Driver), true);
-            entity.LinkMany<YardLog, TruckCommon>(nameof(Truck), true);
-            entity.LinkMany<YardLog, TrailerCommon>(nameof(Trailer));
+            entity.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
+            entity.Link<YardLog, Employee>(nameof(Guard), Required: true);
+            entity.Link<YardLog, Section>(nameof(Section), Required: true);
+            entity.Link<YardLog, DriverCommon>(nameof(Driver), Required: true);
+            entity.Link<YardLog, TruckCommon>(nameof(Truck), Required: true);
+            entity.Link<YardLog, TrailerCommon>(nameof(Trailer));
         });
     }
 

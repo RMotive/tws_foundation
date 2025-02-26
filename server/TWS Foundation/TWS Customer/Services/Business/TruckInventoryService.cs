@@ -42,9 +42,7 @@ public class TruckInventoryService
                 .ThenInclude(t => t!.Carrier)
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.Plates)
-
-             .Include(t => t.TruckExternalNavigation)
-                .ThenInclude(t => t!.TruckCommonNavigation);
+             .Include(t => t.TruckExternalNavigation);
         }
 
         return await TrucksInventoriesDepot.View(Options, include);

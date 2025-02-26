@@ -31,14 +31,12 @@ public class Location
     /// <summary>
     ///     <see cref="TruckCommon"/>s referencing this <see cref="Location"/>
     /// </summary>
-    public ICollection<TruckCommon> TrucksCommons { get; set; } = [];
+    public ICollection<TruckCommon> Trucks { get; set; } = [];
 
     /// <summary>
     ///     <see cref="TrailerCommon"/>s referencing this <see cref="Location"/>
     /// </summary>
-    public ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
-
-
+    public ICollection<TrailerCommon> Trailers { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();

@@ -49,12 +49,12 @@ public class Trailer
         mBuilder.Entity<Trailer>(
             (etBuilder) => {
 
-                etBuilder.LinkMany<Trailer, Status>(nameof(Status), true);
-                etBuilder.LinkMany<Trailer, Carrier>(nameof(Carrier), true);
+                etBuilder.Link<Trailer, Status>(nameof(Status), Required: true);
+                etBuilder.Link<Trailer, Carrier>(nameof(Carrier), Required: true);
 
-                etBuilder.LinkMany<Trailer, SCT>(nameof(SCT));
-                etBuilder.LinkMany<Trailer, VehiculeModel>(nameof(Model));
-                etBuilder.LinkMany<Trailer, Maintenance>(nameof(Maintenance));
+                etBuilder.Link<Trailer, SCT>(nameof(SCT));
+                etBuilder.Link<Trailer, VehiculeModel>(nameof(Model));
+                etBuilder.Link<Trailer, Maintenance>(nameof(Maintenance));
             }
         );
     }

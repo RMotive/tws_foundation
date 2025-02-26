@@ -18,14 +18,13 @@ public class Q_TruckDepot
         DateOnly date = DateOnly.FromDateTime(DateTime.Now);
 
         return new() {
-            Status = new Status {
-                Id = 1,
-            },
             VIN = RandomUtils.String(17),
             Motor = RandomUtils.String(16),
             Common = new() {
                 Timestamp = DateTime.Now,
-                Status = 1,
+                Status = new Status {
+                    Id = 1,
+                },
                 Economic = RandomUtils.String(16),
             },
             Model = new() {
