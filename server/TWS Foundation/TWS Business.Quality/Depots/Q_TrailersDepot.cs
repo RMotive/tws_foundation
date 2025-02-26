@@ -17,15 +17,15 @@ public class Q_TrailersDepot
     protected override Trailer MockFactory(string RandomSeed) {
 
         return new() {
-            Common = 0,
-            Status = 1,
-            Carrier = 0,
-            TrailerCommonNavigation = new() {
+            Status = new Status {
+                Id = 1,
+            },
+            Common = new() {
                 Status = 1,
                 Timestamp = DateTime.Now,
                 Economic = RandomUtils.String(16),
             },
-            CarrierNavigation = new() {
+            Carrier = new() {
                 Status = new Status {
                     Id = 1,
                 },

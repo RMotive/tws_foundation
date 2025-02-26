@@ -12,7 +12,6 @@ public class Q_DriverExternal : BQ_Entity<DriverExternal> {
                 Id = 1,
                 Status = 0,
                 Common = 0,
-                Identification = 0
             },
             Expectations = [],
         };

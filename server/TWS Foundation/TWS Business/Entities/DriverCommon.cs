@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class DriverCommon
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
     public int Status { get; set; }
 
@@ -18,9 +18,44 @@ public partial class DriverCommon
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<Driver> Drivers { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Driver"/> information.
+    /// </summary>
+    public Driver? Internal { get; set; }
 
-    public virtual ICollection<DriverExternal> DriversExternals { get; set; } = [];
+    /// <summary>
+    ///     <see cref="DriverExternal"/> information.
+    /// </summary>
+    public DriverExternal? External { get; set; }
+
+
+    #region Custom Getters 
+
+    /// <summary>
+    ///     Gets the [Driver] displayable name.
+    /// </summary>
+    /// <remarks>
+    ///     Needs loaded <see cref="Internal"/> then <see cref="Driver.Employee"/> then <see cref="Employees.Employee.Identification"/>.
+    ///     Needs loaded <see cref="External"/> then <see cref="DriverExternal.Identification"/>.
+    /// </remarks>
+    public string? Name {
+        get {
+            Identification? ident;
+
+            if(Internal != null) {
+                ident = Internal.Employee?.Identification;
+            } else {
+                ident = External?.Identification;
+            }
+
+            if(ident == null)
+                return null;
+
+            return $"{ident.Name} {ident.FatherLastname} {ident.MotherLastName}";
+        }
+    }
+
+    #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();

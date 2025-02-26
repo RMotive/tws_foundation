@@ -8,7 +8,7 @@ using TWS_Business.Entities.Employees;
 namespace TWS_Business.Entities;
 
 public partial class Identification
-    : BBusinessDatabaseEntity, IEntity_Name {
+    : BBusinessEntity, IEntity_Name {
 
     public string Name { get; set; } = string.Empty;
 

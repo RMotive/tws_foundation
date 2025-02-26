@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class TrailerExternal
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
     
 
     
@@ -64,9 +64,6 @@ public partial class TrailerExternal
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            Entity.HasOne(d => d.TrailerCommonNavigation)
-                .WithMany(p => p.TrailersExternals)
-                .HasForeignKey(d => d.Common);
             Entity.HasIndex(e => e.Common)
                 .IsUnique();
 

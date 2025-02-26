@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class TruckInventory
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
     
 
@@ -53,11 +53,6 @@ public partial class TruckInventory
                 .HasColumnName("truck");
             Entity.Property(e => e.TruckExternal)
                 .HasColumnName("truckExternal");
-
-            Entity.HasOne(d => d.TruckNavigation)
-                .WithMany(p => p.TrucksInventories)
-                .HasForeignKey(d => d.Truck)
-                .OnDelete(DeleteBehavior.ClientSetNull);
 
             Entity.HasOne(d => d.TruckExternalNavigation)
                 .WithMany(p => p.TrucksInventories)

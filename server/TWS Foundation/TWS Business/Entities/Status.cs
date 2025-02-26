@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +7,7 @@ using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities;
 public partial class Status
-: BBusinessDatabaseEntity, IEntity_Name {
+: BBusinessEntity, IEntity_Name {
 
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
@@ -51,13 +50,13 @@ public partial class Status
 
     public virtual ICollection<Plate> Plates { get; set; } = [];
 
-    public virtual ICollection<Sct> Scts { get; set; } = [];
+    public virtual ICollection<SCT> Scts { get; set; } = [];
 
     public virtual ICollection<Trailer> Trailers { get; set; } = [];
 
     public virtual ICollection<Truck> Trucks { get; set; } = [];
 
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+    public virtual ICollection<TruckH> TrucksHistories { get; set; } = [];
 
     public virtual ICollection<CarrierH> CarriersH { get; set; } = [];
 

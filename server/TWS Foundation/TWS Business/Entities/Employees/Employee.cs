@@ -6,7 +6,7 @@ using TWS_Business.Entities.Employees_Dates;
 namespace TWS_Business.Entities.Employees;
 
 public class Employee
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
     /// <summary>
     ///     Mexico's unique people identifier (Clave Única de Registro de Población / Unique Population Registry Code).

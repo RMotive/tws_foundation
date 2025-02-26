@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class LoadType
-    : BBusinessDatabaseEntity, IEntity_Name {
+    : BBusinessEntity, IEntity_Name {
 
     public string Name { get; set; } = default!;
 

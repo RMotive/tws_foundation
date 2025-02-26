@@ -1,113 +1,95 @@
-﻿using System.Reflection;
-
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace TWS_Business.Entities;
 
-public partial class Truck
-    : BBusinessDatabaseEntity {    
+/// <summary>
+///     [Entity] that represents a physical <see cref="Truck"/> for business operations.
+/// </summary>
+public class Truck
+    : BBusinessEntity<TruckCommon> {
 
-    public int Status { get; set; }
-
-    public int Common { get; set; }
-
+    /// <summary>
+    ///     Motor identifier.
+    /// </summary>
     public string? Motor { get; set; }
 
-    public string Vin { get; set; } = null!;
+    /// <summary>
+    ///     Vehicule identifier number.
+    /// </summary>
+    public string VIN { get; set; } = string.Empty;
 
-    public int Carrier { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    public Status Status { get; set; } = default!;
 
-    public int Model { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Carrier"/> information.
+    /// </summary>
+    public Carrier Carrier { get; set; } = default!;
 
-    public int? Sct { get; set; }
+    /// <summary>
+    ///     <see cref="VehiculeModel"/> information.
+    /// </summary>
+    public VehiculeModel Model { get; set; } = default!;
 
-    public int? Maintenance { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.SCT"/> information.
+    /// </summary>
+    public SCT? SCT { get; set; }
 
-    public int? Insurance { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Maintenance"/> information.
+    /// </summary>
+    public Maintenance? Maintenance { get; set; }
 
-    public Carrier? CarrierNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Insurance"/> information.
+    /// </summary>
+    public Insurance? Insurance { get; set; }
 
-    public TruckCommon? TruckCommonNavigation { get; set; }
 
-    public Sct? SctNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Plate"/>s referencing this <see cref="Truck"/>.
+    /// </summary>
+    public ICollection<Plate>? Plates { get; set; } = [];
 
-    public Insurance? InsuranceNavigation { get; set; }
-
-    public Maintenance? MaintenanceNavigation { get; set; }
-        
-    public VehiculeModel? VehiculeModelNavigation { get; set; }
-
-    public Status? StatusNavigation { get; set; }
-
-    public ICollection<Plate> Plates { get; set; } = [];
-
+    /// <summary>
+    ///     <see cref="YardLog"/>s referencing this <see cref="Truck"/>
+    /// </summary>
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
-    public ICollection<TruckH> TrucksH { get; set; } = [];
-
-    public ICollection<PlateH> PlatesH { get; set; } = [];
-
-    public ICollection<TruckInventory> TrucksInventories { get; set; } = [];
-
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Truck>(Entity => {
-
-            Entity
-                .HasIndex(e => e.Common)
-                .IsUnique();
-
-            Entity
-                .Property(e => e.Motor)
-                .HasMaxLength(16)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Sct)
-                .HasColumnName("SCT");
-
-            Entity.HasOne(d => d.CarrierNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Carrier)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.SctNavigation)
-              .WithMany(p => p.Trucks)
-              .HasForeignKey(d => d.Sct);
-
-            Entity.HasOne(d => d.InsuranceNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Insurance);
-
-            Entity.HasOne(d => d.MaintenanceNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Maintenance);
-
-            Entity.HasOne(d => d.VehiculeModelNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Model)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.TruckCommonNavigation)
-                .WithMany(p => p.Trucks)
-                .HasForeignKey(d => d.Common);
-        });
-    }
+    /// <summary>
+    ///     <see cref="Truck"/> history entries.
+    /// </summary>
+    public ICollection<TruckH> History { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator required = new();
         Container = [
             ..Container,
-            (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Vin), [required, new UniqueValidator(), new LengthValidator(Min: 1, Max: 17)]),
+            (nameof(VIN), [required, new UniqueValidator(), new LengthValidator(Min: 1, Max: 17)]),
         ];
         return Container;
+    }
+
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Truck>(
+                (etBuilder) => {
+                    etBuilder.Property(t => t.Motor).HasMaxLength(16);
+                    etBuilder.Property(t => t.VIN).HasMaxLength(17).IsRequired();
+
+                    etBuilder.LinkMany<Truck, Status>(nameof(Status), true);
+                    etBuilder.LinkMany<Truck, Carrier>(nameof(Carrier), true);
+                    etBuilder.LinkMany<Truck, VehiculeModel>(nameof(Model), true);
+
+                    etBuilder.LinkMany<Truck, SCT>(nameof(SCT));
+                    etBuilder.LinkMany<Truck, Maintenance>(nameof(Maintenance));
+                }
+        );
     }
 }

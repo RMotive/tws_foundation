@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
@@ -24,7 +23,7 @@ public class Action
         ];
     }
 
-    static public void CreateModel(ModelBuilder Builder) {
+    public static void CreateModel(ModelBuilder Builder) {
         Builder.Entity<Action>(
             (Entity) => {
                 Entity.HasKey(i => i.Id);

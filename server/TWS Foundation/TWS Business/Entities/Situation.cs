@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class Situation
-    : BBusinessDatabaseEntity, IEntity_Name {
+    : BBusinessEntity, IEntity_Name {
 
     public string Name { get; set; } = default!;
 
@@ -19,7 +18,10 @@ public partial class Situation
 
     public virtual ICollection<TrailerCommon>? TrailersCommons { get; set; } = [];
 
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+    /// <summary>
+    ///     <see cref="TruckH"/> history entries referencing this <see cref="Situation"/>
+    /// </summary>
+    public virtual ICollection<TruckH> TrucksHistories { get; set; } = [];
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Situation>(Entity => {

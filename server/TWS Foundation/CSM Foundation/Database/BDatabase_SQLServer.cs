@@ -9,8 +9,80 @@ using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Foundation.Database.Bases;
+
+/// <summary>
+/// 
+/// </summary>
+public static class EntityTypeBuilderExtension {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Builder"></param>
+    /// <param name="Relation"></param>
+    /// <param name="Reference"></param>
+    /// <param name="Required"></param>
+    /// <param name="Auto"></param>
+    /// <param name="Deletion"></param>
+    public static void LinkMany(this EntityTypeBuilder Builder, (Type Source, Type Target) Relation, string Reference, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.Cascade) {
+        Type source = Relation.Source;
+        Type target = Relation.Target;
+
+        Type entityIType = typeof(IEntity);
+        if (!(source.IsAssignableTo(entityIType) && target.IsAssignableTo(entityIType))) {
+            throw new Exception($"[SourceT ({source.Name})] or [Target ({target.Name})] Relation configuration is not an [IEntity]");
+        }
+
+        string shadow = $"{Reference}Shadow";
+
+        Type propType = Required ? typeof(long) : typeof(long?);
+
+        string targetReference = $"{source.Name}s";
+        if (source.Name.EndsWith('H')) {
+            if (source.Name.Replace("H", "").Equals(target.Name)) {
+                targetReference = $"History";
+            } else {
+                string targetName = source.Name.Replace("H", "");
+                if (targetName.EndsWith('s')) {
+                    targetName = $"{targetName}e";
+                }
+                targetReference = $"{targetName}sHistories";
+            }
+        }
+
+        Builder.Property(propType, shadow).HasColumnName(Reference).HasColumnType("bigint").IsRequired(Required);
+        Builder
+            .HasOne(Relation.Target, Reference)
+            .WithMany(targetReference)
+            .HasForeignKey(shadow)
+            .IsRequired(Required)
+            .OnDelete(Deletion);
+
+        if(Auto) {
+            Builder.Navigation(Reference).AutoInclude();
+        }
+    }
+
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <typeparam name="TSource"></typeparam>
+    /// <typeparam name="TTarget"></typeparam>
+    /// <param name="Builder"></param>
+    /// <param name="Reference"></param>
+    /// <param name="Required"></param>
+    /// <param name="Auto"></param>
+    /// <param name="Deletion"></param>
+    public static void LinkMany<TSource, TTarget>(this EntityTypeBuilder Builder, string Reference, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.ClientCascade)
+        where TSource : class, IEntity
+        where TTarget : class, IEntity {
+
+        LinkMany(Builder, (typeof(TSource), typeof(TTarget)), Reference, Required, Auto, Deletion);
+    }
+}
 
 /// <summary>
 ///     [Abstract] for a SQL Server database implementation, a [CSM] custom wrapper from <see cref="DbContext"/> EntityFrameworkCore
@@ -225,48 +297,54 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     ///     will automatically configure the SQL Server connection.
     /// </summary>
     /// <param name="optionsBuilder">
-    ///     Options builder proxy object.
+    ///     Relations builder proxy object.
     /// </param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         string connectionString = Connection.GenerateConnectionString();
         optionsBuilder.UseSqlServer(connectionString);
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        modelBuilder.Ignore<CustomAttributeData>();
+    protected override void OnModelCreating(ModelBuilder mBuilder) {
+        mBuilder.Ignore<CustomAttributeData>();
 
         (BEntity[] sets, BConnector<IEntity, IEntity>[] _) = ValidateSets();
 
         foreach (BEntity set in sets) {
             Type setType = set.GetType();
-            modelBuilder.Entity(
+            mBuilder.Entity(
                 setType,
-                (EntityBuilder) => {
-                    EntityBuilder.HasKey(nameof(IEntity.Id));
+                (etBuilder) => {
+                    etBuilder.HasKey(nameof(IEntity.Id));
+
+                    etBuilder.Property(nameof(IEntity.Id)).IsRequired();
 
                     if (set is IEntity_Name) {
                         PropertyInfo nameProperty = set.GetProperty(nameof(IEntity_Name.Name));
 
-                        EntityBuilder
+                        etBuilder
                             .HasIndex(nameProperty.Name)
                             .IsUnique();
 
-                        EntityBuilder
+                        etBuilder
                             .Property(nameProperty.Name)
                             .HasMaxLength(25)
                             .IsRequired();
                     }
 
-                    EntityBuilder
-                        .Property(nameof(IEntity.Timestamp))
-                        .HasColumnType("datetime");
+                    if (set is BEntity<IEntity>) {
+                        PropertyInfo commonProperty = set.GetProperty(nameof(BEntity<IEntity>.Common));
+
+                        etBuilder.LinkMany((setType, commonProperty.PropertyType), commonProperty.Name, true);
+                    }
+
+                    etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime");
                 }
             );
 
-            set.DescribeSet(modelBuilder);
+            set.DescribeSet(mBuilder);
         }
 
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(mBuilder);
     }
 
     #endregion

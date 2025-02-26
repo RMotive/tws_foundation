@@ -62,7 +62,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Anual = date,
             Trimestral = date,
         };
-        Sct sct = new() {
+        SCT sct = new() {
             Status = 1,
             Type = "TypT14",
             Number = "NumberSCTTesting value" + RandomSeed,
@@ -131,18 +131,17 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
 
         List<Plate> plateList = [plateMX, plateUSA];
         Truck truck = new() {
-            Status = 1,
-            Carrier = 0,
-            Common = 0,
-            Model = 0,
+            Status = new Status {
+                Id = 1,
+            },
             Motor = motor,
-            Vin = "VIN " + RandomSeed,
-            VehiculeModelNavigation = vehiculeModel,
-            CarrierNavigation = carrier,
-            InsuranceNavigation = insurance,
-            TruckCommonNavigation = common,
-            MaintenanceNavigation = maintenance,
-            SctNavigation = sct,
+            VIN = "VIN " + RandomSeed,
+            Model = vehiculeModel,
+            Carrier = carrier,
+            Insurance = insurance,
+            Common = common,
+            Maintenance = maintenance,
+            SCT = sct,
             Plates = plateList,
         };
         return truck;
@@ -211,7 +210,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Truck creationRecord = creationResult.Updated;
             Assert.Multiple([
                 () => Assert.True(creationRecord.Id > 0),
-                () => Assert.Equal(mock.Vin, creationRecord.Vin),
+                () => Assert.Equal(mock.VIN, creationRecord.VIN),
                 () => Assert.Equal(mock.Motor, creationRecord.Motor),
             ]);
             #endregion
@@ -223,9 +222,9 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             string modifiedMotor = updatedTag + RandomUtils.String(11);
             mock = creationRecord;
 
-            mock.Vin = modifiedVin;
+            mock.VIN = modifiedVin;
             mock.Motor = modifiedMotor;
-            mock.TruckCommonNavigation!.Economic = modifiedMotor;
+            mock.Common.Economic = modifiedMotor;
             Plate plate = mock.Plates.First();
             plate.Identifier = "identfy" + updatedTag;
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
@@ -240,11 +239,11 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Assert.Multiple([
                 () => Assert.Equal(creationRecord.Id, updateRecord.Id),
                 () => Assert.Equal(creationRecord.Model, updateRecord.Model),
-                () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
-                () => Assert.NotEqual(previousRecord.Vin, updateRecord.Vin),
+                () => Assert.Equal(creationRecord.Carrier.Id, updateRecord.Carrier.Id),
+                () => Assert.NotEqual(previousRecord.VIN, updateRecord.VIN),
                 () => Assert.NotEqual(previousRecord.Plates.First().Identifier, updateRecord.Plates.First().Identifier),
                 () => Assert.NotEqual(previousRecord.Motor, updateRecord.Motor),
-                () => Assert.NotEqual(previousRecord.TruckCommonNavigation!.Economic, updateRecord.TruckCommonNavigation!.Economic)
+                () => Assert.NotEqual(previousRecord.Common.Economic, updateRecord.Common.Economic)
             ]);
             #endregion
         }

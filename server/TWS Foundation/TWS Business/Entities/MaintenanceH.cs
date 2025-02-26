@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Entities;
 
-public partial class MaintenanceH
-    : BBusinessDatabaseEntity {
+public class MaintenanceH
+    : BBusinessEntity {
 
     public int Sequence { get; set; }
 
@@ -22,7 +22,10 @@ public partial class MaintenanceH
 
     public virtual Maintenance? MaintenanceNavigation { get; set; }
 
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+    /// <summary>
+    ///     <see cref="TruckH"/> history entries referencing this <see cref="MaintenanceH"/>.
+    /// </summary>
+    public ICollection<TruckH> TrucksHistories { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();

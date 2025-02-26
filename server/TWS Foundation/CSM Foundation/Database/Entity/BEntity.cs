@@ -10,6 +10,23 @@ using CSM_Foundation.Database.Validators;
 namespace CSM_Foundation.Database.Bases;
 
 /// <summary>
+///     [Abstract] class for <see cref="BEntity"/> implementations, these are <see cref="BEntity"/>
+///     implementations that holds a <see cref="TCommon"/> common object information.
+/// </summary>
+/// <typeparam name="TCommon">
+///     [Entity] type to use as <see cref="Common"/> information.
+/// </typeparam>
+public abstract class BEntity<TCommon> 
+    : BEntity 
+    where TCommon : class, IEntity {
+
+    /// <summary>
+    ///     <typeparamref name="TCommon"/> information.
+    /// </summary>
+    public TCommon Common { get; set; } = default!;
+}
+
+/// <summary>
 ///     [Abstract] class for <see cref="BBusinessDatabaseEntity"/> implementations.
 ///     
 ///     A Set is a table into a data storage, defining properties and relations stored.
@@ -99,6 +116,7 @@ public abstract partial class BEntity
 
         throw new XBMigrationSet_Evaluate(GetType(), unvalidations);
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -108,6 +126,7 @@ public abstract partial class BEntity
             (nameof(Timestamp), [new RequiredValidator()])
         ]);
     }
+
     /// <summary>
     /// 
     /// </summary>

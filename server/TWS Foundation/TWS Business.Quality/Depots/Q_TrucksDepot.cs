@@ -18,17 +18,17 @@ public class Q_TruckDepot
         DateOnly date = DateOnly.FromDateTime(DateTime.Now);
 
         return new() {
-            Status = 1,
-            Model = 0,
-            Vin = RandomUtils.String(17),
+            Status = new Status {
+                Id = 1,
+            },
+            VIN = RandomUtils.String(17),
             Motor = RandomUtils.String(16),
-            Common = 0,
-            TruckCommonNavigation = new() {
+            Common = new() {
                 Timestamp = DateTime.Now,
                 Status = 1,
                 Economic = RandomUtils.String(16),
             },
-            VehiculeModelNavigation = new() {
+            Model = new() {
                 Status = 1,
                 Name = RandomUtils.String(32),
                 Year = date,
@@ -37,8 +37,7 @@ public class Q_TruckDepot
                     Name = RandomUtils.String(32),
                 }
             },
-            Carrier = 0,
-            CarrierNavigation = new() {
+            Carrier =  new() {
                 Name = RandomUtils.String(10),
                 Status = new Status {
                     Id = 1,

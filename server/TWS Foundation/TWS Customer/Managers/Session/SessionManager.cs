@@ -52,7 +52,6 @@ public sealed class SessionManager {
     private readonly ConcurrentDictionary<Guid, CredentialsExpiration> CurrentSessions = [];
     private readonly ConcurrentBag<Guid> CurrentTokens = [];
 
-
     /// <summary>
     ///     Authorizes the given <paramref name="Credentials"/> unsafely into the current [Sessions] context.
     /// </summary>

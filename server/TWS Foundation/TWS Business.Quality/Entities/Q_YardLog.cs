@@ -10,24 +10,16 @@ public class Q_YardLog : BQ_Entity<YardLog> {
         Q_EntityEvaluation<YardLog> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                LoadType = 0,
             },
             Expectations = [],
         };
         Q_EntityEvaluation<YardLog> failAllCases = new("All properties fail") {
-            Mock = new() {
-                Id = 0,
-                LoadType = 0,
-                TTPicture = "",
-                Gname = "",
-                FromTo = ""
-            },
+            Mock = new(),
             Expectations = [
                 (nameof(YardLog.Id), [(new PointerValidator(), 3)]),
-                (nameof(YardLog.TTPicture), [(new RequiredValidator(), 1)]),
-                (nameof(YardLog.Gname), [(new LengthValidator(), 2)]),
+                (nameof(YardLog.Evidence), [(new LengthValidator(), 1)]),
+                (nameof(YardLog.Damage), [(new LengthValidator(), 2)]),
                 (nameof(YardLog.FromTo), [(new LengthValidator(), 2)]),
-                (nameof(YardLog.LoadType), [(new PointerValidator(true), 3)]),
             ],
         };
 

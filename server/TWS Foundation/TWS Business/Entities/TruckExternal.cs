@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class TruckExternal
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
     
 
     
@@ -69,10 +69,6 @@ public partial class TruckExternal
             Entity.Property(e => e.MxPlate)
               .HasMaxLength(12)
               .IsUnicode(false);
-
-            Entity.HasOne(d => d.TruckCommonNavigation)
-               .WithMany(p => p.TrucksExternals)
-               .HasForeignKey(d => d.Common);
 
             Entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.TrucksExternals)

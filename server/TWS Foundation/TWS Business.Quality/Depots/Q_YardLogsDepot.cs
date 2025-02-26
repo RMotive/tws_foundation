@@ -18,24 +18,24 @@ public class Q_YardLogsDepot
 
         return new() {
             Entry = false,
-            LoadType = 1,
+            LoadType = new LoadType {
+                Id = 1,
+            },
             Timestamp = DateTime.Now,
-            Guard = 1,
-            TruckExternal = 0,
-            Gname = RandomUtils.String(30),
+            Guard = new TWS_Business.Entities.Employees.Employee {
+                Id = 1,
+            },
             FromTo = RandomUtils.String(30),
-            Damage = false,
-            TTPicture = RandomUtils.String(30),
-            TruckExternalNavigation = new() {
-                Status = 1,
-                Common = 0,
-                TruckCommonNavigation = new() {
-                    Timestamp = DateTime.Now,
-                    Status = 1,
-                    Economic = RandomUtils.String(16),
+            Truck = new TruckCommon {
+                Timestamp = DateTime.UtcNow,
+                Economic = RandomUtils.String(16),
+                Status = new Status {
+                    Id = 1,
                 },
-                MxPlate = "12345678",
-                Carrier = "truck carrier qlty"
+                External = new TruckExternal {
+                    MxPlate = "12345678",
+                    Carrier = "truck carrier qlty"
+                }
             }
         };
     }

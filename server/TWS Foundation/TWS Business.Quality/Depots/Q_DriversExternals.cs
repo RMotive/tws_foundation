@@ -19,7 +19,9 @@ public class Q_DriversExternals
         return new() {
             Status = 1,
             Common = 0,
-            Identification = 1,
+            Identification = new Identification {
+                Id = 1,
+            },
             DriverCommonNavigation = new() {
                 Timestamp = DateTime.Now,
                 Status = 1,
@@ -28,6 +30,7 @@ public class Q_DriversExternals
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(DriverExternal Mock) 
-    => null;
+    protected override (string Property, string? Value)? FactorizeProperty(DriverExternal Mock) {
+        return null;
+    }
 }

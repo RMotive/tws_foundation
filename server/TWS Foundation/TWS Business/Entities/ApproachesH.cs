@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class ApproachesH
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
     public int Sequence { get; set; }
 

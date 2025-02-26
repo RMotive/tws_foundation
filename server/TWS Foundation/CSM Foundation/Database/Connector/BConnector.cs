@@ -10,7 +10,7 @@ namespace CSM_Foundation.Database.Bases;
 ///     Type of the source [Set] that holds the relation.
 /// </typeparam>
 /// <typeparam name="TTarget">
-///     Type of the property related to the [TEntity] relation.
+///     Type of the property related to the [SourceT] relation.
 /// </typeparam>
 public abstract partial class BConnector<TSource, TTarget>
     : IConnector<TSource, TTarget>

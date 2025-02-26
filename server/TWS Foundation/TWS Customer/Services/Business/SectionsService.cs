@@ -21,7 +21,7 @@ public class SectionsService : ISectionsService {
     public async Task<SetViewOut<Section>> View(SetViewOptions<Section> Options) {
         static IQueryable<Section> include(IQueryable<Section> query) {
             return query
-            .Include(t => t.LocationNavigation);
+            .Include(t => t.Location);
         }
         return await Sections.View(Options, include);
     }

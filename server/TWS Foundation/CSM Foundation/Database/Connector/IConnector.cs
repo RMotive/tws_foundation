@@ -11,7 +11,7 @@ namespace CSM_Foundation.Database.Connector;
 ///     Type of the source [Set] that holds the relation.
 /// </typeparam>
 /// <typeparam name="TTarget">
-///     Type of the property related to the [TEntity] relation.
+///     Type of the property related to the [SourceT] relation.
 /// </typeparam>
 public interface IConnector<TSource, TTarget>
     : IConnector
@@ -19,7 +19,7 @@ public interface IConnector<TSource, TTarget>
     where TTarget : class, IEntity {
 
     /// <summary>
-    ///     Source relation record.
+    ///     SourceT relation record.
     /// </summary>
     public TSource Source { get; set; }
 
@@ -36,7 +36,7 @@ public interface IConnector<TSource, TTarget>
 /// </summary>
 public interface IConnector {
     /// <summary>
-    ///     Source [Set] relation pointer.
+    ///     SourceT [Set] relation pointer.
     /// </summary>
     public int SourcePointer { get; set; }
 

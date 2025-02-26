@@ -11,7 +11,9 @@ public class Q_Driver : BQ_Entity<Driver> {
             Mock = new() {
                 Id = 1,
                 Status = 0,
-                Employee = 0,
+                Employee = new TWS_Business.Entities.Employees.Employee {
+                    Id = 1,
+                },
                 DriverType = "",
                 Common = 0
             },

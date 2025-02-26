@@ -1,124 +1,110 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace TWS_Business.Entities;
-public partial class TruckH
-: BBusinessDatabaseEntity {
-    
 
-    
+/// <summary>
+///     [Entity_H] History entry for <see cref="Truck"/> Entity.
+/// </summary>
+public class TruckH
+: BBusinessEntity {
 
+    /// <summary>
+    ///     History entry sequence.
+    /// </summary>
     public int Sequence { get; set; }
 
-    public int Status { get; set; }
+    /// <summary>
+    ///     Vehicule Identifier Number.
+    /// </summary>
+    [StringLength(17, MinimumLength = 17)]
+    public string VIN { get; set; } = string.Empty;
 
-    public int Entity { get; set; }
+    /// <summary>
+    ///     Internal business vehicule identifier.
+    /// </summary>
+    [StringLength(16, MinimumLength = 1)]
+    public string Economic { get; set; } = string.Empty;
 
-    public string Vin { get; set; } = null!;
+    /// <summary>
+    ///     Unique motor identifier.
+    /// </summary>
+    [StringLength(16)]
+    public string? Motor { get; set; }
 
-    public string? Motor { get; set; } = null!;
+    /// <summary>
+    ///     <see cref="Truck"/> [Entity] source.
+    /// </summary>
+    public Truck Entity { get; set; } = default!;
 
-    public string Economic { get; set; } = null!;
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    public Status Status { get; set; } = default!;
 
-    public int Manufacturer { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Manufacturer"/>
+    /// </summary>
+    public Manufacturer Manufacturer { get; set; } = default!;
 
-    public int? CarrierH { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.CarrierH"/> Carrier history entry.
+    /// </summary>
+    public CarrierH? CarrierH { get; set; }
 
-    public int? Situation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Situation"/> information.
+    /// </summary>
+    public Situation? Situation { get; set; }
 
-    public int? MaintenanceH { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.MaintenanceH"/> history information.
+    /// </summary>
+    public MaintenanceH? MaintenanceH { get; set; }
 
-    public int? InsuranceH { get; set; }
-
-    public virtual CarrierH? CarrierHNavigation { get; set; }
-
-    public virtual Status? StatusNavigation { get; set; }
-
-    public virtual Truck? TruckNavigation { get; set; }
-
-    public virtual Situation? SituationNavigation { get; set; }
-
-    public virtual Manufacturer? ManufacturerNavigation { get; set; }
-
-    public virtual InsuranceH? InsuranceHNavigation { get; set; }
-
-    public virtual MaintenanceH? MaintenanceHNavigation { get; set; }
-
-
+    /// <summary>
+    ///     <see cref="Entities.InsuranceH"/> history information
+    /// </summary>
+    public InsuranceH? InsuranceH { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         UniqueValidator Unique = new();
-        PointerValidator Pointer = new(true);
+
         Container = [
             ..Container,
-            (nameof(Vin), [Unique, new LengthValidator(17, 17)]),
+            (nameof(VIN), [Unique, new LengthValidator(17, 17)]),
             (nameof(Economic), [new LengthValidator(1, 16)]),
             (nameof(Sequence), [new RequiredValidator()]),
-            (nameof(Manufacturer), [Pointer]),
-            (nameof(Status), [Pointer]),
-            (nameof(Entity), [Pointer])
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<TruckH>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Trucks_H");
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity(
+                (EntityTypeBuilder<TruckH> etBuilder) => {
+                    etBuilder.Property(th => th.Sequence).IsRequired();
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                    etBuilder.LinkMany<TruckH, Truck>(nameof(Entity), true);
+                    etBuilder.HasIndex("EntityShadow", nameof(Sequence)).IsUnique();
 
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
+                    etBuilder.Property(tH => tH.VIN).HasMaxLength(17).IsRequired();
+                    etBuilder.Property(tH => tH.Economic).HasMaxLength(16).IsRequired();
 
-            Entity.Property(e => e.Motor)
-                .HasMaxLength(16)
-                .IsUnicode(false);
+                    etBuilder.Property(tH => tH.Motor).HasMaxLength(16);
+                    etBuilder.LinkMany<TruckH, Status>(nameof(Status), true);
+                    etBuilder.LinkMany<TruckH, Manufacturer>(nameof(Manufacturer), true);
 
-            Entity.Property(e => e.Vin)
-                .HasMaxLength(17)
-                .IsUnicode(false)
-                .HasColumnName("VIN");
-
-            Entity.Property(e => e.Economic)
-                .HasMaxLength(16)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.MaintenanceH)
-               .HasColumnName("MaintenanceH");
-            Entity.Property(e => e.InsuranceH)
-               .HasColumnName("InsuranceH");
-            Entity.Property(e => e.CarrierH)
-              .HasColumnName("CarrierH");
-
-            Entity.HasOne(d => d.StatusNavigation)
-               .WithMany(p => p.TrucksH)
-               .HasForeignKey(d => d.Status);
-
-            Entity.HasOne(d => d.TruckNavigation)
-               .WithMany(p => p.TrucksH)
-               .HasForeignKey(d => d.Entity);
-
-            Entity.HasOne(d => d.CarrierHNavigation)
-                 .WithMany(p => p.TrucksH)
-                 .HasForeignKey(d => d.CarrierH);
-
-            Entity.HasOne(d => d.SituationNavigation)
-                .WithMany(p => p.TrucksH)
-                .HasForeignKey(d => d.Situation)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.InsuranceHNavigation)
-                .WithMany(p => p.TrucksH)
-                .HasForeignKey(d => d.InsuranceH);
-
-            Entity.HasOne(d => d.MaintenanceHNavigation)
-                .WithMany(p => p.TrucksH)
-                .HasForeignKey(d => d.MaintenanceH);
-        });
+                    etBuilder.LinkMany<TruckH, CarrierH>(nameof(CarrierH));
+                    etBuilder.LinkMany<TruckH, Situation>(nameof(Situation));
+                    etBuilder.LinkMany<TruckH, InsuranceH>(nameof(InsuranceH));
+                    etBuilder.LinkMany<TruckH, MaintenanceH>(nameof(MaintenanceH));
+                }
+            );
     }
 }

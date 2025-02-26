@@ -1,15 +1,11 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Entities;
 
-public partial class Sct
-    : BBusinessDatabaseEntity {
-    
-
-    
+public partial class SCT
+    : BBusinessEntity {
 
     public int Status { get; set; }
 
@@ -30,7 +26,7 @@ public partial class Sct
 
 
     protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Sct>(Entity => {
+        Builder.Entity<SCT>(Entity => {
             Entity.ToTable("SCT");
             Entity.HasKey(e => e.Id);
 
@@ -60,7 +56,7 @@ public partial class Sct
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
-        
+
         Container = [
             ..Container,
             (nameof(Type), [Required, new LengthValidator(6,6)]),

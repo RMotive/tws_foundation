@@ -67,16 +67,15 @@ public class Q_PlatesController
             Truck = 0,
             TruckNavigation = new() {
                 Id = 0,
-                Status = 1,
-                Common = 0,
-                Vin = RandomUtils.String(17),
-                Carrier = 0,
-                Model = 0,
-                TruckCommonNavigation = new() {
+                Status = new TWS_Business.Entities.Status {
+                    Id = 1,
+                },
+                VIN = RandomUtils.String(17),
+                Common = new() {
                     Status = 1,
                     Economic = RandomUtils.String(16)
                 },
-                VehiculeModelNavigation = new() {
+                Model = new() {
                     Status = 1,
                     Name = RandomUtils.String(32),
                     Year = date,
@@ -85,7 +84,7 @@ public class Q_PlatesController
                         Name = RandomUtils.String(32),
                     }
                 },
-                CarrierNavigation = new() {
+                Carrier = new() {
                     Name = RandomUtils.String(10),
                     Status = new Status {
                         Id = 1,

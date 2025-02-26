@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class Section
-    : BBusinessDatabaseEntity, IEntity_Name {
+    : BBusinessEntity, IEntity_Name {
 
     public string Name { get; set; } = string.Empty;
 
@@ -20,14 +20,28 @@ public partial class Section
 
     public int Ocupancy { get; set; }
 
+    public Location Location { get; set; } = default!;
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual Location? LocationNavigation { get; set; }
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
     public virtual ICollection<TruckInventory> TrucksInventories { get; set; } = [];
+
+
+    #region Custom Getters
+
+    /// <summary>
+    ///     Gets a parsed displayable name.
+    /// </summary>
+    /// <remarks>
+    ///     Needs laoded <see cref="Location"/>.
+    /// </remarks>
+    public string? Display 
+        => $"{Location?.Name} - {Name}";
+
+    #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
 
@@ -57,7 +71,7 @@ public partial class Section
                 .HasMaxLength(32)
                 .IsUnicode(false);
 
-            Entity.HasOne(d => d.LocationNavigation)
+            Entity.HasOne(d => d.Location)
                 .WithMany(p => p.Sections)
                 .HasForeignKey(d => d.Yard);
 

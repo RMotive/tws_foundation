@@ -1,97 +1,61 @@
 ﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Entities;
 
-public partial class Trailer
-    : BBusinessDatabaseEntity {
-    
+/// <summary>
+///     [Entity] for <see cref="Trailer"/> business operations.
+/// </summary>
+public class Trailer
+    : BBusinessEntity<TrailerCommon> {
 
-    
+    /// <summary>
+    ///     <see cref="Entities.SCT"/> information.
+    /// </summary>
+    public SCT? SCT { get; set; }
 
-    public int Status { get; set; }
+    /// <summary>
+    ///     <see cref="VehiculeModel"/> information.
+    /// </summary>
+    public VehiculeModel? Model { get; set; }
 
-    public int Common { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Maintenance"/> information.
+    /// </summary>
+    public Maintenance? Maintenance { get; set; }
 
-    public int Carrier { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    public Status Status { get; set; } = default!;
 
-    public int? Model { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Carrier"/> information
+    /// </summary>
+    public Carrier Carrier { get; set; } = default!;
 
-    public int? Sct { get; set; }
+    /// <summary>
+    ///     <see cref="YardLog"/>s entries referencing this <see cref="Trailer"/>.
+    /// </summary>
+    public ICollection<YardLog> YardLogs { get; set; } = [];
 
-    public int? Maintenance { get; set; }
+    /// <summary>
+    ///     <see cref="Plate"/>s entries referencing this <see cref="Trailer"/>
+    /// </summary>
+    public ICollection<Plate> Plates { get; set; } = [];
 
-    public virtual Status? StatusNavigation { get; set; }
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Trailer>(
+            (etBuilder) => {
 
-    public virtual Sct? SctNavigation { get; set; }
+                etBuilder.LinkMany<Trailer, Status>(nameof(Status), true);
+                etBuilder.LinkMany<Trailer, Carrier>(nameof(Carrier), true);
 
-    public virtual Carrier? CarrierNavigation { get; set; }
-
-    public virtual TrailerCommon? TrailerCommonNavigation { get; set; }
-
-    public virtual VehiculeModel? VehiculesModelsNavigation { get; set; }
-
-    public virtual Maintenance? MaintenanceNavigation { get; set; }
-
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
-
-    public virtual ICollection<Plate> Plates { get; set; } = [];
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-
-        Container = [
-                .. Container,
-            (nameof(Status), [new PointerValidator(true)]),
-        ];
-
-        return Container;
-    }
-
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Trailer>(Entity => {
-            Entity.ToTable("Trailers");
-            Entity.HasKey(e => e.Id);
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.Sct)
-              .HasColumnName("SCT");
-
-            Entity.HasOne(d => d.TrailerCommonNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Common);
-
-            Entity.HasIndex(e => e.Common)
-               .IsUnique();
-
-            Entity.HasOne(d => d.SctNavigation)
-             .WithMany(p => p.Trailers)
-             .HasForeignKey(d => d.Sct);
-
-            Entity.HasOne(d => d.CarrierNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Carrier)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.VehiculesModelsNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Model)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.MaintenanceNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Maintenance);
-
-            Entity.HasOne(d => d.StatusNavigation)
-               .WithMany(p => p.Trailers)
-               .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.LinkMany<Trailer, SCT>(nameof(SCT));
+                etBuilder.LinkMany<Trailer, VehiculeModel>(nameof(Model));
+                etBuilder.LinkMany<Trailer, Maintenance>(nameof(Maintenance));
+            }
+        );
     }
 }

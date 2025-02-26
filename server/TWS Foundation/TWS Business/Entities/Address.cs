@@ -7,7 +7,7 @@ using TWS_Business.Entities.Employees;
 namespace TWS_Business.Entities;
 
 public partial class Address
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
     public string? State { get; set; }
 
     public string? Street { get; set; }

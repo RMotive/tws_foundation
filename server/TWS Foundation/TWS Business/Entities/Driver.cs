@@ -6,12 +6,12 @@ using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities;
 
-public class Driver
-    : BBusinessDatabaseEntity {
+public class  Driver
+    : BBusinessEntity {
 
     public int Status { get; set; }
 
-    public int Employee { get; set; }
+    public Employee Employee { get; set; } = default!;
 
     public int Common { get; set; }
 
@@ -42,8 +42,6 @@ public class Driver
     public virtual DriverCommon? DriverCommonNavigation { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
-
-    public virtual Employee? EmployeeNavigation { get; set; }
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
@@ -87,10 +85,6 @@ public class Driver
             Entity.Property(e => e.Anam)
                 .HasMaxLength(24)
                 .IsUnicode(false);
-
-            Entity.HasOne(d => d.DriverCommonNavigation)
-                .WithMany(p => p.Drivers)
-                .HasForeignKey(d => d.Common);
 
             Entity.HasIndex(e => e.Common)
                .IsUnique();

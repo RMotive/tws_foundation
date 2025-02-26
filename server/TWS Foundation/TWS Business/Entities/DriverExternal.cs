@@ -6,17 +6,15 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class DriverExternal
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
     public int Status { get; set; }
 
-    public int Identification { get; set; }
+    public Identification Identification { get; set; } = default!;
 
     public int Common { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
-
-    public virtual Identification? IdentificationNavigation { get; set; }
 
     public virtual DriverCommon? DriverCommonNavigation { get; set; }
 
@@ -44,14 +42,10 @@ public partial class DriverExternal
             Entity.Property(e => e.Timestamp)
                 .HasColumnType("datetime");
 
-            Entity.HasOne(d => d.DriverCommonNavigation)
-                .WithMany(p => p.DriversExternals)
-                .HasForeignKey(d => d.Common);
-
             Entity.HasIndex(e => e.Common)
                .IsUnique();
 
-            Entity.HasOne(d => d.IdentificationNavigation)
+            Entity.HasOne(d => d.Identification)
                 .WithMany(p => p.DriversExternals)
                 .HasForeignKey(d => d.Identification);
 

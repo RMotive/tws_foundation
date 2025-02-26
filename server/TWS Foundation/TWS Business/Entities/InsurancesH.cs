@@ -1,12 +1,11 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Business.Entities;
 
-public partial class InsuranceH
-    : BBusinessDatabaseEntity {
+public class InsuranceH
+    : BBusinessEntity {
 
     public int Sequence { get; set; }
 
@@ -24,7 +23,10 @@ public partial class InsuranceH
 
     public virtual Insurance? InsuranceNavigation { get; set; }
 
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+    /// <summary>
+    ///     <see cref="TruckH"/> history entries referencing this <see cref="InsuranceH"/>.
+    /// </summary>
+    public ICollection<TruckH> TrucksHistories { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();

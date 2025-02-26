@@ -35,11 +35,11 @@ public class TruckInventoryService
         static IQueryable<TruckInventory> include(IQueryable<TruckInventory> query) {
             return query
             .Include(t => t.SectionNavigation)
-                .ThenInclude(t => t!.LocationNavigation)
+                .ThenInclude(t => t!.Location)
             .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.TruckCommonNavigation)
+                .ThenInclude(t => t!.Common)
             .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.CarrierNavigation)
+                .ThenInclude(t => t!.Carrier)
             .Include(t => t.TruckNavigation)
                 .ThenInclude(t => t!.Plates)
 

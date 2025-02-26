@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class SctH
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
     
 
     
@@ -23,7 +23,7 @@ public partial class SctH
 
     public string Configuration { get; set; } = null!;
 
-    public virtual Sct? SctNavigation { get; set; }
+    public virtual SCT? SctNavigation { get; set; }
 
     public virtual Status? StatusNavigation { get; set; }
 

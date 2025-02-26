@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -7,13 +6,18 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class Manufacturer
-    : BBusinessDatabaseEntity, IEntity_Name {
-   
+    : BBusinessEntity, IEntity_Name {
+
     public string Name { get; set; } = default!;
 
     public string? Description { get; set; }
 
-    public virtual ICollection<VehiculeModel> Models { get; set; } = [];
+    /// <summary>
+    ///     <see cref="TruckH"/> entries referencing this <see cref="Manufacturer"/>
+    /// </summary>
+    public ICollection<TruckH> TrucksHistories { get; set; } = [];
+
+    public ICollection<VehiculeModel> Models { get; set; } = [];
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Manufacturer>(Entity => {

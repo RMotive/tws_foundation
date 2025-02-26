@@ -7,7 +7,7 @@ using TWS_Business.Entities.Employees;
 namespace TWS_Business.Entities;
 
 public partial class Approach
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
     public int Status { get; set; }
 
     public string? Enterprise { get; set; }

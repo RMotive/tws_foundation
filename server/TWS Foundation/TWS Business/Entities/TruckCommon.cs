@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -6,28 +8,86 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class TruckCommon
-    : BBusinessDatabaseEntity {
-    
+    : BBusinessEntity {
 
-    
-
-    public int Status { get; set; }
-
+    /// <summary>
+    ///     Business economic identifier.
+    /// </summary>
+    [StringLength(16, MinimumLength = 1)]
     public string Economic { get; set; } = null!;
 
-    public int? Location { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Location"/> information.
+    /// </summary>
+    public Location? Location { get; set; }
 
-    public int? Situation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Situation"/> information.
+    /// </summary>
+    public Situation? Situation { get; set; }
 
-    public virtual Situation? SituationNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public virtual Location? LocationNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Truck"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Truck? Internal { get; set; }
 
-    public virtual Status? StatusNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="TruckExternal"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto Included relation.
+    /// </remarks>
+    public TruckExternal? External { get; set; }
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
+    #region Custom Getters
 
-    public virtual ICollection<TruckExternal> TrucksExternals { get; set; } = [];
+    /// <summary>
+    ///     Gets the [Truck] mexican plate.
+    /// </summary>
+    /// <remarks>
+    ///     Needs loaded <see cref="Internal"/> or <see cref="External"/>.
+    ///     for <see cref="Internal"/> also needs loaded <see cref="Truck.Plates"/>
+    /// </remarks>
+    public string? PlateMEX
+        => Internal?.Plates?.LastOrDefault(i => i.Country == "MEX")?.Identifier ?? External?.MxPlate;
+
+    /// <summary>
+    ///     Gets the [Truck] usa plate.
+    /// </summary>
+    /// <remarks>
+    ///     Needs loaded <see cref="Internal"/> or <see cref="External"/>
+    ///     for <see cref="Internal"/> also needs loaded <see cref="Truck.Plates"/>
+    /// </remarks>
+    public string? PlateUSA
+        => Internal?.Plates?.LastOrDefault(i => i.Country == "USA")?.Identifier ?? External?.UsaPlate;
+
+    #endregion
+
+    protected override void DescribeSet(ModelBuilder Builder) {
+        Builder.Entity<TruckCommon>(Entity => {
+
+            Entity.Property(e => e.Economic).HasMaxLength(16).IsRequired();
+
+            Entity.LinkMany<TruckCommon, Location>(nameof(Location));
+            Entity.LinkMany<TruckCommon, Situation>(nameof(Situation));
+
+            Entity.LinkMany<TruckCommon, Truck>(nameof(Internal), Auto: true);
+            Entity.LinkMany<TruckCommon, TruckExternal>(nameof(External), Auto: true);
+
+            Entity.LinkMany<TruckCommon, Status>(nameof(Status), true, true);
+        });
+    }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
@@ -35,40 +95,8 @@ public partial class TruckCommon
         Container = [
             ..Container,
             (nameof(Economic), [Required, new LengthValidator(1, 16)]),
-            (nameof(Status), [new PointerValidator(true)])
         ];
 
         return Container;
-    }
-
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<TruckCommon>(Entity => {
-            Entity.ToTable("Trucks_Commons");
-            Entity.HasKey(e => e.Id);
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
-
-            Entity.Property(e => e.Economic)
-                .HasMaxLength(16)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.SituationNavigation)
-               .WithMany(p => p.TrucksCommons)
-               .HasForeignKey(d => d.Situation);
-
-            Entity.HasOne(d => d.LocationNavigation)
-               .WithMany(p => p.TrucksCommons)
-               .HasForeignKey(d => d.Location)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.StatusNavigation)
-               .WithMany(p => p.TrucksCommons)
-               .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-        });
     }
 }

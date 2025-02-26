@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
@@ -29,30 +30,30 @@ public class YardLogsDepot
             Options,
             (query) => {
                 return query
-                    .Include(i => i.TrailerNavigation)
-                        .ThenInclude(i => i!.TrailerCommonNavigation)
-                    .Include(i => i.TrailerNavigation)
-                        .ThenInclude(i => i!.CarrierNavigation)
-                    .Include(i => i.TrailerNavigation)
-                        .ThenInclude(i => i!.Plates)
-                    .Include(i => i.TrailerExternalNavigation)
-                        .ThenInclude(i => i!.TrailerCommonNavigation)
-                    .Include(i => i.SectionNavigation)
-                        .ThenInclude(i => i!.LocationNavigation)
-                    .Include(i => i.TruckNavigation)
-                        .ThenInclude(i => i!.TruckCommonNavigation)
-                    .Include(i => i.TruckNavigation)
-                        .ThenInclude(i => i!.Plates)
-                    .Include(i => i.TruckExternalNavigation)
-                        .ThenInclude(i => i!.TruckCommonNavigation)
                     .OrderBy(i => i.Timestamp)
-                    .GroupBy(i => new { i.Trailer, i.TrailerExternal })
-                    .Where(i => (i.Key.Trailer != null || i.Key.TrailerExternal != null) && i.OrderBy(i => i.Timestamp).Last().Entry)
-                    .Select(i => i.OrderBy(i => i.Timestamp).Last())
+                    .GroupBy(
+                        i => 
+                            new { 
+                                i.Trailer!.Internal, 
+                                i.Trailer.External 
+                            }
+                    )
+                    .Where(
+                        i => 
+                            (
+                                i.Key.Internal != null 
+                                || i.Key.External != null
+                            ) 
+                            && i.OrderBy(i => i.Timestamp).Last().Entry
+                    )
+                    .Select(
+                        i => i.OrderBy(i => i.Timestamp).Last()
+                    )
                     .ToList()
-                    .OrderByDescending(i => i.Timestamp)
+                    .OrderByDescending(y => y.Timestamp)
                     .AsQueryable();
             }
         );
     }
 }
+ 

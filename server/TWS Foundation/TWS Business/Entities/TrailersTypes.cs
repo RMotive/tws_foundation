@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class TrailerType
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
     
 
     

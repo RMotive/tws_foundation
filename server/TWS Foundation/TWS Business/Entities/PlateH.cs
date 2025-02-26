@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class PlateH
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
     public int Sequence { get; set; }
 
@@ -65,11 +65,6 @@ public partial class PlateH
             entity.Property(e => e.State)
                 .HasMaxLength(3)
                 .IsUnicode(false);
-
-            entity.HasOne(d => d.TruckNavigation)
-                .WithMany(p => p.PlatesH)
-                .HasForeignKey(d => d.Truck)
-                .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.StatusNavigation)
                 .WithMany(p => p.PlatesH)

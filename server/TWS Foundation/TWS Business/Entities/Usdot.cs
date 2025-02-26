@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public class USDOT
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
 
 

@@ -1,16 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Entities;
-
 namespace TWS_Business.Entities;
 
 public partial class CarrierH
-    : BBusinessDatabaseEntity {
+    : BBusinessEntity {
 
     [StringLength(100)]
     public string Name { get; set; } = string.Empty;
@@ -42,7 +39,10 @@ public partial class CarrierH
 
     public virtual SctH? SctHNavigation { get; set; }
 
-    public virtual ICollection<TruckH> TrucksH { get; set; } = [];
+    /// <summary>
+    ///     <see cref="TruckH"/> entries referencing this <see cref="CarrierH"/>.
+    /// </summary>
+    public ICollection<TruckH> TrucksHistories { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();

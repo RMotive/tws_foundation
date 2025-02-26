@@ -22,7 +22,7 @@ public class DriversExternalsService : IDriversExternalsService {
         static IQueryable<DriverExternal> include(IQueryable<DriverExternal> query) {
             return query
             .Include(t => t.DriverCommonNavigation)
-            .Include(t => t.IdentificationNavigation);
+            .Include(t => t.Identification);
 
         }
         return await DriversExternals.View(Options, include);

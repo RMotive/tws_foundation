@@ -47,7 +47,7 @@ public class BusinessDatabase
     public virtual DbSet<Manufacturer> Manufacturers { get; set; } = default!;
 
 
-    public virtual DbSet<Sct> Scts { get; set; } = default!;
+    public virtual DbSet<SCT> Scts { get; set; } = default!;
 
     public virtual DbSet<Situation> Situations { get; set; } = default!;
 

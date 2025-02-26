@@ -9,12 +9,12 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="SctsDepot"/>.
 /// </summary>
 public class Q_SctsDepot
-    : BQ_Depot<Sct, SctsDepot, BusinessDatabase> {
+    : BQ_Depot<SCT, SctsDepot, BusinessDatabase> {
     public Q_SctsDepot()
-        : base(nameof(Sct.Type)) {
+        : base(nameof(SCT.Type)) {
     }
 
-    protected override Sct MockFactory(string RandomSeed) {
+    protected override SCT MockFactory(string RandomSeed) {
         return new() {
             Type = RandomUtils.String(6),
             Number = RandomUtils.String(25),
@@ -23,7 +23,7 @@ public class Q_SctsDepot
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(Sct Mock) {
-        return (nameof(Sct.Number), Mock.Number);
+    protected override (string Property, string? Value)? FactorizeProperty(SCT Mock) {
+        return (nameof(SCT.Number), Mock.Number);
     }
 }
