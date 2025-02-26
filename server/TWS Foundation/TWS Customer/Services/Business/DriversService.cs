@@ -22,7 +22,6 @@ public class DriversService : IDriversService {
     public async Task<SetViewOut<Driver>> View(SetViewOptions<Driver> Options) {
         static IQueryable<Driver> include(IQueryable<Driver> query) {
             return query
-            .Include(t => t.DriverCommonNavigation)
             .Include(t => t.Employee)
                 .ThenInclude(i => i!.Identification);
         }

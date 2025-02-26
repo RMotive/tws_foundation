@@ -48,6 +48,11 @@ public class Employee
     /// </summary>
     public Address? Address { get; set; }
 
+    /// <summary>
+    ///     <see cref="Entities.Driver"/> information.
+    /// </summary>
+    public Driver? Driver { get; set; }
+
     protected override void DescribeSet(ModelBuilder ModelBuilder) {
         ModelBuilder.Entity(
                 (EntityTypeBuilder<Employee> etBuilder) => {

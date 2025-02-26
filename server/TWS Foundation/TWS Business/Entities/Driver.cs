@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Bases;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -6,54 +6,73 @@ using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities;
 
-public class  Driver
-    : BBusinessEntity {
+public class Driver
+    : BBusinessEntity<DriverCommon> {
 
-    public int Status { get; set; }
-
-    public Employee Employee { get; set; } = default!;
-
-    public int Common { get; set; }
-
-    public string? DriverType { get; set; }
-
-    public DateOnly? LicenseExpiration { get; set; }
-
-    public DateOnly? DrugalcRegistrationDate { get; set; }
-
-    public DateOnly? PullnoticeRegistrationDate { get; set; }
-
-    public string? Twic { get; set; }
-
-    public DateOnly? TwicExpiration { get; set; }
-
-    public string? Visa { get; set; }
-
-    public DateOnly? VisaExpiration { get; set; }
-
+    /// <summary>
+    ///     Fast permit number.
+    /// </summary>
     public string? Fast { get; set; }
 
+    /// <summary>
+    ///     TBD
+    /// </summary>
+    public string? ANAM { get; set; }
+
+    /// <summary>
+    ///     USA Visa document number.
+    /// </summary>
+    public string? VISA { get; set; }
+
+    /// <summary>
+    ///     TBD
+    /// </summary>
+    public string? TWIC { get; set; }
+
+    /// <summary>
+    ///     Driver type name.
+    /// </summary>
+    public string? DriverType { get; set; }
+
+    /// <summary>
+    ///     Driver licence expiration date.
+    /// </summary>
+    public DateOnly? LicenseExpiration { get; set; }
+
+    /// <summary>
+    ///     TBD
+    /// </summary>
+    public DateOnly? DrugalcRegistrationDate { get; set; }
+
+    /// <summary>
+    ///     TBD
+    /// </summary>
+    public DateOnly? PullnoticeRegistrationDate { get; set; }
+
+    /// <summary>
+    ///     TDB
+    /// </summary>
+    public DateOnly? TwicExpiration { get; set; }
+
+    /// <summary>
+    ///     USA Visa expiration date.
+    /// </summary>
+    public DateOnly? VisaExpiration { get; set; }
+
+    /// <summary>
+    ///     Fast permit expiration date.
+    /// </summary>
     public DateOnly? FastExpiration { get; set; }
 
-    public string? Anam { get; set; }
-
+    /// <summary>
+    ///     TBD
+    /// </summary>
     public DateOnly? AnamExpiration { get; set; }
 
-    public virtual DriverCommon? DriverCommonNavigation { get; set; }
-
-    public virtual Status? StatusNavigation { get; set; }
-
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
-
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        Container = [
-            ..Container,
-            (nameof(Status), [new PointerValidator(true)]),
-        ];
-
-        return Container;
-    }
+    /// <summary>
+    ///     <see cref="Employees.Employee"/> information.
+    /// </summary>
+    public Employee Employee { get; set; } = default!;
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<Driver>(Entity => {
@@ -62,15 +81,15 @@ public class  Driver
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            Entity.Property(e => e.Twic)
+            Entity.Property(e => e.TWIC)
                .HasColumnName("TWIC");
-            Entity.Property(e => e.Twic)
+            Entity.Property(e => e.TWIC)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            Entity.Property(e => e.Visa)
+            Entity.Property(e => e.VISA)
                .HasColumnName("VISA");
-            Entity.Property(e => e.Visa)
+            Entity.Property(e => e.VISA)
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
@@ -80,18 +99,18 @@ public class  Driver
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
-            Entity.Property(e => e.Anam)
+            Entity.Property(e => e.ANAM)
                .HasColumnName("ANAM");
-            Entity.Property(e => e.Anam)
+            Entity.Property(e => e.ANAM)
                 .HasMaxLength(24)
                 .IsUnicode(false);
 
-            Entity.HasIndex(e => e.Common)
-               .IsUnique();
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Drivers)
-                .HasForeignKey(d => d.Status);
+            Entity.Link<Driver, Employee>(
+                    nameof(Employee),
+                    Required: true,
+                    Auto: true,
+                    Index: true
+                );
         });
     }
 }

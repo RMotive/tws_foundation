@@ -26,7 +26,7 @@ public static class EntityTypeBuilderExtension {
     /// <param name="Required"></param>
     /// <param name="Auto"></param>
     /// <param name="Deletion"></param>
-    public static void Link(this EntityTypeBuilder Builder, (Type Source, Type Target) Relation, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.Cascade) {
+    public static void Link(this EntityTypeBuilder Builder, (Type Source, Type Target) Relation, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.Cascade) {
         Type source = Relation.Source;
         Type target = Relation.Target;
 
@@ -35,10 +35,8 @@ public static class EntityTypeBuilderExtension {
             throw new Exception($"[SourceT ({source.Name})] or [Target ({target.Name})] Relation configuration is not an [IEntity]");
         }
 
+
         string shadow = $"{SourceReference}Shadow";
-
-        Type propType = Required ? typeof(long) : typeof(long?);
-
         string targetReference = TargetReference ?? $"{source.Name}s";
         if (source.Name.EndsWith('H')) {
             if (source.Name.Replace("H", "").Equals(target.Name)) {
@@ -51,17 +49,31 @@ public static class EntityTypeBuilderExtension {
                 targetReference = $"{targetName}sHistories";
             }
         }
+        PropertyInfo sourceNavigation = source.GetProperty(SourceReference) ?? throw new Exception($"[Source {source.Name}] doesn't contain navigation reference ({SourceReference})");
+        if (sourceNavigation.PropertyType.IsGenericType && sourceNavigation.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>)) {
+            throw new Exception($"This method only supports one to on/many relationship for many-to-many use ({1})");
+        }
 
+        Type propType = Required ? typeof(long) : typeof(long?);
         Builder.Property(propType, shadow).HasColumnName(SourceReference).HasColumnType("bigint").IsRequired(Required);
-        Builder
-            .HasOne(Relation.Target, SourceReference)
-            .WithMany(targetReference)
-            .HasForeignKey(shadow)
-            .IsRequired(Required)
-            .OnDelete(Deletion);
+        ReferenceNavigationBuilder relationBuilder = Builder.HasOne(target, SourceReference);
+
+
+        PropertyInfo? targetNavigation = target.GetProperty(targetReference);
+
+        if (targetNavigation != null && targetNavigation.PropertyType.IsGenericType && targetNavigation.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>)) {
+            relationBuilder.WithMany(targetReference).HasForeignKey(shadow).OnDelete(Deletion).IsRequired(Required);
+        } else {
+
+            relationBuilder.WithOne(targetNavigation is null ? null : targetReference).HasForeignKey(source, shadow).OnDelete(Deletion).IsRequired(Required);
+        }
 
         if (Auto) {
             Builder.Navigation(SourceReference).AutoInclude();
+        }
+
+        if (Index && Required) {
+            Builder.HasIndex(SourceReference).IsUnique();
         }
     }
     /// <summary>
@@ -74,11 +86,20 @@ public static class EntityTypeBuilderExtension {
     /// <param name="Required"></param>
     /// <param name="Auto"></param>
     /// <param name="Deletion"></param>
-    public static void Link<SourceT, TargetT>(this EntityTypeBuilder Builder, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, DeleteBehavior Deletion = DeleteBehavior.ClientCascade)
+    public static void Link<SourceT, TargetT>(this EntityTypeBuilder Builder, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.ClientCascade)
         where SourceT : class, IEntity
         where TargetT : class, IEntity {
 
-        Link(Builder, (typeof(SourceT), typeof(TargetT)), SourceReference, TargetReference, Required, Auto, Deletion);
+        Link(
+                Builder,
+                (typeof(SourceT), typeof(TargetT)),
+                SourceReference: SourceReference,
+                TargetReference: TargetReference,
+                Required: Required,
+                Auto: Auto,
+                Index: Index,
+                Deletion: Deletion
+            );
     }
 }
 
@@ -335,7 +356,9 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                         etBuilder.Link(
                                 (setType, commonProperty.PropertyType),
                                 commonProperty.Name,
-                                Required: true
+                                Required: true,
+                                Index: true,
+                                Auto: true
                             );
                     }
 

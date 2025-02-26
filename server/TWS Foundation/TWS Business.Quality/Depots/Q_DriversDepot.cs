@@ -19,13 +19,11 @@ public class Q_DriversDepot
     protected override Driver MockFactory(string RandomSeed) {
 
         return new() {
-           Status = 1,
            Employee = new TWS_Business.Entities.Employees.Employee {
                Id = 1,
            },
            DriverType = RandomUtils.String(12),
-           Common = 0,
-           DriverCommonNavigation = new() {
+           Common = new() {
                Timestamp = DateTime.Now,
                Status = 1,
                License = RandomUtils.String(12)

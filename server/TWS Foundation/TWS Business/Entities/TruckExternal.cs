@@ -51,13 +51,6 @@ public partial class TruckExternal
                 Entity.Property(e => e.MxPlate).HasMaxLength(12);
 
                 Entity.Property(e => e.Carrier).HasMaxLength(100).IsRequired();
-
-                Entity.Link<TruckExternal, TruckCommon>(
-                        nameof(Common),
-                        TargetReference: nameof(TruckCommon.External),
-                        Required: true,
-                        Auto: true
-                    );
             }
         );
     }

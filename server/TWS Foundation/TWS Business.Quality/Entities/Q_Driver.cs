@@ -10,23 +10,16 @@ public class Q_Driver : BQ_Entity<Driver> {
         Q_EntityEvaluation<Driver> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Status = 0,
                 Employee = new TWS_Business.Entities.Employees.Employee {
                     Id = 1,
                 },
-                DriverType = "",
-                Common = 0
             },
             Expectations = [],
         };
         Q_EntityEvaluation<Driver> failAllCases = new("All properties fail") {
-            Mock = new() {
-                Id = 0,
-                Status = 0,
-            },
+            Mock = new(),
             Expectations = [
                 (nameof(Driver.Id), [(new PointerValidator(), 3)]),
-                (nameof(Driver.Status), [(new PointerValidator(true), 3)]),
             ],
         };
 
