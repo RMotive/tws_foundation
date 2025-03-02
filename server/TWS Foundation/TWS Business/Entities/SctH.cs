@@ -70,7 +70,7 @@ public partial class SctH
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.SctNavigation)
-                .WithMany(p => p.SctsH)
+                .WithMany(p => p.History)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });

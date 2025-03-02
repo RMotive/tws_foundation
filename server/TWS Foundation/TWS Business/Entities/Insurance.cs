@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,19 +10,52 @@ namespace TWS_Business.Entities;
 public partial class Insurance
     : BBusinessEntity {
 
-    public int Status { get; set; }
+    #region Properties
 
-    public string Policy { get; set; } = null!;
+    /// <summary>
+    ///     Insurance policy identifier.
+    /// </summary>
+    [StringLength(20, MinimumLength = 1)]
+    public string Policy { get; set; } = string.Empty;
 
+    /// <summary>
+    ///     Contract country.
+    /// </summary>
+    [StringLength(3, MinimumLength = 2)]
+    public string Country { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Insurance expiration date.
+    /// </summary>
     public DateOnly Expiration { get; set; }
 
-    public string Country { get; set; } = null!;
+    #endregion
 
-    public virtual Status? StatusNavigation { get; set; }
+    #region Relations
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public virtual ICollection<InsuranceH> InsurancesH { get; set; } = [];
+    #endregion
+
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="Truck"/> dependants from this <see cref="Insurance"/>
+    /// </summary>
+    public ICollection<Truck> Trucks { get; set; } = [];
+
+    #endregion
+
+    /// <summary>
+    ///     History entries.
+    /// </summary>
+    public ICollection<InsuranceH> History { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
@@ -36,28 +71,19 @@ public partial class Insurance
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Insurance>(Entity => {
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Insurance>(
+            (etBuilder) => {
+                etBuilder.Property(e => e.Country).HasMaxLength(3);
 
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
+                etBuilder.Property(e => e.Policy).HasMaxLength(20);
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Country)
-                .HasMaxLength(3)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Policy)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Insurances)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<Insurance, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

@@ -60,22 +60,21 @@ public class Q_PlatesController
 
         (HttpStatusCode Status, GenericFrame Response) = await Post("Create", new Plate() {
             Identifier = RandomUtils.String(10),
-            Status = 1,
+            Status = new Status { Id = 1 },
             State = "ABC",
             Country = "MXN",
             Expiration = date,
-            TruckNavigation = new() {
+            Truck = new() {
                 VIN = RandomUtils.String(17),
                 Common = new() {
                     Status = new Status { Id = 1 },
                     Economic = RandomUtils.String(16)
                 },
                 Model = new() {
-                    Status = 1,
+                    Status = new Status { Id = 1 },
                     Name = RandomUtils.String(32),
                     Year = date,
-                    Manufacturer = 0,
-                    ManufacturerNavigation = new() {
+                    Manufacturer = new() {
                         Name = RandomUtils.String(32),
                     }
                 },

@@ -38,9 +38,9 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Description = "DESC " + RandomSeed
         };
         VehiculeModel vehiculeModel = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Name = "Generic model " + RandomSeed,
-            ManufacturerNavigation = manufacturer,
+            Manufacturer = manufacturer,
         };
 
         SCT sct = new() {
@@ -69,14 +69,14 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         Plate plateMX = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "mxPlate" + RandomSeed,
             State = "BAC",
             Country = "MXN",
             Expiration = date,
         };
         Plate plateUSA = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "usaPlate" + RandomSeed,
             State = "CaA",
             Country = "USA",
@@ -91,13 +91,9 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
 
         List<Plate> plateList = [plateMX, plateUSA];
         TrailerCommon trailerCommon = new() {
-            Status = 1,
             Economic = "TrailerEco " + RandomSeed,
         };
         Trailer trailer = new() {
-            Status = new Status {
-                Id = 1,
-            },
             Carrier = new Carrier {
                 Id = 1,
             },
@@ -113,8 +109,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Plates = plateList,
         };
         Section section = new() {
-            Status = 1,
-            Yard = 1,
+            Yard = new Location { Id = 1 },
             Name = "section " + RandomSeed,
             Capacity = 30,
             Ocupancy = 1,

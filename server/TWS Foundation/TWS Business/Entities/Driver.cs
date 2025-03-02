@@ -75,42 +75,21 @@ public class Driver
     public Employee Employee { get; set; } = default!;
 
     protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Driver>(Entity => {
+        Builder.Entity<Driver>(
+            (Entity) => {
+                Entity.Property(e => e.DriverType).HasMaxLength(12);
+                Entity.Property(e => e.TWIC).HasMaxLength(12);
+                Entity.Property(e => e.VISA).HasMaxLength(12);
+                Entity.Property(e => e.Fast).HasMaxLength(12);
+                Entity.Property(e => e.ANAM).HasMaxLength(24);
 
-            Entity.Property(e => e.DriverType)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.TWIC)
-               .HasColumnName("TWIC");
-            Entity.Property(e => e.TWIC)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.VISA)
-               .HasColumnName("VISA");
-            Entity.Property(e => e.VISA)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Fast)
-               .HasColumnName("FAST");
-            Entity.Property(e => e.Fast)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.ANAM)
-               .HasColumnName("ANAM");
-            Entity.Property(e => e.ANAM)
-                .HasMaxLength(24)
-                .IsUnicode(false);
-
-            Entity.Link<Driver, Employee>(
-                    nameof(Employee),
-                    Required: true,
-                    Auto: true,
-                    Index: true
-                );
-        });
+                Entity.Link<Driver, Employee>(
+                        nameof(Employee),
+                        Required: true,
+                        Auto: true,
+                        Index: true
+                    );
+            }
+        );
     }
 }

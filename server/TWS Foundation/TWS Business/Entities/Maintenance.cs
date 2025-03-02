@@ -8,36 +8,65 @@ namespace TWS_Business.Entities;
 public partial class Maintenance
     : BBusinessEntity {
 
-    public int Status { get; set; }
+    #region Properties
 
+    /// <summary>
+    ///     Next anual maintenance scheduled.
+    /// </summary>
     public DateOnly Anual { get; set; }
 
+    /// <summary>
+    ///     Next trimestral maintenance scheduled.
+    /// </summary>
     public DateOnly Trimestral { get; set; }
 
-    public virtual Status? StatusNavigation { get; set; }
+    #endregion
 
-    public virtual ICollection<Trailer> Trailers { get; set; } = [];
+    #region Relations
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public virtual ICollection<MaintenanceH> MaintenancesH { get; set; } = [];
+    #endregion
+
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="Trailer"/> dependants from this <see cref="Maintenance"/>
+    /// </summary>
+    public ICollection<Trailer> Trailers { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="Truck"/> dependants from this <see cref="Maintenance"/>
+    /// </summary>
+    public ICollection<Truck> Trucks { get; set; } = [];
+
+    #endregion
+
+    /// <summary>
+    ///     History entries.
+    /// </summary>
+    public ICollection<MaintenanceH> History { get; set; } = [];
 
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Maintenance>(Entity => {
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Maintenance>(
+            (etBuilder) => {
+                etBuilder.Property(m => m.Anual).IsRequired();
+                etBuilder.Property(m => m.Trimestral).IsRequired();
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Maintenances)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<Maintenance, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {

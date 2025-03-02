@@ -19,7 +19,7 @@ public class Q_TrailersTypesDepot
         return new() {
             Status = 1,
             Size = RandomUtils.String(10),
-            TrailerClass = 0,
+            Class = 0,
             TrailerClassNavigation = new() {
                 Name = RandomUtils.String(10)
             }

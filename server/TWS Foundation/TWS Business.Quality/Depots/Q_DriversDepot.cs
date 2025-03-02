@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
@@ -19,18 +17,21 @@ public class Q_DriversDepot
     protected override Driver MockFactory(string RandomSeed) {
 
         return new() {
-           Employee = new TWS_Business.Entities.Employees.Employee {
-               Id = 1,
-           },
-           DriverType = RandomUtils.String(12),
-           Common = new() {
-               Timestamp = DateTime.Now,
-               Status = 1,
-               License = RandomUtils.String(12)
-           }
+            Employee = new TWS_Business.Entities.Employees.Employee {
+                Id = 1,
+            },
+            DriverType = RandomUtils.String(12),
+            Common = new() {
+                Timestamp = DateTime.Now,
+                Status = new Status {
+                    Id = 1
+                },
+                License = RandomUtils.String(12)
+            }
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(Driver Mock) 
-    => null;
+    protected override (string Property, string? Value)? FactorizeProperty(Driver Mock) {
+        return null;
+    }
 }

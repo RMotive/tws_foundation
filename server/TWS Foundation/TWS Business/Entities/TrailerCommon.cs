@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -7,29 +10,45 @@ namespace TWS_Business.Entities;
 public partial class TrailerCommon
     : BBusinessEntity {
 
+    /// <summary>
+    ///     Business trailer identifier number.
+    /// </summary>
+    [StringLength(16, MinimumLength = 1)]
+    public string Economic { get; set; } = string.Empty;
 
-    public int Status { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public string Economic { get; set; } = null!;
+    /// <summary>
+    ///     Desscriptive type.
+    /// </summary>
+    public TrailerType? Type { get; set; }
 
-    public int? Type { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Situation"/> information.
+    /// </summary>
+    public Situation? Situation { get; set; }
 
-    public int? Situation { get; set; }
-
-    public int? Location { get; set; }
-
-    public virtual Status? StatusNavigation { get; set; }
-
-    public virtual TrailerType? TrailerTypeNavigation { get; set; }
-
-    public virtual Situation? SituationNavigation { get; set; }
-
-    public virtual Location? LocationNavigation { get; set; }
-
+    /// <summary>
+    ///     <see cref="Entities.Location"/> information.
+    /// </summary>
+    public Location? Location { get; set; }
 
 
+
+    /// <summary>
+    ///     <see cref="Trailer"/> information.
+    /// </summary>
     public Trailer? Internal { get; set; }
 
+    /// <summary>
+    ///     <see cref="TrailerExternal"/> information.
+    /// </summary>
     public TrailerExternal? External { get; set; }
 
     #region Custom Getters
@@ -67,49 +86,33 @@ public partial class TrailerCommon
     #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
 
         Container = [
-                .. Container,
-            (nameof(Economic), [Required, new LengthValidator(1, 16)]),
-            (nameof(Status), [new PointerValidator(true)]),
+            ..Container,
+            (nameof(Economic), [ new LengthValidator(1, 16) ] ),
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<TrailerCommon>(Entity => {
-            Entity.ToTable("Trailers_Commons");
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<TrailerCommon>(
+            (etBuilder) => {
+                etBuilder.ToTable("Trailers_Commons");
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                etBuilder.Property(e => e.Economic).HasMaxLength(16).IsRequired();
 
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
+                etBuilder.Link<TrailerCommon, Status>(
+                        nameof(Status),
+                        nameof(Status.Trailers),
+                        Required: true,
+                        Auto: true
+                    );
 
-            Entity.Property(e => e.Economic)
-                .HasMaxLength(16)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.TrailerTypeNavigation)
-                .WithMany(p => p.TrailersCommons)
-                .HasForeignKey(d => d.Type);
-
-            Entity.HasOne(d => d.SituationNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Situation);
-
-            Entity.HasOne(d => d.LocationNavigation)
-                .WithMany(p => p.Trailers)
-                .HasForeignKey(d => d.Location)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.TrailersCommons)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<TrailerCommon, TrailerType>(nameof(Type), nameof(TrailerType.Trailers));
+                etBuilder.Link<TrailerCommon, Situation>(nameof(Situation), nameof(Entities.Situation.Trailers));
+                etBuilder.Link<TrailerCommon, Location>(nameof(Location), nameof(Entities.Location.Trailers));
+            }
+        );
     }
 }

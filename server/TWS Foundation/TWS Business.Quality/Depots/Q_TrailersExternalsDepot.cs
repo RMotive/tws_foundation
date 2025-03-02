@@ -17,12 +17,10 @@ public class Q_TrailersExternalsDepot
     protected override TrailerExternal MockFactory(string RandomSeed) {
 
         return new() {
-            Common = 0,
-            Status = 1,
             Carrier = "Carrier test",
             MxPlate = "12345678",
-            TrailerCommonNavigation = new() {
-                Status = 1,
+            Common = new() {
+                Status = new Status { Id = 1 },
                 Economic = RandomUtils.String(16),
             }
         };

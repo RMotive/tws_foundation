@@ -16,10 +16,7 @@ public class Q_Maintenance : BQ_Entity<Maintenance> {
             Expectations = [],
         };
         Q_EntityEvaluation<Maintenance> failAllCases = new("All properties fail") {
-            Mock = new() {
-                Id = 0,
-                Status = 0
-            },
+            Mock = new(),
             Expectations = [
                 (nameof(Maintenance.Id), [(new PointerValidator(), 3)]),
                 (nameof(Maintenance.Status), [(new PointerValidator(true), 3)]),

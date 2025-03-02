@@ -43,12 +43,12 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Description = "DESC " + RandomSeed
         };
         VehiculeModel vehiculeModel = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Name = "Generic model " + RandomSeed,
-            ManufacturerNavigation = manufacturer,
+            Manufacturer = manufacturer,
         };
         Insurance insurance = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Policy = "P232Policy" + RandomSeed,
             Expiration = date,
             Country = "MEX"
@@ -58,7 +58,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Description = "Description test " + RandomSeed
         };
         Maintenance maintenance = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Anual = date,
             Trimestral = date,
         };
@@ -79,8 +79,8 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
 
         USDOT usdot = new() {
             Status = 1,
-            Mc = "mc- " + RandomSeed,
-            Scac = "s" + RandomSeed
+            MC = "mc- " + RandomSeed,
+            SCAC = "s" + RandomSeed
         };
 
         Approach contact = new() {
@@ -99,14 +99,14 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         };
 
         Plate plateMX = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "mxPlate" + RandomSeed,
             State = "BAC",
             Country = "MXN",
             Expiration = date,
         };
         Plate plateUSA = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "usaPlate" + RandomSeed,
             State = "CaA",
             Country = "USA",

@@ -11,8 +11,8 @@ public class Q_Usdot : BQ_Entity<USDOT> {
             Mock = new() {
                 Id = 1,
                 Status = 1,
-                Mc = "",
-                Scac = ""
+                MC = "",
+                SCAC = ""
             },
             Expectations = [],
         };
@@ -20,13 +20,13 @@ public class Q_Usdot : BQ_Entity<USDOT> {
             Mock = new() {
                 Id = -1,
                 Status = -1,
-                Mc = "",
-                Scac = ""
+                MC = "",
+                SCAC = ""
             },
             Expectations = [
                 (nameof(USDOT.Id), [(new PointerValidator(), 3) ]),
-                (nameof(USDOT.Mc), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
-                (nameof(USDOT.Scac), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
+                (nameof(USDOT.MC), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
+                (nameof(USDOT.SCAC), [(new RequiredValidator(), 1), (new LengthValidator(), 2)]),
                 (nameof(USDOT.Status), [(new PointerValidator(), 3) ])
             ],
         };

@@ -11,9 +11,6 @@ public class Q_Section : BQ_Entity<Section> {
             Mock = new() {
                 Id = 1,
                 Name = "",
-                Yard = 0,
-                Status = 0
-
             },
             Expectations = [],
         };
@@ -21,8 +18,6 @@ public class Q_Section : BQ_Entity<Section> {
             Mock = new() {
                 Id = 0,
                 Name = "",
-                Yard = 0,
-                Status = 0
             },
             Expectations = [
                 (nameof(Section.Id), [(new PointerValidator(), 3)]),

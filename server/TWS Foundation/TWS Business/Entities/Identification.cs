@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -6,52 +8,76 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class Identification
-    : BBusinessEntity, IEntity_Name {
+    : BBusinessEntity {
 
+    #region Properties
+
+    /// <summary>
+    ///     Legal name. 
+    /// </summary>
+    /// <remarks>
+    ///     For more than one name split with space.
+    /// </remarks>
+    [StringLength(32, MinimumLength = 1)]
     public string Name { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
+    /// <summary>
+    ///     Legal first last name (father).
+    /// </summary>
+    /// </remarks>
+    [StringLength(32, MinimumLength = 1)]
+    public string FatherLastname { get; set; } = string.Empty;
 
-    public int Status { get; set; }
+    /// <summary>
+    ///     Legal second last name (mother).
+    /// </summary>
+    /// </remarks>
+    [StringLength(32, MinimumLength = 1)]
+    public string MotherLastName { get; set; } = string.Empty;
 
-    public string FatherLastname { get; set; } = null!;
-
-    public string MotherLastName { get; set; } = null!;
-
+    /// <summary>
+    ///     Birthday.
+    /// </summary>
     public DateOnly? Birthday { get; set; }
 
-    public virtual Status? StatusNavigation { get; set; }
+    #endregion
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Identification>(Entity => {
+    #region Status
 
-            Entity.Property(e => e.Name)
-                .HasMaxLength(32)
-                .IsUnicode(false);
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-            Entity.Property(e => e.FatherLastname)
-                .HasMaxLength(32)
-                .IsUnicode(false);
+    #endregion
 
-            Entity.Property(e => e.MotherLastName)
-                .HasMaxLength(32)
-                .IsUnicode(false);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Identification>(
+            (etBuilder) => {
+                etBuilder.Property(e => e.FatherLastname).HasMaxLength(32).IsRequired();
+                etBuilder.Property(e => e.MotherLastName).HasMaxLength(32).IsRequired();
+                etBuilder.Property(i => i.Name).HasMaxLength(32).IsRequired();
 
-            Entity.HasOne(d => d.StatusNavigation)
-               .WithMany(p => p.Identifications)
-               .HasForeignKey(d => d.Status)
-               .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<Identification, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
+        LengthValidator nameValidator = new(1, 32);
+
         Container = [
             ..Container,
-            (nameof(Name), [Required, new LengthValidator(Max: 32)]),
-            (nameof(FatherLastname), [Required, new LengthValidator(Max: 32)]),
-            (nameof(MotherLastName), [Required, new LengthValidator(Max: 32)]),
-            (nameof(Status), [new PointerValidator(true)])
+            (nameof(Name), [ nameValidator ] ),
+            (nameof(FatherLastname), [ nameValidator ] ),
+            (nameof(MotherLastName), [ nameValidator ] ),
         ];
         return Container;
     }

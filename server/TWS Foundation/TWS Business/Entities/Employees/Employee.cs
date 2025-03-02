@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSM_Foundation.Database.Bases;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Employees_Dates;
@@ -26,16 +28,25 @@ public class Employee
     /// <summary>
     ///     Identification information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Identification Identification { get; set; } = default!;
 
     /// <summary>
     ///     Status information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     Important <see cref="Employee"/> dates information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Employee_Dates Dates { get; set; } = default!;
 
     /// <summary>
@@ -60,38 +71,25 @@ public class Employee
                     etBuilder.Property(e => e.RFC).HasMaxLength(13);
                     etBuilder.Property(e => e.NSS).HasMaxLength(11);
 
-                    etBuilder
-                        .HasOne(e => e.Identification)
-                        .WithOne()
-                        .HasForeignKey<Employee>("IdentificationShadow")
-                        .IsRequired();
-                    etBuilder.Property<int>("IdentificationShadow").HasColumnName("Identification");
-
-                    etBuilder
-                        .HasOne(e => e.Status)
-                        .WithMany(s => s.Employees)
-                        .HasForeignKey("StatusShadow")
-                        .IsRequired();
-                    etBuilder.Property<int>("StatusShadow").HasColumnName("Status");
-
-                    etBuilder
-                        .HasOne(e => e.Dates)
-                        .WithOne(ed => ed.Employee)
-                        .HasForeignKey<Employee>("DatesShadow")
-                        .IsRequired();
-                    etBuilder.Property<long>("DatesShadow").HasColumnName("Dates").HasColumnType("bigint");
-
-                    etBuilder
-                        .HasOne(e => e.Address)
-                        .WithMany(a => a.Employees)
-                        .HasForeignKey("AddressShadow");
-                    etBuilder.Property<long>("AddressShadow").HasColumnName("Address");
-
-                    etBuilder
-                        .HasOne(e => e.Approach)
-                        .WithMany(a => a.Employees)
-                        .HasForeignKey("ApproachShadow");
-                    etBuilder.Property<long>("ApproachShadow").HasColumnName("Approach");
+                    etBuilder.Link<Employee, Identification>(
+                            nameof(Identification),
+                            Required: true,
+                            Auto: true,
+                            Index: true
+                        );
+                    etBuilder.Link<Employee, Status>(
+                            nameof(Status),
+                            Required: true,
+                            Auto: true
+                        );
+                    etBuilder.Link<Employee, Employee_Dates>(
+                            nameof(Dates),
+                            Required: true,
+                            Auto: true,
+                            Index: true
+                        );
+                    etBuilder.Link<Employee, Address>(nameof(Address));
+                    etBuilder.Link<Employee, Approach>(nameof(Approach));
                 }
             );
     }

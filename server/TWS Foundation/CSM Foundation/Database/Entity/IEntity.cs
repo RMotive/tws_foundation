@@ -72,7 +72,7 @@ public interface IEntity_Name {
     /// <summary>
     ///     [Entity] name.
     /// </summary>
-    [StringLength(100)]
+    [StringLength(100, MinimumLength = 1)]
     string Name { get; set; }
 
     /// <summary>

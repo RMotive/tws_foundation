@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,26 +11,48 @@ namespace TWS_Business.Entities;
 public partial class Section
     : BBusinessEntity, IEntity_Name {
 
+    /// <summary>
+    ///     etBuilder name.
+    /// </summary>
+    [StringLength(1, MinimumLength = 32)]
     public string Name { get; set; } = string.Empty;
 
+    /// <summary>
+    ///     etBuilder description.
+    /// </summary>
     public string? Description { get; set; } = string.Empty;
 
-    public int Status { get; set; }
-
-    public int Yard { get; set; }
-
+    /// <summary>
+    ///     Total physical capacity.
+    /// </summary>
     public int Capacity { get; set; }
 
+    /// <summary>
+    ///     Current physical capacity utilization.
+    /// </summary>
     public int Ocupancy { get; set; }
 
-    public Location Location { get; set; } = default!;
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public virtual Status? StatusNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Location"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Location Yard { get; set; } = default!;
 
 
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
-
-    public virtual ICollection<TruckInventory> TrucksInventories { get; set; } = [];
+    /// <summary>
+    ///     <see cref="YardLog"/> entries referencing this <see cref="Section"/>
+    /// </summary>
+    public ICollection<YardLog> YardLogs { get; set; } = [];
 
 
     #region Custom Getters
@@ -38,47 +63,40 @@ public partial class Section
     /// <remarks>
     ///     Needs laoded <see cref="Location"/>.
     /// </remarks>
-    public string? Display 
-        => $"{Location?.Name} - {Name}";
+    public string? Display
+        => $"{Yard?.Name} - {Name}";
 
     #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
 
         Container = [
-                .. Container,
-            (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Yard), [new PointerValidator(true)]),
-            (nameof(Name), [new LengthValidator(1,32)]),
+            ..Container,
+            (nameof(Name), [new LengthValidator(1, 32)]),
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Section>(Entity => {
-            Entity.ToTable("Sections");
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Section>(
+            (etBuilder) => {
+                etBuilder.HasKey(e => e.Id);
 
+                etBuilder.Property(s => s.Capacity).IsRequired();
+                etBuilder.Property(s => s.Ocupancy).IsRequired();
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.Name)
-                .HasMaxLength(32)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.Location)
-                .WithMany(p => p.Sections)
-                .HasForeignKey(d => d.Yard);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Sections)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<Section, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+                etBuilder.Link<Section, Location>(
+                        nameof(Yard),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

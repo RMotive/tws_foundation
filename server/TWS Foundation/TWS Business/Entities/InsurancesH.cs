@@ -63,7 +63,7 @@ public class InsuranceH
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.InsuranceNavigation)
-                .WithMany(p => p.InsurancesH)
+                .WithMany(p => p.History)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });

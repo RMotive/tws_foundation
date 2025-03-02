@@ -31,11 +31,6 @@ public class Employee_Dates
     /// </summary>
     public DateOnly? Termination { get; set; }
 
-    /// <summary>
-    ///     <see cref="Employees.Employee"/> information.
-    /// </summary>
-    public Employee Employee { get; set; } = default!;
-
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity(
                 (EntityTypeBuilder<Employee_Dates> EntityTypeBuilder) => {

@@ -18,8 +18,8 @@ public class Q_SectionsDepot
 
         return new() {
             Name = "Section A name",
-            Status = 1,
-            Yard = 1,
+            Status = new Status { Id = 1 },
+            Yard = new Location { Id = 1 },
             Capacity = 20,
             Ocupancy = 10
         };

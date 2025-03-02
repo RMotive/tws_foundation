@@ -45,8 +45,8 @@ public class YardLogsService
         return query
             .Include("Driver.Internal.Identification")
             .Include("Driver.External.Identification")
-            .Include("Trailer.External.TrailerType.TrailerClass")
-            .Include("Trailer.Internal.TrailerType.TrailerClass")
+            .Include("Trailer.External.TrailerType.Class")
+            .Include("Trailer.Internal.TrailerType.Class")
             .Include("Trailer.Internal.Carrier.Address")
             .Include("Trailer.Internal.Carrier.USDOT")
             .Include("Trailer.Internal.Carrier.Approach")

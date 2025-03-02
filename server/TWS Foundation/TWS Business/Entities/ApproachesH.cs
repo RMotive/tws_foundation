@@ -69,7 +69,7 @@ public partial class ApproachesH
                 .IsUnicode(false);
 
             Entity.HasOne(d => d.ApproachNavigation)
-                .WithMany(p => p.ContactsH)
+                .WithMany(p => p.History)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 

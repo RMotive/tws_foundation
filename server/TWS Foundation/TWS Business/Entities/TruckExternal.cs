@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class TruckExternal
-    : BBusinessEntity {
+    : BBusinessEntity<TruckCommon> {
 
     /// <summary>
     ///     External truck vehicule number identifier.
@@ -32,14 +32,6 @@ public partial class TruckExternal
     /// </summary>
     [StringLength(100, MinimumLength = 1)]
     public string Carrier { get; set; } = string.Empty;
-
-    /// <summary>
-    ///     <see cref="TruckCommon"/> information.
-    /// </summary>
-    /// <remarks>
-    ///     Auto included relation.
-    /// </remarks>
-    public TruckCommon Common { get; set; } = default!;
 
     protected override void DescribeSet(ModelBuilder Builder) {
         Builder.Entity<TruckExternal>(

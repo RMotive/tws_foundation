@@ -17,7 +17,6 @@ public class Q_Trailer : BQ_Entity<Trailer> {
             Mock = new(),
             Expectations = [
                 (nameof(Trailer.Id), [(new PointerValidator(), 3)]),
-                (nameof(Trailer.Status), [(new PointerValidator(), 3)])
             ],
         };
 

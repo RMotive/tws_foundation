@@ -62,7 +62,7 @@ public partial class UsdotH
                 .HasColumnName("SCAC");
 
             Entity.HasOne(d => d.UsdotNavigation)
-                .WithMany(p => p.UsdotsH)
+                .WithMany(p => p.History)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 

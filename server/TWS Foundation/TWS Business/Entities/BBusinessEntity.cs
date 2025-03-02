@@ -10,6 +10,7 @@ namespace TWS_Business.Entities;
 public abstract class BBusinessEntity<TCommon>
     : BEntity<TCommon>
     where TCommon : class, IEntity {
+
     public override Type Database { get; init; } = typeof(BusinessDatabase);
 }
 

@@ -1,9 +1,5 @@
-﻿using System.Linq.Expressions;
-
-using CSM_Foundation.Core.Utils;
+﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
-
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -26,7 +22,7 @@ public class Q_PlatesDepot
             State = RandomUtils.String(3),
             Country = RandomUtils.String(3),
             Expiration = date,
-            Status = 1
+            Status = new Status { Id = 1 }
         };
     }
 

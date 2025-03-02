@@ -16,14 +16,8 @@ public class VehiculeModelService : IVehiculesModelsService {
         VehiculesModels = vehiculeModel;
     }
 
-    private IQueryable<VehiculeModel> Include(IQueryable<VehiculeModel> query) {
-        return query
-            .Include(t => t.ManufacturerNavigation)
-            .Include(t => t.StatusNavigation);
-    }
-
     public async Task<SetViewOut<VehiculeModel>> View(SetViewOptions<VehiculeModel> Options) {
-        return await VehiculesModels.View(Options, Include);
+        return await VehiculesModels.View(Options);
     }
 
     public async Task<VehiculeModel> Create(VehiculeModel vehiculeModel) {

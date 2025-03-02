@@ -18,10 +18,13 @@ public class Q_DriversCommons
 
         return new() {
             License = RandomUtils.String(12),
-            Status = 1
+            Status = new Status {
+                Id = 1
+            }
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(DriverCommon Mock) 
-    => (nameof(DriverCommon.License), Mock.License);
+    protected override (string Property, string? Value)? FactorizeProperty(DriverCommon Mock) {
+        return (nameof(DriverCommon.License), Mock.License);
+    }
 }

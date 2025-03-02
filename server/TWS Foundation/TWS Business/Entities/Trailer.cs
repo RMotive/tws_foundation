@@ -26,13 +26,11 @@ public class Trailer
     public Maintenance? Maintenance { get; set; }
 
     /// <summary>
-    ///     <see cref="Entities.Status"/> information.
-    /// </summary>
-    public Status Status { get; set; } = default!;
-
-    /// <summary>
     ///     <see cref="Entities.Carrier"/> information
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Carrier Carrier { get; set; } = default!;
 
     /// <summary>
@@ -48,9 +46,11 @@ public class Trailer
     protected override void DescribeSet(ModelBuilder mBuilder) {
         mBuilder.Entity<Trailer>(
             (etBuilder) => {
-
-                etBuilder.Link<Trailer, Status>(nameof(Status), Required: true);
-                etBuilder.Link<Trailer, Carrier>(nameof(Carrier), Required: true);
+                etBuilder.Link<Trailer, Carrier>(
+                        nameof(Carrier), 
+                        Required: true,
+                        Auto: true
+                    );
 
                 etBuilder.Link<Trailer, SCT>(nameof(SCT));
                 etBuilder.Link<Trailer, VehiculeModel>(nameof(Model));

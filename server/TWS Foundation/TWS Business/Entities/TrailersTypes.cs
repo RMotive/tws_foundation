@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -7,58 +9,75 @@ namespace TWS_Business.Entities;
 
 public partial class TrailerType
     : BBusinessEntity {
-    
 
-    
+    #region Properties
 
-    public int Status { get; set; }
+    /// <summary>
+    ///     Size description.
+    /// </summary>
+    [StringLength(16)]
+    public string Size { get; set; } = string.Empty;
 
-    public string Size { get; set; } = null!;
+    #endregion
 
-    public int TrailerClass { get; set; }
+    #region Relations
 
-    public virtual TrailerClass? TrailerClassNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public virtual Status? StatusNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Class"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public TrailerClass Class { get; set; } = default!;
 
-    public virtual ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
+    #endregion
+
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="TrailerCommon"/> dependants from this <see cref="TrailerType"/>
+    /// </summary>
+    public ICollection<TrailerCommon> Trailers { get; set; } = [];
+
+    #endregion
+
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
 
         Container = [
-                .. Container,
-            (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Size), [new RequiredValidator(), new LengthValidator(Max: 16)]),
+            ..Container,
+            (nameof(Size), [new LengthValidator(Max: 16)]),
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<TrailerType>(Entity => {
-            Entity.ToTable("Trailers_Types");
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<TrailerType>(
+            (etBuilder) => {
+                etBuilder.ToTable("Trailers_Types");
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                etBuilder.Property(e => e.Size).HasMaxLength(16).IsRequired();
 
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
-
-            Entity.Property(e => e.Size)
-                .HasMaxLength(16)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.TrailerClassNavigation)
-                .WithMany(p => p.TrailersTypesCommons)
-                .HasForeignKey(d => d.TrailerClass)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.TrailerTypes)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-        });
+                etBuilder.Link<TrailerType, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+                etBuilder.Link<TrailerType, TrailerClass>(
+                        nameof(Class),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

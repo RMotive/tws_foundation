@@ -72,7 +72,7 @@ public partial class PlateH
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.PlateNavigation)
-                .WithMany(p => p.PlatesH)
+                .WithMany(p => p.History)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });

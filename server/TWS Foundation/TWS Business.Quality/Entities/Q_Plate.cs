@@ -14,19 +14,12 @@ public class Q_Plate : BQ_Entity<Plate> {
                 State = "",
                 Country = "",
                 Expiration = DateOnly.FromDateTime(new DateTime()),
-                Truck = 1
+                Truck = new Truck { Id = 1 }
             },
             Expectations = [],
         };
         Q_EntityEvaluation<Plate> failAllCases = new("All properties fail") {
-            Mock = new() {
-                Id = 0,
-                Identifier = "",
-                State = "",
-                Country = "",
-                Truck = 0,
-                Status = 0
-            },
+            Mock = new(),
             Expectations = [
                 (nameof(Plate.Id), [(new PointerValidator(), 3)]),
                 (nameof(Plate.Identifier), [(new LengthValidator(), 2)]),

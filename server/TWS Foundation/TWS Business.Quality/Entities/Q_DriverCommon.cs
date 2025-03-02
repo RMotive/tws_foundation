@@ -10,9 +10,6 @@ public class Q_DriverCommon : BQ_Entity<DriverCommon> {
         Q_EntityEvaluation<DriverCommon> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Situation = 0,
-                License = ""
-
             },
             Expectations = [],
         };
@@ -20,7 +17,9 @@ public class Q_DriverCommon : BQ_Entity<DriverCommon> {
             Mock = new() {
                 Id = 0,
                 License = "",
-                Status = 0
+                Status = new Status {
+                    Id = 1,
+                }
             },
             Expectations = [
                 (nameof(DriverCommon.Id), [(new PointerValidator(), 3)]),

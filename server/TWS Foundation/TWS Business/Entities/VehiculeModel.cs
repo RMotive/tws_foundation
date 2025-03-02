@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,59 +10,67 @@ public partial class VehiculeModel
     : BBusinessEntity, IEntity_Name {
 
     public string Name { get; set; } = string.Empty;
-
     public string? Description { get; set; }
 
-    public int Status { get; set; }
-
+    /// <summary>
+    ///     Manufacturing year.
+    /// </summary>
     public DateOnly Year { get; set; }
 
-    public int Manufacturer { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public virtual Manufacturer? ManufacturerNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Manufacturer"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Manufacturer Manufacturer { get; set; } = default!;
 
-    public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<Trailer> Trailers { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Trailer"/> dependents from this <see cref="VehiculeModel"/>
+    /// </summary>
+    public ICollection<Trailer> Trailers { get; set; } = [];
 
-    public virtual ICollection<Truck> Trucks { get; set; } = [];
-
+    /// <summary>
+    ///     <see cref="Truck"/> dependents from this <see cref="VehiculeModel"/>
+    /// </summary>
+    public ICollection<Truck> Trucks { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-
         Container = [
-                .. Container,
-            (nameof(Status), [new PointerValidator(true)]),
-            (nameof(Name), [new RequiredValidator(), new LengthValidator(Max: 32)]),
+            ..Container,
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<VehiculeModel>(Entity => {
-            Entity.ToTable("Vehicules_Models");
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<VehiculeModel>(
+            (etBuilder) => {
+                etBuilder.ToTable("Vehicules_Models");
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+                etBuilder.Property(vm => vm.Year).IsRequired();
 
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
-
-            Entity.Property(e => e.Name)
-                .HasMaxLength(32)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.ManufacturerNavigation)
-                .WithMany(p => p.Models)
-                .HasForeignKey(d => d.Manufacturer)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.VehiculeModels)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<VehiculeModel, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+                etBuilder.Link<VehiculeModel, Manufacturer>(
+                        nameof(Manufacturer),
+                        TargetReference: nameof(Manufacturer.Models),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

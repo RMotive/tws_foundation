@@ -17,11 +17,8 @@ public class Q_TrailersDepot
     protected override Trailer MockFactory(string RandomSeed) {
 
         return new() {
-            Status = new Status {
-                Id = 1,
-            },
             Common = new() {
-                Status = 1,
+                Status = new Status { Id = 1},
                 Timestamp = DateTime.Now,
                 Economic = RandomUtils.String(16),
             },

@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -7,62 +10,73 @@ namespace TWS_Business.Entities;
 public class USDOT
     : BBusinessEntity {
 
+    #region Properties
 
+    /// <summary>
+    ///     todo: to be defined
+    /// </summary>
+    [StringLength(7, MinimumLength = 7)]
+    public string MC { get; set; } = string.Empty;
 
+    /// <summary>
+    ///     TODO: to be defined
+    /// </summary>
+    [StringLength(4, MinimumLength = 4)]
+    public string SCAC { get; set; } = string.Empty;
 
+    #endregion
 
-    public int Status { get; set; }
+    #region Relations
 
-    public string Mc { get; set; } = null!;
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public string Scac { get; set; } = null!;
+    #endregion
 
-    public virtual Status? StatusNavigation { get; set; }
+    #region Dependants
 
-    public virtual ICollection<UsdotH> UsdotsH { get; set; } = [];
-
+    /// <summary>
+    ///     <see cref="Carrier"/> dependants from this <see cref="USDOT"/>
+    /// </summary>
     public virtual ICollection<Carrier> Carriers { get; set; } = [];
+
+    #endregion
+
+    /// <summary>
+    ///     History entries.
+    /// </summary>
+    public ICollection<UsdotH> History { get; set; } = [];
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
-            (nameof(Mc), [Required, new LengthValidator(7, 7)]),
-            (nameof(Scac), [Required, new LengthValidator(4, 4)]),
-            (nameof(Status), [new PointerValidator(true)]),
+            ..Container,
+            (nameof(MC), [Required, new LengthValidator(7, 7)]),
+            (nameof(SCAC), [Required, new LengthValidator(4, 4)]),
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<USDOT>(entity => {
-            entity.ToTable("USDOT");
-            entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<USDOT>(
+            (etBuilder) => {
+                etBuilder.Property(e => e.MC).HasMaxLength(7).IsRequired();
+                etBuilder.Property(e => e.SCAC).HasMaxLength(4).IsRequired();
 
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id)
-               .HasColumnName("id");
-
-            entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            entity.Property(e => e.Mc)
-                .HasMaxLength(7)
-                .IsUnicode(false)
-                .HasColumnName("MC");
-
-            entity.Property(e => e.Scac)
-                .HasMaxLength(4)
-                .IsUnicode(false)
-                .HasColumnName("SCAC");
-
-            entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Usdots)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<USDOT, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

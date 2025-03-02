@@ -11,18 +11,18 @@ namespace TWS_Business.Quality.Depots;
 public class Q_UsdotsDepot
     : BQ_Depot<USDOT, UsdotsDepot, BusinessDatabase> {
     public Q_UsdotsDepot()
-        : base(nameof(USDOT.Mc)) {
+        : base(nameof(USDOT.MC)) {
     }
 
     protected override USDOT MockFactory(string RandomSeed) {
         return new() {
             Status = 1,
-            Mc = "MCtestT",
-            Scac = "SCAT"
+            MC = "MCtestT",
+            SCAC = "SCAT"
         };
     }
 
     protected override (string Property, string? Value)? FactorizeProperty(USDOT Mock) {
-        return (nameof(USDOT.Mc), Mock.Mc);
+        return (nameof(USDOT.MC), Mock.MC);
     }
 }

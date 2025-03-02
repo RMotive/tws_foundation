@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,62 +10,77 @@ namespace TWS_Business.Entities;
 public partial class Plate
     : BBusinessEntity {
 
-    public int Status { get; set; }
+    #region Properties
 
-    public string Identifier { get; set; } = null!;
+    /// <summary>
+    ///     Plate identifier number.
+    /// </summary>
+    public string Identifier { get; set; } = string.Empty;
 
+    /// <summary>
+    ///     Political country the plate is from.
+    /// </summary>
+    [StringLength(3, MinimumLength = 2)]
+    public string Country { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Political state name the plate is from.
+    /// </summary>
+    [StringLength(3, MinimumLength = 2)]
     public string? State { get; set; }
 
-    public string Country { get; set; } = null!;
-
+    /// <summary>
+    ///     Expiration date.
+    /// </summary>
     public DateOnly? Expiration { get; set; }
 
-    public int? Truck { get; set; }
+    #endregion
 
-    public int? Trailer { get; set; }
+    #region Relations
 
-    public virtual Truck? TruckNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
-    public virtual Trailer? TrailerNavigation { get; set; }
+    #endregion
 
-    public virtual Status? StatusNavigation { get; set; }
+    #region Dependants
 
-    public virtual ICollection<PlateH> PlatesH { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Entities.Truck"/> information.
+    /// </summary>
+    public Truck? Truck { get; set; }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Plate>(Entity => {
-            Entity.HasKey(e => e.Id);
+    /// <summary>
+    ///     <see cref="Entities.Trailer"/> information.
+    /// </summary>
+    public Trailer? Trailer { get; set; }
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
+    #endregion
 
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-            Entity.Property(e => e.Country)
-                .HasMaxLength(3)
-                .IsUnicode(false);
-            Entity.Property(e => e.Identifier)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-            Entity.Property(e => e.State)
-                .HasMaxLength(3)
-                .IsUnicode(false);
+    /// <summary>
+    ///     etBuilder history entries.
+    /// </summary>
+    public ICollection<PlateH> History { get; set; } = [];
 
-            Entity.HasOne(d => d.TruckNavigation)
-                .WithMany(p => p.Plates)
-                .HasForeignKey(d => d.Truck)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Plate>(
+            (etBuilder)=> {
+                etBuilder.Property(e => e.Country).HasMaxLength(3);
+                etBuilder.Property(e => e.Identifier).HasMaxLength(12);
+                etBuilder.Property(e => e.State).HasMaxLength(3);
 
-            Entity.HasOne(d => d.TrailerNavigation)
-                .WithMany(p => p.Plates)
-                .HasForeignKey(d => d.Trailer)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Plates)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<Plate, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
@@ -71,7 +88,6 @@ public partial class Plate
             ..Container,
             (nameof(Identifier), [new LengthValidator(5, 12)]),
             (nameof(Country), [new LengthValidator(2, 3)]),
-            (nameof(Status), [new PointerValidator(true)]),
         ];
         return Container;
     }

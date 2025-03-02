@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,15 +10,21 @@ namespace TWS_Business.Entities;
 public partial class DriverCommon
     : BBusinessEntity {
 
-    public int Status { get; set; }
-
+    /// <summary>
+    ///     Licence identification number.
+    /// </summary>
+    [StringLength(12, MinimumLength = 8)]
     public string License { get; set; } = null!;
 
-    public int? Situation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Situation"/> information.
+    /// </summary>
+    public Situation Situation { get; set; } = default!;
 
-    public virtual Situation? SituationNavigation { get; set; }
-
-    public virtual Status? StatusNavigation { get; set; }
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Driver"/> information.
@@ -42,13 +50,13 @@ public partial class DriverCommon
         get {
             Identification? ident;
 
-            if(Internal != null) {
+            if (Internal != null) {
                 ident = Internal.Employee?.Identification;
             } else {
                 ident = External?.Identification;
             }
 
-            if(ident == null)
+            if (ident == null)
                 return null;
 
             return $"{ident.Name} {ident.FatherLastname} {ident.MotherLastName}";
@@ -61,38 +69,33 @@ public partial class DriverCommon
         RequiredValidator Required = new();
 
         Container = [
-                .. Container,
-            (nameof(License), [Required, new LengthValidator(8,12)]),
-            (nameof(Status), [new PointerValidator(true)]),
+            ..Container,
+            (nameof(License), [ Required, new LengthValidator(8, 12)]),
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<DriverCommon>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Drivers_Commons");
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<DriverCommon>(
+            (etBuilder) => {
+                etBuilder.ToTable("Drivers_Commons");
 
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
+                etBuilder.Property(e => e.License).HasMaxLength(12);
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.License)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.DriversCommons)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-
-            Entity.HasOne(d => d.SituationNavigation)
-                .WithMany(p => p.Drivers)
-                .HasForeignKey(d => d.Situation)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<DriverCommon, Situation>(
+                        nameof(Situation),
+                        nameof(Situation.Drivers),
+                        Required: true,
+                        Auto: true
+                    );
+                etBuilder.Link<DriverCommon, Status>(
+                        nameof(Status),
+                        nameof(Situation.Drivers),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

@@ -17,7 +17,7 @@ public class Q_TrailerType : BQ_Entity<TrailerType> {
         Q_EntityEvaluation<TrailerType> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
-                TrailerClass = 0
+                Class = 0
 
             },
             Expectations = [

@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -55,7 +54,7 @@ public class MaintenanceH
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.MaintenanceNavigation)
-                .WithMany(p => p.MaintenancesH)
+                .WithMany(p => p.History)
                 .HasForeignKey(d => d.Entity)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });

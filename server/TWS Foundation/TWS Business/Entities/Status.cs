@@ -12,31 +12,36 @@ public partial class Status
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
 
+    /// <summary>
+    ///     <see cref="DriverCommon"/> referencing to this <see cref="Status"/>.
+    /// </summary>
+    public ICollection<DriverCommon> Drivers { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="TruckCommon"/> referencing to this <see cref="Status"/>.
+    /// </summary>
     public ICollection<TruckCommon> Trucks { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="TrailerCommon"/> referencing to this <see cref="Status"/>
+    /// </summary>
+    public ICollection<TrailerCommon> Trailers { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="SCT"/> dependants from this <see cref="Status"/>
+    /// </summary>
+    public ICollection<SCT> SCTs { get; set; } = [];
 
 
     public virtual ICollection<VehiculeModel> VehiculeModels { get; set; } = [];
 
     public virtual ICollection<TrailerType> TrailerTypes { get; set; } = [];
 
-
-    public virtual ICollection<TrailerCommon> TrailersCommons { get; set; } = [];
-
-    public virtual ICollection<DriverCommon> DriversCommons { get; set; } = [];
-
     public virtual ICollection<Section> Sections { get; set; } = [];
-
-    public virtual ICollection<DriverExternal> DriversExternals { get; set; } = [];
-
-    public virtual ICollection<Driver> Drivers { get; set; } = [];
 
     public virtual ICollection<Employee> Employees { get; set; } = [];
 
     public virtual ICollection<Identification> Identifications { get; set; } = [];
-
-    public virtual ICollection<TrailerExternal> TrailersExternals { get; set; } = [];
-
-    public virtual ICollection<TruckExternal> TrucksExternals { get; set; } = [];
 
     public virtual ICollection<Location> Locations { get; set; } = [];
 
@@ -51,10 +56,6 @@ public partial class Status
     public virtual ICollection<Maintenance> Maintenances { get; set; } = [];
 
     public virtual ICollection<Plate> Plates { get; set; } = [];
-
-    public virtual ICollection<SCT> Scts { get; set; } = [];
-
-    public virtual ICollection<Trailer> Trailers { get; set; } = [];
 
     public virtual ICollection<TruckH> TrucksHistories { get; set; } = [];
 

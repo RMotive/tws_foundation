@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -6,71 +7,46 @@ using Microsoft.EntityFrameworkCore;
 namespace TWS_Business.Entities;
 
 public partial class TrailerExternal
-    : BBusinessEntity {
-    
+    : BBusinessEntity<TrailerCommon> {
 
-    
+    /// <summary>
+    ///     Carrier idenfitication.
+    /// </summary>
+    [StringLength(100, MinimumLength = 1)]
+    public string Carrier { get; set; } = string.Empty;
 
-    public int Status { get; set; }
-
-    public int Common { get; set; }
-
-    public string Carrier { get; set; } = null!;
-
+    /// <summary>
+    ///     Mexican plate number.
+    /// </summary>
     public string? MxPlate { get; set; }
 
-    public string? UsaPlate { get; set; } = null!;
-
-    public virtual Status? StatusNavigation { get; set; }
-
-    public virtual TrailerCommon? TrailerCommonNavigation { get; set; }
-
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
+    /// <summary>
+    ///     USA Plate number.
+    /// </summary>
+    public string? UsaPlate { get; set; }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
+        LengthValidator plateValidator = new(12, 12, true);
 
         Container = [
-                .. Container,
-            (nameof(Common), [new UniqueValidator()]),
-            (nameof(Status), [Required, new PointerValidator(true)]),
+            ..Container,
             (nameof(Carrier), [new LengthValidator(1, 100)]),
-
+            (nameof(UsaPlate), [ plateValidator ] ),
+            (nameof(MxPlate), [ plateValidator ] )
         ];
 
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<TrailerExternal>(Entity => {
-            Entity.ToTable("Trailers_Externals");
-            Entity.HasKey(e => e.Id);
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<TrailerExternal>(
+            (etBuilder) => {
+                etBuilder.ToTable("Trailers_Externals");
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.UsaPlate)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Carrier)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.MxPlate)
-                .HasMaxLength(12)
-                .IsUnicode(false);
-
-            Entity.HasIndex(e => e.Common)
-                .IsUnique();
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.TrailersExternals)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Property(e => e.Carrier).HasMaxLength(100).IsRequired();
+                etBuilder.Property(e => e.UsaPlate).HasMaxLength(12);
+                etBuilder.Property(e => e.MxPlate).HasMaxLength(12);
+            }
+        );
     }
 }

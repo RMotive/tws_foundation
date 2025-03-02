@@ -18,13 +18,7 @@ public class Q_Insurance : BQ_Entity<Insurance> {
             Expectations = [],
         };
         Q_EntityEvaluation<Insurance> failAllCases = new("All properties fail") {
-            Mock = new() {
-                Id = 0,
-                Policy = "",
-                Country = "",
-                Status = 0
-
-            },
+            Mock = new(),
             Expectations = [
                 (nameof(Insurance.Id), [(new PointerValidator(), 3)]),
                 (nameof(Insurance.Policy), [(new LengthValidator(), 2)]),

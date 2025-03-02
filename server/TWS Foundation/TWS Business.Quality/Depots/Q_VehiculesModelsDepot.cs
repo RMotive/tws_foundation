@@ -17,15 +17,16 @@ public class Q_VehiculesModelsDepot
     protected override VehiculeModel MockFactory(string RandomSeed) {
 
         return new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Name = RandomUtils.String(20),
             Year = DateOnly.MinValue,
-            ManufacturerNavigation = new Manufacturer() {
+            Manufacturer = new Manufacturer() {
                 Name = RandomUtils.String(20)
             }
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(VehiculeModel Mock)
-    => (nameof(VehiculeModel.Name), Mock.Name);
+    protected override (string Property, string? Value)? FactorizeProperty(VehiculeModel Mock) {
+        return (nameof(VehiculeModel.Name), Mock.Name);
+    }
 }

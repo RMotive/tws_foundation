@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,23 +11,65 @@ namespace TWS_Business.Entities;
 
 public partial class Approach
     : BBusinessEntity {
-    public int Status { get; set; }
 
+    #region Properties
+
+    /// <summary>
+    ///     Electronic mail address.
+    /// </summary>
+    [StringLength(64)]
+    public string Email { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Enterprise phone number.
+    /// </summary>
+    [StringLength(13)]
     public string? Enterprise { get; set; }
 
+    /// <summary>
+    ///     Personal phone number.
+    /// </summary>
+    [StringLength(13)]
     public string? Personal { get; set; }
 
+    /// <summary>
+    ///     Alternative phone number
+    /// </summary>
+    [StringLength(30)]
     public string? Alternative { get; set; }
 
-    public string Email { get; set; } = null!;
+    #endregion
 
-    public virtual Status? StatusNavigation { get; set; }
+    #region Relations
 
-    public virtual ICollection<ApproachesH> ContactsH { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Entities.Status"/> information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
+    #endregion
+
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="Carrier"/> dependants from this <see cref="Approach"/>
+    /// </summary>
     public virtual ICollection<Carrier> Carriers { get; set; } = [];
 
+    /// <summary>
+    ///     <see cref="Employee"/> dependants from this <see cref="Approach"/>
+    /// </summary>
     public virtual ICollection<Employee> Employees { get; set; } = [];
+
+    #endregion
+
+    /// <summary>
+    ///     History entries.
+    /// </summary>
+    public ICollection<ApproachesH> History { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
 
@@ -37,37 +82,21 @@ public partial class Approach
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Approach>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Approaches");
+    protected override void DescribeSet(ModelBuilder mBuilder) {
+        mBuilder.Entity<Approach>(
+            (etBuilder) => {
 
-            Entity.Property(e => e.Id)
-                 .HasColumnName("id");
+                etBuilder.Property(e => e.Email).HasMaxLength(64).IsRequired();
+                etBuilder.Property(e => e.Enterprise).HasMaxLength(13);
+                etBuilder.Property(e => e.Personal).HasMaxLength(13);
+                etBuilder.Property(e => e.Alternative).HasMaxLength(30);
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Enterprise)
-                .HasMaxLength(13)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Personal)
-                .HasMaxLength(13)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Alternative)
-                .HasMaxLength(30)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Email)
-                .HasMaxLength(64)
-                .IsUnicode(false);
-
-            Entity.HasOne(d => d.StatusNavigation)
-                .WithMany(p => p.Contacts)
-                .HasForeignKey(d => d.Status)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-        });
+                etBuilder.Link<Approach, Status>(
+                        nameof(Status),
+                        Required: true,
+                        Auto: true
+                    );
+            }
+        );
     }
 }

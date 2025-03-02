@@ -10,18 +10,14 @@ public class Q_TrailerCommon : BQ_Entity<TrailerCommon> {
         Q_EntityEvaluation<TrailerCommon> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Type = 1,
-                Situation = 1,
+                Type = new TrailerType { Id = 1 },
+                Situation = new Situation { Id = 1 },
 
             },
             Expectations = [],
         };
         Q_EntityEvaluation<TrailerCommon> failAllCases = new("All properties fail") {
-            Mock = new() {
-                Id = 0,
-                Status = 0,
-                Economic = "",
-            },
+            Mock = new(),
             Expectations = [
                 (nameof(TrailerCommon.Id), [(new PointerValidator(), 3)]),
                 (nameof(TrailerCommon.Economic), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),

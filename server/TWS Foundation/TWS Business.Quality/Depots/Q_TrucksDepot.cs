@@ -28,15 +28,14 @@ public class Q_TruckDepot
                 Economic = RandomUtils.String(16),
             },
             Model = new() {
-                Status = 1,
+                Status = new Status { Id = 1 },
                 Name = RandomUtils.String(32),
                 Year = date,
-                Manufacturer = 0,
-                ManufacturerNavigation = new() {
+                Manufacturer = new() {
                     Name = RandomUtils.String(32),
                 }
             },
-            Carrier =  new() {
+            Carrier = new() {
                 Name = RandomUtils.String(10),
                 Status = new Status {
                     Id = 1,

@@ -22,7 +22,7 @@ public class Q_DriversExternals
             },
             Common = new() {
                 Timestamp = DateTime.Now,
-                Status = 1,
+                Status = new Status { Id = 1 },
                 License = RandomUtils.String(12)
             }
         };
