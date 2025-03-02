@@ -28,7 +28,7 @@ public class Q_TrailersDepot
                 },
                 Name = RandomUtils.String(10),
                 Approach = new() {
-                    Status = 1,
+                    Status = new Status { Id = 1 },
                     Email = RandomUtils.String(30)
                 },
                 Address = new() {

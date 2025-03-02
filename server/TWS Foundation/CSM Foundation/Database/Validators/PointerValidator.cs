@@ -47,7 +47,7 @@ public class PointerValidator
     public void Evaluate(PropertyInfo Property, object? Value) {
         string message;
         int code;
-        int? value = Value as int?;
+        long? value = Value as long?;
         if (Property.Name != "Id" && !isDependency) {
             message = "Pointer cannot be named different than 'Id'";
             code = 1;

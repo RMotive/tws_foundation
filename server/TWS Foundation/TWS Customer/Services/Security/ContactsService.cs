@@ -2,9 +2,9 @@
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
-using TWS_Customer.Services.Interfaces;
+using CSM_Security.Entities.Contacts;
 
-using TWS_Security.Entities.Contacts;
+using TWS_Customer.Services.Interfaces;
 
 namespace TWS_Customer.Services.Security;
 public class ContactsService

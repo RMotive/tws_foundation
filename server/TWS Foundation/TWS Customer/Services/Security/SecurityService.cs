@@ -1,6 +1,9 @@
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Models.Out;
 
+using CSM_Security.Entities.Accounts;
+using CSM_Security.Entities.Permits;
+
 using Microsoft.EntityFrameworkCore;
 
 using TWS_Customer.Managers.Configuration;
@@ -8,9 +11,6 @@ using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Interfaces;
 using TWS_Customer.Services.Records;
-
-using TWS_Security.Entities;
-using TWS_Security.Entities.Accounts;
 
 namespace TWS_Customer.Services.Security;
 public class SecurityService

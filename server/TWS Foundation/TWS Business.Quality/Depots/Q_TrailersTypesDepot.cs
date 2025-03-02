@@ -17,10 +17,9 @@ public class Q_TrailersTypesDepot
     protected override TrailerType MockFactory(string RandomSeed) {
 
         return new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Size = RandomUtils.String(10),
-            Class = 0,
-            TrailerClassNavigation = new() {
+            Class = new() {
                 Name = RandomUtils.String(10)
             }
         };

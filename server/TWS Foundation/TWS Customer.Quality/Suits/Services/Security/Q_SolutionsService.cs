@@ -2,10 +2,10 @@
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
-using TWS_Customer.Services.Security.Solutions;
+using CSM_Security;
+using CSM_Security.Entities.Solutions;
 
-using TWS_Security;
-using TWS_Security.Entities.Solutions;
+using TWS_Customer.Services.Security.Solutions;
 
 namespace TWS_Customer.Quality.Suits.Services.Security;
 
@@ -13,7 +13,7 @@ namespace TWS_Customer.Quality.Suits.Services.Security;
 ///     Quality Suit implementation for <see cref="Solutions"/>
 /// </summary>
 public class Q_SolutionsService
-    : BQ_Service<Solution, SolutionsService, SecurityDatabase> {
+    : BQ_Service<Solution, SolutionsService, Database> {
 
     public Q_SolutionsService()
         : base(new(new SolutionsDepot())) {

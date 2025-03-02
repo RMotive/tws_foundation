@@ -17,7 +17,7 @@ public class Q_IdentificationsDepot
 
         return new() {
             Name = "Identifications name",
-            Status = 1,
+            Status = new Status { Id = 1},
             FatherLastname = "Father last name",
             MotherLastName = "Mother last name"
         };

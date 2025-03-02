@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality;
+﻿using CSM_Foundation.Database.Quality;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -16,7 +15,7 @@ public class Q_UsdotsDepot
 
     protected override USDOT MockFactory(string RandomSeed) {
         return new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             MC = "MCtestT",
             SCAC = "SCAT"
         };

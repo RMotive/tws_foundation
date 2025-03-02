@@ -6,15 +6,15 @@ using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
+using CSM_Security.Entities.Accounts;
+using CSM_Security.Entities.Solutions;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
-
-using TWS_Security.Entities.Accounts;
-using TWS_Security.Entities.Solutions;
 
 using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.YardLog>;
 
@@ -44,7 +44,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         SCT sct = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Type = "TypT14",
             Number = "NumberSCTTesting value" + RandomSeed,
             Configuration = "Conf" + RandomSeed
@@ -55,7 +55,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         Approach contact = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Email = "mail@test.com " + RandomSeed
         };
 

@@ -1,12 +1,12 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
 
+using CSM_Security.Entities.Accounts;
+
 using Microsoft.AspNetCore.Mvc;
 
 using TWS_Customer.Services.Interfaces;
 
 using TWS_Foundation.Authentication;
-
-using TWS_Security.Entities.Accounts;
 
 namespace TWS_Foundation.Controllers.Security;
 

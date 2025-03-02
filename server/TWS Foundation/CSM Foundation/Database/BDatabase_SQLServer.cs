@@ -245,7 +245,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     /// </summary>
     public void ValidateConnection() {
         AdvisorManager.Announce($"ORM Setting up *^____^*", new() {
-            {"Database", GetType().Name },
+            {"Database", GetType()?.Namespace ?? "---" },
             {"Base", nameof(BDatabase_SQLServer<TDatabases>) }
         });
 
@@ -325,8 +325,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                 setType,
                 (etBuilder) => {
                     etBuilder.HasKey(nameof(IEntity.Id));
-
-                    etBuilder.Property(nameof(IEntity.Id)).IsRequired();
+                    etBuilder.Property<long>(nameof(IEntity.Id)).IsRequired();
 
                     if (set is IEntity_Name) {
                         PropertyInfo nameProperty = set.GetProperty(nameof(IEntity_Name.Name));

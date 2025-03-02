@@ -63,7 +63,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Trimestral = date,
         };
         SCT sct = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Type = "TypT14",
             Number = "NumberSCTTesting value" + RandomSeed,
             Configuration = "Conf" + RandomSeed
@@ -78,13 +78,13 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         };
 
         USDOT usdot = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             MC = "mc- " + RandomSeed,
             SCAC = "s" + RandomSeed
         };
 
         Approach contact = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Email = "mail@test.com " + RandomSeed
         };
 
@@ -143,7 +143,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
     }
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Entities.Accounts.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<CSM_Security.Entities.Accounts.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,

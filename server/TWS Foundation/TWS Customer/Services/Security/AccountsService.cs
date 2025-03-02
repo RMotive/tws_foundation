@@ -1,11 +1,11 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
+using CSM_Security.Entities.Accounts;
+
 using Microsoft.EntityFrameworkCore;
 
 using TWS_Customer.Services.Interfaces;
-
-using TWS_Security.Entities.Accounts;
 
 namespace TWS_Customer.Services.Security;
 /// <summary>

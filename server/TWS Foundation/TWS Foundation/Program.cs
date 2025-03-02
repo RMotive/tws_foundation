@@ -12,6 +12,11 @@ using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
 using CSM_Foundation.Server.Utils;
 
+using CSM_Security;
+using CSM_Security.Entities.Accounts;
+using CSM_Security.Entities.Contacts;
+using CSM_Security.Entities.Solutions;
+
 using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -25,11 +30,6 @@ using TWS_Customer.Services.Security;
 using TWS_Customer.Services.Security.Solutions;
 
 using TWS_Foundation.Middlewares;
-
-using TWS_Security;
-using TWS_Security.Entities.Accounts;
-using TWS_Security.Entities.Contacts;
-using TWS_Security.Entities.Solutions;
 
 namespace TWS_Foundation;
 
@@ -123,7 +123,7 @@ public partial class Program {
             );
 
             // --> Data storages connection validations.
-            new SecurityDatabase().ValidateConnection();
+            new Database().ValidateConnection();
             new BusinessDatabase().ValidateConnection();
 
             // --> Adding customer services
@@ -140,7 +140,7 @@ public partial class Program {
                 Services.AddSingleton<IDisposer, SampleDisposer>();
 
                 // --> Databasess contexts
-                Services.AddDbContext<SecurityDatabase>();
+                Services.AddDbContext<Database>();
                 Services.AddDbContext<IBusinessDatabase, BusinessDatabase>();
 
                 // --> Depots

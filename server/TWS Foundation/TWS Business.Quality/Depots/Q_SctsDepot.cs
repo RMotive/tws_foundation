@@ -19,7 +19,7 @@ public class Q_SctsDepot
             Type = RandomUtils.String(6),
             Number = RandomUtils.String(25),
             Configuration = RandomUtils.String(10),
-            Status = 1
+            Status = new Status { Id = 1 }
         };
     }
 

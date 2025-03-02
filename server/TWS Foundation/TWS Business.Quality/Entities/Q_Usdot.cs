@@ -10,7 +10,7 @@ public class Q_Usdot : BQ_Entity<USDOT> {
         Q_EntityEvaluation<USDOT> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Status = 1,
+                Status = new Status { Id = 1 },
                 MC = "",
                 SCAC = ""
             },
@@ -19,7 +19,7 @@ public class Q_Usdot : BQ_Entity<USDOT> {
         Q_EntityEvaluation<USDOT> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = -1,
-                Status = -1,
+                Status = new Status { Id = -1 },
                 MC = "",
                 SCAC = ""
             },

@@ -29,7 +29,7 @@ public class Q_EmployeesService
                     Name = $"Identification {Entropy}",
                     FatherLastname = $"Identification {Entropy}",
                     MotherLastName = $"Identification {Entropy}",
-                    Status = 1,
+                    Status = new Status { Id = 1 },
                 }
             );
 

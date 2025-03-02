@@ -48,8 +48,9 @@ public class EnvironmentManager {
             return;
         }
 
-
-        if (Debugger.IsAttached) {
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToLower()?.Equals("development", StringComparison.InvariantCultureIgnoreCase) ?? false) {
+            _Mode = ServerEnvironments.development;
+        } else if (Debugger.IsAttached) {
             _Mode = ServerEnvironments.development;
         } else {
             _Mode = ServerEnvironments.production;

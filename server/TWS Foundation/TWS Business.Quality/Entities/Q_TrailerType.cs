@@ -17,8 +17,7 @@ public class Q_TrailerType : BQ_Entity<TrailerType> {
         Q_EntityEvaluation<TrailerType> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
-                Class = 0
-
+                Class = new TrailerClass { Id = 0 }
             },
             Expectations = [
                 (nameof(TrailerType.Status), [(new PointerValidator(), 3) ]),

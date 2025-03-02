@@ -15,7 +15,9 @@ public class Q_ApproachesDepot
 
     protected override Approach MockFactory(string RandomSeed) {
         return new() {
-            Status = 1,
+            Status = new Status {
+                Id = 1,
+            },
             Email = "mail@test.com"
         };
     }

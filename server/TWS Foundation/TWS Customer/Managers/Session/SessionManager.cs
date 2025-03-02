@@ -3,15 +3,15 @@
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Models.Out;
 
+using CSM_Security.Entities.Accounts;
+using CSM_Security.Entities.Contacts;
+using CSM_Security.Entities.Permits;
+
 using Microsoft.EntityFrameworkCore;
 
 using TWS_Customer.Managers.Session.Exceptions;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
-
-using TWS_Security.Entities;
-using TWS_Security.Entities.Accounts;
-using TWS_Security.Entities.Contacts;
 
 using CredentialsExpiration = (TWS_Customer.Services.Records.Credentials Credentials, System.DateTime Expiration);
 
@@ -102,10 +102,10 @@ public sealed class SessionManager {
         SetBatchOut<Account> readAccountOut = await Accounts.Read(
             ReadBehaviors.First,
             (Account i) => i.User == safeCredentials.Identity,
-            (CSM_Foundation.Database.Entity.AccumulateDelegate<Account>?)((query) => {
-                return (IQueryable<Account>)query
-                    .Include((System.Linq.Expressions.Expression<Func<Account, Contact?>>)(i => (Contact)i.Contact));
-            })
+            (query) => {
+                return query
+                    .Include((System.Linq.Expressions.Expression<Func<Account, Contact?>>)(i => i.Contact));
+            }
         );
 
         if (readAccountOut.Failed) {

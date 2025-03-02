@@ -10,7 +10,7 @@ public class Q_Identification : BQ_Entity<Identification> {
         Q_EntityEvaluation<Identification> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Status = 1,
+                Status = new Status { Id = 1 },
                 Name = "",
                 FatherLastname = "",
                 MotherLastName = ""
@@ -20,7 +20,7 @@ public class Q_Identification : BQ_Entity<Identification> {
         Q_EntityEvaluation<Identification> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
-                Status = 0,
+                Status = new Status { Id = 0 },
             },
             Expectations = [
                 (nameof(Identification.Id), [(new PointerValidator(), 3)]),

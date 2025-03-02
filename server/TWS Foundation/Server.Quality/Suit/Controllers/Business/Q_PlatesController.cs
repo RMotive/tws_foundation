@@ -40,7 +40,7 @@ public class Q_PlatesController
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Entities.Accounts.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<CSM_Security.Entities.Accounts.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -84,7 +84,7 @@ public class Q_PlatesController
                         Id = 1,
                     },
                     Approach = new() {
-                        Status = 1,
+                        Status = new Status { Id = 1 },
                         Email = RandomUtils.String(30)
                     },
                     Address = new() {
