@@ -76,7 +76,7 @@ public partial class DriverCommon
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<DriverCommon>(
             (etBuilder) => {
                 etBuilder.ToTable("Drivers_Commons");

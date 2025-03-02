@@ -54,7 +54,7 @@ public partial class Identification
 
     #endregion
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<Identification>(
             (etBuilder) => {
                 etBuilder.Property(e => e.FatherLastname).HasMaxLength(32).IsRequired();

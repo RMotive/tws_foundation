@@ -72,7 +72,7 @@ public abstract class BQ_Disposer
 
             using DbContext database = factory();
             database.RemoveRange(Database.Value);
-            database.SaveChangesAsync();
+            database.SaveChanges();
         }
     }
 }

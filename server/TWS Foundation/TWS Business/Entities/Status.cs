@@ -84,7 +84,7 @@ public partial class Status
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<Status>(Entity => {
         });
     }

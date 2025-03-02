@@ -43,7 +43,7 @@ public class InsuranceH
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<InsuranceH>(entity => {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)

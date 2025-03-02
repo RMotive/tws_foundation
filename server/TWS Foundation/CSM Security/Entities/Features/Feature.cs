@@ -1,47 +1,40 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Entity;
 
 using CSM_Security.Entities.Permits;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities.Features;
 
-public partial class Feature
+/// <summary>
+///     [Entity] that represents a complex Feature storing different actions, this to determine Feature Scoped permits.
+///     only for authorization purposes.
+/// </summary>
+public class Feature
     : BSecurityDatabaseEntity, IEntity_Name {
 
-    public string Name { get; set; } = default!;
+    #region Properties
+
+    public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
+
+    /// <summary>
+    ///     Wheter it's enabled.
+    /// </summary>
     public bool Enabled { get; set; }
 
-    public virtual ICollection<Permit> Permits { get; set; } = [];
+    #endregion
 
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+    #region Dependants
 
-        return [
-            ..Container,
-            ( nameof(Name), [ new LengthValidator(1, 25) ] )
-        ];
-    }
+    /// <summary>
+    ///     <see cref="Permit"/> dependants from this <see cref="Feature"/>.
+    /// </summary>
+    public ICollection<Permit> Permits { get; set; } = [];
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Feature>(
-            (Entity) => {
-                Entity.HasKey(x => x.Id);
+    #endregion
 
-                Entity.HasIndex(i => i.Name)
-                    .IsUnique();
-
-                Entity.Property(i => i.Id)
-                    .IsRequired();
-                Entity.Property(i => i.Name)
-                    .IsRequired()
-                    .HasMaxLength(25);
-                Entity.Property(i => i.Description);
-                Entity.Property(i => i.Timestamp);
-                Entity.Property(i => i.Enabled);
-            }
-        );
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(Enabled)).IsRequired();
     }
 }

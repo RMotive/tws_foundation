@@ -40,7 +40,7 @@ public class MaintenanceH
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<MaintenanceH>(entity => {
             entity.ToTable("Maintenances_H");
             entity.HasKey(e => e.Id);

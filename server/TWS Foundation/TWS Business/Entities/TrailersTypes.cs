@@ -60,7 +60,7 @@ public partial class TrailerType
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<TrailerType>(
             (etBuilder) => {
                 etBuilder.ToTable("Trailers_Types");

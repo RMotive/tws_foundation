@@ -52,7 +52,9 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     public BQ_Depot(string Ordering) {
         this.Ordering = Ordering;
 
-        Disposer = new Q_Disposer();
+        Disposer = new Q_Disposer(
+                () => new TDatabase()
+            );
         StoredMocks = StoreMocks(30);
     }
     public void Dispose() {

@@ -41,7 +41,7 @@ public partial class ApproachesH
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<ApproachesH>(Entity => {
             Entity.ToTable("Approaches_H");
             Entity.HasKey(e => e.Id);

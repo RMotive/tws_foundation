@@ -21,23 +21,24 @@ public abstract class BQ_MigrationDatabases<TDatabases>
     /// <summary>
     ///     EF [MigrationDatabases]. 
     /// </summary>
-    protected readonly TDatabases Databases;
+    protected readonly TDatabases Database;
 
     /// <summary>
     ///     Generates a new base quality class for [MigrationDatabases].
     /// </summary>
     /// <param name="Databases"></param>
-    public BQ_MigrationDatabases(TDatabases Databases) {
-        this.Databases = Databases;
+    public BQ_MigrationDatabases(TDatabases Databases) 
+        : base(){
+        this.Database = Databases;
     }
 
     [Fact]
     public void Communication() {
-        Assert.True(Databases.Database.CanConnect(), $"{GetType()} cannot connect, check your connection credentials");
+        Assert.True(Database.Database.CanConnect(), $"{GetType()} cannot connect, check your connection credentials");
     }
 
     [Fact]
     public void Evaluate() {
-        Databases.Evaluate();
+        Database.Evaluate();
     }
 }

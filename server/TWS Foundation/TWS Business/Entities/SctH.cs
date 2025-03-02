@@ -46,7 +46,7 @@ public partial class SctH
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<SctH>(entity => {
             entity.ToTable("SCT_H");
             entity.HasKey(e => e.Id);

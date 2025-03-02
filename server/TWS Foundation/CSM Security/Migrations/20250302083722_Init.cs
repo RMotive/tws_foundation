@@ -231,7 +231,7 @@ public partial class Init : Migration {
         migrationBuilder.CreateIndex(
             name: "IX_Contacts_Email",
             table: "Contacts",
-            column: "Email",
+            column: "EMail",
             unique: true);
 
         migrationBuilder.CreateIndex(

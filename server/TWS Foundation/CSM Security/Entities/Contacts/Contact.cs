@@ -1,67 +1,86 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities;
 using CSM_Security.Entities.Accounts;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities.Contacts;
 
-public partial class Contact
-    : BSecurityDatabaseEntity, IEntity_Name {
+/// <summary>
+///     [Action] that represents the high-level information for an account, this only works to identify a way to contact the Account owner and mustn't be used 
+///     for Business identifications only for Account contacting purposes.
+/// </summary>
+public class Contact
+    : BSecurityDatabaseEntity {
 
+    #region Properties
+
+    /// <summary>
+    ///     Owner name.
+    /// </summary>
+    /// <remarks>
+    ///     For multiple names split them with single space " ".
+    /// </remarks>
+    [StringLength(100, MinimumLength = 1)]
     public string Name { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
-
+    /// <summary>
+    ///     Owner last name.
+    /// </summary>
+    /// <remarks>
+    ///     For multiple last names split them with single space " ".
+    /// </remarks>
+    [StringLength(100, MinimumLength = 1)]
     public string Lastname { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
+    /// <summary>
+    ///     Electronic mail address for sending and communication purposes.
+    /// </summary>
+    [StringLength(100, MinimumLength = 1)]
+    public string EMail { get; set; } = null!;
 
+    /// <summary>
+    ///     Phone number for communication purposes.
+    /// </summary>
+    [StringLength(14, MinimumLength = 10)]
     public string Phone { get; set; } = null!;
 
-    public virtual Account? Account { get; set; }
+    #endregion
+
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="Accounts.Account"/> dependant from this <see cref="Contact"/>.
+    /// </summary>
+    public Account? Account { get; set; }
+
+    #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        LengthValidator mainLengthValidator = new LengthValidator(1, 100);
+
         Container = [
             ..Container,
-            (nameof(Name), [new LengthValidator(1,50)]),
-            (nameof(Lastname), [new LengthValidator(1,50)]),
-            (nameof(Email), [new UniqueValidator(),new LengthValidator(1,30)]),
-            (nameof(Phone), [new UniqueValidator(), new LengthValidator(10,14)]),
+            (nameof(Name), [ mainLengthValidator ]),
+            (nameof(Lastname), [ mainLengthValidator ]),
+            (nameof(EMail), [ mainLengthValidator, new UniqueValidator() ]),
+            (nameof(Phone), [ mainLengthValidator, new UniqueValidator() ]),
 
         ];
 
         return Container;
     }
 
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(Name)).HasMaxLength(100).IsRequired();
+        etBuilder.Property(nameof(Lastname)).HasMaxLength(100).IsRequired();
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Contact>(entity => {
-            entity.HasKey(e => e.Id);
+        etBuilder.HasIndex(nameof(EMail)).IsUnique();
+        etBuilder.Property(nameof(EMail)).HasMaxLength(100).IsRequired();
 
-            entity.HasIndex(e => e.Phone)
-                .IsUnique();
-
-            entity.HasIndex(e => e.Email)
-                .IsUnique();
-
-            entity.Property(e => e.Id);
-            entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-            entity.Property(e => e.Email)
-                .HasMaxLength(30)
-                .IsUnicode(false);
-            entity.Property(e => e.Lastname)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.Phone)
-                .HasMaxLength(14)
-                .IsUnicode(false);
-        });
+        etBuilder.HasIndex(nameof(Phone)).IsUnique();
+        etBuilder.Property(nameof(Phone)).HasMaxLength(14).IsRequired();
     }
 }

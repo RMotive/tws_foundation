@@ -59,7 +59,7 @@ public partial class Carrier
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<Carrier>(
             (etBuilder) => {
 

@@ -25,7 +25,7 @@ public class Q_ContactsController
         return new Contact {
             Name = RandomSeed,
             Lastname = RandomSeed,
-            Email = RandomSeed,
+            EMail = RandomSeed,
             Phone = RandomSeed[..10],
         };
     }

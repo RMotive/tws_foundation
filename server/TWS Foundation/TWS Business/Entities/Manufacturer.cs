@@ -19,7 +19,7 @@ public partial class Manufacturer
 
     public ICollection<VehiculeModel> Models { get; set; } = [];
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<Manufacturer>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.ToTable("Manufacturers");

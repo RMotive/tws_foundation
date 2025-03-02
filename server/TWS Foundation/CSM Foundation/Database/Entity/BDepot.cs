@@ -56,7 +56,7 @@ public abstract class BDepot<TDatabase, TEntity>
     public BDepot(TDatabase Database, IDisposer? Disposer) {
         this.Database = Database;
         this.Disposer = Disposer;
-        Set = Database.Set<TEntity>(typeof(TEntity).Name);
+        Set = Database.Set<TEntity>();
     }
 
     protected IQueryable<TEntity> Filtering(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
@@ -194,8 +194,8 @@ public abstract class BDepot<TDatabase, TEntity>
         Set.Timestamp = DateTime.UtcNow;
         Set.EvaluateWrite();
 
-        _ = await this.Set.AddAsync(Set);
-        _ = await Database.SaveChangesAsync();
+        await this.Set.AddAsync(Set);
+        await Database.SaveChangesAsync();
         Database.ChangeTracker.Clear();
 
         Disposer?.Push(Database, [Set]);

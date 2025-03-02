@@ -71,7 +71,7 @@ public class Truck
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<Truck>(
                 (etBuilder) => {
                     etBuilder.Property(t => t.Motor).HasMaxLength(16);

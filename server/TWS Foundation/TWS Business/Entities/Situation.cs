@@ -23,7 +23,7 @@ public partial class Situation
     /// </summary>
     public ICollection<TruckH> TrucksHistories { get; set; } = [];
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<Situation>(Entity => {
             Entity.HasKey(e => e.Id);
 

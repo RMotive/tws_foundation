@@ -1,10 +1,9 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
-using CSM_Security;
 using CSM_Security.Entities.Solutions;
 
-namespace CSM_Security.Quality.Depots;
+namespace CSM_Security.Quality.Entities.Solutions;
 
 /// <summary>
 ///     Qualifies the <see cref="SolutionsDepot"/>.

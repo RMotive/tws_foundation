@@ -74,7 +74,7 @@ public partial class TruckCommon
 
     #endregion
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<TruckCommon>(Entity => {
 
             Entity.Property(e => e.Economic).HasMaxLength(16).IsRequired();

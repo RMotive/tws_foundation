@@ -4,13 +4,20 @@ using CSM_Foundation.Database.Validators;
 using CSM_Security.Entities.Permits;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities.Solutions;
 
-public partial class Solution
+/// <summary>
+///     [Entity] that stores information for business environment solution.
+/// </summary>
+public class Solution
     : BSecurityDatabaseEntity, IEntity_Name {
 
-    public string Name { get; set; } = default!;
+    #region Properties
+
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
 
     /// <summary>
     ///     Solution unique sign to reference easyly the solution along operations.
@@ -18,27 +25,29 @@ public partial class Solution
     /// <remarks>
     ///     Must be unique along records. 5 Restricted Length.
     /// </remarks>
-    public string Sign { get; set; } = null!;
+    public string Sign { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
+    #endregion
 
-    public virtual ICollection<Permit> Permits { get; set; } = [];
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="Permit"/> dependants from this <see cref="Solution"/>.
+    /// </summary>
+    public ICollection<Permit> Permits { get; set; } = [];
+
+    #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
             ..Container,
-            (nameof(Name), [new UniqueValidator(), new LengthValidator(1, 40)]),
             (nameof(Sign), [new UniqueValidator(), new LengthValidator(5, 5)]),
         ];
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Solution>(
-            (Entity) => {
-                Entity.Property(e => e.Sign).IsFixedLength(true).HasMaxLength(5).IsRequired();
-                Entity.HasIndex(e => e.Sign).IsUnique();
-            }
-        );
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(Sign)).IsFixedLength().HasMaxLength(5).IsRequired();
+        etBuilder.HasIndex(nameof(Sign)).IsUnique();
     }
 }

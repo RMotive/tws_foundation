@@ -64,7 +64,7 @@ public class Employee
     /// </summary>
     public Driver? Driver { get; set; }
 
-    protected override void DescribeSet(ModelBuilder ModelBuilder) {
+    protected override void DesignEntity(ModelBuilder ModelBuilder) {
         ModelBuilder.Entity(
                 (EntityTypeBuilder<Employee> etBuilder) => {
                     etBuilder.Property(e => e.CURP).HasMaxLength(18);

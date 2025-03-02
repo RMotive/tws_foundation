@@ -78,7 +78,7 @@ public partial class Section
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<Section>(
             (etBuilder) => {
                 etBuilder.HasKey(e => e.Id);

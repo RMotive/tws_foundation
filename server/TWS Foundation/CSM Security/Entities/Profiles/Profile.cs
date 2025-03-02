@@ -4,25 +4,36 @@ using CSM_Foundation.Database.Validators;
 using CSM_Security.Entities.Accounts;
 using CSM_Security.Entities.Permits;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities.Profiles;
 
 /// <summary>
-///     Profile [Set] record object definition.
-///     
-///     A Profile stores a relation between a collection of <see cref="Permit"/> with an <see cref="Account"/>
+///     [Entity] that stores a relation between a collection of <see cref="Permit"/> with an <see cref="Account"/>
 /// </summary>
-public partial class Profile
+public class Profile
     : BSecurityDatabaseEntity, IEntity_Name {
 
-    public string Name { get; set; } = default!;
+    #region Properties
 
+    public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
 
+    #endregion
+
+    #region Relations
+
+    /// <summary>
+    ///     <see cref="Permit"/> related to this <see cref="Profile"/>.
+    /// </summary>
     public ICollection<Permit> Permits { get; set; } = default!;
 
+    /// <summary>
+    ///     <see cref="Account"/> related to this <see cref="Profile"/>.
+    /// </summary>
     public ICollection<Account> Accounts { get; set; } = default!;
+
+    #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         return [
@@ -31,35 +42,24 @@ public partial class Profile
         ];
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
-        Builder.Entity<Profile>(
-            (EntityBuilder) => {
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
 
-                EntityBuilder
-                    .HasIndex(i => i.Name)
-                    .IsUnique();
+        etBuilder
+            .HasMany(nameof(Permits))
+            .WithMany(nameof(Permit.Profiles))
+            .UsingEntity(
+                "Profiles_Permits",
+                con => con.HasOne(typeof(Permit)).WithMany().HasForeignKey("Permit"),
+                con => con.HasOne(typeof(Profile)).WithMany().HasForeignKey("Profile")
+            );
 
-                EntityBuilder
-                    .Property(i => i.Description);
-
-                EntityBuilder
-                    .HasMany(i => i.Permits)
-                    .WithMany(i => i.Profiles)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "Profiles_Permits",
-                        con => con.HasOne<Permit>().WithMany().HasForeignKey("Permit"),
-                        con => con.HasOne<Profile>().WithMany().HasForeignKey("Profile")
-                    );
-
-                EntityBuilder
-                    .HasMany(i => i.Accounts)
-                    .WithMany(i => i.Profiles)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "Accounts_Profiles",
-                        con => con.HasOne<Account>().WithMany().HasForeignKey("Account"),
-                        con => con.HasOne<Profile>().WithMany().HasForeignKey("Profile")
-                    );
-            }
-        );
+        etBuilder
+            .HasMany(nameof(Accounts))
+            .WithMany(nameof(Account.Profiles))
+            .UsingEntity(
+                "Accounts_Profiles",
+                con => con.HasOne(typeof(Account)).WithMany().HasForeignKey("Account"),
+                con => con.HasOne(typeof(Profile)).WithMany().HasForeignKey("Profile")
+            );
     }
 }

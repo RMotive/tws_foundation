@@ -26,7 +26,7 @@ public partial class TrailerClass
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<TrailerClass>(Entity => {
             Entity.ToTable("Trailer_Classes");
             Entity.HasKey(e => e.Id);

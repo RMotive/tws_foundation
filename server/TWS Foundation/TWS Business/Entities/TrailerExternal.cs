@@ -38,7 +38,7 @@ public partial class TrailerExternal
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<TrailerExternal>(
             (etBuilder) => {
                 etBuilder.ToTable("Trailers_Externals");

@@ -78,7 +78,7 @@ public class YardLog
     /// </summary>
     public TrailerCommon? Trailer { get; set; }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<YardLog>(entity => {
             entity.ToTable(
                 "Yard_Logs",

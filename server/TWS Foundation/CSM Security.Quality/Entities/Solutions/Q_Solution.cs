@@ -3,7 +3,7 @@ using CSM_Foundation.Database.Validators;
 
 using CSM_Security.Entities.Solutions;
 
-namespace CSM_Security.Quality.Entities;
+namespace CSM_Security.Quality.Entities.Solutions;
 public class Q_Solution
     : BQ_Entity<Solution> {
     protected override Q_EntityEvaluation<Solution>[] EvaluateFactory(Q_EntityEvaluation<Solution>[] Container) {
@@ -20,12 +20,11 @@ public class Q_Solution
         };
         Q_EntityEvaluation<Solution> failure = new("All properties fail") {
             Mock = new() { 
-                    Id = 0
+                    Id = 0,
                 },
             Expectations = [
                 (nameof(Solution.Id), [(new PointerValidator(), 3)]),
-                (nameof(Solution.Name), [(new LengthValidator(), 1)]),
-                (nameof(Solution.Sign), [(new LengthValidator(), 1)]),
+                (nameof(Solution.Sign), [(new LengthValidator(), 2)]),
             ],
         };
 

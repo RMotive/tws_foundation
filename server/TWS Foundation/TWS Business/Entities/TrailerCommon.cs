@@ -95,7 +95,7 @@ public partial class TrailerCommon
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<TrailerCommon>(
             (etBuilder) => {
                 etBuilder.ToTable("Trailers_Commons");

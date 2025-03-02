@@ -41,7 +41,7 @@ public partial class UsdotH
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<UsdotH>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.Property(e => e.Id)

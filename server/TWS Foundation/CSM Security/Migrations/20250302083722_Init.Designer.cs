@@ -136,7 +136,7 @@ namespace CSM_Security.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("EMail")
                         .IsRequired()
                         .HasMaxLength(30)
                         .IsUnicode(false)
@@ -165,7 +165,7 @@ namespace CSM_Security.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("EMail")
                         .IsUnique();
 
                     b.HasIndex("Name")

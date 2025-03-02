@@ -3,7 +3,7 @@ using CSM_Foundation.Database.Validators;
 
 using CSM_Security.Entities.Contacts;
 
-namespace CSM_Security.Quality.Entities;
+namespace CSM_Security.Quality.Entities.Contacts;
 public class Q_Contact
     : BQ_Entity<Contact> {
     protected override Q_EntityEvaluation<Contact>[] EvaluateFactory(Q_EntityEvaluation<Contact>[] Container) {
@@ -12,7 +12,7 @@ public class Q_Contact
                 Id = 1,
                 Name = "",
                 Lastname = "",
-                Email = "",
+                EMail = "",
                 Phone = ""
             },
             Expectations = [],
@@ -22,14 +22,14 @@ public class Q_Contact
                 Id = 0,
                 Name = "",
                 Lastname = "",
-                Email = "",
+                EMail = "",
                 Phone = ""
             },
             Expectations = [
                 (nameof(Contact.Id), [(new PointerValidator(), 3)]),
                 (nameof(Contact.Name), [(new LengthValidator(), 2)]),
                 (nameof(Contact.Lastname), [(new LengthValidator(), 2)]),
-                (nameof(Contact.Email), [(new LengthValidator(), 2)]),
+                (nameof(Contact.EMail), [(new LengthValidator(), 2)]),
                 (nameof(Contact.Phone), [(new LengthValidator(), 2)])
             ],
         };

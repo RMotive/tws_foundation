@@ -15,7 +15,7 @@ public partial class LoadType
 
     public virtual ICollection<YardLog> YardLogs { get; set; } = [];
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<LoadType>(Entity => {
             Entity.ToTable("Load_Types");
             Entity.HasKey(e => e.Id);

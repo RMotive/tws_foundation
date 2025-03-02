@@ -60,7 +60,7 @@ public partial class CarrierH
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<CarrierH>(Entity => {
             Entity.HasKey(e => e.Id);
             Entity.Property(e => e.Id)

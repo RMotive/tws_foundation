@@ -1,15 +1,19 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Validators;
 
 using CSM_Security.Entities.Contacts;
 using CSM_Security.Entities.Permits;
 using CSM_Security.Entities.Profiles;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities.Accounts;
 
-public partial class Account
+public class Account
     : BSecurityDatabaseEntity {
+
+    #region Properties
 
     /// <summary>
     ///     <see cref="Account"/> user identifier.
@@ -26,20 +30,29 @@ public partial class Account
     /// </summary>
     public bool Wildcard { get; set; }
 
+    #endregion
+
+    #region Relations
+
     /// <summary>
-    ///     Contact information.
+    ///     <see cref="Contacts.Contact"/> information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Contact Contact { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Permit"/>s related to this <see cref="Account"/>
+    ///     <see cref="Permit"/> related to this <see cref="Account"/>
     /// </summary>
     public ICollection<Permit> Permits { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="Profile"/>s related to this <see cref="Account"/>
+    ///     <see cref="Profile"/> related to this <see cref="Account"/>
     /// </summary>
     public ICollection<Profile> Profiles { get; set; } = [];
+
+    #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         Container = [
@@ -50,43 +63,34 @@ public partial class Account
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
-        mBuilder.Entity<Account>(
-            (etBuilder) => {
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.HasIndex(nameof(User)).IsUnique();
+        etBuilder.Property(nameof(User)).HasMaxLength(50).IsRequired();
+        etBuilder.Property(nameof(Password)).IsRequired();
 
-                etBuilder.HasIndex(e => e.User).IsUnique();
-                etBuilder.Property(e => e.User).HasMaxLength(50).IsRequired();
+        etBuilder.Link<Account, Contact>(
+                nameof(Contact),
+                Required: true,
+                Index: true,
+                Auto: true
+            );
 
-                etBuilder.Property<long>("ContactShadow").HasColumnName("Contact").IsRequired();
-                etBuilder.HasIndex("ContactShadow");
+        etBuilder
+            .HasMany(nameof(Permits))
+            .WithMany(nameof(Permit.Accounts))
+            .UsingEntity(
+                Constants.Connectors.AccountsPermits.Connector,
+                con => con.HasOne(typeof(Permit)).WithMany().HasForeignKey(Constants.Connectors.AccountsPermits.Permit).OnDelete(DeleteBehavior.Cascade),
+                con => con.HasOne(typeof(Account)).WithMany().HasForeignKey(Constants.Connectors.AccountsPermits.Account).OnDelete(DeleteBehavior.Cascade)
+            );
 
-                etBuilder.Property(e => e.Password).IsRequired();
-
-                etBuilder
-                    .HasOne(d => d.Contact)
-                    .WithOne(p => p.Account)
-                    .HasForeignKey<Account>("ContactShadow")
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                etBuilder
-                    .HasMany(i => i.Permits)
-                    .WithMany(i => i.Accounts)
-                    .UsingEntity<Dictionary<string, object>>(
-                        Constants.Connectors.AccountsPermits.Connector,
-                        con => con.HasOne<Permit>().WithMany().HasForeignKey(Constants.Connectors.AccountsPermits.Permit).OnDelete(DeleteBehavior.Cascade),
-                        con => con.HasOne<Account>().WithMany().HasForeignKey(Constants.Connectors.AccountsPermits.Account).OnDelete(DeleteBehavior.Cascade)
-                    );
-
-                etBuilder
-                    .HasMany(i => i.Profiles)
-                    .WithMany(i => i.Accounts)
-                    .UsingEntity<Dictionary<string, object>>(
-                        Constants.Connectors.AccountsProfiles.Connector,
-                        con => con.HasOne<Profile>().WithMany().HasForeignKey(Constants.Connectors.AccountsProfiles.Profile).OnDelete(DeleteBehavior.Cascade),
-                        con => con.HasOne<Account>().WithMany().HasForeignKey(Constants.Connectors.AccountsPermits.Account).OnDelete(DeleteBehavior.Cascade)
-                    );
-            }
-        );
+        etBuilder
+            .HasMany(nameof(Profiles))
+            .WithMany(nameof(Profile.Accounts))
+            .UsingEntity(
+                Constants.Connectors.AccountsProfiles.Connector,
+                con => con.HasOne(typeof(Profile)).WithMany().HasForeignKey(Constants.Connectors.AccountsProfiles.Profile).OnDelete(DeleteBehavior.Cascade),
+                con => con.HasOne(typeof(Account)).WithMany().HasForeignKey(Constants.Connectors.AccountsPermits.Account).OnDelete(DeleteBehavior.Cascade)
+            );
     }
 }

@@ -85,7 +85,7 @@ public class TruckH
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity(
                 (EntityTypeBuilder<TruckH> etBuilder) => {
                     etBuilder.Property(th => th.Sequence).IsRequired();

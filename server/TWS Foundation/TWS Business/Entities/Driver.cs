@@ -74,7 +74,7 @@ public class Driver
     /// </summary>
     public Employee Employee { get; set; } = default!;
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<Driver>(
             (Entity) => {
                 Entity.Property(e => e.DriverType).HasMaxLength(12);

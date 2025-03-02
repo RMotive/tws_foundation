@@ -24,7 +24,7 @@ public partial class DriverExternal
     /// </remarks>
     public Identification Identification { get; set; } = default!;
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<DriverExternal>(
             (Entity) => {
                 Entity.ToTable("Drivers_Externals");

@@ -4,7 +4,7 @@ using CSM_Foundation.Database.Quality;
 
 using CSM_Security.Entities.Contacts;
 
-namespace CSM_Security.Quality.Depots;
+namespace CSM_Security.Quality.Entities.Contacts;
 
 /// <summary>
 ///     Qualifies the <see cref="ContactsDepot"/>.
@@ -19,7 +19,7 @@ public class Q_ContactsDepot
         return new() {
             Name = RandomUtils.String(50),
             Lastname = RandomUtils.String(50),
-            Email = RandomUtils.String(30),
+            EMail = RandomUtils.String(30),
             Phone = RandomUtils.String(14),
         };
     }

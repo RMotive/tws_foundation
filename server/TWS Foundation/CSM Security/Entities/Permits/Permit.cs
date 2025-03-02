@@ -1,37 +1,32 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Validators;
 
 using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Actions;
 using CSM_Security.Entities.Features;
 using CSM_Security.Entities.Profiles;
 using CSM_Security.Entities.Solutions;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using Action = CSM_Security.Entities.Actions.Action;
 
 namespace CSM_Security.Entities.Permits;
 
+/// <summary>
+///     [Entity] that stores and handles specific Feature / Solution / Action authorization for Accounts.
+/// </summary>
 public class Permit
     : BSecurityDatabaseEntity {
 
-
-    /// <summary>
-    ///     Solution information.
-    /// </summary>
-    public Solution Solution { get; set; } = default!;
-
-    /// <summary>
-    ///     Feature information.
-    /// </summary>
-    public Feature Feature { get; set; } = default!;
-
-    /// <summary>
-    ///     Action information.
-    /// </summary>
-    public Actions.Action Action { get; set; } = default!;
+    #region Properties
 
     /// <summary>
     ///     Unique identifier reference.
     /// </summary>
+    [StringLength(8, MinimumLength = 8)]
     public string Reference { get; set; } = string.Empty;
 
     /// <summary>
@@ -39,15 +34,49 @@ public class Permit
     /// </summary>
     public bool Enabled { get; set; }
 
+    #endregion
+
+    #region Relations
+
     /// <summary>
-    ///     <see cref="Profile"/>s that references this <see cref="Permit"/>.
+    ///     Solution information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Solution Solution { get; set; } = default!;
+
+    /// <summary>
+    ///     Feature information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Feature Feature { get; set; } = default!;
+
+    /// <summary>
+    ///     Action information.
+    /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Actions.Action Action { get; set; } = default!;
+
+    #endregion
+
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="Profile"/> dependants from this <see cref="Permit"/>.
     /// </summary>
     public ICollection<Profile> Profiles { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="Account"/>s that references this <see cref="Permit"/>.
+    ///     <see cref="Account"/> dependants from this <see cref="Permit"/>.
     /// </summary>
     public ICollection<Account> Accounts { get; set; } = [];
+
+    #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         return [
@@ -56,38 +85,28 @@ public class Permit
         ];
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
-        mBuilder.Entity<Permit>(
-            (etBuilder) => {
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.HasIndex(nameof(Reference)).IsUnique();
+        etBuilder.Property(nameof(Reference)).HasMaxLength(8).IsFixedLength().IsRequired();
 
-                etBuilder.HasIndex(p => p.Reference).IsUnique();
+        etBuilder.Property(nameof(Enabled)).IsRequired();
 
-                etBuilder.Property(p => p.Enabled).IsRequired();
-
-                etBuilder.Property<long>("SolutionShadow").HasColumnName("Solution").IsRequired();
-                etBuilder.Property<long>("FeatureShadow").HasColumnName("Feature").IsRequired();
-                etBuilder.Property<long>("ActionShadow").HasColumnName("Action").IsRequired();
-                etBuilder.HasIndex("ActionShadow", "SolutionShadow", "FeatureShadow")
-                    .IsUnique();
-                etBuilder
-                    .HasOne(p => p.Solution)
-                    .WithMany(s => s.Permits)
-                    .HasForeignKey("SolutionShadow")
-                    .IsRequired();
-                
-                etBuilder
-                    .HasOne(p => p.Feature)
-                    .WithMany(f => f.Permits)
-                    .HasForeignKey("FeatureShadow")
-                    .IsRequired();
-
-                etBuilder
-                    .HasOne(p => p.Action)
-                    .WithMany(a => a.Permits)
-                    .HasForeignKey("ActionShadow")
-                    .IsRequired();
-            }
-        );
+        etBuilder.Link<Permit, Solution>(
+                nameof(Solution),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Permit, Feature>(
+                nameof(Feature),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Permit, Action>(
+                nameof(Action),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.HasIndex("ActionShadow", "SolutionShadow", "FeatureShadow");
     }
 
     /// <summary>

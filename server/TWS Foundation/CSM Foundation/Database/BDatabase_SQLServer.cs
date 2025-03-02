@@ -5,7 +5,7 @@ using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Database.Connector;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
@@ -108,7 +108,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     /// <summary>
     ///     Data storage connection options.
     /// </summary>
-    protected readonly DatabasesLinkOptions Connection;
+    protected readonly ConnectionOptions Connection;
 
     /// <summary>
     ///     [MaxLength 5] Server sign identificator (needed for transactions and authorization processes).
@@ -146,7 +146,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     /// <param name="Connection">
     ///     Database connection options.
     /// </param>
-    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign, DatabasesLinkOptions Connection)
+    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign, ConnectionOptions Connection)
         : base() {
 
         this.Sign = Sign;
@@ -186,7 +186,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     /// <param name="Options">
     ///     Native EntityFrameworkCore <see cref="DbContext"/> implementation options.
     /// </param>
-    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign, DatabasesLinkOptions Connection, DbContextOptions<TDatabases> Options)
+    public BDatabase_SQLServer([StringLength(5, MinimumLength = 5)] string Sign, ConnectionOptions Connection, DbContextOptions<TDatabases> Options)
         : base(Options) {
 
         this.Sign = Sign;
@@ -371,10 +371,10 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                     }
 
                     etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime");
+
+                    set.DesignEntity(etBuilder);
                 }
             );
-
-            set.DescribeSet(mBuilder);
         }
 
         base.OnModelCreating(mBuilder);
@@ -391,15 +391,15 @@ public abstract partial class BEntity
 
     /// <summary>
     ///     Describe to the Entity Framework manager how to handle the [Set] object, its proeprties and relations, instructing
-    ///     the <see cref="ModelBuilder"/> how to handle them.
+    ///     the <see cref="EntityTypeBuilder"/> how to handle them.
     /// </summary>
-    /// <param name="Builder">
+    /// <param name="etBuilder">
     ///     Proxy object to configure Set Model to Entity Framework Core.
     /// </param>
     /// <remarks>
     ///     Don't describe <see cref="IEntity"/> properties they are being auto-described by the [CSM] engine, <see cref="IEntity.Id"/>, <see cref="IEntity.Timestamp"/> and <see cref="IEntity.Name"/>.
     /// </remarks>
-    protected internal abstract void DescribeSet(ModelBuilder Builder);
+    protected internal abstract void DesignEntity(EntityTypeBuilder etBuilder);
 }
 
 /// <summary>

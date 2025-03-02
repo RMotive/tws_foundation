@@ -65,7 +65,7 @@ public class USDOT
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<USDOT>(
             (etBuilder) => {
                 etBuilder.Property(e => e.MC).HasMaxLength(7).IsRequired();

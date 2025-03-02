@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 
-using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Models;
 using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
 
@@ -29,12 +29,12 @@ public class DatabaseUtilities {
     ///     the correct dataDatabases project root path.
     /// </param>
     /// <returns>
-    ///     <see cref="DatabasesLinkOptions"/>: The dataDatabases connection properties gathered and retrieved from the found private properties file.
+    ///     <see cref="ConnectionOptions"/>: The dataDatabases connection properties gathered and retrieved from the found private properties file.
     /// </returns>
     /// <exception cref="Exception">
     ///     When something gone wrong during the IO connection properties gather operation.
     /// </exception>
-    public static DatabasesLinkOptions Retrieve(string DatabaseSign) {
+    public static ConnectionOptions Retrieve(string DatabaseSign) {
         string wd = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
         string prefix = EnvironmentManager.Mode switch {
@@ -64,7 +64,7 @@ public class DatabaseUtilities {
             ?? throw new FileNotFoundException();
 
         using FileStream pfs = new(cpfi, FileMode.Open, FileAccess.Read, FileShare.Read);
-        DatabasesLinkOptions? m = JsonSerializer.Deserialize<DatabasesLinkOptions>(pfs);
+        ConnectionOptions? m = JsonSerializer.Deserialize<ConnectionOptions>(pfs);
         pfs.Dispose();
 
         return m is null ? throw new Exception() : m;

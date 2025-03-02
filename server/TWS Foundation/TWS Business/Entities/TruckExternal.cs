@@ -33,7 +33,7 @@ public partial class TruckExternal
     [StringLength(100, MinimumLength = 1)]
     public string Carrier { get; set; } = string.Empty;
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<TruckExternal>(
             (Entity) => {
                 Entity.ToTable("Trucks_Externals");

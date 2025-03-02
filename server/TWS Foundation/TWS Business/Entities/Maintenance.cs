@@ -54,7 +54,7 @@ public partial class Maintenance
     public ICollection<MaintenanceH> History { get; set; } = [];
 
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<Maintenance>(
             (etBuilder) => {
                 etBuilder.Property(m => m.Anual).IsRequired();

@@ -31,7 +31,7 @@ public class Employee_Dates
     /// </summary>
     public DateOnly? Termination { get; set; }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity(
                 (EntityTypeBuilder<Employee_Dates> EntityTypeBuilder) => {
 

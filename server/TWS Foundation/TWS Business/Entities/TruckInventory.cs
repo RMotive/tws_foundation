@@ -37,7 +37,7 @@ public partial class TruckInventory
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder Builder) {
+    protected override void DesignEntity(ModelBuilder Builder) {
         Builder.Entity<TruckInventory>(Entity => {
             Entity.ToTable("Trucks_Inventories", tb => tb.HasTrigger("TruckInventories_Management"));
             Entity.HasKey(e => e.Id);

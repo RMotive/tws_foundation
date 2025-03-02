@@ -15,33 +15,9 @@ public class Q_Action
             Expectations = [],
         };
 
-        Q_EntityEvaluation<Action> nameMinValue = new("Name min value unreached") {
-            Mock = new() {
-                Id = 0,
-                Name = "",
-            },
-            Expectations = [
-                (nameof(Action.Id), [(new PointerValidator(), 3)]),
-                (nameof(Action.Name), [(new LengthValidator(1, 25), 2)])
-            ],
-        };
-
-        Q_EntityEvaluation<Action> nameMaxValue = new("Name max value overrided") {
-            Mock = new() {
-                Id = 0,
-                Name = "SWFDBWZZUEVWQIXSXZZAAXNTXI",
-            },
-            Expectations = [
-                (nameof(Action.Id), [(new PointerValidator(), 3)]),
-                (nameof(Action.Name), [(new LengthValidator(1, 25), 3)])
-            ],
-        };
-
         return [
              ..Container,
              noErrors,
-             nameMinValue,
-             nameMaxValue,
         ];
     }
 }

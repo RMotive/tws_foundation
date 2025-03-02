@@ -71,7 +71,7 @@ public partial class Insurance
         return Container;
     }
 
-    protected override void DescribeSet(ModelBuilder mBuilder) {
+    protected override void DesignEntity(ModelBuilder mBuilder) {
         mBuilder.Entity<Insurance>(
             (etBuilder) => {
                 etBuilder.Property(e => e.Country).HasMaxLength(3);
