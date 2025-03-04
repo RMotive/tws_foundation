@@ -19,7 +19,7 @@ public class Q_Approach : BQ_Entity<Approach> {
             },
             Expectations = [
                 (nameof(Approach.Id), [(new PointerValidator(), 3)]),
-                (nameof(Approach.Email), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
+                (nameof(Approach.EMail), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
             ],
         };
 

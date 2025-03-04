@@ -85,7 +85,7 @@ public class Q_PlatesController
                     },
                     Approach = new() {
                         Status = new Status { Id = 1 },
-                        Email = RandomUtils.String(30)
+                        EMail = RandomUtils.String(30)
                     },
                     Address = new() {
                         Country = "USA"

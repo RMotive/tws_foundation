@@ -5,11 +5,11 @@ using TWS_Business.Entities;
 namespace TWS_Business.Depots;
 /// <summary>
 ///     Implements a <see cref="BDatabasesDepot{TMigrationDatabases, TMigrationSet}"/>
-///     representing a depot to handle <see cref="ApproachesH"/> dataDatabases entity mirror.
+///     representing a depot to handle <see cref="Approach_History"/> dataDatabases entity mirror.
 /// </summary>
-public class ApproachesHDepot : BDepot<BusinessDatabase, ApproachesH> {
+public class ApproachesHDepot : BDepot<BusinessDatabase, Approach_History> {
     /// <summary>
-    ///     Generates a new depot handler for <see cref="ApproachesH"/>.
+    ///     Generates a new depot handler for <see cref="Approach_History"/>.
     /// </summary>
     public ApproachesHDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
       : base(Databases, Disposer) {

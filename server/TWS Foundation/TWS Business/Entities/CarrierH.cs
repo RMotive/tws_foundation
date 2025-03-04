@@ -31,7 +31,7 @@ public partial class CarrierH
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ApproachesH? ContactHNavigation { get; set; }
+    public virtual Approach_History? ContactHNavigation { get; set; }
 
     public virtual Address? AddressNavigation { get; set; }
 
@@ -50,7 +50,7 @@ public partial class CarrierH
         Container = [
                 .. Container,
             (nameof(Name), [Required, new LengthValidator(1, 20)]),
-            //(nameof(ApproachesH), [Required, new PointerValidator(true)]),
+            //(nameof(Approach_History), [Required, new PointerValidator(true)]),
             (nameof(Address), [Required, new PointerValidator(true)]),
             (nameof(Status), [Required, new PointerValidator(true)]),
             (nameof(Entity), [Required, new PointerValidator(true)]),
@@ -78,7 +78,7 @@ public partial class CarrierH
                 .HasColumnName("ApproachH");
 
             Entity.HasOne(d => d.ContactHNavigation)
-              .WithMany(p => p.CarriersH)
+              .WithMany(p => p.CarriersHistories)
               .HasForeignKey(d => d.ApproachH);
 
             Entity.HasOne(d => d.CarrierNavigation)
@@ -86,7 +86,7 @@ public partial class CarrierH
               .HasForeignKey(d => d.Entity);
 
             Entity.HasOne(d => d.AddressNavigation)
-                .WithMany(p => p.CarriersH)
+                .WithMany(p => p.CarriersHistories)
                 .HasForeignKey(d => d.Address)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 

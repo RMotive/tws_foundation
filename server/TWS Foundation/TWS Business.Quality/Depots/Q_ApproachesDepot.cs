@@ -10,7 +10,7 @@ namespace TWS_Business.Quality.Depots;
 public class Q_ApproachesDepot
     : BQ_Depot<Approach, ApproachesDepot, BusinessDatabase> {
     public Q_ApproachesDepot()
-        : base(nameof(Approach.Email)) {
+        : base(nameof(Approach.EMail)) {
     }
 
     protected override Approach MockFactory(string RandomSeed) {
@@ -18,7 +18,7 @@ public class Q_ApproachesDepot
             Status = new Status {
                 Id = 1,
             },
-            Email = "mail@test.com"
+            EMail = "mail@test.com"
         };
     }
 

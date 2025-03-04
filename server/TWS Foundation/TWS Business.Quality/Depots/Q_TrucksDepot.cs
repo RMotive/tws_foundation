@@ -42,7 +42,7 @@ public class Q_TruckDepot
                 },
                 Approach = new() {
                     Status = new Status { Id = 1 },
-                    Email = RandomUtils.String(30)
+                    EMail = RandomUtils.String(30)
                 },
                 Address = new() {
                     Country = "USA"

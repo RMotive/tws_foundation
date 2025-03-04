@@ -22,3 +22,14 @@ public abstract class BBusinessEntity
 
     public override Type Database { get; init; } = typeof(BusinessDatabase);
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
+public abstract class BBusinessHistory<TEntity>
+    : BHistory<TEntity>
+    where TEntity : class, IEntity {
+
+    public override Type Database { get; init; } = typeof(BusinessDatabase);
+}

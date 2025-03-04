@@ -33,6 +33,12 @@ public partial class Status
     public ICollection<SCT> SCTs { get; set; } = [];
 
 
+    /// <summary>
+    ///     <see cref="Approach_History"/>`entries dependants from this <see cref="Status"/>
+    /// </summary>
+    public ICollection<Approach_History> ApproachesHIstories { get; set; } = [];
+
+
     public virtual ICollection<VehiculeModel> VehiculeModels { get; set; } = [];
 
     public virtual ICollection<TrailerType> TrailerTypes { get; set; } = [];
@@ -68,8 +74,6 @@ public partial class Status
     public virtual ICollection<PlateH> PlatesH { get; set; } = [];
 
     public virtual ICollection<UsdotH> UsdotsH { get; set; } = [];
-
-    public virtual ICollection<ApproachesH> ContactsH { get; set; } = [];
 
     public virtual ICollection<SctH> SctsH { get; set; } = [];
 

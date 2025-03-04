@@ -85,7 +85,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
 
         Approach contact = new() {
             Status = new Status { Id = 1 },
-            Email = "mail@test.com " + RandomSeed
+            EMail = "mail@test.com " + RandomSeed
         };
 
         Carrier carrier = new() {

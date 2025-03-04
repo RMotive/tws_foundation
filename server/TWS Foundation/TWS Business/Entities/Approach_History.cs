@@ -1,21 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Employees;
-
 namespace TWS_Business.Entities;
 
 /// <summary>
-///     [Entity] Stores contact information for business purposes.
+///     [History etBuilder] for <see cref="Approach"/> entity.
 /// </summary>
-public class Approach
-    : BBusinessEntity, IHistorical<Approach_History> {
+public class Approach_History
+    : BBusinessHistory<Approach> {
 
     #region Properties
 
@@ -60,21 +57,12 @@ public class Approach
     #region Dependants
 
     /// <summary>
-    ///     <see cref="Carrier"/> dependants from this <see cref="Approach"/>
+    ///     <see cref="CarrierH"/> entries dependants from this <see cref="Approach_History"/>.
     /// </summary>
-    public virtual ICollection<Carrier> Carriers { get; set; } = [];
-
-    /// <summary>
-    ///     <see cref="Employee"/> dependants from this <see cref="Approach"/>
-    /// </summary>
-    public virtual ICollection<Employee> Employees { get; set; } = [];
+    public ICollection<CarrierH> CarriersHistories { get; set; } = [];
 
     #endregion
 
-    /// <summary>
-    ///     History entries.
-    /// </summary>
-    public ICollection<Approach_History> History { get; set; } = [];
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         LengthValidator phoneValidator = new(5, 13, true);
@@ -90,15 +78,16 @@ public class Approach
     }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
-        etBuilder.ToTable("Approaches");
+        etBuilder.ToTable("Approaches_Histories");
 
         etBuilder.Property(nameof(EMail)).HasMaxLength(64).IsRequired();
         etBuilder.Property(nameof(Enterprise)).HasMaxLength(13);
         etBuilder.Property(nameof(Personal)).HasMaxLength(13);
         etBuilder.Property(nameof(Alternative)).HasMaxLength(30);
 
-        etBuilder.Link<Approach, Status>(
+        etBuilder.Link<Approach_History, Status>(
                 nameof(Status),
+                TargetReference: nameof(Status.ApproachesHIstories)
                 Required: true,
                 Auto: true
             );
