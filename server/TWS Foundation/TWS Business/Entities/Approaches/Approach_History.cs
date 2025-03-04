@@ -57,9 +57,9 @@ public class Approach_History
     #region Dependants
 
     /// <summary>
-    ///     <see cref="CarrierH"/> entries dependants from this <see cref="Approach_History"/>.
+    ///     <see cref="Carrier_History"/> entries dependants from this <see cref="Approach_History"/>.
     /// </summary>
-    public ICollection<CarrierH> CarriersHistories { get; set; } = [];
+    public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     #endregion
 

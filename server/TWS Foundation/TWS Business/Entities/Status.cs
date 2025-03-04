@@ -66,7 +66,7 @@ public partial class Status
 
     public virtual ICollection<TruckH> TrucksHistories { get; set; } = [];
 
-    public virtual ICollection<CarrierH> CarriersH { get; set; } = [];
+    public virtual ICollection<Carrier_History> CarriersH { get; set; } = [];
 
     public virtual ICollection<InsuranceH> InsurancesH { get; set; } = [];
 

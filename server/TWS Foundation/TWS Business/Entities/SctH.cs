@@ -27,7 +27,7 @@ public partial class SctH
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<CarrierH> CarriersH { get; set; } = [];
+    public virtual ICollection<Carrier_History> CarriersH { get; set; } = [];
 
 
 

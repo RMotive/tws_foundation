@@ -53,9 +53,9 @@ public class TruckH
     public Manufacturer Manufacturer { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Entities.CarrierH"/> Carrier history entry.
+    ///     <see cref="Entities.Carrier_History"/> Carrier history entry.
     /// </summary>
-    public CarrierH? CarrierH { get; set; }
+    public Carrier_History? CarrierH { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
@@ -100,7 +100,7 @@ public class TruckH
                     etBuilder.Link<TruckH, Status>(nameof(Status), Required: true);
                     etBuilder.Link<TruckH, Manufacturer>(nameof(Manufacturer), Required: true);
 
-                    etBuilder.Link<TruckH, CarrierH>(nameof(CarrierH));
+                    etBuilder.Link<TruckH, Carrier_History>(nameof(CarrierH));
                     etBuilder.Link<TruckH, Situation>(nameof(Situation));
                     etBuilder.Link<TruckH, InsuranceH>(nameof(InsuranceH));
                     etBuilder.Link<TruckH, MaintenanceH>(nameof(MaintenanceH));

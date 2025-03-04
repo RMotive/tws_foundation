@@ -24,7 +24,7 @@ public partial class UsdotH
 
     public virtual Status? StatusNavigation { get; set; }
 
-    public virtual ICollection<CarrierH> CarriersH { get; set; } = [];
+    public virtual ICollection<Carrier_History> CarriersH { get; set; } = [];
 
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {

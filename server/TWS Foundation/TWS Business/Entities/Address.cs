@@ -80,9 +80,9 @@ public class Address
     public ICollection<Carrier> Carriers { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="CarrierH"/> dependants from this <see cref="Address"/>.
+    ///     <see cref="Carrier_History"/> dependants from this <see cref="Address"/>.
     /// </summary>
-    public ICollection<CarrierH> CarriersHistories { get; set; } = [];
+    public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     #endregion
 

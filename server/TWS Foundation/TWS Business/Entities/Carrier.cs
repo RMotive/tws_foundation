@@ -1,32 +1,49 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Approaches;
 
 namespace TWS_Business.Entities;
 
-public partial class Carrier
-    : BBusinessEntity, IEntity_Name {
+/// <summary>
+///     [Entity] that stores information about a carrying company.
+/// </summary>
+public class Carrier
+    : BBusinessEntity, IEntity_Name, IHistorical<Carrier_History> {
+
+    #region Properties
 
     public string Name { get; set; } = string.Empty;
-
     public string? Description { get; set; }
+
+    #endregion
+
+    #region Relations
 
     /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Approaches.Approach"/> information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Approach Approach { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Address"/> information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Address Address { get; set; } = default!;
 
     /// <summary>
@@ -34,6 +51,9 @@ public partial class Carrier
     /// </summary>
     public USDOT? USDOT { get; set; }
 
+    #endregion
+
+    #region Dependants 
 
     /// <summary>
     ///     <see cref="Truck"/>s referencing this <see cref="Carrier"/>
@@ -45,56 +65,26 @@ public partial class Carrier
     /// </summary>
     public ICollection<Trailer> Trailers { get; set; } = [];
 
-    /// <summary>
-    ///     The <see cref="Carrier"/> history entries.
-    /// </summary>
-    public ICollection<CarrierH> Histories { get; set; } = [];
+    #endregion
 
+    public ICollection<Carrier_History> History { get; set; } = [];
 
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator required = new();
-        Container = [
-            ..Container,
-            (nameof(Name), [required, new LengthValidator(Max: 100)]),
-        ];
-
-        return Container;
-    }
-
-    protected override void DesignEntity(ModelBuilder mBuilder) {
-        mBuilder.Entity<Carrier>(
-            (etBuilder) => {
-
-                etBuilder.Property<long>("StatusShadow").HasColumnName("Status").IsRequired();
-                etBuilder
-                    .HasOne(d => d.Status)
-                    .WithMany(p => p.Carriers)
-                    .HasForeignKey("StatusShadow")
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                etBuilder.Property<long>("ApproachShadow").HasColumnName("Approach").IsRequired();
-                etBuilder
-                    .HasOne(d => d.Approach)
-                    .WithMany(p => p.Carriers)
-                    .HasForeignKey("ApproachShadow")
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                etBuilder.Property<long>("AddressShadow").HasColumnName("Address").IsRequired();
-                etBuilder
-                    .HasOne(c => c.Address)
-                    .WithMany(a => a.Carriers)
-                    .HasForeignKey("AddressShadow")
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                etBuilder.Property<long?>("USDOTShadow").HasColumnName("USDOT");
-                etBuilder
-                    .HasOne(c => c.USDOT)
-                    .WithMany(u => u.Carriers)
-                    .HasForeignKey("USDOTShadow")
-                    .OnDelete(DeleteBehavior.Cascade);
-            }
-        );
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Link<Carrier, Status>(
+                nameof(Status),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Carrier, Approach>(
+                nameof(Approach),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Carrier, Address>(
+                nameof(Address),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Carrier, USDOT>(nameof(USDOT));
     }
 }
