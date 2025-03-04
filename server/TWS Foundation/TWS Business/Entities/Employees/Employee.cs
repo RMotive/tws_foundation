@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Employees_Dates;
+using TWS_Business.Entities.Approaches;
 
 namespace TWS_Business.Entities.Employees;
 

@@ -8,6 +8,7 @@ using CSM_Foundation.Server.Records;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Approaches;
 
 using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;

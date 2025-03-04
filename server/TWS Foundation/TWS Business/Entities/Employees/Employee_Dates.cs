@@ -3,9 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Employees;
-
-namespace TWS_Business.Entities.Employees_Dates;
+namespace TWS_Business.Entities.Employees;
 
 public class Employee_Dates
     : BEntity {
@@ -17,7 +15,7 @@ public class Employee_Dates
     public DateOnly? CNAP { get; set; }
 
     /// <summary>
-    ///     When was the <see cref="Employees.Employee"/> issued to the ( Instituto Méxicano del Seguro Social / Mexican Social Security Institute).
+    ///     When was the <see cref="Employee"/> issued to the ( Instituto Méxicano del Seguro Social / Mexican Social Security Institute).
     /// </summary>
     public DateOnly? IMSS { get; set; }
 

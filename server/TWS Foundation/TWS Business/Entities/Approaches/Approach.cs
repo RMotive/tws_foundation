@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Employees;
 
-namespace TWS_Business.Entities;
+namespace TWS_Business.Entities.Approaches;
 
 /// <summary>
 ///     [Entity] Stores contact information for business purposes.

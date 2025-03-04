@@ -6,7 +6,7 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace TWS_Business.Entities;
+namespace TWS_Business.Entities.Approaches;
 
 /// <summary>
 ///     [History etBuilder] for <see cref="Approach"/> entity.

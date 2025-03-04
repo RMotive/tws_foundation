@@ -3,6 +3,8 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
+using TWS_Business.Entities.Approaches;
+
 namespace TWS_Business.Entities;
 
 public partial class Carrier
@@ -18,7 +20,7 @@ public partial class Carrier
     public Status Status { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Entities.Approach"/> information.
+    ///     <see cref="Approaches.Approach"/> information.
     /// </summary>
     public Approach Approach { get; set; } = default!;
 

@@ -20,6 +20,7 @@ using CSM_Security.Entities.Solutions;
 using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Approaches;
 using TWS_Business.Entities.Employees;
 
 using TWS_Customer.Managers.Depot;

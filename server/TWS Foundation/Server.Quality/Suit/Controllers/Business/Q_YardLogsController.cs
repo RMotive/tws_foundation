@@ -12,6 +12,7 @@ using CSM_Security.Entities.Solutions;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Approaches;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;

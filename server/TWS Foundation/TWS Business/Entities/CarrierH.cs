@@ -4,6 +4,8 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 
+using TWS_Business.Entities.Approaches;
+
 namespace TWS_Business.Entities;
 
 public partial class CarrierH
