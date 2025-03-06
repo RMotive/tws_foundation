@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities;
 using TWS_Business.Entities.Approaches;
@@ -35,6 +36,9 @@ public class Database
 
     public Database()
         : base("TWSB") {
+    }
+
+    protected override void EvaluateCustom(BEntity Entity, EntityTypeBuilder mBuilder) {
     }
 
     #region Drivers

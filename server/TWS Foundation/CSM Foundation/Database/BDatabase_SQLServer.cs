@@ -10,6 +10,7 @@ using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Server.Managers;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Foundation.Database.Bases;
@@ -302,6 +303,8 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
 
     #region EF Native Methods
 
+    protected virtual void EvaluateCustom(BEntity Entity, EntityTypeBuilder mBuilder) { }
+
     /// <summary>
     ///     This is overriden from <see cref="BDatabase_SQLServer{TDatabases}"/> to Configure an SQL Server Connection using
     ///     <see cref="Connection"/> generated string, this natively has another behavior but using <see cref="BDatabase_SQLServer{TDatabases}"/>
@@ -326,7 +329,19 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     protected override void OnModelCreating(ModelBuilder mBuilder) {
-        mBuilder.Ignore<CustomAttributeData>();
+
+        IEnumerable<IMutableEntityType> entityTypes = mBuilder.Model.GetEntityTypes();
+        foreach (IMutableEntityType entityType in entityTypes) {
+
+            IEnumerable<IMutableForeignKey> foreignKeys = [..entityType.GetForeignKeys()];
+            foreach (IMutableForeignKey foreignKey in foreignKeys) {
+
+                if (foreignKey.DependentToPrincipal is null)
+                    continue;
+
+                mBuilder.Entity(entityType.ClrType).Ignore(foreignKey.DependentToPrincipal.Name);
+            }
+        }
 
         (BEntity[] sets, BConnector<IEntity, IEntity>[] _) = ValidateSets();
 
@@ -381,6 +396,8 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                                 Index: true
                             );
                     }
+
+                    EvaluateCustom(set, etBuilder);
 
                     etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime");
 
