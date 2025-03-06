@@ -21,7 +21,15 @@ using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Approaches;
+using TWS_Business.Entities.Carriers;
 using TWS_Business.Entities.Employees;
+using TWS_Business.Entities.Insurances;
+using TWS_Business.Entities.Maintenances;
+using TWS_Business.Entities.Plates;
+using TWS_Business.Entities.SCTs;
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.USDOTs;
 
 using TWS_Customer.Managers.Depot;
 using TWS_Customer.Managers.Session;
@@ -158,7 +166,7 @@ public partial class Program {
                 }
 
                 builder.Services.AddScoped<AddressesDepot>();
-                builder.Services.AddScoped<UsdotsDepot>();
+                builder.Services.AddScoped<USDOTsDepot>();
                 builder.Services.AddScoped<CarriersDepot>();
                 builder.Services.AddScoped<ApproachesDepot>();
                 builder.Services.AddScoped<ContactsDepot>();
@@ -167,7 +175,7 @@ public partial class Program {
                 builder.Services.AddScoped<PlatesDepot>();
                 builder.Services.AddScoped<TruckDepot>();
                 builder.Services.AddScoped<InsurancesDepot>();
-                builder.Services.AddScoped<SctsDepot>();
+                builder.Services.AddScoped<SCTsDepot>();
                 builder.Services.AddScoped<MaintenacesDepot>();
                 builder.Services.AddScoped<StatusesDepot>();
                 builder.Services.AddScoped<AddressesDepot>();
@@ -185,13 +193,9 @@ public partial class Program {
                 builder.Services.AddScoped<TrailersExternalsDepot>();
                 builder.Services.AddScoped<TrailersDepot>();
                 builder.Services.AddScoped<IdentificationsDepot>();
-                builder.Services.AddScoped<TrucksExternalsDepot>();
-                builder.Services.AddScoped<TrucksCommonsDepot>();
                 builder.Services.AddScoped<TrailersTypesDepot>();
                 builder.Services.AddScoped<VehiculesModelsDepot>();
-                builder.Services.AddScoped<TrucksInventoriesDepot>();
                 builder.Services.AddScoped<YardLogsDepot>();
-                builder.Services.AddScoped<TrucksHDepot>();
 
                 // --> Services
                 builder.Services.AddScoped<ISolutionsService, SolutionsService>();
@@ -201,11 +205,9 @@ public partial class Program {
                 builder.Services.AddScoped<ISituationsService, SituationsService>();
                 builder.Services.AddScoped<IPlatesService, PlatesServices>();
                 builder.Services.AddScoped<ITrucksService, TrucksService>();
-                builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
                 builder.Services.AddScoped<IContactsService, ContactsService>();
                 builder.Services.AddScoped<IDriversService, DriversService>();
                 builder.Services.AddScoped<IDriversExternalsService, DriversExternalsService>();
-                builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
                 builder.Services.AddScoped<ITrailersService, TrailersService>();
                 builder.Services.AddScoped<ITrailersExternalsService, TrailersExternalsService>();
                 builder.Services.AddScoped<ILoadTypesService, LoadTypesService>();

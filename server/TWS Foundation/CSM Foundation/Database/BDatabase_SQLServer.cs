@@ -399,7 +399,7 @@ public abstract partial class BEntity
     /// <remarks>
     ///     Don't describe <see cref="IEntity"/> properties they are being auto-described by the [CSM] engine, <see cref="IEntity.Id"/>, <see cref="IEntity.Timestamp"/> and <see cref="IEntity.Name"/>.
     /// </remarks>
-    protected internal abstract void DesignEntity(EntityTypeBuilder etBuilder);
+    protected internal virtual void DesignEntity(EntityTypeBuilder etBuilder) { }
 }
 
 /// <summary>

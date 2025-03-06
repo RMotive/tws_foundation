@@ -1,11 +1,11 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
-using TWS_Business.Entities;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Customer.Services.Interfaces;
 public interface ITrucksInventoriesService {
 
-    Task<SetViewOut<TruckInventory>> View(SetViewOptions<TruckInventory> options);
+    Task<SetViewOut<TruckEntry>> View(SetViewOptions<TruckEntry> options);
 
 }

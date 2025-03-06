@@ -1,7 +1,6 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Options;
 using CSM_Foundation.Server.Records;
 
 using CSM_Security.Entities.Accounts;
@@ -11,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.TrailerExternal>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Trailers.TrailerExternal>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;

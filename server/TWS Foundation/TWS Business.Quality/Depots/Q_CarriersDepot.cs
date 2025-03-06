@@ -1,7 +1,8 @@
 ﻿using CSM_Foundation.Database.Quality;
 
-using TWS_Business.Depots;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Approaches;
+using TWS_Business.Entities.Carriers;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
@@ -16,7 +17,7 @@ public class Q_CarriersDepot
     protected override Carrier MockFactory(string RandomSeed) {
 
         return new() {
-            Name = "Carrier name",
+            Name = "CarrierHistory name",
             Approach = new Approach {
                 Id = 1,
             },

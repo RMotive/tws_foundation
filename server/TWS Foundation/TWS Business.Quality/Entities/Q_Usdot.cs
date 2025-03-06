@@ -2,6 +2,7 @@
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.USDOTs;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_Usdot : BQ_Entity<USDOT> {

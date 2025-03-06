@@ -1,13 +1,14 @@
-﻿using CSM_Foundation.Database.Bases;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace TWS_Business.Entities.Employees;
 
+/// <summary>
+///     [Entity] that stores dates of interest for <see cref="Employee"/> entities.
+/// </summary>
 public class Employee_Dates
-    : BEntity {
-    public override Type Database { get; init; } = typeof(BusinessDatabase);
+    : TWSEntity {
+
+    #region Properties
 
     /// <summary>
     ///     When the (Certificado de No Antecedentes Penales / Certificate of No Criminal Records) was issued.
@@ -29,15 +30,12 @@ public class Employee_Dates
     /// </summary>
     public DateOnly? Termination { get; set; }
 
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity(
-                (EntityTypeBuilder<Employee_Dates> EntityTypeBuilder) => {
+    #endregion
 
-                    EntityTypeBuilder.Property(ed => ed.CNAP);
-                    EntityTypeBuilder.Property(ed => ed.IMSS);
-                    EntityTypeBuilder.Property(ed => ed.Hire);
-                    EntityTypeBuilder.Property(ed => ed.Termination);
-                }
-            );
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(CNAP));
+        etBuilder.Property(nameof(IMSS));
+        etBuilder.Property(nameof(Hire));
+        etBuilder.Property(nameof(Termination));
     }
 }

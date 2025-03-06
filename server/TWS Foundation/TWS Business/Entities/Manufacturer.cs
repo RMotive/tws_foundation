@@ -1,53 +1,34 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
 
-using Microsoft.EntityFrameworkCore;
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
 
-public partial class Manufacturer
-    : BBusinessEntity, IEntity_Name {
+/// <summary>
+///     [Entity] that stores information about certain manufacturers for <see cref="Trailer"/> and <see cref="Truck"/> data proccesses.
+/// </summary>
+public class Manufacturer
+    : TWSEntity, IEntity_Name {
+
+    #region Properties
 
     public string Name { get; set; } = default!;
-
     public string? Description { get; set; }
 
-    /// <summary>
-    ///     <see cref="TruckH"/> entries referencing this <see cref="Manufacturer"/>
-    /// </summary>
-    public ICollection<TruckH> TrucksHistories { get; set; } = [];
+    #endregion
 
+    #region Dependants
+
+    /// <summary>
+    ///     <see cref="Truck_History"/> dependants from this <see cref="Manufacturer"/>
+    /// </summary>
+    public ICollection<Truck_History> TrucksHistories { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="VehiculeModel"/> dependatns from this <see cref="Manufacturer"/>
+    /// </summary>
     public ICollection<VehiculeModel> Models { get; set; } = [];
 
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity<Manufacturer>(Entity => {
-            Entity.HasKey(e => e.Id);
-            Entity.ToTable("Manufacturers");
-
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-
-            Entity.Property(e => e.Name)
-                .HasMaxLength(32)
-                .IsUnicode(false);
-
-            Entity.Property(e => e.Description)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-        });
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
-        Container = [
-                .. Container,
-            (nameof(Name), [Required, new LengthValidator(Max: 32)]),
-        ];
-
-        return Container;
-    }
+    #endregion
 }

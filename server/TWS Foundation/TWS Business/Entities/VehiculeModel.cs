@@ -1,13 +1,21 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
 
-public partial class VehiculeModel
-    : BBusinessEntity, IEntity_Name {
+/// <summary>
+///     [Entity] that stores information about a vehicule model with its descriptive name and year of manufacturing.
+/// </summary>
+public class VehiculeModel
+    : TWSEntity, IEntity_Name {
+
+    #region Properties
 
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
@@ -16,6 +24,10 @@ public partial class VehiculeModel
     ///     Manufacturing year.
     /// </summary>
     public DateOnly Year { get; set; }
+
+    #endregion
+
+    #region Relations
 
     /// <summary>
     ///     <see cref="Entities.Status"/> information.
@@ -33,6 +45,9 @@ public partial class VehiculeModel
     /// </remarks>
     public Manufacturer Manufacturer { get; set; } = default!;
 
+    #endregion
+
+    #region Dependants
 
     /// <summary>
     ///     <see cref="Trailer"/> dependents from this <see cref="VehiculeModel"/>
@@ -44,33 +59,24 @@ public partial class VehiculeModel
     /// </summary>
     public ICollection<Truck> Trucks { get; set; } = [];
 
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        Container = [
-            ..Container,
-        ];
+    #endregion
 
-        return Container;
-    }
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.ToTable("Vehicule_Models");
 
-    protected override void DesignEntity(ModelBuilder mBuilder) {
-        mBuilder.Entity<VehiculeModel>(
-            (etBuilder) => {
-                etBuilder.ToTable("Vehicules_Models");
+        etBuilder.Property(nameof(Year)).HasColumnType("date").IsRequired();
 
-                etBuilder.Property(vm => vm.Year).IsRequired();
-
-                etBuilder.Link<VehiculeModel, Status>(
-                        nameof(Status),
-                        Required: true,
-                        Auto: true
-                    );
-                etBuilder.Link<VehiculeModel, Manufacturer>(
-                        nameof(Manufacturer),
-                        TargetReference: nameof(Manufacturer.Models),
-                        Required: true,
-                        Auto: true
-                    );
-            }
-        );
+        etBuilder.Link<VehiculeModel, Status>(
+                nameof(Status),
+                TargetReference: nameof(Entities.Status.Models),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<VehiculeModel, Manufacturer>(
+                nameof(Manufacturer),
+                TargetReference: nameof(Entities.Manufacturer.Models),
+                Required: true,
+                Auto: true
+            );
     }
 }

@@ -2,6 +2,8 @@
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Approaches;
+using TWS_Business.Entities.Carriers;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_Carrier : BQ_Entity<Carrier> {

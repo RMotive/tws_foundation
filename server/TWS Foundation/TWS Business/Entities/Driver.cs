@@ -1,13 +1,20 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities;
 
+/// <summary>
+///     [Entity] that represents an internal business driver (Tuck operator).
+/// </summary>
 public class Driver
-    : BBusinessEntity<DriverCommon> {
+    : TWSScopeEntity<DriverCommon> {
+
+    #region Properties
 
     /// <summary>
     ///     Fast permit number.
@@ -69,27 +76,29 @@ public class Driver
     /// </summary>
     public DateOnly? AnamExpiration { get; set; }
 
+    #endregion
+
+    #region Relations
+
     /// <summary>
     ///     <see cref="Employees.Employee"/> information.
     /// </summary>
     public Employee Employee { get; set; } = default!;
 
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity<Driver>(
-            (Entity) => {
-                Entity.Property(e => e.DriverType).HasMaxLength(12);
-                Entity.Property(e => e.TWIC).HasMaxLength(12);
-                Entity.Property(e => e.VISA).HasMaxLength(12);
-                Entity.Property(e => e.Fast).HasMaxLength(12);
-                Entity.Property(e => e.ANAM).HasMaxLength(24);
+    #endregion
 
-                Entity.Link<Driver, Employee>(
-                        nameof(Employee),
-                        Required: true,
-                        Auto: true,
-                        Index: true
-                    );
-            }
-        );
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(DriverType)).HasMaxLength(12);
+        etBuilder.Property(nameof(TWIC)).HasMaxLength(12);
+        etBuilder.Property(nameof(VISA)).HasMaxLength(12);
+        etBuilder.Property(nameof(Fast)).HasMaxLength(12);
+        etBuilder.Property(nameof(ANAM)).HasMaxLength(24);
+
+        etBuilder.Link<Driver, Employee>(
+                nameof(Employee),
+                Required: true,
+                Auto: true,
+                Index: true
+            );
     }
 }

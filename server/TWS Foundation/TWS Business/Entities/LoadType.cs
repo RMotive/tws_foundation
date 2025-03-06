@@ -1,46 +1,28 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Entity;
 
-using Microsoft.EntityFrameworkCore;
+using TWS_Business.Entities.Trailers;
 
 namespace TWS_Business.Entities;
 
-public partial class LoadType
-    : BBusinessEntity, IEntity_Name {
+/// <summary>
+///     [etBuilder] that stores information about a specific type of load for <see cref="Trailer"/> loading information.
+/// </summary>
+public class LoadType
+    : TWSEntity, IEntity_Name {
+
+    #region Properties
 
     public string Name { get; set; } = default!;
-
     public string? Description { get; set; }
 
-    public virtual ICollection<YardLog> YardLogs { get; set; } = [];
+    #endregion
 
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity<LoadType>(Entity => {
-            Entity.ToTable("Load_Types");
-            Entity.HasKey(e => e.Id);
+    #region Dependants
 
-            Entity.HasIndex(e => e.Name)
-                .IsUnique();
+    /// <summary>
+    ///     <see cref="YardLog"/> dependants from this <see cref="LoadType"/>.
+    /// </summary>
+    public ICollection<YardLog> YardLogs { get; set; } = [];
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-            Entity.Property(e => e.Description)
-                .HasMaxLength(100);
-            Entity.Property(e => e.Name)
-                .HasMaxLength(32);
-        });
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-        Container = [
-            ..Container,
-            (nameof(Name), [Required, new LengthValidator(1, 32)]),
-        ];
-        return Container;
-    }
+    #endregion
 }

@@ -3,8 +3,7 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Depots;
-using TWS_Business.Entities;
+using TWS_Business.Entities.Trucks;
 
 using TWS_Customer.Services.Interfaces;
 

@@ -3,6 +3,7 @@ using CSM_Foundation.Database.Quality;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
@@ -26,7 +27,7 @@ public class Q_YardLogsDepot
                 Id = 1,
             },
             FromTo = RandomUtils.String(30),
-            Truck = new TruckCommon {
+            Truck = new Truck_Common {
                 Timestamp = DateTime.UtcNow,
                 Economic = RandomUtils.String(16),
                 Status = new Status {

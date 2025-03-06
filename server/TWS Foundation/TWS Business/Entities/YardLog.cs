@@ -4,8 +4,11 @@ using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Employees;
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
 
@@ -13,7 +16,9 @@ namespace TWS_Business.Entities;
 ///     [Entity] for <see cref="YardLog"/> entries. A <see cref="YardLog"/> record stores information about an entry or exit from the main business [Yards].
 /// </summary>
 public class YardLog
-    : BBusinessEntity {
+    : TWSEntity {
+
+    #region Properties
 
     /// <summary>
     ///     Wheter the record is entry or exit.
@@ -48,6 +53,10 @@ public class YardLog
     /// </summary>
     public byte[]? Damage { get; set; }
 
+    #endregion
+
+    #region Relations
+
     /// <summary>
     ///     <see cref="Entities.LoadType"/> information.
     /// </summary>
@@ -69,42 +78,38 @@ public class YardLog
     public DriverCommon Driver { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Entities.TruckCommon"/> information.
+    ///     <see cref="Trucks.Truck_Common"/> information.
     /// </summary>
-    public TruckCommon Truck { get; set; } = default!;
+    public Truck_Common Truck { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Entities.TrailerCommon"/> information.
+    ///     <see cref="Trailers.Trailer_Common"/> information.
     /// </summary>
-    public TrailerCommon? Trailer { get; set; }
+    public Trailer_Common? Trailer { get; set; }
 
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity<YardLog>(entity => {
-            entity.ToTable(
-                "Yard_Logs",
-                (tb) => tb.HasTrigger("YardLogs_InsertInto_TrucksInventories")
-            );
+    #endregion
 
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.ToTable("Yard_Logs");
 
-            entity.Property(e => e.Seal).HasMaxLength(64);
-            entity.Property(e => e.SealAlt).HasMaxLength(64);
-            entity.Property(e => e.FromTo).HasMaxLength(100).IsRequired();
-            entity.Property(y => y.Evidence).IsRequired();
-            entity.Property(y => y.Damage);
+        etBuilder.Property(nameof(Seal)).HasMaxLength(64);
+        etBuilder.Property(nameof(SealAlt)).HasMaxLength(64);
+        etBuilder.Property(nameof(FromTo)).HasMaxLength(100).IsRequired();
+        etBuilder.Property(nameof(Evidence)).IsRequired();
+        etBuilder.Property(nameof(Damage));
 
-            entity.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
-            entity.Link<YardLog, Employee>(nameof(Guard), Required: true);
-            entity.Link<YardLog, Section>(nameof(Section), Required: true);
-            entity.Link<YardLog, DriverCommon>(nameof(Driver), Required: true);
-            entity.Link<YardLog, TruckCommon>(nameof(Truck), Required: true);
-            entity.Link<YardLog, TrailerCommon>(nameof(Trailer));
-        });
+        etBuilder.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
+        etBuilder.Link<YardLog, Employee>(nameof(Guard), Required: true);
+        etBuilder.Link<YardLog, Section>(nameof(Section), Required: true);
+        etBuilder.Link<YardLog, DriverCommon>(nameof(Driver), Required: true);
+        etBuilder.Link<YardLog, Truck_Common>(nameof(Truck), Required: true);
+        etBuilder.Link<YardLog, Trailer_Common>(nameof(Trailer));
     }
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         LengthValidator sealLengthValidation = new(10, 64, true);
 
-        Container = [
+        return [
             ..Container,
             (nameof(Seal), [ sealLengthValidation ]),
             (nameof(SealAlt), [ sealLengthValidation ]),
@@ -112,7 +117,5 @@ public class YardLog
             (nameof(Evidence), [ new LengthValidator(32) ]),
             (nameof(Damage), [ new LengthValidator(32, AllowNull: true) ]),
         ];
-
-        return Container;
     }
 }

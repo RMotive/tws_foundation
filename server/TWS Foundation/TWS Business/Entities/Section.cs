@@ -1,25 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
 
-public partial class Section
-    : BBusinessEntity, IEntity_Name {
+/// <summary>
+///     [Entity] that stores information about a physical vehicules storage section.
+/// </summary>
+public class Section
+    : TWSEntity, IEntity_Name {
 
-    /// <summary>
-    ///     etBuilder name.
-    /// </summary>
-    [StringLength(1, MinimumLength = 32)]
+    #region Properties
+
     public string Name { get; set; } = string.Empty;
-
-    /// <summary>
-    ///     etBuilder description.
-    /// </summary>
     public string? Description { get; set; } = string.Empty;
 
     /// <summary>
@@ -31,6 +27,10 @@ public partial class Section
     ///     Current physical capacity utilization.
     /// </summary>
     public int Ocupancy { get; set; }
+
+    #endregion
+
+    #region Relations
 
     /// <summary>
     ///     <see cref="Entities.Status"/> information.
@@ -48,12 +48,21 @@ public partial class Section
     /// </remarks>
     public Location Yard { get; set; } = default!;
 
+    #endregion
+
+    #region Dependats 
 
     /// <summary>
-    ///     <see cref="YardLog"/> entries referencing this <see cref="Section"/>
+    ///     <see cref="YardLog"/> dependants from this <see cref="Section"/>
     /// </summary>
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
+    /// <summary>
+    ///     <see cref="TruckEntry"/> dependants from this <see cref="Section"/>.
+    /// </summary>
+    public ICollection<TruckEntry> TrucksEntries { get; set; } = [];
+
+    #endregion
 
     #region Custom Getters
 
@@ -68,35 +77,19 @@ public partial class Section
 
     #endregion
 
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(Capacity)).IsRequired();
+        etBuilder.Property(nameof(Ocupancy)).IsRequired();
 
-        Container = [
-            ..Container,
-            (nameof(Name), [new LengthValidator(1, 32)]),
-        ];
-
-        return Container;
-    }
-
-    protected override void DesignEntity(ModelBuilder mBuilder) {
-        mBuilder.Entity<Section>(
-            (etBuilder) => {
-                etBuilder.HasKey(e => e.Id);
-
-                etBuilder.Property(s => s.Capacity).IsRequired();
-                etBuilder.Property(s => s.Ocupancy).IsRequired();
-
-                etBuilder.Link<Section, Status>(
-                        nameof(Status),
-                        Required: true,
-                        Auto: true
-                    );
-                etBuilder.Link<Section, Location>(
-                        nameof(Yard),
-                        Required: true,
-                        Auto: true
-                    );
-            }
-        );
+        etBuilder.Link<Section, Status>(
+                nameof(Status),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Section, Location>(
+                nameof(Yard),
+                Required: true,
+                Auto: true
+            );
     }
 }

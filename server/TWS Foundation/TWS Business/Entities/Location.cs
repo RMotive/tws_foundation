@@ -1,27 +1,48 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
 
+/// <summary>
+///     [Entity] that stores a spot that represents a business physical location.
+/// </summary>
 public class Location
-    : BBusinessEntity, IEntity_Name {
+    : TWSEntity, IEntity_Name {
+
+    #region Properties
 
     public string Name { get; set; } = string.Empty;
 
     public string? Description { get; set; }
 
+    #endregion
+
+    #region Relations
+
     /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Address"/> information.
     /// </summary>
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
     public Address Address { get; set; } = default!;
 
+    #endregion
+
+    #region Dependants
 
     /// <summary>
     ///     <see cref="Section"/>s referencing this <see cref="Location"/>
@@ -29,46 +50,28 @@ public class Location
     public ICollection<Section> Sections { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="TruckCommon"/>s referencing this <see cref="Location"/>
+    ///     <see cref="Truck_Common"/>s referencing this <see cref="Location"/>
     /// </summary>
-    public ICollection<TruckCommon> Trucks { get; set; } = [];
+    public ICollection<Truck_Common> Trucks { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="TrailerCommon"/>s referencing this <see cref="Location"/>
+    ///     <see cref="Trailer_Common"/>s referencing this <see cref="Location"/>
     /// </summary>
-    public ICollection<TrailerCommon> Trailers { get; set; } = [];
+    public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
+    #endregion
 
-        Container = [
-                .. Container,
-            (nameof(Name), [Required, new LengthValidator(1, 30)]),
-        ];
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
 
-        return Container;
-    }
-
-    protected override void DesignEntity(ModelBuilder mBuilder) {
-        mBuilder.Entity<Location>(
-            (etBuilder) => {
-
-                etBuilder.Property<long>("StatusShadow").HasColumnName("Status").IsRequired();
-                etBuilder
-                    .HasOne(l => l.Status)
-                    .WithMany(s => s.Locations)
-                    .HasForeignKey("StatusShadow")
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                etBuilder.Property<long>("AddressShadow").HasColumnName("Address").IsRequired();
-                etBuilder
-                    .HasOne(l => l.Address)
-                    .WithMany(a => a.Locations)
-                    .HasForeignKey("AddressShadow")
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-            }
-        );
+        etBuilder.Link<Location, Status>(
+                nameof(Status),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Location, Address>(
+                nameof(Address),
+                Required: true,
+                Auto: true
+            );
     }
 }

@@ -4,7 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 using TWS_Business.Entities;
 using TWS_Business.Entities.Approaches;
+using TWS_Business.Entities.Carriers;
 using TWS_Business.Entities.Employees;
+using TWS_Business.Entities.Insurances;
+using TWS_Business.Entities.Maintenances;
+using TWS_Business.Entities.Plates;
+using TWS_Business.Entities.SCTs;
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.USDOTs;
 
 namespace TWS_Business;
 
@@ -25,12 +33,12 @@ public class BusinessDatabase
     public virtual DbSet<Employee> Employees { get; set; }
 
     public virtual DbSet<Truck> Trucks { get; set; } = default!;
-    public virtual DbSet<TruckCommon> TruckCommons { get; set; } = default!;
+    public virtual DbSet<Truck_Common> TruckCommons { get; set; } = default!;
     public virtual DbSet<TruckExternal> TruckExternal { get; set; } = default!;
 
 
     public virtual DbSet<Trailer> Trailers { get; set; } = default!;
-    public virtual DbSet<TrailerCommon> TrailersCommons { get; set; } = default!;
+    public virtual DbSet<Trailer_Common> TrailersCommons { get; set; } = default!;
     public virtual DbSet<TrailerExternal> TrailersExternals { get; set; } = default!;
 
 
@@ -54,7 +62,7 @@ public class BusinessDatabase
 
     public virtual DbSet<Status> Statuses { get; set; } = default!;
 
-    public virtual DbSet<TruckH> HPTrucks { get; set; } = default!;
+    public virtual DbSet<Truck_History> HPTrucks { get; set; } = default!;
 
     public virtual DbSet<Carrier> Carriers { get; set; } = default!;
 
@@ -66,7 +74,7 @@ public class BusinessDatabase
 
     public virtual DbSet<Identification> Identifications { get; set; } = default!;
 
-    public virtual DbSet<TrailerClass> TrailerClasses { get; set; } = default!;
+    public virtual DbSet<Trailer_Class> TrailerClasses { get; set; } = default!;
 
     public virtual DbSet<Location> Locations { get; set; } = default!;
 
@@ -78,7 +86,7 @@ public class BusinessDatabase
 
     public virtual DbSet<VehiculeModel> VehiculesModels { get; set; } = default!;
 
-    public virtual DbSet<TrailerType> TrailersTypes { get; set; } = default!;
+    public virtual DbSet<Trailer_Type> TrailersTypes { get; set; } = default!;
 
-    public virtual DbSet<TruckInventory> TrucksInventories { get; set; } = default!;
+    public virtual DbSet<TruckEntry> TrucksInventories { get; set; } = default!;
 }

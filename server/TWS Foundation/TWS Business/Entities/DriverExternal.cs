@@ -1,20 +1,17 @@
 ﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace TWS_Business.Entities;
 
+/// <summary>
+///     [etBuilder] that represents an external driver not handled by the business administration, a third party driver.
+/// </summary>
 public partial class DriverExternal
-    : BBusinessEntity {
+    : TWSScopeEntity<DriverCommon> {
 
-    /// <summary>
-    ///     <see cref="DriverCommon"/> information.
-    /// </summary>
-    /// <remarks>
-    ///     Auto included relation.
-    /// </remarks>
-    public DriverCommon Common { get; set; } = default!;
+    #region Relations
 
     /// <summary>
     ///     <see cref="Entities.Identification"/> information.
@@ -24,24 +21,16 @@ public partial class DriverExternal
     /// </remarks>
     public Identification Identification { get; set; } = default!;
 
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity<DriverExternal>(
-            (Entity) => {
-                Entity.ToTable("Drivers_Externals");
+    #endregion
 
-                Entity.Link<DriverExternal, DriverCommon>(
-                        nameof(Common),
-                        TargetReference: nameof(DriverCommon.External),
-                        Required: true,
-                        Auto: true
-                    );
-                Entity.Link<DriverExternal, Identification>(
-                        nameof(Identification),
-                        TargetReference: "",
-                        Required: true,
-                        Auto: true
-                    );
-            }
-        );
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.ToTable("Drivers_Externals");
+
+        etBuilder.Link<DriverExternal, Identification>(
+                nameof(Identification),
+                TargetReference: "",
+                Required: true,
+                Auto: true
+            );
     }
 }

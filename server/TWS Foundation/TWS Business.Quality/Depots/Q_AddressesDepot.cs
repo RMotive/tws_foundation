@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality;
+﻿using CSM_Foundation.Database.Quality;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -21,6 +20,7 @@ public class Q_AddressesDepot
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(Address Mock)
-    => (nameof(Address.Street), Mock.Street);
+    protected override (string Property, string? Value)? FactorizeProperty(Address Mock) {
+        return (nameof(Address.Street), Mock.Street);
+    }
 }

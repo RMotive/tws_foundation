@@ -4,17 +4,27 @@ using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace TWS_Business.Entities;
 
-public partial class DriverCommon
-    : BBusinessEntity {
+/// <summary>
+///     [Entity] that represent common information for [Drivers] (<see cref="Driver"/> / <see cref="DriverExternal"/>).
+/// </summary>
+public class DriverCommon
+    : TWSEntity {
+
+    #region Properties
 
     /// <summary>
     ///     Licence identification number.
     /// </summary>
     [StringLength(12, MinimumLength = 8)]
     public string License { get; set; } = null!;
+
+    #endregion
+
+    #region Relations
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
@@ -36,6 +46,7 @@ public partial class DriverCommon
     /// </summary>
     public DriverExternal? External { get; set; }
 
+    #endregion
 
     #region Custom Getters 
 
@@ -59,43 +70,36 @@ public partial class DriverCommon
             if (ident == null)
                 return null;
 
-            return $"{ident.Name} {ident.FatherLastname} {ident.MotherLastName}";
+            return $"{ident.Name} {ident.Lastname}";
         }
     }
 
     #endregion
 
+
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
-        Container = [
+        return [
             ..Container,
-            (nameof(License), [ Required, new LengthValidator(8, 12)]),
+            (nameof(License), [ new LengthValidator(8, 12)]),
         ];
-
-        return Container;
     }
 
-    protected override void DesignEntity(ModelBuilder mBuilder) {
-        mBuilder.Entity<DriverCommon>(
-            (etBuilder) => {
-                etBuilder.ToTable("Drivers_Commons");
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.ToTable("Drivers_Commons");
 
-                etBuilder.Property(e => e.License).HasMaxLength(12);
+        etBuilder.Property(nameof(License)).HasMaxLength(12);
 
-                etBuilder.Link<DriverCommon, Situation>(
-                        nameof(Situation),
-                        nameof(Situation.Drivers),
-                        Required: true,
-                        Auto: true
-                    );
-                etBuilder.Link<DriverCommon, Status>(
-                        nameof(Status),
-                        nameof(Situation.Drivers),
-                        Required: true,
-                        Auto: true
-                    );
-            }
-        );
+        etBuilder.Link<DriverCommon, Situation>(
+                nameof(Situation),
+                nameof(Situation.Drivers),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<DriverCommon, Status>(
+                nameof(Status),
+                nameof(Situation.Drivers),
+                Required: true,
+                Auto: true
+            );
     }
 }

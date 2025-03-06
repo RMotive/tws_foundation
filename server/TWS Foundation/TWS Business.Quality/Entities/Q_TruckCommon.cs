@@ -2,12 +2,13 @@
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_TruckCommon : BQ_Entity<TruckCommon> {
-    protected override Q_EntityEvaluation<TruckCommon>[] EvaluateFactory(Q_EntityEvaluation<TruckCommon>[] Container) {
+public class Q_TruckCommon : BQ_Entity<Truck_Common> {
+    protected override Q_EntityEvaluation<Truck_Common>[] EvaluateFactory(Q_EntityEvaluation<Truck_Common>[] Container) {
 
-        Q_EntityEvaluation<TruckCommon> success = new("Success") {
+        Q_EntityEvaluation<Truck_Common> success = new("Success") {
             Mock = new() {
                 Id = 1,
                 Economic = "",
@@ -18,15 +19,15 @@ public class Q_TruckCommon : BQ_Entity<TruckCommon> {
             },
             Expectations = [],
         };
-        Q_EntityEvaluation<TruckCommon> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<Truck_Common> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
                 Economic = "",
             },
             Expectations = [
-                (nameof(TruckCommon.Id), [(new PointerValidator(), 3)]),
-                (nameof(TruckCommon.Economic), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
-                (nameof(TruckCommon.Status), [(new PointerValidator(), 3)]),
+                (nameof(Truck_Common.Id), [(new PointerValidator(), 3)]),
+                (nameof(Truck_Common.Economic), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
+                (nameof(Truck_Common.Status), [(new PointerValidator(), 3)]),
 
             ],
         };

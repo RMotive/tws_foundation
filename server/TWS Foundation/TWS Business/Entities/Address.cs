@@ -5,6 +5,7 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Entities.Carriers;
 using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities;
@@ -13,7 +14,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores geolocalization information.
 /// </summary>
 public class Address
-    : BBusinessEntity {
+    : TWSEntity {
 
     #region Properties
 

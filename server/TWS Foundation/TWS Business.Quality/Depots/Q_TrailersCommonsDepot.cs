@@ -1,20 +1,20 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
-using TWS_Business.Depots;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Trailers;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
 ///     Qualifies the <see cref="TrailersCommonsDepot"/>.
 /// </summary>
 public class Q_TrailersCommonsDepot
-    : BQ_Depot<TrailerCommon, TrailersCommonsDepot, BusinessDatabase> {
+    : BQ_Depot<Trailer_Common, TrailersCommonsDepot, BusinessDatabase> {
     public Q_TrailersCommonsDepot()
-        : base(nameof(TrailerCommon.Id)) {
+        : base(nameof(Trailer_Common.Id)) {
     }
 
-    protected override TrailerCommon MockFactory(string RandomSeed) {
+    protected override Trailer_Common MockFactory(string RandomSeed) {
 
         return new() {
             Status = new Status { Id = 1},
@@ -22,7 +22,7 @@ public class Q_TrailersCommonsDepot
         };
     }
 
-    protected override (string Property, string? Value)? FactorizeProperty(TrailerCommon Mock) {
-        return (nameof(TrailerCommon.Economic), Mock.Economic);
+    protected override (string Property, string? Value)? FactorizeProperty(Trailer_Common Mock) {
+        return (nameof(Trailer_Common.Economic), Mock.Economic);
     }
 }

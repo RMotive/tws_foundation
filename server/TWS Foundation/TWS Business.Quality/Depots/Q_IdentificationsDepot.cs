@@ -14,12 +14,10 @@ public class Q_IdentificationsDepot
     }
 
     protected override Identification MockFactory(string RandomSeed) {
-
         return new() {
-            Name = "Identifications name",
-            Status = new Status { Id = 1},
-            FatherLastname = "Father last name",
-            MotherLastName = "Mother last name"
+            Name = RandomSeed,
+            Status = new Status { Id = 1 },
+            Lastname = $"{RandomSeed[..8]}  {RandomSeed[8..]}",
         };
     }
 

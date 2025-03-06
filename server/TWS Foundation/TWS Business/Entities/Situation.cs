@@ -1,54 +1,39 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
 
-using Microsoft.EntityFrameworkCore;
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
 
-public partial class Situation
-    : BBusinessEntity, IEntity_Name {
+/// <summary>
+///     [Entity] that stores information about the current situation for a business process entity.
+/// </summary>
+public class Situation
+    : TWSEntity, IEntity_Name {
+
+    #region Properties
 
     public string Name { get; set; } = default!;
-
     public string? Description { get; set; }
 
-    public ICollection<DriverCommon> Drivers { get; set; } = [];
+    #endregion
 
-    public ICollection<TruckCommon> Trucks { get; set; } = [];
-
-    public ICollection<TrailerCommon> Trailers { get; set; } = [];
+    #region Dependants
 
     /// <summary>
-    ///     <see cref="TruckH"/> history entries referencing this <see cref="Situation"/>
+    ///     <see cref="DriverCommon"/> dependants from this <see cref="Situation"/>
     /// </summary>
-    public ICollection<TruckH> TrucksHistories { get; set; } = [];
+    public ICollection<DriverCommon> Drivers { get; set; } = [];
 
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity<Situation>(Entity => {
-            Entity.HasKey(e => e.Id);
+    /// <summary>
+    ///     <see cref="Truck_Common"/> dependants form this <see cref="Situation"/>.
+    /// </summary>
+    public ICollection<Truck_Common> Trucks { get; set; } = [];
 
+    /// <summary>
+    ///     <see cref="Trailer_Common"/> dependants from this <see cref="Situation"/>.
+    /// </summary>
+    public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
-            Entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime");
-
-            Entity.HasIndex(e => e.Name)
-                .IsUnique();
-
-            Entity.Property(e => e.Id)
-                .HasColumnName("id");
-            Entity.Property(e => e.Description)
-                .HasMaxLength(100);
-            Entity.Property(e => e.Name)
-                .HasMaxLength(25);
-        });
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-        Container = [
-            ..Container,
-            (nameof(Name), [Required, new LengthValidator(1, 25)]),
-        ];
-        return Container;
-    }
+    #endregion
 }

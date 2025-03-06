@@ -1,8 +1,8 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
-using TWS_Business.Depots;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Trailers;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>

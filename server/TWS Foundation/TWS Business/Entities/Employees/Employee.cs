@@ -7,8 +7,13 @@ using TWS_Business.Entities.Approaches;
 
 namespace TWS_Business.Entities.Employees;
 
+/// <summary>
+///     [Entity] that represent a business human being handled by business administration. A legally employee from own administration.
+/// </summary>
 public class Employee
-    : BBusinessEntity {
+    : TWSEntity {
+
+    #region Properties
 
     /// <summary>
     ///     Mexico's unique people identifier (Clave Única de Registro de Población / Unique Population Registry Code).
@@ -24,6 +29,10 @@ public class Employee
     ///     Mexico's unqiue people social security identifier (Número de Seguro Social / Social Security Number.)
     /// </summary>
     public string? NSS { get; set; } = null!;
+
+    #endregion
+
+    #region Relations
 
     /// <summary>
     ///     Identification information.
@@ -64,33 +73,31 @@ public class Employee
     /// </summary>
     public Driver? Driver { get; set; }
 
-    protected override void DesignEntity(ModelBuilder ModelBuilder) {
-        ModelBuilder.Entity(
-                (EntityTypeBuilder<Employee> etBuilder) => {
-                    etBuilder.Property(e => e.CURP).HasMaxLength(18);
-                    etBuilder.Property(e => e.RFC).HasMaxLength(13);
-                    etBuilder.Property(e => e.NSS).HasMaxLength(11);
+    #endregion
 
-                    etBuilder.Link<Employee, Identification>(
-                            nameof(Identification),
-                            Required: true,
-                            Auto: true,
-                            Index: true
-                        );
-                    etBuilder.Link<Employee, Status>(
-                            nameof(Status),
-                            Required: true,
-                            Auto: true
-                        );
-                    etBuilder.Link<Employee, Employee_Dates>(
-                            nameof(Dates),
-                            Required: true,
-                            Auto: true,
-                            Index: true
-                        );
-                    etBuilder.Link<Employee, Address>(nameof(Address));
-                    etBuilder.Link<Employee, Approach>(nameof(Approach));
-                }
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(CURP)).HasMaxLength(18);
+        etBuilder.Property(nameof(RFC)).HasMaxLength(13);
+        etBuilder.Property(nameof(NSS)).HasMaxLength(11);
+
+        etBuilder.Link<Employee, Identification>(
+                nameof(Identification),
+                Required: true,
+                Auto: true,
+                Index: true
             );
+        etBuilder.Link<Employee, Status>(
+                nameof(Status),
+                Required: true,
+                Auto: true
+            );
+        etBuilder.Link<Employee, Employee_Dates>(
+                nameof(Dates),
+                Required: true,
+                Auto: true,
+                Index: true
+            );
+        etBuilder.Link<Employee, Address>(nameof(Address));
+        etBuilder.Link<Employee, Approach>(nameof(Approach));
     }
 }

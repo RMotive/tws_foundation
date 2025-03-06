@@ -12,8 +12,7 @@ public class Q_Identification : BQ_Entity<Identification> {
                 Id = 1,
                 Status = new Status { Id = 1 },
                 Name = "",
-                FatherLastname = "",
-                MotherLastName = ""
+                Lastname = "",
             },
             Expectations = [],
         };
@@ -25,8 +24,7 @@ public class Q_Identification : BQ_Entity<Identification> {
             Expectations = [
                 (nameof(Identification.Id), [(new PointerValidator(), 3)]),
                 (nameof(Identification.Name), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
-                (nameof(Identification.FatherLastname), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
-                (nameof(Identification.MotherLastName), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
+                (nameof(Identification.Lastname), [(new RequiredValidator(), 1), (new LengthValidator(), 1)]),
                 (nameof(Identification.Status), [(new PointerValidator(true), 3)]),
             ],
         };

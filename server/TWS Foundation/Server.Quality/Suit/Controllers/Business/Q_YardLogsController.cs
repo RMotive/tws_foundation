@@ -13,6 +13,11 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
 using TWS_Business.Entities.Approaches;
+using TWS_Business.Entities.Carriers;
+using TWS_Business.Entities.Plates;
+using TWS_Business.Entities.SCTs;
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
@@ -61,7 +66,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         Carrier carrier = new() {
-            Name = "Carrier " + RandomSeed,
+            Name = "CarrierHistory " + RandomSeed,
             Status = new Status {
                 Id = 1,
             },
@@ -83,7 +88,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Country = "USA",
             Expiration = date,
         };
-        TruckCommon common = new() {
+        Truck_Common common = new() {
             Status = new Status {
                 Id = 1,
             },
@@ -91,7 +96,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         List<Plate> plateList = [plateMX, plateUSA];
-        TrailerCommon trailerCommon = new() {
+        Trailer_Common trailerCommon = new() {
             Economic = "TrailerEco " + RandomSeed,
         };
         Trailer trailer = new() {
@@ -124,7 +129,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Guard = new TWS_Business.Entities.Employees.Employee {
                 Id = 1,
             },
-            Trailer = new TrailerCommon {
+            Trailer = new Trailer_Common {
                 Internal = trailer
             },
             Seal = "seal " + iterationTag,
@@ -134,7 +139,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Driver = new DriverCommon {
                 Id = 1,
             },
-            Truck = new TruckCommon {
+            Truck = new Truck_Common {
                 Id = truck.Common.Id,
                 Internal = truck
             },

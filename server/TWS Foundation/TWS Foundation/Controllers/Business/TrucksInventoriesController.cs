@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Business.Entities;
+using TWS_Business.Entities.Trucks;
 
 using TWS_Customer.Services.Interfaces;
 
@@ -19,7 +19,7 @@ public class TrucksInventoriesController : ControllerBase {
     }
 
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewOptions<TruckInventory> Options) {
+    public async Task<IActionResult> View(SetViewOptions<TruckEntry> Options) {
         return Ok(await Service.View(Options));
     }
 

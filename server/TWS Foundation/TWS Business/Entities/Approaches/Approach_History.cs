@@ -6,13 +6,15 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Entities.Carriers;
+
 namespace TWS_Business.Entities.Approaches;
 
 /// <summary>
 ///     [History etBuilder] for <see cref="Approach"/> entity.
 /// </summary>
 public class Approach_History
-    : BBusinessHistory<Approach> {
+    : TWSHistory<Approach> {
 
     #region Properties
 
@@ -87,7 +89,7 @@ public class Approach_History
 
         etBuilder.Link<Approach_History, Status>(
                 nameof(Status),
-                TargetReference: nameof(Status.ApproachesHIstories)
+                TargetReference: nameof(Status.ApproachesHistories),
                 Required: true,
                 Auto: true
             );

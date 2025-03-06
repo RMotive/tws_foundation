@@ -3,8 +3,7 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Depots;
-using TWS_Business.Entities;
+using TWS_Business.Entities.Trucks;
 
 using TWS_Customer.Services.Interfaces;
 
@@ -17,33 +16,29 @@ public class TruckInventoryService
     /// <summary>
     /// 
     /// </summary>
-    private readonly TrucksInventoriesDepot TrucksInventoriesDepot;
+    private readonly TruckInventory TruckInventory;
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Solutions"></param>
-    public TruckInventoryService(TrucksInventoriesDepot TrucksInventories) {
-        TrucksInventoriesDepot = TrucksInventories;
+    public TruckInventoryService(TruckInventory TrucksInventories) {
+        TruckInventory = TrucksInventories;
     }
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Options"></param>
     /// <returns></returns>
-    public async Task<SetViewOut<TruckInventory>> View(SetViewOptions<TruckInventory> Options) {
+    public async Task<SetViewOut<TruckEntry>> View(SetViewOptions<TruckEntry> Options) {
 
-        static IQueryable<TruckInventory> include(IQueryable<TruckInventory> query) {
+        static IQueryable<TruckEntry> include(IQueryable<TruckEntry> query) {
             return query
-            .Include(t => t.SectionNavigation)
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.Common)
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.Carrier)
-            .Include(t => t.TruckNavigation)
-                .ThenInclude(t => t!.Plates)
-             .Include(t => t.TruckExternalNavigation);
+            .Include(t => t.Section)
+            .Include(t => t.Truck)
+                .ThenInclude(t => t.Internal)
+                    .ThenInclude(i => i!.Plates);
         }
 
-        return await TrucksInventoriesDepot.View(Options, include);
+        return await TruckInventory.View(Options, include);
     }
 }

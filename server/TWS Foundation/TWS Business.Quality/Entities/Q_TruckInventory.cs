@@ -1,29 +1,28 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using TWS_Business.Entities;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Quality.Entities;
-public class Q_TruckInventory : BQ_Entity<TruckInventory> {
-    protected override Q_EntityEvaluation<TruckInventory>[] EvaluateFactory(Q_EntityEvaluation<TruckInventory>[] Container) {
+public class Q_TruckInventory : BQ_Entity<TruckEntry> {
+    protected override Q_EntityEvaluation<TruckEntry>[] EvaluateFactory(Q_EntityEvaluation<TruckEntry>[] Container) {
 
-        Q_EntityEvaluation<TruckInventory> success = new("Success") {
+        Q_EntityEvaluation<TruckEntry> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Section = 0,
-
+                Section = new TWS_Business.Entities.Section {
+                    Id = 0
+                },
             },
             Expectations = [],
         };
-        Q_EntityEvaluation<TruckInventory> failAllCases = new("All properties fail") {
+        Q_EntityEvaluation<TruckEntry> failAllCases = new("All properties fail") {
             Mock = new() {
                 Id = 0,
-                Section = -1,
-
             },
             Expectations = [
-                (nameof(TruckInventory.Id), [(new PointerValidator(), 3)]),
-                (nameof(TruckInventory.Section), [(new PointerValidator(), 3)]),
+                (nameof(TruckEntry.Id), [(new PointerValidator(), 3)]),
+                (nameof(TruckEntry.Section), [(new PointerValidator(), 3)]),
             ],
         };
 

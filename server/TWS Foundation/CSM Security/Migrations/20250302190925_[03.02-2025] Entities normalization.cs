@@ -2,13 +2,11 @@
 
 #nullable disable
 
-namespace CSM_Security.Migrations; 
+namespace CSM_Security.Migrations;
 /// <inheritdoc />
-public partial class _03022025Entitiesnormalization : Migration
-{
+public partial class _03022025Entitiesnormalization : Migration {
     /// <inheritdoc />
-    protected override void Up(MigrationBuilder migrationBuilder)
-    {
+    protected override void Up(MigrationBuilder migrationBuilder) {
         migrationBuilder.DropForeignKey(
             name: "FK_Accounts_Contacts_Contact",
             table: "Accounts");
@@ -104,7 +102,7 @@ public partial class _03022025Entitiesnormalization : Migration
         migrationBuilder.CreateIndex(
             name: "IX_Permits_Action_Solution_Feature",
             table: "Permits",
-            columns: new[] { "Action", "Solution", "Feature" });
+            columns: ["Action", "Solution", "Feature"]);
 
         migrationBuilder.AddForeignKey(
             name: "FK_Accounts_Contacts_Contact",
@@ -136,8 +134,7 @@ public partial class _03022025Entitiesnormalization : Migration
     }
 
     /// <inheritdoc />
-    protected override void Down(MigrationBuilder migrationBuilder)
-    {
+    protected override void Down(MigrationBuilder migrationBuilder) {
         migrationBuilder.DropForeignKey(
             name: "FK_Accounts_Contacts_Contact",
             table: "Accounts");
@@ -232,7 +229,7 @@ public partial class _03022025Entitiesnormalization : Migration
         migrationBuilder.CreateIndex(
             name: "IX_Permits_Action_Solution_Feature",
             table: "Permits",
-            columns: new[] { "Action", "Solution", "Feature" },
+            columns: ["Action", "Solution", "Feature"],
             unique: true);
 
         migrationBuilder.CreateIndex(

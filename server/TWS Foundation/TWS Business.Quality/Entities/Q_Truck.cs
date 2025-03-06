@@ -2,6 +2,9 @@
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Insurances;
+using TWS_Business.Entities.Maintenances;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_Truck : BQ_Entity<Truck> {
@@ -9,7 +12,7 @@ public class Q_Truck : BQ_Entity<Truck> {
         Q_EntityEvaluation<Truck> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Common = new TruckCommon {
+                Common = new Truck_Common {
                     Id = 1,
                     Status = new Status {
                         Id = 1,

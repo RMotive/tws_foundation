@@ -59,9 +59,9 @@ public class Contact
     #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        LengthValidator mainLengthValidator = new LengthValidator(1, 100);
+        LengthValidator mainLengthValidator = new(1, 100);
 
-        Container = [
+        return [
             ..Container,
             (nameof(Name), [ mainLengthValidator ]),
             (nameof(Lastname), [ mainLengthValidator ]),
@@ -69,8 +69,6 @@ public class Contact
             (nameof(Phone), [ mainLengthValidator, new UniqueValidator() ]),
 
         ];
-
-        return Container;
     }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

@@ -13,7 +13,7 @@ using TWS_Customer.Services.Records;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Carrier>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Carriers.Carrier>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 

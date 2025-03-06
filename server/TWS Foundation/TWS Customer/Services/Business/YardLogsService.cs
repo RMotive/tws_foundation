@@ -45,17 +45,17 @@ public class YardLogsService
         return query
             .Include("Driver.Internal.Identification")
             .Include("Driver.External.Identification")
-            .Include("Trailer.External.TrailerType.Class")
-            .Include("Trailer.Internal.TrailerType.Class")
-            .Include("Trailer.Internal.Carrier.Address")
-            .Include("Trailer.Internal.Carrier.USDOT")
-            .Include("Trailer.Internal.Carrier.Approach")
+            .Include("Trailer.External.Trailer_Type.Class")
+            .Include("Trailer.Internal.Trailer_Type.Class")
+            .Include("Trailer.Internal.CarrierHistory.Address")
+            .Include("Trailer.Internal.CarrierHistory.USDOTHistory")
+            .Include("Trailer.Internal.CarrierHistory.ApproachHistory")
             .Include("Model")
             .Include("Truck.Model")
             .Include("Truck.External")
-            .Include("Truck.Internal.Carrier.Address")
-            .Include("Truck.Internal.Carrier.USDOT")
-            .Include("Truck.Internal.Carrier.Approach")
+            .Include("Truck.Internal.CarrierHistory.Address")
+            .Include("Truck.Internal.CarrierHistory.USDOTHistory")
+            .Include("Truck.Internal.CarrierHistory.ApproachHistory")
             .Include("Section.Location");
     }
 

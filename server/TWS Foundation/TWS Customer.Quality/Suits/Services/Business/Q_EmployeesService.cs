@@ -27,8 +27,7 @@ public class Q_EmployeesService
         Identification identification = Store(
                 new Identification {
                     Name = $"Identification {Entropy}",
-                    FatherLastname = $"Identification {Entropy}",
-                    MotherLastName = $"Identification {Entropy}",
+                    Lastname = $"Identification {Entropy}",
                     Status = new Status { Id = 1 },
                 }
             );

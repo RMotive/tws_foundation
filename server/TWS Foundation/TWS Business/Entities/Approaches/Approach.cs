@@ -7,6 +7,7 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Entities.Carriers;
 using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities.Approaches;
@@ -15,7 +16,7 @@ namespace TWS_Business.Entities.Approaches;
 ///     [Entity] Stores contact information for business purposes.
 /// </summary>
 public class Approach
-    : BBusinessEntity, IHistorical<Approach_History> {
+    : TWSEntity, IHistorical<Approach_History> {
 
     #region Properties
 

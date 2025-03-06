@@ -1,17 +1,25 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
-
-using Microsoft.EntityFrameworkCore;
 
 using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Employees;
+using TWS_Business.Entities.Carriers;
+using TWS_Business.Entities.Insurances;
+using TWS_Business.Entities.Plates;
+using TWS_Business.Entities.SCTs;
+using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
 public partial class Status
-: BBusinessEntity, IEntity_Name {
+: TWSEntity, IEntity_Name {
+
+    #region Properites
 
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
+
+    #endregion
+
+    #region Dependants
 
     /// <summary>
     ///     <see cref="DriverCommon"/> referencing to this <see cref="Status"/>.
@@ -19,78 +27,69 @@ public partial class Status
     public ICollection<DriverCommon> Drivers { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="TruckCommon"/> referencing to this <see cref="Status"/>.
+    ///     <see cref="Truck_Common"/> referencing to this <see cref="Status"/>.
     /// </summary>
-    public ICollection<TruckCommon> Trucks { get; set; } = [];
+    public ICollection<Truck_Common> Trucks { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="TrailerCommon"/> referencing to this <see cref="Status"/>
+    ///     <see cref="Trailer_Common"/> referencing to this <see cref="Status"/>
     /// </summary>
-    public ICollection<TrailerCommon> Trailers { get; set; } = [];
+    public ICollection<Trailer_Common> Trailers { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="Trailer_Type"/> dependants from this <see cref="Status"/>.
+    /// </summary>
+    public ICollection<Trailer_Type> TrailerTypes { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="VehiculeModel"/> dependants from this <see cref="Status"/>.
+    /// </summary>
+    public ICollection<VehiculeModel> Models { get; set; } = [];
 
     /// <summary>
     ///     <see cref="SCT"/> dependants from this <see cref="Status"/>
     /// </summary>
     public ICollection<SCT> SCTs { get; set; } = [];
 
+    /// <summary>
+    ///     <see cref="Carrier_History"/> entries dependants from this <see cref="Status"/>.
+    /// </summary>
+    public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="Approach_History"/>`entries dependants from this <see cref="Status"/>
+    ///     <see cref="Approach_History"/> entries dependants from this <see cref="Status"/>.
     /// </summary>
-    public ICollection<Approach_History> ApproachesHIstories { get; set; } = [];
+    public ICollection<Approach_History> ApproachesHistories { get; set; } = [];
 
+    /// <summary>
+    ///     <see cref="Insurance"/> dependants from this <see cref="Status"/>
+    /// </summary>
+    public ICollection<Insurance> Insurances { get; set; } = [];
 
-    public virtual ICollection<VehiculeModel> VehiculeModels { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Insurance_History"/> dependants from this <see cref="Status"/>
+    /// </summary>
+    public ICollection<Insurance_History> InsurancesHistories { get; set; } = [];
 
-    public virtual ICollection<TrailerType> TrailerTypes { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Maintenances.Maintenance"/> dependants from this <see cref="Status"/>
+    /// </summary>
+    public ICollection<Maintenances.Maintenance> Maintenances { get; set; } = [];
 
-    public virtual ICollection<Section> Sections { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Maintenances.Maintenance_History"/> dependants from this <see cref="Status"/>
+    /// </summary>
+    public ICollection<Maintenances.Maintenance_History> MaintenancesHistories { get; set; } = [];
 
-    public virtual ICollection<Employee> Employees { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Plate"/> dependants from this <see cref="Status"/>.
+    /// </summary>
+    public ICollection<Plate> Plates { get; set; } = [];
 
-    public virtual ICollection<Identification> Identifications { get; set; } = [];
+    /// <summary>
+    ///     <see cref="Plate_History"/> dependants from this <see cref="Status"/>.
+    /// </summary>
+    public ICollection<Plate_History> PlatesHistories { get; set; } = [];
 
-    public virtual ICollection<Location> Locations { get; set; } = [];
-
-    public virtual ICollection<Carrier> Carriers { get; set; } = [];
-
-    public virtual ICollection<USDOT> Usdots { get; set; } = [];
-
-    public virtual ICollection<Approach> Contacts { get; set; } = [];
-
-    public virtual ICollection<Insurance> Insurances { get; set; } = [];
-
-    public virtual ICollection<Maintenance> Maintenances { get; set; } = [];
-
-    public virtual ICollection<Plate> Plates { get; set; } = [];
-
-    public virtual ICollection<TruckH> TrucksHistories { get; set; } = [];
-
-    public virtual ICollection<Carrier_History> CarriersH { get; set; } = [];
-
-    public virtual ICollection<InsuranceH> InsurancesH { get; set; } = [];
-
-    public virtual ICollection<MaintenanceH> MaintenancesH { get; set; } = [];
-
-    public virtual ICollection<PlateH> PlatesH { get; set; } = [];
-
-    public virtual ICollection<UsdotH> UsdotsH { get; set; } = [];
-
-    public virtual ICollection<SctH> SctsH { get; set; } = [];
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
-        Container = [
-            ..Container,
-            (nameof(Name), [Required, new LengthValidator(1, 25)]),
-        ];
-
-        return Container;
-    }
-
-    protected override void DesignEntity(ModelBuilder Builder) {
-        Builder.Entity<Status>(Entity => {
-        });
-    }
+    #endregion
 }

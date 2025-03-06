@@ -2,6 +2,7 @@
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Trailers;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_TrailerExternal : BQ_Entity<TrailerExternal> {
@@ -10,7 +11,7 @@ public class Q_TrailerExternal : BQ_Entity<TrailerExternal> {
         Q_EntityEvaluation<TrailerExternal> success = new("Success") {
             Mock = new() {
                 Id = 1,
-                Common = new TrailerCommon {
+                Common = new Trailer_Common {
                     Status = new Status { Id = 1 },
                 }
             },
