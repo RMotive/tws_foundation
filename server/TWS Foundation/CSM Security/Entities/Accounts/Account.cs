@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace CSM_Security.Entities.Accounts;
 
 public class Account
-    : BSecurityDatabaseEntity {
+    : BEntity {
 
     #region Properties
 

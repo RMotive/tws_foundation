@@ -4,7 +4,7 @@ using CSM_Foundation.Database.Validators;
 using CSM_Security.Entities.Accounts;
 using CSM_Security.Entities.Contacts;
 
-namespace CSM_Security.Quality.Entities;
+namespace CSM_Security.Quality.Entities.Accounts;
 public class Q_Account
     : BQ_Entity<Account> {
     protected override Q_EntityEvaluation<Account>[] EvaluateFactory(Q_EntityEvaluation<Account>[] Container) {

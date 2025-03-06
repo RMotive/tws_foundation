@@ -10,7 +10,7 @@ namespace CSM_Security.Entities.Actions;
 ///     [Entity] that represents the information for certain actions/operations to be performed to the Solutions.
 /// </summary>
 public class Action
-    : BSecurityDatabaseEntity, IEntity_Name {
+    : BEntity, IEntity_Name {
 
     #region Properties
     public string Name { get; set; } = string.Empty;

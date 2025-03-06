@@ -12,7 +12,7 @@ namespace CSM_Security.Entities.Profiles;
 ///     [Entity] that stores a relation between a collection of <see cref="Permit"/> with an <see cref="Account"/>
 /// </summary>
 public class Profile
-    : BSecurityDatabaseEntity, IEntity_Name {
+    : BEntity, IEntity_Name {
 
     #region Properties
 

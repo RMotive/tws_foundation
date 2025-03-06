@@ -1,9 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality;
 
-using CSM_Security;
-
 namespace CSM_Security.Quality;
-public class Q_TWSSecurityDatabases
+public class Q_Database
     : BQ_MigrationDatabases<Database> {
-    public Q_TWSSecurityDatabases() : base(new()) { }
+    public Q_Database() : base(new()) { }
 }

@@ -11,7 +11,7 @@ namespace CSM_Security.Entities.Features;
 ///     only for authorization purposes.
 /// </summary>
 public class Feature
-    : BSecurityDatabaseEntity, IEntity_Name {
+    : BEntity, IEntity_Name {
 
     #region Properties
 

@@ -13,7 +13,7 @@ namespace CSM_Security.Entities.Contacts;
 ///     for Business identifications only for Account contacting purposes.
 /// </summary>
 public class Contact
-    : BSecurityDatabaseEntity {
+    : BEntity {
 
     #region Properties
 

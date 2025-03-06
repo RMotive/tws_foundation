@@ -20,7 +20,7 @@ namespace CSM_Security.Entities.Permits;
 ///     [Entity] that stores and handles specific Feature / Solution / Action authorization for Accounts.
 /// </summary>
 public class Permit
-    : BSecurityDatabaseEntity {
+    : BEntity {
 
     #region Properties
 
