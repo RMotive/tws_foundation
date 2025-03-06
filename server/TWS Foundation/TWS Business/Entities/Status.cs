@@ -9,7 +9,11 @@ using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities;
-public partial class Status
+
+/// <summary>
+///     []
+/// </summary>
+public class Status
 : TWSEntity, IEntity_Name {
 
     #region Properites
@@ -20,6 +24,11 @@ public partial class Status
     #endregion
 
     #region Dependants
+
+    /// <summary>
+    ///     <see cref="VehiculeModel"/> dependants from this <see cref="Status"/>.
+    /// </summary>
+    public ICollection<VehiculeModel> Models { get; set; } = [];
 
     /// <summary>
     ///     <see cref="DriverCommon"/> referencing to this <see cref="Status"/>.
@@ -40,11 +49,6 @@ public partial class Status
     ///     <see cref="Trailer_Type"/> dependants from this <see cref="Status"/>.
     /// </summary>
     public ICollection<Trailer_Type> TrailerTypes { get; set; } = [];
-
-    /// <summary>
-    ///     <see cref="VehiculeModel"/> dependants from this <see cref="Status"/>.
-    /// </summary>
-    public ICollection<VehiculeModel> Models { get; set; } = [];
 
     /// <summary>
     ///     <see cref="SCT"/> dependants from this <see cref="Status"/>

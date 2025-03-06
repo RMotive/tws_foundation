@@ -83,39 +83,28 @@ public class Truck
     /// </summary>
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
-    #endregion
-
     /// <summary>
     ///     <see cref="Truck"/> history entries.
     /// </summary>
     public ICollection<Truck_History> History { get; set; } = [];
 
+    #endregion
+
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         return [
             ..Container,
-            ( nameof(VIN), [ new UniqueValidator(), new LengthValidator(17, 17)] ),
+            ( nameof(VIN), [ new UniqueValidator(), new LengthValidator(17, 17) ] ),
         ];
     }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Motor)).HasMaxLength(16);
+        etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsRequired();
 
-        etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsFixedLength().IsRequired();
-        etBuilder.HasIndex(nameof(VIN)).IsUnique();
-
-        etBuilder.Link<Truck, Carrier>(
-            nameof(Carrier), 
-            Required: true,
-            Auto: true
-        );
-        etBuilder.Link<Truck, VehiculeModel>(
-            nameof(Model), 
-            Required: true,
-            Auto: true   
-        );
+        etBuilder.Link<Truck, Carrier>(nameof(Carrier), Required: true);
+        etBuilder.Link<Truck, VehiculeModel>(nameof(Model), Required: true);
 
         etBuilder.Link<Truck, SCT>(nameof(SCT));
         etBuilder.Link<Truck, Maintenance>(nameof(Maintenance));
-        etBuilder.Link<Truck, Insurance>(nameof(Insurance));
     }
 }

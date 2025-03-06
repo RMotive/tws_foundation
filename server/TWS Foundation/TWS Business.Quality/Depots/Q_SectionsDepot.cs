@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="SectionsDepot"/>.
 /// </summary>
 public class Q_SectionsDepot
-    : BQ_Depot<Section, SectionsDepot, BusinessDatabase> {
+    : BQ_Depot<Section, SectionsDepot, Database> {
 
     public Q_SectionsDepot()
         : base(nameof(Section.Id)) {

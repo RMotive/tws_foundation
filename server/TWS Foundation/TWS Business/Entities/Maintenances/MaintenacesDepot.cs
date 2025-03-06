@@ -6,11 +6,11 @@ namespace TWS_Business.Entities.Maintenances;
 ///     representing a depot to handle <see cref="Maintenance"/> dataDatabases entity mirror.
 /// </summary>
 public class MaintenacesDepot
-: BDepot<BusinessDatabase, Maintenance> {
+: BDepot<Database, Maintenance> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Maintenance"/>.
     /// </summary>
-    public MaintenacesDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public MaintenacesDepot(Database Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     public MaintenacesDepot() : base(new(), null) {

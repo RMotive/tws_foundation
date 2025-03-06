@@ -1,108 +1,88 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Carriers;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
-using TWS_Business.Entities.Plates;
-using TWS_Business.Entities.SCTs;
 
 namespace TWS_Business.Entities.Trucks;
 
 /// <summary>
-///     [Entity_H] History entry for <see cref="Truck"/> Entity.
+///     [History Entity] for <see cref="Truck"/> Entity.
 /// </summary>
 public class Truck_History
-: TWSHistory<Truck> {
+    : TWSHistory<Truck> {
 
     #region Properties
 
     /// <summary>
-    ///     Motor identifier.
-    /// </summary>
-    public string? Motor { get; set; }
-
-    /// <summary>
-    ///     Vehicule identifier number.
+    ///     Vehicule Identifier Number.
     /// </summary>
     [StringLength(17, MinimumLength = 17)]
     public string VIN { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Internal business vehicule identifier.
+    /// </summary>
+    [StringLength(16, MinimumLength = 1)]
+    public string Economic { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Unique motor identifier.
+    /// </summary>
+    [StringLength(16)]
+    public string? Motor { get; set; }
 
     #endregion
 
     #region Relations
 
     /// <summary>
-    ///     <see cref="Carrier_History"/> information.
+    ///     <see cref="Entities.Status"/> information.
     /// </summary>
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    public Carrier_History CarrierHistory { get; set; } = default!;
+    public Status Status { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="VehiculeModel"/> information.
+    ///     <see cref="Entities.Manufacturer"/>
     /// </summary>
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    public VehiculeModel Model { get; set; } = default!;
+    public Manufacturer Manufacturer { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="SCT"/> information.
+    ///     <see cref="Carrier_History"/> Carrier history entry.
     /// </summary>
-    public SCT_History? SCTHistory { get; set; }
+    public Carrier_History? CarrierH { get; set; }
 
     /// <summary>
-    ///     <see cref="Maintenance_History"/> information.
+    ///     <see cref="Entities.Situation"/> information.
     /// </summary>
-    public Maintenance_History? MaintenanceHistory { get; set; }
+    public Situation? Situation { get; set; }
 
     /// <summary>
-    ///     <see cref="Insurances.Insurance"/> information.
+    ///     <see cref="Maintenance_History"/> history information.
     /// </summary>
-    public Insurance_History? InsuranceHistory { get; set; }
+    public Maintenance_History? MaintenanceH { get; set; }
 
     /// <summary>
-    ///     <see cref="Plate_History"/>s referencing this <see cref="Truck"/>.
+    ///     <see cref="Insurance_History"/> history information
     /// </summary>
-    public ICollection<Plate_History> Plates { get; set; } = [];
+    public Insurance_History? InsuranceH { get; set; }
 
     #endregion
 
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
+        UniqueValidator Unique = new();
+
         return [
             ..Container,
-            ( nameof(VIN), [ new UniqueValidator(), new LengthValidator(17, 17)] ),
+            (nameof(VIN), [Unique, new LengthValidator(17, 17)]),
+            (nameof(Economic), [new LengthValidator(1, 16)]),
         ];
-    }
-
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
-        etBuilder.Property(nameof(Motor)).HasMaxLength(16);
-
-        etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsFixedLength().IsRequired();
-        etBuilder.HasIndex(nameof(VIN)).IsUnique();
-
-        etBuilder.Link<Truck_History, Carrier_History>(
-            nameof(CarrierHistory),
-            TargetReference: nameof(Carrier_History.TrucksHistories),
-            Required: true,
-            Auto: true
-        );
-        etBuilder.Link<Truck_History, VehiculeModel>(
-            nameof(Model),
-            TargetReference: nameof(VehiculeModel.TrucksHistories),
-            Required: true,
-            Auto: true
-        );
-
-        etBuilder.Link<Truck_History, SCT_History>(nameof(SCTHistory), nameof(SCT_History.TrucksHistories));
-        etBuilder.Link<Truck_History, Maintenance_History>(nameof(MaintenanceHistory), nameof(Maintenance_History.TrucksHistories));
-        etBuilder.Link<Truck_History, Insurance_History>(nameof(InsuranceHistory), nameof(Insurance_History.TrucksHistories));
     }
 }

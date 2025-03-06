@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="CarriersDepot"/>.
 /// </summary>
 public class Q_CarriersDepot
-    : BQ_Depot<Carrier, CarriersDepot, BusinessDatabase> {
+    : BQ_Depot<Carrier, CarriersDepot, Database> {
     public Q_CarriersDepot()
         : base(nameof(Carrier.Id)) {
     }
@@ -17,7 +17,7 @@ public class Q_CarriersDepot
     protected override Carrier MockFactory(string RandomSeed) {
 
         return new() {
-            Name = "CarrierHistory name",
+            Name = "Carrier name",
             Approach = new Approach {
                 Id = 1,
             },

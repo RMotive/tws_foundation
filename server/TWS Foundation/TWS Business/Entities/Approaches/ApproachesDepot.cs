@@ -6,12 +6,12 @@ namespace TWS_Business.Entities.Approaches;
 ///     representing a depot to handle <see cref="Approach"/> dataDatabases entity mirror.
 /// </summary>
 public class ApproachesDepot 
-    : BDepot<BusinessDatabase, Approach> {
+    : BDepot<Database, Approach> {
 
     /// <summary>
     ///     Generates a new depot handler for <see cref="Approach"/>.
     /// </summary>
-    public ApproachesDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public ApproachesDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public ApproachesDepot() : base(new(), null) {

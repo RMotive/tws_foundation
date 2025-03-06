@@ -8,11 +8,11 @@ namespace TWS_Business.Depots;
 ///     representing a depot to handle <see cref="Status"/> dataDatabases entity mirror.
 /// </summary>
 public class StatusesDepot
-: BDepot<BusinessDatabase, Status> {
+: BDepot<Database, Status> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Status"/>.
     /// </summary>
-    public StatusesDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public StatusesDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public StatusesDepot() : base(new(), null) {

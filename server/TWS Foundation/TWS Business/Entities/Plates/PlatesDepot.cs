@@ -6,11 +6,11 @@ namespace TWS_Business.Entities.Plates;
 ///     representing a depot to handle <see cref="Plate"/> dataDatabases entity mirror.
 /// </summary>
 public class PlatesDepot
-    : BDepot<BusinessDatabase, Plate> {
+    : BDepot<Database, Plate> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Plate"/>.
     /// </summary>
-    public PlatesDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public PlatesDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public PlatesDepot()

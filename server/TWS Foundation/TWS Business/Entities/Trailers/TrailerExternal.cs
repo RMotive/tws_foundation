@@ -16,7 +16,7 @@ public class TrailerExternal
     #region Properties
 
     /// <summary>
-    ///     External carrier identification
+    ///     Carrier idenfitication.
     /// </summary>
     [StringLength(100, MinimumLength = 1)]
     public string Carrier { get; set; } = string.Empty;

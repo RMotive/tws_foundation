@@ -7,7 +7,7 @@ namespace TWS_Business;
 /// <summary>
 ///     [Interface] for [TWS Business] database implementations.
 /// </summary>
-public interface IBusinessDatabase {
+public interface IDatabase {
 
     /// <summary>
     ///     [Employee] [Entity] database Set.

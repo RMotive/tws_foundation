@@ -5,11 +5,11 @@ namespace TWS_Business.Entities.Trailers;
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Trailer_Class"/> dataDatabases entity mirror.
 /// </summary>
-public class TrailerClassesDepot : BDepot<BusinessDatabase, Trailer_Class> {
+public class TrailerClassesDepot : BDepot<Database, Trailer_Class> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Trailer_Class"/>.
     /// </summary>
-    public TrailerClassesDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public TrailerClassesDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public TrailerClassesDepot() : base(new(), null) {

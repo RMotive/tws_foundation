@@ -11,7 +11,7 @@ namespace TWS_Business.Entities.Trucks;
 ///     [Entity] that stores shared information along trucks. (<see cref="Truck"/> / <see cref="TruckExternal"/>).
 /// </summary>
 public class Truck_Common
-    : TWSScopeCommonEntity<Truck, TruckExternal> {
+    : TWSEntity {
 
     #region Properties
 
@@ -43,14 +43,24 @@ public class Truck_Common
     /// </remarks>
     public Status Status { get; set; } = default!;
 
-    #endregion
-
-    #region Dependants
+    /// <summary>
+    ///     <see cref="Truck"/> information.
+    /// </summary>
+    public Truck? Internal { get; set; }
 
     /// <summary>
-    ///     <see cref="TruckEntry"/> dependants from this <see cref="Truck_Common"/>.
+    ///     <see cref="TruckExternal"/> information.
     /// </summary>
-    public ICollection<TruckEntry> TrucksEntries { get; set; } = [];
+    public TruckExternal? External { get; set; }
+
+    #endregion
+
+    #region Dependants 
+
+    /// <summary>
+    ///     <see cref="TruckEntry"/> dependants from this <see cref="Truck_Common"/>
+    /// </summary>
+    public ICollection<TruckEntry> TruckEntries { get; set; } = [];
 
     #endregion
 
@@ -100,7 +110,7 @@ public class Truck_Common
     protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
         return [
             ..Container,
-            ( nameof(Economic), [ new LengthValidator(1, 16) ] ),
+            (nameof(Economic), [ new LengthValidator(1, 16) ] ),
         ];
     }
 }

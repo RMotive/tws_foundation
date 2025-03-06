@@ -60,7 +60,7 @@ public class Section
     /// <summary>
     ///     <see cref="TruckEntry"/> dependants from this <see cref="Section"/>.
     /// </summary>
-    public ICollection<TruckEntry> TrucksEntries { get; set; } = [];
+    public ICollection<TruckEntry> TruckEntries { get; set; } = [];
 
     #endregion
 

@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database;
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Models;
 
 using CSM_Security.Entities.Accounts;

@@ -6,14 +6,14 @@ namespace TWS_Business.Entities.Trucks;
 /// 
 /// </summary>
 public class TruckInventory
-    : BDepot<BusinessDatabase, TruckEntry> {
+    : BDepot<Database, TruckEntry> {
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="Database"></param>
     /// <param name="Disposer"></param>
-    public TruckInventory(BusinessDatabase Database, IDisposer? Disposer = null)
+    public TruckInventory(Database Database, IDisposer? Disposer = null)
         : base(Database, Disposer) {
     }
 

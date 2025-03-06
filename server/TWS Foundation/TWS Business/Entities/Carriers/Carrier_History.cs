@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Trucks;
 using TWS_Business.Entities.USDOTs;
 
 namespace TWS_Business.Entities.Carriers;
@@ -51,15 +50,6 @@ public class Carrier_History
     ///     <see cref="USDOT_History"/> information.
     /// </summary>
     public USDOT_History? USDOTHistory { get; set; }
-
-    #endregion
-
-    #region Dependants
-
-    /// <summary>
-    ///     <see cref="Truck_History"/> dependants from this <see cref="Carrier_History"/>.
-    /// </summary>
-    public ICollection<Truck_History> TrucksHistories { get; set; } = []; 
 
     #endregion
 

@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database;
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using CSM_Security.Entities.Contacts;

@@ -7,11 +7,11 @@ namespace TWS_Business.Depots;
 ///     Implements a new depot to handle <see cref="Manufacturer"/> entity
 ///     transactions. 
 /// </summary>
-public class ManufacturersDepot : BDepot<BusinessDatabase, Manufacturer> {
+public class ManufacturersDepot : BDepot<Database, Manufacturer> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Manufacturer"/>.
     /// </summary>
-    public ManufacturersDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public ManufacturersDepot(Database Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     public ManufacturersDepot() : base(new(), null) {

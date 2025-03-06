@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="PlatesDepot"/>.
 /// </summary>
 public class Q_PlatesDepot
-    : BQ_Depot<Plate, PlatesDepot, BusinessDatabase> {
+    : BQ_Depot<Plate, PlatesDepot, Database> {
     public Q_PlatesDepot()
         : base(nameof(Plate.Identifier)) {
     }

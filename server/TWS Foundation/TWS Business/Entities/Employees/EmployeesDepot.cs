@@ -6,12 +6,12 @@ namespace TWS_Business.Entities.Employees;
 ///     representing a depot to handle <see cref="Employee"/> dataDatabases entity mirror.
 /// </summary>
 public class EmployeesDepot
-    : BDepot<BusinessDatabase, Employee>, IEmployeesDepot {
+    : BDepot<Database, Employee>, IEmployeesDepot {
 
     /// <summary>
     ///     Generates a new depot handler for <see cref="Employee"/>.
     /// </summary>
-    public EmployeesDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public EmployeesDepot(Database Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     public EmployeesDepot()

@@ -7,11 +7,11 @@ namespace TWS_Business.Entities.SCTs;
 ///     representing a depot to handle <see cref="SCT"/> dataDatabases entity mirror.
 /// </summary>
 public class SCTsDepot
-: BDepot<BusinessDatabase, SCT> {
+: BDepot<Database, SCT> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="SCT"/>.
     /// </summary>
-    public SCTsDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public SCTsDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public SCTsDepot()

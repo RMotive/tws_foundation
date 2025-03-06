@@ -8,11 +8,11 @@ namespace TWS_Business.Depots;
 ///     representing a depot to handle <see cref="Address"/> dataDatabases entity mirror.
 /// </summary>
 public class AddressesDepot 
-    : BDepot<BusinessDatabase, Address> {
+    : BDepot<TWS_Business.Database, Address> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Address"/>.
     /// </summary>
-    public AddressesDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public AddressesDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public AddressesDepot() : base(new(), null) {

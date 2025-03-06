@@ -97,7 +97,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         };
 
         Carrier carrier = new() {
-            Name = "CarrierHistory " + RandomSeed,
+            Name = "Carrier " + RandomSeed,
             Status = new Status {
                 Id = 1,
             },

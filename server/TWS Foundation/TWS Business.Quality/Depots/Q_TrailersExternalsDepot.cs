@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="TrailersExternalsDepot"/>.
 /// </summary>
 public class Q_TrailersExternalsDepot
-    : BQ_Depot<TrailerExternal, TrailersExternalsDepot, BusinessDatabase> {
+    : BQ_Depot<TrailerExternal, TrailersExternalsDepot, Database> {
     public Q_TrailersExternalsDepot()
         : base(nameof(TrailerExternal.Id)) {
     }
@@ -17,7 +17,7 @@ public class Q_TrailersExternalsDepot
     protected override TrailerExternal MockFactory(string RandomSeed) {
 
         return new() {
-            Carrier = "CarrierHistory test",
+            Carrier = "Carrier test",
             MxPlate = "12345678",
             Common = new() {
                 Status = new Status { Id = 1 },

@@ -66,7 +66,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         Carrier carrier = new() {
-            Name = "CarrierHistory " + RandomSeed,
+            Name = "Carrier " + RandomSeed,
             Status = new Status {
                 Id = 1,
             },

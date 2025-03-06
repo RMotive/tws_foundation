@@ -12,17 +12,8 @@ public abstract class TWSScopeCommonEntity<InternalT, ExternalT>
     : TWSEntity
     where InternalT : class, IEntity
     where ExternalT : class, IEntity {
-
-    /// <summary>
-    ///     <see cref="InternalT"/> information.
-    /// </summary>
-    public InternalT? Internal { get; set; } = default!;
-
-    /// <summary>
-    ///     <see cref="ExternalT"/> information.
-    /// </summary>
-    public ExternalT? External { get; set; } = default!;
 }
+
 
 /// <summary>
 /// 
@@ -32,7 +23,7 @@ public abstract class TWSScopeEntity<TCommon>
     : BEntity<TCommon>
     where TCommon : class, IEntity {
 
-    public override Type Database { get; init; } = typeof(BusinessDatabase);
+    public override Type Database { get; init; } = typeof(Database);
 }
 
 /// <summary>
@@ -41,7 +32,7 @@ public abstract class TWSScopeEntity<TCommon>
 public abstract class TWSEntity
     : BEntity {
 
-    public override Type Database { get; init; } = typeof(BusinessDatabase);
+    public override Type Database { get; init; } = typeof(Database);
 }
 
 /// <summary>
@@ -52,5 +43,5 @@ public abstract class TWSHistory<TEntity>
     : BHistory<TEntity>
     where TEntity : class, IEntity {
 
-    public override Type Database { get; init; } = typeof(BusinessDatabase);
+    public override Type Database { get; init; } = typeof(Database);
 }

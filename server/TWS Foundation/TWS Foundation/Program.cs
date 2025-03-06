@@ -132,8 +132,8 @@ public partial class Program {
             );
 
             // --> Data storages connection validations.
-            new Database().ValidateConnection();
-            new BusinessDatabase().ValidateConnection();
+            new CSM_Security.Database().ValidateConnection();
+            new TWS_Business.Database().ValidateConnection();
 
             // --> Adding customer services
             {
@@ -149,8 +149,8 @@ public partial class Program {
                 Services.AddSingleton<IDisposer, SampleDisposer>();
 
                 // --> Databasess contexts
-                Services.AddDbContext<Database>();
-                Services.AddDbContext<IBusinessDatabase, BusinessDatabase>();
+                Services.AddDbContext<CSM_Security.Database>();
+                Services.AddDbContext<IDatabase, TWS_Business.Database>();
 
                 // --> Depots
 
@@ -215,7 +215,6 @@ public partial class Program {
                 builder.Services.AddScoped<IYardLogsService, YardLogsService>();
                 builder.Services.AddScoped<ICarriersService, CarriersService>();
                 builder.Services.AddScoped<IVehiculesModelsService, VehiculeModelService>();
-                builder.Services.AddScoped<ITrucksInventoriesService, TruckInventoryService>();
             }
 
             WebApplication app = builder.Build();

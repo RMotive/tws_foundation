@@ -13,11 +13,11 @@ namespace TWS_Business.Depots;
 ///     representing a depot to handle <see cref="YardLog"/> dataDatabases entity mirror.
 /// </summary>
 public class YardLogsDepot
-    : BDepot<BusinessDatabase, YardLog> {
+    : BDepot<Database, YardLog> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="YardLog"/>.
     /// </summary>
-    public YardLogsDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public YardLogsDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public YardLogsDepot()

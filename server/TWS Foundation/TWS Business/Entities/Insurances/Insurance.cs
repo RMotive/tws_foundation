@@ -20,7 +20,7 @@ public class Insurance
     #region Properties
 
     /// <summary>
-    ///     InsuranceHistory policy identifier.
+    ///     Insurance policy identifier.
     /// </summary>
     [StringLength(20, MinimumLength = 1)]
     public string Policy { get; set; } = string.Empty;
@@ -32,7 +32,7 @@ public class Insurance
     public string Country { get; set; } = string.Empty;
 
     /// <summary>
-    ///     InsuranceHistory expiration date.
+    ///     Insurance expiration date.
     /// </summary>
     public DateOnly Expiration { get; set; }
 

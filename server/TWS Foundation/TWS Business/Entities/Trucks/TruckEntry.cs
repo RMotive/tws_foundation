@@ -36,13 +36,13 @@ public class TruckEntry
 
         etBuilder.Link<TruckEntry, Section>(
                 nameof(Section),
-                TargetReference: nameof(Entities.Section.TrucksEntries),
+                TargetReference: nameof(Entities.Section.TruckEntries),
                 Required: true,
                 Auto: true
             );
         etBuilder.Link<TruckEntry, Truck_Common>(
                 nameof(Truck),
-                TargetReference: nameof(Truck_Common.TrucksEntries),
+                TargetReference: nameof(Truck_Common.TruckEntries),
                 Required: true,
                 Auto: true
             );

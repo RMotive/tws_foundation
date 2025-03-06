@@ -7,11 +7,11 @@ namespace TWS_Business.Depots;
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Driver"/> dataDatabases entity mirror.
 /// </summary>
-public class DriversDepot : BDepot<BusinessDatabase, Driver> {
+public class DriversDepot : BDepot<Database, Driver> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Driver"/>.
     /// </summary>
-    public DriversDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public DriversDepot(Database Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
     public DriversDepot() : base(new(), null) {

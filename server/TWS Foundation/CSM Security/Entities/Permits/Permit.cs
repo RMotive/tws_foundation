@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 

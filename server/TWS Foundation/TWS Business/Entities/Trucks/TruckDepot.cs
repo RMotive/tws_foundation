@@ -6,11 +6,11 @@ namespace TWS_Business.Entities.Trucks;
 ///     representing a depot to handle <see cref="Truck"/> dataDatabases entity mirror.
 /// </summary>
 public class TruckDepot 
-    : BDepot<BusinessDatabase, Truck> {
+    : BDepot<Database, Truck> {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Truck"/>.
     /// </summary>
-    public TruckDepot(BusinessDatabase Databases, IDisposer? Disposer = null)
+    public TruckDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public TruckDepot()

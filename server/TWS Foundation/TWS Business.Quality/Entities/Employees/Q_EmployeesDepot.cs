@@ -8,7 +8,7 @@ namespace TWS_Business.Quality.Entities.Employees;
 ///     Qualifies the <see cref="EmployeesDepot"/>.
 /// </summary>
 public class Q_EmployeesDepot
-    : BQ_Depot<Employee, EmployeesDepot, BusinessDatabase> {
+    : BQ_Depot<Employee, EmployeesDepot, Database> {
     public Q_EmployeesDepot()
         : base(nameof(Employee.Id)) {
     }

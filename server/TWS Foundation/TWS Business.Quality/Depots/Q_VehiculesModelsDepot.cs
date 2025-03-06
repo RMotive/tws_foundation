@@ -9,7 +9,7 @@ namespace TWS_Business.Quality.Depots;
 ///     Qualifies the <see cref="VehiculesModelsDepot"/>.
 /// </summary>
 public class Q_VehiculesModelsDepot
-    : BQ_Depot<VehiculeModel, VehiculesModelsDepot, BusinessDatabase> {
+    : BQ_Depot<VehiculeModel, VehiculesModelsDepot, Database> {
     public Q_VehiculesModelsDepot()
         : base(nameof(VehiculeModel.Id)) {
     }

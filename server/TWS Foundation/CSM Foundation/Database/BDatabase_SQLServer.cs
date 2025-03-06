@@ -7,6 +7,7 @@ using CSM_Foundation.Database.Connector;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
+using CSM_Foundation.Server.Managers;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -312,6 +313,16 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         string connectionString = Connection.GenerateConnectionString();
         optionsBuilder.UseSqlServer(connectionString);
+
+        if (AppDomain.CurrentDomain.FriendlyName.Contains("ef")) {
+            AdvisorManager.Warning(
+                    $"Running EF Database update",
+                    new Dictionary<string, dynamic> {
+                        { "Environment", EnvironmentManager.Mode.ToString() },
+                        { "Connection", connectionString },
+                    }
+                );
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder mBuilder) {
@@ -351,6 +362,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
 
                         return false;
                     }
+
                     if (HasCommonDefinition()) {
                         PropertyInfo commonProperty = set.GetProperty(nameof(BEntity<IEntity>.Common));
                         Type commonType = commonProperty.PropertyType;

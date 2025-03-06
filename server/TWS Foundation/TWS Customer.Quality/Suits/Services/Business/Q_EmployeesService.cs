@@ -12,11 +12,11 @@ namespace TWS_Customer.Quality.Suits.Services.Business;
 
 
 public class Q_EmployeesService
-    : BQ_Service<Employee, EmployeesService, BusinessDatabase> {
+    : BQ_Service<Employee, EmployeesService, Database> {
     public Q_EmployeesService()
         : base(
                 new(new EmployeesDepot()),
-                () => new BusinessDatabase()
+                () => new Database()
             ) {
 
     }
