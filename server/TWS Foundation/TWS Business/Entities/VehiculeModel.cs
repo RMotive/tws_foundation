@@ -59,6 +59,11 @@ public class VehiculeModel
     /// </summary>
     public ICollection<Truck> Trucks { get; set; } = [];
 
+    /// <summary>
+    ///     <see cref="Truck_History"/> dependants from this <see cref="VehiculeModel"/>.
+    /// </summary>
+    public ICollection<Truck_History> TrucksHistories { get; set; } = [];
+
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

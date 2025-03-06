@@ -223,7 +223,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             bool isConnector = generic.IsAssignableTo(typeof(BConnector<,>));
 
             if (!(isSet || isConnector))
-                throw new Exception($"BBusinessDatabaseEntity [{dbSet.Name}] doesn't implement the correct bases (BBusinessDatabaseEntity || BConnector) unable to define its function");
+                throw new Exception($"BEntity [{dbSet.Name}] doesn't implement the correct bases (BEntity || BConnector) unable to define its function");
 
             if (isSet) {
                 sets = [

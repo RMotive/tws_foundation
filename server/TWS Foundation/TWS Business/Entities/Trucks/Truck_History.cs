@@ -88,19 +88,21 @@ public class Truck_History
         etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsFixedLength().IsRequired();
         etBuilder.HasIndex(nameof(VIN)).IsUnique();
 
-        etBuilder.Link<Truck, Carrier>(
+        etBuilder.Link<Truck_History, Carrier_History>(
             nameof(CarrierHistory),
+            TargetReference: nameof(Carrier_History.TrucksHistories),
             Required: true,
             Auto: true
         );
-        etBuilder.Link<Truck, VehiculeModel>(
+        etBuilder.Link<Truck_History, VehiculeModel>(
             nameof(Model),
+            TargetReference: nameof(VehiculeModel.TrucksHistories),
             Required: true,
             Auto: true
         );
 
-        etBuilder.Link<Truck, SCT_History>(nameof(SCTHistory));
-        etBuilder.Link<Truck, Maintenance_History>(nameof(MaintenanceHistory));
-        etBuilder.Link<Truck, Insurance_History>(nameof(InsuranceHistory));
+        etBuilder.Link<Truck_History, SCT_History>(nameof(SCTHistory), nameof(SCT_History.TrucksHistories));
+        etBuilder.Link<Truck_History, Maintenance_History>(nameof(MaintenanceHistory), nameof(Maintenance_History.TrucksHistories));
+        etBuilder.Link<Truck_History, Insurance_History>(nameof(InsuranceHistory), nameof(Insurance_History.TrucksHistories));
     }
 }

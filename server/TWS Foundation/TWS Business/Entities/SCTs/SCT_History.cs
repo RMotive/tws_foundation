@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Carriers;
+using TWS_Business.Entities.Trucks;
 
 namespace TWS_Business.Entities.SCTs;
 
@@ -55,7 +56,12 @@ public class SCT_History
     /// <summary>
     ///     <see cref="Carrier_History"/> dependants from this <see cref="SCT_History"/>.
     /// </summary>
-    public ICollection<Carrier_History> CarriersH { get; set; } = [];
+    public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
+
+    /// <summary>
+    ///     <see cref="Truck_History"/> dependants from this <see cref="Truck_History"/>.
+    /// </summary>
+    public ICollection<Truck_History> TrucksHistories { get; set; } = [];
 
     #endregion
 
