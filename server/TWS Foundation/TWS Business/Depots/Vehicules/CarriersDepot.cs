@@ -2,7 +2,7 @@
 
 using TWS_Business.Entities.Vehicules;
 
-namespace TWS_Business.Depots;
+namespace TWS_Business.Depots.Vehicules;
 /// <summary>
 ///     Implements a <see cref="BDatabasesDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Carrier"/> dataDatabases entity mirror.

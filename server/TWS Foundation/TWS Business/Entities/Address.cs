@@ -52,6 +52,9 @@ public class Address
     /// <summary>
     ///     Country code.
     /// </summary>
+    /// <remarks>
+    ///     This property must have a minimum 2 length and maximum of 3.
+    /// </remarks>
     [StringLength(3, MinimumLength = 2)]
     public string Country { get; set; } = null!;
 

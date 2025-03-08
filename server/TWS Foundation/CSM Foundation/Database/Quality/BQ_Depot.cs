@@ -37,15 +37,15 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     protected readonly TDepot Depot = new();
 
     /// <summary>
-    ///     Stores the most valid orderable property from the current <see cref="TEntity"/>.
+    ///     Stores the most valid evaluable property from the current <see cref="TEntity"/>. used for ordering and filtering at View operations and evaluate their quality.
     /// </summary>
-    protected readonly PropertyInfo Orderable; 
+    protected readonly PropertyInfo Evaluable;
 
     /// <summary>
     ///     Generates a new behavior base for <see cref="BQ_Depot{TMigrationSet, TMigrationDepot, TMigrationDatabases}"/>.
     /// </summary>
     /// <param name="Factories">
-    ///     Database factories for relations entities at external databases needed for <see cref="TEntity"/>.
+    ///     Database factories for relations sampleEntity at external databases needed for <see cref="TEntity"/>.
     /// </param>
     /// <param name="Database">
     ///     Main Entity <see cref="TEntity"/> database handler instance. If isn't given will use a default built instance.
@@ -55,10 +55,20 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
         PropertyInfo[] entityProperties = typeof(TEntity).GetProperties();
 
-        foreach(PropertyInfo propertyInfo in entityProperties) {
+        PropertyInfo? orderableTmp = null;
+        foreach (PropertyInfo propertyInfo in entityProperties) {
 
+            Type propertyType = propertyInfo.PropertyType;
 
+            if (!(propertyType == typeof(string)) || (propertyType == typeof(int))) {
+                continue;
+            }
+
+            orderableTmp = propertyInfo;
         }
+
+
+        Evaluable = orderableTmp ?? typeof(TEntity).GetProperty(nameof(IEntity.Id))!; // By default if the [Entity] doesn't have a valid evaluable property will use the Id. 
     }
 
     /// <summary>
@@ -130,8 +140,8 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             Retroactive = false,
             Orderings = [
                 new SetViewOrderOptions {
-                        Property = ,
-                        Order = SetViewOrders.Descending,
+                    Property = Evaluable.Name,
+                    Order = SetViewOrders.Descending,
                 },
             ],
         };
@@ -144,9 +154,8 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         {
             Type setType = typeof(TEntity);
             ParameterExpression parameterExpression = Expression.Parameter(setType, $"X0");
-            PropertyInfo property = setType.GetProperty(Ordering)
-                ?? throw new Exception($"Unexisted property ({Ordering}) on ({setType})");
-            MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
+
+            MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, Evaluable);
             UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
             Expression<Func<TEntity, object>> orderingExpression = Expression.Lambda<Func<TEntity, object>>(translationExpression, parameterExpression);
 
@@ -159,8 +168,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             TEntity expected = orderedReferenceRecords[i];
             TEntity actual = orderedReferenceRecords[i];
 
-            PropertyInfo property = typeof(TEntity).GetProperty(Ordering)!;
-            Assert.Equal(property.GetValue(expected), property.GetValue(actual));
+            Assert.Equal(Evaluable.GetValue(expected), Evaluable.GetValue(actual));
         }
     }
 
@@ -186,13 +194,12 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         });
     }
 
-    [Fact(DisplayName = "[View]: Using Property filter (Contains)")]
+    [SkippableFact(DisplayName = "[View]: Using Property filter (Contains)")]
     public async Task ViewE() {
+        Skip.If(Evaluable.PropertyType != typeof(string), "This assertion is only available for entities that have an evaluable string property since CONTAINS method is currently only supported to filter string type properties.");
 
-        if (factorization is null) {
-            return;
-        }
-
+        TEntity sampleEntity = Store(EntityFactory);
+        object? sampleValue = Evaluable.GetValue(sampleEntity);
 
         SetViewOptions<TEntity> qViewOptions = new() {
             Retroactive = false,
@@ -201,47 +208,42 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             Filters = [
                 new SetViewPropertyFilter<TEntity> {
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
-                    Property = factorization.Value.Property,
-                    Value = factorization.Value.Value,
+                    Property = Evaluable.Name,
+                    Value = sampleValue,
                 }
             ],
         };
 
-
         SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
+        Assert.All(
+            qOut.Records,
+            (i) => {
+                object? value = Evaluable.GetValue(i);
 
-
-        PropertyInfo? pInfo = typeof(TEntity).GetProperty(factorization.Value.Property);
-        Assert.NotNull(pInfo);
-        Assert.All(qOut.Records, i => {
-            object? value = pInfo.GetValue(i);
-
-            Assert.Equal(value, factorization.Value.Value);
-        });
+                Assert.Equal(sampleValue, value);
+            }
+        );
     }
 
     [Fact(DisplayName = "[View]: Using filter Linear Evaluation (OR)")]
     public async Task ViewF() {
-        TEntity[] mocks = [StoredMocks[0], StoredMocks[1]];
+        TEntity[] entities = Store(2, EntityFactory);
 
+
+        List<object?> possibleValues = [];
         ISetViewFilter<TEntity>[] filters = [];
-        string property = "";
-        string?[] values = [];
-        foreach (TEntity mock in mocks) {
-            (string Property, string? Value)? factorization = FactorizeProperty(mock);
-            if (factorization is null || factorization.Value.Property is null) {
-                return;
-            }
+        foreach (TEntity entity in entities) {
 
-            property = factorization.Value.Property;
-            values = [.. values, factorization.Value.Value];
+            object? sampleValue = Evaluable.GetValue(entity);
             filters = [
                 new SetViewPropertyFilter<TEntity> {
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
-                    Property = factorization.Value.Property,
-                    Value = factorization.Value.Value,
+                    Property = Evaluable.Name,
+                    Value = sampleValue,
                 },
             ];
+
+            possibleValues.Add(sampleValue);
         }
 
         SetViewOptions<TEntity> qViewOptions = new() {
@@ -255,21 +257,15 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                 },
             ],
         };
+
         SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
-
-        PropertyInfo? propMirror = typeof(TEntity).GetProperty(property);
-        Assert.NotNull(propMirror);
-
-        Assert.All(qOut.Records, i => {
-            object? value = propMirror.GetValue(i);
-
-            foreach (string? refValue in values) {
-                if (refValue == (string?)value) {
-                    return;
-                }
+        Assert.All(
+            qOut.Records,
+            (i) => {
+                object? actualValue = Evaluable.GetValue(i);
+                Assert.Contains(actualValue, possibleValues);
             }
-            Assert.True(false);
-        });
+        );
     }
 
     #endregion

@@ -10,17 +10,12 @@ namespace TWS_Business.Quality.Depots;
 public class Q_AddressesDepot
     : BQ_Depot<Address, AddressesDepot, Database> {
     public Q_AddressesDepot()
-        : base(nameof(Address.Id)) {
+        : base() {
     }
 
-    protected override Address MockFactory(string RandomSeed) {
-
+    protected override Address EntityFactory(string Entropy) {
         return new() {
-            Country = "USA"
+            Country = Entropy[..3],
         };
-    }
-
-    protected override (string Property, string? Value)? FactorizeProperty(Address Mock) {
-        return (nameof(Address.Street), Mock.Street);
     }
 }

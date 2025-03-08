@@ -72,6 +72,9 @@ public interface IEntity_Name {
     /// <summary>
     ///     [Entity] name.
     /// </summary>
+    /// <remarks>
+    ///     This property must be unique along entities and have length constraint ( >= 1 && <= 100)
+    /// </remarks>
     [StringLength(100, MinimumLength = 1)]
     string Name { get; set; }
 

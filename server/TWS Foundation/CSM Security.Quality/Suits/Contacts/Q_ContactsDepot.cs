@@ -1,31 +1,22 @@
-﻿
-using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Quality;
+﻿using CSM_Foundation.Database.Quality;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
-namespace CSM_Security.Quality.Entities.Contacts;
+namespace CSM_Security.Quality.Suits.Contacts;
 
 /// <summary>
 ///     Qualifies the <see cref="ContactsDepot"/>.
 /// </summary>
 public class Q_ContactsDepot
     : BQ_Depot<Contact, ContactsDepot, Database> {
-    public Q_ContactsDepot()
-        : base(nameof(Contact.Name)) {
-    }
 
-    protected override Contact MockFactory(string RandomSeed) {
+    protected override Contact EntityFactory(string Entropy) {
         return new() {
-            Name = RandomUtils.String(50),
-            Lastname = RandomUtils.String(50),
-            EMail = RandomUtils.String(30),
-            Phone = RandomUtils.String(14),
+            Name = Entropy[..8],
+            Lastname = Entropy[9..],
+            EMail = $"{Entropy[11..]}.com",
+            Phone = Entropy[..14],
         };
-    }
-
-    protected override (string Property, string? Value)? FactorizeProperty(Contact Mock) {
-        return (nameof(Contact.Name), Mock.Name);
     }
 }

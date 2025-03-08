@@ -42,6 +42,9 @@ public class Contact
     /// <summary>
     ///     Phone number for communication purposes.
     /// </summary>
+    /// <remarks>
+    ///     This proeprty have length restriction: ( >= 10 & <= 14)
+    /// </remarks>
     [StringLength(14, MinimumLength = 10)]
     public string Phone { get; set; } = null!;
 

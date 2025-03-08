@@ -4,25 +4,19 @@ using TWS_Business.Depots;
 using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Depots;
+
 /// <summary>
 ///     Qualifies the <see cref="ApproachesDepot"/>.
 /// </summary>
 public class Q_ApproachesDepot
     : BQ_Depot<Approach, ApproachesDepot, Database> {
-    public Q_ApproachesDepot()
-        : base(nameof(Approach.EMail)) {
-    }
 
-    protected override Approach MockFactory(string RandomSeed) {
+    protected override Approach EntityFactory(string Entropy) {
         return new() {
             Status = new Status {
                 Id = 1,
             },
-            EMail = "mail@test.com"
+            EMail = $"{Entropy}@test.com"
         };
-    }
-
-    protected override (string Property, string? Value)? FactorizeProperty(Approach Mock) {
-        return (nameof(Approach.Personal), Mock.Personal);
     }
 }
