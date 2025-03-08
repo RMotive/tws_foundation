@@ -1,8 +1,7 @@
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Models.Out;
 
-using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Permits;
+using CSM_Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
 

@@ -3,6 +3,7 @@ using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
 using CSM_Security;
+using CSM_Security.Entities;
 using CSM_Security.Entities.Solutions;
 
 using TWS_Customer.Services.Security.Solutions;

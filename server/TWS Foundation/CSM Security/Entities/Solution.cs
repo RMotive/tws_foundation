@@ -1,12 +1,10 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities.Permits;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CSM_Security.Entities.Solutions;
+namespace CSM_Security.Entities;
 
 /// <summary>
 ///     [Entity] that stores information for business environment solution.

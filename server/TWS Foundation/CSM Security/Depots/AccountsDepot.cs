@@ -3,13 +3,12 @@ using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Exceptions;
 using CSM_Foundation.Database.Models.Out;
 
-using CSM_Security.Entities.Permits;
-using CSM_Security.Entities.Profiles;
+using CSM_Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
 
-namespace CSM_Security.Entities.Accounts;
+namespace CSM_Security.Depots;
 /// <summary>
 ///     Implements a new depot to handle <see cref="Account"/> entity
 ///     transactions. 

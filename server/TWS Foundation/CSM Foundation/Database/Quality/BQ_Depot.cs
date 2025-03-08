@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Filters;
@@ -9,117 +8,83 @@ using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Database.Quality.Disposing;
 
-using Microsoft.EntityFrameworkCore;
-
 using Xunit;
 
 namespace CSM_Foundation.Database.Quality;
 
 /// <summary>
-/// 
+///     [Abstract] class for Quality Depots implementations. This are classes that tests the functionallity quality of a certain <see cref="BDepot{TDatabase, TEntity}"/>, providing
+///     default built-in tests for all these implementations.
 /// </summary>
-/// <typeparam name="TSet"></typeparam>
-/// <typeparam name="TDepot"></typeparam>
-/// <typeparam name="TDatabase"></typeparam>
-public abstract class BQ_Depot<TSet, TDepot, TDatabase>
-    : IQ_Depot, IDisposable
-    where TSet : class, IEntity, new()
-    where TDepot : IDepot<TSet>, new()
+/// <typeparam name="TEntity">
+///     [Entity] the <see cref="TDepot"/> is based on.
+/// </typeparam>
+/// <typeparam name="TDepot">
+///     [Depot] to be qualified.
+/// </typeparam>
+/// <typeparam name="TDatabase">
+///     [Database] that stores the <see cref="TEntity"/> data.
+/// </typeparam>
+public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
+    : BQ_DataHandler
+    where TEntity : class, IEntity, new()
+    where TDepot : IDepot<TEntity>, new()
     where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
 
-    protected readonly Q_Disposer Disposer;
-
-    private readonly string Ordering;
+    /// <summary>
+    ///     Depot instance to operate tests.
+    /// </summary>
+    protected readonly TDepot Depot = new();
 
     /// <summary>
-    /// 
+    ///     Stores the most valid orderable property from the current <see cref="TEntity"/>.
     /// </summary>
-    protected TDepot Depot => new();
-    /// <summary>
-    /// 
-    /// </summary>
-    private static TDatabase Database => new();
-
-    private readonly TSet[] StoredMocks;
-
+    protected readonly PropertyInfo Orderable; 
 
     /// <summary>
     ///     Generates a new behavior base for <see cref="BQ_Depot{TMigrationSet, TMigrationDepot, TMigrationDatabases}"/>.
     /// </summary>
-    /// <param name="Ordering">
-    ///     Property name to perform <see cref="View"/> qualifications with ordering.
+    /// <param name="Factories">
+    ///     Database factories for relations entities at external databases needed for <see cref="TEntity"/>.
     /// </param>
-    public BQ_Depot(string Ordering) {
-        this.Ordering = Ordering;
+    /// <param name="Database">
+    ///     Main Entity <see cref="TEntity"/> database handler instance. If isn't given will use a default built instance.
+    /// </param>
+    public BQ_Depot(DatabaseFactory? Database = null, params DatabaseFactory[] Factories)
+        : base([.. Factories, () => Database?.Invoke() ?? new TDatabase()]) {
 
-        Disposer = new Q_Disposer(
-                () => new TDatabase()
-            );
-        StoredMocks = StoreMocks(30);
-    }
-    public void Dispose() {
-        Disposer.Dispose();
-        GC.SuppressFinalize(this);
-    }
+        PropertyInfo[] entityProperties = typeof(TEntity).GetProperties();
 
-    /// <summary>
-    ///     
-    /// </summary>
-    /// <returns></returns>
-    protected abstract TSet MockFactory(string RandomSeed);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    protected abstract (string Property, string? Value)? FactorizeProperty(TSet Mock);
-
-    /// <summary>
-    ///     
-    /// </summary>
-    /// <param name="Quantity"></param>
-    /// <returns></returns>
-    protected TSet[] StoreMocks(int Quantity) {
-        TDatabase database = Database;
-
-        TSet[] storedMocks = GenerateMocks(Quantity);
+        foreach(PropertyInfo propertyInfo in entityProperties) {
 
 
-        database.Set<TSet>().AddRange(storedMocks);
-        database.SaveChanges();
-        Disposer.Push(storedMocks);
-        return storedMocks;
-    }
-
-    protected TSet[] GenerateMocks(int Quantity) {
-        TSet[] storedMocks = [];
-
-        for (int i = 0; i < Quantity; i++) {
-            string seed = RandomUtils.String(16);
-
-            TSet mock = MockFactory(seed);
-            mock.Timestamp = DateTime.UtcNow;
-
-            storedMocks = [.. storedMocks, mock];
         }
-
-        return storedMocks;
     }
+
+    /// <summary>
+    ///     Creates a context [Entity] for testing data creation and assertion.
+    /// </summary>
+    /// <param name="Entropy">
+    ///     Random 16 length value for unique properties.
+    /// </param>
+    /// <returns>
+    ///     A correctly built <see cref="TEntity"/>.
+    /// </returns>
+    protected abstract TEntity EntityFactory(string Entropy);
 
     #region Q_Base View
 
     [Fact(DisplayName = "[View]: No ordering, no filters")]
     public async Task ViewA() {
-        TDatabase Database = BQ_Depot<TSet, TDepot, TDatabase>.Database;
-        DbSet<TSet> Set = Database.Set<TSet>();
+        Store(30, EntityFactory);
 
-        SetViewOptions<TSet> qViewOptions = new() {
+        SetViewOptions<TEntity> qViewOptions = new() {
             Retroactive = false,
             Range = 20,
             Page = 1,
         };
 
-        SetViewOut<TSet> qOut = await Depot.View(qViewOptions);
+        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
 
         Assert.Multiple(
             () => Assert.True(qOut.Pages > 1),
@@ -132,7 +97,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     [Fact(DisplayName = "[View]: Specific page selected")]
     public async Task ViewB() {
 
-        SetViewOptions<TSet> qViewOptions;
+        SetViewOptions<TEntity> qViewOptions;
         {
             qViewOptions = new() {
                 Retroactive = false,
@@ -141,7 +106,7 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
             };
         }
 
-        SetViewOut<TSet> qOut = await Depot.View(qViewOptions);
+        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
 
         Assert.Multiple(
             () => Assert.True(qOut.Pages > 1),
@@ -154,66 +119,66 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
     [Fact(DisplayName = $"[View]: Specific ordering by property")]
     public async Task ViewC() {
 
-        SetViewOptions<TSet> qUnorderedViewOptions = new() {
+        SetViewOptions<TEntity> qUnorderedViewOptions = new() {
             Page = 1,
             Range = 20,
             Retroactive = false,
         };
-        SetViewOptions<TSet> qOrderedViewOptions = new() {
+        SetViewOptions<TEntity> qOrderedViewOptions = new() {
             Page = 1,
             Range = 20,
             Retroactive = false,
             Orderings = [
                 new SetViewOrderOptions {
-                        Property = Ordering,
+                        Property = ,
                         Order = SetViewOrders.Descending,
                 },
             ],
         };
 
-        SetViewOut<TSet> qOrderedOut = await Depot.View(qOrderedViewOptions);
-        SetViewOut<TSet> qUnorderedOut = await Depot.View(qUnorderedViewOptions);
+        SetViewOut<TEntity> qOrderedOut = await Depot.View(qOrderedViewOptions);
+        SetViewOut<TEntity> qUnorderedOut = await Depot.View(qUnorderedViewOptions);
 
         // --> Manual ordering undordered result for reference.
-        TSet[] orderedReferenceRecords = qUnorderedOut.Records;
+        TEntity[] orderedReferenceRecords = qUnorderedOut.Records;
         {
-            Type setType = typeof(TSet);
+            Type setType = typeof(TEntity);
             ParameterExpression parameterExpression = Expression.Parameter(setType, $"X0");
             PropertyInfo property = setType.GetProperty(Ordering)
                 ?? throw new Exception($"Unexisted property ({Ordering}) on ({setType})");
             MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
             UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
-            Expression<Func<TSet, object>> orderingExpression = Expression.Lambda<Func<TSet, object>>(translationExpression, parameterExpression);
+            Expression<Func<TEntity, object>> orderingExpression = Expression.Lambda<Func<TEntity, object>>(translationExpression, parameterExpression);
 
-            IQueryable<TSet> sorted = orderedReferenceRecords.AsQueryable();
+            IQueryable<TEntity> sorted = orderedReferenceRecords.AsQueryable();
             sorted = sorted.OrderByDescending(orderingExpression);
             orderedReferenceRecords = [.. sorted];
         }
 
         for (int i = 0; i < orderedReferenceRecords.Length; i++) {
-            TSet expected = orderedReferenceRecords[i];
-            TSet actual = orderedReferenceRecords[i];
+            TEntity expected = orderedReferenceRecords[i];
+            TEntity actual = orderedReferenceRecords[i];
 
-            PropertyInfo property = typeof(TSet).GetProperty(Ordering)!;
+            PropertyInfo property = typeof(TEntity).GetProperty(Ordering)!;
             Assert.Equal(property.GetValue(expected), property.GetValue(actual));
         }
     }
 
     [Fact(DisplayName = "[View]: Using Date filter")]
     public async Task ViewD() {
-        SetViewOptions<TSet> qViewOptions = new() {
+        SetViewOptions<TEntity> qViewOptions = new() {
             Page = 1,
             Range = 20,
             Retroactive = false,
             Filters = [
-                new SetViewDateFilter<TSet> {
+                new SetViewDateFilter<TEntity> {
                     From = DateTime.UtcNow.Date,
                 },
             ],
         };
 
 
-        SetViewOut<TSet> qOut = await Depot.View(qViewOptions);
+        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
 
 
         Assert.All(qOut.Records, (i) => {
@@ -223,20 +188,18 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
     [Fact(DisplayName = "[View]: Using Property filter (Contains)")]
     public async Task ViewE() {
-        TSet mock = StoredMocks[5];
-        (string Property, string? Value)? factorization = FactorizeProperty(mock);
 
         if (factorization is null) {
             return;
         }
 
 
-        SetViewOptions<TSet> qViewOptions = new() {
+        SetViewOptions<TEntity> qViewOptions = new() {
             Retroactive = false,
             Range = 20,
             Page = 1,
             Filters = [
-                new SetViewPropertyFilter<TSet> {
+                new SetViewPropertyFilter<TEntity> {
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
                     Property = factorization.Value.Property,
                     Value = factorization.Value.Value,
@@ -245,10 +208,10 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
         };
 
 
-        SetViewOut<TSet> qOut = await Depot.View(qViewOptions);
+        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
 
 
-        PropertyInfo? pInfo = typeof(TSet).GetProperty(factorization.Value.Property);
+        PropertyInfo? pInfo = typeof(TEntity).GetProperty(factorization.Value.Property);
         Assert.NotNull(pInfo);
         Assert.All(qOut.Records, i => {
             object? value = pInfo.GetValue(i);
@@ -259,20 +222,21 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
     [Fact(DisplayName = "[View]: Using filter Linear Evaluation (OR)")]
     public async Task ViewF() {
-        TSet[] mocks = [StoredMocks[0], StoredMocks[1]];
+        TEntity[] mocks = [StoredMocks[0], StoredMocks[1]];
 
-        ISetViewFilter<TSet>[] filters = [];
+        ISetViewFilter<TEntity>[] filters = [];
         string property = "";
         string?[] values = [];
-        foreach (TSet mock in mocks) {
+        foreach (TEntity mock in mocks) {
             (string Property, string? Value)? factorization = FactorizeProperty(mock);
-            if (factorization is null || factorization.Value.Property is null)
+            if (factorization is null || factorization.Value.Property is null) {
                 return;
+            }
 
             property = factorization.Value.Property;
             values = [.. values, factorization.Value.Value];
             filters = [
-                new SetViewPropertyFilter<TSet> {
+                new SetViewPropertyFilter<TEntity> {
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
                     Property = factorization.Value.Property,
                     Value = factorization.Value.Value,
@@ -280,28 +244,29 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
             ];
         }
 
-        SetViewOptions<TSet> qViewOptions = new() {
+        SetViewOptions<TEntity> qViewOptions = new() {
             Retroactive = false,
             Range = 20,
             Page = 1,
             Filters = [
-                new SetViewFilterLinearEvaluation<TSet>{
+                new SetViewFilterLinearEvaluation<TEntity>{
                     Operator = SetViewFilterEvaluationOperators.OR,
                     Filters = filters,
                 },
             ],
         };
-        SetViewOut<TSet> qOut = await Depot.View(qViewOptions);
+        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
 
-        PropertyInfo? propMirror = typeof(TSet).GetProperty(property);
+        PropertyInfo? propMirror = typeof(TEntity).GetProperty(property);
         Assert.NotNull(propMirror);
 
         Assert.All(qOut.Records, i => {
             object? value = propMirror.GetValue(i);
 
             foreach (string? refValue in values) {
-                if (refValue == (string?)value)
+                if (refValue == (string?)value) {
                     return;
+                }
             }
             Assert.True(false);
         });
@@ -313,9 +278,9 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
     [Fact(DisplayName = "[Create]: Record created and unique store check")]
     public async Task CreateA() {
-        TSet mock = GenerateMocks(1)[0];
+        TEntity mock = Store(EntityFactory);
 
-        TSet storedMock = await Depot.Create(mock);
+        TEntity storedMock = await Depot.Create(mock);
         Disposer.Push(storedMock);
 
         Assert.Multiple([
@@ -330,9 +295,9 @@ public abstract class BQ_Depot<TSet, TDepot, TDatabase>
 
     [Fact(DisplayName = "[Create]: Multiple records created")]
     public async Task CreateB() {
-        TSet[] mocks = GenerateMocks(3);
+        TEntity[] mocks = Store(3, EntityFactory);
 
-        SetBatchOut<TSet> qOut = await Depot.Create(mocks);
+        SetBatchOut<TEntity> qOut = await Depot.Create(mocks);
         Disposer.Push(qOut.Successes);
 
         Assert.Multiple([

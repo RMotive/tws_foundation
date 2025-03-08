@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities.Solutions;
+using CSM_Security.Entities;
 
 namespace CSM_Security.Quality.Entities.Solutions;
 public class Q_Solution

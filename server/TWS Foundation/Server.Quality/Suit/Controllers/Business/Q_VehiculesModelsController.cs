@@ -3,6 +3,8 @@
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Server.Records;
 
+using CSM_Security.Entities;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Foundation.Middlewares.Frames;
@@ -20,7 +22,7 @@ public class Q_VehiculesModelsController
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<CSM_Security.Entities.Accounts.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,

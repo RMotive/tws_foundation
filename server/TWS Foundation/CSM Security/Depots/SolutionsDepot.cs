@@ -1,8 +1,9 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-using CSM_Security;
+using CSM_Security.Entities;
+using CSM_Security.Entities.Solutions;
 
-namespace CSM_Security.Entities.Solutions;
+namespace CSM_Security.Depots;
 
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>

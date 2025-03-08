@@ -2,7 +2,8 @@
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
-using CSM_Security.Entities.Contacts;
+using CSM_Security.Depots;
+using CSM_Security.Entities;
 
 using TWS_Customer.Services.Interfaces;
 

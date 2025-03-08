@@ -2,7 +2,8 @@
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
-using CSM_Security.Entities.Contacts;
+using CSM_Security.Depots;
+using CSM_Security.Entities;
 
 namespace CSM_Security.Quality.Entities.Contacts;
 
