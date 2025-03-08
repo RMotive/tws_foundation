@@ -1,23 +1,23 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-using CSM_Security.Entities.Permits;
-
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CSM_Security.Entities.Actions;
+namespace CSM_Security.Entities;
 
 /// <summary>
-///     [Entity] that represents the information for certain actions/operations to be performed to the Solutions.
+///     [Entity] that represents a complex Feature storing different actions, this to determine Feature Scoped permits.
+///     only for authorization purposes.
 /// </summary>
-public class Action
+public class Feature
     : BEntity, IEntity_Name {
 
     #region Properties
+
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
 
     /// <summary>
-    ///     Wheter the <see cref="Action"/> is enabled.
+    ///     Wheter it's enabled.
     /// </summary>
     public bool Enabled { get; set; }
 
@@ -26,7 +26,7 @@ public class Action
     #region Dependants
 
     /// <summary>
-    ///     <see cref="Permit"/> dependats from this <see cref="Action"/>.
+    ///     <see cref="Permit"/> dependants from this <see cref="Feature"/>.
     /// </summary>
     public ICollection<Permit> Permits { get; set; } = [];
 

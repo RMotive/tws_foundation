@@ -1,12 +1,13 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities.Accounts;
+using CSM_Security.Entities;
 using CSM_Security.Entities.Contacts;
 
-namespace CSM_Security.Quality.Entities.Accounts;
+namespace CSM_Security.Quality.Suits;
 public class Q_Account
     : BQ_Entity<Account> {
+
     protected override Q_EntityEvaluation<Account>[] EvaluateFactory(Q_EntityEvaluation<Account>[] Container) {
         Q_EntityEvaluation<Account> success = new("Success") {
             Mock = new() {

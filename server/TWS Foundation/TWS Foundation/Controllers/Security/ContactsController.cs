@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
 
-using CSM_Security.Entities.Contacts;
+using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 

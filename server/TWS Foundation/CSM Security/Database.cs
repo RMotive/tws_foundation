@@ -2,11 +2,7 @@
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Models;
 
-using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Contacts;
-using CSM_Security.Entities.Features;
-using CSM_Security.Entities.Permits;
-using CSM_Security.Entities.Profiles;
+using CSM_Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -47,7 +43,7 @@ public class Database : BDatabase_SQLServer<Database> {
 
     public DbSet<Profile> Profiles { get; set; } = default!;
 
-    public DbSet<CSM_Security.Entities.Solutions.Solution> Solutions { get; set; } = default!;
+    public DbSet<Solution> Solutions { get; set; } = default!;
 
-    public DbSet<Entities.Actions.Action> Actions { get; set; } = default!;
+    public DbSet<Entities.Action> Actions { get; set; } = default!;
 }

@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Customer;
 
-using CSM_Security.Entities.Profiles;
+using CSM_Security.Entities;
 
 namespace TWS_Customer.Services.Security.Profiles;
 

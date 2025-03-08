@@ -1,12 +1,9 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Permits;
-
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CSM_Security.Entities.Profiles;
+namespace CSM_Security.Entities;
 
 /// <summary>
 ///     [Entity] that stores a relation between a collection of <see cref="Permit"/> with an <see cref="Account"/>

@@ -2,14 +2,10 @@
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities.Contacts;
-using CSM_Security.Entities.Permits;
-using CSM_Security.Entities.Profiles;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CSM_Security.Entities.Accounts;
+namespace CSM_Security.Entities;
 
 public class Account
     : BEntity {
@@ -36,7 +32,7 @@ public class Account
     #region Relations
 
     /// <summary>
-    ///     <see cref="Contacts.Contact"/> information.
+    ///     <see cref="Entities.Contact"/> information.
     /// </summary>
     /// <remarks>
     ///     Auto included relation.

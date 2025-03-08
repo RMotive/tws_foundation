@@ -5,7 +5,7 @@ using System.Net;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
-using CSM_Security.Entities.Contacts;
+using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 

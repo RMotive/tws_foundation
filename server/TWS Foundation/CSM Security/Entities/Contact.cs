@@ -2,11 +2,9 @@
 
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities.Accounts;
-
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CSM_Security.Entities.Contacts;
+namespace CSM_Security.Entities;
 
 /// <summary>
 ///     [Action] that represents the high-level information for an account, this only works to identify a way to contact the Account owner and mustn't be used 
@@ -52,7 +50,7 @@ public class Contact
     #region Dependants
 
     /// <summary>
-    ///     <see cref="Accounts.Account"/> dependant from this <see cref="Contact"/>.
+    ///     <see cref="Entities.Account"/> dependant from this <see cref="Contact"/>.
     /// </summary>
     public Account? Account { get; set; }
 

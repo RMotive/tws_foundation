@@ -13,8 +13,9 @@ using CSM_Foundation.Server.Managers;
 using CSM_Foundation.Server.Utils;
 
 using CSM_Security;
+using CSM_Security.Depots;
+using CSM_Security.Entities;
 using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Contacts;
 using CSM_Security.Entities.Solutions;
 
 using TWS_Business;

@@ -6,8 +6,7 @@ using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
-using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Solutions;
+using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 

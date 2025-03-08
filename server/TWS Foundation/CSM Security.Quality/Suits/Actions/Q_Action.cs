@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using Action = CSM_Security.Entities.Actions.Action;
+using Action = CSM_Security.Entities.Action;
 
 namespace CSM_Security.Quality.Entities.Actions;
 public class Q_Action

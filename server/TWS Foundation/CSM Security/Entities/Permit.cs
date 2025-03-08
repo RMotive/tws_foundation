@@ -4,17 +4,12 @@ using CSM_Foundation.Database;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
-using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Features;
-using CSM_Security.Entities.Profiles;
-using CSM_Security.Entities.Solutions;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Action = CSM_Security.Entities.Actions.Action;
+using Action = CSM_Security.Entities.Action;
 
-namespace CSM_Security.Entities.Permits;
+namespace CSM_Security.Entities;
 
 /// <summary>
 ///     [Entity] that stores and handles specific Feature / Solution / Action authorization for Accounts.
@@ -61,7 +56,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    public Actions.Action Action { get; set; } = default!;
+    public Action Action { get; set; } = default!;
 
     #endregion
 

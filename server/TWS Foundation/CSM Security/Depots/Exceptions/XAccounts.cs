@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Core.Bases;
 
-namespace CSM_Security.Entities.Accounts;
+namespace CSM_Security.Depots.Exceptions;
 
 
 public class XAccounts
