@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.VehiculeModel>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Vehicules.VehiculeModel>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_VehiculesModelsController

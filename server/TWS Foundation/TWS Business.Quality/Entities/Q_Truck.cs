@@ -5,6 +5,8 @@ using TWS_Business.Entities;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
 using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_Truck : BQ_Entity<Truck> {

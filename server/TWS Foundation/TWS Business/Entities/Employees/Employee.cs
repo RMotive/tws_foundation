@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Approaches;
+using TWS_Business.Entities.Drivers;
 
 namespace TWS_Business.Entities.Employees;
 
@@ -11,7 +11,7 @@ namespace TWS_Business.Entities.Employees;
 ///     [Entity] that represent a business human being handled by business administration. A legally employee from own administration.
 /// </summary>
 public class Employee
-    : TWSEntity {
+    : BEntity {
 
     #region Properties
 
@@ -69,7 +69,7 @@ public class Employee
     public Address? Address { get; set; }
 
     /// <summary>
-    ///     <see cref="Entities.Driver"/> information.
+    ///     <see cref="Drivers.Driver"/> information.
     /// </summary>
     public Driver? Driver { get; set; }
 

@@ -1,5 +1,7 @@
 ﻿using CSM_Foundation.Database.Entity;
 
+using TWS_Business.Entities.Vehicules.Trailers;
+
 namespace TWS_Business.Entities.Trailers;
 /// <summary>
 ///     Implements a <see cref="BDatabasesDepot{TMigrationDatabases, TMigrationSet}"/>

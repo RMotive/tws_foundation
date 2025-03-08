@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Trailers.TrailerExternal>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Vehicules.Trailers.TrailerExternal>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;

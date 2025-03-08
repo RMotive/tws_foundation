@@ -3,6 +3,7 @@ using CSM_Foundation.Database.Quality;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Drivers;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>

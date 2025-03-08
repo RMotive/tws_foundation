@@ -20,15 +20,9 @@ using CSM_Security.Entities.Solutions;
 using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Carriers;
-using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
-using TWS_Business.Entities.Plates;
-using TWS_Business.Entities.SCTs;
 using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
 using TWS_Business.Entities.USDOTs;
 
 using TWS_Customer.Managers.Depot;
@@ -173,9 +167,9 @@ public partial class Program {
                 builder.Services.AddScoped<ManufacturersDepot>();
                 builder.Services.AddScoped<SituationsDepot>();
                 builder.Services.AddScoped<PlatesDepot>();
-                builder.Services.AddScoped<TruckDepot>();
+                builder.Services.AddScoped<TrucksDepot>();
                 builder.Services.AddScoped<InsurancesDepot>();
-                builder.Services.AddScoped<SCTsDepot>();
+                builder.Services.AddScoped<SCTDepot>();
                 builder.Services.AddScoped<MaintenacesDepot>();
                 builder.Services.AddScoped<StatusesDepot>();
                 builder.Services.AddScoped<AddressesDepot>();

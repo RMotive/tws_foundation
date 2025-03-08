@@ -12,12 +12,9 @@ using CSM_Security.Entities.Solutions;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
-using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Carriers;
-using TWS_Business.Entities.Plates;
-using TWS_Business.Entities.SCTs;
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;

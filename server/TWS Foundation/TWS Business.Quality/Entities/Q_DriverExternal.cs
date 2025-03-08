@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using TWS_Business.Entities;
+using TWS_Business.Entities.Drivers;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_DriverExternal : BQ_Entity<DriverExternal> {

@@ -4,7 +4,7 @@ using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 
 using TWS_Business.Depots;
-using TWS_Business.Entities;
+using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Services.Interfaces;
 

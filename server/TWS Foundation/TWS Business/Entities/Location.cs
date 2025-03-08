@@ -3,8 +3,8 @@ using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities;
 
@@ -12,7 +12,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores a spot that represents a business physical location.
 /// </summary>
 public class Location
-    : TWSEntity, IEntity_Name {
+    : BEntity, IEntity_Name {
 
     #region Properties
 

@@ -1,12 +1,10 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Carriers;
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Insurances;
-using TWS_Business.Entities.Plates;
-using TWS_Business.Entities.SCTs;
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities;
 
@@ -14,7 +12,7 @@ namespace TWS_Business.Entities;
 ///     []
 /// </summary>
 public class Status
-: TWSEntity, IEntity_Name {
+: BEntity, IEntity_Name {
 
     #region Properites
 
@@ -31,9 +29,9 @@ public class Status
     public ICollection<VehiculeModel> Models { get; set; } = [];
 
     /// <summary>
-    ///     <see cref="DriverCommon"/> referencing to this <see cref="Status"/>.
+    ///     <see cref="Driver_Common"/> referencing to this <see cref="Status"/>.
     /// </summary>
-    public ICollection<DriverCommon> Drivers { get; set; } = [];
+    public ICollection<Driver_Common> Drivers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck_Common"/> referencing to this <see cref="Status"/>.

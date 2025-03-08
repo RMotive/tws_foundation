@@ -11,7 +11,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores identification information for a physical being for business entities related information.
 /// </summary>
 public class Identification
-    : TWSEntity {
+    : BEntity {
 
     #region Properties
 

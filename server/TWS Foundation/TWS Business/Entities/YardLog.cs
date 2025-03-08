@@ -6,9 +6,10 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities;
 
@@ -16,7 +17,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] for <see cref="YardLog"/> entries. A <see cref="YardLog"/> record stores information about an entry or exit from the main business [Yards].
 /// </summary>
 public class YardLog
-    : TWSEntity {
+    : BEntity {
 
     #region Properties
 
@@ -73,17 +74,17 @@ public class YardLog
     public Section Section { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Entities.DriverCommon"/> information.
+    ///     <see cref="Drivers.Driver_Common"/> information.
     /// </summary>
-    public DriverCommon Driver { get; set; } = default!;
+    public Driver_Common Driver { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Trucks.Truck_Common"/> information.
+    ///     <see cref="Vehicules.Trucks.Truck_Common"/> information.
     /// </summary>
     public Truck_Common Truck { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Trailers.Trailer_Common"/> information.
+    ///     <see cref="Vehicules.Trailers.Trailer_Common"/> information.
     /// </summary>
     public Trailer_Common? Trailer { get; set; }
 
@@ -101,7 +102,7 @@ public class YardLog
         etBuilder.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
         etBuilder.Link<YardLog, Employee>(nameof(Guard), Required: true);
         etBuilder.Link<YardLog, Section>(nameof(Section), Required: true);
-        etBuilder.Link<YardLog, DriverCommon>(nameof(Driver), Required: true);
+        etBuilder.Link<YardLog, Driver_Common>(nameof(Driver), Required: true);
         etBuilder.Link<YardLog, Truck_Common>(nameof(Truck), Required: true);
         etBuilder.Link<YardLog, Trailer_Common>(nameof(Trailer));
     }

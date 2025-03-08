@@ -6,8 +6,8 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities.Insurances;
 
@@ -15,7 +15,7 @@ namespace TWS_Business.Entities.Insurances;
 ///     [Entity] that stores information for Insurances, this insurances are applicable for insurable actives linke (<see cref="Truck"/> / <see cref="Trailer"/>).
 /// </summary>
 public class Insurance
-    : TWSEntity, IHistorical<Insurance_History> {
+    : BEntity, IHistorical<Insurance_History> {
 
     #region Properties
 

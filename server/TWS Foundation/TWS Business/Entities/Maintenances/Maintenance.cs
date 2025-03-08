@@ -5,8 +5,8 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities.Maintenances;
 
@@ -14,7 +14,7 @@ namespace TWS_Business.Entities.Maintenances;
 ///     [Entity] that stores information abour maintenance scheduling for maintenable assets (<see cref="Truck"/> / <see cref="Trailer"/>)
 /// </summary>
 public class Maintenance
-    : TWSEntity, IHistorical<Maintenance_History> {
+    : BEntity, IHistorical<Maintenance_History> {
 
     #region Properties
 

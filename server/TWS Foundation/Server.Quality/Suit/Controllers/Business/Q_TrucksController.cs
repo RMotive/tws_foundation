@@ -8,14 +8,11 @@ using CSM_Foundation.Server.Records;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
-using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Carriers;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
-using TWS_Business.Entities.Plates;
-using TWS_Business.Entities.SCTs;
-using TWS_Business.Entities.Trucks;
 using TWS_Business.Entities.USDOTs;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
@@ -24,7 +21,7 @@ using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Trucks.Truck>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Vehicules.Trucks.Truck>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_TrucksController : BQ_CustomServerController<Truck> {

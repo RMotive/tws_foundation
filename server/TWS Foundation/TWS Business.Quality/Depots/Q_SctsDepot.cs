@@ -1,15 +1,16 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
+using TWS_Business.Depots;
 using TWS_Business.Entities;
-using TWS_Business.Entities.SCTs;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
-///     Qualifies the <see cref="SCTsDepot"/>.
+///     Qualifies the <see cref="SCTDepot"/>.
 /// </summary>
 public class Q_SctsDepot
-    : BQ_Depot<SCT, SCTsDepot, Database> {
+    : BQ_Depot<SCT, SCTDepot, Database> {
     public Q_SctsDepot()
         : base(nameof(SCT.Type)) {
     }

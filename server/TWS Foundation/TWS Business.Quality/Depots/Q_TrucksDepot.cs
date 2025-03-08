@@ -1,15 +1,16 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
+using TWS_Business.Depots;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>
-///     Qualifies the <see cref="TruckDepot"/>.
+///     Qualifies the <see cref="TrucksDepot"/>.
 /// </summary>
 public class Q_TruckDepot
-    : BQ_Depot<Truck, TruckDepot, Database> {
+    : BQ_Depot<Truck, TrucksDepot, Database> {
     public Q_TruckDepot()
         : base(nameof(Truck.Id)) {
     }

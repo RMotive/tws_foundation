@@ -1,23 +1,26 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities;
-using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Carriers;
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
-using TWS_Business.Entities.Plates;
-using TWS_Business.Entities.SCTs;
-using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Trucks;
 using TWS_Business.Entities.USDOTs;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business;
 
+/// <summary>
+///     
+/// </summary>
 public class DesignDatabaseFactory : IDesignTimeDbContextFactory<Database> {
     public Database CreateDbContext(string[] args) {
         return new Database();
@@ -30,22 +33,54 @@ public class DesignDatabaseFactory : IDesignTimeDbContextFactory<Database> {
 public class Database
     : BDatabase_SQLServer<Database>, IDatabase {
 
-    public Database(DbContextOptions<Database> options)
-        : base("TWSB", options) {
+    /// <summary>
+    /// 
+    /// </summary>
+    const string SIGN = "TWSB";
+
+    /// <summary>
+    /// /
+    /// </summary>
+    /// <param name="Options"></param>
+    public Database(DbContextOptions<Database> Options)
+        : base(SIGN, Options) {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Connection"></param>
+    public Database(ConnectionOptions Connection)
+        : base(SIGN, Connection) {
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Options"></param>
+    /// <param name="Connection"></param>
+    public Database(DbContextOptions<Database> Options, ConnectionOptions Connection) 
+        : base(SIGN, Connection, Options) {
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public Database()
-        : base("TWSB") {
+        : base(SIGN) {
     }
 
-    protected override void EvaluateCustom(BEntity Entity, EntityTypeBuilder mBuilder) {
+    protected override void EvaluateCustom(CSM_Foundation.Database.Bases.BEntity Entity, EntityTypeBuilder mBuilder) {
     }
 
     #region Drivers
 
     public DbSet<Driver> Drivers { get; set; } = default!;
-    public DbSet<DriverCommon> DriversCommons { get; set; } = default!;
+
+    public DbSet<Driver_Common> DriversCommons { get; set; } = default!;
+
     public DbSet<DriverExternal> DriversExternals { get; set; } = default!;
+
 
     #endregion
 

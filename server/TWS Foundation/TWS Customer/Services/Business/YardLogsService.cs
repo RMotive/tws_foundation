@@ -41,7 +41,7 @@ public class YardLogsService
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    private IQueryable<YardLog> Include(IQueryable<YardLog> query) {
+    private static IQueryable<YardLog> Include(IQueryable<YardLog> query) {
         return query
             .Include("Driver.Internal.Identification")
             .Include("Driver.External.Identification")

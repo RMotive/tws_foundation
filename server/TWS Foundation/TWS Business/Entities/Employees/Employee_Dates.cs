@@ -6,7 +6,7 @@ namespace TWS_Business.Entities.Employees;
 ///     [Entity] that stores dates of interest for <see cref="Employee"/> entities.
 /// </summary>
 public class Employee_Dates
-    : TWSEntity {
+    : BEntity {
 
     #region Properties
 

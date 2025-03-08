@@ -4,7 +4,7 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities.Maintenances;
 

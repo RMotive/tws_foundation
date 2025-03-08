@@ -1,7 +1,8 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Drivers;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities;
 
@@ -9,7 +10,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores information about the current situation for a business process entity.
 /// </summary>
 public class Situation
-    : TWSEntity, IEntity_Name {
+    : BEntity, IEntity_Name {
 
     #region Properties
 
@@ -21,9 +22,9 @@ public class Situation
     #region Dependants
 
     /// <summary>
-    ///     <see cref="DriverCommon"/> dependants from this <see cref="Situation"/>
+    ///     <see cref="Driver_Common"/> dependants from this <see cref="Situation"/>
     /// </summary>
-    public ICollection<DriverCommon> Drivers { get; set; } = [];
+    public ICollection<Driver_Common> Drivers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck_Common"/> dependants form this <see cref="Situation"/>.

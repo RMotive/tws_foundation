@@ -2,6 +2,7 @@
 using CSM_Foundation.Database.Quality;
 
 using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>

@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Business.Entities;
 
@@ -8,7 +8,7 @@ namespace TWS_Business.Entities;
 ///     [etBuilder] that stores information about a specific type of load for <see cref="Trailer"/> loading information.
 /// </summary>
 public class LoadType
-    : TWSEntity, IEntity_Name {
+    : BEntity, IEntity_Name {
 
     #region Properties
 

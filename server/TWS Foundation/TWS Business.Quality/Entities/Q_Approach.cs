@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using TWS_Business.Entities.Approaches;
+using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_Approach : BQ_Entity<Approach> {

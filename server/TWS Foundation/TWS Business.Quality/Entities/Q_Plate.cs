@@ -1,8 +1,8 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using TWS_Business.Entities.Plates;
 using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_Plate : BQ_Entity<Plate> {

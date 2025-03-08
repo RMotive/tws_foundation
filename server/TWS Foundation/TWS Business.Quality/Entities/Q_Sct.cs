@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using TWS_Business.Entities.SCTs;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_Sct : BQ_Entity<SCT> {

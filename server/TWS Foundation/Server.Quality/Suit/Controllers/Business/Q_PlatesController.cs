@@ -7,7 +7,7 @@ using CSM_Foundation.Server.Records;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
-using TWS_Business.Entities.Plates;
+using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
@@ -16,7 +16,7 @@ using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Plates.Plate>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Vehicules.Plate>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;

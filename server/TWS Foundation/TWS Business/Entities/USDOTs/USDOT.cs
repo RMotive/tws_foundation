@@ -7,12 +7,12 @@ using CSM_Foundation.Database.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Carriers;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Entities.USDOTs;
 
 public class USDOT
-    : TWSEntity, IHistorical<USDOT_History> {
+    : BEntity, IHistorical<USDOT_History> {
 
     #region Properties
 

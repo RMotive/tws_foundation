@@ -3,15 +3,16 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Depots;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 using TWS_Customer.Services.Interfaces;
 
 namespace TWS_Customer.Services.Business;
 public class TrucksService : ITrucksService {
-    private readonly TruckDepot Trucks;
+    private readonly TrucksDepot Trucks;
 
-    public TrucksService(TruckDepot Trucks) {
+    public TrucksService(TrucksDepot Trucks) {
         this.Trucks = Trucks;
     }
 

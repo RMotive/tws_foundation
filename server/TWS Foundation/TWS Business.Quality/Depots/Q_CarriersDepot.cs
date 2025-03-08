@@ -1,8 +1,9 @@
 ﻿using CSM_Foundation.Database.Quality;
 
+using TWS_Business.Depots;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Approaches;
-using TWS_Business.Entities.Carriers;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Quality.Depots;
 /// <summary>

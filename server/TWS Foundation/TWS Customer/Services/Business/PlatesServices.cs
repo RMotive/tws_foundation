@@ -4,7 +4,8 @@ using CSM_Foundation.Database.Models.Out;
 
 using Microsoft.EntityFrameworkCore;
 
-using TWS_Business.Entities.Plates;
+using TWS_Business.Depots;
+using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Services.Interfaces;
 

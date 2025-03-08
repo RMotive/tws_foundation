@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Customer;
 using CSM_Foundation.Database.Entity;
 
+using TWS_Business.Depots;
 using TWS_Business.Entities.Employees;
 
 namespace TWS_Customer.Services.Business.Employees;

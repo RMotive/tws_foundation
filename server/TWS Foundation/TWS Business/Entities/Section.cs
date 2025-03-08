@@ -11,7 +11,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores information about a physical vehicules storage section.
 /// </summary>
 public class Section
-    : TWSEntity, IEntity_Name {
+    : BEntity, IEntity_Name {
 
     #region Properties
 

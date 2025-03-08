@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 using TWS_Customer.Services.Interfaces;
 

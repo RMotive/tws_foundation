@@ -3,6 +3,8 @@ using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
 using TWS_Business.Entities.Trucks;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_TruckExternal : BQ_Entity<TruckExternal> {

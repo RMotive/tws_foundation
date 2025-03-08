@@ -2,7 +2,10 @@
 using CSM_Foundation.Database.Validators;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_TrailerCommon : BQ_Entity<Trailer_Common> {
@@ -22,7 +25,7 @@ public class Q_TrailerCommon : BQ_Entity<Trailer_Common> {
             Expectations = [
                 (nameof(Trailer_Common.Id), [(new PointerValidator(), 3)]),
                 (nameof(Trailer_Common.Economic), [(new RequiredValidator(), 1), (new LengthValidator(),2)]),
-                (nameof(DriverCommon.Status), [(new PointerValidator(true), 3) ])
+                (nameof(Driver_Common.Status), [(new PointerValidator(true), 3) ])
             ],
         };
 

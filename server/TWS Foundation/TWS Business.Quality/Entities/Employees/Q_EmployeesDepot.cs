@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Quality;
 
+using TWS_Business.Depots;
 using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Quality.Entities.Employees;

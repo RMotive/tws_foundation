@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Validators;
 
-using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Business.Quality.Entities;
 public class Q_TrailerClass : BQ_Entity<Trailer_Class> {

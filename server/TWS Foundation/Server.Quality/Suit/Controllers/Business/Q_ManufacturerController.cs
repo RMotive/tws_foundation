@@ -12,7 +12,7 @@ using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Manufacturer>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Vehicules.Manufacturer>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_ManufacturerController
