@@ -3,8 +3,6 @@ using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Trucks;
-
 namespace TWS_Business.Entities;
 
 /// <summary>
@@ -56,11 +54,6 @@ public class Section
     ///     <see cref="YardLog"/> dependants from this <see cref="Section"/>
     /// </summary>
     public ICollection<YardLog> YardLogs { get; set; } = [];
-
-    /// <summary>
-    ///     <see cref="TruckEntry"/> dependants from this <see cref="Section"/>.
-    /// </summary>
-    public ICollection<TruckEntry> TruckEntries { get; set; } = [];
 
     #endregion
 

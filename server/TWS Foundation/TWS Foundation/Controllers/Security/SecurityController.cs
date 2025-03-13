@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using TWS_Customer.Services.Interfaces;
+using TWS_Customer.Features.Security;
 using TWS_Customer.Services.Records;
 
 namespace TWS_Foundation.Controllers.Security;
@@ -11,7 +11,8 @@ namespace TWS_Foundation.Controllers.Security;
 [ApiController, Route("[Controller]")]
 public class SecurityController
     : ControllerBase {
-    private readonly ISecurityService Service;
+
+    readonly ISecurityService Service;
     public SecurityController(ISecurityService Service) {
         this.Service = Service;
     }

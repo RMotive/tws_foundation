@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
+using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
 
@@ -59,7 +60,7 @@ public class YardLog
     #region Relations
 
     /// <summary>
-    ///     <see cref="Entities.LoadType"/> information.
+    ///     <see cref="Vehicules.LoadType"/> information.
     /// </summary>
     public LoadType LoadType { get; set; } = default!;
 

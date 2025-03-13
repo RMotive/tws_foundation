@@ -4,7 +4,7 @@ using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Customer.Services.Interfaces;
+using TWS_Customer.Features.Security;
 
 using TWS_Foundation.Authentication;
 
@@ -13,7 +13,9 @@ namespace TWS_Foundation.Controllers.Security;
 [ApiController, Feature("Accounts"), Route("[Controller]/[Action]")]
 public class AccountsController
     : ControllerBase {
-    private readonly IAccountsService Service;
+
+    readonly IAccountsService Service;
+    
     public AccountsController(IAccountsService Service) {
         this.Service = Service;
     }

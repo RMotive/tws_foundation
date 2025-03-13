@@ -5,8 +5,6 @@ using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Entities.Trucks;
-
 namespace TWS_Business.Entities.Vehicules.Trucks;
 
 /// <summary>
@@ -58,11 +56,6 @@ public class Truck_Common
     #endregion
 
     #region Dependants 
-
-    /// <summary>
-    ///     <see cref="TruckEntry"/> dependants from this <see cref="Truck_Common"/>
-    /// </summary>
-    public ICollection<TruckEntry> TruckEntries { get; set; } = [];
 
     #endregion
 

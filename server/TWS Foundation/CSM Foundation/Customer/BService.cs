@@ -22,7 +22,7 @@ public class BService<TEntity, TDepot>
 
     public BService(TDepot Depot, AccumulateDelegate<TEntity>? Accumulate = null) {
         this.Depot = Depot;
-        this.Accumulator = Accumulate;
+        Accumulator = Accumulate;
     }
 
     public virtual Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {

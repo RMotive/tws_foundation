@@ -12,10 +12,7 @@ using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
 using CSM_Foundation.Server.Utils;
 
-using CSM_Security;
-using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Contacts;
-using CSM_Security.Entities.Solutions;
+using CSM_Security.Entities;
 
 using TWS_Business;
 using TWS_Business.Depots;
@@ -26,12 +23,9 @@ using TWS_Business.Entities.Maintenances;
 using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.USDOTs;
 
-using TWS_Customer.Managers.Depot;
+using TWS_Customer.Features.Business;
+using TWS_Customer.Features.Security;
 using TWS_Customer.Managers.Session;
-using TWS_Customer.Services.Business;
-using TWS_Customer.Services.Interfaces;
-using TWS_Customer.Services.Security;
-using TWS_Customer.Services.Security.Solutions;
 
 using TWS_Foundation.Middlewares;
 
@@ -57,13 +51,13 @@ public class Settings
 }
 
 public partial class Program {
-    private const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
-    private const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
+    const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
+    const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
 
     public static Settings Settings => Settings_ ??= GetSettings();
-    private static Settings? Settings_;
+    static Settings? Settings_;
 
-    private static void Main(string[] args) {
+    static void Main(string[] args) {
         AdvisorManager.Announce("Running engines ◉_◉");
 
         try {
@@ -126,16 +120,11 @@ public partial class Program {
                 }
             );
 
-            // --> Data storages connection validations.
-            new CSM_Security.Database().ValidateConnection();
-            new TWS_Business.Database().ValidateConnection();
-
             // --> Adding customer services
             {
                 IServiceCollection Services = builder.Services;
 
                 // --> Application
-                Services.AddSingleton<DepotManager>();
                 Services.AddSingleton<SessionManager>();
                 Services.AddSingleton<AnalyticsMiddleware>();
                 Services.AddSingleton<AdvisorMiddleware>();
@@ -143,73 +132,12 @@ public partial class Program {
                 Services.AddSingleton<DispositionMiddleware>();
                 Services.AddSingleton<IDisposer, SampleDisposer>();
 
-                // --> Databasess contexts
-                Services.AddDbContext<CSM_Security.Database>();
-                Services.AddDbContext<IDatabase, TWS_Business.Database>();
-
                 // --> Depots
 
                 // --> [Business] depots.
                 {
                     builder.Services.AddScoped<EmployeesDepot>();
                 }
-
-                // --> [Security] depots.
-                {
-                    Services.AddScoped<IAccountsDepot, AccountsDepot>();
-                    Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
-                }
-
-                builder.Services.AddScoped<AddressesDepot>();
-                builder.Services.AddScoped<USDOTsDepot>();
-                builder.Services.AddScoped<CarriersDepot>();
-                builder.Services.AddScoped<ApproachesDepot>();
-                builder.Services.AddScoped<ContactsDepot>();
-                builder.Services.AddScoped<ManufacturersDepot>();
-                builder.Services.AddScoped<SituationsDepot>();
-                builder.Services.AddScoped<PlatesDepot>();
-                builder.Services.AddScoped<TrucksDepot>();
-                builder.Services.AddScoped<InsurancesDepot>();
-                builder.Services.AddScoped<SCTDepot>();
-                builder.Services.AddScoped<MaintenacesDepot>();
-                builder.Services.AddScoped<StatusesDepot>();
-                builder.Services.AddScoped<AddressesDepot>();
-                builder.Services.AddScoped<ApproachesDepot>();
-                builder.Services.AddScoped<CarriersDepot>();
-                builder.Services.AddScoped<DriversDepot>();
-                builder.Services.AddScoped<DriversCommonsDepot>();
-                builder.Services.AddScoped<DriversExternalsDepot>();
-                builder.Services.AddScoped<SectionsDepot>();
-                builder.Services.AddScoped<LocationsDepot>();
-                builder.Services.AddScoped<LoadTypesDepot>();
-                builder.Services.AddScoped<LocationsDepot>();
-                builder.Services.AddScoped<TrailerClassesDepot>();
-                builder.Services.AddScoped<TrailersCommonsDepot>();
-                builder.Services.AddScoped<TrailersExternalsDepot>();
-                builder.Services.AddScoped<TrailersDepot>();
-                builder.Services.AddScoped<IdentificationsDepot>();
-                builder.Services.AddScoped<TrailersTypesDepot>();
-                builder.Services.AddScoped<VehiculesModelsDepot>();
-                builder.Services.AddScoped<YardLogsDepot>();
-
-                // --> Services
-                builder.Services.AddScoped<ISolutionsService, SolutionsService>();
-                builder.Services.AddScoped<IAccountsService, AccountsService>();
-                builder.Services.AddScoped<ISecurityService, SecurityService>();
-                builder.Services.AddScoped<IManufacturersService, ManufacturersService>();
-                builder.Services.AddScoped<ISituationsService, SituationsService>();
-                builder.Services.AddScoped<IPlatesService, PlatesServices>();
-                builder.Services.AddScoped<ITrucksService, TrucksService>();
-                builder.Services.AddScoped<IContactsService, ContactsService>();
-                builder.Services.AddScoped<IDriversService, DriversService>();
-                builder.Services.AddScoped<IDriversExternalsService, DriversExternalsService>();
-                builder.Services.AddScoped<ITrailersService, TrailersService>();
-                builder.Services.AddScoped<ITrailersExternalsService, TrailersExternalsService>();
-                builder.Services.AddScoped<ILoadTypesService, LoadTypesService>();
-                builder.Services.AddScoped<ISectionsService, SectionsService>();
-                builder.Services.AddScoped<IYardLogsService, YardLogsService>();
-                builder.Services.AddScoped<ICarriersService, CarriersService>();
-                builder.Services.AddScoped<IVehiculesModelsService, VehiculeModelService>();
             }
 
             WebApplication app = builder.Build();

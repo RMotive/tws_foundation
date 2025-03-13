@@ -10,7 +10,6 @@ using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
-using TWS_Business.Entities.Trucks;
 using TWS_Business.Entities.USDOTs;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trailers;
@@ -59,7 +58,7 @@ public class Database
     /// </summary>
     /// <param name="Options"></param>
     /// <param name="Connection"></param>
-    public Database(DbContextOptions<Database> Options, ConnectionOptions Connection) 
+    public Database(DbContextOptions<Database> Options, ConnectionOptions Connection)
         : base(SIGN, Connection, Options) {
     }
 
@@ -161,12 +160,6 @@ public class Database
     public DbSet<Status> Statuses { get; set; } = default!;
 
     public DbSet<Situation> Situations { get; set; } = default!;
-
-    #endregion
-
-    #region Inventories
-
-    public DbSet<TruckEntry> TrucksInventories { get; set; } = default!;
 
     #endregion
 }

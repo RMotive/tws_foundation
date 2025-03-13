@@ -3,6 +3,15 @@
 using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Depots;
+
+/// <summary>
+///     [Interface] for <see cref="Employee"/> based depot implementations.
+/// </summary>
+public interface IEmployeesDepot
+    : IDepot<Employee> {
+
+}
+
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Employee"/> dataDatabases entity mirror.
@@ -13,10 +22,5 @@ public class EmployeesDepot
     /// <summary>
     ///     Generates a new depot handler for <see cref="Employee"/>.
     /// </summary>
-    public EmployeesDepot(Database Databases, IDisposer? Disposer = null)
-        : base(Databases, Disposer) {
-    }
-    public EmployeesDepot()
-        : base(new(), null) {
-    }
+    public EmployeesDepot(Database Databases, IDisposer? Disposer = null) : base(Databases, Disposer) { }
 }

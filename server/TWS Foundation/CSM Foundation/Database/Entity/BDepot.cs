@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CSM_Foundation.Database.Entity;
+
 /// <summary>
 ///     Defines base behaviors for a <see cref="IDepot{TMigrationSet}"/>
 ///     implementation describing <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>

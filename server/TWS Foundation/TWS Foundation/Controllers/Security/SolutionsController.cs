@@ -4,7 +4,7 @@ using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Customer.Services.Security.Solutions;
+using TWS_Customer.Features.Security;
 
 using TWS_Foundation.Authentication;
 
@@ -13,7 +13,8 @@ namespace TWS_Foundation.Controllers.Security;
 [ApiController, Feature("Solution"), Route("[Controller]/[Action]")]
 public class SolutionsController
     : ControllerBase {
-    private readonly ISolutionsService Service;
+
+    readonly ISolutionsService Service;
     public SolutionsController(ISolutionsService Service) {
         this.Service = Service;
     }

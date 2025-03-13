@@ -1,9 +1,15 @@
 ﻿using CSM_Foundation.Database.Entity;
 
 using CSM_Security.Entities;
-using CSM_Security.Entities.Solutions;
 
 namespace CSM_Security.Depots;
+
+/// <summary>
+///     [Interface] for [SolutionsDepot] implementations.
+/// </summary>
+public interface ISolutionsDepot
+    : IDepot<Solution> {
+}
 
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
@@ -17,10 +23,5 @@ public class SolutionsDepot
     public SolutionsDepot(Database Databases, IDisposer? Disposer = null)
         : base(Databases, Disposer) {
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    public SolutionsDepot()
-        : base(new(), null) {
-    }
 }
+

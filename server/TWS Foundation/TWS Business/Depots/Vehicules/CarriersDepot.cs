@@ -3,17 +3,28 @@
 using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Depots.Vehicules;
+
 /// <summary>
-///     Implements a <see cref="BDatabasesDepot{TMigrationDatabases, TMigrationSet}"/>
-///     representing a depot to handle <see cref="Carrier"/> dataDatabases entity mirror.
+///     [interface] for <see cref="Carrier"/> based [Depot] implementations.
 /// </summary>
-public class CarriersDepot : BDepot<Database, Carrier> {
+public interface ICarriersDepot
+    : IDepot<Carrier> {
+}
+
+/// <summary>
+///     [Depot] implementation for <see cref="Carrier"/> based entity operations.
+/// </summary>
+public class CarriersDepot
+    : BDepot<Database, Carrier>, ICarriersDepot {
+
     /// <summary>
-    ///     Generates a new depot handler for <see cref="Carrier"/>.
+    ///     Creates a new <see cref="CarriersDepot"/> instance.
     /// </summary>
-    public CarriersDepot(Database Databases, IDisposer? Disposer = null)
-       : base(Databases, Disposer) {
-    }
-    public CarriersDepot() : base(new(), null) {
-    }
+    /// <param name="Database">
+    ///     Database context handler to be used.
+    /// </param>
+    /// <param name="Disposer">
+    ///     Data disposition handler to be used.
+    /// </param>
+    public CarriersDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
 }

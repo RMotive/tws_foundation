@@ -4,7 +4,7 @@ using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Customer.Services.Interfaces;
+using TWS_Customer.Features.Security;
 
 using TWS_Foundation.Authentication;
 
@@ -15,7 +15,8 @@ namespace TWS_Foundation.Controllers.Security;
 [Route("[Controller]/[Action]")]
 public class ContactsController
     : ControllerBase {
-    private readonly IContactsService Service;
+
+    readonly IContactsService Service;
 
     public ContactsController(IContactsService service) {
         Service = service;

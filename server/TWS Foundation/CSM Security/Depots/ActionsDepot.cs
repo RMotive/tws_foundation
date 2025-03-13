@@ -9,15 +9,19 @@ public class ActionsDepot
     : BDepot<Database, Entities.Action> {
 
     /// <summary>
-    /// 
+    ///     Creates a new <see cref="ActionsDepot"/> instance.
     /// </summary>
     /// <param name="Database">
-    ///     Database context handler.
+    ///     Database handler to be used.
     /// </param>
     /// <param name="Disposer">
-    ///     
+    ///     Data disposition manager handler to be used.
     /// </param>
-    public ActionsDepot(Database Database, IDisposer? Disposer) 
+    /// <remarks>
+    ///     If no <paramref name="Database"/> is provided, a default configured instance will be used. 
+    ///     If no <paramref name="Disposer"/> is provided, none will be used.
+    /// </remarks>
+    public ActionsDepot(Database Database, IDisposer? Disposer = null)
         : base(Database, Disposer) {
     }
 }

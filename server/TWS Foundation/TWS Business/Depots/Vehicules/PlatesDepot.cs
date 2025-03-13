@@ -3,19 +3,28 @@
 using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Depots.Vehicules;
+
 /// <summary>
-///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
-///     representing a depot to handle <see cref="Plate"/> dataDatabases entity mirror.
+///     [Interface] for <see cref="Plate"/> based [Depot] implementations.
+/// </summary>
+public interface IPlatesDepot
+    : IDepot<Plate> {
+}
+
+/// <summary>
+///     [Depot] implementation for <see cref="Plate"/> based entity operations.
 /// </summary>
 public class PlatesDepot
-    : BDepot<Database, Plate> {
+    : BDepot<Database, Plate>, IPlatesDepot {
+
     /// <summary>
-    ///     Generates a new depot handler for <see cref="Plate"/>.
+    ///     Creates a new <see cref="PlatesDepot"/> instance.
     /// </summary>
-    public PlatesDepot(Database Databases, IDisposer? Disposer = null)
-       : base(Databases, Disposer) {
-    }
-    public PlatesDepot()
-        : base(new(), null) {
-    }
+    /// <param name="Database">
+    ///     Database context handler to be used.
+    /// </param>
+    /// <param name="Disposer">
+    ///     Data disposition handler to be used.
+    /// </param>
+    public PlatesDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
 }

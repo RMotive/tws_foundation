@@ -1,9 +1,8 @@
 ﻿using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Server.Exceptions;
 
+using CSM_Security.Depots;
 using CSM_Security.Entities;
-using CSM_Security.Entities.Accounts;
-using CSM_Security.Entities.Solutions;
 
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -19,7 +18,7 @@ public class AuthAttribute
     : Attribute, IAsyncAuthorizationFilter {
     // private const string DISP_HEAD_KEY = "CSMDisposition";
     // private const string DISP_HEAD_VALUE = "Quality";
-    private const string AUTH_TOKEN_KEY = "CSMAuth";
+    const string AUTH_TOKEN_KEY = "CSMAuth";
 
     /// <summary>
     ///     Action that specifies the permit.
