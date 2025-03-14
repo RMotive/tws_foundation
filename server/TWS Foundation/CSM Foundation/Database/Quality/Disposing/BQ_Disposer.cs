@@ -71,7 +71,9 @@ public abstract class BQ_Disposer
             DatabaseFactory factory = Factories[dbType];
 
             using DbContext database = factory();
-            database.RemoveRange(Database.Value);
+            IEnumerable<IEntity> committedEntities = Database.Value.Where(i => i.Id > 0);
+
+            database.RemoveRange(committedEntities);
             database.SaveChanges();
         }
     }

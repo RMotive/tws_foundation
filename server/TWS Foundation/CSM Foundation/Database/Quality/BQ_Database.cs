@@ -1,8 +1,11 @@
 ﻿using System.Text.Json;
 
+using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
+
+using Microsoft.EntityFrameworkCore;
 
 using Xunit;
 
@@ -40,8 +43,15 @@ public abstract class BQ_Database<TDatabase>
     }
 
     [Fact]
+    public void Migration() {
+        IEnumerable<string> pendingMigrations = Database.Database.GetPendingMigrations();
+
+        Assert.True(pendingMigrations.Empty(), $"Database instance isn't up-to-date with current database migrations. ({pendingMigrations.Count()} pendent)");
+    }
+
+    [Fact]
     public void Communication() {
-        Assert.True(Database.Database.CanConnect(), $"{GetType()} cannot connect, check your connection credentials");
+        Assert.True(Database.Database.CanConnect(), $"{GetType()} cannot connect, check your connection credentials.");
     }
 
     [Fact]

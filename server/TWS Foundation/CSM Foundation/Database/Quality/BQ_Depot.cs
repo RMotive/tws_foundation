@@ -9,8 +9,6 @@ using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 
-using Microsoft.EntityFrameworkCore;
-
 using Xunit;
 
 namespace CSM_Foundation.Database.Quality;
@@ -40,6 +38,11 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     protected readonly TDepot Depot;
 
     /// <summary>
+    ///     Database context the <see cref="Depot"/> is using.
+    /// </summary>
+    protected readonly TDatabase Database;
+
+    /// <summary>
     ///     Stores the most valid evaluable property from the current <see cref="TEntity"/>. used for ordering and filtering at View operations and evaluate their quality.
     /// </summary>
     protected readonly PropertyInfo Evaluable;
@@ -64,8 +67,8 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             ]
         ) {
 
-        DbContext database = Database?.Invoke() ?? DatabaseUtilities.Construct<TDatabase>(Sign);
-        Depot = (TDepot)Activator.CreateInstance(typeof(TDepot), (TDatabase)database, null)!;
+        this.Database = (TDatabase)(Database?.Invoke() ?? DatabaseUtilities.Construct<TDatabase>(Sign));
+        Depot = (TDepot)Activator.CreateInstance(typeof(TDepot), this.Database, null)!;
 
         PropertyInfo[] entityProperties = typeof(TEntity).GetProperties();
 
@@ -306,10 +309,11 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public async Task CreateB() {
         TEntity[] mocks = [];
         for (int i = 0; i < 3; i++) {
-            mocks = [.. mocks, RunEntityFactory(EntityFactory)];
+            mocks = [..mocks, RunEntityFactory(EntityFactory)];
         }
 
         SetBatchOut<TEntity> qOut = await Depot.Create(mocks);
+        await Database.SaveChangesAsync();
         Disposer.Push(qOut.Successes);
 
         Assert.Multiple([

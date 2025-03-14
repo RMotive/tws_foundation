@@ -20,7 +20,7 @@ namespace CSM_Foundation.Database.Entity;
 ///     shared behaviors.
 ///     
 ///     A <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> provides methods to 
-///     serve dataDatabases saved transactions for <see cref="TEntity"/>.
+///     serve dataDatabases attached transactions for <see cref="TEntity"/>.
 /// </summary>
 /// <typeparam name="TDatabase">
 ///     What Database implementation belongs this depot.
@@ -39,7 +39,7 @@ public abstract class BDepot<TDatabase, TEntity>
     protected readonly IDisposer? Disposer;
 
     /// <summary>
-    ///     Name to handle direct transactions (not-saved)
+    ///     Name to handle direct transactions (not-attached)
     /// </summary>
     protected readonly TDatabase Database;
 
@@ -91,17 +91,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
         int start = (page - 1) * range;
 
-        int records;
-        if (page == pages) {
-            if (left == 0) {
-                records = range;
-            } else {
-                records = left;
-            }
-        } else {
-            records = range;
-        }
-
+        int records = page == pages ? left == 0 ? range : left : range;
         Source = Source
             .Skip(start)
             .Take(records);
@@ -182,70 +172,62 @@ public abstract class BDepot<TDatabase, TEntity>
     #region Create
 
     /// <summary>
-    ///     Creates a new record into the dataDatabases.
+    ///     Creates a new entity into the dataDatabases.
     /// </summary>
-    /// <param name="Set">
+    /// <param name="entity">
     ///     <see cref="TEntity"/> to store.
     /// </param>
     /// <returns> 
     ///     The stored object. (Object Id is always auto-generated)
     /// </returns>
-    public async Task<TEntity> Create(TEntity Set) {
-        Set.Timestamp = DateTime.UtcNow;
-        Set.EvaluateWrite();
+    public async Task<TEntity> Create(TEntity entity) {
+        entity.Timestamp = DateTime.UtcNow;
+        entity.EvaluateWrite();
 
-        await this.Set.AddAsync(Set);
-        await Database.SaveChangesAsync();
-        Database.ChangeTracker.Clear();
+        await this.Set.AddAsync(entity);
 
-        Disposer?.Push(Database, [Set]);
-        return Set;
+        Disposer?.Push(Database, entity);
+        return entity;
     }
 
     /// <summary>
     ///     Creates a collection of records into the dataDatabases. 
     ///     <br>
-    ///         Depending on <paramref name="Sync"/> the transaction performs different,
+    ///         Depending on <paramref name="sync"/> the transaction performs different,
     ///         the operation iterates the desire collection to store and collects all the 
     ///         failures gathered during the operation.
     ///     </br>
     /// </summary>
-    /// <param name="Sets">
+    /// <param name="entities">
     ///     The collection to store.
     /// </param>
-    /// <param name="Sync">
-    ///     Determines if the transaction should be broke at the first failure catched. This means that
+    /// <param name="sync">
+    ///     Determines if the transaction should be broken at the first failure catched. This means that
     ///     the previous successfully stored objects will be kept as stored but the next ones objects desired
     ///     to be stored won't continue, the operation will throw new exception.
     /// </param>
     /// <returns>
     ///     A <see cref="SetBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public async Task<SetBatchOut<TEntity>> Create(TEntity[] Sets, bool Sync = false) {
-        TEntity[] saved = [];
-        SetOperationFailure<TEntity>[] fails = [];
+    public async Task<SetBatchOut<TEntity>> Create(TEntity[] entities, bool sync = false) {
+        TEntity[] attached = [];
+        SetOperationFailure<TEntity>[] failures = [];
 
-        foreach (TEntity record in Sets) {
+        foreach (TEntity entity in entities) {
             try {
-                record.Timestamp = DateTime.UtcNow;
-                record.EvaluateWrite();
-                Database.ChangeTracker.Clear();
-                Set.Attach(record);
-                await Database.SaveChangesAsync();
-                saved = [.. saved, record];
+                TEntity attachedEntity = await Create(entity);
+                attached = [.. attached, attachedEntity];
             } catch (Exception excep) {
-                if (Sync) {
+                if (sync) {
                     throw;
                 }
 
-                SetOperationFailure<TEntity> fail = new(record, excep);
-                fails = [.. fails, fail];
+                SetOperationFailure<TEntity> fail = new(entity, excep);
+                failures = [.. failures, fail];
             }
         }
 
-        Database.ChangeTracker.Clear();
-        Disposer?.Push(Database, Sets);
-        return new(saved, fails);
+        return new(attached, failures);
     }
 
     #endregion
@@ -294,7 +276,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// </summary>
     /// <param name="current"> Lastest data set stored in db sorce. </param>
     /// <param name="Record"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
-    private void UpdateHelper(IEntity current, IEntity Record) {
+    void UpdateHelper(IEntity current, IEntity Record) {
         EntityEntry previousEntry = Database.Entry(current);
         if (previousEntry.State == EntityState.Unchanged) {
             // Update the non-navigation properties.
@@ -321,7 +303,7 @@ public abstract class BDepot<TDatabase, TEntity>
                     }
                     // Find items to modify.
                     for (int i = 0; i < previousList.Count; i++) {
-                        // For each new item stored in record collection, will search for an ID match and update the record.
+                        // For each new item stored in entity collection, will search for an ID match and update the entity.
                         foreach (object newitem in newList) {
                             if (previousList[i] is IEntity previousItem && newitem is IEntity newItemSet && previousItem.Id == newItemSet.Id) {
                                 UpdateHelper(previousItem, newItemSet);
@@ -425,7 +407,7 @@ public abstract class BDepot<TDatabase, TEntity>
             .AsNoTracking()
             .Where(r => r.Id == Id)
             .FirstOrDefaultAsync()
-            ?? throw new Exception("Trying to remove an unexist record");
+            ?? throw new Exception("Trying to remove an unexist entity");
 
         Set.Remove(record);
         await Database.SaveChangesAsync();

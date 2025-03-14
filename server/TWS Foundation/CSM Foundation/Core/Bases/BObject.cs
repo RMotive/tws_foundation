@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CSM_Foundation.Core.Bases;
 
@@ -85,7 +86,13 @@ public abstract class BObject<TObject> {
             jsonReference.Add(prop.Name, prop.GetValue(this));
         }
 
-        return JsonSerializer.Serialize(jsonReference);
+        return JsonSerializer.Serialize(
+                jsonReference, 
+                options: new JsonSerializerOptions {
+                    WriteIndented = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                }
+            );
     }
     public override int GetHashCode() {
         return base.GetHashCode();
