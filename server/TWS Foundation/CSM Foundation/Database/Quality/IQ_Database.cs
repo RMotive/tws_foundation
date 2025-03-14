@@ -7,7 +7,7 @@
 ///     [MigrationDatabases] concept: determines a dataDatabases class mirrored by an Entity Framework
 ///     migration implementation.
 /// </summary>
-public interface IQ_MigrationDatabases {
+public interface IQ_Database {
     /// <summary>
     ///     Qualify if the [MigrationDatabases] can communicate at runtime.
     /// </summary>

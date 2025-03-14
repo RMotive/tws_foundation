@@ -179,7 +179,6 @@ public abstract class BDepot<TDatabase, TEntity>
 
     #endregion
 
-
     #region Create
 
     /// <summary>

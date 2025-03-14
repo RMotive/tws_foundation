@@ -16,8 +16,8 @@ namespace CSM_Foundation.Database.Bases;
 /// <typeparam name="TCommon">
 ///     [Entity] type to use as <see cref="Common"/> information.
 /// </typeparam>
-public abstract class BEntity<TCommon> 
-    : BEntity 
+public abstract class BEntity<TCommon>
+    : BEntity
     where TCommon : class, IEntity {
 
     /// <summary>
@@ -54,12 +54,12 @@ public abstract partial class BEntity
     /// <summary>
     /// 
     /// </summary>
-    private static bool Defined = false;
+    static bool Defined = false;
 
     /// <summary>
     /// 
     /// </summary>
-    private (string Property, IValidator[] Validators)[]? Validators;
+    (string Property, IValidator[] Validators)[]? Validators;
 
     /// <summary>
     /// 
@@ -81,8 +81,8 @@ public abstract partial class BEntity
     /// 
     /// </summary>
     /// <param name="Custom"></param>
-    /// <exception cref="XBMigrationSet_Evaluate"></exception>
-    protected void Evaluate((string Propety, IValidator[] Validators)[] Custom) {
+    /// <exception cref="XBEntity_Evaluate"></exception>
+    protected void Evaluate((string Propety, IValidator[] Validators)[] Custom, bool IsRead = false) {
         Validators ??= Validations([]);
 
         (string Propety, IValidator[] Validators)[] validators = [.. Custom, .. Validators];
@@ -114,26 +114,31 @@ public abstract partial class BEntity
             return;
         }
 
-        throw new XBMigrationSet_Evaluate(GetType(), unvalidations);
+        throw new XBEntity_Evaluate(GetType(), IsRead, unvalidations);
     }
 
     /// <summary>
     /// 
     /// </summary>
     public void EvaluateRead() {
-        Evaluate([
-            (nameof(Id), [new PointerValidator()]),
-            (nameof(Timestamp), [new RequiredValidator()])
-        ]);
+        Evaluate(
+            IsRead: true,
+            Custom: [
+                (nameof(Id), [new PointerValidator()]),
+                (nameof(Timestamp), [new RequiredValidator()])
+            ]
+        );
     }
 
     /// <summary>
     /// 
     /// </summary>
     public void EvaluateWrite() {
-        Evaluate([
-            (nameof(Timestamp), [new RequiredValidator()])
-        ]);
+        Evaluate(
+            Custom: [
+                (nameof(Timestamp), [new RequiredValidator()])
+            ]
+        );
     }
 
     public Exception[] EvaluateDefinition() {

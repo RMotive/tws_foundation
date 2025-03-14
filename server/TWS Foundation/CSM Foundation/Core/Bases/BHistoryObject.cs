@@ -40,7 +40,7 @@
 //            return;
 //        }
 
-//        throw new XBMigrationSet_Evaluate(GetType(), unvalidations);
+//        throw new XBEntity_Evaluate(GetType(), unvalidations);
 //    }
 //    public void EvaluateRead() {
 //        Evaluate([

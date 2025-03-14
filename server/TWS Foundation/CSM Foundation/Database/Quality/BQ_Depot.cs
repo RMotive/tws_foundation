@@ -7,6 +7,9 @@ using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Database.Quality.Disposing;
+using CSM_Foundation.Database.Utilitites;
+
+using Microsoft.EntityFrameworkCore;
 
 using Xunit;
 
@@ -28,13 +31,13 @@ namespace CSM_Foundation.Database.Quality;
 public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     : BQ_DataHandler
     where TEntity : class, IEntity, new()
-    where TDepot : IDepot<TEntity>, new()
-    where TDatabase : BDatabase_SQLServer<TDatabase>, new() {
+    where TDepot : IDepot<TEntity>
+    where TDatabase : BDatabase_SQLServer<TDatabase> {
 
     /// <summary>
     ///     Depot instance to operate tests.
     /// </summary>
-    protected readonly TDepot Depot = new();
+    protected readonly TDepot Depot;
 
     /// <summary>
     ///     Stores the most valid evaluable property from the current <see cref="TEntity"/>. used for ordering and filtering at View operations and evaluate their quality.
@@ -47,11 +50,22 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     /// <param name="Factories">
     ///     Database factories for relations sampleEntity at external databases needed for <see cref="TEntity"/>.
     /// </param>
+    /// <param name="Sign">
+    ///     Database sign for identification purposes.
+    /// </param>
     /// <param name="Database">
     ///     Main Entity <see cref="TEntity"/> database handler instance. If isn't given will use a default built instance.
     /// </param>
-    public BQ_Depot(DatabaseFactory? Database = null, params DatabaseFactory[] Factories)
-        : base([.. Factories, () => Database?.Invoke() ?? new TDatabase()]) {
+    public BQ_Depot(string Sign, DatabaseFactory? Database = null, params DatabaseFactory[] Factories)
+        : base(
+            [
+                ..Factories,
+                () => Database?.Invoke() ?? DatabaseUtilities.Construct<TDatabase>(Sign)
+            ]
+        ) {
+
+        DbContext database = Database?.Invoke() ?? DatabaseUtilities.Construct<TDatabase>(Sign);
+        Depot = (TDepot)Activator.CreateInstance(typeof(TDepot), (TDatabase)database, null)!;
 
         PropertyInfo[] entityProperties = typeof(TEntity).GetProperties();
 
@@ -66,7 +80,6 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
             orderableTmp = propertyInfo;
         }
-
 
         Evaluable = orderableTmp ?? typeof(TEntity).GetProperty(nameof(IEntity.Id))!; // By default if the [Entity] doesn't have a valid evaluable property will use the Id. 
     }
@@ -291,7 +304,10 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     [Fact(DisplayName = "[Create]: Multiple records created")]
     public async Task CreateB() {
-        TEntity[] mocks = Store(3, EntityFactory);
+        TEntity[] mocks = [];
+        for (int i = 0; i < 3; i++) {
+            mocks = [.. mocks, RunEntityFactory(EntityFactory)];
+        }
 
         SetBatchOut<TEntity> qOut = await Depot.Create(mocks);
         Disposer.Push(qOut.Successes);

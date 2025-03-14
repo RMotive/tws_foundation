@@ -74,7 +74,7 @@ public class BQ_DataHandler
     /// <returns>
     ///     The generated [Entity] object.
     /// </returns>
-    private static TEntity2 RunEntityFactory<TEntity2>(EntityFactory<TEntity2> Factory)
+    protected static TEntity2 RunEntityFactory<TEntity2>(EntityFactory<TEntity2> Factory)
         where TEntity2 : class, IEntity {
 
         return Factory(RandomUtils.String(16));
