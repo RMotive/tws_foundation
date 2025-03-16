@@ -2,9 +2,12 @@
 using System.Text.Json;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace CSM_Foundation.Database.Utilitites;
 public class DatabaseUtilities {
@@ -75,6 +78,20 @@ public class DatabaseUtilities {
         pfs.Dispose();
 
         return m is null ? throw new Exception() : m;
+    }
+
+
+    public static TEntity SanitizeEntity<TEntity>(DbContext database, IEntity entity) {
+
+        PropertyInfo relationsProperties = entity.GetType().GetProperties().Where(
+                (pi) => pi.GetCustomAttribute(typeof(RelationAttribute)) != null;
+            );
+
+        foreach(PropertyInfo relationProperty in relationsProperties) {
+
+            Type relationType = relationProperty.PropertyType;
+
+        }
     }
 
     /// <summary>

@@ -98,11 +98,7 @@ public class BQ_DataHandler
     protected TEntity2 Store<TEntity2>(TEntity2 Entity)
         where TEntity2 : class, IEntity {
 
-        if (!Factories.TryGetValue(Entity.Database, out DatabaseFactory? factory)) {
-            throw new Exception($"No factory subscribed for [({Entity.Database.Name})]");
-        }
-
-        DbContext database = factory();
+        DbContext database = GetDatabase(Entity.Database);
 
         database.Set<TEntity2>().Add(Entity);
         database.SaveChanges();
@@ -151,34 +147,37 @@ public class BQ_DataHandler
     ///     The stored and updated [Entities] stored.
     /// </returns>
     protected async Task<TEntity2[]> Store<TEntity2>(int Quantity, EntityFactory<TEntity2> EntityFactory)
-        where TEntity2 : class, IEntity {
+        where TEntity2 : class, IEntity, new() {
 
-        DbContext? database = null;
         List<TEntity2> entities = [];
 
-        while (Quantity > 0) {
+        DbContext database = GetDatabase(new TEntity2().Database);
+        for (int i = 0; i < Quantity; i++) {
+
             TEntity2 entity = RunEntityFactory(EntityFactory);
-            entities.Add(entity);
 
-            Quantity--;
-            if (database != null) {
-                continue;
-            }
-            if (!Factories.TryGetValue(entity.Database, out DatabaseFactory? dbFactory)) {
-                throw new Exception($"No factory subscribed for [({entity.Database.Name})]");
-            }
-            database = dbFactory();
         }
 
-        if (database != null) {
-            using DbContext dbContext = database;
-
-            dbContext.Set<TEntity2>().AddRange(entities);
-            await dbContext.SaveChangesAsync();
-        }
-
-        return [..entities];
+        return [.. entities];
     }
 
     #endregion
+
+    /// <summary>
+    ///    Retrieves the database instance for the given <paramref name="databaseType"/> based on the subscribed DatabaseFactories.
+    /// </summary>
+    /// <param name="databaseType">
+    ///     <see cref="Type"/> of the database requested.
+    /// </param>
+    /// <returns>
+    ///     The matched <see cref="Type"/> database context instance.
+    /// </returns>
+    /// <exception cref="Exception">
+    ///     Thrown when the requested database <see cref="Type"/> isn't found in the subcribed database factories.
+    /// </exception>
+    DbContext GetDatabase(Type databaseType) {
+        return !Factories.TryGetValue(databaseType, out DatabaseFactory? factory)
+            ? throw new Exception($"No factory subscribed for [({databaseType.Name})]")
+            : factory();
+    }
 }

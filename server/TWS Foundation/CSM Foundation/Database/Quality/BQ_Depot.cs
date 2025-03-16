@@ -141,9 +141,9 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     #region Q_Base View
 
-    [Fact(DisplayName = "[View]: No ordering, no filters")]
+    [Fact(DisplayName = "[View]: Simple view calculation")]
     public async Task ViewA() {
-        await Store(30);
+        await Store(30, EntityFactory);
 
         SetViewOptions<TEntity> qViewOptions = new() {
             Retroactive = false,

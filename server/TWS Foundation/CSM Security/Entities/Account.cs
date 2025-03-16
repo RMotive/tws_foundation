@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ public class Account
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Contact Contact { get; set; } = default!;
 
     /// <summary>
