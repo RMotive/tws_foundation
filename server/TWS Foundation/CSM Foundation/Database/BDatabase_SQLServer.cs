@@ -28,7 +28,7 @@ public static class EntityTypeBuilderExtension {
     /// <param name="Required"></param>
     /// <param name="Auto"></param>
     /// <param name="Deletion"></param>
-    public static void Link(this EntityTypeBuilder Builder, (Type Source, Type Target) Relation, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.Cascade) {
+    public static void Link(this EntityTypeBuilder Builder, (Type Source, Type Target) Relation, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.Restrict) {
         Type entityIType = typeof(IEntity);
         Type source = Relation.Source;
         Type target = Relation.Target;
@@ -79,7 +79,7 @@ public static class EntityTypeBuilderExtension {
     /// <param name="Required"></param>
     /// <param name="Auto"></param>
     /// <param name="Deletion"></param>
-    public static void Link<SourceT, TargetT>(this EntityTypeBuilder Builder, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.ClientCascade)
+    public static void Link<SourceT, TargetT>(this EntityTypeBuilder Builder, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.Restrict)
         where SourceT : class, IEntity
         where TargetT : class, IEntity {
 
@@ -316,6 +316,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         string connectionString = Connection.GenerateConnectionString();
         optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.EnableSensitiveDataLogging().LogTo(Console.WriteLine);
 
         if (AppDomain.CurrentDomain.FriendlyName.Contains("ef")) {
             AdvisorManager.Warning(

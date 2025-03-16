@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
@@ -98,11 +99,51 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     /// </returns>
     protected abstract TEntity EntityFactory(string Entropy);
 
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <param name="SampleEntities"></param>
+    protected async Task CommitSampleEntities(ICollection<IEntity> SampleEntities) {
+        await Database.SaveChangesAsync();
+        Disposer.Push([..SampleEntities]);
+    }
+
+    #region Sampling
+
+    /// <summary>
+    ///     Creates a new <see cref="TEntity"/> instance based on the <see cref="EntityFactory(string)"/> implementation.
+    /// </summary>
+    /// <returns> A new <see cref="TEntity"/> instance </returns>
+    /// <remarks>
+    ///     This <see cref="IEntity"/> instance is created but not stored in the database.
+    /// </remarks>
+    protected TEntity Sampling() {
+        return RunEntityFactory(EntityFactory);
+    }
+
+    /// <summary>
+    ///    Creates a new collection of <see cref="TEntity"/> instances based on the <see cref="EntityFactory(string)"/> implementation.
+    /// </summary>
+    /// <param name="Count">
+    ///     Number of instances to create.
+    /// </param>
+    /// <returns>
+    ///     A new <see cref="TEntity"/> instance collection.
+    /// </returns>
+    /// <remarks>
+    ///     This <see cref="IEntity"/> instance collection is created but not stored in the database.
+    /// </remarks>
+    protected TEntity[] Sampling(int Count) {
+        return [.. Enumerable.Range(0, Count).Select(_ => RunEntityFactory(EntityFactory))];
+    }
+
+    #endregion
+
     #region Q_Base View
 
     [Fact(DisplayName = "[View]: No ordering, no filters")]
     public async Task ViewA() {
-        Store(30, EntityFactory);
+        await Store(30);
 
         SetViewOptions<TEntity> qViewOptions = new() {
             Retroactive = false,
@@ -243,7 +284,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     [Fact(DisplayName = "[View]: Using filter Linear Evaluation (OR)")]
     public async Task ViewF() {
-        TEntity[] entities = Store(2, EntityFactory);
+        TEntity[] entities = await Store(2, EntityFactory);
 
 
         List<object?> possibleValues = [];
@@ -290,39 +331,40 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     [Fact(DisplayName = "[Create]: Record created and unique store check")]
     public async Task CreateA() {
-        TEntity mock = Store(EntityFactory);
+        TEntity sample = Sampling();
 
-        TEntity storedMock = await Depot.Create(mock);
-        Disposer.Push(storedMock);
+        TEntity storedEntity = await Depot.Create(sample);
+        await CommitSampleEntities([storedEntity]);
 
-        Assert.Multiple([
-            () => Assert.True(storedMock.Id > 0),
-            async () => {
-                await Assert.ThrowsAnyAsync<Exception>(async () => {
-                    await Depot.Create(mock);
-                });
-            },
-        ]);
+        Assert.Multiple(
+            [
+                () => Assert.True(storedEntity.Id > 0),
+                async () => {
+                    await Assert.ThrowsAnyAsync<Exception>(
+                        async () => {
+                            await Depot.Create(sample);
+                            await CommitSampleEntities([sample]);
+                        }
+                    );
+                },
+            ]
+        );
     }
 
     [Fact(DisplayName = "[Create]: Multiple records created")]
     public async Task CreateB() {
-        TEntity[] mocks = [];
-        for (int i = 0; i < 3; i++) {
-            mocks = [..mocks, RunEntityFactory(EntityFactory)];
-        }
+        TEntity[] samples = Sampling(3);
 
-        SetBatchOut<TEntity> qOut = await Depot.Create(mocks);
-        await Database.SaveChangesAsync();
-        Disposer.Push(qOut.Successes);
+        SetBatchOut<TEntity> qOut = await Depot.Create(samples);
+        await CommitSampleEntities(samples);
 
-        Assert.Multiple([
-            () => Assert.Equal(qOut.QTransactions, mocks.Length),
-            () => Assert.True(qOut.QSuccesses.Equals(mocks.Length), qOut.QFailures > 0 ? qOut.Failures[0].System : ""),
-            () => Assert.All(qOut.Successes, i => {
-                Assert.True(i.Id > 0);
-            })
-        ]);
+        Assert.Multiple(
+            [
+                () => Assert.Equal(qOut.QTransactions, samples.Length),
+                () => Assert.True(qOut.QSuccesses.Equals(samples.Length), qOut.QFailures > 0 ? qOut.Failures[0].System : ""),
+                () => Assert.All(qOut.Successes, i => { Assert.True(i.Id > 0); })
+            ]
+        );
     }
 
     #endregion

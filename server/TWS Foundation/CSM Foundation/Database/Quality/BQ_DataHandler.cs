@@ -80,6 +80,9 @@ public class BQ_DataHandler
         return Factory(RandomUtils.String(16));
     }
 
+
+    #region Storing
+
     /// <summary>
     ///     Stores the given <paramref name="Entity"/> into the database.
     /// </summary>
@@ -92,7 +95,7 @@ public class BQ_DataHandler
     /// <returns>
     ///     The stored and updated [Entity] object values. 
     /// </returns>
-    public TEntity2 Store<TEntity2>(TEntity2 Entity)
+    protected TEntity2 Store<TEntity2>(TEntity2 Entity)
         where TEntity2 : class, IEntity {
 
         if (!Factories.TryGetValue(Entity.Database, out DatabaseFactory? factory)) {
@@ -121,7 +124,7 @@ public class BQ_DataHandler
     /// <returns>
     ///     The stored and updated [Entity] object. 
     /// </returns>
-    public TEntity2 Store<TEntity2>(EntityFactory<TEntity2> EntityFactory)
+    protected TEntity2 Store<TEntity2>(EntityFactory<TEntity2> EntityFactory)
         where TEntity2 : class, IEntity {
 
         TEntity2 toStore = RunEntityFactory(EntityFactory);
@@ -147,27 +150,23 @@ public class BQ_DataHandler
     /// <returns>
     ///     The stored and updated [Entities] stored.
     /// </returns>
-    public TEntity2[] Store<TEntity2>(int Quantity, EntityFactory<TEntity2> EntityFactory)
+    protected async Task<TEntity2[]> Store<TEntity2>(int Quantity, EntityFactory<TEntity2> EntityFactory)
         where TEntity2 : class, IEntity {
 
         DbContext? database = null;
-        TEntity2[] entities = [];
+        List<TEntity2> entities = [];
+
         while (Quantity > 0) {
-            Quantity--;
-
             TEntity2 entity = RunEntityFactory(EntityFactory);
-            entities = [
-                    ..entities, entity,
-                ];
+            entities.Add(entity);
 
+            Quantity--;
             if (database != null) {
                 continue;
             }
-
             if (!Factories.TryGetValue(entity.Database, out DatabaseFactory? dbFactory)) {
                 throw new Exception($"No factory subscribed for [({entity.Database.Name})]");
             }
-
             database = dbFactory();
         }
 
@@ -175,9 +174,11 @@ public class BQ_DataHandler
             using DbContext dbContext = database;
 
             dbContext.Set<TEntity2>().AddRange(entities);
-            dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
         }
 
-        return entities;
+        return [..entities];
     }
+
+    #endregion
 }

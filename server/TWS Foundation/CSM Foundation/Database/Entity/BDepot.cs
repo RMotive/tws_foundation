@@ -161,6 +161,19 @@ public abstract class BDepot<TDatabase, TEntity>
     }
 
 
+    protected TEntity2 ValidateDependency<TEntity2>(TEntity2 dependencyEntity)
+        where TEntity2 : class, IEntity, new() {
+
+        TEntity2? tmpDependency = dependencyEntity;
+        tmpDependency = tmpDependency.Id > 0
+            ? Database.Set<TEntity2>().Where(dep => dep.Id == tmpDependency.Id).FirstOrDefault()
+            : throw new Exception($"Dependencies aren't allowed to be auto-created on main Entity creation, you need to create the Dependency first in its corresponding [Depot]");
+
+        return tmpDependency is null
+            ? throw new Exception($"[{GetType().Name}] entity requires [{typeof(TEntity2)}] dependency")
+            : tmpDependency;
+    }
+
     #region View 
 
     public Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
@@ -180,11 +193,11 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <returns> 
     ///     The stored object. (Object Id is always auto-generated)
     /// </returns>
-    public async Task<TEntity> Create(TEntity entity) {
+    public virtual async Task<TEntity> Create(TEntity entity) {
         entity.Timestamp = DateTime.UtcNow;
         entity.EvaluateWrite();
 
-        await this.Set.AddAsync(entity);
+        await Set.AddAsync(entity);
 
         Disposer?.Push(Database, entity);
         return entity;
@@ -209,7 +222,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <returns>
     ///     A <see cref="SetBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public async Task<SetBatchOut<TEntity>> Create(TEntity[] entities, bool sync = false) {
+    public virtual async Task<SetBatchOut<TEntity>> Create(ICollection<TEntity> entities, bool sync = false) {
         TEntity[] attached = [];
         SetOperationFailure<TEntity>[] failures = [];
 
@@ -295,7 +308,7 @@ public abstract class BDepot<TDatabase, TEntity>
                             // Getting the item type to add.
                             Type itemType = newItemSet.GetType();
                             // Getting the Add method from Icollection.
-                            var addMethod = previousCollection.GetType().GetMethod("Add", [itemType]);
+                            MethodInfo? addMethod = previousCollection.GetType().GetMethod("Add", [itemType]);
                             // Adding the new item to Icollection.
                             _ = (addMethod?.Invoke(previousCollection, [newItemSet]));
 

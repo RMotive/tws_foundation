@@ -37,13 +37,13 @@ public class AccountsDepot
     /// <summary>
     ///     Generates a new depot handler for <see cref="Account"/>.
     /// </summary>
-    /// <param name="Databases">
+    /// <param name="database">
     ///     Database handler to use.
     /// </param>
     /// <param name="Disposer">
     ///     Disposition manager handler to use.
     /// </param>
-    public AccountsDepot(Database Databases, IDisposer? Disposer = null) : base(Databases, Disposer) { }
+    public AccountsDepot(Database database, IDisposer? Disposer = null) : base(database, Disposer) { }
 
     public async Task<Permit[]> GetPermits(long Account) {
         SetBatchOut<Account> accountReadOut = await Read(
@@ -80,4 +80,14 @@ public class AccountsDepot
 
         return totalPermits;
     }
+
+
+    #region Create
+
+    public override Task<Account> Create(Account entity) {
+        entity.Contact = ValidateDependency(entity.Contact);
+        return base.Create(entity);
+    }
+
+    #endregion
 }

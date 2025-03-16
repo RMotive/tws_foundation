@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +68,8 @@ public class Account
                 nameof(Contact),
                 Required: true,
                 Index: true,
-                Auto: true
+                Auto: true,
+                Deletion: DeleteBehavior.Cascade
             );
 
         etBuilder

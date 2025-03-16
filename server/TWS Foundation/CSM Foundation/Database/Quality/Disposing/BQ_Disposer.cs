@@ -3,6 +3,7 @@
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CSM_Foundation.Database.Quality.Disposing;
 
@@ -56,7 +57,9 @@ public abstract class BQ_Disposer
                     (_, prev) => [.. prev, Record]
                 );
 
-        } else throw new Exception($"Tried to push a record for Disposition with no subscribed database owning factory ({Record.Database.Name}).");
+        } else {
+            throw new Exception($"Tried to push a record for Disposition with no subscribed database owning factory ({Record.Database.Name}).");
+        }
     }
 
     public void Push(IEntity[] Records) {
@@ -71,9 +74,12 @@ public abstract class BQ_Disposer
             DatabaseFactory factory = Factories[dbType];
 
             using DbContext database = factory();
-            IEnumerable<IEntity> committedEntities = Database.Value.Where(i => i.Id > 0);
+            IEnumerable<IEntity> committedEntities = Database.Value.Where(i => i.Id > 0).Reverse();
 
-            database.RemoveRange(committedEntities);
+            foreach (IEntity committedEntity in committedEntities) {
+                EntityEntry entry = database.Entry(committedEntity);
+                entry.State = EntityState.Deleted;
+            }
             database.SaveChanges();
         }
     }
