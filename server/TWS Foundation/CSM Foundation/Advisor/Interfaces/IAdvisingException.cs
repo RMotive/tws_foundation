@@ -16,7 +16,7 @@ public interface IAdvisingException {
     public string Message { get; }
 
     /// <summary>
-    ///     System exception caught trace description.
+    ///     Message exception caught trace description.
     /// </summary>
     public string Trace { get; }
 

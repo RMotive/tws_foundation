@@ -32,28 +32,28 @@ public interface IDepot_Read<TEntity>
     where TEntity : IEntity {
 
     /// <summary>
-    ///     Looks for the <typeparamref name="TEntity"/> entities matching the given <paramref name="Filter"/>.
+    ///     Reads into the database for the <typeparamref name="TEntity"/> instances matched by the given <paramref name="filter"/>.
     /// </summary>
-    /// <param name="Behavior">
+    /// <param name="behavior">
     ///     How the function will behave about the result.
     /// </param>
-    /// <param name="Filter">
+    /// <param name="filter">
     ///     How the function will pick the correct records to take.
     /// </param>
-    /// <param name="Accumulate">
-    ///     Proxied [Query] to generate accumulative instructions.
+    /// <param name="postProcessing">
+    ///     Post processing function to catch the native operation resulted query and modify for custom needs.
     /// </param>
     /// <returns>
-    ///     Function result.
+    ///     Collection of <typeparamref name="TEntity"/> instances found.
     /// </returns>
-    Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<EntityBatchOut<TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null);
 
     /// <summary>
-    ///     Reads into the <see cref="TEntity"/> database [Set] for matched records.
+    ///     Reads into the database for the <typeparamref name="TEntity"/> instance with the given <paramref name="id"/>.
     /// </summary>
-    /// <param name="Id">
+    /// <param name="id">
     ///     Identifier of the desired <typeparamref name="TEntity"/>.
     /// </param>
-    /// <returns> <see cref="TEntity"/> insatcne found </returns>
-    Task<TEntity> Read(long Id);
+    /// <returns> <see cref="TEntity"/> instance found. </returns>
+    Task<TEntity> Read(long id);
 }

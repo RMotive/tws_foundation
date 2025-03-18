@@ -226,7 +226,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// </returns>
     public virtual async Task<EntityBatchOut<TEntity>> Create(ICollection<TEntity> entities, bool sync = false) {
         TEntity[] attached = [];
-        SetOperationFailure<TEntity>[] failures = [];
+        EntityOperationFailure<TEntity>[] failures = [];
 
         foreach (TEntity entity in entities) {
             try {
@@ -237,7 +237,7 @@ public abstract class BDepot<TDatabase, TEntity>
                     throw;
                 }
 
-                SetOperationFailure<TEntity> fail = new(entity, excep);
+                EntityOperationFailure<TEntity> fail = new(entity, excep);
                 failures = [.. failures, fail];
             }
         }
@@ -250,7 +250,7 @@ public abstract class BDepot<TDatabase, TEntity>
     #region Read
 
     /// <summary>
-    ///     Reads into the <see cref="TEntity"/> database [Set] for matched records.
+    ///     Reads into the <see cref="TEntity"/> database [Entity] for matched records.
     /// </summary>
     /// <param name="Id">
     ///     Identifier of the desired <typeparamref name="TEntity"/>.
@@ -264,43 +264,45 @@ public abstract class BDepot<TDatabase, TEntity>
         TEntity? entity = await Set.Where(
                 e => e.Id == Id
             )
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync()
+            ?? throw new XDepot(typeof(TEntity), $"{nameof(IEntity.Id)} = {Id}", XDepotSituations.Unfound);
 
-        return entity ?? throw new XDepot(typeof(TEntity), $"{nameof(IEntity.Id)} = {Id}", XDepotSituations.Unfound);
+        entity.EvaluateRead();
+        return entity;
     }
 
-    public async Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
-        IQueryable<TEntity> query = Set.Where(Filter);
-        if (Accumulate != null) {
-            query = Accumulate(query);
+    public async Task<EntityBatchOut<TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null) {
+        IQueryable<TEntity> query = Set.Where(filter);
+        if (postProcessing != null) {
+            query = postProcessing(query);
         }
 
         if (!query.Any()) {
             return new EntityBatchOut<TEntity>([], []);
         }
 
-        TEntity[] items = Behavior switch {
+        TEntity[] items = behavior switch {
             ReadBehaviors.First => [await query.FirstAsync()],
             ReadBehaviors.Last => [await query.LastAsync()],
             ReadBehaviors.All => await query.ToArrayAsync(),
-            _ => throw new NotImplementedException(Behavior.ToString())
+            _ => throw new NotImplementedException(behavior.ToString())
         };
 
         List<TEntity> successes = [];
-        List<SetOperationFailure<TEntity>> failures = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
         foreach (TEntity item in items) {
             try {
                 item.EvaluateRead();
                 successes.Add(item);
             } catch (Exception exception) {
-                SetOperationFailure<TEntity> failure = new(item, exception);
+                EntityOperationFailure<TEntity> failure = new(item, exception);
                 failures.Add(failure);
             }
         }
 
-        return new EntityBatchOut<TEntity> (
-                [..successes],
-                [..failures]
+        return new EntityBatchOut<TEntity>(
+                [.. successes],
+                [.. failures]
             );
     }
 
@@ -371,7 +373,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="Set"></param>
+    /// <param name="Entity"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     public async Task<EntityUpdateOut<TEntity>> Update(TEntity Record, AccumulateDelegate<TEntity>? Accumulate = null) {
@@ -417,14 +419,14 @@ public abstract class BDepot<TDatabase, TEntity>
     public Task<EntityBatchOut<TEntity>> Delete(TEntity[] Sets) {
 
         TEntity[] safe = [];
-        SetOperationFailure<TEntity>[] fails = [];
+        EntityOperationFailure<TEntity>[] fails = [];
 
         foreach (TEntity set in Sets) {
             try {
                 set.EvaluateWrite();
                 safe = [.. safe, set];
             } catch (Exception excep) {
-                SetOperationFailure<TEntity> fail = new(set, excep);
+                EntityOperationFailure<TEntity> fail = new(set, excep);
                 fails = [.. fails, fail];
             }
         }

@@ -10,7 +10,7 @@ namespace TWS_Business;
 public interface IDatabase {
 
     /// <summary>
-    ///     [Employee] [Entity] database Set.
+    ///     [Employee] [Entity] database Entity.
     /// </summary>
     DbSet<Employee> Employees { get; set; }
 }

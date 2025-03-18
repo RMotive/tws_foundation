@@ -5,13 +5,13 @@ namespace CSM_Foundation.Database.Models.Out;
 public record EntityBatchOut<TSet>
     where TSet : IEntity {
     public TSet[] Successes { get; init; }
-    public SetOperationFailure<TSet>[] Failures { get; init; }
+    public EntityOperationFailure<TSet>[] Failures { get; init; }
     public int QTransactions { get; private set; }
     public int QSuccesses { get; private set; }
     public int QFailures { get; private set; }
     public bool Failed { get; private set; }
 
-    public EntityBatchOut(TSet[] Successes, SetOperationFailure<TSet>[] Failures) {
+    public EntityBatchOut(TSet[] Successes, EntityOperationFailure<TSet>[] Failures) {
         this.Successes = Successes;
         this.Failures = Failures;
         QSuccesses = this.Successes.Length;

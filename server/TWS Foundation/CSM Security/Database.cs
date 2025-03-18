@@ -1,11 +1,26 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Advisor.Managers;
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Models;
+using CSM_Foundation.Database.Utilitites;
 
 using CSM_Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace CSM_Security;
+
+
+internal class DatabaseDesignFactory
+    : IDesignTimeDbContextFactory<Database> {
+    public Database CreateDbContext(string[] args) {
+        AdvisorManager.Warning("Using native [CSM] design time database context factory");
+
+        ConnectionOptions connectionOptions = DatabaseUtilities.Retrieve("CSMS");
+
+        return new Database(connectionOptions);
+    }
+}
 
 /// <summary>
 ///     [Database Context] implementation for [CSM Security] module. Stores necessary information for security and access control to the registered solutions.

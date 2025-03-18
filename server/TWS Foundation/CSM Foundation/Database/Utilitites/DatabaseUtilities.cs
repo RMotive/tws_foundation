@@ -12,9 +12,9 @@ using Microsoft.EntityFrameworkCore;
 namespace CSM_Foundation.Database.Utilitites;
 public class DatabaseUtilities {
     const string DirectoryName = ".Connection";
-    const string QualityPrefix = "quality_";
-    const string DevelopmentPrefix = "development_";
-    const string ProductionPrefix = "production_";
+    const string QualityPrefix = "quality";
+    const string DevelopmentPrefix = "development";
+    const string ProductionPrefix = "production";
 
 
     /// <summary>
@@ -53,7 +53,7 @@ public class DatabaseUtilities {
             ServerEnvironments.production => ProductionPrefix,
             _ => DevelopmentPrefix,
         };
-        string fn = $"{prefix}connection.json";
+        string fn = $"{prefix}.connection.json";
 
         if (wd is null) {
             throw new ArgumentNullException(wd);
@@ -71,7 +71,7 @@ public class DatabaseUtilities {
         string cpfi = cfs
             .Where(i => i == tfn)
             .FirstOrDefault()
-            ?? throw new FileNotFoundException();
+            ?? throw new FileNotFoundException($"{tfn} not found in the system");
 
         using FileStream pfs = new(cpfi, FileMode.Open, FileAccess.Read, FileShare.Read);
         ConnectionOptions? m = JsonSerializer.Deserialize<ConnectionOptions>(pfs);

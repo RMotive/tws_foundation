@@ -139,6 +139,70 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     #endregion
 
+    #region Q_Base Create
+
+    [Fact(DisplayName = "[Create]: Record created and unique store check")]
+    public async Task CreateA() {
+        TEntity sample = Sampling();
+
+        TEntity storedEntity = await Depot.Create(sample);
+        await CommitSampleEntities([storedEntity]);
+
+        Assert.Multiple(
+            [
+                () => Assert.True(storedEntity.Id > 0),
+                async () => {
+                    await Assert.ThrowsAnyAsync<Exception>(
+                        async () => {
+                            await Depot.Create(sample);
+                            await CommitSampleEntities([sample]);
+                        }
+                    );
+                },
+            ]
+        );
+    }
+
+    [Fact(DisplayName = "[Create]: Multiple records created")]
+    public async Task CreateB() {
+        TEntity[] samples = Sampling(3);
+
+        EntityBatchOut<TEntity> qOut = await Depot.Create(samples);
+        await CommitSampleEntities(samples);
+
+        Assert.Multiple(
+            [
+                () => Assert.Equal(qOut.QTransactions, samples.Length),
+                () => Assert.True(qOut.QSuccesses.Equals(samples.Length), qOut.QFailures > 0 ? qOut.Failures[0].Message : ""),
+                () => Assert.All(qOut.Successes, i => { Assert.True(i.Id > 0); })
+            ]
+        );
+    }
+
+    #endregion
+
+    #region Q_Base Read
+
+    [Fact(DisplayName = "[Read]: Read an Entity by {Id}.")]
+    public virtual async Task ReadA() {
+        TEntity sample = Store(EntityFactory);
+
+        TEntity readEntity = await Depot.Read(sample.Id);
+        Assert.Multiple(
+                [
+                    () => Assert.Equal(sample.Id, readEntity.Id),
+                    () => Assert.Equal(sample.Timestamp, readEntity.Timestamp),
+                    () => {
+                            object? sampleEvaluableValue = Evaluable.GetValue(sample);
+                            object? readEvaluableValue = Evaluable.GetValue(readEntity);
+                            Assert.Equal(sampleEvaluableValue, readEvaluableValue);
+                        }
+                ]
+            );
+    }
+
+    #endregion
+
     #region Q_Base View
 
     [Fact(DisplayName = "[View]: Simple view calculation")]
@@ -323,60 +387,6 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                 Assert.Contains(actualValue, possibleValues);
             }
         );
-    }
-
-    #endregion
-
-    #region Q_Base Create
-
-    [Fact(DisplayName = "[Create]: Record created and unique store check")]
-    public async Task CreateA() {
-        TEntity sample = Sampling();
-
-        TEntity storedEntity = await Depot.Create(sample);
-        await CommitSampleEntities([storedEntity]);
-
-        Assert.Multiple(
-            [
-                () => Assert.True(storedEntity.Id > 0),
-                async () => {
-                    await Assert.ThrowsAnyAsync<Exception>(
-                        async () => {
-                            await Depot.Create(sample);
-                            await CommitSampleEntities([sample]);
-                        }
-                    );
-                },
-            ]
-        );
-    }
-
-    [Fact(DisplayName = "[Create]: Multiple records created")]
-    public async Task CreateB() {
-        TEntity[] samples = Sampling(3);
-
-        EntityBatchOut<TEntity> qOut = await Depot.Create(samples);
-        await CommitSampleEntities(samples);
-
-        Assert.Multiple(
-            [
-                () => Assert.Equal(qOut.QTransactions, samples.Length),
-                () => Assert.True(qOut.QSuccesses.Equals(samples.Length), qOut.QFailures > 0 ? qOut.Failures[0].System : ""),
-                () => Assert.All(qOut.Successes, i => { Assert.True(i.Id > 0); })
-            ]
-        );
-    }
-
-    #endregion
-
-    #region Q_Base Read
-
-    [Fact(DisplayName = "[Read]: Read an Entity by {Id}.")]
-    public virtual async Task ReadA() {
-
-        TEntity sample = Store(EntityFactory);
-
-        TEntity readEntity = await Depot.Read(sample.Id);
     }
 
     #endregion

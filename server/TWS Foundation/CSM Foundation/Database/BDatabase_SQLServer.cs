@@ -299,11 +299,10 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         string connectionString = Connection.GenerateConnectionString();
         optionsBuilder.UseSqlServer(connectionString);
-        optionsBuilder.EnableSensitiveDataLogging().LogTo(Console.WriteLine);
 
         if (AppDomain.CurrentDomain.FriendlyName.Contains("ef")) {
             AdvisorManager.Warning(
-                    $"Running EF Database update",
+                    $"Running EF Design Time Execution",
                     new Dictionary<string, dynamic> {
                         { "Environment", EnvironmentManager.Mode.ToString() },
                         { "Connection", connectionString },
@@ -384,7 +383,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
 
                     EvaluateCustom(set, etBuilder);
 
-                    etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime");
+                    etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime2(7)");
 
                     set.DesignEntity(etBuilder);
                 }
@@ -404,11 +403,11 @@ public abstract partial class BEntity
     : BObject<IEntity>, IEntity {
 
     /// <summary>
-    ///     Describe to the Entity Framework manager how to handle the [Set] object, its proeprties and relations, instructing
+    ///     Describe to the Entity Framework manager how to handle the [Entity] object, its proeprties and relations, instructing
     ///     the <see cref="EntityTypeBuilder"/> how to handle them.
     /// </summary>
     /// <param name="etBuilder">
-    ///     Proxy object to configure Set Model to Entity Framework Core.
+    ///     Proxy object to configure Entity Model to Entity Framework Core.
     /// </param>
     /// <remarks>
     ///     Don't describe <see cref="IEntity"/> properties they are being auto-described by the [CSM] engine, <see cref="IEntity.Id"/>, <see cref="IEntity.Timestamp"/> and <see cref="IEntity.Name"/>.

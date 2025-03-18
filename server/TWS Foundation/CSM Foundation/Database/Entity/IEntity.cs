@@ -5,7 +5,7 @@ using CSM_Foundation.Convertion;
 namespace CSM_Foundation.Database.Entity;
 
 /// <summary>
-///     Interface to determine the required behavior for a [Database] Set, this concept (Set) referrs to a
+///     Interface to determine the required behavior for a [Database] Entity, this concept (Entity) referrs to a
 ///     table in the [Database] storage system specifying the base properties and methods that the implementation
 ///     must have.
 /// </summary>

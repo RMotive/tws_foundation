@@ -29,7 +29,7 @@ public abstract class BEntity<TCommon>
 /// <summary>
 ///     [Abstract] class for <see cref="BBusinessDatabaseEntity"/> implementations.
 ///     
-///     A Set is a table into a data storage, defining properties and relations stored.
+///     A Entity is a table into a data storage, defining properties and relations stored.
 /// </summary>
 public abstract partial class BEntity
     : BObject<IEntity>, IEntity {
