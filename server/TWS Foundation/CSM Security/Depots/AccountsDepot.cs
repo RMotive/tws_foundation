@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Exceptions;
+using CSM_Foundation.Database.Entity.Exceptions;
 using CSM_Foundation.Database.Models.Out;
 
 using CSM_Security.Entities;
@@ -46,7 +46,7 @@ public class AccountsDepot
     public AccountsDepot(Database database, IDisposer? Disposer = null) : base(database, Disposer) { }
 
     public async Task<Permit[]> GetPermits(long Account) {
-        SetBatchOut<Account> accountReadOut = await Read(
+        EntityBatchOut<Account> accountReadOut = await Read(
                 ReadBehaviors.First,
                 (record) => record.Id == Account,
                 (query) => {
@@ -58,7 +58,7 @@ public class AccountsDepot
             );
 
         if (accountReadOut.Failed) {
-            throw new XRecord(typeof(Account), $"Account.Id = {Account}", XRecordSituations.Unfound);
+            throw new XDepot(typeof(Account), $"Account.Id = {Account}", XDepotSituations.Unfound);
         }
         Account account = accountReadOut.Successes[0];
         Permit[] directPermits = [.. account.Permits];
@@ -80,14 +80,4 @@ public class AccountsDepot
 
         return totalPermits;
     }
-
-
-    #region Create
-
-    public override Task<Account> Create(Account entity) {
-        entity.Contact = ValidateDependency(entity.Contact);
-        return base.Create(entity);
-    }
-
-    #endregion
 }

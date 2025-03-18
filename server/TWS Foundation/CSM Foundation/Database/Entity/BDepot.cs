@@ -4,10 +4,11 @@ using System.Reflection;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Exceptions;
 using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -197,6 +198,7 @@ public abstract class BDepot<TDatabase, TEntity>
         entity.Timestamp = DateTime.UtcNow;
         entity.EvaluateWrite();
 
+        entity = DatabaseUtilities.SanitizeEntity(Database, entity);
         await Set.AddAsync(entity);
 
         Disposer?.Push(Database, entity);
@@ -220,9 +222,9 @@ public abstract class BDepot<TDatabase, TEntity>
     ///     to be stored won't continue, the operation will throw new exception.
     /// </param>
     /// <returns>
-    ///     A <see cref="SetBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
+    ///     A <see cref="EntityBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public virtual async Task<SetBatchOut<TEntity>> Create(ICollection<TEntity> entities, bool sync = false) {
+    public virtual async Task<EntityBatchOut<TEntity>> Create(ICollection<TEntity> entities, bool sync = false) {
         TEntity[] attached = [];
         SetOperationFailure<TEntity>[] failures = [];
 
@@ -246,40 +248,64 @@ public abstract class BDepot<TDatabase, TEntity>
     #endregion
 
     #region Read
-    public async Task<SetBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
-        IQueryable<TEntity> query = Set.Where(Filter);
 
+    /// <summary>
+    ///     Reads into the <see cref="TEntity"/> database [Set] for matched records.
+    /// </summary>
+    /// <param name="Id">
+    ///     Identifier of the desired <typeparamref name="TEntity"/>.
+    /// </param>
+    /// <returns> <see cref="TEntity"/> insatcne found </returns>
+    /// <exeption cref="XDepot">
+    ///     Thrown when the <see cref="TEntity"/> couldn't be found.
+    /// </exeption>
+    public async Task<TEntity> Read(long Id) {
+
+        TEntity? entity = await Set.Where(
+                e => e.Id == Id
+            )
+            .FirstOrDefaultAsync();
+
+        return entity ?? throw new XDepot(typeof(TEntity), $"{nameof(IEntity.Id)} = {Id}", XDepotSituations.Unfound);
+    }
+
+    public async Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
+        IQueryable<TEntity> query = Set.Where(Filter);
         if (Accumulate != null) {
             query = Accumulate(query);
         }
 
         if (!query.Any()) {
-            return new SetBatchOut<TEntity>([], []);
+            return new EntityBatchOut<TEntity>([], []);
         }
 
         TEntity[] items = Behavior switch {
             ReadBehaviors.First => [await query.FirstAsync()],
             ReadBehaviors.Last => [await query.LastAsync()],
             ReadBehaviors.All => await query.ToArrayAsync(),
-            _ => throw new NotImplementedException()
+            _ => throw new NotImplementedException(Behavior.ToString())
         };
 
-
-        TEntity[] successes = [];
-        SetOperationFailure<TEntity>[] failures = [];
+        List<TEntity> successes = [];
+        List<SetOperationFailure<TEntity>> failures = [];
         foreach (TEntity item in items) {
             try {
                 item.EvaluateRead();
-
-                successes = [.. successes, item];
-            } catch (Exception excep) {
-                SetOperationFailure<TEntity> failure = new(item, excep);
-                failures = [.. failures, failure];
+                successes.Add(item);
+            } catch (Exception exception) {
+                SetOperationFailure<TEntity> failure = new(item, exception);
+                failures.Add(failure);
             }
         }
 
-        return new(successes, failures);
+        return new EntityBatchOut<TEntity> (
+                [..successes],
+                [..failures]
+            );
     }
+
+
+
     #endregion
 
     #region Update 
@@ -388,7 +414,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
     #region Delete
 
-    public Task<SetBatchOut<TEntity>> Delete(TEntity[] Sets) {
+    public Task<EntityBatchOut<TEntity>> Delete(TEntity[] Sets) {
 
         TEntity[] safe = [];
         SetOperationFailure<TEntity>[] fails = [];
@@ -404,26 +430,23 @@ public abstract class BDepot<TDatabase, TEntity>
         }
 
         Set.RemoveRange(safe);
-        return Task.FromResult<SetBatchOut<TEntity>>(new(safe, []));
+        return Task.FromResult<EntityBatchOut<TEntity>>(new(safe, []));
     }
 
-    public async Task<TEntity> Delete(TEntity Set) {
+    public Task<TEntity> Delete(TEntity Set) {
         Set.EvaluateWrite();
-        _ = this.Set.Remove(Set);
-        _ = await Database.SaveChangesAsync();
-        Database.ChangeTracker.Clear();
-        return Set;
+
+        this.Set.Remove(Set);
+        return Task.FromResult(Set);
     }
 
     public async Task<TEntity> Delete(long Id) {
         TEntity record = await Set
-            .AsNoTracking()
             .Where(r => r.Id == Id)
             .FirstOrDefaultAsync()
             ?? throw new Exception("Trying to remove an unexist entity");
 
         Set.Remove(record);
-        await Database.SaveChangesAsync();
 
         return record;
     }

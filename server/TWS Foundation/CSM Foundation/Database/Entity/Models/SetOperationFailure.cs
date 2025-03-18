@@ -2,16 +2,17 @@
 
 using CSM_Foundation.Database.Entity;
 
-namespace CSM_Foundation.Database.Models;
+namespace CSM_Foundation.Database.Entity.Models;
 /// <summary>
 /// 
 /// </summary>
-public record SetOperationFailure<TSet>
-    where TSet : IEntity {
+public record SetOperationFailure<TEntity>
+    where TEntity : IEntity {
+
     /// <summary>
     /// 
     /// </summary>
-    public TSet Set { get; init; } = default!;
+    public TEntity Set { get; init; } = default!;
     /// <summary>
     /// 
     /// </summary>
@@ -26,7 +27,7 @@ public record SetOperationFailure<TSet>
     /// </summary>
     /// <param name="Set"></param>
     /// <param name="SystemInternal"></param>
-    public SetOperationFailure(TSet Set, Exception SystemInternal) {
+    public SetOperationFailure(TEntity Set, Exception SystemInternal) {
         this.Set = Set;
         this.SystemInternal = SystemInternal;
         System = SystemInternal.Message;

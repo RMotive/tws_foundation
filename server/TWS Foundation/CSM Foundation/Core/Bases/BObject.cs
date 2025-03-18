@@ -88,7 +88,7 @@ public abstract class BObject<TObject> {
 
         return JsonSerializer.Serialize(
                 jsonReference, 
-                options: new JsonSerializerOptions {
+                options: new () {
                     WriteIndented = true,
                     ReferenceHandler = ReferenceHandler.Preserve
                 }

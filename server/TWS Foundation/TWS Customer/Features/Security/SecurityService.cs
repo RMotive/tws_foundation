@@ -53,7 +53,7 @@ public class SecurityService
 
     public async Task<Session> Authenticate(Credentials Credentials) {
 
-        SetBatchOut<Account> result = await AccountsDepot.Read(
+        EntityBatchOut<Account> result = await AccountsDepot.Read(
                 ReadBehaviors.First,
                 (account) => account.User == Credentials.Identity
             );

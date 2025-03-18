@@ -1,7 +1,8 @@
 ﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Models;
 
 namespace CSM_Foundation.Database.Models.Out;
-public record SetBatchOut<TSet>
+public record EntityBatchOut<TSet>
     where TSet : IEntity {
     public TSet[] Successes { get; init; }
     public SetOperationFailure<TSet>[] Failures { get; init; }
@@ -10,7 +11,7 @@ public record SetBatchOut<TSet>
     public int QFailures { get; private set; }
     public bool Failed { get; private set; }
 
-    public SetBatchOut(TSet[] Successes, SetOperationFailure<TSet>[] Failures) {
+    public EntityBatchOut(TSet[] Successes, SetOperationFailure<TSet>[] Failures) {
         this.Successes = Successes;
         this.Failures = Failures;
         QSuccesses = this.Successes.Length;

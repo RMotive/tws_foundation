@@ -80,18 +80,86 @@ public class DatabaseUtilities {
         return m is null ? throw new Exception() : m;
     }
 
+    /// <summary>
+    ///     Sanitizes the entity relations to ensure that the relations are correctly tracked from the database and avoid the creation of relation entities wrongly given through the main entity.
+    /// </summary>
+    /// <typeparam name="TEntity">
+    ///     Type of the Main Entity to be sanitized.
+    /// </typeparam>
+    /// <param name="database">
+    ///     Database context handler for Entity to be sanitized.
+    /// </param>
+    /// <param name="entity">
+    ///     Entity instance to be sanitized
+    /// </param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the dbSet couldn't be found for the relation entity.
+    ///     Thrown when a relation Entity is being tried to be created automatically.
+    ///     Thrown when the relation isn´t a IEntity implementation neither a Collection of IEntity.
+    /// </exception>
+    /// <exception cref="Exception">
+    ///     Thrown when the relation entity couldn't be found in the database.
+    /// </exception>
+    public static TEntity SanitizeEntity<TEntity>(DbContext database, TEntity entity) {
+        if (entity == null) {
+            return entity;
+        }
 
-    public static TEntity SanitizeEntity<TEntity>(DbContext database, IEntity entity) {
-
-        PropertyInfo relationsProperties = entity.GetType().GetProperties().Where(
-                (pi) => pi.GetCustomAttribute(typeof(RelationAttribute)) != null;
+        IEnumerable<PropertyInfo> relationsProperties = entity.GetType().GetProperties().Where(
+                (pi) => pi.GetCustomAttribute<RelationAttribute>() != null
             );
 
-        foreach(PropertyInfo relationProperty in relationsProperties) {
-
+        foreach (PropertyInfo relationProperty in relationsProperties) {
             Type relationType = relationProperty.PropertyType;
+            object? relationValue = relationProperty.GetValue(entity);
+            if (relationValue is null) {
+                continue;
+            }
 
+            MethodInfo dbContextSetMethod = typeof(DbContext)
+                .GetMethods()
+                .Where(
+                    m => m.Name == nameof(DbContext.Set) && m.IsGenericMethod && m.GetGenericArguments().Length == 1
+                )
+                .FirstOrDefault()?.MakeGenericMethod(relationType)
+                ?? throw new Exception($"Unreasonable problem, DbContext doesn´t have longer the Set method to build DbSet generically");
+
+            object? rawDbSet = dbContextSetMethod.Invoke(database, null)
+                ?? throw new Exception($"Unable to locate DbSet of Type ({relationType.Name}) for Database ({database.GetType().Name})");
+            IQueryable<IEntity> dbSet = rawDbSet as IQueryable<IEntity> 
+                ?? throw new Exception();
+
+            if (relationValue is IEntity relationEntity) {
+                if (relationEntity.Id <= 0) {
+                    throw new Exception($"Dependencies aren't allowed to be auto-created on main Entity creation, you need to create the Dependency first in its corresponding [Depot]");
+                }
+
+                IEntity tmpDependency = dbSet.Where(
+                    i => i.Id == relationEntity.Id
+                    ).FirstOrDefault()
+                    ?? throw new Exception($"Couldn't find pointing relation of Type ({relationType}) with Id ({relationEntity.Id})");
+
+                relationProperty.SetValue(entity, tmpDependency);
+            } else if (relationValue is ICollection<IEntity> relatedEntities) {
+
+                List<IEntity> trackedCollection = [];
+                foreach (IEntity relatedEntity in relatedEntities) {
+
+                    IEntity tmpDependency = dbSet.Where(
+                        i => i.Id == relatedEntity.Id
+                        ).FirstOrDefault()
+                        ?? throw new Exception($"Couldn't find pointing relation of Type ({relationType}) with Id ({relatedEntity.Id})");
+
+                    trackedCollection.Add(tmpDependency);
+                }
+
+                relationProperty.SetValue(entity, trackedCollection);
+            } else {
+                throw new InvalidOperationException($"The relation isn't an IEntity implementation neither a Collection of IEntity");
+            }
         }
+        return entity;
     }
 
     /// <summary>

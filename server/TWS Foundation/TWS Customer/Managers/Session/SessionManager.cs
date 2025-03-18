@@ -98,7 +98,7 @@ public sealed class SessionManager {
         }
 
         Credentials safeCredentials = safeSession.Credentials;
-        SetBatchOut<Account> readAccountOut = await Accounts.Read(
+        EntityBatchOut<Account> readAccountOut = await Accounts.Read(
             ReadBehaviors.First,
             (Account i) => i.User == safeCredentials.Identity,
             (query) => {

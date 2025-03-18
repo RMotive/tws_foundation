@@ -32,7 +32,7 @@ public interface IDepot_Read<TEntity>
     where TEntity : IEntity {
 
     /// <summary>
-    ///     Reads into the <see cref="TEntity"/> database [Set] for matched records.
+    ///     Looks for the <typeparamref name="TEntity"/> entities matching the given <paramref name="Filter"/>.
     /// </summary>
     /// <param name="Behavior">
     ///     How the function will behave about the result.
@@ -46,5 +46,14 @@ public interface IDepot_Read<TEntity>
     /// <returns>
     ///     Function result.
     /// </returns>
-    public Task<SetBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
+
+    /// <summary>
+    ///     Reads into the <see cref="TEntity"/> database [Set] for matched records.
+    /// </summary>
+    /// <param name="Id">
+    ///     Identifier of the desired <typeparamref name="TEntity"/>.
+    /// </param>
+    /// <returns> <see cref="TEntity"/> insatcne found </returns>
+    Task<TEntity> Read(long Id);
 }

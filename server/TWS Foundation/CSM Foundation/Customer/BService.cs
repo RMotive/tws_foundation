@@ -29,11 +29,11 @@ public class BService<TEntity, TDepot>
         return Depot.View(Options, Accumulate ?? Accumulator);
     }
 
-    public virtual Task<SetBatchOut<TEntity>> Create(TEntity[] Entities, bool Sync = false) {
+    public virtual Task<EntityBatchOut<TEntity>> Create(TEntity[] Entities, bool Sync = false) {
         return Depot.Create(Entities, Sync);
     }
 
-    public virtual Task<SetBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
+    public virtual Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
         return Depot.Read(Behavior, Filter, Accumulate ?? Accumulator);
     }
 
@@ -41,7 +41,7 @@ public class BService<TEntity, TDepot>
         return Depot.Update(Entity, Accumulate ?? Accumulator);
     }
 
-    public virtual Task<SetBatchOut<TEntity>> Delete(TEntity[] Entities) {
+    public virtual Task<EntityBatchOut<TEntity>> Delete(TEntity[] Entities) {
         return Depot.Delete(Entities);
     }
 

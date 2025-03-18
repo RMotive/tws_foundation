@@ -78,7 +78,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
             Type propertyType = propertyInfo.PropertyType;
 
-            if (!(propertyType == typeof(string)) || (propertyType == typeof(int))) {
+            if (((propertyType != typeof(string)) && (propertyType != typeof(int))) || (propertyInfo.Name == nameof(IEntity.Discriminator))) {
                 continue;
             }
 
@@ -105,7 +105,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     /// <param name="SampleEntities"></param>
     protected async Task CommitSampleEntities(ICollection<IEntity> SampleEntities) {
         await Database.SaveChangesAsync();
-        Disposer.Push([..SampleEntities]);
+        Disposer.Push([.. SampleEntities]);
     }
 
     #region Sampling
@@ -163,7 +163,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     [Fact(DisplayName = "[View]: Specific page selected")]
     public async Task ViewB() {
-
+        await Store(30, EntityFactory);
         SetViewOptions<TEntity> qViewOptions;
         {
             qViewOptions = new() {
@@ -355,7 +355,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public async Task CreateB() {
         TEntity[] samples = Sampling(3);
 
-        SetBatchOut<TEntity> qOut = await Depot.Create(samples);
+        EntityBatchOut<TEntity> qOut = await Depot.Create(samples);
         await CommitSampleEntities(samples);
 
         Assert.Multiple(
@@ -365,6 +365,18 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                 () => Assert.All(qOut.Successes, i => { Assert.True(i.Id > 0); })
             ]
         );
+    }
+
+    #endregion
+
+    #region Q_Base Read
+
+    [Fact(DisplayName = "[Read]: Read an Entity by {Id}.")]
+    public virtual async Task ReadA() {
+
+        TEntity sample = Store(EntityFactory);
+
+        TEntity readEntity = await Depot.Read(sample.Id);
     }
 
     #endregion

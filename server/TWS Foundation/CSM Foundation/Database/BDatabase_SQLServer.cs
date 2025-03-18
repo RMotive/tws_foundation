@@ -3,7 +3,6 @@ using System.Reflection;
 
 using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Database.Connector;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
@@ -119,7 +118,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     protected string Sign {
         get => _Sign; init => _Sign = value.ToUpper();
     }
-    private string _Sign = "";
+    string _Sign = "";
 
     /// <summary>
     ///     Generates a <see cref="BDatabase_SQLServer{TDatabases}"/> instance that handles specific database connection
@@ -196,17 +195,16 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     /// <summary>
-    ///     Validates if all the <see cref="Sets"/> <see cref="Type"/>s are <see cref="BBusinessDatabaseEntity"/> assuring contains the correct
+    ///     Validates if all the <see cref="Sets"/> <see cref="Type"/>s are <see cref="BEntity"/> assuring contains the correct
     ///     methods needed.
     /// </summary>
     /// <returns>
     ///     The strict validated collection of [<see cref="BBusinessDatabaseEntity"/>]s and [<see cref="BConnector{TSource, TTarget}"/>]s.
     /// </returns>
-    private (BEntity[] Sets, BConnector<IEntity, IEntity>[] Connectors) ValidateSets() {
+    BEntity[] ValidateSets() {
         Type databaseType = GetType();
 
-        BEntity[] sets = [];
-        BConnector<IEntity, IEntity>[] connectors = [];
+        List<BEntity> sets = [];
         IEnumerable<PropertyInfo> dbSets = databaseType
            .GetProperties()
            .Where(
@@ -221,25 +219,10 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             Type generic = dbSet.PropertyType.GetGenericArguments()[0]
                 ?? throw new Exception($"DBSet [{dbSet.Name}] generic gathering failure");
 
-            bool isSet = generic.IsAssignableTo(typeof(BEntity));
-            bool isConnector = generic.IsAssignableTo(typeof(BConnector<,>));
-
-            if (!(isSet || isConnector))
-                throw new Exception($"BEntity [{dbSet.Name}] doesn't implement the correct bases (BEntity || BConnector) unable to define its function");
-
-            if (isSet) {
-                sets = [
-                        ..sets,
-                        (BEntity)Activator.CreateInstance(generic)!,
-                    ];
-            } else {
-                connectors = [
-                        (BConnector<IEntity, IEntity>)Activator.CreateInstance(generic)!,
-                    ];
-            }
+            sets.Add((BEntity)Activator.CreateInstance(generic)!);
         }
 
-        return (sets, connectors);
+        return [..sets];
     }
 
     /// <summary>
@@ -268,7 +251,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     ///     Evaluates if <see cref="Sets"/> are correctly configured and translated to the internal framework handler.
     /// </summary>
     public void Evaluate() {
-        (BEntity[] sets, _) = ValidateSets();
+        BEntity[] sets = ValidateSets();
 
         AdvisorManager.Announce(
             $"[{GetType().Name}] Validatig Sets...",
@@ -334,17 +317,18 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
         IEnumerable<IMutableEntityType> entityTypes = mBuilder.Model.GetEntityTypes();
         foreach (IMutableEntityType entityType in entityTypes) {
 
-            IEnumerable<IMutableForeignKey> foreignKeys = [..entityType.GetForeignKeys()];
+            IEnumerable<IMutableForeignKey> foreignKeys = [.. entityType.GetForeignKeys()];
             foreach (IMutableForeignKey foreignKey in foreignKeys) {
 
-                if (foreignKey.DependentToPrincipal is null)
+                if (foreignKey.DependentToPrincipal is null) {
                     continue;
+                }
 
                 mBuilder.Entity(entityType.ClrType).Ignore(foreignKey.DependentToPrincipal.Name);
             }
         }
 
-        (BEntity[] sets, BConnector<IEntity, IEntity>[] _) = ValidateSets();
+        BEntity[] sets = ValidateSets();
 
         foreach (BEntity set in sets) {
             Type setType = set.GetType();
@@ -430,26 +414,4 @@ public abstract partial class BEntity
     ///     Don't describe <see cref="IEntity"/> properties they are being auto-described by the [CSM] engine, <see cref="IEntity.Id"/>, <see cref="IEntity.Timestamp"/> and <see cref="IEntity.Name"/>.
     /// </remarks>
     protected internal virtual void DesignEntity(EntityTypeBuilder etBuilder) { }
-}
-
-/// <summary>
-///     [Abstract] Partial implementation to expose generation/validation methods to <see cref="BConnector{TSource, TTarget}"/> handler.
-/// </summary>
-public abstract partial class BConnector<TSource, TTarget>
-    : IConnector<TSource, TTarget>
-    where TSource : class, IEntity
-    where TTarget : class, IEntity {
-
-    /// <summary>
-    ///     Describe to the Entity Framework manager how to handle the [Connector] object, its proeprties, instructing
-    ///     the <see cref="ModelBuilder"/> how to handle them.
-    /// </summary>
-    /// <param name="Builder">
-    ///     Proxy object to configure Set Model to Entity Framework Core.
-    /// </param>
-    /// <remarks>
-    ///     [Connector] Description only must describe its properties, ignoring <see cref="BConnector{TSource, TTarget}.Target"/> and <see cref="BConnector{TSource, TTarget}.Source"/> properties implementations.
-    ///     They are auto described by the engine.
-    /// </remarks>
-    protected internal virtual void DescribeConnector(ModelBuilder Builder) { }
 }

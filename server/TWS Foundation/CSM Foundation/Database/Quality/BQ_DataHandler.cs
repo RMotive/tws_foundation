@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Quality.Disposing;
+using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -100,6 +101,7 @@ public class BQ_DataHandler
 
         DbContext database = GetDatabase(Entity.Database);
 
+        Entity = DatabaseUtilities.SanitizeEntity(database, Entity);
         database.Set<TEntity2>().Add(Entity);
         database.SaveChanges();
 
@@ -126,8 +128,6 @@ public class BQ_DataHandler
         TEntity2 toStore = RunEntityFactory(EntityFactory);
         toStore = Store(toStore);
 
-        Disposer.Push(toStore);
-
         return toStore;
     }
 
@@ -151,12 +151,17 @@ public class BQ_DataHandler
 
         List<TEntity2> entities = [];
 
-        DbContext database = GetDatabase(new TEntity2().Database);
+        using DbContext database = GetDatabase(new TEntity2().Database);
         for (int i = 0; i < Quantity; i++) {
 
             TEntity2 entity = RunEntityFactory(EntityFactory);
-
+            entity = DatabaseUtilities.SanitizeEntity(database, entity);
+            entities.Add(entity);
         }
+
+        await database.Set<TEntity2>().AddRangeAsync(entities);
+        await database.SaveChangesAsync();
+        Disposer.Push([.. entities]);
 
         return [.. entities];
     }

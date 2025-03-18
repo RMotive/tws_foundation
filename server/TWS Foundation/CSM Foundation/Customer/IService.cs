@@ -35,9 +35,9 @@ public interface IService<TEntity>
     /// <returns>
     ///     A complex batch result that provides information related to exceptions catched, record that belongs to the exception and successes.
     /// </returns>
-    Task<SetBatchOut<TEntity>> Create(TEntity[] Entities, bool Sync = false);
+    Task<EntityBatchOut<TEntity>> Create(TEntity[] Entities, bool Sync = false);
 
-    Task<SetBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Updates the given record, this is based on the <see cref="TEntity.Id"/> pointer to identify the record to update and override the given <paramref name="Solution"/> object.
@@ -61,5 +61,5 @@ public interface IService<TEntity>
     /// <returns>
     ///     The removed record object.
     /// </returns>
-    Task<SetBatchOut<TEntity>> Delete(TEntity[] Entities);
+    Task<EntityBatchOut<TEntity>> Delete(TEntity[] Entities);
 }

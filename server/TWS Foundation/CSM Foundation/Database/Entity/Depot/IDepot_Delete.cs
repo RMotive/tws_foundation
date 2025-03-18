@@ -29,7 +29,7 @@ public interface IDepot_Delete<TEntity>
     ///         </list>
     ///     </para>
     /// </remarks>
-    public Task<SetBatchOut<TEntity>> Delete(TEntity[] Records);
+    public Task<EntityBatchOut<TEntity>> Delete(TEntity[] Records);
 
     /// <summary>
     ///     Deletes the given <paramref name="Record"/>.

@@ -43,5 +43,5 @@ public interface IDepot_Create<TEntity>
     /// <returns>
     ///     The operation result information.
     /// </returns>
-    Task<SetBatchOut<TEntity>> Create(ICollection<TEntity> Records, bool Sync = false);
+    Task<EntityBatchOut<TEntity>> Create(ICollection<TEntity> Records, bool Sync = false);
 }

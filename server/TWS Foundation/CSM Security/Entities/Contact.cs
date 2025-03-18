@@ -68,7 +68,6 @@ public class Contact
             (nameof(Lastname), [ mainLengthValidator ]),
             (nameof(EMail), [ mainLengthValidator, new UniqueValidator() ]),
             (nameof(Phone), [ mainLengthValidator, new UniqueValidator() ]),
-
         ];
     }
 
