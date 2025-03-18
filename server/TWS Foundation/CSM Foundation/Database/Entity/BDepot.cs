@@ -32,7 +32,7 @@ namespace CSM_Foundation.Database.Entity;
 public abstract class BDepot<TDatabase, TEntity>
     : IDepot<TEntity>
     where TDatabase : BDatabase_SQLServer<TDatabase>
-    where TEntity : class, IEntity {
+    where TEntity : class, IEntity, new() {
 
     /// <summary>
     /// 
@@ -271,6 +271,30 @@ public abstract class BDepot<TDatabase, TEntity>
         return entity;
     }
 
+    public async Task<EntityBatchOut<TEntity>> Read(long[] ids) {
+
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
+        foreach (long id in ids) {
+            
+            try {
+                TEntity success = await Read(id);
+                successes.Add(success);
+            } catch (Exception ex) {
+                failures.Add(
+                        new EntityOperationFailure<TEntity>(
+                                new TEntity {
+                                    Id = id
+                                },
+                                ex
+                            )
+                    );
+            }
+        }
+
+        return new EntityBatchOut<TEntity>([..successes], [..failures]);
+    }
+
     public async Task<EntityBatchOut<TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null) {
         IQueryable<TEntity> query = Set.Where(filter);
         if (postProcessing != null) {
@@ -283,7 +307,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
         TEntity[] items = behavior switch {
             ReadBehaviors.First => [await query.FirstAsync()],
-            ReadBehaviors.Last => [await query.LastAsync()],
+            ReadBehaviors.Last => [await query.Order().LastAsync()],
             ReadBehaviors.All => await query.ToArrayAsync(),
             _ => throw new NotImplementedException(behavior.ToString())
         };
@@ -305,8 +329,6 @@ public abstract class BDepot<TDatabase, TEntity>
                 [.. failures]
             );
     }
-
-
 
     #endregion
 

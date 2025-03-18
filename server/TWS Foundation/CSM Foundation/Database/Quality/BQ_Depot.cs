@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
@@ -183,7 +184,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     #region Q_Base Read
 
-    [Fact(DisplayName = "[Read]: Read an Entity by {Id}.")]
+    [Fact(DisplayName = "[Read]: Reads an Entity by {Id}.")]
     public virtual async Task ReadA() {
         TEntity sample = Store(EntityFactory);
 
@@ -197,6 +198,119 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                             object? readEvaluableValue = Evaluable.GetValue(readEntity);
                             Assert.Equal(sampleEvaluableValue, readEvaluableValue);
                         }
+                ]
+            );
+    }
+
+    [Fact(DisplayName = "[Read]: Reads a collection of entities by a collection of {Id}")]
+    public virtual async Task ReadB() {
+        TEntity[] samples = await Store(20, EntityFactory);
+        long[] sampleIds = [..samples.Select(i => i.Id)];
+
+        EntityBatchOut<TEntity> readEntities = await Depot.Read(sampleIds);
+        Assert.Multiple(
+                [
+                    () => Assert.Empty(readEntities.Failures),
+                    () => Assert.Equal(samples.Length, readEntities.QSuccesses),
+                    () => Assert.All(
+                        readEntities.Successes,
+                        (entity) => {
+                            TEntity sample = samples.First(j => j.Id == entity.Id);
+
+                            Assert.Equal(sample.Id, entity.Id);
+                            Assert.Equal(sample.Timestamp, entity.Timestamp);
+
+                            object? evaluableSampleValue = Evaluable.GetValue(sample);
+                            object? evaluableEntityValue = Evaluable.GetValue(entity);
+                            Assert.Equal(evaluableSampleValue, evaluableEntityValue);
+                        }
+                    )
+                ]
+            );
+    }
+
+    [Fact(DisplayName = "[Read]: Reads for the first entity matching the filter")]
+    public virtual async Task ReadC() {
+        TEntity[] samples = await Store(2, EntityFactory);
+        TEntity samplePivot = samples[0];
+
+        EntityBatchOut<TEntity> readEntites = await Depot.Read(
+                ReadBehaviors.First,
+                (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
+            );
+
+        Assert.Multiple(
+                [
+                    () => Assert.Empty(readEntites.Failures),
+                    () => Assert.Equal(1, readEntites.QSuccesses),
+                    () => {
+                        TEntity readEntity = readEntites.Successes[0];
+
+                        Assert.Equal(samplePivot.Id, readEntity.Id);
+                        Assert.Equal(samplePivot.Timestamp, readEntity.Timestamp);
+
+                        object? evaluableSampleValue = Evaluable.GetValue(samplePivot);
+                        object? evaluableEntityValue = Evaluable.GetValue(readEntity);
+                        Assert.Equal(evaluableSampleValue, evaluableEntityValue);
+                    },
+                ]
+            );
+    }
+
+    [Fact(DisplayName = "[Read]: Reads for the last entity matching the filter")]
+    public virtual async Task ReadD() {
+        TEntity[] samples = await Store(2, EntityFactory);
+        TEntity samplePivot = samples[1];
+
+        EntityBatchOut<TEntity> readEntites = await Depot.Read(
+                ReadBehaviors.Last,
+                (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
+            );
+
+        Assert.Multiple(
+                [
+                    () => Assert.Empty(readEntites.Failures),
+                    () => Assert.Equal(1, readEntites.QSuccesses),
+                    () => {
+                        TEntity readEntity = readEntites.Successes[0];
+
+                        Assert.Equal(samplePivot.Id, readEntity.Id);
+                        Assert.Equal(samplePivot.Timestamp, readEntity.Timestamp);
+
+                        object? evaluableSampleValue = Evaluable.GetValue(samplePivot);
+                        object? evaluableEntityValue = Evaluable.GetValue(readEntity);
+                        Assert.Equal(evaluableSampleValue, evaluableEntityValue);
+                    },
+                ]
+            );
+    }
+
+    [Fact(DisplayName = "[Read]: Reads for all entities matching the filter")]
+    public virtual async Task ReadE() {
+        TEntity[] samples = await Store(2, EntityFactory);
+
+        EntityBatchOut<TEntity> readEntites = await Depot.Read(
+                ReadBehaviors.All,
+                (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
+            );
+
+        Assert.Multiple(
+                [
+                    () => Assert.Empty(readEntites.Failures),
+                    () => Assert.Equal(2, readEntites.QSuccesses),
+                    () => Assert.All(
+                            samples,
+                            (sample) => {
+                                TEntity entity = readEntites.Successes.First(i => i.Id == sample.Id);
+
+                                Assert.Equal(sample.Id, entity.Id);
+                                Assert.Equal(sample.Timestamp, entity.Timestamp);
+
+                                object? evaluableSampleValue = Evaluable.GetValue(sample);
+                                object? evaluableEntityValue = Evaluable.GetValue(entity);
+                                Assert.Equal(evaluableSampleValue, evaluableEntityValue);
+                            }
+                        ),
                 ]
             );
     }

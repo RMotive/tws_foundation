@@ -32,6 +32,26 @@ public interface IDepot_Read<TEntity>
     where TEntity : IEntity {
 
     /// <summary>
+    ///     Reads into the database for the <typeparamref name="TEntity"/> instance with the given <paramref name="id"/>.
+    /// </summary>
+    /// <param name="id">
+    ///     Identifier of the desired <typeparamref name="TEntity"/>.
+    /// </param>
+    /// <returns> <see cref="TEntity"/> instance found. </returns>
+    Task<TEntity> Read(long id);
+
+    /// <summary>
+    ///     Reads into the database for a collection of <typeparamref name="TEntity"/> with the given <paramref name="ids"/>.
+    /// </summary>
+    /// <param name="ids">
+    ///     <see cref="IEntity.Id"/> pointer to match with the database entities.
+    /// </param>
+    /// <returns>
+    ///     An <see cref="IEntity"/> batch operation result.
+    /// </returns>
+    Task<EntityBatchOut<TEntity>> Read(long[] ids);
+
+    /// <summary>
     ///     Reads into the database for the <typeparamref name="TEntity"/> instances matched by the given <paramref name="filter"/>.
     /// </summary>
     /// <param name="behavior">
@@ -47,13 +67,4 @@ public interface IDepot_Read<TEntity>
     ///     Collection of <typeparamref name="TEntity"/> instances found.
     /// </returns>
     Task<EntityBatchOut<TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null);
-
-    /// <summary>
-    ///     Reads into the database for the <typeparamref name="TEntity"/> instance with the given <paramref name="id"/>.
-    /// </summary>
-    /// <param name="id">
-    ///     Identifier of the desired <typeparamref name="TEntity"/>.
-    /// </param>
-    /// <returns> <see cref="TEntity"/> instance found. </returns>
-    Task<TEntity> Read(long id);
 }
