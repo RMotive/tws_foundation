@@ -7,7 +7,7 @@ import 'package:tws_widgets/tws_widgets.dart';
 /// Theme Struct:
 ///   - required[pageColorStruct]
 ///   - optional[twsSectionStruct]
-class TWSSection<T extends TWSFThemeBase> extends StatelessWidget {
+class TWSSection extends StatelessWidget {
   /// Indicates the display title to show in the section.
   final String title;
 
@@ -18,9 +18,6 @@ class TWSSection<T extends TWSFThemeBase> extends StatelessWidget {
   final EdgeInsets padding;
 
   final bool isOptional;
-
-  //Page theme options.
-  final T? theme;
 
   //Section custom color border.
   final Color? borderColor;
@@ -42,14 +39,13 @@ class TWSSection<T extends TWSFThemeBase> extends StatelessWidget {
     ),
     this.borderColor,
     this.textStyle,
-    this.theme,
     required this.title,
     required this.content,
   });
 
   @override
   Widget build(BuildContext context) {
-    final CSMColorThemeOptions colorStruct = theme?.page ?? TWSFDarkTheme().page;
+    final CSMColorThemeOptions colorStruct = getTheme<TWSFThemeBase>().page;
 
     final Color bColor = isOptional ? colorStruct.fore.withValues(alpha: .5) : borderColor ?? colorStruct.highlight;
     return Padding(

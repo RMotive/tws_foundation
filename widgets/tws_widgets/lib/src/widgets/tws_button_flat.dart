@@ -11,23 +11,23 @@ class TWSButtonFlat<T extends TWSFThemeBase> extends StatelessWidget {
   final String label;
   final bool waiting;
   final bool disabled;
-  final T? theme;
+  final CSMColorThemeOptions? themeOptions;
   final Function() onTap;
 
   const TWSButtonFlat({
     super.key,
     this.width,
-    this.theme,
     this.height = 40,
     this.label = 'Hello!',
     this.waiting = false,
     this.disabled = false,
+    this.themeOptions,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final CSMColorThemeOptions colorStruct = theme?.primaryControlColor ?? TWSFDarkTheme().primaryControlColor;
+    final CSMColorThemeOptions colorStruct = themeOptions ?? getTheme<TWSFThemeBase>().primaryControlColor;
 
     Color bgStateColorize(StatesSet currentStates) {
       final Color hlightColor = colorStruct.highlight;

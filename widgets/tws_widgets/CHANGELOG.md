@@ -7,6 +7,8 @@
     4. Added the following TWS widgets: 
         * [TWSButtonFlat]
         * [TWSSection]
+        * [TWSCascadeSection]
+        * [TWSDatetimePicker]
 
 - Fixes:
 

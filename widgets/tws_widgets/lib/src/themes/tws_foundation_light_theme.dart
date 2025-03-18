@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_widgets/src/constants/foundation_colors.dart';
+import 'package:tws_widgets/src/core/constants/foundation_colors.dart';
 import 'package:tws_widgets/src/themes/tws_foundation_theme_base.dart';
 
 class TWSFThemeLight extends TWSFThemeBase {
@@ -25,7 +25,7 @@ class TWSFThemeLight extends TWSFThemeBase {
             TWSFColors.oceanBlue,
             TWSFColors.lightDark,
             TWSFColors.oceanBlue,
-            foreAlt: TWSFColors.warmWhite,
+            foreAlt: TWSFColors.lightDark,
           ),
           primaryDisabledControl: const CSMColorThemeOptions(
             TWSFColors.darkGrey,
