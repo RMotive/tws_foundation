@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
@@ -6,6 +10,12 @@ part 'landing_entries/tws_button_flat_entry.dart';
 part 'landing_entries/tws_section_entry.dart';
 part 'landing_entries/tws_cascade_section_entry.dart';
 part 'landing_entries/tws_datetime_picker_entry.dart';
+part 'landing_entries/tws_confirmation_dialog_entry.dart';
+part 'landing_entries/tws_display_flat_entry.dart';
+part 'landing_entries/tws_dropup_entry.dart';
+part 'landing_entries/tws_file_picker_entry.dart';
+part 'landing_entries/tws_frame_decoration_entry.dart';
+part 'landing_entries/tws_image_viewer_entry.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -16,7 +26,7 @@ class LandingView extends StatefulWidget {
 
 class _LandingViewState extends State<LandingView> {
   late TWSFThemeBase currentTheme;
-
+  
   void themeUpdateListener() {
     setState(() {
       currentTheme = getTheme();
@@ -39,7 +49,7 @@ class _LandingViewState extends State<LandingView> {
           spacing: 16,
           children: <Widget>[
             Expanded(
-              child: TWSButtonFlat<TWSFThemeBase>(
+              child: TWSButtonFlat(
                 label: "refresh",
                 onTap: () {
                   setState(() {});
@@ -47,7 +57,7 @@ class _LandingViewState extends State<LandingView> {
               ),
             ),
             Expanded(
-              child: TWSButtonFlat<TWSFThemeBase>(
+              child: TWSButtonFlat(
                 label: "Change theme\nCurrent theme: ${currentTheme.identifier}",
                 onTap: () {
                   if(currentTheme.identifier == TWSFDarkTheme.kIdentifier){
@@ -67,7 +77,14 @@ class _LandingViewState extends State<LandingView> {
               _twsButtonFlatEntry,
               _twsSectionEntry,
               _twsCascadeSectionEntry,
-              _tws_datetime_picker_entry,
+              _twsDatetimePickerEntry,
+              _twsConfirmationDialogEntry,
+              _twsDisplayFlatEntry,
+              _twsDropupEntry,
+              _twsFilePickerEntry,
+              _twsFrameDecorationEntry,
+              _twsFilePickerEntry,
+              _twsImageViewerEntry,
             ],
           ),
         ),

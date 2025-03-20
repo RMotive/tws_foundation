@@ -132,10 +132,10 @@ class _TWSDatepickerState<T extends TWSFThemeBase> extends State<TWSDatepicker<T
             enabled: widget.isEnabled,
             cursorOpacityAnimates: true,
             cursorWidth: 3,
-            cursorColor: colorStruct.foreAlt,
+            cursorColor: colorStruct.fore,
             onTap: () => _showDatePicker(),
             style: TextStyle(
-              color: colorStruct.foreAlt?.withValues(alpha: .7),
+              color: colorStruct.fore.withValues(alpha: .7),
             ),
             decoration: InputDecoration(
               isDense: true,
@@ -153,7 +153,7 @@ class _TWSDatepickerState<T extends TWSFThemeBase> extends State<TWSDatepicker<T
                           widget.suffixLabel!,
                           style: TextStyle(
                             fontSize: 12,
-                            color: colorStruct.foreAlt?.withValues(alpha: 50),
+                            color: colorStruct.fore.withValues(alpha: 50),
                           ),
                         ),
                       ],
@@ -180,7 +180,7 @@ class _TWSDatepickerState<T extends TWSFThemeBase> extends State<TWSDatepicker<T
                 Icons.calendar_month,
               ),
               labelStyle: TextStyle(
-                color: colorStruct.foreAlt,
+                color: colorStruct.fore,
               ),
               errorStyle: TextStyle(
                 color: errorColorStruct.fore,
@@ -226,12 +226,12 @@ class _TWSDatepickerState<T extends TWSFThemeBase> extends State<TWSDatepicker<T
         colorScheme: ColorScheme.dark(
           surface: pageColorStruct.main, //Background color
           primary: pageColorStruct.main, // header background color
-          onPrimary: colorStruct.foreAlt ?? Colors.white, // header text color
-          onSurface: colorStruct.foreAlt ?? Colors.white, // body text color
+          onPrimary: pageColorStruct.fore, // header text color
+          onSurface: pageColorStruct.fore // body text color
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: colorStruct.foreAlt ?? Colors.white // button text color
+            foregroundColor: pageColorStruct.fore // button text color
           )
         )
       ),

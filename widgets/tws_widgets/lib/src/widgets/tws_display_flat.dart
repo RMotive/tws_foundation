@@ -57,7 +57,7 @@ class TWSDisplayFlat extends StatelessWidget {
                   display,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: foreColor ?? colorStruct.fore,
+                    color: foreColor ?? colorStruct.hightlightAlt ?? colorStruct.fore,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

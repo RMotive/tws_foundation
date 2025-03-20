@@ -9,7 +9,16 @@
         * [TWSSection]
         * [TWSCascadeSection]
         * [TWSDatetimePicker]
-
+        * [TWSConfirmationDialog]
+        * [TWSDroup]
+        * [TWSFilePicker]
+        * [TWSFrameDecorations]
+        * [TWSImageViewer]
+    5. Dependencies added:
+        * file_picker: ^8.1.7
+        * camera_platform_interface: ^2.8.0
+        * camera_web: ^0.3.5
+        
 - Fixes:
 
 - Dependencies upgrade:

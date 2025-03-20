@@ -9,7 +9,7 @@ CSMPackageLandingEntry _twsButtonFlatEntry = CSMPackageLandingEntry(
     ),
   ), 
   composeLanding: (BuildContext ctx) {
-    return TWSButtonFlat<TWSFThemeBase>(
+    return TWSButtonFlat(
       onTap: () => print("TWSButtonFlat: Tap..."),
     );
   }

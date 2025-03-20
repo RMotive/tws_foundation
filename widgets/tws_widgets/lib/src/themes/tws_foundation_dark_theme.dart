@@ -18,13 +18,13 @@ class TWSFDarkTheme extends TWSFThemeBase{
           TWSFColors.lightDark,
           TWSFColors.warmWhite,
           TWSFColors.oceanBlue,
-          foreAlt: TWSFColors.darkGrey,
+          foreAlt: TWSFColors.darkGrey ,
+          hightlightAlt: TWSFColors.warmWhite,
         ),
         primaryControlColor: const CSMColorThemeOptions(
           TWSFColors.oceanBlue,
           TWSFColors.warmWhite,
           TWSFColors.oceanBlue,
-          foreAlt: TWSFColors.warmWhite,
         ),
         primaryDisabledControl: const CSMColorThemeOptions(
           TWSFColors.darkGrey,

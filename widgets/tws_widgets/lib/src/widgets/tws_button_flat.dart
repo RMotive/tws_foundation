@@ -5,7 +5,7 @@ import 'package:tws_widgets/tws_widgets.dart';
 typedef StatesSet = Set<WidgetState>;
 typedef MStates = WidgetState;
 
-class TWSButtonFlat<T extends TWSFThemeBase> extends StatelessWidget {
+class TWSButtonFlat extends StatelessWidget {
   final double? width;
   final double? height;
   final String label;
@@ -77,14 +77,14 @@ class TWSButtonFlat<T extends TWSFThemeBase> extends StatelessWidget {
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
                   backgroundColor: Colors.transparent,
-                  color: colorStruct.foreAlt,
+                  color: colorStruct.fore,
                 ),
               ),
             ),
             child: Text(
               label,
               style: TextStyle(
-                color: colorStruct.foreAlt,
+                color: colorStruct.fore,
               ),
             ),
           ),
