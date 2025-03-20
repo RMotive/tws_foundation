@@ -1,34 +1,39 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Core.Bases;
+using CSM_Foundation.Core.Constants;
+
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CSM_Foundation.Database.Entity.Exceptions;
 
 /// <summary>
 ///     [Exception] to notify critical errors found during [<see cref="IDepot{TEntity}"/>] operations.
 /// </summary>
-public class XDepot
-    : BException<XDepotSituations> {
+public class XDepot<TEntity>
+    : BException<XDepotSituations> 
+    where TEntity : IEntity {
 
-    protected Type Type;
+    protected Type EntityType;
 
-    protected string Filter;
+    protected string? Filter;
 
-    public XDepot(Type entityType, string Filter, XDepotSituations Situation, Exception? System = null)
-        : base($"[{entityType.Name}] Record Error", Situation, HttpStatusCode.InternalServerError, System) {
+    public XDepot(XDepotSituations Situation, string? Filter = "", Exception? System = null)
+        : base($"[{typeof(TEntity).Name}] Record Error", Situation, HttpStatusCode.InternalServerError, System) {
 
-        Type = entityType;
+        EntityType = typeof(TEntity);
         this.Filter = Filter;
 
         Factors = new Dictionary<string, dynamic> {
-            { nameof(entityType), entityType },
-            { nameof(Filter), Filter },
+            { nameof(EntityType), EntityType},
+            { nameof(Filter), Filter ?? "---" },
         };
     }
 
     protected override Dictionary<XDepotSituations, string> AdviseFactory() {
         return new Dictionary<XDepotSituations, string> {
-            { XDepotSituations.Unfound, $"Unable to find required record from set ${Type.Name}" },
+            { XDepotSituations.Unfound, $"Unable to find required entity from set ${EntityType.Name}" },
+            { XDepotSituations.CreateDisabled, $"{AdvisesConstants.SERVER_CONTACT_ADVISE}" }
         };
     }
 }
@@ -42,4 +47,10 @@ public enum XDepotSituations {
     ///     Used when a searched <see cref="IEntity"/> wasn't found.
     /// </summary>
     Unfound,
+
+    /// <summary>
+    ///     Usedn when at an Update operation the <see cref="IEntity"/> given has <see cref="IEntity.Id"/> 0
+    ///     (wich usually means a new entity creation) but <seealso cref="UpdateInput.Create"/> is set to false.
+    /// </summary>
+    CreateDisabled,
 }

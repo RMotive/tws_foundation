@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Models.Out;
+﻿using CSM_Foundation.Database.Entity.Models.Input;
+using CSM_Foundation.Database.Entity.Models.Input.Update;
+using CSM_Foundation.Database.Entity.Models.Out;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 
@@ -9,18 +11,18 @@ namespace CSM_Foundation.Database.Entity.Depot;
 ///     [Entity] type for the [Depot] implementation.
 /// </typeparam>
 public interface IDepot_Update<TEntity>
-    where TEntity : IEntity {
+    where TEntity : class, IEntity {
 
     /// <summary>
-    ///     Updates the given record calculating the current stored values with the given <paramref name="Record"/> to update and store the new values.
+    ///     Updates the given record calculating the current stored values with the given <paramref name="entity"/> to update and store the new values.
     /// </summary>
-    /// <param name="Record">
-    ///     [Entity] object values to store.
+    /// <param name="Input">
+    ///     Operation input parameters.
     /// </param>
     /// <returns></returns>
     /// <remarks>
     ///     Always the record to be overriden will be defined by the <see cref="IEntity.Id"/> property, if isn't given, will try with <see cref="IEntity_Name.Name"/> property in case the
     ///     [Entity] implementation does have it, otherwise will finally create a new record with the given values.
     /// </remarks>
-    Task<EntityUpdateOut<TEntity>> Update(TEntity Record, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<EntityUpdateOutput<TEntity>> Update(OperationInput<TEntity, UpdateInput<TEntity>> Input);
 }

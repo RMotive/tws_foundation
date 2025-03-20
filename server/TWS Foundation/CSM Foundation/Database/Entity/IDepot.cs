@@ -35,4 +35,4 @@ public interface IDepot<TEntity>
     , IDepot_Create<TEntity>
     , IDepot_Update<TEntity>
     , IDepot_Delete<TEntity>
-    where TEntity : IEntity { }
+    where TEntity : class, IEntity { }

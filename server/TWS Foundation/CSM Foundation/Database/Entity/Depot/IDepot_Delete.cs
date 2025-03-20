@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Models.Out;
+﻿using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 
@@ -9,7 +9,7 @@ namespace CSM_Foundation.Database.Entity.Depot;
 ///     [Entity] type for the [Depot] implementation.
 /// </typeparam>
 public interface IDepot_Delete<TEntity>
-    where TEntity : IEntity {
+    where TEntity : class, IEntity {
 
     /// <summary>
     ///     Deletes the given <paramref name="Records"/>.
@@ -29,7 +29,7 @@ public interface IDepot_Delete<TEntity>
     ///         </list>
     ///     </para>
     /// </remarks>
-    public Task<EntityBatchOut<TEntity>> Delete(TEntity[] Records);
+    public Task<EntityBatchOutput<TEntity, TEntity>> Delete(TEntity[] Records);
 
     /// <summary>
     ///     Deletes the given <paramref name="Record"/>.

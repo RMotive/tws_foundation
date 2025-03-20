@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Out;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 /// <summary>
@@ -39,5 +39,5 @@ public interface IDepot_View<TEntity>
     /// <returns> 
     ///     The final View resolutions, giving metadata related to the created View and records resolved 
     /// </returns>
-    Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<SetViewOutput<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null);
 }

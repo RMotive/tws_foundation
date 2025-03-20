@@ -1,5 +1,6 @@
 ﻿namespace CSM_Foundation.Database.Models;
-public class ConnectionOptions {
+
+public record ConnectionOptions {
     public required string Host { get; init; }
     public required string Name { get; init; }
     public required string User { get; init; }

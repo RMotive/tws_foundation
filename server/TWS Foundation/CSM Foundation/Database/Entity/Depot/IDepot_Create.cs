@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Models.Out;
+﻿using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 /// <summary>
@@ -10,7 +10,7 @@ namespace CSM_Foundation.Database.Entity.Depot;
 ///     [Entity] type of the [Depot] implementation.
 /// </typeparam>
 public interface IDepot_Create<TEntity>
-    where TEntity : IEntity {
+    where TEntity : class, IEntity {
     /// <summary>
     ///     Creates a single <paramref name="Record"/> record into the live migration.
     ///     <br>
@@ -43,5 +43,5 @@ public interface IDepot_Create<TEntity>
     /// <returns>
     ///     The operation result information.
     /// </returns>
-    Task<EntityBatchOut<TEntity>> Create(ICollection<TEntity> Records, bool Sync = false);
+    Task<EntityBatchOutput<TEntity, TEntity>> Create(ICollection<TEntity> Records, bool Sync = false);
 }

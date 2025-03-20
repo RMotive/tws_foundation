@@ -1,15 +1,15 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-namespace CSM_Foundation.Database.Models.Out;
+namespace CSM_Foundation.Database.Entity.Models.Out;
 
 /// <summary>
-///     Stores a result <see cref="SetViewOut{TMigrationSet}"/> 
+///     Stores a result <see cref="SetViewOutput{TMigrationSet}"/> 
 ///     after a build operation determining paging, filtering and ordering.
 /// </summary>
 /// <typeparam name="TEntity">
 ///     <typeparamref name="TEntity"/> that this view handles results.
 /// </typeparam>
-public class SetViewOut<TEntity>
+public class SetViewOutput<TEntity>
     where TEntity : IEntity {
 
     TEntity[] _Records = [];

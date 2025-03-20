@@ -1,8 +1,8 @@
-﻿using CSM_Foundation.Database.Models.Out;
+﻿using CSM_Foundation.Database.Entity.Models.Out;
 
 namespace CSM_Foundation.Database.Entity.Models;
 /// <summary>
-///     Stores a ordering step options for the <see cref="SetViewOut{TMigrationSet}"/>
+///     Stores a ordering step options for the <see cref="SetViewOutput{TMigrationSet}"/>
 ///     builder, indicating how the current ordering step should behave.
 /// </summary>
 public class SetViewOrderOptions {

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Out;
 
 namespace CSM_Foundation.Customer;
 
@@ -25,7 +25,7 @@ public class BService<TEntity, TDepot>
         Accumulator = Accumulate;
     }
 
-    public virtual Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
+    public virtual Task<SetViewOutput<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
         return Depot.View(Options, Accumulate ?? Accumulator);
     }
 
@@ -37,7 +37,7 @@ public class BService<TEntity, TDepot>
         return Depot.Read(Behavior, Filter, Accumulate ?? Accumulator);
     }
 
-    public virtual Task<EntityUpdateOut<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null) {
+    public virtual Task<EntityUpdateOutput<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null) {
         return Depot.Update(Entity, Accumulate ?? Accumulator);
     }
 

@@ -7,7 +7,7 @@ using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Out;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 
@@ -173,7 +173,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
         Assert.Multiple(
             [
-                () => Assert.Equal(qOut.QTransactions, samples.Length),
+                () => Assert.Equal(qOut.OperationsCount, samples.Length),
                 () => Assert.True(qOut.QSuccesses.Equals(samples.Length), qOut.QFailures > 0 ? qOut.Failures[0].Message : ""),
                 () => Assert.All(qOut.Successes, i => { Assert.True(i.Id > 0); })
             ]
@@ -317,6 +317,12 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     #endregion
 
+    #region Q_Base Update
+
+
+
+    #endregion
+
     #region Q_Base View
 
     [Fact(DisplayName = "[View]: Simple view calculation")]
@@ -329,7 +335,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             Page = 1,
         };
 
-        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
+        SetViewOutput<TEntity> qOut = await Depot.View(qViewOptions);
 
         Assert.Multiple(
             () => Assert.True(qOut.Pages > 1),
@@ -351,7 +357,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             };
         }
 
-        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
+        SetViewOutput<TEntity> qOut = await Depot.View(qViewOptions);
 
         Assert.Multiple(
             () => Assert.True(qOut.Pages > 1),
@@ -381,8 +387,8 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             ],
         };
 
-        SetViewOut<TEntity> qOrderedOut = await Depot.View(qOrderedViewOptions);
-        SetViewOut<TEntity> qUnorderedOut = await Depot.View(qUnorderedViewOptions);
+        SetViewOutput<TEntity> qOrderedOut = await Depot.View(qOrderedViewOptions);
+        SetViewOutput<TEntity> qUnorderedOut = await Depot.View(qUnorderedViewOptions);
 
         // --> Manual ordering undordered result for reference.
         TEntity[] orderedReferenceRecords = qUnorderedOut.Records;
@@ -421,7 +427,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         };
 
 
-        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
+        SetViewOutput<TEntity> qOut = await Depot.View(qViewOptions);
 
 
         Assert.All(qOut.Records, (i) => {
@@ -449,7 +455,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             ],
         };
 
-        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
+        SetViewOutput<TEntity> qOut = await Depot.View(qViewOptions);
         Assert.All(
             qOut.Records,
             (i) => {
@@ -493,7 +499,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             ],
         };
 
-        SetViewOut<TEntity> qOut = await Depot.View(qViewOptions);
+        SetViewOutput<TEntity> qOut = await Depot.View(qViewOptions);
         Assert.All(
             qOut.Records,
             (i) => {

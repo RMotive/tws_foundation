@@ -3,7 +3,7 @@
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Out;
 
 namespace CSM_Foundation.Customer;
 
@@ -19,7 +19,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     The complex View results, a View is a paged and ordered collection of records based on the given <paramref name="Options"/>
     /// </returns>
-    Task<SetViewOut<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<SetViewOutput<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Creates a new <see cref="TEntity"/> set records into the data storage.
@@ -48,7 +48,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     Complex update operation result.
     /// </returns>
-    Task<EntityUpdateOut<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<EntityUpdateOutput<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null);
 
     Task<TEntity> Delete(long Pointer);
     

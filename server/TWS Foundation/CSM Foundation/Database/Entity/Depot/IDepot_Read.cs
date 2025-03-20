@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-using CSM_Foundation.Database.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 
@@ -29,7 +29,7 @@ public enum ReadBehaviors {
 ///     [<see cref="IEntity"/>] implementation class type. This methods are based on this [Entity] to the params required and function returns.
 /// </typeparam>
 public interface IDepot_Read<TEntity>
-    where TEntity : IEntity {
+    where TEntity : class, IEntity {
 
     /// <summary>
     ///     Reads into the database for the <typeparamref name="TEntity"/> instance with the given <paramref name="id"/>.
@@ -49,7 +49,7 @@ public interface IDepot_Read<TEntity>
     /// <returns>
     ///     An <see cref="IEntity"/> batch operation result.
     /// </returns>
-    Task<EntityBatchOut<TEntity>> Read(long[] ids);
+    Task<EntityBatchOutput<TEntity, TEntity>> Read(long[] ids);
 
     /// <summary>
     ///     Reads into the database for the <typeparamref name="TEntity"/> instances matched by the given <paramref name="filter"/>.
@@ -66,5 +66,5 @@ public interface IDepot_Read<TEntity>
     /// <returns>
     ///     Collection of <typeparamref name="TEntity"/> instances found.
     /// </returns>
-    Task<EntityBatchOut<TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null);
+    Task<EntityBatchOutput<TEntity, TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null);
 }

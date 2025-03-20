@@ -1,5 +1,4 @@
 using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Models.Out;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -61,7 +60,7 @@ public class SecurityService
             throw new XSetOperation<Account>(result.Failures);
         }
 
-        if (result.QTransactions == 0) {
+        if (result.OperationsCount == 0) {
             throw new XAuthenticate(XAuthenticateSituation.IDENTITY_UNFOUND);
         }
 
