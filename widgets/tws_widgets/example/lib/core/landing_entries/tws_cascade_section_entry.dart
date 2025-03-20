@@ -1,4 +1,4 @@
-part of '../landing_view.dart';
+part of '../landing_view/landing_view.dart';
 CSMPackageLandingEntry _twsCascadeSectionEntry = CSMPackageLandingEntry(
   name: "TWS Cascade Section", 
   description: RichText(

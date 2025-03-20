@@ -18,6 +18,7 @@
         * file_picker: ^8.1.7
         * camera_platform_interface: ^2.8.0
         * camera_web: ^0.3.5
+    6. Added Routes system.
         
 - Fixes:
 

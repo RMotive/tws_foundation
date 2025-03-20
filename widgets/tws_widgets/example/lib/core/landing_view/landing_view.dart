@@ -6,16 +6,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
-part 'landing_entries/tws_button_flat_entry.dart';
-part 'landing_entries/tws_section_entry.dart';
-part 'landing_entries/tws_cascade_section_entry.dart';
-part 'landing_entries/tws_datetime_picker_entry.dart';
-part 'landing_entries/tws_confirmation_dialog_entry.dart';
-part 'landing_entries/tws_display_flat_entry.dart';
-part 'landing_entries/tws_dropup_entry.dart';
-part 'landing_entries/tws_file_picker_entry.dart';
-part 'landing_entries/tws_frame_decoration_entry.dart';
-part 'landing_entries/tws_image_viewer_entry.dart';
+part '../landing_entries/tws_button_flat_entry.dart';
+part '../landing_entries/tws_section_entry.dart';
+part '../landing_entries/tws_cascade_section_entry.dart';
+part '../landing_entries/tws_datetime_picker_entry.dart';
+part '../landing_entries/tws_confirmation_dialog_entry.dart';
+part '../landing_entries/tws_display_flat_entry.dart';
+part '../landing_entries/tws_dropup_entry.dart';
+part '../landing_entries/tws_file_picker_entry.dart';
+part '../landing_entries/tws_frame_decoration_entry.dart';
+part '../landing_entries/tws_image_viewer_entry.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -43,7 +43,9 @@ class _LandingViewState extends State<LandingView> {
 
   @override
   Widget build(BuildContext context) {
+    double heigth = MediaQuery.of(context).size.height;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         CSMSpacingRow(
           spacing: 16,
@@ -70,7 +72,8 @@ class _LandingViewState extends State<LandingView> {
             ),
           ],
         ),
-        Expanded(
+        SizedBox(
+          height: heigth - 40,
           child: CSMPackageLanding(
             title: 'tws widgets example',
             entries: <CSMPackageLandingEntry>[

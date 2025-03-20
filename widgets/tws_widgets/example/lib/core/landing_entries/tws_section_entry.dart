@@ -1,4 +1,4 @@
-part of '../landing_view.dart';
+part of '../landing_view/landing_view.dart';
 
 CSMPackageLandingEntry _twsSectionEntry = CSMPackageLandingEntry(
   name: "TWS Section", 
