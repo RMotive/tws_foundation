@@ -9,7 +9,6 @@ using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Input.Update;
-using CSM_Foundation.Database.Entity.Models.Out;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Utilitites;
 
@@ -442,6 +441,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
         TEntity? original = await query
             .Where(r => r.Id == overwritten.Id)
+            .AsNoTracking()
             .FirstOrDefaultAsync()
             ?? throw new XDepot<TEntity>(XDepotSituations.Unfound);
         if(original == null) {

@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
-
-namespace CSM_Foundation.Database.Entity.Models.Out;
+﻿namespace CSM_Foundation.Database.Entity.Models.Output;
 
 /// <summary>
 ///     Stores a result <see cref="SetViewOutput{TMigrationSet}"/> 

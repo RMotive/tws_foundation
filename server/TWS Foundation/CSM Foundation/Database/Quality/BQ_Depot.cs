@@ -7,7 +7,9 @@ using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Input;
+using CSM_Foundation.Database.Entity.Models.Input.Update;
+using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 
@@ -89,6 +91,8 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         Evaluable = orderableTmp ?? typeof(TEntity).GetProperty(nameof(IEntity.Id))!; // By default if the [Entity] doesn't have a valid evaluable property will use the Id. 
     }
 
+    #region Abtraction
+
     /// <summary>
     ///     Creates a context [Entity] for testing data creation and assertion.
     /// </summary>
@@ -100,6 +104,10 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     /// </returns>
     protected abstract TEntity EntityFactory(string Entropy);
 
+    #endregion
+
+    #region Private / Protected Functions
+
     /// <summary>
     ///     
     /// </summary>
@@ -108,6 +116,20 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         await Database.SaveChangesAsync();
         Disposer.Push([.. SampleEntities]);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="expected"></param>
+    /// <param name="actual"></param>
+    protected void AssertEvaluable(TEntity expected, TEntity actual) {
+        object? sampleEvaluableValue = Evaluable.GetValue(expected);
+        object? overwrittenEvaluableValue = Evaluable.GetValue(actual);
+
+        Assert.Equal(sampleEvaluableValue, overwrittenEvaluableValue);
+    }
+
+    #endregion
 
     #region Sampling
 
@@ -168,13 +190,13 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public async Task CreateB() {
         TEntity[] samples = Sampling(3);
 
-        EntityBatchOut<TEntity> qOut = await Depot.Create(samples);
+        EntityBatchOutput<TEntity, TEntity> qOut = await Depot.Create(samples);
         await CommitSampleEntities(samples);
 
         Assert.Multiple(
             [
                 () => Assert.Equal(qOut.OperationsCount, samples.Length),
-                () => Assert.True(qOut.QSuccesses.Equals(samples.Length), qOut.QFailures > 0 ? qOut.Failures[0].Message : ""),
+                () => Assert.True(qOut.SuccessesCount.Equals(samples.Length), qOut.FailuresCount > 0 ? qOut.Failures[0].Message : ""),
                 () => Assert.All(qOut.Successes, i => { Assert.True(i.Id > 0); })
             ]
         );
@@ -207,11 +229,11 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(20, EntityFactory);
         long[] sampleIds = [..samples.Select(i => i.Id)];
 
-        EntityBatchOut<TEntity> readEntities = await Depot.Read(sampleIds);
+        EntityBatchOutput<TEntity, TEntity> readEntities = await Depot.Read(sampleIds);
         Assert.Multiple(
                 [
                     () => Assert.Empty(readEntities.Failures),
-                    () => Assert.Equal(samples.Length, readEntities.QSuccesses),
+                    () => Assert.Equal(samples.Length, readEntities.SuccessesCount),
                     () => Assert.All(
                         readEntities.Successes,
                         (entity) => {
@@ -234,7 +256,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(2, EntityFactory);
         TEntity samplePivot = samples[0];
 
-        EntityBatchOut<TEntity> readEntites = await Depot.Read(
+        EntityBatchOutput<TEntity, TEntity> readEntites = await Depot.Read(
                 ReadBehaviors.First,
                 (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
             );
@@ -242,7 +264,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         Assert.Multiple(
                 [
                     () => Assert.Empty(readEntites.Failures),
-                    () => Assert.Equal(1, readEntites.QSuccesses),
+                    () => Assert.Equal(1, readEntites.SuccessesCount),
                     () => {
                         TEntity readEntity = readEntites.Successes[0];
 
@@ -262,7 +284,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(2, EntityFactory);
         TEntity samplePivot = samples[1];
 
-        EntityBatchOut<TEntity> readEntites = await Depot.Read(
+        EntityBatchOutput<TEntity, TEntity> readEntites = await Depot.Read(
                 ReadBehaviors.Last,
                 (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
             );
@@ -270,7 +292,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         Assert.Multiple(
                 [
                     () => Assert.Empty(readEntites.Failures),
-                    () => Assert.Equal(1, readEntites.QSuccesses),
+                    () => Assert.Equal(1, readEntites.SuccessesCount),
                     () => {
                         TEntity readEntity = readEntites.Successes[0];
 
@@ -289,7 +311,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public virtual async Task ReadE() {
         TEntity[] samples = await Store(2, EntityFactory);
 
-        EntityBatchOut<TEntity> readEntites = await Depot.Read(
+        EntityBatchOutput<TEntity, TEntity> readEntites = await Depot.Read(
                 ReadBehaviors.All,
                 (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
             );
@@ -297,7 +319,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         Assert.Multiple(
                 [
                     () => Assert.Empty(readEntites.Failures),
-                    () => Assert.Equal(2, readEntites.QSuccesses),
+                    () => Assert.Equal(2, readEntites.SuccessesCount),
                     () => Assert.All(
                             samples,
                             (sample) => {
@@ -320,6 +342,65 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     #region Q_Base Update
 
 
+    [Fact(DisplayName = $"[Update]: Creates a single entity when Id is 0")]
+    public virtual async Task UpdateA() {
+        TEntity sample = RunEntityFactory(EntityFactory);
+
+        EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+                new OperationInput<TEntity, UpdateInput<TEntity>> {
+                    Parameters = new UpdateInput<TEntity> {
+                        Entity = sample,
+                        Create = true,
+                    },
+                }
+            );
+        await CommitSampleEntities([updateOutput.Updated]);
+
+        Assert.Multiple(
+                [
+                    () => Assert.Null(updateOutput.Original),
+                    () => {
+                        TEntity overwritten = updateOutput.Updated;
+
+                        Assert.True(overwritten.Id > 0);
+                        AssertEvaluable(sample, overwritten);
+                    },
+                ]
+            );
+    }
+
+    [Fact(DisplayName = $"[Update]: Updates a single entity")]
+    public virtual async Task UpdateB() {
+        TEntity sample = Store(EntityFactory);
+        TEntity valueReference = RunEntityFactory(EntityFactory);
+
+        object? sampleOriginalValue = Evaluable.GetValue(sample);
+
+        Evaluable.SetValue(sample, Evaluable.GetValue(valueReference));
+
+        EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+                new OperationInput<TEntity, UpdateInput<TEntity>> {
+                    Parameters = new UpdateInput<TEntity> {
+                        Entity = sample,
+                    },
+                }
+            );
+
+        Assert.Multiple(
+                [
+                    () => Assert.NotNull(updateOutput.Original),
+                    () => {
+                        TEntity overwritten = updateOutput.Updated;
+
+                        Assert.NotEqual(updateOutput.Original, overwritten);
+
+                        Evaluable.SetValue(sample, sampleOriginalValue);
+
+                        Assert.Equal(sample, overwritten);
+                    }
+                ]
+            );
+    }
 
     #endregion
 

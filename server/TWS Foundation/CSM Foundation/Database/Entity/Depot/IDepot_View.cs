@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 /// <summary>

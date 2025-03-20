@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Input.Update;
-using CSM_Foundation.Database.Entity.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 

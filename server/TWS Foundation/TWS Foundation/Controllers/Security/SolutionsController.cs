@@ -1,4 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input.Update;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 using CSM_Security.Entities;
 
@@ -30,8 +32,9 @@ public class SolutionsController
     }
 
     [HttpPost(), Auth("Update")]
-    public async Task<IActionResult> Update(Solution Solution) {
-        return Ok(await Service.Update(Solution));
+    public async Task<IActionResult> Update(UpdateInput<Solution> Solution) {
+        EntityUpdateOutput<Solution> Output = await Service.Update(Solution);
+        return Ok(Output);
     }
 
     [HttpPost(), Auth("Delete")]

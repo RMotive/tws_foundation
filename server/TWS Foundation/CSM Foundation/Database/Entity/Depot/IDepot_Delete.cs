@@ -3,7 +3,7 @@
 namespace CSM_Foundation.Database.Entity.Depot;
 
 /// <summary>
-///     [Interface] describing [Delete] functions for [Depot] implementations.
+///     [Interface] describing [Delete] operations for [Depot] implementations.
 /// </summary>
 /// <typeparam name="TEntity">
 ///     [Entity] type for the [Depot] implementation.

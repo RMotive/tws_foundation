@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Exceptions;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 using CSM_Security.Entities;
 
@@ -45,7 +46,7 @@ public class AccountsDepot
     public AccountsDepot(Database database, IDisposer? Disposer = null) : base(database, Disposer) { }
 
     public async Task<Permit[]> GetPermits(long Account) {
-        EntityBatchOut<Account> accountReadOut = await Read(
+        EntityBatchOutput<Account, Account> accountReadOut = await Read(
                 ReadBehaviors.First,
                 (record) => record.Id == Account,
                 (query) => {
@@ -57,7 +58,7 @@ public class AccountsDepot
             );
 
         if (accountReadOut.Failed) {
-            throw new XDepot(typeof(Account), $"Account.Id = {Account}", XDepotSituations.Unfound);
+            throw new XDepot<Account>(XDepotSituations.Unfound, $"Account.Id = {Account}");
         }
         Account account = accountReadOut.Successes[0];
         Permit[] directPermits = [.. account.Permits];

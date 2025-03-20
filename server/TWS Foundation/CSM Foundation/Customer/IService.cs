@@ -3,7 +3,8 @@
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Input.Update;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Customer;
 
@@ -35,9 +36,9 @@ public interface IService<TEntity>
     /// <returns>
     ///     A complex batch result that provides information related to exceptions catched, record that belongs to the exception and successes.
     /// </returns>
-    Task<EntityBatchOut<TEntity>> Create(TEntity[] Entities, bool Sync = false);
+    Task<EntityBatchOutput<TEntity, TEntity>> Create(TEntity[] Entities, bool Sync = false);
 
-    Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<EntityBatchOutput<TEntity, TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Updates the given record, this is based on the <see cref="TEntity.Id"/> pointer to identify the record to update and override the given <paramref name="Solution"/> object.
@@ -48,10 +49,10 @@ public interface IService<TEntity>
     /// <returns>
     ///     Complex update operation result.
     /// </returns>
-    Task<EntityUpdateOutput<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<EntityUpdateOutput<TEntity>> Update(UpdateInput<TEntity> input);
 
     Task<TEntity> Delete(long Pointer);
-    
+
     /// <summary>
     ///     Removes from the data storage the <see cref="TEntity"/> record based on the <paramref name="Id"/> pointer.
     /// </summary>
@@ -61,5 +62,5 @@ public interface IService<TEntity>
     /// <returns>
     ///     The removed record object.
     /// </returns>
-    Task<EntityBatchOut<TEntity>> Delete(TEntity[] Entities);
+    Task<EntityBatchOutput<TEntity, TEntity>> Delete(TEntity[] Entities);
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -97,7 +98,7 @@ public sealed class SessionManager {
         }
 
         Credentials safeCredentials = safeSession.Credentials;
-        EntityBatchOut<Account> readAccountOut = await Accounts.Read(
+        EntityBatchOutput<Account, Account> readAccountOut = await Accounts.Read(
             ReadBehaviors.First,
             (Account i) => i.User == safeCredentials.Identity,
             (query) => {

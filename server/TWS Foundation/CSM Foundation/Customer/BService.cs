@@ -4,7 +4,9 @@ using System.Linq.Expressions;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Out;
+using CSM_Foundation.Database.Entity.Models.Input;
+using CSM_Foundation.Database.Entity.Models.Input.Update;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Customer;
 
@@ -18,30 +20,42 @@ public class BService<TEntity, TDepot>
     /// </summary>
     protected readonly TDepot Depot;
 
-    readonly AccumulateDelegate<TEntity>? Accumulator;
+    readonly AccumulateDelegate<TEntity>? PreOperation;
 
-    public BService(TDepot Depot, AccumulateDelegate<TEntity>? Accumulate = null) {
+    readonly AccumulateDelegate<TEntity>? PostOperation;
+
+    public BService(TDepot Depot, AccumulateDelegate<TEntity>? preOperation = null, AccumulateDelegate<TEntity>? postOperation = null) {
         this.Depot = Depot;
-        Accumulator = Accumulate;
+        PreOperation = preOperation;
+        PostOperation = postOperation;
     }
+
+    protected OperationInput<TEntity, TParameters> GetOperationInput<TParameters>(TParameters parameters)
+    => new() {
+        Parameters = parameters,
+        PreOperation = PreOperation,
+        PostOperation = PostOperation
+    };
 
     public virtual Task<SetViewOutput<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
-        return Depot.View(Options, Accumulate ?? Accumulator);
+        return Depot.View(Options);
     }
 
-    public virtual Task<EntityBatchOut<TEntity>> Create(TEntity[] Entities, bool Sync = false) {
+    public virtual Task<EntityBatchOutput<TEntity, TEntity>> Create(TEntity[] Entities, bool Sync = false) {
         return Depot.Create(Entities, Sync);
     }
 
-    public virtual Task<EntityBatchOut<TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
-        return Depot.Read(Behavior, Filter, Accumulate ?? Accumulator);
+    public virtual Task<EntityBatchOutput<TEntity, TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
+        return Depot.Read(Behavior, Filter);
     }
 
-    public virtual Task<EntityUpdateOutput<TEntity>> Update(TEntity Entity, AccumulateDelegate<TEntity>? Accumulate = null) {
-        return Depot.Update(Entity, Accumulate ?? Accumulator);
+    public virtual Task<EntityUpdateOutput<TEntity>> Update(UpdateInput<TEntity> input) {
+        return Depot.Update(
+                GetOperationInput(input)
+            );
     }
 
-    public virtual Task<EntityBatchOut<TEntity>> Delete(TEntity[] Entities) {
+    public virtual Task<EntityBatchOutput<TEntity, TEntity>> Delete(TEntity[] Entities) {
         return Depot.Delete(Entities);
     }
 
