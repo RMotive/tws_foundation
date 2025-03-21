@@ -5,12 +5,15 @@ CSMPackageLandingEntry _twsButtonFlatEntry = CSMPackageLandingEntry(
   description: RichText(
     text: TextSpan(
       text:
-          "Simple stylish button. \nThis component has the same color scheme in dark and light themes.",
+          "Simple TWS Custom action button with async capabilities. \nThis component has the same color scheme in dark and light themes.",
     ),
   ), 
   composeLanding: (BuildContext ctx) {
-    return TWSButtonFlat(
-      onTap: () => print("TWSButtonFlat: Tap..."),
+    return TWSFLandingFrame(
+      child: TWSButtonFlat(
+        width: 200,
+        onTap: () => print("TWSButtonFlat: Tap..."),
+      ),
     );
   }
 );

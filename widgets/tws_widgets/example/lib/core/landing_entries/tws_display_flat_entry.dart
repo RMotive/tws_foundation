@@ -9,8 +9,10 @@ CSMPackageLandingEntry _twsDisplayFlatEntry = CSMPackageLandingEntry(
     ),
   ), 
   composeLanding: (BuildContext ctx) {
-    return TWSDisplayFlat( 
-      display: "Display example",
+    return TWSFLandingFrame(
+      child: TWSDisplayFlat( 
+        display: "Display example",
+      ), 
     );
   }
 );

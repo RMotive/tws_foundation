@@ -5,6 +5,7 @@ import 'package:tws_widgets/tws_widgets.dart';
 typedef StatesSet = Set<WidgetState>;
 typedef MStates = WidgetState;
 
+/// [TWSButtonFlat] Simple TWS Custom action button with async capabilities.
 class TWSButtonFlat extends StatelessWidget {
   final double? width;
   final double? height;
@@ -84,7 +85,7 @@ class TWSButtonFlat extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                color: colorStruct.fore,
+                color: colorStruct.foreAlt ?? colorStruct.fore,
               ),
             ),
           ),

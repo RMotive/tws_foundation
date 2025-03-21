@@ -22,9 +22,9 @@ class TWSFThemeLight extends TWSFThemeBase {
         ),
         primaryControlColor: const CSMColorThemeOptions(
           TWSFColors.oceanBlue,
-          TWSFColors.warmWhite,
+          TWSFColors.lightDark,
           TWSFColors.oceanBlue,
-          hightlightAlt: TWSFColors.lightDark
+          foreAlt:TWSFColors.warmWhite,
         ),
         primaryDisabledControl: const CSMColorThemeOptions(
           TWSFColors.darkGrey,

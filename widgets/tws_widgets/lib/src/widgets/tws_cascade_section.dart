@@ -2,6 +2,7 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
+/// [TWSCascadeSection] Widget shows a custom main control widget with a colapsable content section.
 class TWSCascadeSection extends StatefulWidget {
   /// Section title.
   final String title;

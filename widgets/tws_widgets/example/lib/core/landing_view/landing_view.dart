@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart';
+import 'package:example/core/Frames/twsf_landing_frame.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
@@ -16,6 +17,8 @@ part '../landing_entries/tws_dropup_entry.dart';
 part '../landing_entries/tws_file_picker_entry.dart';
 part '../landing_entries/tws_frame_decoration_entry.dart';
 part '../landing_entries/tws_image_viewer_entry.dart';
+part '../landing_entries/tws_incremental_list_entry.dart';
+part '../landing_entries/tws_input_text_entry.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -88,6 +91,8 @@ class _LandingViewState extends State<LandingView> {
               _twsFrameDecorationEntry,
               _twsFilePickerEntry,
               _twsImageViewerEntry,
+              _twsIncrementalListEntry,
+              _twsInputTextEntry,
             ],
           ),
         ),

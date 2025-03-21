@@ -8,22 +8,20 @@ CSMPackageLandingEntry _twsConfirmationDialogEntry = CSMPackageLandingEntry(
     ),
   ), 
   composeLanding: (BuildContext ctx) {
-    return Column(
-      children: <Widget>[
-        TWSButtonFlat(
-          label: "Show dialog",
-          onTap: (){
-            showDialog(context: ctx, 
-              builder:(BuildContext context) {
-                return TWSConfirmationDialog(
-                  onClose: () => print("Closing dialog...."),
-                  onAccept: () => print("Tap on Ok button...."),
-                );
-              },
-            );
-          }
-        ),
-      ],
+    return TWSFLandingFrame(
+      child: TWSButtonFlat(
+        label: "Show dialog",
+        onTap: (){
+          showDialog(context: ctx, 
+            builder:(BuildContext context) {
+              return TWSConfirmationDialog(
+                onClose: () => print("Closing dialog...."),
+                onAccept: () => print("Tap on Ok button...."),
+              );
+            },
+          );
+        }
+      ),
     );
   }
 );

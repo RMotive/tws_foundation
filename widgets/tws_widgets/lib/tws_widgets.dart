@@ -14,4 +14,6 @@ export 'src/widgets/tws_dropup.dart';
 export 'src/widgets/tws_file_picker.dart';
 export 'src/widgets/tws_frame_decoration.dart';
 export 'src/widgets/tws_image_viewer.dart';
+export 'src/widgets/tws_incremental_list.dart';
+export 'src/widgets/tws_input_text.dart';
 export 'src/widgets/tws_section.dart';
