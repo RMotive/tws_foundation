@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Exceptions;
 using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
@@ -227,7 +227,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     [Fact(DisplayName = "[Read]: Reads a collection of entities by a collection of {Id}")]
     public virtual async Task ReadB() {
         TEntity[] samples = await Store(20, EntityFactory);
-        long[] sampleIds = [..samples.Select(i => i.Id)];
+        long[] sampleIds = [.. samples.Select(i => i.Id)];
 
         EntityBatchOutput<TEntity, TEntity> readEntities = await Depot.Read(sampleIds);
         Assert.Multiple(
@@ -341,8 +341,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     #region Q_Base Update
 
-
-    [Fact(DisplayName = $"[Update]: Creates a single entity when Id is 0")]
+    [Fact(DisplayName = $"[Update Entity]: Created when Create parameter enabled")]
     public virtual async Task UpdateA() {
         TEntity sample = RunEntityFactory(EntityFactory);
 
@@ -369,8 +368,46 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             );
     }
 
-    [Fact(DisplayName = $"[Update]: Updates a single entity")]
+    [Fact(DisplayName = $"[Update Entity]: Throws CreateDisabled exception situation.")]
     public virtual async Task UpdateB() {
+        TEntity sample = RunEntityFactory(EntityFactory);
+
+        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
+                async () => {
+                    EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+                new OperationInput<TEntity, UpdateInput<TEntity>> {
+                    Parameters = new UpdateInput<TEntity> {
+                        Entity = sample,
+                    },
+                }
+                    );
+                }
+            );
+
+        Assert.Equal(XDepotSituations.CreateDisabled, depotException.Situation);
+    }
+
+    [Fact(DisplayName = $"[Update Entity]: Throws Unfound exception situation")]
+    public virtual async Task UpdateC() {
+        TEntity sample = RunEntityFactory(EntityFactory);
+        sample.Id = 100;
+
+        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
+                async () => {
+                    EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+                        new OperationInput<TEntity, UpdateInput<TEntity>> {
+                            Parameters = new UpdateInput<TEntity> {
+                                Entity = sample,
+                            },
+                        }
+                    );
+                }
+            );
+        Assert.Equal(XDepotSituations.Unfound, depotException.Situation);
+    }
+
+    [Fact(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
+    public virtual async Task UpdateD() {
         TEntity sample = Store(EntityFactory);
         TEntity valueReference = RunEntityFactory(EntityFactory);
 
@@ -401,6 +438,13 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                 ]
             );
     }
+
+
+    #endregion
+
+    #region Q_Base Delete
+
+
 
     #endregion
 

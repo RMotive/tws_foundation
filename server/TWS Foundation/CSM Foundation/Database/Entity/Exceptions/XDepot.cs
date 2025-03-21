@@ -32,7 +32,7 @@ public class XDepot<TEntity>
 
     protected override Dictionary<XDepotSituations, string> AdviseFactory() {
         return new Dictionary<XDepotSituations, string> {
-            { XDepotSituations.Unfound, $"Unable to find required entity from set ${EntityType.Name}" },
+            { XDepotSituations.Unfound, $"Unable to find required entity from set ${typeof(TEntity).Name}" },
             { XDepotSituations.CreateDisabled, $"{AdvisesConstants.SERVER_CONTACT_ADVISE}" }
         };
     }

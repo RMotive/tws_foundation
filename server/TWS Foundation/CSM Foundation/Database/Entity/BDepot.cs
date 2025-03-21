@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Exceptions;
@@ -66,7 +65,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
 
     #region (Private / Protected) Functions
-    
+
     protected IQueryable<TEntity> Filtering(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
         ISetViewFilterNode<TEntity>[] filters = Options.Filters;
         if (filters.Length > 0) {
@@ -194,7 +193,7 @@ public abstract class BDepot<TDatabase, TEntity>
     ///     The updated query.
     /// </returns>
     protected IQueryable<TEntity> ValidateAccumulation(IQueryable<TEntity> query, AccumulateDelegate<TEntity>? accumulation) {
-        if(accumulation == null) {
+        if (accumulation == null) {
             return query;
         }
 
@@ -303,7 +302,7 @@ public abstract class BDepot<TDatabase, TEntity>
         List<TEntity> successes = [];
         List<EntityOperationFailure<TEntity>> failures = [];
         foreach (long id in ids) {
-            
+
             try {
                 TEntity success = await Read(id);
                 successes.Add(success);
@@ -319,7 +318,7 @@ public abstract class BDepot<TDatabase, TEntity>
             }
         }
 
-        return new EntityBatchOutput<TEntity, TEntity>([..successes], [..failures]);
+        return new EntityBatchOutput<TEntity, TEntity>([.. successes], [.. failures]);
     }
 
     public async Task<EntityBatchOutput<TEntity, TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null) {
@@ -419,14 +418,28 @@ public abstract class BDepot<TDatabase, TEntity>
 
     }
 
+    /// <summary>
+    ///     Updates the given record calculating the current stored values with the given <paramref name="entity"/> to update and store the new values.
+    /// </summary>
+    /// <param name="Input">
+    ///     Operation input parameters.
+    /// </param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Always the record to be overriden will be defined by the <see cref="IEntity.Id"/> property, if isn't given, will try with <see cref="IEntity_Name.Name"/> property in case the
+    ///     [Entity] implementation does have it, otherwise will finally create a new record with the given values.
+    /// </remarks>
+    /// <exception cref="XDepot{TEntity}">
+    ///     <see cref="IDepot{TEntity}"/> related exception.
+    /// </exception>
     public async Task<EntityUpdateOutput<TEntity>> Update(OperationInput<TEntity, UpdateInput<TEntity>> Input) {
         IQueryable<TEntity> query = ValidateAccumulation(Set, Input.PreOperation);
 
         UpdateInput<TEntity> parameters = Input.Parameters;
 
         TEntity overwritten = parameters.Entity;
-        if(overwritten.Id == 0) {
-            if(!parameters.Create) {
+        if (overwritten.Id == 0) {
+            if (!parameters.Create) {
                 throw new XDepot<TEntity>(XDepotSituations.CreateDisabled);
             }
 
@@ -437,25 +450,25 @@ public abstract class BDepot<TDatabase, TEntity>
                 Original = null,
                 Updated = overwritten,
             };
-        } 
+        }
 
         TEntity? original = await query
             .Where(r => r.Id == overwritten.Id)
             .AsNoTracking()
             .FirstOrDefaultAsync()
             ?? throw new XDepot<TEntity>(XDepotSituations.Unfound);
-        if(original == null) {
-            if(!parameters.Create)
+        if (original == null) {
+            if (!parameters.Create)
                 throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {overwritten.Id}");
 
             overwritten = await Create(overwritten);
-            
+
             Disposer?.Push(Database, overwritten);
             return new EntityUpdateOutput<TEntity> {
                 Original = null,
                 Updated = overwritten,
             };
-        } 
+        }
 
         UpdateHelper(original, overwritten);
         Disposer?.Push(Database, overwritten);
@@ -468,6 +481,18 @@ public abstract class BDepot<TDatabase, TEntity>
     #endregion
 
     #region Delete
+
+
+    public async Task<TEntity> Delete(long Id) {
+        TEntity record = await Set
+            .Where(r => r.Id == Id)
+            .AsNoTracking()
+            .FirstOrDefaultAsync()
+            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {Id}");
+
+        Set.Remove(record);
+        return record;
+    }
 
     public Task<EntityBatchOutput<TEntity, TEntity>> Delete(TEntity[] Sets) {
 
@@ -493,17 +518,6 @@ public abstract class BDepot<TDatabase, TEntity>
 
         this.Set.Remove(Set);
         return Task.FromResult(Set);
-    }
-
-    public async Task<TEntity> Delete(long Id) {
-        TEntity record = await Set
-            .Where(r => r.Id == Id)
-            .FirstOrDefaultAsync()
-            ?? throw new Exception("Trying to remove an unexist entity");
-
-        Set.Remove(record);
-
-        return record;
     }
 
     #endregion
