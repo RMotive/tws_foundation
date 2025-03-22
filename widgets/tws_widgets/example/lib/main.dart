@@ -23,15 +23,16 @@ class MainApp extends StatelessWidget {
         TWSFThemeLight(),
       ],
       builder: (BuildContext context, Widget? home) {
+        TWSFThemeBase theme = getTheme<TWSFThemeBase>();
         return Title(
           title: "TWS Foundation View",
           color: Colors.black,
           child: DefaultTextStyle(
-            style: const TextStyle(
-              color: Colors.white60,
+            style: TextStyle(
+              color: theme.page.fore, //! TODO <---- Not Working default theme changes.
               fontSize: 16,
             ),
-            child: home ?? Container(color: Colors.red,),
+            child: home ?? Container(color: Colors.red)
           ),
         );
       },

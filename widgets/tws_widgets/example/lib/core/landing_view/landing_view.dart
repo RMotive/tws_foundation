@@ -1,10 +1,11 @@
 import 'dart:convert';
-
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart';
-import 'package:example/core/Frames/twsf_landing_frame.dart';
+import 'package:example/core/adapters/view_consume_adapter.dart';
+import 'package:example/core/frames/twsf_landing_frame.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
 part '../landing_entries/tws_button_flat_entry.dart';
@@ -19,6 +20,13 @@ part '../landing_entries/tws_frame_decoration_entry.dart';
 part '../landing_entries/tws_image_viewer_entry.dart';
 part '../landing_entries/tws_incremental_list_entry.dart';
 part '../landing_entries/tws_input_text_entry.dart';
+part '../landing_entries/tws_list_tile_entry.dart';
+part '../landing_entries/tws_options_selector_entry.dart';
+part '../landing_entries/tws_paging_selector_entry.dart';
+part '../landing_entries/tws_property_viewer_entry.dart';
+part '../landing_entries/tws_section_divider_entry.dart';
+part '../landing_entries/tws_selectable_list_entry.dart';
+part '../landing_entries/tws_switch_button.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -70,6 +78,7 @@ class _LandingViewState extends State<LandingView> {
                   }else{
                     updateTheme(TWSFDarkTheme.kIdentifier);
                   }
+                  currentTheme = getTheme();
                 },
               ),
             ),
@@ -77,22 +86,30 @@ class _LandingViewState extends State<LandingView> {
         ),
         SizedBox(
           height: heigth - 40,
-          child: CSMPackageLanding(
+          child: 
+          CSMPackageLanding(
             title: 'tws widgets example',
             entries: <CSMPackageLandingEntry>[
-              _twsButtonFlatEntry,
-              _twsSectionEntry,
-              _twsCascadeSectionEntry,
-              _twsDatetimePickerEntry,
-              _twsConfirmationDialogEntry,
-              _twsDisplayFlatEntry,
-              _twsDropupEntry,
-              _twsFilePickerEntry,
-              _twsFrameDecorationEntry,
-              _twsFilePickerEntry,
-              _twsImageViewerEntry,
-              _twsIncrementalListEntry,
-              _twsInputTextEntry,
+              // _twsButtonFlatEntry,
+              // _twsSectionEntry,
+              // _twsCascadeSectionEntry,
+              // _twsDatetimePickerEntry,
+              // _twsConfirmationDialogEntry,
+              // _twsDisplayFlatEntry,
+              // _twsDropupEntry,
+              // _twsFilePickerEntry,
+              // _twsFrameDecorationEntry,
+              // _twsFilePickerEntry,
+              // _twsImageViewerEntry,
+              // _twsIncrementalListEntry,
+              // _twsInputTextEntry,
+              // _twsListTileEntry,
+              // _twsOptionsSelectorEntry,
+              // _twsPagingSelectorEntry,
+              // _twsPropertyViewerEntry,
+              _twsSectionDividerEntry,
+              _twsSelectableListEntry,
+              _twsSwitchButtonEntry,
             ],
           ),
         ),

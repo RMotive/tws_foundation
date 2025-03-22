@@ -78,11 +78,11 @@ class _TWSInputTextState extends State<TWSInputText> {
   final double borderWidth = 2;
   late TextEditingController ctrl;
   late final FocusNode fNode;
-  late final TWSFThemeBase theme;
-  late final CSMColorThemeOptions colorStruct;
-  late final CSMColorThemeOptions disabledColorStruct;
-  late final CSMColorThemeOptions errorColorStruct;
-  late final CSMColorThemeOptions pageColorStruct;
+  late TWSFThemeBase theme;
+  late CSMColorThemeOptions colorStruct;
+  late CSMColorThemeOptions disabledColorStruct;
+  late CSMColorThemeOptions errorColorStruct;
+  late CSMColorThemeOptions pageColorStruct;
 
   @override
   void initState() {
@@ -112,6 +112,7 @@ class _TWSInputTextState extends State<TWSInputText> {
     _deBouncer?.cancel();
     super.dispose();
   }
+
   void setFocus(){
     fNode.addListener(() {
       if (fNode.hasFocus) {

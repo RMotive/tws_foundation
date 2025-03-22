@@ -6,6 +6,14 @@
     3. Added the defaults [TWSFDarkTheme] and [TWSFLightTheme] for widgets.
     4. Added Routes system.
     5. Added [TWSFLandingFrame] wrap for Landing entries.
+    6. Added exporting modules.
+
+    N. Added the following models:
+        * [TwsOptionSelectorAction]
+
+    N. Added the following interfaces:
+        * [TWSViewConsumeAdapter]
+        
     N. Added the following TWS widgets: 
         * [TWSButtonFlat]
         * [TWSSection]
@@ -18,11 +26,30 @@
         * [TWSImageViewer]
         * [TWSIncrementalList]
         * [TWSInputText]
+        * [TWSListTile]
+        * [TWSOptionsSelector]
+        * [TWSPagingSelector]
+        * [TWSSectionDivider]
+        * [TWSPropertyViewer]
+        * [TWSSelectableList]
+        * [TWSSwitchButton]
 
     N. Dependencies added:
+        * go_router: ^14.0.2
         * file_picker: ^8.1.7
         * camera_platform_interface: ^2.8.0
         * camera_web: ^0.3.5
+
+        * csm_view:
+            git:
+            url: https://github.com/RMotive/csm_view
+            ref: main
+
+        * tws_foundation_client:
+            git:
+            url: https://github.com/RMotive/tws_foundation
+            path: client/tws_foundation_client
+            ref: 60#61
         
 - Fixes:
 

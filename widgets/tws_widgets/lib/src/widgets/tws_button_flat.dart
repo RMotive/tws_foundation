@@ -28,7 +28,8 @@ class TWSButtonFlat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CSMColorThemeOptions colorStruct = themeOptions ?? getTheme<TWSFThemeBase>().primaryControlColor;
+    final CSMColorThemeOptions colorStruct =
+        themeOptions ?? getTheme<TWSFThemeBase>().primaryControlColor;
 
     Color bgStateColorize(StatesSet currentStates) {
       final Color hlightColor = colorStruct.highlight;
