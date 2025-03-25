@@ -27,6 +27,7 @@ part '../landing_entries/tws_property_viewer_entry.dart';
 part '../landing_entries/tws_section_divider_entry.dart';
 part '../landing_entries/tws_selectable_list_entry.dart';
 part '../landing_entries/tws_switch_button.dart';
+part '../landing_entries/tws_article_creation.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -110,6 +111,7 @@ class _LandingViewState extends State<LandingView> {
               _twsSectionDividerEntry,
               _twsSelectableListEntry,
               _twsSwitchButtonEntry,
+              _twsArticleCreationEntry,
             ],
           ),
         ),

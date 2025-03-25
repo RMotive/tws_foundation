@@ -10,6 +10,10 @@
 
     N. Added the following models:
         * [TwsOptionSelectorAction]
+        * [TWSArticleCreatorItemState]
+        * [TWSArticleAgent]
+        * [TWSArticleCreationItemState]
+        * [TWSArticleCreatorFeedback]
 
     N. Added the following interfaces:
         * [TWSViewConsumeAdapter]
@@ -33,6 +37,7 @@
         * [TWSPropertyViewer]
         * [TWSSelectableList]
         * [TWSSwitchButton]
+        * [TWSArticleCreator]
 
     N. Dependencies added:
         * go_router: ^14.0.2
