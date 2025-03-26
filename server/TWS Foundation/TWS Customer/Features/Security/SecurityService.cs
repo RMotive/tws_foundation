@@ -1,3 +1,4 @@
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models.Output;
 
@@ -53,8 +54,8 @@ public class SecurityService
 
     public async Task<Session> Authenticate(Credentials Credentials) {
 
-        EntityBatchOutput<Account, Account> result = await AccountsDepot.Read(
-                ReadBehaviors.First,
+        BatchOperationOutput<Account, Account> result = await AccountsDepot.Read(
+                EntityBatchBehaviors.First,
                 (account) => account.User == Credentials.Identity
             );
         if (result.Failed) {

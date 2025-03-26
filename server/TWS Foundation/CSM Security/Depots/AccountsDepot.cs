@@ -46,8 +46,8 @@ public class AccountsDepot
     public AccountsDepot(Database database, IDisposer? Disposer = null) : base(database, Disposer) { }
 
     public async Task<Permit[]> GetPermits(long Account) {
-        EntityBatchOutput<Account, Account> accountReadOut = await Read(
-                ReadBehaviors.First,
+        BatchOperationOutput<Account, Account> accountReadOut = await Read(
+                EntityBatchBehaviors.First,
                 (record) => record.Id == Account,
                 (query) => {
                     return query

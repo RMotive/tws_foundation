@@ -78,6 +78,9 @@ public abstract class BQ_Disposer
 
             foreach (IEntity committedEntity in committedEntities) {
                 EntityEntry entry = database.Entry(committedEntity);
+                if(entry.GetDatabaseValues() is null) {
+                    continue;
+                }
                 entry.State = EntityState.Deleted;
             }
             database.SaveChanges();

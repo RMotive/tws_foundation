@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
@@ -11,7 +12,7 @@ namespace CSM_Foundation.Database.Entity.Depot;
 ///     [Entity] type handling of the implementation.
 /// </typeparam>
 public interface IDepot_View<TEntity>
-    where TEntity : IEntity {
+    where TEntity : class, IEntity {
 
     /// <summary>
     ///     Provides a table view of <see cref="TEntity"/> calculated based on the given <paramref name="Options"/>.
@@ -30,14 +31,11 @@ public interface IDepot_View<TEntity>
     ///         3. Orderings: Third the orderings will be applied after the records to be used are resolved.
     ///     </para>
     /// </summary>
-    /// <param name="Options"> 
-    ///     View calculation instructions, the View resolution behavior. 
-    /// </param>
-    /// <param name="Accumulate"> 
-    ///     Custom <see cref="TEntity"/> special navigation properties inclusion 
+    /// <param name="input"> 
+    ///     Operation input parameters. 
     /// </param>
     /// <returns> 
     ///     The final View resolutions, giving metadata related to the created View and records resolved 
     /// </returns>
-    Task<SetViewOutput<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null);
+    Task<SetViewOutput<TEntity>> View(OperationInput<TEntity, SetViewInput<TEntity>> input);
 }

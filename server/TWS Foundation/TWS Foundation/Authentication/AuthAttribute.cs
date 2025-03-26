@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Server.Exceptions;
 
 using CSM_Security.Depots;
@@ -57,7 +58,7 @@ public class AuthAttribute
         }
 
         Solution runningSolution = (await solutions.Read(
-                ReadBehaviors.First,
+                EntityBatchBehaviors.First,
                 (solution) => solution.Sign == sign
             )).Successes[0];
 

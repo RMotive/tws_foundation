@@ -14,7 +14,7 @@ public class SetViewOutput<TEntity>
     /// <summary>
     ///     The collection of items gathered.
     /// </summary>
-    public required TEntity[] Records {
+    public required TEntity[] Entities {
         get => _Records;
         init {
             _Records = value;

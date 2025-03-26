@@ -9,12 +9,9 @@ namespace CSM_Foundation.Core.Bases;
 ///     that need specific equality comparisson between their properties.
 /// </summary>
 public abstract class BObject<TObject> {
-    protected virtual PropertyInfo[] EqualityExceptions() {
-        return [];
-    }
 
     public override bool Equals(object? Comparer) {
-        PropertyInfo[] exceptions = EqualityExceptions();
+        PropertyInfo[] exceptions = [];
 
         if (this is null && Comparer is null) {
             return true;

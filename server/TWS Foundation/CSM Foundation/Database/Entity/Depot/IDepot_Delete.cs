@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity.Models.Input;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
 
@@ -12,46 +14,6 @@ public interface IDepot_Delete<TEntity>
     where TEntity : class, IEntity {
 
     /// <summary>
-    ///     Deletes the given <paramref name="Records"/>.
-    /// </summary>
-    /// <param name="Records">
-    ///     [Entity] database set records to remove.
-    /// </param>
-    /// <returns>
-    ///     A result for [Batch] record handling operations.
-    /// </returns>
-    /// <remarks>
-    ///     The way to find the [<paramref name="Records"/>] to delete follows the next order:
-    ///     <para>
-    ///         <list type="number">
-    ///             <item> <see cref="IEntity.Id"/> In case its value is bigger than 0 </item>
-    ///             <item> <see cref="IEntity_Name.Name"/> In case the <see cref="TEntity"/> inherits from <see cref="IEntity_Name"/> and the property value is not null nor empty string. </item>
-    ///         </list>
-    ///     </para>
-    /// </remarks>
-    public Task<EntityBatchOutput<TEntity, TEntity>> Delete(TEntity[] Records);
-
-    /// <summary>
-    ///     Deletes the given <paramref name="Record"/>.
-    /// </summary>
-    /// <param name="Record">
-    ///     [Entity] database set record to remove.
-    /// </param>
-    /// <returns>
-    ///     Deleted <see cref="TEntity"/> record.
-    /// </returns>
-    /// <remarks>
-    ///     The way to find the [<paramref name="Record"/>] to delete follows the next order:
-    ///     <para>
-    ///         <list type="number">
-    ///             <item> <see cref="IEntity.Id"/> In case its value is bigger than 0 </item>
-    ///             <item> <see cref="IEntity_Name.Name"/> In case the <see cref="TEntity"/> inherits from <see cref="IEntity_Name"/> and the property value is not null nor empty string. </item>
-    ///         </list>
-    ///     </para>
-    /// </remarks>
-    public Task<TEntity> Delete(TEntity Record);
-
-    /// <summary>
     ///     Deletes the <see cref="TEntity"/> record based on its <see cref="IEntity.Id"/> value.
     /// </summary>
     /// <param name="Id">
@@ -61,4 +23,27 @@ public interface IDepot_Delete<TEntity>
     ///     Deleted <see cref="TEntity"/> record.
     /// </returns>
     public Task<TEntity> Delete(long Id);
+
+    /// <summary>
+    ///     Deletes a collection of <typeparamref name="TEntity"/> based on the given <paramref name="ids"/> collection.
+    /// </summary>
+    /// <param name="ids">
+    ///     Collection of <see cref="IEntity.Id"/> to locate the <see cref="IEntity"/> collection to be removed.
+    /// </param>
+    /// <returns>
+    ///     A batch operation result information object.
+    /// </returns>
+    public Task<BatchOperationOutput<TEntity, TEntity>> Delete(long[] ids);
+
+    /// <summary>
+    ///     Deletes one or more items based on the given <see cref="BatchOperationInput{TEntity}.Filter"/> and <see cref="BatchOperationInput{TEntity}.Behavior"/> combination, gathering all the <see cref="IEntity"/>s objects 
+    ///     matching the filter but only removing based on the given <see cref="BatchOperationInput{TEntity}.Behavior"/>
+    /// </summary>
+    /// <param name="input">
+    ///     Operation parameters.
+    /// </param>
+    /// <returns>
+    ///     A batch operation result informaiton object.
+    /// </returns>
+    public Task<BatchOperationOutput<TEntity, TEntity>> Delete(OperationInput<TEntity, BatchOperationInput<TEntity>> input);
 }

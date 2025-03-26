@@ -1,8 +1,8 @@
 ﻿
 using System.Linq.Expressions;
 
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Input.Update;
@@ -12,7 +12,7 @@ namespace CSM_Foundation.Customer;
 
 public class BService<TEntity, TDepot>
     : IService<TEntity>
-    where TEntity : class, IEntity
+    where TEntity : BEntity
     where TDepot : IDepot<TEntity> {
 
     /// <summary>
@@ -20,11 +20,11 @@ public class BService<TEntity, TDepot>
     /// </summary>
     protected readonly TDepot Depot;
 
-    readonly AccumulateDelegate<TEntity>? PreOperation;
+    readonly QueryProcessor<TEntity>? PreOperation;
 
-    readonly AccumulateDelegate<TEntity>? PostOperation;
+    readonly QueryProcessor<TEntity>? PostOperation;
 
-    public BService(TDepot Depot, AccumulateDelegate<TEntity>? preOperation = null, AccumulateDelegate<TEntity>? postOperation = null) {
+    public BService(TDepot Depot, QueryProcessor<TEntity>? preOperation = null, QueryProcessor<TEntity>? postOperation = null) {
         this.Depot = Depot;
         PreOperation = preOperation;
         PostOperation = postOperation;
@@ -37,15 +37,15 @@ public class BService<TEntity, TDepot>
         PostOperation = PostOperation
     };
 
-    public virtual Task<SetViewOutput<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
-        return Depot.View(Options);
+    public virtual Task<SetViewOutput<TEntity>> View(OperationInput<TEntity, SetViewInput<TEntity>> input) {
+        return Depot.View(input);
     }
 
-    public virtual Task<EntityBatchOutput<TEntity, TEntity>> Create(TEntity[] Entities, bool Sync = false) {
+    public virtual Task<BatchOperationOutput<TEntity, TEntity>> Create(TEntity[] Entities, bool Sync = false) {
         return Depot.Create(Entities, Sync);
     }
 
-    public virtual Task<EntityBatchOutput<TEntity, TEntity>> Read(ReadBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, AccumulateDelegate<TEntity>? Accumulate = null) {
+    public virtual Task<BatchOperationOutput<TEntity, TEntity>> Read(EntityBatchBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, QueryProcessor<TEntity>? Accumulate = null) {
         return Depot.Read(Behavior, Filter);
     }
 
@@ -55,11 +55,11 @@ public class BService<TEntity, TDepot>
             );
     }
 
-    public virtual Task<EntityBatchOutput<TEntity, TEntity>> Delete(TEntity[] Entities) {
-        return Depot.Delete(Entities);
+    public virtual Task<TEntity> Delete(long id) {
+        return Depot.Delete(id);
     }
 
-    public virtual Task<TEntity> Delete(long Pointer) {
-        return Depot.Delete(Pointer);
+    public virtual Task<BatchOperationOutput<TEntity, TEntity>> Delete(long[] ids) {
+        return Depot.Delete(ids);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input;
 
 using CSM_Security.Entities;
 
@@ -21,7 +22,13 @@ public class AccountsController
     }
 
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewOptions<Account> Options) {
-        return Ok(await Service.View(Options));
+    public async Task<IActionResult> View(SetViewInput<Account> options) {
+        return Ok(
+                await Service.View(
+                        new OperationInput<Account, SetViewInput<Account>> {
+                            Parameters = options
+                        }
+                    )
+            );
     }
 }

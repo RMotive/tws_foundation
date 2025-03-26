@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Input.Update;
 using CSM_Foundation.Database.Entity.Models.Output;
 
@@ -22,8 +23,14 @@ public class SolutionsController
     }
 
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewOptions<Solution> Options) {
-        return Ok(await Service.View(Options));
+    public async Task<IActionResult> View(SetViewInput<Solution> options) {
+        return Ok(
+                await Service.View(
+                        new OperationInput<Solution, SetViewInput<Solution>> {
+                            Parameters = options
+                        }
+                    )
+            );
     }
 
     [HttpPost(), Auth("Create")]

@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TWS_Foundation;
 
-public class SampleDisposer
+public class Dsposer
     : IDisposer {
 
     private readonly IServiceProvider Servicer;
     private readonly ConcurrentDictionary<DbContext, List<IEntity>> DispositionStack = new();
     private bool Active = false;
 
-    public SampleDisposer(IServiceProvider Servicer) {
+    public Dsposer(IServiceProvider Servicer) {
         this.Servicer = Servicer;
     }
 

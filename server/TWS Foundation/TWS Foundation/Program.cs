@@ -130,7 +130,7 @@ public partial class Program {
                 Services.AddSingleton<AdvisorMiddleware>();
                 Services.AddSingleton<FramingMiddleware>();
                 Services.AddSingleton<DispositionMiddleware>();
-                Services.AddSingleton<IDisposer, SampleDisposer>();
+                Services.AddSingleton<IDisposer, Dsposer>();
 
                 // --> Depots
 

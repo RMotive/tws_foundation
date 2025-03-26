@@ -15,7 +15,7 @@ namespace CSM_Security.Quality.Q_Depots;
 /// </typeparam>
 public abstract class BQ_Security<TEntity, TDepot>
     : BQ_Depot<TEntity, TDepot, Database>
-    where TEntity : class, IEntity, new()
+    where TEntity : BEntity, new()
     where TDepot : class, IDepot<TEntity> {
 
     /// <summary>

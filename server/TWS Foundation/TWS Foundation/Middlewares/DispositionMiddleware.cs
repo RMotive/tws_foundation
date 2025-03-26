@@ -9,10 +9,10 @@ namespace TWS_Foundation.Middlewares;
 public class DispositionMiddleware : IMiddleware {
     private const string DISP_HEAD_KEY = "CSMDisposition";
     private const string DISP_HEAD_VALUE = "Quality";
-    private readonly SampleDisposer Disposer;
+    private readonly Dsposer Disposer;
 
     public DispositionMiddleware(IDisposer Disposer) {
-        this.Disposer = (SampleDisposer)Disposer;
+        this.Disposer = (Dsposer)Disposer;
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next) {

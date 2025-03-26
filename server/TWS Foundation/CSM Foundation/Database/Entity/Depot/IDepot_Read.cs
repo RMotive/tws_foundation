@@ -5,24 +5,6 @@ using CSM_Foundation.Database.Entity.Models.Output;
 namespace CSM_Foundation.Database.Entity.Depot;
 
 /// <summary>
-///     Indicates how [Read] operations must behave about how to calculate the result.
-/// </summary>
-public enum ReadBehaviors {
-    /// <summary>
-    ///     First record found that matches.
-    /// </summary>
-    First,
-    /// <summary>
-    ///     Last record found that matches.
-    /// </summary>
-    Last,
-    /// <summary>
-    ///     All records found that match.
-    /// </summary>
-    All,
-}
-
-/// <summary>
 ///     [Interface] to expose common [Read] action methods for <see cref="IDepot{TSet}"/> implementations.
 /// </summary>
 /// <typeparam name="TEntity">
@@ -49,7 +31,7 @@ public interface IDepot_Read<TEntity>
     /// <returns>
     ///     An <see cref="IEntity"/> batch operation result.
     /// </returns>
-    Task<EntityBatchOutput<TEntity, TEntity>> Read(long[] ids);
+    Task<BatchOperationOutput<TEntity, TEntity>> Read(long[] ids);
 
     /// <summary>
     ///     Reads into the database for the <typeparamref name="TEntity"/> instances matched by the given <paramref name="filter"/>.
@@ -66,5 +48,5 @@ public interface IDepot_Read<TEntity>
     /// <returns>
     ///     Collection of <typeparamref name="TEntity"/> instances found.
     /// </returns>
-    Task<EntityBatchOutput<TEntity, TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null);
+    Task<BatchOperationOutput<TEntity, TEntity>> Read(EntityBatchBehaviors behavior, Expression<Func<TEntity, bool>> filter, QueryProcessor<TEntity>? postProcessing = null);
 }

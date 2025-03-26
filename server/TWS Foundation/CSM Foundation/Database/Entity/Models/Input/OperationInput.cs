@@ -15,10 +15,10 @@ public record OperationInput<TEntity, TParameters>
     /// <summary>
     ///     Custom query process to apply before the operation commit.
     /// </summary>
-    public AccumulateDelegate<TEntity>? PreOperation { get; set; }
+    public QueryProcessor<TEntity>? PreOperation { get; set; }
 
     /// <summary>
     ///     Custom query process to apply after the operation commit.
     /// </summary>
-    public AccumulateDelegate<TEntity>? PostOperation { get; set; }
+    public QueryProcessor<TEntity>? PostOperation { get; set; }
 }

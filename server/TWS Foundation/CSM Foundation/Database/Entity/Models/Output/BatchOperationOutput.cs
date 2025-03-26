@@ -9,7 +9,7 @@
 /// <typeparam name="TSuccess">
 ///     Type of the success result for the batch operation.
 /// </typeparam>
-public record EntityBatchOutput<TEntity, TSuccess>
+public record BatchOperationOutput<TEntity, TSuccess>
     where TEntity : class, IEntity {
 
     /// <summary>
@@ -47,7 +47,7 @@ public record EntityBatchOutput<TEntity, TSuccess>
     /// </summary>
     public int SuccessesCount { get; private set; }
 
-    public EntityBatchOutput(TSuccess[] Successes, EntityOperationFailure<TEntity>[] Failures) {
+    public BatchOperationOutput(TSuccess[] Successes, EntityOperationFailure<TEntity>[] Failures) {
         this.Successes = Successes;
         this.Failures = Failures;
 

@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Exceptions;
 using CSM_Foundation.Database.Entity.Filters;
 using CSM_Foundation.Database.Entity.Models;
@@ -62,72 +62,121 @@ public abstract class BDepot<TDatabase, TEntity>
         Set = Database.Set<TEntity>();
     }
 
-
-
     #region (Private / Protected) Functions
 
-    protected IQueryable<TEntity> Filtering(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
-        ISetViewFilterNode<TEntity>[] filters = Options.Filters;
+    /// <summary>
+    ///     Applies the given <paramref name="filters"/> to the given <paramref name="query"/>.
+    /// </summary>
+    /// <param name="query">
+    ///     Query object.
+    /// </param>
+    /// <param name="filters">
+    ///     Filters specifications to apply.
+    /// </param>
+    /// <returns>
+    ///     The filtered calculated 
+    /// </returns>
+    protected IQueryable<TEntity> FilterQuery(IQueryable<TEntity> query, ISetViewFilterNode<TEntity>[] filters) {
         if (filters.Length > 0) {
-            filters = [.. filters.OrderBy(x => x.Order)];
+            var orderedFilters = filters.OrderBy(
+                    (filter) => filter.Order
+                );
 
-            foreach (ISetViewFilterNode<TEntity> filter in filters) {
+            foreach (ISetViewFilterNode<TEntity> filter in orderedFilters) {
                 Expression<Func<TEntity, bool>> queryExpression = filter.Compose();
-                Source = Source.Where(queryExpression);
+                query = query.Where(queryExpression);
             }
         }
 
-        return Source;
+        return query;
     }
 
-    public (IQueryable<TEntity>, int Amount, int Pages, int Page) Paging(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
+    /// <summary>
+    ///     Applies and calculates pagination values to the given <paramref name="query"/>.
+    /// </summary>
+    /// <param name="query">
+    ///     Query object.
+    /// </param>
+    /// <param name="page">
+    ///     The page requested to get the items.
+    /// </param>
+    /// <param name="range">
+    ///     The range of items per page to calculate.
+    /// </param>
+    /// <param name="export">
+    ///     Wheter the current calculation is for an Exportable View.
+    /// </param>
+    /// <returns>
+    ///     The pagination operation result information.
+    /// </returns>
+    protected async Task<PaginationOutput<TEntity>> PaginateQuery(IQueryable<TEntity> query, int page, int range, bool export = false) {
+        int entitiesCount = await query.CountAsync();
+        if (export) {
 
-        int range = Options.Range;
-        int page = Options.Page;
-        if (Options.Export) {
-            page = 1;
-            range = Source.Count();
+            return new PaginationOutput<TEntity> {
+                Query = query,
+                PagesCount = 1,
+                EntitiesCount = entitiesCount,
+            };
         }
 
-        int amount = Source.Count();
-        (int pages, int left) = Math.DivRem(amount, range);
-        if (left > 0) {
+        (int pages, int remainder) = Math.DivRem(entitiesCount, range);
+        if (remainder > 0) {
             pages++;
         }
 
-        int start = (page - 1) * range;
+        int paginationStart = range * (page - 1);
+        int paginationEnd = (page == pages) ? (remainder == 0) ? range : remainder : range;
+        query = query
+            .AsNoTracking()
+            .Skip(paginationStart)
+            .Take(paginationEnd);
 
-        int records = page == pages ? left == 0 ? range : left : range;
-        Source = Source
-            .Skip(start)
-            .Take(records);
-
-        return (Source, amount, pages, page);
+        return new PaginationOutput<TEntity> {
+            Query = query,
+            PagesCount = pages,
+            EntitiesCount = entitiesCount,
+        };
     }
 
-    public IQueryable<TEntity> Ordering(SetViewOptions<TEntity> Options, IQueryable<TEntity> Source) {
-        int orderActions = Options.Orderings.Length;
-        if (orderActions <= 0) {
-            return Source;
+    /// <summary>
+    ///     Applies the given <paramref name="orderings"/> to the given <paramref name="query"/>.
+    /// </summary>
+    /// <param name="query">
+    ///     Query object.
+    /// </param>
+    /// <param name="orderings">
+    ///     Options to apply ordering to the given <paramref name="query"/>.
+    /// </param>
+    /// <returns>
+    ///     An ordered and calculated query object.
+    /// </returns>
+    /// <exception cref="TypeAccessException">
+    ///     When a given <see cref="SetViewOrderOptions"/> has configured a wrong property that doesn't exist in the main <see cref="IEntity"/> declaration.
+    /// </exception>
+    protected IQueryable<TEntity> OrderQuery(IQueryable<TEntity> query, SetViewOrderOptions[] orderings) {
+        int orderingsCount = orderings.Length;
+        if (orderingsCount <= 0) {
+            return query;
         }
 
-        Type setType = typeof(TEntity);
+        Type entityDeclarationType = typeof(TEntity);
         IOrderedQueryable<TEntity> orderingQuery = default!;
+        for (int orderingsIteration = 0; orderingsIteration < orderingsCount; orderingsIteration++) {
+            ParameterExpression parameterExpression = Expression.Parameter(entityDeclarationType, $"X{orderingsIteration}");
+            SetViewOrderOptions ordering = orderings[orderingsIteration];
 
-        for (int i = 0; i < orderActions; i++) {
-            ParameterExpression parameterExpression = Expression.Parameter(setType, $"X{i}");
-            SetViewOrderOptions ordering = Options.Orderings[i];
+            PropertyInfo property = entityDeclarationType.GetProperty(ordering.Property)
+                ?? throw new TypeAccessException($"Unexist property ({ordering.Property}) on ({entityDeclarationType})");
 
-            PropertyInfo property = setType.GetProperty(ordering.Property)
-                ?? throw new Exception($"Unexisted property ({ordering.Property}) on ({setType})");
             MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
             UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
             Expression<Func<TEntity, object>> orderingExpression = Expression.Lambda<Func<TEntity, object>>(translationExpression, parameterExpression);
-            if (i == 0) {
+            if (orderingsIteration == 0) {
                 orderingQuery = ordering.Order switch {
-                    SetViewOrders.Ascending => Source.OrderBy(orderingExpression),
-                    SetViewOrders.Descending => Source.OrderByDescending(orderingExpression),
-                    _ => Source.OrderBy(orderingExpression),
+                    SetViewOrders.Ascending => query.OrderBy(orderingExpression),
+                    SetViewOrders.Descending => query.OrderByDescending(orderingExpression),
+                    _ => query.OrderBy(orderingExpression),
                 };
                 continue;
             }
@@ -141,44 +190,47 @@ public abstract class BDepot<TDatabase, TEntity>
         return orderingQuery;
     }
 
-    public Task<SetViewOutput<TEntity>> Processing(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
+    /// <summary>
+    ///     Processes a complex View for a database set, this includes the following order of operations:
+    ///     
+    ///     <list type="number"> 
+    ///         <item>
+    ///             Validates and processes <see cref="OperationInput{TEntity, TParameters}.PreOperation"/>
+    ///         </item>
+    ///         <item>
+    ///             Orders the query with <see cref="OrderQuery(IQueryable{TEntity}, SetViewOrderOptions[])"/>
+    ///         </item>
+    ///         <item> 
+    ///             Filters the query with <see cref="FilterQuery(IQueryable{TEntity}, ISetViewFilterNode{TEntity}[])"/> 
+    ///         </item>
+    ///         <item>
+    ///             Validates and processes <see cref="OperationInput{TEntity, TParameters}.PostOperation"/>
+    ///         </item>
+    ///     </list>
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    protected async Task<SetViewOutput<TEntity>> ProcessView(OperationInput<TEntity, SetViewInput<TEntity>> input) {
+        SetViewInput<TEntity> parameters = input.Parameters;
+
         IQueryable<TEntity> query = Set.AsNoTracking();
 
-        query = Ordering(Options, query);
+        query = ValidateProcessor(query, input.PreOperation);
 
-        query = Filtering(Options, query);
+        query = OrderQuery(query, parameters.Orderings);
+        query = FilterQuery(query, parameters.Filters);
 
-        query = Accumulate?.Invoke(query) ?? query;
+        query = ValidateProcessor(query, input.PostOperation);
 
-        (IQueryable<TEntity> source, int amount, int pages, int page) = Paging(Options, query);
+        PaginationOutput<TEntity> paginationOutput = await PaginateQuery(query, parameters.Page, parameters.Range, parameters.Export);
 
-        query = source;
-
-        TEntity[] sets = [.. query];
-
-        return Task.FromResult(
-            new SetViewOutput<TEntity>() {
-                Count = amount,
-                Pages = pages,
-                Page = page,
-                Records = sets,
-            }
-        );
+        return new SetViewOutput<TEntity>() {
+            Page = parameters.Page,
+            Pages = paginationOutput.PagesCount,
+            Count = paginationOutput.EntitiesCount,
+            Entities = [.. paginationOutput.Query],
+        };
     }
-    protected TEntity2 ValidateDependency<TEntity2>(TEntity2 dependencyEntity)
-        where TEntity2 : class, IEntity, new() {
-
-        TEntity2? tmpDependency = dependencyEntity;
-        tmpDependency = tmpDependency.Id > 0
-            ? Database.Set<TEntity2>().Where(dep => dep.Id == tmpDependency.Id).FirstOrDefault()
-            : throw new Exception($"Dependencies aren't allowed to be auto-created on main Entity creation, you need to create the Dependency first in its corresponding [Depot]");
-
-        return tmpDependency is null
-            ? throw new Exception($"[{GetType().Name}] entity requires [{typeof(TEntity2)}] dependency")
-            : tmpDependency;
-    }
-
-
 
     /// <summary>
     ///     Validates if the given <paramref name="accumulation"/> is invokable.
@@ -192,7 +244,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <returns>
     ///     The updated query.
     /// </returns>
-    protected IQueryable<TEntity> ValidateAccumulation(IQueryable<TEntity> query, AccumulateDelegate<TEntity>? accumulation) {
+    protected IQueryable<TEntity> ValidateProcessor(IQueryable<TEntity> query, QueryProcessor<TEntity>? accumulation) {
         if (accumulation == null) {
             return query;
         }
@@ -200,12 +252,25 @@ public abstract class BDepot<TDatabase, TEntity>
         return accumulation(query);
     }
 
+    protected TEntity2 ValidateDependency<TEntity2>(TEntity2 dependencyEntity)
+        where TEntity2 : class, IEntity, new() {
+
+        TEntity2? tmpDependency = dependencyEntity;
+        tmpDependency = tmpDependency.Id > 0
+            ? Database.Set<TEntity2>().Where(dep => dep.Id == tmpDependency.Id).FirstOrDefault()
+            : throw new Exception($"Dependencies aren't allowed to be auto-created on main Entity creation, you need to create the Dependency first in its corresponding [Depot]");
+
+        return tmpDependency is null
+            ? throw new Exception($"[{GetType().Name}] entity requires [{typeof(TEntity2)}] dependency")
+            : tmpDependency;
+    }
+
     #endregion
 
     #region View 
 
-    public Task<SetViewOutput<TEntity>> View(SetViewOptions<TEntity> Options, AccumulateDelegate<TEntity>? Accumulate = null) {
-        return Processing(Options, Accumulate);
+    public Task<SetViewOutput<TEntity>> View(OperationInput<TEntity, SetViewInput<TEntity>> input) {
+        return ProcessView(input);
     }
 
     #endregion
@@ -251,7 +316,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <returns>
     ///     A <see cref="EntityBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public virtual async Task<EntityBatchOutput<TEntity, TEntity>> Create(ICollection<TEntity> entities, bool sync = false) {
+    public virtual async Task<BatchOperationOutput<TEntity, TEntity>> Create(ICollection<TEntity> entities, bool sync = false) {
         TEntity[] attached = [];
         EntityOperationFailure<TEntity>[] failures = [];
 
@@ -279,25 +344,25 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <summary>
     ///     Reads into the <see cref="TEntity"/> database [Entity] for matched records.
     /// </summary>
-    /// <param name="Id">
+    /// <param name="id">
     ///     Identifier of the desired <typeparamref name="TEntity"/>.
     /// </param>
     /// <returns> <see cref="TEntity"/> insatcne found </returns>
     /// <exeption cref="XDepot">
     ///     Thrown when the <see cref="TEntity"/> couldn't be found.
     /// </exeption>
-    public async Task<TEntity> Read(long Id) {
+    public async Task<TEntity> Read(long id) {
         TEntity? entity = await Set.Where(
-                e => e.Id == Id
+                e => e.Id == id
             )
             .FirstOrDefaultAsync()
-            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{nameof(IEntity.Id)} = {Id}");
+            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{nameof(IEntity.Id)} = {id}");
 
         entity.EvaluateRead();
         return entity;
     }
 
-    public async Task<EntityBatchOutput<TEntity, TEntity>> Read(long[] ids) {
+    public async Task<BatchOperationOutput<TEntity, TEntity>> Read(long[] ids) {
 
         List<TEntity> successes = [];
         List<EntityOperationFailure<TEntity>> failures = [];
@@ -318,23 +383,23 @@ public abstract class BDepot<TDatabase, TEntity>
             }
         }
 
-        return new EntityBatchOutput<TEntity, TEntity>([.. successes], [.. failures]);
+        return new BatchOperationOutput<TEntity, TEntity>([.. successes], [.. failures]);
     }
 
-    public async Task<EntityBatchOutput<TEntity, TEntity>> Read(ReadBehaviors behavior, Expression<Func<TEntity, bool>> filter, AccumulateDelegate<TEntity>? postProcessing = null) {
+    public async Task<BatchOperationOutput<TEntity, TEntity>> Read(EntityBatchBehaviors behavior, Expression<Func<TEntity, bool>> filter, QueryProcessor<TEntity>? postProcessing = null) {
         IQueryable<TEntity> query = Set.Where(filter);
         if (postProcessing != null) {
             query = postProcessing(query);
         }
 
         if (!query.Any()) {
-            return new EntityBatchOutput<TEntity, TEntity>([], []);
+            return new BatchOperationOutput<TEntity, TEntity>([], []);
         }
 
         TEntity[] items = behavior switch {
-            ReadBehaviors.First => [await query.FirstAsync()],
-            ReadBehaviors.Last => [await query.Order().LastAsync()],
-            ReadBehaviors.All => await query.ToArrayAsync(),
+            EntityBatchBehaviors.First => [await query.FirstAsync()],
+            EntityBatchBehaviors.Last => [await query.Order().LastAsync()],
+            EntityBatchBehaviors.All => await query.ToArrayAsync(),
             _ => throw new NotImplementedException(behavior.ToString())
         };
 
@@ -350,7 +415,7 @@ public abstract class BDepot<TDatabase, TEntity>
             }
         }
 
-        return new EntityBatchOutput<TEntity, TEntity>(
+        return new BatchOperationOutput<TEntity, TEntity>(
                 [.. successes],
                 [.. failures]
             );
@@ -433,7 +498,7 @@ public abstract class BDepot<TDatabase, TEntity>
     ///     <see cref="IDepot{TEntity}"/> related exception.
     /// </exception>
     public async Task<EntityUpdateOutput<TEntity>> Update(OperationInput<TEntity, UpdateInput<TEntity>> Input) {
-        IQueryable<TEntity> query = ValidateAccumulation(Set, Input.PreOperation);
+        IQueryable<TEntity> query = ValidateProcessor(Set, Input.PreOperation);
 
         UpdateInput<TEntity> parameters = Input.Parameters;
 
@@ -482,42 +547,82 @@ public abstract class BDepot<TDatabase, TEntity>
 
     #region Delete
 
-
-    public async Task<TEntity> Delete(long Id) {
-        TEntity record = await Set
-            .Where(r => r.Id == Id)
+    /// <summary>
+    ///     Deletes the <see cref="TEntity"/> record based on its <see cref="IEntity.Id"/> value.
+    /// </summary>
+    /// <param name="Id">
+    ///     <see cref="IEntity.Id"/> to match.
+    /// </param>
+    /// <returns>
+    ///     Deleted <see cref="TEntity"/> record.
+    /// </returns>
+    /// <exception cref="XDepot{TEntity}">
+    ///     <see cref="IDepot{TEntity}"/> based exception, more info see inner Situation.
+    /// </exception>
+    public async Task<TEntity> Delete(long id) {
+        TEntity entity = await Set
             .AsNoTracking()
-            .FirstOrDefaultAsync()
-            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {Id}");
+            .FirstOrDefaultAsync(
+                e => e.Id == id
+            )
+            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {id}");
 
-        Set.Remove(record);
-        return record;
+        Set.Remove(entity);
+        return entity;
     }
 
-    public Task<EntityBatchOutput<TEntity, TEntity>> Delete(TEntity[] Sets) {
 
-        TEntity[] safe = [];
-        EntityOperationFailure<TEntity>[] fails = [];
+    public async Task<BatchOperationOutput<TEntity, TEntity>> Delete(long[] ids) {
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
+        foreach (long id in ids) {
 
-        foreach (TEntity set in Sets) {
             try {
-                set.EvaluateWrite();
-                safe = [.. safe, set];
-            } catch (Exception excep) {
-                EntityOperationFailure<TEntity> fail = new(set, excep);
-                fails = [.. fails, fail];
+                TEntity success = await Delete(id);
+                successes.Add(success);
+            } catch (Exception ex) {
+                failures.Add(
+                        new EntityOperationFailure<TEntity>(
+                                new TEntity {
+                                    Id = id
+                                },
+                                ex
+                            )
+                    );
             }
         }
 
-        Set.RemoveRange(safe);
-        return Task.FromResult<EntityBatchOutput<TEntity, TEntity>>(new(safe, []));
+        return new BatchOperationOutput<TEntity, TEntity>([.. successes], [.. failures]);
     }
 
-    public Task<TEntity> Delete(TEntity Set) {
-        Set.EvaluateWrite();
+    public Task<BatchOperationOutput<TEntity, TEntity>> Delete(OperationInput<TEntity, BatchOperationInput<TEntity>> input) {
+        BatchOperationInput<TEntity> parameters = input.Parameters;
 
-        this.Set.Remove(Set);
-        return Task.FromResult(Set);
+        IQueryable<TEntity> query = Set;
+
+        query = ValidateProcessor(query, input.PreOperation);
+
+        query = query.AsNoTracking().Where(parameters.Filter);
+
+        query = ValidateProcessor(query, input.PostOperation);
+
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
+        foreach (TEntity entity in query) {
+            try {
+                Set.Remove(entity);
+
+                successes.Add(entity);
+            } catch (Exception exception) {
+                failures.Add(
+                        new EntityOperationFailure<TEntity>(entity, exception)
+                    );
+            }
+        }
+
+        return Task.FromResult(
+                new BatchOperationOutput<TEntity, TEntity>([.. successes], [.. failures])
+            );
     }
 
     #endregion

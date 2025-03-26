@@ -6,7 +6,7 @@ namespace CSM_Foundation.Database.Entity.Models;
 ///     Defines options to build a [View]
 ///     specifing the behavior to the builder.
 /// </summary>
-public class SetViewOptions<TEntity>
+public class SetViewInput<TEntity>
     where TEntity : IEntity {
 
     /// <summary>
