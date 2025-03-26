@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:example/core/adapters/view_consume_adapter.dart';
+import 'package:example/core/adapters/view_table_adapter.dart';
+import 'package:example/core/const/image_base64.dart';
+import 'package:example/core/const/mock_data.dart';
 import 'package:example/core/frames/twsf_landing_frame.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +30,11 @@ part '../landing_entries/tws_property_viewer_entry.dart';
 part '../landing_entries/tws_section_divider_entry.dart';
 part '../landing_entries/tws_selectable_list_entry.dart';
 part '../landing_entries/tws_switch_button.dart';
-part '../landing_entries/tws_article_creation.dart';
+part '../landing_entries/tws_article_creation_entry.dart';
+part '../landing_entries/tws_article_table_entry.dart';
+part '../landing_entries/tws_autocomplete_field_entry.dart';
+part '../landing_entries/tws_list_viewer_entry.dart';
+part '../landing_entries/tws_photo_taker_entry.dart';
 
 class LandingView extends StatefulWidget {
   const LandingView({super.key});
@@ -112,6 +119,10 @@ class _LandingViewState extends State<LandingView> {
               _twsSelectableListEntry,
               _twsSwitchButtonEntry,
               _twsArticleCreationEntry,
+              _twsArticleTable,
+              _twsAutoCompleteFieldEntry,
+              _twslistViewerEntry,
+              _twsPhotoTakerEntry,
             ],
           ),
         ),

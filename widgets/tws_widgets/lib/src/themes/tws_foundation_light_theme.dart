@@ -89,7 +89,7 @@ class TWSFThemeLight extends TWSFThemeBase {
         ),
         criticalControlState: const CSMStateThemeOptions(
           main: CSMGenericThemeOptions(
-            background: TWSFColors.deepWine,
+            background: TWSFColors.smoothWine,
             foreground: TWSFColors.lightDark,
           ),
           hoverStruct: CSMGenericThemeOptions(

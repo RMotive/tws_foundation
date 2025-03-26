@@ -17,6 +17,9 @@
 
     N. Added the following interfaces:
         * [TWSViewConsumeAdapter]
+        * [TWSArticleTableAdapter]
+        * [TWSArticleTableAgent]
+        * [TWSArticleTableFieldOptions]
         
     N. Added the following TWS widgets: 
         * [TWSButtonFlat]
@@ -38,6 +41,10 @@
         * [TWSSelectableList]
         * [TWSSwitchButton]
         * [TWSArticleCreator]
+        * [TWSArticleTable]
+        * [TWSAutocompleteField]
+        * [TWSListViewer]
+        * [TWSPhotoTaker]
 
     N. Dependencies added:
         * go_router: ^14.0.2
