@@ -38,6 +38,13 @@ public interface IService<TEntity>
     /// </returns>
     Task<BatchOperationOutput<TEntity, TEntity>> Create(TEntity[] Entities, bool Sync = false);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Behavior"></param>
+    /// <param name="Filter"></param>
+    /// <param name="Accumulate"></param>
+    /// <returns></returns>
     Task<BatchOperationOutput<TEntity, TEntity>> Read(EntityBatchBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, QueryProcessor<TEntity>? Accumulate = null);
 
     /// <summary>
@@ -51,7 +58,17 @@ public interface IService<TEntity>
     /// </returns>
     Task<EntityUpdateOutput<TEntity>> Update(UpdateInput<TEntity> input);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     Task<TEntity> Delete(long id);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <returns></returns>
     Task<BatchOperationOutput<TEntity, TEntity>> Delete(long[] ids);
 }
