@@ -84,8 +84,8 @@
   }
 
   Status? statusNavigation;
-  if (json[SCK.kStatusNavigation] != null) {
-    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+  if (json[EntitiesCommonProperties.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(EntitiesCommonProperties.kStatusNavigation, &lt;String, dynamic&gt;{});
     statusNavigation = Status.des(rawNavigation);
   }
   int id = json.get(&#39;id&#39;);

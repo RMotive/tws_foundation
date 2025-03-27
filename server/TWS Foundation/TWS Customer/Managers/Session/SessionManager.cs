@@ -13,14 +13,14 @@ using TWS_Customer.Managers.Session.Exceptions;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
-using CredentialsExpiration = (TWS_Customer.Services.Records.Credentials Credentials, System.DateTime Expiration);
+using CredentialsExpiration = (TWS_Customer.Services.Records.AuthenticationInput Credentials, System.DateTime Expiration);
 
 namespace TWS_Customer.Managers.Session;
 
 /// <summary>
 /// 
 /// </summary>
-public record Session {
+public record ServerSession {
     public required Guid Token { get; init; }
     public required DateTime Expiration { get; init; }
     public required string Identity { get; init; }
@@ -32,8 +32,8 @@ public record Session {
     /// 
     /// </summary>
     /// <returns></returns>
-    public Session Copy(Guid? Token = null, DateTime? Expiration = null, string? Identity = null, bool? Wildcard = null, Permit[]? Permits = null, Contact? Contact = null) {
-        return new Session {
+    public ServerSession Copy(Guid? Token = null, DateTime? Expiration = null, string? Identity = null, bool? Wildcard = null, Permit[]? Permits = null, Contact? Contact = null) {
+        return new ServerSession {
             Token = Token ?? this.Token,
             Expiration = Expiration ?? this.Expiration,
             Identity = Identity ?? this.Identity,
@@ -61,7 +61,7 @@ public sealed class SessionManager {
     /// </remarks>
     /// <exception cref="XSessionManager"></exception>
     /// <exception cref="XSessionManagerSituations.UNSAFE_TOKEN"></exception>
-    public Guid Authorize(Credentials Credentials) {
+    public Guid Authorize(AuthenticationInput Credentials) {
         Guid safeToken = GenerateToken();
 
         GenerateSession(safeToken, Credentials);
@@ -69,7 +69,7 @@ public sealed class SessionManager {
     }
 
     /// <summary>
-    ///     Tries to get a <see cref="Session"/> stored in the context based on the given <paramref name="Token"/>
+    ///     Tries to get a <see cref="ServerSession"/> stored in the context based on the given <paramref name="Token"/>
     /// </summary>
     /// <param name="Token">
     ///     Token to identify the session context.
@@ -82,13 +82,13 @@ public sealed class SessionManager {
     /// </param>
     /// <returns>
     ///     <see langword="null"/>: The session wasn't found.
-    ///     <para> <see cref="Session"/>: when it got found. </para>
+    ///     <para> <see cref="ServerSession"/>: when it got found. </para>
     /// </returns>
     /// <remarks>
     ///     <paramref name="Refresh"/> by default is false indicating that the expiration won't be refreshed.
     /// </remarks>
     /// <exception cref="XSetOperation{TSet}"></exception>
-    public async Task<Session?> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
+    public async Task<ServerSession?> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
         if (!CurrentSessions.TryGetValue(Token, out CredentialsExpiration Session)) {
             return null;
         }
@@ -98,7 +98,7 @@ public sealed class SessionManager {
             safeSession = RefreshToken(Token, Session);
         }
 
-        Credentials safeCredentials = safeSession.Credentials;
+        AuthenticationInput safeCredentials = safeSession.Credentials;
         BatchOperationOutput<Account, Account> readAccountOut = await Accounts.Read(
             EntityBatchBehaviors.First,
             (Account i) => i.User == safeCredentials.Identity,
@@ -115,7 +115,7 @@ public sealed class SessionManager {
         Account account = readAccountOut.Successes[0];
         Permit[] permits = await Accounts.GetPermits(account.Id);
 
-        return new Session {
+        return new ServerSession {
             Token = Token,
             Permits = permits,
             Contact = account.Contact!,
@@ -126,7 +126,7 @@ public sealed class SessionManager {
     }
 
     /// <summary>
-    ///     Tries to get a <see cref="Session"/> stored in the context based on the given <paramref name="Token"/>
+    ///     Tries to get a <see cref="ServerSession"/> stored in the context based on the given <paramref name="Token"/>
     /// </summary>
     /// <param name="Token">
     ///     Token to identify the session context.
@@ -142,7 +142,7 @@ public sealed class SessionManager {
     /// </param>
     /// <returns>
     ///     <see langword="null"/>: The session wasn't found.
-    ///     <para> <see cref="Session"/>: when it got found. </para>
+    ///     <para> <see cref="ServerSession"/>: when it got found. </para>
     /// </returns>
     /// <remarks>
     ///     <paramref name="Refresh"/> by default is false indicating that the expiration won't be refreshed.
@@ -157,7 +157,7 @@ public sealed class SessionManager {
     ///     </b> </para>
     /// </remarks>
     /// <exception cref="XSetOperation{TSet}"></exception>
-    public Session? Get(Guid Token, Account Account, Permit[] Permits, bool Refresh = false) {
+    public ServerSession? Get(Guid Token, Account Account, Permit[] Permits, bool Refresh = false) {
         if (!CurrentSessions.TryGetValue(Token, out CredentialsExpiration Session)) {
             return null;
         }
@@ -167,7 +167,7 @@ public sealed class SessionManager {
             safeSession = RefreshToken(Token, Session);
         }
 
-        return new Session {
+        return new ServerSession {
             Token = Token,
             Permits = Permits,
             Contact = Account.Contact!,
@@ -202,7 +202,7 @@ public sealed class SessionManager {
     /// <exception cref="XSessionManager"></exception>
     /// <exception cref="XSessionManagerSituations.UNSAFE_UPDATE"></exception>
     private CredentialsExpiration RefreshToken(Guid Token, CredentialsExpiration Session) {
-        (Credentials Credentials, DateTime Expiration) safeUpdate = (Session.Credentials, DateTime.UtcNow.Add(EXPIRATION_RANGE));
+        (AuthenticationInput Credentials, DateTime Expiration) safeUpdate = (Session.Credentials, DateTime.UtcNow.Add(EXPIRATION_RANGE));
 
         return CurrentSessions.TryUpdate(Token, safeUpdate, Session)
             ? safeUpdate
@@ -220,7 +220,7 @@ public sealed class SessionManager {
     /// </param>
     /// <exception cref="XSessionManager"></exception>
     /// <exception cref="XSessionManagerSituations.UNSAFE_TOKEN"></exception>
-    private void GenerateSession(Guid SafeToken, Credentials Credentials) {
+    private void GenerateSession(Guid SafeToken, AuthenticationInput Credentials) {
         CredentialsExpiration safeExpiration = (Credentials, DateTime.UtcNow.Add(EXPIRATION_RANGE));
 
         if (CurrentSessions.TryAdd(SafeToken, safeExpiration)) {

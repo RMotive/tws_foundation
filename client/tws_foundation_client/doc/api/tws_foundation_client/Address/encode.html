@@ -86,7 +86,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 JObject encode() {
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
+    EntitiesCommonProperties.kId: id,
     kCountry: country,
     kState: state,
     kStreet: street,
@@ -94,7 +94,7 @@ JObject encode() {
     kCity: city,
     kZip: zip,
     kColonia: colonia,
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kCarriers: carriers.map((Carrier i) =&gt; i.encode()).toList(),
   };
 }</code></pre>

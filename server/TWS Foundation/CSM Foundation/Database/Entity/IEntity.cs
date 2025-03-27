@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 using CSM_Foundation.Convertion;
-using CSM_Foundation.Core.Bases;
 
 namespace CSM_Foundation.Database.Entity;
 
@@ -16,7 +16,8 @@ public interface IEntity
     /// <summary>
     ///     Stores the <see cref="Type"/> for the database owning from this <see cref="IEntity"/> implementation.
     /// </summary>
-    Type Database { get; init; } 
+    [JsonIgnore]
+    Type Database { get; init; }
 
     /// <summary>
     ///     Base unique [Database] property to identify the record easily.

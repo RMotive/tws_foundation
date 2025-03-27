@@ -84,11 +84,11 @@
 JObject encode() {
   return &lt;String, dynamic&gt;{
     &#39;id&#39;: id,
-    SCK.kName: name,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kName: name,
+    EntitiesCommonProperties.kStatus: status,
     kAddress: address,
-    SCK.kTimestamp: timestamp.toIso8601String(),
-    SCK.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
   };
 }</code></pre>
 </section>

@@ -48,15 +48,16 @@ public class AuthAttribute
 
         SessionManager sessionManager = serProvider.GetRequiredService<SessionManager>();
         IAccountsDepot accounts = serProvider.GetRequiredService<IAccountsDepot>();
-        ISolutionsDepot solutions = serProvider.GetRequiredService<ISolutionsDepot>();
 
-        Session session = await sessionManager.Get(Guid.Parse(token), accounts, true)
+        ServerSession session = await sessionManager.Get(Guid.Parse(token), accounts, true)
             ?? throw new XAuth(XAuthSituation.Expired);
 
         if (session.Wildcard) {
             return;
         }
 
+
+        ISolutionsDepot solutions = serProvider.GetRequiredService<ISolutionsDepot>();
         Solution runningSolution = (await solutions.Read(
                 EntityBatchBehaviors.First,
                 (solution) => solution.Sign == sign

@@ -28,6 +28,8 @@ internal class DatabaseDesignFactory
 public class Database
     : BDatabase_SQLServer<Database> {
 
+    public const string SIGN = "CSMS";
+
     /// <summary>
     ///     Creates a new <see cref="Database"/> instance.
     /// </summary>
@@ -35,7 +37,7 @@ public class Database
     ///     Connection parameters information.
     /// </param>
     public Database(ConnectionOptions Connection)
-        : base("CSMS", Connection) {
+        : base(SIGN, Connection) {
     }
 
     /// <summary>
@@ -48,7 +50,7 @@ public class Database
     ///     Custom EF Native options.
     /// </param>
     public Database(ConnectionOptions Connection, DbContextOptions<Database> Options)
-        : base("CSMS", Connection, Options) {
+        : base(SIGN, Connection, Options) {
     }
 
     /// <summary>

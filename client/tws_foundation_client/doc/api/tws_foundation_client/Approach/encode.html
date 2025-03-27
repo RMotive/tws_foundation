@@ -83,14 +83,14 @@
   <pre class="language-dart"><code class="language-dart">@override
 JObject encode() {
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
     kEmail: email,
     kEnterprise: enterprise,
     kPersonal: personal,
     kAlternative: alternative,
-    SCK.kStatusNavigation: statusNavigation?.encode(),
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kCarriers: carriers.map((Carrier i) =&gt; i.encode()).toList(),
   };
 }</code></pre>

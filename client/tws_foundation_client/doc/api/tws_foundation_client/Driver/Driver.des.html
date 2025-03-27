@@ -73,12 +73,12 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Driver.des(JObject json) {
-  int id = json.get(SCK.kId);
-  int status = json.get(SCK.kStatus);
+  int id = json.get(EntitiesCommonProperties.kId);
+  int status = json.get(EntitiesCommonProperties.kStatus);
   int employee = json.get(kEmployee);
   int common = json.get(kCommon);
   String? driverType = json.getDefault(kDriverType, null);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
 
   String? licenExp = json.getDefault(kLicenseExpiration, null);
   DateTime? licenseExpiration = licenExp != null? DateTime.parse(licenExp) : null;

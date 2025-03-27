@@ -73,10 +73,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory TrailerClass.des(JObject json) {
-  int id = json.get(SCK.kId);
-  String name = json.get(SCK.kName);
-  DateTime timestamp = json.get(SCK.kTimestamp);
-  String? description = json.getDefault(SCK.kDescription, null);
+  int id = json.get(EntitiesCommonProperties.kId);
+  String name = json.get(EntitiesCommonProperties.kName);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
+  String? description = json.getDefault(EntitiesCommonProperties.kDescription, null);
 
   return TrailerClass(id, name, description, timestamp: timestamp);
 }</code></pre>

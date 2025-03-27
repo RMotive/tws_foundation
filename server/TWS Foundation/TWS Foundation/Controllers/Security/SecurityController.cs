@@ -18,7 +18,7 @@ public class SecurityController
     }
 
     [HttpPost("[Action]")]
-    public async Task<IActionResult> Authenticate([FromBody] Credentials Credentials) {
+    public async Task<IActionResult> Authenticate([FromBody] AuthenticationInput Credentials) {
         return Ok(await Service.Authenticate(Credentials));
     }
 }

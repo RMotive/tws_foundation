@@ -88,7 +88,7 @@
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
   if(economic.trim().isEmpty || economic.length &gt; 16) results.add(CSMSetValidationResult(kEconomic, &quot;Economic number length must be between 1 and 16&quot;, &quot;strictLength(1,16)&quot;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(EntitiesCommonProperties.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(type != null){
     if(type! &lt; 0) results.add(CSMSetValidationResult(kType, &#39;Trailer Type pointer must be empty, equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   }

@@ -85,10 +85,10 @@ JObject encode() {
   final Map&lt;String, dynamic&gt;? contactNavEncode = contactNavigation?.encode();
 
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
+    EntitiesCommonProperties.kId: id,
     kContact: contact,
     kUser: user,
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kContactNavigation: contactNavEncode,
   };
 }</code></pre>

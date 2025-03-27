@@ -73,14 +73,14 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory USDOT.des(JObject json) {
-  int id = json.get(SCK.kId);
-  int status = json.get(SCK.kStatus);
+  int id = json.get(EntitiesCommonProperties.kId);
+  int status = json.get(EntitiesCommonProperties.kStatus);
   String mc = json.get(kMc);
   String scac = json.get(kScac);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
   Status? statusNavigation;
-  if (json[SCK.kStatusNavigation] != null) {
-    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+  if (json[EntitiesCommonProperties.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(EntitiesCommonProperties.kStatusNavigation, &lt;String, dynamic&gt;{});
     statusNavigation = Status.des(rawNavigation);
   }
 

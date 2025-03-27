@@ -7,11 +7,15 @@ using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Filters;
+using CSM_Foundation.Database.Models;
+using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Server.Converters.JSON;
 using CSM_Foundation.Server.Enumerators;
 using CSM_Foundation.Server.Managers;
 using CSM_Foundation.Server.Utils;
 
+using CSM_Security;
+using CSM_Security.Depots;
 using CSM_Security.Entities;
 
 using TWS_Business;
@@ -132,12 +136,17 @@ public partial class Program {
                 Services.AddSingleton<DispositionMiddleware>();
                 Services.AddSingleton<IDisposer, Dsposer>();
 
-                // --> Depots
+                // --> [CSM Security]
+                ConnectionOptions securityDbConnectionOptions = DatabaseUtilities.Retrieve(CSM_Security.Database.SIGN);
+                Services.AddScoped(
+                        (provider) => new CSM_Security.Database(securityDbConnectionOptions)
+                    );
+                Services.AddScoped<IAccountsDepot, AccountsDepot>();
+                Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
 
-                // --> [Business] depots.
-                {
-                    builder.Services.AddScoped<EmployeesDepot>();
-                }
+                // --> [Customer] services.
+                Services.AddScoped<ISecurityService, SecurityService>();
+                Services.AddScoped<ISolutionsService, SolutionsService>();
             }
 
             WebApplication app = builder.Build();

@@ -383,7 +383,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
 
                     EvaluateCustom(set, etBuilder);
 
-                    etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime2(7)");
+                    etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime2(7)").HasDefaultValueSql("GETUTCDATE()");
 
                     set.DesignEntity(etBuilder);
                 }

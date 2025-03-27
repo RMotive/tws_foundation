@@ -90,8 +90,8 @@ public abstract class BException<TSituation>
         return advise;
     }
 
-    public ExceptionExposition Publish() {
-        return new ExceptionExposition() {
+    public ExceptionInfo Publish() {
+        return new ExceptionInfo() {
             Advise = Advise,
             Situation = Convert.ToInt32(Situation),
             System = (System?.GetType().ToString() ?? "N/A") + $"|{Message}",

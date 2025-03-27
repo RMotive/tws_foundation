@@ -89,7 +89,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
   if(identification &lt;= 0 &amp;&amp; identificationNavigation == null) results.add(CSMSetValidationResult(kIdentification, &#39;Debe ingresar el nombre y apellido del conductor externo. Identification pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(common &lt;= 0 &amp;&amp; driverCommonNavigation == null) results.add(CSMSetValidationResult(kCommon, &#39;Debe ingresar los datos comunes del conductor externo. Common pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(EntitiesCommonProperties.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(driverCommonNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...driverCommonNavigation!.evaluate()];
   if(identificationNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...identificationNavigation!.evaluate()];
 

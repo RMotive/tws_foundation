@@ -17,20 +17,20 @@ final class SolutionsService extends SolutionsServiceBase {
         );
 
   @override
-  Effect<SetViewOut<Solution>> view(SetViewOptions<Solution> options, String auth) async {
+  Effect<SetViewOutput<Solution>> view(SetViewOutput<Solution> options, String auth) async {
     CSMActEffect actEffect = await twsPost('view', options, auth: auth);
-    return MainResolver<SetViewOut<Solution>>(actEffect);
+    return ServiceResolver<SetViewOutput<Solution>>(actEffect);
   }
 
   @override
-  Effect<SetBatchOut<Solution>> create(List<Solution> solutions, String auth) async {
+  Effect<SetViewOutput<Solution>> create(List<Solution> solutions, String auth) async {
     CSMActEffect actEffect = await twsPostList('create', solutions, auth: auth);
-    return MainResolver<SetBatchOut<Solution>>(actEffect);
+    return ServiceResolver<SetViewOutput<Solution>>(actEffect);
   }
 
   @override
-  Effect<RecordUpdateOut<Solution>> update(Solution solution, String auth) async {
+  Effect<EntityUpdateOutput<Solution>> update(Solution solution, String auth) async {
     CSMActEffect actEffect = await twsPost('update', solution, auth: auth);
-    return MainResolver<RecordUpdateOut<Solution>>(actEffect);
+    return ServiceResolver<EntityUpdateOutput<Solution>>(actEffect);
   }
 }

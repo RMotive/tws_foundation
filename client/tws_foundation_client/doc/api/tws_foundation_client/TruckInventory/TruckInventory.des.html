@@ -76,8 +76,8 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory TruckInventory.des(JObject json) {
-  int id = json.get(SCK.kId);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  int id = json.get(EntitiesCommonProperties.kId);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
   DateTime entryDate = json.get(kEntryDate);
   int section = json.get(kSection);
   int? truck = json.getDefault(kTruck, null);

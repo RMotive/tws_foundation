@@ -89,7 +89,7 @@ JObject encode() {
 
   return &lt;String, dynamic&gt;{
     &#39;id&#39;: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kStatus: status,
     kIdentification: identification,
     kAddress: address,
     kApproach: approach,
@@ -100,9 +100,9 @@ JObject encode() {
     kImssRegistrationDate: b,
     kHiringdate: c,
     kTerminationDate: d,
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kIdentificationNavigation: identificationNavigation?.encode(),
-    SCK.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
   };
 }</code></pre>
 </section>

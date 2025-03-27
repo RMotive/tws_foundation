@@ -87,10 +87,10 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(name.trim().isEmpty || name.length &gt; 32) results.add(CSMSetValidationResult(SCK.kName, &quot;El nombre no debe de estar vacio y no debe tener mas de 32 caracteres&quot;, &quot;strictLength(1, 32)&quot;));
+  if(name.trim().isEmpty || name.length &gt; 32) results.add(CSMSetValidationResult(EntitiesCommonProperties.kName, &quot;El nombre no debe de estar vacio y no debe tener mas de 32 caracteres&quot;, &quot;strictLength(1, 32)&quot;));
   if(fatherlastname.trim().isEmpty || fatherlastname.length &gt; 32) results.add(CSMSetValidationResult(kFatherLastName, &quot;El apellido paterno no debe estar vacio y no debe tener mas de 32 caracteres&quot;, &quot;strictLength(1, 32)&quot;));
   if(motherlastname.trim().isEmpty || motherlastname.length &gt; 32) results.add(CSMSetValidationResult(kMotherLastName, &quot;El apellido materno no debe estar vacio y no debe tener mas de 32 caracteres&quot;, &quot;strictLength(1, 32)&quot;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(EntitiesCommonProperties.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
   return results;
 }</code></pre>

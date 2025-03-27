@@ -69,7 +69,9 @@ namespace CSM_Security.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("User")
                         .IsRequired()
@@ -111,7 +113,9 @@ namespace CSM_Security.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -150,7 +154,9 @@ namespace CSM_Security.Migrations
                         .HasColumnType("nvarchar(14)");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -184,7 +190,9 @@ namespace CSM_Security.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -224,7 +232,9 @@ namespace CSM_Security.Migrations
                         .HasColumnName("Solution");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -258,7 +268,9 @@ namespace CSM_Security.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 
@@ -292,7 +304,9 @@ namespace CSM_Security.Migrations
                         .IsFixedLength();
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2(7)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
 

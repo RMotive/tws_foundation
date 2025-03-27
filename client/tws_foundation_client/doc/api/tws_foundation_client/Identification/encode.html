@@ -84,14 +84,14 @@
 JObject encode() {
   String? a = birthday?.toString().substring(0,10);
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
-    SCK.kName: name,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
+    EntitiesCommonProperties.kName: name,
     kFatherLastName: fatherlastname,
     kMotherLastName: motherlastname,
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kBirthday: a,
-    SCK.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
   };
 }</code></pre>
 </section>

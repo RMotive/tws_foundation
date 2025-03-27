@@ -1,4 +1,6 @@
-﻿namespace CSM_Security;
+﻿using System.Text.Json.Serialization;
+
+namespace CSM_Security;
 
 /// <summary>
 ///     [Abstract] for [CSM Security] database entities implementations.
@@ -9,5 +11,6 @@
 public abstract class BEntity
     : CSM_Foundation.Database.Bases.BEntity {
 
+    [JsonIgnore]
     public override Type Database { get; init; } = typeof(Database);
 }

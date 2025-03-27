@@ -21,9 +21,9 @@ public interface ISecurityService {
     ///     Authentication credentials.
     /// </param>
     /// <returns>
-    ///     The <see cref="Session"/> information referencing the given <see cref="Credentials"/> session.
+    ///     The <see cref="ServerSession"/> information referencing the given <see cref="AuthenticationInput"/> session.
     /// </returns>
-    Task<Session> Authenticate(Credentials Credentials);
+    Task<ServerSession> Authenticate(AuthenticationInput Credentials);
 }
 
 /// <summary>
@@ -52,7 +52,7 @@ public class SecurityService
         SessionManager = sessionManager;
     }
 
-    public async Task<Session> Authenticate(Credentials Credentials) {
+    public async Task<ServerSession> Authenticate(AuthenticationInput Credentials) {
 
         BatchOperationOutput<Account, Account> result = await AccountsDepot.Read(
                 EntityBatchBehaviors.First,
@@ -75,7 +75,7 @@ public class SecurityService
         Guid token = SessionManager.Authorize(Credentials);
 
 
-        Session? session = SessionManager.Get(token, account, permits, true)
+        ServerSession? session = SessionManager.Get(token, account, permits, true)
             ?? throw new XAuthenticate(XAuthenticateSituation.SESSION_UNFOUND);
         if (account.Wildcard) {
             return session;

@@ -44,7 +44,7 @@ public class FramingMiddleware
                 _ = bufferingStream.Seek(0, SeekOrigin.Begin);
                 string encodedContent = "";
                 if (failure is not null) {
-                    ExceptionExposition exPublish = failure.Publish();
+                    ExceptionInfo exPublish = failure.Publish();
 
                     FailureFrame frame = new() {
                         Tracer = Tracer,
@@ -60,7 +60,7 @@ public class FramingMiddleware
                             encodedContent = "{}";
                             break;
                         case 405: {
-                                ExceptionExposition publish = new XSystem(new MethodAccessException()).Publish();
+                                ExceptionInfo publish = new XSystem(new MethodAccessException()).Publish();
                                 FailureFrame frame = new() {
                                     Tracer = Tracer,
                                     Estela = publish,
@@ -69,7 +69,7 @@ public class FramingMiddleware
                             }
                             break;
                         case 404: {
-                                ExceptionExposition publish = new XSystem(new Exception($"{context.Request.GetDisplayUrl()} not found")).Publish();
+                                ExceptionInfo publish = new XSystem(new Exception($"{context.Request.GetDisplayUrl()} not found")).Publish();
                                 FailureFrame frame = new() {
                                     Tracer = Tracer,
                                     Estela = publish,

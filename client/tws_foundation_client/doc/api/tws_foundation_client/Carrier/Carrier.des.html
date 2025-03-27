@@ -74,18 +74,18 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Carrier.des(JObject json) {
   List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(SCK.kId);
-  int status = json.get(SCK.kStatus);
+  int id = json.get(EntitiesCommonProperties.kId);
+  int status = json.get(EntitiesCommonProperties.kStatus);
   int approach = json.get(kApproach);
   int address = json.get(kAddress);
-  String name = json.get(SCK.kName);
-  DateTime timestamp = json.get(SCK.kTimestamp);
-  String? description = json.getDefault(SCK.kDescription, null);
+  String name = json.get(EntitiesCommonProperties.kName);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
+  String? description = json.getDefault(EntitiesCommonProperties.kDescription, null);
   int? usdot = json.getDefault(kUsdot, null);
 
   Status? statusNavigation;
-  if (json[SCK.kStatusNavigation] != null) {
-    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+  if (json[EntitiesCommonProperties.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(EntitiesCommonProperties.kStatusNavigation, &lt;String, dynamic&gt;{});
     statusNavigation = Status.des(rawNavigation);
   }
 

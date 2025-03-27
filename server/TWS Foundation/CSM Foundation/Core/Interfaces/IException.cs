@@ -44,5 +44,5 @@ public interface IException {
     /// <returns>
     ///     Public exception details.
     /// </returns>
-    public ExceptionExposition Publish();
+    public ExceptionInfo Publish();
 }
