@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:tws_widgets/src/core/extension/datetime.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
-/// [TWSDatepicker] Custom component for TWS Environment.
-/// This component shows a datepicker dialog to select a date.
-class TWSDatepicker<T extends TWSFThemeBase> extends StatefulWidget {
+/// [TWSDatepicker] shows a datepicker dialog for date and time selection.
+class TWSDatepicker extends StatefulWidget {
   /// First selectable date.
   final DateTime firstDate;
   /// Last selectable date.
@@ -56,10 +55,10 @@ class TWSDatepicker<T extends TWSFThemeBase> extends StatefulWidget {
   });
   
   @override
-  State<TWSDatepicker<T>> createState() => _TWSDatepickerState<T>();
+  State<TWSDatepicker> createState() => _TWSDatepickerState();
 }
 
-class _TWSDatepickerState<T extends TWSFThemeBase> extends State<TWSDatepicker<T>> {
+class _TWSDatepickerState extends State<TWSDatepicker> {
   String? _error;
   
   final double borderWidth = 2;
@@ -101,7 +100,7 @@ class _TWSDatepickerState<T extends TWSFThemeBase> extends State<TWSDatepicker<T
   }
   
   @override
-  void didUpdateWidget(covariant TWSDatepicker<T> oldWidget) {
+  void didUpdateWidget(covariant TWSDatepicker oldWidget) {
     super.didUpdateWidget(oldWidget);
     initializeThemes();
     if (widget.controller != oldWidget.controller) {

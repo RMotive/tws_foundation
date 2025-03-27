@@ -18,16 +18,22 @@ const double _kColWidthLimit = 300;
 final class TWSArticleCreator<TModel> extends StatefulWidget {
   /// Generic method to build new [TModel] items.
   final TModel Function() factory;
+
   /// Method to validate [TModel] and notify the invalid item.
   final bool Function(TModel model)? modelValidator;
+
   /// A [FutureOr] list for the submit of the added items, returning the result [TWSArticleCreatorFeedback] status.
   final FutureOr<List<TWSArticleCreatorFeedback>> Function(List<TModel> records)? onCreate;
+
   /// Designer for resume items values content.
   final Widget Function(TModel actualModel, bool selected, bool valid) itemDesigner;
+
   /// Creation form to populate data into the added items.
   final Widget Function(TWSArticleCreatorItemState<TModel>? itemState) formDesigner;
+
   /// Events agent manager.
   final TWSArticleCreatorAgent<TModel>? agent;
+  
   /// On close event.
   final VoidCallback? afterClose;
 

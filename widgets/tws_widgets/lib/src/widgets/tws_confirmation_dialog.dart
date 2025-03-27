@@ -4,12 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
+/// [TWSConfirmationDialog] Widget designed to be implemented in a [showdialog] method.
+/// Displays a dialog window with a header, body content and confirmation action buttons.
 final class TWSConfirmationDialog extends StatefulWidget {
+  /// Dialog title.
   final String title;
+  /// Text content.
   final Text? statement;
+  /// Show an optional cancel button.
   final bool showCancelButton;
+  /// Accept button text.
   final String accept;
+  /// Trigger on close dialog.
   final VoidCallback? onClose;
+  /// Trigger on accept dialog.
   final FutureOr<void> Function()? onAccept;
 
   const TWSConfirmationDialog({

@@ -5,7 +5,7 @@ CSMPackageLandingEntry _twslistViewerEntry = CSMPackageLandingEntry(
   description: RichText(
     text: TextSpan(
       text:
-          " A simple list component to show a section that contains a list with a title and subtitle.",
+          "A simple list component to show a section that contains a list with a title and subtitle.",
     ),
   ), 
   composeLanding: (BuildContext ctx) {

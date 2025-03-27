@@ -5,7 +5,7 @@ CSMPackageLandingEntry _twsSectionDividerEntry = CSMPackageLandingEntry(
   description: RichText(
     text: TextSpan(
       text:
-          "Shows a text format for properties: Property title and the property value.",
+          "Custom divider component to divide the sections or sub-sections.",
     ),
   ),
   composeLanding: (BuildContext ctx) {

@@ -47,6 +47,8 @@
         * [TWSPhotoTaker]
 
     N. Dependencies added:
+        * flutter_web_plugins
+
         * go_router: ^14.0.2
         * file_picker: ^8.1.7
         * camera_platform_interface: ^2.8.0

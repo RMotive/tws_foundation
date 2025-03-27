@@ -11,32 +11,87 @@ import 'package:tws_widgets/tws_widgets.dart';
 /// 
 /// TWS Theme Base, this component uses primaryControlColorStruct
 class TWSInputText extends StatefulWidget {
+  /// Control title.
   final String? label;
+  
+  /// hint text.
   final String? hint;
+
+  /// Control width.
   final double? width;
+
+  /// Control height.
   final double? height;
+
+  /// Display text on error.
   final String? errorText;
+
+  /// Flag to add focus listener.
   final bool focusEvents;
+
+  /// Move automaticatly the mouse pointer to this [TWSInputText] on load.
   final bool autofocus;
+
+  /// Replace the characters by "*" characters to hide sensible input data.
   final bool isPrivate;
+
+  /// Set the widget has enabled or disabled.
   final bool isEnabled;
+
+  /// Border color on input error.
   final bool showErrorColor;
+
+  /// Max input text lenght.
   final int? maxLength;
+
+  /// Max input text lines.
   final int? maxLines;
+
+  /// Don't trigger an empty error validation on empty input.
   final bool isOptional;
+
+  /// Shows additional text at the end of the title label.
   final String? suffixLabel;
+
+  /// Shows an icon at the end of the editable text area.
   final Widget? suffixIcon;
+
+  /// Input text background color.
   final Color? backgroundColor;
+
+  /// Mandatory fix input text lenght. 
+  /// 
+  /// If the input lengh is not equal to [maxLenght] value, wil trigger a input text validation error.
   final bool isStrictLength;
+
+  /// Trigger method on tap input text.
   final void Function()? onTap;
+
+  /// Set a custom focusNode.
   final FocusNode? focusNode;
+
+  /// Set a custom controller.
   final TextEditingController? controller;
+
+  /// Custom input validator method.
   final String? Function(String? text)? validator;
+
+  /// Trigger method on input changes.
   final void Function(String text)? onChanged;
+
+  /// Trigger method on lost focus event.
   final Function(PointerDownEvent)? onTapOutside;
+
+  /// This values refers to the waiting time before sending an [OnChange] 
+  /// notification after the user has typed the last character on the input field.
   final Duration? deBounce;
+
+  /// Set a input text formatter.
   final List<TextInputFormatter>? formatter;
+
+  /// Set an keyboard type: Only characters, only numbers, etc...
   final TextInputType? keyboardType;
+
   const TWSInputText({
     super.key,
     this.label,

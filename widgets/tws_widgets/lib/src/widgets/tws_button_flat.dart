@@ -5,14 +5,29 @@ import 'package:tws_widgets/tws_widgets.dart';
 typedef StatesSet = Set<WidgetState>;
 typedef MStates = WidgetState;
 
-/// [TWSButtonFlat] Simple TWS Custom action button with async capabilities.
+/// [TWSButtonFlat] Simple TWS Custom control button with async capabilities.
 class TWSButtonFlat extends StatelessWidget {
+  /// Control width.
   final double? width;
+
+  /// Control height.
   final double? height;
+
+  /// Control title.
   final String label;
+
+  /// If this values is true, shows a loading component.
+  /// 
+  /// When is set to false, shows the control button.
   final bool waiting;
+  
+  /// Flag to disable control events.
   final bool disabled;
+
+  /// Theme scheme options.
   final CSMColorThemeOptions? themeOptions;
+
+  /// Trigger method on tap control.
   final Function() onTap;
 
   const TWSButtonFlat({

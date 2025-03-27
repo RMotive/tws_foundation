@@ -2,7 +2,12 @@ part of '../landing_view/landing_view.dart';
 
 CSMPackageLandingEntry _twsDropupEntry = CSMPackageLandingEntry(
   name: "TWS Dropup", 
-  description: RichText(text: TextSpan(text: "Custom TWS Dropup component"),), 
+  description: RichText(
+    text: TextSpan(
+      text:
+          "Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.",
+    ),
+  ), 
   composeLanding: (BuildContext ctx) {
     return TWSFLandingFrame(
       child: TWSDropup<int>(

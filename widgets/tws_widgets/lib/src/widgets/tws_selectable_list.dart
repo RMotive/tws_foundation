@@ -10,34 +10,49 @@ final class _HeaderState extends CSMStateBase{}
 class TwsSelectableList<T> extends StatefulWidget {
   /// Section title.
   final String title;
+
   /// Method to get the title from the [T] type object.
   final String Function(T set) tileTitle;
+
   /// List heigth.
   final double? heigth;
+
   /// Items padding
   final EdgeInsetsGeometry padding;
+
   /// Item background color.
   final Color? backgroundColor;
+  
   /// Item text color.
   final Color? textColor;
+
   /// Title text alignment.
   final TextAlign titleAlignment;
+
   /// Subtitle text alignment.
   final TextAlign subtitleAlignment;
+
   /// Text to show when list content is empty.
   final String emptyContentMessage;
+
   /// Async data consume adapter.
   final TWSViewConsumeAdapter adapter;
+
   /// Preselected list values. This list is compared with consume list result and the coincidenses are marked has selected.
   final List<T>? initialValues;
+
   /// Trigger method on tile selection.
   final Function(bool selected, T item) onSelect;
+
   /// Custom header implementation.
   final Widget? customHeader;
+
   /// Custom comparation for [T] objects in [T] lists. If this field is empty, then the .compare list method will be used.
   final bool Function(T item1, T item2)? isEqual;
+
   /// Interaction status flag.
   final bool enabled;
+  
   const TwsSelectableList({
     super.key,
     required this.title,

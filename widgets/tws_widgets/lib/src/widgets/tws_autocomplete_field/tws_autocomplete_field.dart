@@ -81,8 +81,6 @@ class TWSAutoCompleteField<T> extends StatefulWidget {
   /// This property has a default method initialitation that always return TRUE.
   final bool Function(T?)? hasKeyValue;
 
-  
-
   const TWSAutoCompleteField({
     super.key,
     required this.onChanged,

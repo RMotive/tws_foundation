@@ -2,18 +2,24 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/src/core/constants/foundation_colors.dart';
 import 'package:tws_widgets/tws_widgets.dart';
-
+/// [TWSDropup] Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.
+/// The content in this section is an interactable list of [T] items.
 class TWSDropup<T> extends StatefulWidget {
   /// Initial selection item.
   final T item;
+
   /// Options list to display.
   final List<T> items;
+
   /// Message to show on hover.
   final String? tooltip;
+
   /// Trigger method on select an item.
   final void Function(T item) onChange;
+
   /// Flag to enabled or disabled widget.
   final bool disabled;
+
   const TWSDropup({
     super.key,
     this.tooltip,

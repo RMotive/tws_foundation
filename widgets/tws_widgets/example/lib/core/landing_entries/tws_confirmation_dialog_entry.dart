@@ -4,7 +4,7 @@ CSMPackageLandingEntry _twsConfirmationDialogEntry = CSMPackageLandingEntry(
   name: "TWS Confirmation Dialog", 
   description: RichText(
     text: TextSpan(
-      text: "Custom TWS Confirmation dialog component",
+      text: "Displays a dialog window with a header, body content and confirmation action buttons.",
     ),
   ), 
   composeLanding: (BuildContext ctx) {

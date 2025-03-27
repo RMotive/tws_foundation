@@ -3,34 +3,49 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 
 /// [TwsListTile] Simple self-administered statefull list tile.
+/// 
 /// Shows simple text data and updates it's internal state on mouse events.
+/// 
 /// Depends of parents widgets for colors theme.
+/// 
 /// Preserve it's own tile selection state.
 class TwsListTile extends StatefulWidget {
   /// Tile width.
   final double? width;
+
   /// Tile heigth
   final double? height;
+
   /// Method triggered on tile selection.
   final void Function(bool selected)? onTap;
+
   /// Background color.
   final Color backgroundColor;
+
   /// Text alignement for tile text.
   final TextAlign textAlignment;
+
   /// Custom padding for tile content.
   final EdgeInsetsGeometry padding;
+
   /// Tile text content 
   final String label;
+
   /// Text color.
   final Color textColor;
+
   /// Tile background color when hover event is triggered.
   final Color? onHoverColor;
+
   /// Tile text color when hover event is triggered.
   final Color? onHoverTextColor;
+
   /// Optional method to evaluate if the tile is selected.
   final bool Function()? evaluateSelection;
+
   /// Flag for tile status.
   final bool enabled;
+  
   const TwsListTile({ super.key,
     required this.label,
     this.width,

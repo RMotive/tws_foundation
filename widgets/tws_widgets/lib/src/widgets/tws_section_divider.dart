@@ -5,8 +5,12 @@ import 'package:tws_widgets/tws_widgets.dart';
 /// [TWSSectionDivider] a custom divider component to divide the sections or sub-sections.
 /// This component shows horizontal line with a centered section name, ideal for dividing sections in a column.
 class TWSSectionDivider extends StatelessWidget {
+  /// Divider color.
   final Color? color;
+  
+  /// Centered text title.
   final String text;
+  
   const TWSSectionDivider({
     super.key,
     this.color,

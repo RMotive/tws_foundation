@@ -2,15 +2,26 @@ import 'dart:typed_data';
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-
+/// [TWSImageViewer] Displays an image component, that expands the image on tap, based on the display or windows app dimensions.
 class TWSImageViewer extends StatelessWidget {
   ///A base64 string image converted to bits.
   final Uint8List img;
+
+  /// Component width.
   final double? width;
+
+  /// Component height.
   final double? height;
+  
+  /// Image title.
   final String? title;
+
+  /// Text style.
   final TextStyle style;
+
+  /// Text alignment.
   final TextAlign align;
+
   const TWSImageViewer({
     super.key,
     required this.img,

@@ -2,9 +2,14 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
+/// [TWSFrameDecoration] Shows an stylized frame decoration wrap for other widgets. 
 final class TWSFrameDecoration extends StatelessWidget {
+  /// Content widget.
   final Widget child;
+
+  /// Upper padding.
   final double topPadding;
+  
   const TWSFrameDecoration({
     super.key,
     this.topPadding = 8,

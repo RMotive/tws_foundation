@@ -8,22 +8,31 @@ import 'package:tws_widgets/tws_widgets.dart';
 class TWSIncrementalList<TModel> extends StatefulWidget {  
   /// text in plural to name the record.
   final String title;
+
   /// Max width component.
   final double width;
+
   /// Max heigth component.
   final double height;
+
   /// [modelBuilder] Build the default data model for each record.
   final TModel Function() modelBuilder;
+
   /// MEthod that returns a widget to build a new record for the [TModel] list.
   final Widget Function(TModel model, int index) recordBuilder;
+
   /// set record list to display in record listview, must be handled via [onAdd] and [onRemove] methods.
   final List<TModel> recordList;
+
   /// On add new record method.
   final void Function(TModel model) onAdd; 
+
   /// On remove last record method.
   final void Function() onRemove;
+
   /// set records creation limit. default value is 0 = no records limit.
   final int recordLimit;
+  
   /// set the min records available. When the min value is reached, the delete option will be disable.
   final int recordMin;
 

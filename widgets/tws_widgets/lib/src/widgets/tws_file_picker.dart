@@ -8,17 +8,27 @@ import 'package:tws_widgets/tws_widgets.dart';
 class TwsFilePicker extends StatefulWidget {
   /// Title for the file picker dialog.
   final String dialogTitle;
+
   /// Specify the selectable file type. 
   final FileType fileType;
+
   /// Specify the file extension allowed.
   final List<String>? allowedExtensions;
+
   /// Function to trigger on finishing file loading.
   final dynamic Function(FilePickerStatus)? onFileLoading;
+
   /// Function to trigger when the dialog is closed without any selection.
   final void Function()? onCancel;
+
   /// Return the user file selection in both, [XFile] and [PlatformFile] format.
   final void Function(List<XFile> xFiles, List<PlatformFile> files) onSelect;
-  /// The cancel button always is enable. This is useful for some cases in other widgets implementations.
+
+  /// Enabled the cancel current image loaded.
+  /// 
+  /// Ideal when is updating some records and want to delete the preloaded image.
+  /// 
+  /// This property es false by default.
   final bool cancelEnable;
   
   const TwsFilePicker({

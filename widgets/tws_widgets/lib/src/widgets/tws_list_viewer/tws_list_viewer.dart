@@ -7,36 +7,47 @@ import 'package:tws_widgets/tws_widgets.dart';
 part 'tws_list_viewer_body.dart';
 /// [TwsListViewer] A simple list component to show a section that contains a list with a title and subtitle.
 /// Ideal for showing simple data collections.
-
 class TwsListViewer<T> extends StatelessWidget {
   /// Section title.
   final String title;
+
   /// A list of data objects to print the list.
   /// if  both [agent] and [tilesContent] properties are not null, will cause an assert exception.
   /// Only [agent] value or [tilesContent] is valid.
   final List<T>? tilesContent;
+
   /// Method to get the title from the [T] type object.
   final String Function(T set) tileTitle;
+
   /// List heigth.
   final double? heigth;
+
   /// Items padding
   final EdgeInsetsGeometry padding;
+
   /// Item background color.
   final Color? backgroundColor;
+
   /// Item text color.
   final Color? textColor;
+
   /// Title text alignment.
   final TextAlign titleAlignment;
+
   /// Text to show when list content is empty.
   final String emptyContentMessage;
+
   /// Custom header implementation.
   final Widget? customHeader;
+
   /// Consumer agent for async content.
   /// if both [agent] and [tilesContent] properties are not null, will cause an assert exception.
   /// Only [agent] value or [tilesContent] is valid.
   final CSMConsumerAgent? agent;
+
   /// Consume class for async data.
   final Future<SetViewOut<dynamic>> Function()? consume;
+  
   /// Default delay to consumer.
   final Duration delay;
   

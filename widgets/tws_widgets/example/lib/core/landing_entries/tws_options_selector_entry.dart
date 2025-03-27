@@ -5,7 +5,7 @@ CSMPackageLandingEntry _twsOptionsSelectorEntry = CSMPackageLandingEntry(
   description: RichText(
     text: TextSpan(
       text:
-          "Widget that display a selectable Wraped list actions given in [options] property",
+        "Widget that display a selectable wraped list actions given in [options] property",
     ),
   ),
   composeLanding: (BuildContext ctx) {

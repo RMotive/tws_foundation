@@ -2,13 +2,27 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
+/// [TWSDisplayFlat] Displays an stylized text container.
 class TWSDisplayFlat extends StatelessWidget {
+  /// Text to display.
   final String display;
+
+  /// Component height.
   final double? height;
+
+  /// Component width.
   final double? width;
+
+  /// Vertcial padding.
   final double? verticalPadding;
+
+  /// Max component height.
   final double? maxHeight;
+
+  /// Background Color.
   final Color? color;
+  
+  /// Text color.
   final Color? foreColor;
 
   const TWSDisplayFlat({

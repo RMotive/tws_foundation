@@ -29,7 +29,7 @@ class MainApp extends StatelessWidget {
           color: Colors.black,
           child: DefaultTextStyle(
             style: TextStyle(
-              color: theme.page.fore, //! TODO <---- Not Working default theme changes.
+              color: theme.page.fore, //! <---- theme scheme changes not working for text style.
               fontSize: 16,
             ),
             child: home ?? Container(color: Colors.red)

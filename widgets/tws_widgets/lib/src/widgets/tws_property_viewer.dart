@@ -6,6 +6,7 @@ import 'package:tws_widgets/tws_widgets.dart';
 final class TWSPropertyViewer extends StatelessWidget {
   /// Property name.
   final String label;
+  
   /// Property value.
   final String? value;
 

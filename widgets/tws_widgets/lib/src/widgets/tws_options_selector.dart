@@ -5,10 +5,13 @@ import 'package:tws_widgets/tws_widgets.dart';
 class TwsOptionsSelector<T> extends StatefulWidget {
   /// Actions list to display in this widget.
   final List<TwsOptionSelectorAction<T>> options;
+
   /// Trigger function on action selection.
   final Function(T value) onSelect;
+
   /// Preselected action.
   final T? initialValue;
+  
   /// Widget status flag.
   final bool enabled;
 

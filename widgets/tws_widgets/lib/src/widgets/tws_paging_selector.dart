@@ -7,16 +7,22 @@ import 'package:tws_widgets/tws_widgets.dart';
 class TWSPagingSelector extends StatefulWidget {
   /// Current view items.
   final int items;
+
   /// Total available items.
   final int total;
+
   /// Current page.
   final int page;
+
   /// Total available pages.
   final int pages;
+
   /// Size for all pages.
   final int size;
+
   /// Pages size options.
   final List<int> sizes;
+  
   /// Trigger method on select new page or size pages.
   final void Function(int page, int size) onChange;
 

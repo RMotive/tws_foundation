@@ -5,7 +5,7 @@ CSMPackageLandingEntry _twsSwitchButtonEntry = CSMPackageLandingEntry(
   description: RichText(
     text: TextSpan(
       text:
-          "This widget returns a boolean, based on the its state",
+          "This widget returns a boolean, based on the its state.",
     ),
   ), 
   composeLanding: (BuildContext ctx) {

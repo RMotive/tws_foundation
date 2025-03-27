@@ -5,7 +5,7 @@ CSMPackageLandingEntry _twsPhotoTakerEntry = CSMPackageLandingEntry(
   description: RichText(
     text: TextSpan(
       text:
-          "Widget Row that shows paging data and paging selector. Ideal for data tables.",
+          "This component can access to the device camera and picture storage to take photos or select stores images.",
     ),
   ),
   composeLanding: (BuildContext ctx) {

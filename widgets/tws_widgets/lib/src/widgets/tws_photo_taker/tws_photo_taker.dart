@@ -8,45 +8,55 @@ import 'package:tws_widgets/tws_widgets.dart';
 part 'tws_photo_taker_photo_preview.dart';
 part 'tws_photo_taker_camera.dart';
 
-///
+/// Initialize an [CameraPlatform] object to access to the device camera functions.
 final CameraPlatform _cameraPlatform = CameraPlatform.instance;
 
-///
+/// Logs advisor intializing.
 const CSMAdvisor _advisor = CSMAdvisor('TWSPhotoTaker');
 
-///
+/// [TWSPhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
+/// 
+/// This widget can:
+///   - Take photos using devices with camera capabilities (mobile or PC).
+///   - Select and load any image file in local storage (mobile or PC).
 final class TWSPhotoTaker extends StatefulWidget {
-  /// Preload 
+  /// Preload an image on widget load.
   final XFile? preLoad;
 
-  ///
+  /// Trigger method on take a photo.
   final void Function(XFile photo)? onPhotoTaken;
   
-  ///
+  /// Disable controls component.
   final bool disabled;
 
-  ///
+  /// Title text.
   final String label;
 
-  ///
+  /// Display and aditional control button to select any image file stored in the device.
   final bool showFilePicker;
 
-  /// When is not empty, shows a preview image from the given base64 string,
-  /// similar to [preLoad] property, but showing an image without an initial Xfile object.
-  final String? basePreview;
+  /// Preload and base64 img.
+  /// An alternative for [Preload] property if an [XFile] image is not available.
+  /// 
+  /// This property is designed for manage state images while editing and updating records that not contain an [XFile] image.
+  /// In this cases this property must contain the image data reference that is beign updated. 
+  /// 
+  /// See update whispers implementations.
+  final String? preLoadBase64;
 
   /// Method to trigger when the cancel button is clicked or the file selection dialog is closed and it's empty.
   final void Function()? onCancel; 
 
-  //
+  /// Enabled the cancel current image loaded.
+  /// 
+  /// Ideal when is updating some records and want to delete the preloaded image.
   final bool cancelButtonEnable;
 
-  ///
   const TWSPhotoTaker({
     super.key,
     this.preLoad,
     this.onPhotoTaken,
-    this.basePreview,
+    this.preLoadBase64,
     this.disabled = false,
     this.label = 'Tomar foto',
     this.showFilePicker = true,
@@ -107,7 +117,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   @override
   void initState() {
     super.initState();
-    if(widget.basePreview != null) originalImg = base64.decode(widget.basePreview!);
+    if(widget.preLoadBase64 != null) originalImg = base64.decode(widget.preLoadBase64!);
     getCameras();
   }
 
@@ -143,7 +153,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
           TwsFilePicker(
             dialogTitle: "Select a picture",
             fileType: FileType.image,
-            cancelEnable: (_photo != null || widget.basePreview != null) && widget.cancelButtonEnable,
+            cancelEnable: (_photo != null || widget.preLoadBase64 != null) && widget.cancelButtonEnable,
             onSelect: (List<XFile> xFiles, List<PlatformFile> files) {
               setState(() {
                 _photo = xFiles.first;
@@ -170,7 +180,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
           spacing: 12,
           children: <Widget>[
             Visibility(
-              visible: widget.basePreview == null && _photo == null,
+              visible: widget.preLoadBase64 == null && _photo == null,
               replacement: CSMPointerHandler(
                 cursor: SystemMouseCursors.click,
                 onClick: () {
@@ -207,7 +217,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
               style: TextStyle(
                 color: getTheme<TWSFThemeBase>().page.fore,
               ),
-              _photo == null && widget.basePreview == null
+              _photo == null && widget.preLoadBase64 == null
                   ? 'Vacío'
                   : 'Foto guardada',
             ),
