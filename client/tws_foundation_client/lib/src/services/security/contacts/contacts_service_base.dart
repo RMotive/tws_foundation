@@ -21,5 +21,5 @@ abstract class ContactsServiceBase extends TWSServiceBase {
   /// [options] dynamic options to indicate how to calculate records to show.
   ///
   /// [auth] auth server token to grant service requests,
-  Effect<SetViewOutput<Contact>> view(SetViewOutput<Contact> options, String auth);
+  Effect<SetViewOutput<Contact>> view(SetViewInput<Contact> options, String auth);
 }
