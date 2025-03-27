@@ -1,4 +1,3 @@
-import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Defines a privileges model, that stores different session descriptive data, like auth token,

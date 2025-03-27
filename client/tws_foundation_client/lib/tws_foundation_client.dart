@@ -1,5 +1,9 @@
 // ignore_for_file: directives_ordering
 
+// --> Exporting dependencies packages needed <-- //
+
+// Exporting from [csm_client]
+export 'package:csm_client/csm_client.dart';
 
 // Main Exports
 export 'src/type_definitions.dart';
@@ -7,8 +11,6 @@ export 'src/tws_foundation_source.dart';
 
 // Exporting Resolvers
 export 'src/services/service_resolver.dart';
-
-
 
 // --> [Models] category export <-- // 
 export 'src/models/exception_info.dart';
