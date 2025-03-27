@@ -27,4 +27,8 @@
     <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Business\" />
+  </ItemGroup>
+
 </Project>

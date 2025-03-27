@@ -3,7 +3,7 @@
 using TWS_Business.Entities.Vehicules;
 
 
-namespace TWS_Business.Depots.Vehicules;
+namespace TWS_Business.Depots.Vehicles;
 
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>

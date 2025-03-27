@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Customer;
 
-using TWS_Business.Depots.Vehicules;
+using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;

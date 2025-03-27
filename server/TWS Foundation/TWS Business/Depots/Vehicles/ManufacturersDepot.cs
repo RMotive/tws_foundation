@@ -2,7 +2,7 @@
 
 using TWS_Business.Entities.Vehicules;
 
-namespace TWS_Business.Depots.Vehicules;
+namespace TWS_Business.Depots.Vehicles;
 
 /// <summary>
 ///     [Interface] for <see cref="Manufacturer"/> based [Depots] implementations.

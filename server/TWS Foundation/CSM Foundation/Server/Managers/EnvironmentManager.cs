@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-using CSM_Foundation.Server.Enumerators;
-
 namespace CSM_Foundation.Server.Managers;
 public class EnvironmentManager {
     private static ServerEnvironments? _Mode;

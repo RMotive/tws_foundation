@@ -7,12 +7,15 @@ using TWS_Business.Entities.Drivers;
 namespace TWS_Customer.Features.Business;
 
 /// <summary>
-///     [Interface] for <see cref="Driver"/> based [Service] implementations.
+///     [Interface] for <see cref="Driver_Common"/> based [Service] implementations.
 /// </summary>
 public interface IDriversService
     : IService<Driver_Common> {
 }
 
+/// <summary>
+///     [Service] native implementation for <see cref="Driver_Common"/> based operations.
+/// </summary>
 public class DriversService
     : BService<Driver_Common, IDriversDepot>, IDriversService {
 
@@ -20,7 +23,7 @@ public class DriversService
     ///     Creates a new of <see cref="DriversService"/> instance.
     /// </summary>
     /// <param name="Depot">
-    ///     <see cref="Driver"/> based <see cref="IDepot{TEntity}"/> handler to be used.
+    ///     <see cref="Driver_Common"/> based <see cref="IDepot{TEntity}"/> handler to be used.
     /// </param>
     public DriversService(IDriversDepot Depot) : base(Depot) { }
 }

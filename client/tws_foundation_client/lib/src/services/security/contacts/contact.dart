@@ -14,10 +14,10 @@ final class Contact implements CSMSetInterface {
 
   /// [phone] property key.
   static const String kPhone = 'phone';
-  
+
   /// Private timestamp property.
   late final DateTime _timestamp;
-  DateTime get timestamp => _timestamp; 
+  DateTime get timestamp => _timestamp;
 
   /// Record database pointer.
   @override
@@ -36,10 +36,15 @@ final class Contact implements CSMSetInterface {
   String phone = '';
 
   /// Creates a new [Contact] object with the required properties
-  Contact(this.id, this.name, this.lastName, this.email, this.phone, { 
+  Contact(
+    this.id,
+    this.name,
+    this.lastName,
+    this.email,
+    this.phone, {
     DateTime? timestamp,
-  }){
-    _timestamp = timestamp ?? DateTime.now(); 
+  }) {
+    _timestamp = timestamp ?? DateTime.now();
   }
 
   /// Creates a new [Contact] object with default properties.
@@ -75,7 +80,7 @@ final class Contact implements CSMSetInterface {
 
   @override
   JObject encode() {
-    return <String, dynamic>{
+    return <String, Object?>{
       'id': id,
       kName: name,
       kLastName: lastName,

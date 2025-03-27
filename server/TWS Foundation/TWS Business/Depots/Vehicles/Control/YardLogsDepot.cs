@@ -2,7 +2,7 @@
 
 using TWS_Business.Entities;
 
-namespace TWS_Business.Depots.Vehicules.Control;
+namespace TWS_Business.Depots.Vehicles.Control;
 
 /// <summary>
 ///     [Interface] for <see cref="YardLog"/> based 

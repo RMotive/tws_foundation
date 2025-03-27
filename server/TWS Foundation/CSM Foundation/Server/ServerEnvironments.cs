@@ -1,4 +1,4 @@
-﻿namespace CSM_Foundation.Server.Enumerators;
+﻿namespace CSM_Foundation.Server;
 public enum ServerEnvironments {
     development,
     production,

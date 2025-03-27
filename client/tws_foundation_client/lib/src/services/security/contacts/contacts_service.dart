@@ -18,8 +18,8 @@ final class ContactsService extends ContactsServiceBase {
         );
 
   @override
-  Effect<SetViewOutput<Contact>> view(SetViewOutput<Contact> options, String auth) async {
-    CSMActEffect actEffect = await twsPost('view', options, auth: auth);
+  Effect<SetViewOutput<Contact>> view(SetViewInput<Contact> input, String auth) async {
+    CSMActEffect actEffect = await twsPost('view', input, auth: auth);
     return ServiceResolver<SetViewOutput<Contact>>(actEffect);
   }
 }
