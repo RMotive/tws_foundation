@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_widgets/src/core/constants/foundation_colors.dart';
+import 'package:tws_widgets/src/core/foundation_colors.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 /// [TWSDropup] Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.
 /// The content in this section is an interactable list of [T] items.

@@ -1,7 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_widgets/src/core/constants/foundation_colors.dart';
+import 'package:tws_widgets/src/core/foundation_colors.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
 part 'tws_list_viewer_body.dart';

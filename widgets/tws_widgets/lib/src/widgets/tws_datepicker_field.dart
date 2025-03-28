@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_widgets/src/core/extension/datetime.dart';
+import 'package:tws_widgets/src/core/datetime.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
 /// [TWSDatepicker] shows a datepicker dialog for date and time selection.
