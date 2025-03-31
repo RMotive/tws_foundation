@@ -6,7 +6,11 @@
     3. Added the defaults [TWSFDarkTheme] and [TWSFLightTheme] for widgets.
     4. Added Routes system.
     5. Added [TWSFLandingFrame] wrap for Landing entries.
-    6. Added exporting modules.
+    6. Added [TWSFStateHolder] class for simple states initializations.
+
+    N. Added FutureOr callbacks on the following widgets:
+        * [TWSButtonFlat]
+        * [TWSCascadeSection]
 
     N. Added the following models:
         * [TwsOptionSelectorAction]
@@ -45,6 +49,7 @@
         * [TWSAutocompleteField]
         * [TWSListViewer]
         * [TWSPhotoTaker]
+        * [TWSFLoadingCircule] (Not exported. Only for internal use)
 
     N. Dependencies added:
         * flutter_web_plugins

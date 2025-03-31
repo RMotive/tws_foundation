@@ -10,9 +10,26 @@ CSMPackageLandingEntry _twsButtonFlatEntry = CSMPackageLandingEntry(
   ), 
   composeLanding: (BuildContext ctx) {
     return TWSFLandingFrame(
-      child: TWSButtonFlat(
-        width: 200,
-        onTap: () => print("TWSButtonFlat: Tap..."),
+      child: CSMSpacingRow(
+        spacing: 20,
+        children: <Widget>[
+          Expanded(
+            child: TWSButtonFlat(
+              label: 'Native onTap',
+              onTap: () => print("TWSButtonFlat: Tap..."),
+            ),
+          ),
+          Expanded(
+            child: TWSButtonFlat(
+              label: 'Async onTap',
+              onTap: () async {
+                print('waiting...');
+                await Future<void>.delayed(Duration(seconds: 2));
+                print("TWSButtonFlat: Tap...");
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

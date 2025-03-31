@@ -165,19 +165,13 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                           children: <Widget>[
                             TWSButtonFlat(
                               label: widget.accept,
-                              waiting: loading,
                               onTap: () async {
                                 if (widget.onAccept == null) {
                                   return;
                                 }
-
-                                setState(() {
-                                  loading = true;
-                                });
+                                loading = true;
                                 await widget.onAccept!();
-                                setState(() {
-                                  loading = false;
-                                });
+                                loading = false;
                               },
                             ),
                             Visibility(

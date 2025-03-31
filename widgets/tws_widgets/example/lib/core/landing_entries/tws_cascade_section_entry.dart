@@ -8,17 +8,42 @@ CSMPackageLandingEntry _twsCascadeSectionEntry = CSMPackageLandingEntry(
   ), 
   composeLanding: (BuildContext ctx) {
     return TWSFLandingFrame(
-      width: 400,
-      child: TWSCascadeSection(
-        title: "Cascade Example", 
-        mainControl: Container(
-          color: Colors.green,
-          child: Text("Main control section"),
-        ), 
-        content: Container(
-          height: 300,
-          color: Colors.red,
-        ),
+      child: CSMSpacingRow(
+        spacing: 20,
+        children: <Widget>[
+          Expanded(
+            child: TWSCascadeSection(
+              title: "Cascade Example", 
+              mainControl: Container(
+                color: Colors.green,
+                child: Text("Main control section"),
+              ), 
+              content: Container(
+                height: 300,
+                color: Colors.red,
+              ),
+            ),
+          ),
+          Expanded(
+            child: TWSCascadeSection(
+              title: "Cascade FutureOr Example", 
+              onPressed: (bool isShowing) async {
+                if(isShowing) {
+                  await Future<void>.delayed(Duration(seconds: 1));
+                  print('loaded....');
+                }
+              },
+              mainControl: Container(
+                color: Colors.green,
+                child: Text("Main control section"),
+              ), 
+              content: Container(
+                height: 300,
+                color: Colors.red,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
+import 'package:tws_widgets/src/core/models/tws_state_holder.dart';
+import 'package:tws_widgets/src/widgets/twsf_loading_circule.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
 /// [TWSCascadeSection] Shows a custom main control widget with a colapsable content section.
@@ -11,7 +15,7 @@ class TWSCascadeSection extends StatefulWidget {
   /// Colapsable content.
   final Widget content;
   /// Trigger method on expand or colapse content.
-  final void Function(bool isShowing)? onPressed;
+  final FutureOr<void> Function(bool isShowing)? onPressed;
   /// Tool tip for colapse or expand icon.
   final String? tooltip;
   /// Section content padding.
@@ -36,8 +40,11 @@ class TWSCascadeSection extends StatefulWidget {
 
 class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   bool show = false;
+  late bool waiting;
   late TWSFThemeBase theme;
   late CSMColorThemeOptions colorStruct;
+  late final TWSFStateHolder state;
+  void stateEffect = (){};
   
   void themeUpdateListener() {
     setState(() {
@@ -45,16 +52,23 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
     });
   }
 
-  void showCascade(){
+  void showCascade() async {
+    if(waiting) return;
     setState(() {
-      if(widget.onPressed != null) widget.onPressed!(show);
+      waiting = true;
       show = !show;
     });
+    if(widget.onPressed != null) await widget.onPressed!(show);
+    waiting = false;
+    state.effect();
+
   }
 
   @override
   void initState() {
     super.initState();
+    waiting = false;
+    state = TWSFStateHolder();
     theme = getTheme(
       updateEfect: themeUpdateListener,
     );
@@ -108,7 +122,20 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
           ),
           Visibility(
             visible: show,
-            child: widget.content,
+            child: CSMDynamicWidget<TWSFStateHolder>(
+              state: state, 
+              designer:(BuildContext ctx, TWSFStateHolder state) {
+                stateEffect = state.effect();
+                print('effect...');
+                return  Visibility(
+                  visible: !waiting,
+                  replacement: TwsfLoadingCircle(
+                    foreColor: colorStruct.hightlightAlt ?? colorStruct.highlight,
+                  ),
+                  child: widget.content,
+                );
+              },
+            ),
           ),
         ],
       ),
