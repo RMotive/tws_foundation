@@ -39,7 +39,7 @@ public abstract class BQ_Database<TDatabase>
     /// </param>
     public BQ_Database(string Sign = "DB") {
         
-        Database = DatabaseUtilities.Construct<TDatabase>(Sign);
+        Database = DatabaseUtilities.Q_Construct<TDatabase>(Sign);
     }
 
     [Fact]

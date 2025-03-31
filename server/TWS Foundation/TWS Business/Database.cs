@@ -32,10 +32,7 @@ public class DesignDatabaseFactory : IDesignTimeDbContextFactory<Database> {
 public class Database
     : BDatabase_SQLServer<Database>, IDatabase {
 
-    /// <summary>
-    /// 
-    /// </summary>
-    const string SIGN = "TWSB";
+    public const string SIGN = "TWSB";
 
     /// <summary>
     /// /

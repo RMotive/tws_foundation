@@ -169,8 +169,11 @@ public class DatabaseUtilities {
     /// <typeparam name="TDatabase">
     ///     Database context handler type.
     /// </typeparam>
-    /// <param name="Sign">
+    /// <param name="sign">
     ///     Specific database connection sign for identification.
+    /// </param>
+    /// <param name="options">
+    ///     Specific EF native configuration options for the instance created.
     /// </param>
     /// <returns>
     ///     An instance of <typeparamref name="TDatabase"/>.
@@ -182,10 +185,10 @@ public class DatabaseUtilities {
     ///         <item> Thrown when the Activator couldn't create correctly the instance of the database context </item>
     ///     </list>
     /// </exception>
-    internal static TDatabase Construct<TDatabase>(string Sign)
+    public static TDatabase Q_Construct<TDatabase>(string sign, DbContextOptions? options = null)
         where TDatabase : BDatabase_SQLServer<TDatabase> {
 
-        string connectionVariable = string.Format(Q_CONNTION_TMPLATE, Sign);
+        string connectionVariable = string.Format(Q_CONNTION_TMPLATE, sign);
 
         string connectionPath = Environment.GetEnvironmentVariable(connectionVariable)
             ?? throw new Exception($"Unable to run tests for {typeof(TDatabase).FullName}, due to couldn't be found Connection file path (Make sure the environment variable [{connectionVariable}] is set or configured at the .runsettings tests context)");
@@ -195,7 +198,7 @@ public class DatabaseUtilities {
         ConnectionOptions connection = JsonSerializer.Deserialize<ConnectionOptions>(fileReader)
             ?? throw new Exception($"File ({connectionPath}) doesn't contain the correct format for (ConnectionOptions)");
 
-        TDatabase Database = (TDatabase?)Activator.CreateInstance(typeof(TDatabase), connection)
+        TDatabase Database = (TDatabase?)Activator.CreateInstance(typeof(TDatabase), connection, options)
             ?? throw new Exception($"Unable to create ({typeof(TDatabase).FullName}) instance with the ConnectionOptions[{connectionPath}]");
 
         return Database;

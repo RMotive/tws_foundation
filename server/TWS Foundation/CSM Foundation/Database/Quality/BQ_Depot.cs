@@ -66,11 +66,11 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         : base(
             [
                 ..Factories,
-                () => Database?.Invoke() ?? DatabaseUtilities.Construct<TDatabase>(Sign)
+                () => Database?.Invoke() ?? DatabaseUtilities.Q_Construct<TDatabase>(Sign)
             ]
         ) {
 
-        this.Database = (TDatabase)(Database?.Invoke() ?? DatabaseUtilities.Construct<TDatabase>(Sign));
+        this.Database = (TDatabase)(Database?.Invoke() ?? DatabaseUtilities.Q_Construct<TDatabase>(Sign));
         Depot = (TDepot)Activator.CreateInstance(typeof(TDepot), this.Database, null)!;
 
         PropertyInfo[] entityProperties = typeof(TEntity).GetProperties();
