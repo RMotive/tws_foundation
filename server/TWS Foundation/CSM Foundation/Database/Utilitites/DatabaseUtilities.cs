@@ -198,9 +198,14 @@ public class DatabaseUtilities {
         ConnectionOptions connection = JsonSerializer.Deserialize<ConnectionOptions>(fileReader)
             ?? throw new Exception($"File ({connectionPath}) doesn't contain the correct format for (ConnectionOptions)");
 
-        TDatabase Database = (TDatabase?)Activator.CreateInstance(typeof(TDatabase), connection, options)
-            ?? throw new Exception($"Unable to create ({typeof(TDatabase).FullName}) instance with the ConnectionOptions[{connectionPath}]");
+        
 
-        return Database;
+        TDatabase? Database;
+        if(options == null) {
+            Database = (TDatabase?)Activator.CreateInstance(typeof(TDatabase), connection);
+        } else {
+            Database = (TDatabase?)Activator.CreateInstance(typeof(TDatabase), connection, options);
+        }
+        return Database ?? throw new Exception($"Unable to create ({typeof(TDatabase).FullName}) instance with the ConnectionOptions[{connectionPath}]"); ;
     }
 }
