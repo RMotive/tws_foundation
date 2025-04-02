@@ -31,7 +31,6 @@ CSMPackageLandingEntry _twsArticleTable = CSMPackageLandingEntry(
                   'Description',
                   (Feature item, int index, BuildContext ctx) => item.description ?? "---",
                 ),
-
               ],
             ),
           ),

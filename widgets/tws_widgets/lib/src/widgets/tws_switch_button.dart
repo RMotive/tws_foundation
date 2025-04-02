@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
+import 'package:tws_widgets/src/widgets/twsf_loading_circule.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
 /// [TWSSwitchButton] Custom widget for TWS environment.
@@ -18,7 +21,7 @@ class TWSSwitchButton extends StatefulWidget {
   final EdgeInsetsGeometry padding;
 
   /// Callback for switch state, returning the state value.
-  final void Function(bool) onChanged;
+  final FutureOr<void> Function(bool) onChanged;
 
   const TWSSwitchButton({
     super.key,
@@ -38,9 +41,13 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
   late CSMColorThemeOptions colorStruct;
   bool _value = false;
 
+  /// Waiting status
+  late bool waiting;
+
   @override
   void initState() {
     _value = widget.value;
+    waiting = false;
     theme = getTheme(
       updateEfect: themeUpdateListener,
     );
@@ -73,25 +80,41 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
               color: colorStruct.fore,
             ),
           ),
-          SizedBox(
-            height: widget.height,
-            child: FittedBox(
-              fit: BoxFit.fill,
-              child: Material(
-                color: Colors.transparent,
-                child: Switch(
-                  value: _value,
-                  activeColor: colorStruct.foreAlt,
-                  activeTrackColor: colorStruct.main,
-                  onChanged: (bool change) {
-                    setState(() {
-                      _value = change;
-                      widget.onChanged(change);
-                    });
-                  },
+          CSMSpacingRow(
+            spacing: 10,
+            mainSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                height: widget.height,
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Switch(
+                      value: _value,
+                      activeColor: colorStruct.foreAlt,
+                      activeTrackColor: colorStruct.main,
+                      onChanged: (bool change) async {
+                        if(waiting) return;
+                        setState(() {
+                          waiting = true;
+                          _value = change;
+                        });
+                        await widget.onChanged(change);
+                        setState(() => waiting = false);
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Visibility(
+                visible: waiting,
+                child: TwsfLoadingCircle(
+                  padding: EdgeInsets.zero,
+                  foreColor: colorStruct.highlight
+                ),
+              ),
+            ],
           ),
         ],
       ),

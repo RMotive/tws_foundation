@@ -1,6 +1,8 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_widgets/src/core/models/tws_state_holder.dart';
+import 'package:tws_widgets/src/widgets/twsf_loading_circule.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
 /// Header state class.
@@ -94,6 +96,13 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   /// Color pallet for the component.
   late CSMColorThemeOptions primaryColorTheme;
   late CSMColorThemeOptions pageColorTheme;
+  /// Waiting widget state.
+  late TWSFStateHolder waitingState;
+  late void Function() waitingEffect;
+
+
+  /// Waiting status.
+  late bool waiting;
 
   // Theme method handler.
   void themeUpdateListener() {
@@ -105,10 +114,12 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
 
   @override
   void initState() {
+    waitingState = TWSFStateHolder();
+    waiting = false;
     selectedItems = widget.initialValues ?? <T>[];
     headerState = _HeaderState();
     headerEffect = (){};
-
+    waitingEffect = (){};
     theme = getTheme( 
       updateEfect: themeUpdateListener,
     );
@@ -151,80 +162,109 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
         },
         successBuilder:(BuildContext ctx, List<SetViewOut<dynamic>> data) {
           fetchedList = data.first.records as List<T>;
-          return CSMSpacingColumn(
-            spacing: 5,
+          return Stack(
             children: <Widget>[
-              widget.customHeader != null
-                  ? widget.customHeader!
-                  : CSMDynamicWidget<_HeaderState>(
-                      state: headerState,
-                      designer: (BuildContext ctx, _HeaderState state) {
-                        headerEffect = state.effect;
-                        return CSMSpacingRow(
-                          spacing: 10,
-                          mainAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Selected: ${selectedItems.length}",
-                              style: TextStyle(
-                                color: tcolor,
-                              ),
-                            ),
-                            Text(
-                              "${widget.title}: ${fetchedList.length.toString()}",
-                              style: TextStyle(
-                                color: tcolor,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-              const Divider(),
-              fetchedList.isNotEmpty? 
-                SizedBox(
-                  height: widget.heigth,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: List<Widget>.generate(fetchedList.length, (int index){
-                        T item = fetchedList[index];
-                        String title = widget.tileTitle(item);
-                        return TwsListTile(
-                          enabled: widget.enabled,
-                          width: double.maxFinite,
-                          label: title,
-                          textColor: tcolor,
-                          onHoverColor: pageColorTheme.highlight,
-                          onHoverTextColor: pageColorTheme.hightlightAlt ?? pageColorTheme.fore,
-                          onTap: (bool selected) {
-                            if(selected){
-                              selectedItems.add(item);
-                            }else{
-                              selectedItems.remove(item);
-                            }
-                            widget.onSelect(selected, item);
-                            headerEffect();
+              CSMSpacingColumn(
+                spacing: 5,
+                children: <Widget>[
+                  widget.customHeader != null
+                      ? widget.customHeader!
+                      : CSMDynamicWidget<_HeaderState>(
+                          state: headerState,
+                          designer: (BuildContext ctx, _HeaderState state) {
+                            headerEffect = state.effect;
+                            return CSMSpacingRow(
+                              spacing: 10,
+                              mainAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Selected: ${selectedItems.length}",
+                                  style: TextStyle(
+                                    color: tcolor,
+                                  ),
+                                ),
+                                Text(
+                                  "${widget.title}: ${fetchedList.length.toString()}",
+                                  style: TextStyle(
+                                    color: tcolor,
+                                  ),
+                                ),
+                              ],
+                            );
                           },
-                          evaluateSelection: () {
-                            if(widget.isEqual != null){
-                              bool founded = false;
-                              for(T selectedItem in selectedItems){
-                                if(widget.isEqual!(selectedItem, item)){
-                                  founded = true;
-                                  break;
+                        ),
+                  const Divider(),
+                  fetchedList.isNotEmpty? 
+                    SizedBox(
+                      height: widget.heigth,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: List<Widget>.generate(fetchedList.length, (int index){
+                            T item = fetchedList[index];
+                            String title = widget.tileTitle(item);
+                            return TwsListTile(
+                              enabled: widget.enabled,
+                              width: double.maxFinite,
+                              label: title,
+                              textColor: tcolor,
+                              onHoverColor: pageColorTheme.highlight,
+                              onHoverTextColor: pageColorTheme.hightlightAlt ?? pageColorTheme.fore,
+                              onTap: (bool selected) async {
+                                waiting = true;
+                                waitingEffect();
+
+                                if(selected){
+                                  selectedItems.add(item);
+                                }else{
+                                  selectedItems.remove(item);
                                 }
-                              }
-                              return founded;
-                            }
-                            return selectedItems.contains(item);
-                          },
-                        );
-                      }),
-                    ),
+                                await widget.onSelect(selected, item);
+                                waiting = false;
+                                waitingEffect();
+                                headerEffect();
+                              },
+                              evaluateSelection: () {
+                                if(widget.isEqual != null){
+                                  bool founded = false;
+                                  for(T selectedItem in selectedItems){
+                                    if(widget.isEqual!(selectedItem, item)){
+                                      founded = true;
+                                      break;
+                                    }
+                                  }
+                                  return founded;
+                                }
+                                return selectedItems.contains(item);
+                              },
+                            );
+                          }),
+                        ),
+                      ),
+                    )
+                  : TWSDisplayFlat(
+                    display: widget.emptyContentMessage,
                   ),
-                )
-              : TWSDisplayFlat(
-                display: widget.emptyContentMessage,
+                ],
+              ),
+              CSMDynamicWidget<TWSFStateHolder>(
+                state: waitingState, 
+                designer:(BuildContext ctx, TWSFStateHolder state) {
+                  waitingEffect = state.effect;
+                  return Positioned.fill(
+                    child: Visibility(
+                      visible: waiting,
+                      child:AbsorbPointer(
+                        child: ColoredBox(
+                          color: pageColorTheme.fore.withValues(alpha: 950),
+                          child: TwsfLoadingCircle(
+                            fit: BoxFit.scaleDown,
+                            foreColor: pageColorTheme.main,
+                          )
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           );

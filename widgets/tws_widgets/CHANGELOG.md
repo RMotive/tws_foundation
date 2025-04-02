@@ -7,10 +7,16 @@
     4. Added Routes system.
     5. Added [TWSFLandingFrame] wrap for Landing entries.
     6. Added [TWSFStateHolder] class for simple states initializations.
+    7. [TWSCascadeSection] Now the cascade content is builded on demand, optimizing build time if the content is not visible.
 
     N. Added FutureOr callbacks on the following widgets:
         * [TWSButtonFlat]
         * [TWSCascadeSection]
+        * [TWSConfirmationDialog]
+        * [TWSDropup]
+        * [TWSOptionsSelector]
+        * [TWSSelectableList]
+        * [TWSSwitchButton]
 
     N. Added the following models:
         * [TwsOptionSelectorAction]

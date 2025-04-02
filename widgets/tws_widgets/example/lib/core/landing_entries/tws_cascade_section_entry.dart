@@ -18,29 +18,32 @@ CSMPackageLandingEntry _twsCascadeSectionEntry = CSMPackageLandingEntry(
                 color: Colors.green,
                 child: Text("Main control section"),
               ), 
-              content: Container(
-                height: 300,
-                color: Colors.red,
-              ),
+              loadOnPress:(bool isShowing) {
+                return Container(
+                  height: 300,
+                  color: Colors.red,
+                );
+              },
             ),
           ),
           Expanded(
             child: TWSCascadeSection(
               title: "Cascade FutureOr Example", 
-              onPressed: (bool isShowing) async {
-                if(isShowing) {
-                  await Future<void>.delayed(Duration(seconds: 1));
-                  print('loaded....');
-                }
-              },
               mainControl: Container(
                 color: Colors.green,
                 child: Text("Main control section"),
               ), 
-              content: Container(
-                height: 300,
-                color: Colors.red,
-              ),
+              loadOnPress:(bool isShowing) async {
+                if(isShowing) {
+                  await Future<void>.delayed(Duration(seconds: 1));
+                  print('loaded....');
+                }
+
+                return Container(
+                  height: 300,
+                  color: Colors.red,
+                );
+              },
             ),
           ),
         ],

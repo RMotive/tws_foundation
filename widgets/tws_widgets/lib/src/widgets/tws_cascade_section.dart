@@ -11,25 +11,28 @@ class TWSCascadeSection extends StatefulWidget {
   /// Section title.
   final String title;
   /// Header top display widget.
-  final Widget mainControl;
-  /// Colapsable content.
-  final Widget content;
-  /// Trigger method on expand or colapse content.
-  final FutureOr<void> Function(bool isShowing)? onPressed;
+  final Widget mainControl; 
+  /// This method return a FutureOr widget to show when cascade is visible.
+  /// This prevents unnecesary widget builds for a content that the user may not open.
+  /// 
+  /// [isShowing] is a cascade visibility status.
+  final FutureOr<Widget> Function(bool isShowing) loadOnPress;
   /// Tool tip for colapse or expand icon.
   final String? tooltip;
   /// Section content padding.
   final EdgeInsets padding;
   /// Aligment for main controls row.
   final MainAxisAlignment mainAxisAlignment;
+  /// Prevents the content to be rebuilded on press the cascade button.
+  final bool preserveContent;
 
   const TWSCascadeSection({
     super.key,
     required this.title,
     required this.mainControl,
-    required this.content,
-    this.onPressed,
+    required this.loadOnPress,
     this.tooltip,
+    this.preserveContent = true,
     this.padding = const EdgeInsets.symmetric(vertical: 10),
     this.mainAxisAlignment =  MainAxisAlignment.spaceBetween,
   });
@@ -39,12 +42,18 @@ class TWSCascadeSection extends StatefulWidget {
 }
 
 class _TWSCascadeSectionState extends State<TWSCascadeSection> {
+  /// Cascade visibility flag.
   bool show = false;
+  /// Waiting status.
   late bool waiting;
+  /// Color theme scheme.
   late TWSFThemeBase theme;
   late CSMColorThemeOptions colorStruct;
+  /// Content internal state manager.
   late final TWSFStateHolder state;
   void stateEffect = (){};
+  /// Widget cascade content;
+  late Widget content;
   
   void themeUpdateListener() {
     setState(() {
@@ -54,11 +63,17 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
 
   void showCascade() async {
     if(waiting) return;
+    waiting = true;
     setState(() {
-      waiting = true;
       show = !show;
     });
-    if(widget.onPressed != null) await widget.onPressed!(show);
+    /// Validate if the widget builder was trigger.
+    if(!widget.preserveContent || content.runtimeType == Placeholder){
+      content = await widget.loadOnPress(show);
+    }else{
+      /// Use the current cascade content and execute the loadOnPress method, skipping rebuilding of the content.
+      await widget.loadOnPress(show);
+    }
     waiting = false;
     state.effect();
 
@@ -68,6 +83,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   void initState() {
     super.initState();
     waiting = false;
+    content = Placeholder();
     state = TWSFStateHolder();
     theme = getTheme(
       updateEfect: themeUpdateListener,
@@ -132,7 +148,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
                   replacement: TwsfLoadingCircle(
                     foreColor: colorStruct.hightlightAlt ?? colorStruct.highlight,
                   ),
-                  child: widget.content,
+                  child: content,
                 );
               },
             ),

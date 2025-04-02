@@ -29,7 +29,7 @@ part '../landing_entries/tws_paging_selector_entry.dart';
 part '../landing_entries/tws_property_viewer_entry.dart';
 part '../landing_entries/tws_section_divider_entry.dart';
 part '../landing_entries/tws_selectable_list_entry.dart';
-part '../landing_entries/tws_switch_button.dart';
+part '../landing_entries/tws_switch_button_entry.dart';
 part '../landing_entries/tws_article_creation_entry.dart';
 part '../landing_entries/tws_article_table_entry.dart';
 part '../landing_entries/tws_autocomplete_field_entry.dart';
@@ -99,27 +99,27 @@ class _LandingViewState extends State<LandingView> {
             title: 'tws widgets example',
             entries: <CSMPackageLandingEntry>[
               _twsButtonFlatEntry,
-              _twsSectionEntry,
+              // _twsSectionEntry,
               _twsCascadeSectionEntry,
-              _twsDatetimePickerEntry,
-              _twsConfirmationDialogEntry,
-              _twsDisplayFlatEntry,
+              // _twsDatetimePickerEntry,
+              // _twsConfirmationDialogEntry,
+              // _twsDisplayFlatEntry,
               _twsDropupEntry,
-              _twsFilePickerEntry,
-              _twsFrameDecorationEntry,
-              _twsFilePickerEntry,
-              _twsImageViewerEntry,
-              _twsIncrementalListEntry,
-              _twsInputTextEntry,
+              // _twsFilePickerEntry,
+              // _twsFrameDecorationEntry,
+              // _twsFilePickerEntry,
+              // _twsImageViewerEntry,
+              // _twsIncrementalListEntry,
+              // _twsInputTextEntry,
               // _twsListTileEntry,
-              // _twsOptionsSelectorEntry,
+              _twsOptionsSelectorEntry,
               // _twsPagingSelectorEntry,
               // _twsPropertyViewerEntry,
               // _twsSectionDividerEntry,
-              // _twsSelectableListEntry,
-              // _twsSwitchButtonEntry,
-              // _twsArticleCreationEntry,
-              // _twsArticleTable,
+              _twsSelectableListEntry,
+              _twsSwitchButtonEntry,
+              _twsArticleCreationEntry,
+              _twsArticleTable,
               // _twsAutoCompleteFieldEntry,
               // _twslistViewerEntry,
               // _twsPhotoTakerEntry,

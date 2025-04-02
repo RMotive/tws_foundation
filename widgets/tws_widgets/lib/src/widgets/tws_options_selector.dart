@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
@@ -7,7 +9,7 @@ class TwsOptionsSelector<T> extends StatefulWidget {
   final List<TwsOptionSelectorAction<T>> options;
 
   /// Trigger function on action selection.
-  final Function(T value) onSelect;
+  final FutureOr<void> Function(T value) onSelect;
 
   /// Preselected action.
   final T? initialValue;
@@ -73,12 +75,13 @@ class _TwsOptionsSelectorState<T> extends State<TwsOptionsSelector<T>> {
                         disabled: widget.initialValue != null
                             ? widget.options[i].value == selected
                             : (widget.options[i].value == selected) || (!widget.enabled),
-                        onTap: () {
+                        onTap: () async {
+                          if (!widget.enabled) return;
                           setState(() {
-                            if(!widget.enabled) return;
                             selected = widget.options[i].value;
-                            widget.onSelect(widget.options[i].value);
                           });
+                          await widget.onSelect(widget.options[i].value);
+
                         },
                       ),
                     );

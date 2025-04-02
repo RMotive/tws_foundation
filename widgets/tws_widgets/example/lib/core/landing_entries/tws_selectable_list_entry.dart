@@ -10,13 +10,32 @@ CSMPackageLandingEntry _twsSelectableListEntry = CSMPackageLandingEntry(
   ), 
   composeLanding: (BuildContext ctx) {
     return TWSFLandingFrame(
-      child: TwsSelectableList<Feature>(
-        title: "title example",
-        tileTitle: (Feature value) => "value: ${value.name}",
-        adapter: ViewConsumeAdapter(),
-        onSelect:(bool selected, Feature item) {
-          print("selected: $selected - ${item.name}");
-        },
+      child: CSMSpacingRow(
+        spacing: 20,
+        children: <Widget>[
+          Expanded(
+            child: TwsSelectableList<Feature>(
+              title: "FutureOr callback Selectable List",
+              tileTitle: (Feature value) => "value: ${value.name}",
+              adapter: ViewConsumeAdapter(),
+              onSelect:(bool selected, Feature item) async {
+                print('waiting...');
+                await Future<void>.delayed(Duration(seconds: 1));
+                print("selected: $selected - ${item.name}");
+              },
+            ),
+          ),
+          Expanded(
+            child: TwsSelectableList<Feature>(
+              title: "TWS Selectable List",
+              tileTitle: (Feature value) => "value: ${value.name}",
+              adapter: ViewConsumeAdapter(),
+              onSelect:(bool selected, Feature item) {
+                print("selected: $selected - ${item.name}");
+              },
+            ),
+          ),
+        ],
       )
     );
   }

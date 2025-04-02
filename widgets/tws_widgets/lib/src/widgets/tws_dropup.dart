@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/src/core/foundation_colors.dart';
@@ -15,7 +17,7 @@ class TWSDropup<T> extends StatefulWidget {
   final String? tooltip;
 
   /// Trigger method on select an item.
-  final void Function(T item) onChange;
+  final FutureOr<void> Function(T item) onChange;
 
   /// Flag to enabled or disabled widget.
   final bool disabled;
@@ -97,7 +99,6 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
                               itemCount: widget.items.length,
                               itemBuilder: (_, int index) {
                                 bool current = widget.items[index] == currentItem;
-
                                 return MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
@@ -156,15 +157,16 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
     });
   }
 
-  void updateState(CSMStates state, {T? currentItem}) {
+  void updateState(CSMStates state, {T? currentItem}) async {
+    this.currentItem = currentItem ?? this.currentItem;
+    if (currentItem != null) {
+      await widget.onChange(currentItem);
+    }
     setState(() {
       this.state = state;
-      this.currentItem = currentItem ?? this.currentItem;
       theme = state.evaluateTheme(themeState);
     });
-    if (currentItem != null) {
-      widget.onChange(currentItem);
-    }
+    
   }
 
   @override

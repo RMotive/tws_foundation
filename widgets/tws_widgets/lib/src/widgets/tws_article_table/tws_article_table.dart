@@ -85,7 +85,7 @@ class _TWSArticleTableState<TArticle extends CSMEncodeInterface> extends State<T
   /// Available page sizes options.
   late final List<int> sizes;
 
-  void updatePaging(int page, int size) {
+  void updatePaging(int page, int size) async {
     setState(() {
       this.page = page;
       this.size = size;
