@@ -134,7 +134,7 @@ public partial class Program {
                 Services.AddSingleton<AdvisorMiddleware>();
                 Services.AddSingleton<FramingMiddleware>();
                 Services.AddSingleton<DispositionMiddleware>();
-                Services.AddSingleton<IDisposer, Dsposer>();
+                Services.AddSingleton<IDisposer, Disposer>();
 
                 // --> [CSM Security]
                 ConnectionOptions securityDbConnectionOptions = DatabaseUtilities.Retrieve(CSM_Security.Database.SIGN);

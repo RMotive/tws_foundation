@@ -293,7 +293,7 @@ public abstract class BDepot<TDatabase, TEntity>
         entity = DatabaseUtilities.SanitizeEntity(Database, entity);
         await Set.AddAsync(entity);
 
-        Disposer?.Push(Database, entity);
+        Disposer?.Push(entity);
         return entity;
     }
 
@@ -510,7 +510,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
             overwritten = await Create(overwritten);
 
-            Disposer?.Push(Database, overwritten);
+            Disposer?.Push(overwritten);
             return new EntityUpdateOutput<TEntity> {
                 Original = null,
                 Updated = overwritten,
@@ -528,7 +528,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
             overwritten = await Create(overwritten);
 
-            Disposer?.Push(Database, overwritten);
+            Disposer?.Push(overwritten);
             return new EntityUpdateOutput<TEntity> {
                 Original = null,
                 Updated = overwritten,
@@ -536,7 +536,7 @@ public abstract class BDepot<TDatabase, TEntity>
         }
 
         UpdateHelper(original, overwritten);
-        Disposer?.Push(Database, overwritten);
+        Disposer?.Push(overwritten);
         return new EntityUpdateOutput<TEntity> {
             Original = original,
             Updated = overwritten,

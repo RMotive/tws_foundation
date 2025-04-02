@@ -29,9 +29,12 @@ public abstract class BQ_Service<TService>
     /// <param name="databaseFactories">
     ///     Databases factories from all the created entities can became. (this is mainly used for multi-databases solutions where some entities are related to another ones but came from different databases instances)
     /// </param>
-    public BQ_Service(ServiceFactory<TService> serviceFactory, params DatabaseFactory[] databaseFactories) 
+    public BQ_Service(params DatabaseFactory[] databaseFactories) 
         : base(databaseFactories) { 
 
-        _service = serviceFactory();
+        _service = ServiceFactory();
     }
+
+
+    protected abstract TService ServiceFactory();
 }
