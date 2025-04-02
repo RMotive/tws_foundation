@@ -164,9 +164,8 @@ public partial class Program {
                 () => {
                     using (IServiceScope scope = app.Services.CreateScope()) {
                         IDisposer disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
-                        Dispose(disposer).GetAwaiter().GetResult();
-                    }
-                    ;
+                        Dispose(disposer);
+                    };
                 }
             );
             app.UseCors();
@@ -184,10 +183,10 @@ public partial class Program {
         }
     }
 
-    static async Task Dispose(IDisposer Disposer) {
+    static void Dispose(IDisposer Disposer) {
         AdvisorManager.Announce("Disposing quality context records");
         try {
-            await Disposer.Dispose();
+            Disposer.Dispose();
         } catch (Exception X) {
             AdvisorManager.Exception(new XSystem(X));
         }

@@ -94,7 +94,7 @@ public class Disposer
         Active = active;
     }
 
-    public async Task Dispose() {
+    public void Dispose() {
         if (_dispositionStack.Empty()) {
             AdvisorManager.Announce($"No records to dispose");
         }
@@ -114,7 +114,7 @@ public class Disposer
             foreach (IEntity record in disposeLine.Value) {
                 try {
                     Database.Remove(record);
-                    await Database.SaveChangesAsync();
+                    Database.SaveChanges();
 
                     corrects++;
                     AdvisorManager.Success($"Disposed: ({record.GetType()}) | ({record.Id})");
