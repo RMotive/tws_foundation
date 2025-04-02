@@ -29,5 +29,5 @@ public interface IDisposer {
     ///     Invokes the Data Disposition Stack to perform the Disposition operation, gathering the required database contexts and
     ///     removing tracked data.
     /// </summary>
-    Task Dispose();
+    void Dispose();
 }

@@ -27,6 +27,9 @@
     <None Update="TWSB.Connection\production_connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TWSB.Connection\development.connection.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TWSB.Connection\quality_connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

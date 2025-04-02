@@ -68,7 +68,7 @@ public abstract class BQ_Disposer
         }
     }
 
-    public async Task Dispose() {
+    public void Dispose() {
         foreach (KeyValuePair<Type, IEntity[]> Database in Queue) {
             Type dbType = Database.Key;
             DatabaseFactory factory = Factories[dbType];
@@ -83,7 +83,7 @@ public abstract class BQ_Disposer
                 }
                 entry.State = EntityState.Deleted;
             }
-            await database.SaveChangesAsync();
+            database.SaveChanges();
         }
     }
 }
