@@ -12,7 +12,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores a spot that represents a business physical location.
 /// </summary>
 public class Location
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 

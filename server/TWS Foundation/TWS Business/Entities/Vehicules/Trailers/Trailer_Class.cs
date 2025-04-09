@@ -9,7 +9,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 /// </summary>
 [Table("Trailer_Classes")]
 public class Trailer_Class
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 

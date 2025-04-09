@@ -337,9 +337,9 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                     etBuilder.HasKey(nameof(IEntity.Id));
                     etBuilder.Property<long>(nameof(IEntity.Id)).IsRequired();
 
-                    if (set is IEntity_Name) {
-                        PropertyInfo nameProperty = set.GetProperty(nameof(IEntity_Name.Name));
-                        PropertyInfo descriptionProperty = set.GetProperty(nameof(IEntity_Name.Description));
+                    if (set is INamedEntity) {
+                        PropertyInfo nameProperty = set.GetProperty(nameof(INamedEntity.Name));
+                        PropertyInfo descriptionProperty = set.GetProperty(nameof(INamedEntity.Description));
 
                         etBuilder.HasIndex(nameProperty.Name).IsUnique();
                         etBuilder.Property(nameProperty.Name).HasMaxLength(100).IsRequired();

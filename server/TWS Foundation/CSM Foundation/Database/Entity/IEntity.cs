@@ -69,7 +69,7 @@ public interface IEntity
 /// <summary>
 ///     [Interface] for [Entity] objects that have [Name].
 /// </summary>
-public interface IEntity_Name {
+public interface INamedEntity {
 
     /// <summary>
     ///     [Entity] name.

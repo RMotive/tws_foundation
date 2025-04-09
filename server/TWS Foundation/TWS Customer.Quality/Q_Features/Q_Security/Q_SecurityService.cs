@@ -1,5 +1,6 @@
 ﻿using System.Text;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Customer.Quality;
 
 using CSM_Security.Depots;
@@ -43,23 +44,25 @@ public class Q_SecurityService
     #region Private Methods/Functions
 
     AuthenticationInput GenerateAccount(bool isWildcard = false) {
-        Account accountEntity = RunEntityFactory(
-                (string Entropy) => {
-                    return new Account {
-                        User = Entropy,
-                        Wildcard = isWildcard,
-                        Password = Encoding.UTF8.GetBytes(Entropy),
-                        Contact = new Contact {
-                            Name = Entropy,
-                            Lastname = Entropy,
-                            Phone = Entropy,
-                            EMail = Entropy
-                        },
-                    };
+        string entropy = RandomUtils.String(16);
+
+        Contact contactEntity = Store(
+                new Contact {
+                    Name = entropy,
+                    Lastname = entropy,
+                    Phone = entropy[..14],
+                    EMail = entropy
                 }
             );
 
-        accountEntity = Store(accountEntity);
+        Account accountEntity = Store(
+                new Account {
+                    User = entropy,
+                    Wildcard = isWildcard,
+                    Password = Encoding.UTF8.GetBytes(entropy),
+                    Contact = contactEntity
+                }
+            );
 
         return new AuthenticationInput {
             Identity = accountEntity.User,

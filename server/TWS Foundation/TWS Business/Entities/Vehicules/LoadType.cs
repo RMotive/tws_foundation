@@ -8,7 +8,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [etBuilder] that stores information about a specific type of load for <see cref="Trailer"/> loading information.
 /// </summary>
 public class LoadType
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 

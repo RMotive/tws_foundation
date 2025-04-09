@@ -21,7 +21,7 @@ public interface IDepot_Update<TEntity>
     /// </param>
     /// <returns></returns>
     /// <remarks>
-    ///     Always the record to be overriden will be defined by the <see cref="IEntity.Id"/> property, if isn't given, will try with <see cref="IEntity_Name.Name"/> property in case the
+    ///     Always the record to be overriden will be defined by the <see cref="IEntity.Id"/> property, if isn't given, will try with <see cref="INamedEntity.Name"/> property in case the
     ///     [Entity] implementation does have it, otherwise will finally create a new record with the given values.
     /// </remarks>
     Task<EntityUpdateOutput<TEntity>> Update(OperationInput<TEntity, UpdateInput<TEntity>> Input);

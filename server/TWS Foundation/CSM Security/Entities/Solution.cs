@@ -10,7 +10,7 @@ namespace CSM_Security.Entities;
 ///     [Entity] that stores information for business environment solution.
 /// </summary>
 public class Solution
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 
