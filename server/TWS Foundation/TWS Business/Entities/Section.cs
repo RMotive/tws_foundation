@@ -36,6 +36,7 @@ public class Section
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -44,6 +45,7 @@ public class Section
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Location Yard { get; set; } = default!;
 
     #endregion

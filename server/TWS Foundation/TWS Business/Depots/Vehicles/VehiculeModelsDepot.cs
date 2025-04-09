@@ -15,7 +15,7 @@ public interface IVehiculesModelsDepot
 /// <summary>
 ///     [Depot] implementation for <see cref="VehiculeModel"/> entities operations.
 /// </summary>
-internal class VehiculeModelsDepot
+public class VehiculeModelsDepot
     : BDepot<Database, VehiculeModel>, IVehiculesModelsDepot {
 
     /// <summary>

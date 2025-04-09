@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSM Security.Quality", "CSM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWS Customer.Quality", "TWS Customer.Quality\TWS Customer.Quality.csproj", "{3228B627-3B71-4FD6-A0F3-0917E42C3A10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWS Business.Quality", "TWS Business.Quality\TWS Business.Quality.csproj", "{D7CA6CD6-7E40-45D8-962F-012505267B26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{3228B627-3B71-4FD6-A0F3-0917E42C3A10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3228B627-3B71-4FD6-A0F3-0917E42C3A10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3228B627-3B71-4FD6-A0F3-0917E42C3A10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7CA6CD6-7E40-45D8-962F-012505267B26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7CA6CD6-7E40-45D8-962F-012505267B26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7CA6CD6-7E40-45D8-962F-012505267B26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7CA6CD6-7E40-45D8-962F-012505267B26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{2212C0DC-E003-2087-94A3-15F67124571F} = {EC926824-8C24-4223-AFEE-B1053C370097}
 		{C148928A-9564-41EF-926D-7440F08EB563} = {EC926824-8C24-4223-AFEE-B1053C370097}
 		{3228B627-3B71-4FD6-A0F3-0917E42C3A10} = {91088964-B082-497A-A756-2966BB581156}
+		{D7CA6CD6-7E40-45D8-962F-012505267B26} = {D2FC4420-586D-46FE-BD40-E20CB0CEE83F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E32DF5DB-FDFA-4503-9651-7763DA17BFB2}

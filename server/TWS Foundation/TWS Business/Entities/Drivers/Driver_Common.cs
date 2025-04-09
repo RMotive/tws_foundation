@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ public class Driver_Common
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
+    [Relation]
     public Situation Situation { get; set; } = default!;
 
     /// <summary>
@@ -39,11 +41,13 @@ public class Driver_Common
     /// <summary>
     ///     <see cref="Driver"/> information.
     /// </summary>
+    [Relation]
     public Driver? Internal { get; set; }
 
     /// <summary>
     ///     <see cref="DriverExternal"/> information.
     /// </summary>
+    [Relation]
     public DriverExternal? External { get; set; }
 
     #endregion

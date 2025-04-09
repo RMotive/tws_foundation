@@ -35,6 +35,7 @@ public class VehiculeModel
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -43,6 +44,7 @@ public class VehiculeModel
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Manufacturer Manufacturer { get; set; } = default!;
 
     #endregion

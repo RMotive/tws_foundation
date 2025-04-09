@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
@@ -62,26 +63,31 @@ public class YardLog
     /// <summary>
     ///     <see cref="Vehicules.LoadType"/> information.
     /// </summary>
+    [Relation]
     public LoadType LoadType { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Employee"/> guard information.
     /// </summary>
+    [Relation]
     public Employee Guard { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Section"/> information.
     /// </summary>
+    [Relation]
     public Section Section { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Drivers.Driver_Common"/> information.
     /// </summary>
+    [Relation]
     public Driver_Common Driver { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Vehicules.Trucks.Truck_Common"/> information.
     /// </summary>
+    [Relation]
     public Truck_Common Truck { get; set; } = default!;
 
     /// <summary>

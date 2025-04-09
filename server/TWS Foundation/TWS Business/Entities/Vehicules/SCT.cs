@@ -47,6 +47,7 @@ public class SCT
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     #endregion
