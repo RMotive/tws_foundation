@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -73,13 +73,6 @@ public class Permit
     public ICollection<Account> Accounts { get; set; } = [];
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            ( nameof(Reference), [ new LengthValidator(8, 8) ] )
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.HasIndex(nameof(Reference)).IsUnique();

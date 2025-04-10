@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
+using CSM_Foundation.Database.Validations.Validators;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -71,14 +72,5 @@ public class Maintenance
                 Required: true,
                 Auto: true
             );
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-        return [
-            ..Container,
-            (nameof(Anual), [Required]),
-            (nameof(Trimestral), [Required]),
-        ];
     }
 }

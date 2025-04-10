@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -19,6 +20,7 @@ public partial class DriverExternal
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Identification Identification { get; set; } = default!;
 
     #endregion

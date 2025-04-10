@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Validations.Validators;
 
 namespace TWS_Business;
 
@@ -12,6 +12,12 @@ public abstract class TWSScopeCommonEntity<InternalT, ExternalT>
     : BEntity
     where InternalT : class, IEntity
     where ExternalT : class, IEntity {
+
+    [Relation, ExclusiveValidator]
+    public InternalT? Internal { get; set; }
+
+    [Relation, ExclusiveValidator]
+    public ExternalT? External { get; set; }
 }
 
 
@@ -20,10 +26,14 @@ public abstract class TWSScopeCommonEntity<InternalT, ExternalT>
 /// </summary>
 /// <typeparam name="TCommon"></typeparam>
 public abstract class TWSScopeEntity<TCommon>
-    : BEntity<TCommon>
+    : BEntity
     where TCommon : class, IEntity {
 
-    public override Type Database { get; init; } = typeof(Database);
+    /// <summary>
+    ///     <typeparamref name="TCommon"/> information.
+    /// </summary>
+    [Relation]
+    public TCommon Common { get; set; } = default!;
 }
 
 /// <summary>

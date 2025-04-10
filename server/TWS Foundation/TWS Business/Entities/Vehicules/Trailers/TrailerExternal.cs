@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -34,15 +34,6 @@ public class TrailerExternal
     public string? UsaPlate { get; set; }
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            (nameof(Carrier), [ new LengthValidator(1, 100) ] ),
-            (nameof(UsaPlate), [ new LengthValidator(5, 7, true) ] ),
-            (nameof(MxPlate), [ new LengthValidator(7, 7, true) ] )
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Trailers_Externals");

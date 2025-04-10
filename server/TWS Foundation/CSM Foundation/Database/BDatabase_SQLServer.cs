@@ -347,40 +347,6 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                         etBuilder.Property(descriptionProperty.Name).HasMaxLength(200);
                     }
 
-
-                    bool HasCommonDefinition() {
-                        Type? evalType = setType;
-
-                        while (evalType != null) {
-                            if (evalType.IsGenericType && evalType.GetGenericTypeDefinition() == typeof(BEntity<>)) {
-                                return true;
-                            }
-
-                            evalType = evalType.BaseType;
-                        }
-
-                        return false;
-                    }
-
-                    if (HasCommonDefinition()) {
-                        PropertyInfo commonProperty = set.GetProperty(nameof(BEntity<IEntity>.Common));
-                        Type commonType = commonProperty.PropertyType;
-                        PropertyInfo commonTypeTargetProp = commonType
-                            .GetProperties()
-                            .Where(i => i.PropertyType == setType)
-                            .FirstOrDefault()
-                            ?? throw new Exception($"Unable to find [Common relation type ({commonType}) property with the same source type ({setType})]");
-
-                        etBuilder.Link(
-                                Relation: (setType, commonType),
-                                SourceReference: commonProperty.Name,
-                                TargetReference: commonTypeTargetProp.Name,
-                                Required: true,
-                                Auto: true,
-                                Index: true
-                            );
-                    }
-
                     EvaluateCustom(set, etBuilder);
 
                     etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime2(7)").HasDefaultValueSql("GETUTCDATE()");

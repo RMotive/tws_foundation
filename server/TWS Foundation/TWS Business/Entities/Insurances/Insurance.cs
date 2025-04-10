@@ -2,7 +2,8 @@
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
+using CSM_Foundation.Database.Validations.Validators;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -63,16 +64,6 @@ public class Insurance
     ///     History entries.
     /// </summary>
     public ICollection<Insurance_History> History { get; set; } = [];
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-        return [
-            ..Container,
-            (nameof(Policy), [new UniqueValidator(), new LengthValidator(1, 20),]),
-            (nameof(Expiration), [Required, new UniqueValidator()]),
-            (nameof(Country), [new LengthValidator(2, 3)]),
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Country)).HasMaxLength(3);

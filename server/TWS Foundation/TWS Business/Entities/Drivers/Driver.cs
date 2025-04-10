@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -81,6 +82,7 @@ public class Driver
     /// <summary>
     ///     <see cref="Employees.Employee"/> information.
     /// </summary>
+    [Relation]
     public Employee Employee { get; set; } = default!;
 
     #endregion

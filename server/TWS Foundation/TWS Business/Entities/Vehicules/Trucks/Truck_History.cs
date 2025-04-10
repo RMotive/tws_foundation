@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Validators;
-
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
 
@@ -74,14 +72,4 @@ public class Truck_History
     public Insurance_History? InsuranceH { get; set; }
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        UniqueValidator Unique = new();
-
-        return [
-            ..Container,
-            (nameof(VIN), [Unique, new LengthValidator(17, 17)]),
-            (nameof(Economic), [new LengthValidator(1, 16)]),
-        ];
-    }
 }

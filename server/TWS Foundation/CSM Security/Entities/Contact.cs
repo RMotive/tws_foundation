@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
+using CSM_Foundation.Database.Validations.Validators;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -58,18 +59,6 @@ public class Contact
     public Account? Account { get; set; }
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        LengthValidator mainLengthValidator = new(1, 100);
-
-        return [
-            ..Container,
-            (nameof(Name), [ mainLengthValidator ]),
-            (nameof(Lastname), [ mainLengthValidator ]),
-            (nameof(EMail), [ mainLengthValidator, new UniqueValidator() ]),
-            (nameof(Phone), [ mainLengthValidator, new UniqueValidator() ]),
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Name)).HasMaxLength(100).IsRequired();

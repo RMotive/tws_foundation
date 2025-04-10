@@ -2,7 +2,6 @@
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -112,18 +111,5 @@ public class YardLog
         etBuilder.Link<YardLog, Driver_Common>(nameof(Driver), Required: true);
         etBuilder.Link<YardLog, Truck_Common>(nameof(Truck), Required: true);
         etBuilder.Link<YardLog, Trailer_Common>(nameof(Trailer));
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        LengthValidator sealLengthValidation = new(10, 64, true);
-
-        return [
-            ..Container,
-            (nameof(Seal), [ sealLengthValidation ]),
-            (nameof(SealAlt), [ sealLengthValidation ]),
-            (nameof(FromTo), [ new LengthValidator(10, 100) ]),
-            (nameof(Evidence), [ new LengthValidator(32) ]),
-            (nameof(Damage), [ new LengthValidator(32, AllowNull: true) ]),
-        ];
     }
 }

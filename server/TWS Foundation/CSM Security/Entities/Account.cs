@@ -1,6 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -51,15 +50,6 @@ public class Account
     public ICollection<Profile> Profiles { get; set; } = [];
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        Container = [
-            ..Container,
-            (nameof(User), [ new UniqueValidator(), new RequiredValidator() ]),
-            (nameof(Password), [ new RequiredValidator() ]),
-        ];
-        return Container;
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.HasIndex(nameof(User)).IsUnique();

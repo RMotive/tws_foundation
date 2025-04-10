@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -67,14 +67,5 @@ public class SCT_History
                 Required: true,
                 Auto: true
             );
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            (nameof(Type), [ new LengthValidator(6, 6) ] ),
-            (nameof(Number), [ new LengthValidator(25, 25) ] ),
-            (nameof(Configuration), [ new LengthValidator(6, 10) ] ),
-        ];
     }
 }

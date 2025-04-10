@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -40,6 +41,7 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Identification Identification { get; set; } = default!;
 
     /// <summary>
@@ -48,6 +50,7 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -56,21 +59,25 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Employee_Dates Dates { get; set; } = default!;
 
     /// <summary>
     ///     Approaching contact information.
     /// </summary>
+    [Relation]
     public Approach? Approach { get; set; }
 
     /// <summary>
     ///     Address information.
     /// </summary>
+    [Relation]
     public Address? Address { get; set; }
 
     /// <summary>
     ///     <see cref="Drivers.Driver"/> information.
     /// </summary>
+    [Relation]
     public Driver? Driver { get; set; }
 
     #endregion

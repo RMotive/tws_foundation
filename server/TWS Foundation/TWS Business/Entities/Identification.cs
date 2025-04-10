@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Validations;
+using CSM_Foundation.Database.Validations.Validators;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -48,6 +50,7 @@ public class Identification
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -61,14 +64,5 @@ public class Identification
                 Required: true,
                 Auto: true
             );
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        LengthValidator nameValidator = new(1, 32);
-        return [
-            ..Container,
-            (nameof(Name), [ nameValidator ] ),
-            (nameof(Lastname), [ nameValidator ] ),
-        ];
     }
 }
