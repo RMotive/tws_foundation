@@ -50,7 +50,13 @@ public abstract partial class BEntity
 
             IEnumerable<BValidator> attributes = property.GetCustomAttributes<BValidator>();
             if(attributes.Any()) {
-
+                foreach (BValidator validator in attributes) {
+                    try {
+                        validator.Evaluate(this);
+                    } catch (XIValidator_Evaluate x) { 
+                    
+                    }
+                }
             }
         }
     }

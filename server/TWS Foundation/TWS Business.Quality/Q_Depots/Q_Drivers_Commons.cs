@@ -24,19 +24,19 @@ public class Q_Drivers_Commons : BQ_Business<Driver_Common, Drivers_CommonsDepot
                 }
             );
 
-        Employee employee = Store(
-                new Employee {
-                    
-                }
-            );
+        Identification identification = Store(
+                  new Identification {
+                      Name = Entropy,
+                      Lastname = Entropy,
+                      Status = status,
+                  }
+             );
 
         return new Driver_Common {
             License = Entropy[..12],
             Situation = situation,
             Status = status,
-            Internal = new Driver {
-                ANAM = Entropy,
-            }
+           
         };
     }
 }
