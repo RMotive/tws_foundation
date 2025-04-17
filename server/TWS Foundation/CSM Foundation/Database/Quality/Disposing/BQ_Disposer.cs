@@ -81,6 +81,8 @@ public abstract class BQ_Disposer
                 if(entry.GetDatabaseValues() is null) {
                     continue;
                 }
+
+                entry.DetectChanges();
                 entry.State = EntityState.Deleted;
             }
             database.SaveChanges();

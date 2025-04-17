@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -35,14 +35,6 @@ public class Solution
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        Container = [
-            ..Container,
-            (nameof(Sign), [new UniqueValidator(), new LengthValidator(5, 5)]),
-        ];
-        return Container;
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Sign)).IsFixedLength().HasMaxLength(5).IsRequired();

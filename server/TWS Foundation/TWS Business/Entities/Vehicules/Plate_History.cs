@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -50,16 +50,6 @@ public class Plate_History
     public Status Status { get; set; } = default!;
 
     #endregion
-
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            ( nameof(Identifier), [ new LengthValidator(5, 12) ] ),
-            ( nameof(Country), [ new LengthValidator(2, 3) ] ),
-            ( nameof(State), [ new LengthValidator(2, 3, true) ] )
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(State)).HasMaxLength(3);

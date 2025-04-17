@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -86,14 +86,6 @@ public class Truck
     public ICollection<Truck_History> History { get; set; } = [];
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            ( nameof(VIN), [ new UniqueValidator(), new LengthValidator(17, 17) ] ),
-        ];
-    }
-
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Motor)).HasMaxLength(16);
         etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsRequired();

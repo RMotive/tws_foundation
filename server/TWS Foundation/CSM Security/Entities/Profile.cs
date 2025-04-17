@@ -1,5 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -31,13 +31,6 @@ public class Profile
     public ICollection<Account> Accounts { get; set; } = default!;
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            (nameof(Name), [ new LengthValidator(1, 25), new UniqueValidator() ]),
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
 

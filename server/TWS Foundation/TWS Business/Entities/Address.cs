@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
+using CSM_Foundation.Database.Validations.Validators;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -89,23 +90,6 @@ public class Address
     public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        LengthValidator streetValidator = new(1, 100, true);
-        LengthValidator divisionValidator = new(1, 30, true);
-
-        Container = [
-            ..Container,
-            ( nameof(State), [ new LengthValidator(2, 3, true) ] ),
-            ( nameof(Street), [ streetValidator ] ),
-            ( nameof(AltStreet), [ streetValidator ] ),
-            ( nameof(City), [ divisionValidator ] ),
-            ( nameof(ZIP), [ new LengthValidator(5, 5, true) ] ),
-            ( nameof(Country), [ new LengthValidator(2, 3) ] ),
-            ( nameof(City), [ divisionValidator ] )
-        ];
-        return Container;
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
 

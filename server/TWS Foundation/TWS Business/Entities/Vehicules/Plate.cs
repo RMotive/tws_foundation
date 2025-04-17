@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -52,6 +52,7 @@ public class Plate
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -85,14 +86,5 @@ public class Plate
                 Required: true,
                 Auto: true
             );
-    }
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            ( nameof(Identifier), [ new LengthValidator(5, 12) ] ),
-            ( nameof(Country), [ new LengthValidator(2, 3) ] ),
-            ( nameof(State), [ new LengthValidator(2, 3, true) ] ) 
-        ];
     }
 }

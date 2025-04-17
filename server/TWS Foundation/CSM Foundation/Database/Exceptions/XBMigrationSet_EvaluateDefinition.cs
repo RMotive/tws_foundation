@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Validators;
+﻿using CSM_Foundation.Database.Validations;
 
 namespace CSM_Foundation.Database.Exceptions;
 public class XBMigrationSet_EvaluateDefinition
@@ -11,11 +11,11 @@ public class XBMigrationSet_EvaluateDefinition
     }
 
     public IEnumerable<string> Properties;
-    public IValidator? Validator;
+    public BValidator? Validator;
     public Reasons Reason;
     public Type Origin;
 
-    public XBMigrationSet_EvaluateDefinition(IEnumerable<string> Properties, Reasons Reason, Type Origin, IValidator? Validator)
+    public XBMigrationSet_EvaluateDefinition(IEnumerable<string> Properties, Reasons Reason, Type Origin, BValidator? Validator)
         : base(
                 $"{ReasonTitle(Reason)} ({Origin})[{string.Join(',', Properties)}] {Validator}"
             ) {

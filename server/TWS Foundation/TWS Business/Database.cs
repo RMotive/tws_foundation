@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.Reflection;
+
+using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
@@ -66,7 +69,41 @@ public class Database
         : base(SIGN) {
     }
 
-    protected override void EvaluateCustom(CSM_Foundation.Database.Bases.BEntity Entity, EntityTypeBuilder mBuilder) {
+    protected override void EvaluateCustom(CSM_Foundation.Database.Bases.BEntity entity, EntityTypeBuilder mBuilder) {
+        Type entityType = entity.GetType();
+
+        bool HasCommonDefinition() {
+            Type? evalType = entityType;
+
+            while (evalType != null) {
+                if (evalType.IsGenericType && evalType.GetGenericTypeDefinition() == typeof(TWSScopeEntity<>)) {
+                    return true;
+                }
+
+                evalType = evalType.BaseType;
+            }
+
+            return false;
+        }
+
+        if (HasCommonDefinition()) {
+            PropertyInfo commonProperty = entity.GetProperty(nameof(TWSScopeEntity<IEntity>.Common));
+            Type commonType = commonProperty.PropertyType;
+            PropertyInfo commonTypeTargetProp = commonType
+                .GetProperties()
+                .Where(i => i.PropertyType == entityType)
+                .FirstOrDefault()
+                ?? throw new Exception($"Unable to find [Common relation type ({commonType}) property with the same source type ({entityType})]");
+
+            mBuilder.Link(
+                    Relation: (entityType, commonType),
+                    SourceReference: commonProperty.Name,
+                    TargetReference: commonTypeTargetProp.Name,
+                    Required: true,
+                    Auto: true,
+                    Index: true
+                );
+        }
     }
 
     #region Drivers

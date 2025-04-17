@@ -85,6 +85,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             }
 
             orderableTmp = propertyInfo;
+            break;
         }
 
         Evaluable = orderableTmp ?? typeof(TEntity).GetProperty(nameof(IEntity.Id))!; // By default if the [Entity] doesn't have a valid evaluable property will use the Id. 
@@ -583,15 +584,6 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     [Fact(DisplayName = $"[View]: Specific ordering by property")]
     public async Task ViewC() {
 
-        SetViewOutput<TEntity> unorderedViewOutput = await Depot.View(
-                new OperationInput<TEntity, SetViewInput<TEntity>> {
-                    Parameters = new() {
-                        Page = 1,
-                        Range = 20,
-                        Retroactive = false,
-                    },
-                }
-            ); 
         SetViewOutput<TEntity> orderedViewOutput = await Depot.View(
                         new OperationInput<TEntity, SetViewInput<TEntity>> {
                             Parameters = new() {
@@ -607,9 +599,10 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                             },
                         }
                    );
+          
 
         // --> Manual ordering undordered result for reference.
-        TEntity[] orderedReferenceRecords = unorderedViewOutput.Entities;
+        TEntity[] orderedReferenceRecords = [..orderedViewOutput.Entities];
         {
             Type setType = typeof(TEntity);
             ParameterExpression parameterExpression = Expression.Parameter(setType, $"X0");

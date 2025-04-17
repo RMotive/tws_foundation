@@ -30,6 +30,7 @@ public class Location
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -38,6 +39,7 @@ public class Location
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Address Address { get; set; } = default!;
 
     #endregion

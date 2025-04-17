@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -55,15 +55,6 @@ public class USDOT
     ///     History entries.
     /// </summary>
     public ICollection<USDOT_History> History { get; set; } = [];
-
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            ( nameof(MC), [ new LengthValidator(7, 7) ]),
-            ( nameof(SCAC), [ new LengthValidator(4, 4) ]),
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(MC)).HasMaxLength(7).IsFixedLength().IsRequired();

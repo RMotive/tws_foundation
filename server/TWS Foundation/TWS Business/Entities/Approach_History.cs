@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Validations;
+using CSM_Foundation.Database.Validations.Validators;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -64,20 +65,6 @@ public class Approach_History
     public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     #endregion
-
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        LengthValidator phoneValidator = new(5, 13, true);
-
-        Container = [
-            ..Container,
-            ( nameof(EMail), [ new LengthValidator(Max: 64, AllowNull: true) ] ),
-            ( nameof(Enterprise), [ phoneValidator ] ),
-            ( nameof(Personal), [ phoneValidator ] ),
-            ( nameof(Alternative), [ phoneValidator ] ),
-        ];
-        return Container;
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Approaches_Histories");

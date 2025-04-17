@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -48,16 +47,6 @@ public class Maintenance_History
     public ICollection<Truck_History> TrucksHistories { get; set; } = [];
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        RequiredValidator Required = new();
-
-        return [
-            ..Container,
-            (nameof(Anual), [Required]),
-            (nameof(Trimestral), [Required]),
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Maintenances_Histories");

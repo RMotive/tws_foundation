@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validators;
+using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,7 +13,7 @@ namespace TWS_Business.Entities.Drivers;
 ///     [Entity] that represent common information for [Drivers] (<see cref="Driver"/> / <see cref="DriverExternal"/>).
 /// </summary>
 public class Driver_Common
-    : BEntity {
+    : TWSScopeCommonEntity<Driver, DriverExternal> {
 
     #region Properties
 
@@ -29,22 +30,14 @@ public class Driver_Common
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
+    [Relation]
     public Situation Situation { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
+    [Relation]
     public Status Status { get; set; } = default!;
-
-    /// <summary>
-    ///     <see cref="Driver"/> information.
-    /// </summary>
-    public Driver? Internal { get; set; }
-
-    /// <summary>
-    ///     <see cref="DriverExternal"/> information.
-    /// </summary>
-    public DriverExternal? External { get; set; }
 
     #endregion
 
@@ -75,13 +68,6 @@ public class Driver_Common
     }
 
     #endregion
-
-    protected override (string Property, IValidator[])[] Validations((string Property, IValidator[])[] Container) {
-        return [
-            ..Container,
-            (nameof(License), [ new LengthValidator(8, 12)]),
-        ];
-    }
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Drivers_Commons");
