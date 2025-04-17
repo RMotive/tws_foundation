@@ -90,8 +90,11 @@ public interface INamedEntity {
 ///     [Converter] concept implementation for complex data structures that are derived from <see cref="IEntity"/>, this converter manager must
 ///     be injected into the [JsonSerializerOptions] from you server implementation.
 /// </summary>
-public class IEntityConvertor
+public class EntityConverter
     : BConverter<IEntity> {
 
+    /// <summary>
+    ///     Stores all the types that inherits from 
+    /// </summary>
     public override required Type[] Variations { get; init; }
 }

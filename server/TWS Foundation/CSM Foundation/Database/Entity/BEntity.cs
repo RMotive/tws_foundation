@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Extensions;
@@ -10,59 +11,34 @@ using CSM_Foundation.Database.Validators;
 namespace CSM_Foundation.Database.Bases;
 
 /// <summary>
-///     [Abstract] class for <see cref="BEntity"/> implementations, these are <see cref="BEntity"/>
-///     implementations that holds a <see cref="TCommon"/> common object information.
-/// </summary>
-/// <typeparam name="TCommon">
-///     [Entity] type to use as <see cref="Common"/> information.
-/// </typeparam>
-public abstract class BEntity<TCommon>
-    : BEntity
-    where TCommon : class, IEntity {
-
-    /// <summary>
-    ///     <typeparamref name="TCommon"/> information.
-    /// </summary>
-    public TCommon Common { get; set; } = default!;
-}
-
-/// <summary>
-///     [Abstract] class for <see cref="BBusinessDatabaseEntity"/> implementations.
+///     [Abstract] class for <see cref="BEntity"/> implementations.
 ///     
 ///     A Entity is a table into a data storage, defining properties and relations stored.
 /// </summary>
 public abstract partial class BEntity
     : BObject<IEntity>, IEntity {
 
-    [NotMapped]
-    public abstract Type Database { get; init; }
+    #region Server Side Properties
 
-    [NotMapped]
+    [NotMapped, JsonPropertyOrder(0)]
     public string Discriminator { get; init; }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    [NotMapped, JsonIgnore]
+    public abstract Type Database { get; init; }
+
+    #endregion
+
+
     public long Id { get; set; }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-
-    /// <summary>
-    /// 
-    /// </summary>
     static bool Defined = false;
 
-    /// <summary>
-    /// 
-    /// </summary>
     (string Property, IValidator[] Validators)[]? Validators;
 
     /// <summary>
-    /// 
+    ///     
     /// </summary>
     public BEntity() {
         Discriminator = $"{GetType().GUID}";

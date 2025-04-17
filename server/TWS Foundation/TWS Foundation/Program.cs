@@ -87,7 +87,7 @@ public partial class Program {
 
                         // --> JSON Converter for [IEntity] objects.
                         options.JsonSerializerOptions.Converters.Add(
-                                new IEntityConvertor {
+                                new EntityConverter {
                                     Variations = [
                                         typeof(YardLog),
                                     ],
