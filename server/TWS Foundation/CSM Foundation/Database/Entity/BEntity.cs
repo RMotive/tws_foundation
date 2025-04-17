@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Database.Entity;
@@ -9,31 +10,30 @@ using CSM_Foundation.Database.Validations;
 namespace CSM_Foundation.Database.Bases;
 
 /// <summary>
-///     [Abstract] class for <see cref="BBusinessDatabaseEntity"/> implementations.
+///     [Abstract] class for <see cref="BEntity"/> implementations.
 ///     
 ///     A Entity is a table into a data storage, defining properties and relations stored.
 /// </summary>
 public abstract partial class BEntity
     : BObject<IEntity>, IEntity {
 
-    [NotMapped]
-    public abstract Type Database { get; init; }
+    #region Server Side Properties
 
-    [NotMapped]
+    [NotMapped, JsonPropertyOrder(0)]
     public string Discriminator { get; init; }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    [NotMapped, JsonIgnore]
+    public abstract Type Database { get; init; }
+
+    #endregion
+
+
     public long Id { get; set; }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    /// 
+    ///     
     /// </summary>
     public BEntity() {
         Discriminator = $"{GetType().GUID}";

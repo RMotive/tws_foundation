@@ -9,7 +9,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about certain manufacturers for <see cref="Trailer"/> and <see cref="Truck"/> data proccesses.
 /// </summary>
 public class Manufacturer
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 

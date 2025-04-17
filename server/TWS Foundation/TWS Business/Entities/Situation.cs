@@ -10,7 +10,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores information about the current situation for a business process entity.
 /// </summary>
 public class Situation
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 

@@ -13,7 +13,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about a vehicule model with its descriptive name and year of manufacturing.
 /// </summary>
 public class VehiculeModel
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 

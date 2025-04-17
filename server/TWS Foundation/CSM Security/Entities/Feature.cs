@@ -9,7 +9,7 @@ namespace CSM_Security.Entities;
 ///     only for authorization purposes.
 /// </summary>
 public class Feature
-    : BEntity, IEntity_Name {
+    : BEntity, INamedEntity {
 
     #region Properties
 

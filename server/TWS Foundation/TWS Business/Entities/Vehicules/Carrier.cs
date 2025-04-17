@@ -13,7 +13,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about a carrying company.
 /// </summary>
 public class Carrier
-    : BEntity, IEntity_Name, IHistorical<Carrier_History> {
+    : BEntity, INamedEntity, IHistorical<Carrier_History> {
 
     #region Properties
 

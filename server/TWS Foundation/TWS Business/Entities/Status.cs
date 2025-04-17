@@ -12,7 +12,7 @@ namespace TWS_Business.Entities;
 ///     []
 /// </summary>
 public class Status
-: BEntity, IEntity_Name {
+: BEntity, INamedEntity {
 
     #region Properites
 
