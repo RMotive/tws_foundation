@@ -8,7 +8,7 @@ const String _kQSuccesses = 'qSuccesses';
 const String _kQFailures = 'qFailures';
 const String _kFailed = 'failed';
 
-final class EntityBatchOperation<TSet extends CSMSetInterface> implements CSMEncodeInterface {
+final class EntityBatchOperation<TSet extends EntityB<TSet>> implements EncodableI {
   final List<TSet> successes;
   final List<EntityOperationFailure<TSet>> failures;
   final int qTransactions;
@@ -18,16 +18,17 @@ final class EntityBatchOperation<TSet extends CSMSetInterface> implements CSMEnc
 
   const EntityBatchOperation(this.successes, this.failures, this.qTransactions, this.qSuccesses, this.qFailures, this.failed);
 
-  factory EntityBatchOperation.des(JObject json, TSet Function(JObject json) decoder) {
-    List<JObject> decSuccesses = json.get(_kSuccesses);
-    List<JObject> decFailures = json.get(_kFailures);
+  factory EntityBatchOperation.des(
+      DataMap json, TSet Function(DataMap json) decoder) {
+    List<DataMap> decSuccesses = json.get(_kSuccesses);
+    List<DataMap> decFailures = json.get(_kFailures);
 
-    final List<TSet> successes = decSuccesses.map<TSet>((JObject e) {
+    final List<TSet> successes = decSuccesses.map<TSet>((DataMap e) {
       TSet set = decoder(e);
       return set;
     }).toList();
     final List<EntityOperationFailure<TSet>> failures = decFailures.map<EntityOperationFailure<TSet>>(
-      (JObject e) {
+      (DataMap e) {
         EntityOperationFailure<TSet> failure = EntityOperationFailure<TSet>.des(e, decoder);
         return failure;
       },
@@ -42,9 +43,9 @@ final class EntityBatchOperation<TSet extends CSMSetInterface> implements CSMEnc
   }
 
   @override
-  JObject encode() {
-    List<JObject> successesEncode = successes.map<JObject>((TSet e) => e.encode()).toList();
-    List<JObject> failuresEncode = failures.map<JObject>((EntityOperationFailure<TSet> e) => e.encode()).toList();
+  DataMap encode() {
+    List<DataMap> successesEncode = successes.map<DataMap>((TSet e) => e.encode()).toList();
+    List<DataMap> failuresEncode = failures.map<DataMap>((EntityOperationFailure<TSet> e) => e.encode()).toList();
 
     return <String, dynamic>{
       _kSuccesses: successesEncode,

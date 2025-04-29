@@ -1,23 +1,23 @@
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///  
-class ServiceResolver<TSuccess extends CSMEncodeInterface> extends CSMServiceResolverBase<TSuccess> {
+class ServiceResolver<TSuccess extends EncodableI> extends ResponseResolverB<TSuccess> {
   ServiceResolver(super.operationResult);
 
   ///
-  Future<TSuccess> act(TSuccess Function(JObject json) decoder) async {
+  Future<TSuccess> act(TSuccess Function(DataMap json) decoder) async {
     late final TSuccess actResult;
-    result.resolve(
-      (JObject success) {
+    controller.resolve(
+      (DataMap success) {
         final SuccessFrame<TSuccess> templateWithSuccess = SuccessFrame<TSuccess>.des(success, decoder);
         actResult = templateWithSuccess.estela;
       },
-      (JObject failure, int statusCode) {
+      (DataMap failure, int statusCode) {
         final FailureFrame failureFrame = FailureFrame.des(failure);
         throw 'FailureException: server act resulted in failure $statusCode with (${failureFrame.estela.system})';
       },
-      (Object exception, StackTrace trace) {
-        throw exception;
+      (TracedException trace) {
+        throw trace.data;
       },
     );
     return actResult;
@@ -25,27 +25,27 @@ class ServiceResolver<TSuccess extends CSMEncodeInterface> extends CSMServiceRes
 
   ///
   void resolve({
-    required TSuccess Function(JObject json) decoder,
+    required TSuccess Function(DataMap json) decoder,
     required void Function(SuccessFrame<TSuccess> success) onSuccess,
     required void Function(FailureFrame failure, int status) onFailure,
     required void Function(Object exception, StackTrace trace) onException,
     required void Function() onConnectionFailure,
     void Function()? onFinally,
   }) {
-    result.resolve(
-      (JObject jSuccess) {
+    controller.resolve(
+      (DataMap jSuccess) {
         final SuccessFrame<TSuccess> templateWithSuccess = SuccessFrame<TSuccess>.des(jSuccess, decoder);
         onSuccess(templateWithSuccess);
       },
-      (JObject jFailure, int statusCode) {
+      (DataMap jFailure, int statusCode) {
         final FailureFrame templateWithFailure = FailureFrame.des(jFailure);
         onFailure(templateWithFailure, statusCode);
       },
-      (Object exception, StackTrace trace) {
-        if (exception.toString().contains('ClientException')) {
+      (TracedException trace) {
+        if (trace.data.toString().contains('ClientException')) {
           onConnectionFailure.call();
         } else {
-          onException.call(exception, trace);
+          onException.call(trace.data, trace.stackTrace);
         }
       },
     );

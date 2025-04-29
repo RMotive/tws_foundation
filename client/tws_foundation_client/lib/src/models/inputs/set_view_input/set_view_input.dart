@@ -1,7 +1,7 @@
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class SetViewInput<TSet extends CSMSetInterface> implements CSMEncodeInterface {
+final class SetViewInput<TSet extends EntityB<TSet>> implements EncodableI {
   ///
   final bool retroactive;
 
@@ -24,7 +24,7 @@ final class SetViewInput<TSet extends CSMSetInterface> implements CSMEncodeInter
   const SetViewInput(this.retroactive, this.range, this.page, this.creation, this.orderings, this.filters);
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'retroactive': retroactive,
       'range': range,

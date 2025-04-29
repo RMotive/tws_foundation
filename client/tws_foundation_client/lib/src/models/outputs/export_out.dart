@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:csm_client/csm_client.dart';
 
 /// Common [Out] object for [Export] action services.
-final class ExportOut implements CSMEncodeInterface {
+final class ExportOut implements EncodableI {
   /// Propety key binder for [content].
   static const String _kContent = 'content';
 
@@ -27,7 +27,7 @@ final class ExportOut implements CSMEncodeInterface {
   const ExportOut(this.name, this.extension, this.content);
 
   /// Creates a new [ExportOut] object instance storing the result from an [Export] service action, based on a [JObject].
-  factory ExportOut.des(JObject json) {
+  factory ExportOut.des(DataMap json) {
     return ExportOut(
       json.get(_kName),
       ExportOutExtensions.values[json.get<int>(_kExtension)],
@@ -36,7 +36,7 @@ final class ExportOut implements CSMEncodeInterface {
   }
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'content': content,
       'name': name,

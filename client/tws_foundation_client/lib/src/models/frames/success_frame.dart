@@ -4,7 +4,7 @@ import 'package:csm_client/csm_client.dart';
 /// exposing static properties from transaction contexts.
 ///
 /// [TEstela] : Model object type that represents the transaction context result.
-final class SuccessFrame<TEstela extends CSMEncodeInterface> implements CSMEncodeInterface {
+final class SuccessFrame<TEstela extends EncodableI> implements EncodableI {
   /// Unique transaction identifier.
   final String tracer;
 
@@ -15,17 +15,17 @@ final class SuccessFrame<TEstela extends CSMEncodeInterface> implements CSMEncod
   const SuccessFrame(this.tracer, this.estela);
 
   /// Generates a new success frame object decoding a json object.
-  factory SuccessFrame.des(JObject json, TEstela Function(JObject json) estelaDecoder) {
+  factory SuccessFrame.des(DataMap json, TEstela Function(DataMap json) estelaDecoder) {
     String tracer = json.get('tracer');
 
-    JObject objEstela = json.getDefault('estela', <String, dynamic>{});
+    DataMap objEstela = json.get('estela', <String, dynamic>{});
     TEstela estelaObject = estelaDecoder(objEstela);
 
     return SuccessFrame<TEstela>(tracer, estelaObject);
   }
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'tracer': '',
       'estela': estela.encode(),

@@ -11,9 +11,9 @@ final class FailureFrame {
   /// Generates a new failure frame response object.
   const FailureFrame(this.tracer, this.estela);
 
-  factory FailureFrame.des(JObject json) {
+  factory FailureFrame.des(DataMap json) {
     String tracer = json.get('tracer');
-    JObject estelaJson = json.getDefault('estela', <String, dynamic>{});
+    DataMap estelaJson = json.get('estela', <String, dynamic>{});
 
     return FailureFrame(
       tracer,

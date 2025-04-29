@@ -2,7 +2,7 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/models/inputs/set_view_input/filters/set_view_filter_interface.dart';
 
 ///
-final class SetViewPropertyFilter<TSet extends CSMSetInterface> implements SetViewFilterInterface<TSet> {
+final class SetViewPropertyFilter<TSet extends EntityB<TSet>> implements SetViewFilterInterface<TSet> {
   @override
   final String discrimination = 'SetViewPropertyFilter`1';
 
@@ -24,7 +24,7 @@ final class SetViewPropertyFilter<TSet extends CSMSetInterface> implements SetVi
   SetViewPropertyFilter(this.order, this.evaluation, this.property, this.value);
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'discrimination': discrimination,
       'order': order,

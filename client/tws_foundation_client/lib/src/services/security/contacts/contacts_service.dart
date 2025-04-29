@@ -9,7 +9,7 @@ final class ContactsService extends ContactsServiceBase {
   ///
   /// [client] custom network [Client] to testing/quality purposes.
   ContactsService(
-    CSMUri host, {
+    Uri host, {
     Client? client,
   }) : super(
           host,
@@ -19,7 +19,7 @@ final class ContactsService extends ContactsServiceBase {
 
   @override
   Effect<SetViewOutput<Contact>> view(SetViewInput<Contact> input, String auth) async {
-    CSMActEffect actEffect = await twsPost('view', input, auth: auth);
+    ResponseController actEffect = await twsPost('view', input, auth: auth);
     return ServiceResolver<SetViewOutput<Contact>>(actEffect);
   }
 }

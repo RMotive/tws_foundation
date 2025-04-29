@@ -5,9 +5,9 @@ final class SolutionsService extends SolutionsServiceBase {
   /// Generates a new [SolutionsService] instance, and implementation of [SolutionsServiceBase] providing methods to handle
   /// [Solution] set records and its data.
   SolutionsService(
-    CSMUri host, {
+    Uri host, {
     Client? client,
-    CSMHeaders? headers,
+    Headers? headers,
   }) : super(
           host,
           'Solutions',
@@ -17,19 +17,19 @@ final class SolutionsService extends SolutionsServiceBase {
 
   @override
   Effect<SetViewOutput<Solution>> view(SetViewOutput<Solution> options, String auth) async {
-    CSMActEffect actEffect = await twsPost('view', options, auth: auth);
+    ResponseController actEffect = await twsPost('view', options, auth: auth);
     return ServiceResolver<SetViewOutput<Solution>>(actEffect);
   }
 
   @override
   Effect<SetViewOutput<Solution>> create(List<Solution> solutions, String auth) async {
-    CSMActEffect actEffect = await twsPostList('create', solutions, auth: auth);
+    ResponseController actEffect = await twsPostList('create', solutions, auth: auth);
     return ServiceResolver<SetViewOutput<Solution>>(actEffect);
   }
 
   @override
   Effect<EntityUpdateOutput<Solution>> update(Solution solution, String auth) async {
-    CSMActEffect actEffect = await twsPost('update', solution, auth: auth);
+    ResponseController actEffect = await twsPost('update', solution, auth: auth);
     return ServiceResolver<EntityUpdateOutput<Solution>>(actEffect);
   }
 }

@@ -5,7 +5,7 @@ import 'package:csm_client/csm_client.dart';
 
 /// Defines a credentials model that stores basic user firm to validate
 /// services privileges.
-final class AuthenticationInput implements CSMEncodeInterface {
+final class AuthenticationInput implements EncodableI {
   
   /// User account identity.
   final String identity;
@@ -20,7 +20,7 @@ final class AuthenticationInput implements CSMEncodeInterface {
   const AuthenticationInput(this.identity, this.password, this.sign);
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'identity': identity,
       'password': base64Encode(password),

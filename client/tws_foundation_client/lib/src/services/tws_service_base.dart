@@ -2,7 +2,7 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/constants.dart';
 
 /// Custom [CSMServiceBase] implementation for [TWS] business services base.
-abstract class TWSServiceBase extends CSMServiceBase {
+abstract class TWSServiceBase extends ServiceB {
   TWSServiceBase(
     super.host,
     super.servicePath, {
@@ -14,7 +14,7 @@ abstract class TWSServiceBase extends CSMServiceBase {
   /// the [auth] token sent to be able to send the [Solution] in the format the server requires:
   ///
   /// format: authToken@solutionSign
-  Future<CSMActEffect> twsPost<T extends CSMEncodeInterface>(
+  Future<ResponseController> twsPost<T extends EncodableI>(
     String act,
     T request, {
     String? auth,
@@ -27,7 +27,7 @@ abstract class TWSServiceBase extends CSMServiceBase {
   /// the [auth] token sent to be able to send the [Solution] in the format the server requires:
   ///
   /// format: authToken@solutionSign
-  Future<CSMActEffect> twsPostList<T extends CSMEncodeInterface>(
+  Future<ResponseController> twsPostList<T extends EncodableI>(
     String act,
     List<T> request, {
     String? auth,

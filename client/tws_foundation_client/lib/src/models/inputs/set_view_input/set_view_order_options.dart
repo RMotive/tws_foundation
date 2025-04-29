@@ -1,7 +1,7 @@
 import 'package:csm_client/csm_client.dart';
 
 /// Stores the options to order a [View] based on a [Set] context. 
-final class SetViewOrderOptions implements CSMEncodeInterface {
+final class SetViewOrderOptions implements EncodableI {
   /// Property path from the context object to order.
   final String property;
 
@@ -12,7 +12,7 @@ final class SetViewOrderOptions implements CSMEncodeInterface {
   const SetViewOrderOptions(this.behavior, this.property);
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'property': property,
       'behavior': behavior.index,

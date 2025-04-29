@@ -2,7 +2,7 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/constants.dart';
 
 /// Contact information set, handles information related to a person that uses an account to authenticate its usage.
-final class Contact implements CSMSetInterface {
+final class Contact implements EntityB<Contact> {
   /// [name] property key.
   static const String kName = 'name';
 
@@ -15,13 +15,17 @@ final class Contact implements CSMSetInterface {
   /// [phone] property key.
   static const String kPhone = 'phone';
 
-  /// Private timestamp property.
-  late final DateTime _timestamp;
-  DateTime get timestamp => _timestamp;
-
   /// Record database pointer.
   @override
   int id = 0;
+
+  /// Interface identifier.
+  @override
+  String discriminator = "";
+
+  /// Timestamp property.
+  @override
+  DateTime timestamp = DateTime.now();
 
   /// Contact name.
   String name = '';
@@ -38,33 +42,43 @@ final class Contact implements CSMSetInterface {
   /// Creates a new [Contact] object with the required properties
   Contact(
     this.id,
+    this.discriminator,
+    this.timestamp,
     this.name,
     this.lastName,
     this.email,
-    this.phone, {
-    DateTime? timestamp,
-  }) {
-    _timestamp = timestamp ?? DateTime.now();
-  }
+    this.phone, 
+  );
 
   /// Creates a new [Contact] object with default properties.
   Contact.a();
 
   /// Creates a new [Contact] object based on a [json] object.
-  factory Contact.des(JObject json) {
+  factory Contact.des(DataMap json) {
     int id = json.get(EntitiesCommonProperties.kId);
+    String discriminator = json.get(EntitiesCommonProperties.kDiscriminator, "");
+    DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
     String name = json.get(kName);
     String lastname = json.get(kLastName);
     String email = json.get(kEmail);
     String phone = json.get(kPhone);
-    DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
 
-    return Contact(id, name, lastname, email, phone, timestamp: timestamp);
+    return Contact(
+      id,
+      discriminator,
+      timestamp,
+      name,
+      lastname,
+      email,
+      phone,
+    );
   }
 
   /// Creates a new [Contact] object overriding the given properties.
   Contact clone({
     int? id,
+    String? discriminator,
+    DateTime? timestamp,
     String? name,
     String? lastName,
     String? email,
@@ -72,6 +86,8 @@ final class Contact implements CSMSetInterface {
   }) =>
       Contact(
         id ?? this.id,
+        discriminator ?? this.discriminator,
+        timestamp ?? this.timestamp,
         name ?? this.name,
         lastName ?? this.lastName,
         email ?? this.email,
@@ -79,7 +95,7 @@ final class Contact implements CSMSetInterface {
       );
 
   @override
-  JObject encode() {
+  DataMap encode([DataMap? entityObject]) {
     return <String, Object?>{
       'id': id,
       kName: name,
@@ -91,7 +107,14 @@ final class Contact implements CSMSetInterface {
   }
 
   @override
-  List<CSMSetValidationResult> evaluate() {
-    return <CSMSetValidationResult>[];
+  void decode(DataMap encode) {
+    
   }
+
+  @override
+  List<EntityInvalidation<Contact>> evaluate() {
+    return <EntityInvalidation<Contact>>[];
+  }
+  
+  
 }

@@ -2,7 +2,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Source that exposes the configured services dependencies for each
 /// requirement, can be configured but if not, will use the default ones.
-final class TWSFoundationSource extends CSMSourceBase {
+final class TWSFoundationSource extends ServerB {
   /// --> Services
 
   /// Solutions service.
@@ -35,24 +35,24 @@ final class TWSFoundationSource extends CSMSourceBase {
     SolutionsServiceBase? solutions,
     AccountsServiceBase? accounts,
     SecurityServiceBase? security,
-    CSMHeaders? headers,
+    Headers? headers,
     ContactsServiceBase? contacts,
-    CSMUri development = const CSMUri(
+    Uri development = const Uri(
       '127.0.0.1',
       '',
       port: 5196,
-      protocol: CSMProtocols.http,
+      protocol: Protocols.http,
     ),
-    CSMUri? production,
+    Uri? production,
   }) : super(
-          debug,
           development,
-          production: production,
-          headers: headers,
+          prodHost: production,
+          httpClient: client,
+          serverHeaders: headers,
         ) {
-    this.solutions = solutions ?? SolutionsService(host, client: client, headers: this.headers);
-    this.accounts = accounts ?? AccountsService(host, client: client);
-    this.security = security ?? SecurityService(host, client: client);
-    this.contacts = contacts ?? ContactsService(host, client: client);
+    this.solutions = solutions ?? SolutionsService(serverHost, client: client, headers: headers);
+    this.accounts = accounts ?? AccountsService(serverHost, client: client);
+    this.security = security ?? SecurityService(serverHost, client: client);
+    this.contacts = contacts ?? ContactsService(serverHost, client: client);
   }
 }

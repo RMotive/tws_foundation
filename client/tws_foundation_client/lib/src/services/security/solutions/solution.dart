@@ -1,68 +1,85 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/constants.dart';
 
-final class Solution implements CSMSetInterface {
+final class Solution implements NamedEntityB<Solution> {
   static const String kName = 'name';
   static const String kSign = 'sign';
   static const String kDescription = 'description';
-  static const String kTimestamp = "timestamp";
-
-  late final DateTime _timestamp;
-  DateTime get timestamp => _timestamp;
-
+  
+  /// Interface identifier.
   @override
   int id = 0;
-  String name = '';
-  String sign = '';
+  
+  /// Record database pointer.
+  @override
+  String discriminator = "";
+
+  /// Timestamp property.
+  @override
+  DateTime timestamp = DateTime.now();
+  
+  @override
+  String name = "";
+
+  @override
   String? description;
 
+  String sign = '';
+
   /// Generates a new [Solution] instance with default values.
-  Solution.a({
-    DateTime? timestamp,
-  }) {
-    _timestamp = timestamp ?? DateTime.now();
-  }
+  Solution.a();
 
   /// Generates a new [Solution] instance from mandatory values.
   Solution.b(
     this.name,
     this.sign, {
     this.id = 0,
+    this.discriminator = "",
     this.description,
-    DateTime? timestamp,
-  }) {
-    _timestamp = timestamp ?? DateTime.now();
-  }
+  });
 
   /// Generates a new [Solution] instance.
   Solution(
     this.id,
+    this.discriminator,
+    this.timestamp,
     this.name,
     this.sign,
-    this.description, {
-    DateTime? timestamp,
-  }) {
-    _timestamp = timestamp ?? DateTime.now();
-  }
+    this.description, 
+  );
+  
 
   /// Geneates a new [Solution] instance based on a [JObject] data.
-  factory Solution.des(JObject json) {
-    int id = json.get('id');
+  factory Solution.des(DataMap json) {
+    int id = json.get(EntitiesCommonProperties.kId);
+    String discriminator = json.get(EntitiesCommonProperties.kDiscriminator);
+    DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
     String name = json.get('name');
     String sign = json.get('sign');
-    DateTime timestamp = json.get('timestamp');
-    String? description = json.getDefault('description', null);
+    String? description = json.get('description', null);
 
-    return Solution(id, name, sign, description, timestamp: timestamp);
+    return Solution(
+      id,
+      discriminator,
+      timestamp,
+      name,
+      sign,
+      description,
+    );
   }
 
   Solution clone({
     int? id,
+    String? discriminator,
+    DateTime? timestamp,
     String? name,
     String? sign,
     String? description,
   }) {
     return Solution(
       id ?? this.id,
+      discriminator ?? this.discriminator,
+      timestamp ?? this.timestamp,
       name ?? this.name,
       sign ?? this.sign,
       description ?? this.description,
@@ -70,22 +87,29 @@ final class Solution implements CSMSetInterface {
   }
 
   @override
-  JObject encode() {
+  DataMap encode([DataMap? entityObject]) {
     return <String, dynamic>{
-      'id': id,
+      EntitiesCommonProperties.kId: id,
+      EntitiesCommonProperties.kDiscriminator: discriminator,
+      EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
       kName: name,
       kSign: sign,
-      kTimestamp: timestamp.toIso8601String(),
       kDescription: description,
     };
   }
 
   @override
-  List<CSMSetValidationResult> evaluate() {
-    List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
+  void decode(DataMap encode) {
 
-    if (name.isEmpty) results.add(CSMSetValidationResult(kName, 'Solution name can\'t be empty', 'notEmpty'));
-    if (sign.length != 5) results.add(CSMSetValidationResult(kSign, 'Solution sign must be 5 length', 'strictLength(5)'));
+  }
+
+  @override
+  List<EntityInvalidation<Solution>> evaluate() {
+    List<EntityInvalidation<Solution>> results = <EntityInvalidation<Solution>>[];
+
+    // if (name.isEmpty) results.add(EntityInvalidation<Solution>(this, get, 'Solution name can\'t be empty', 'notEmpty'));
+    // if (sign.length != 5) results.add(EntityInvalidation(kSign, 'Solution sign must be 5 length', 'strictLength(5)'));
     return results;
   }
+
 }

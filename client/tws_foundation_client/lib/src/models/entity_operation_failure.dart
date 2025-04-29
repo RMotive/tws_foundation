@@ -4,7 +4,7 @@ const String _kSet = 'set';
 const String _kSystem = 'system';
 
 ///
-final class EntityOperationFailure<TSet extends CSMSetInterface> implements CSMEncodeInterface {
+final class EntityOperationFailure<TSet extends EntityB<TSet>> implements EncodableI {
   ///
   final TSet set;
 
@@ -15,8 +15,8 @@ final class EntityOperationFailure<TSet extends CSMSetInterface> implements CSME
   const EntityOperationFailure(this.set, this.system);
 
   ///
-  factory EntityOperationFailure.des(JObject json, TSet Function(JObject json) decoder) {
-    JObject decSet = json.get(_kSet);
+  factory EntityOperationFailure.des(DataMap json, TSet Function(DataMap json) decoder) {
+    DataMap decSet = json.get(_kSet);
     TSet set = decoder(decSet);
 
     String system = json.get(_kSystem);
@@ -25,7 +25,7 @@ final class EntityOperationFailure<TSet extends CSMSetInterface> implements CSME
   }
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       _kSet: set.encode(),
       _kSystem: system,

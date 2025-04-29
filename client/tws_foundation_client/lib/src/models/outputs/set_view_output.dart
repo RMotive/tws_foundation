@@ -5,7 +5,7 @@ import 'package:csm_client/csm_client.dart';
 ///
 ///
 /// [TSet] : The type of live database mirror set from to build the [View].
-final class SetViewOutput<TSet extends CSMEncodeInterface> implements CSMEncodeInterface {
+final class SetViewOutput<TSet extends EntityB<TSet>> implements EncodableI {
   /// Records resolved.
   final List<TSet> records;
 
@@ -31,9 +31,9 @@ final class SetViewOutput<TSet extends CSMEncodeInterface> implements CSMEncodeI
   ///
   /// [json] : The object to bind properties.
   /// [setDecode] : Optional [CSMDecodeInterface] implementation to use on environment cases.
-  factory SetViewOutput.des(JObject json, TSet Function(JObject json) decoder) {
+  factory SetViewOutput.des(DataMap json, TSet Function(DataMap json) decoder) {
 
-    List<JObject> rawRecords = json.getDefault('records', <dynamic>[]).cast();
+    List<DataMap> rawRecords = json.get('records', <dynamic>[]).cast();
     List<TSet> records = rawRecords
         .map<TSet>(decoder)
         .toList();
@@ -49,7 +49,7 @@ final class SetViewOutput<TSet extends CSMEncodeInterface> implements CSMEncodeI
   }
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'records': records.map((TSet e) => e.encode()).toList(),
       'pages': pages,

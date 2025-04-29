@@ -2,7 +2,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class AccountsService extends AccountsServiceBase {
   AccountsService(
-    CSMUri host, {
+    Uri host, {
     Client? client,
   }) : super(
           host,
@@ -12,7 +12,7 @@ final class AccountsService extends AccountsServiceBase {
 
   @override
   Effect<SetViewOutput<Account>> view(SetViewOutput<Account> options, String auth) async {
-    CSMActEffect actEffect = await twsPost('view', options, auth: auth);
+    ResponseController actEffect = await twsPost('view', options, auth: auth);
     return ServiceResolver<SetViewOutput<Account>>(actEffect);
   }
 }

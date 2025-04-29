@@ -2,7 +2,7 @@ import 'package:tws_foundation_client/src/constants.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Account information set, handles all data related to an account object stored in security database.
-final class Account implements CSMSetInterface {
+final class Account implements EntityB<Account> {
   /// [user] property key.
   static const String kUser = "user";
 
@@ -11,14 +11,18 @@ final class Account implements CSMSetInterface {
 
   /// [contactNavigation] property key.
   static const String kContactNavigation = 'ContactNavigation';
-
-  /// Private timestamp property.
-  late final DateTime _timestamp;
-  DateTime get timestamp => _timestamp; 
-
+  
+  /// Interface identifier.
+  @override
+  String discriminator = "";
+  
   /// Record database pointer.
   @override
   int id = 0;
+  
+  /// Timestamp property.
+  @override
+  DateTime timestamp = DateTime.now();
 
   /// Foreign relation [contactNavigation] pointer.
   int contact = 0;
@@ -30,30 +34,41 @@ final class Account implements CSMSetInterface {
   Contact? contactNavigation;
 
   /// Creates a new [Account] object with the required properties.
-  Account(this.id, this.contact, this.user, this.contactNavigation, { 
-    DateTime? timestamp,
-  }){
-    _timestamp = timestamp ?? DateTime.now(); 
-  }
+  Account(
+    this.id,
+    this.discriminator,
+    this.timestamp,
+    this.contact,
+    this.user,
+    this.contactNavigation,
+  );
 
   /// Creates a new [Account] object with default properties.
   Account.a();
 
   /// Converts a [JObject] into an [Account] object.
-  factory Account.des(JObject json) {
+  factory Account.des(DataMap json) {
     int id = json.get(EntitiesCommonProperties.kId);
+    String discriminator = json.get(EntitiesCommonProperties.kDiscriminator, "");
+    
     int contact = json.get(kContact);
     String user = json.get(kUser);
     DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
 
-
     Contact? contactNavigation;
     if (json[kContactNavigation] != null) {
-      JObject rawNavigation = json.getDefault(kContactNavigation, <String, dynamic>{});
+      DataMap rawNavigation = json.get(kContactNavigation, <String, dynamic>{});
       contactNavigation = Contact.des(rawNavigation);
     }
 
-    return Account(id, contact, user, contactNavigation, timestamp: timestamp);
+    return Account(
+      id,
+      discriminator,
+      timestamp,
+      contact,
+      user,
+      contactNavigation,
+    );
   }
 
   /// Creates an [Account] object cloning the current object with new overriden properties.
@@ -67,15 +82,17 @@ final class Account implements CSMSetInterface {
   /// [contactNavigation] : Foreign relation [contactNavigation] record entity.
   Account clone({
     int? id,
+    DateTime? timestamp,
+    String? discriminator,
     int? contact,
     String? user,
     Contact? contactNavigation,
   }) {
-    return Account(id ?? this.id, contact ?? this.contact, user ?? this.user, contactNavigation ?? this.contactNavigation);
+    return Account(id ?? this.id, discriminator ?? this.discriminator, timestamp ?? this.timestamp, contact ?? this.contact, user ?? this.user, contactNavigation ?? this.contactNavigation);
   }
 
   @override
-  JObject encode() {
+  DataMap encode([DataMap? entityObject]) {
     final Map<String, dynamic>? contactNavEncode = contactNavigation?.encode();
 
     return <String, dynamic>{
@@ -88,8 +105,15 @@ final class Account implements CSMSetInterface {
   }
 
   @override
-  List<CSMSetValidationResult> evaluate() {
-    List<CSMSetValidationResult> results = <CSMSetValidationResult>[];
+  void decode(DataMap encode) {
+
+  }
+
+  @override
+  List<EntityInvalidation<Account>> evaluate() {
+    List<EntityInvalidation<Account>> results = <EntityInvalidation<Account>>[];
     return results;
   }
+  
+  
 }

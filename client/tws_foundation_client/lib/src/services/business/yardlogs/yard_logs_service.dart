@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 final class YardLogsService extends YardLogsServiceBase {
   ///
   YardLogsService(
-    CSMUri host, {
+    Uri host, {
     Client? client,
   }) : super(
           host,
@@ -17,7 +17,7 @@ final class YardLogsService extends YardLogsServiceBase {
   ///
   @override
   Effect<SetViewOutput<YardLog>> view(SetViewInput<YardLog> input, String auth) async {
-    CSMActEffect actEffect = await twsPost('view', input, auth: auth);
+    ResponseController actEffect = await twsPost('view', input, auth: auth);
 
     return ServiceResolver<SetViewOutput<YardLog>>(actEffect);
   }

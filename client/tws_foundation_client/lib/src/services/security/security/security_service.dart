@@ -3,7 +3,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 final class SecurityService extends SecurityServiceBase {
   SecurityService(
-    CSMUri host, {
+    Uri host, {
     Client? client,
   }) : super(
           host,
@@ -13,7 +13,7 @@ final class SecurityService extends SecurityServiceBase {
 
   @override
   Effect<ServerSession> authenticate(AuthenticationInput credentials) async {
-    CSMActEffect effect = await twsPost('authenticate', credentials);
+    ResponseController effect = await twsPost('authenticate', credentials);
     return ServiceResolver<ServerSession>(effect);
   }
 }

@@ -15,18 +15,18 @@ final class ExceptionInfo {
   final String system;
 
   /// A custom collection of data, this is custom per exception definition.
-  final JObject factors;
+  final DataMap factors;
 
   /// Generates a new [ExceptionInfo] object.
   const ExceptionInfo(this.situation, this.trace, this.advise, this.system, this.factors);
 
   /// Generates a new [ExceptionInfo] object based on a [JObject] deserealization.
-  factory ExceptionInfo.des(JObject json) {
+  factory ExceptionInfo.des(DataMap json) {
     int situation = json.get('situation');
     String trace = json.get('trace');
     String advise = json.get('advise');
     String system = json.get('system');
-    JObject factors = json.getDefault('factors', <String, dynamic>{});
+    DataMap factors = json.get('factors', <String, dynamic>{});
 
     return ExceptionInfo(situation, trace, advise, system, factors);
   }

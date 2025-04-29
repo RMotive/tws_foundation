@@ -2,7 +2,7 @@
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class SetViewDateFilter<TSet extends CSMSetInterface> implements SetViewFilterInterface<TSet> {
+final class SetViewDateFilter<TSet extends EntityB<TSet>> implements SetViewFilterInterface<TSet> {
   @override
   final String discrimination = 'SetViewDateFilter`1';
 
@@ -27,7 +27,7 @@ final class SetViewDateFilter<TSet extends CSMSetInterface> implements SetViewFi
   });
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'discrimination': discrimination,
       'property': property,

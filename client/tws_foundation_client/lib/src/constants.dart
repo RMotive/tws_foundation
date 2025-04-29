@@ -11,4 +11,8 @@ final class EntitiesCommonProperties {
 
   ///
   static const String kTimestamp = "timestamp";
+  ///
+  
+  static const String kDiscriminator = "discriminator";
+
 }

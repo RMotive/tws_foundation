@@ -3,7 +3,7 @@ import 'package:tws_foundation_client/src/models/inputs/set_view_input/filters/s
 import 'package:tws_foundation_client/src/models/inputs/set_view_input/filters/set_view_filter_node_interface.dart';
 
 ///
-final class SetViewFilterLinearEvaluation<TSet extends CSMSetInterface> implements SetViewFilterNodeInterface<TSet> {
+final class SetViewFilterLinearEvaluation<TSet extends EntityB<TSet>> implements SetViewFilterNodeInterface<TSet> {
   ///
   @override
   final String discrimination = 'SetViewFilterLinearEvaluation`1';
@@ -22,7 +22,7 @@ final class SetViewFilterLinearEvaluation<TSet extends CSMSetInterface> implemen
   SetViewFilterLinearEvaluation(this.order, this.operator, this.filters);
 
   @override
-  JObject encode() {
+  DataMap encode() {
     return <String, dynamic>{
       'discrimination': discrimination,
       'order': order,
