@@ -5,27 +5,27 @@ import 'package:csm_client/csm_client.dart';
 ///
 ///
 /// [TSet] : The type of live database mirror set from to build the [View].
-final class SetViewOutput<TSet extends EntityB<TSet>> implements EncodableI {
+final class SetViewOutput<TSet extends EntityB<TSet>> implements EncodableI, DecodableI {
   /// Records resolved.
-  final List<TSet> records;
+  List<TSet> records;
 
   /// Total amount of pages available.
-  final int pages;
+  int pages;
 
   /// The current page resulted.
-  final int page;
+  int page;
 
   /// Timemark where this view resolution was created.
-  final DateTime creation;
+  DateTime creation;
 
   /// The quantity of records resolved.
-  final int length;
+  int length;
 
   /// The total quantity of available records at the data storage.
-  final int count;
+  int count;
 
   /// Creates a new [SetViewOutput] object.
-  const SetViewOutput(this.records, this.page, this.creation, this.pages, this.length, this.count);
+  SetViewOutput(this.records, this.page, this.creation, this.pages, this.length, this.count);
 
   /// Creates a new [SetViewOutput] object based on deserealization from a [JObject].
   ///
@@ -58,5 +58,15 @@ final class SetViewOutput<TSet extends EntityB<TSet>> implements EncodableI {
       'length': length,
       'count': count,
     };
+  }
+  
+  @override
+  void decode(DataMap encode) {
+    records = encode.getList('records');
+    pages = encode.get('pages');
+    page = encode.get('page');
+    creation = encode.get('creation');
+    length = encode.get('lenght');
+    count = encode.get('count');
   }
 }

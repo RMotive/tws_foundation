@@ -1,10 +1,14 @@
-import 'package:tws_foundation_client/src/services/tws_service_base.dart';
+import 'package:tws_foundation_client/src/core/typdefs.dart';
+import 'package:tws_foundation_client/src/models/outputs/entity_update_output.dart';
+import 'package:tws_foundation_client/src/models/outputs/set_view_output.dart';
+import 'package:tws_foundation_client/src/services/foundation_service_b.dart';
+import 'package:tws_foundation_client/src/services/security/solutions/solution.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 
 
 /// [API] for any [SolutionsServiceBase] implementations.
-abstract class SolutionsServiceBase extends TWSServiceBase {
+abstract class SolutionsServiceBase extends FoundationServiceB {
   /// Generates a new [SolutionsServiceBase] instance to store mandatory proeprties for any [SolutionsServiceBase] implementation.
   SolutionsServiceBase(
     super.host,

@@ -31,6 +31,8 @@
         - [CSMActEffect] changed to [ResponseController]
         - [CSMServiceResolverBase] changed to [ResponseResolverB]
         - [CSMServiceBase] changed to [ServiceBase]
+        - [twsPostList] changes to [PostListSecure]
+        - [twsPost] changes to [PostSecure]
 
 - Fixes:
 

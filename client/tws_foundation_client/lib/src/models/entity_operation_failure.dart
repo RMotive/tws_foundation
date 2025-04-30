@@ -1,34 +1,38 @@
 import 'package:csm_client/csm_client.dart';
 
-const String _kSet = 'set';
-const String _kSystem = 'system';
+/// [Class] stores data information about an [Entity] operation failure.
+final class EntityOperationFailure<TEntity extends EntityB<TEntity>> implements DecodableI, EncodableI {
+  /// [entity] property binding.
+  static const String kEntity = 'entity';
 
-///
-final class EntityOperationFailure<TSet extends EntityB<TSet>> implements EncodableI {
-  ///
-  final TSet set;
+  /// [message] property binding.
+  static const String kMessage = 'message';
 
-  ///
-  final String system;
+  /// [Entity] object instance where the operation failed.
+  late TEntity entity;
 
-  ///
-  const EntityOperationFailure(this.set, this.system);
+  /// System failure message.
+  String message = '';
 
-  ///
-  factory EntityOperationFailure.des(DataMap json, TSet Function(DataMap json) decoder) {
-    DataMap decSet = json.get(_kSet);
-    TSet set = decoder(decSet);
+  /// [entity] object factory.
+  final TEntity Function() entityFactory;
 
-    String system = json.get(_kSystem);
+  /// Creates a new [EntityOperationFailure] instance.
+  EntityOperationFailure(this.entityFactory);
 
-    return EntityOperationFailure<TSet>(set, system);
+  @override
+  void decode(DataMap encode) {
+    entity = entityFactory();
+    entity.decode(encode.get(kEntity));
+
+    message = encode.get(kMessage);
   }
-
+  
   @override
   DataMap encode() {
     return <String, dynamic>{
-      _kSet: set.encode(),
-      _kSystem: system,
+      kEntity: entity,
+      kMessage: message,
     };
   }
 }

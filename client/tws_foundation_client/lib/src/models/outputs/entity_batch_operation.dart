@@ -8,39 +8,17 @@ const String _kQSuccesses = 'qSuccesses';
 const String _kQFailures = 'qFailures';
 const String _kFailed = 'failed';
 
-final class EntityBatchOperation<TSet extends EntityB<TSet>> implements EncodableI {
-  final List<TSet> successes;
-  final List<EntityOperationFailure<TSet>> failures;
-  final int qTransactions;
-  final int qSuccesses;
-  final int qFailures;
-  final bool failed;
+final class EntityBatchOperation<TSet extends EntityB<TSet>> implements EncodableI, DecodableI {
+  List<TSet> successes;
+  List<EntityOperationFailure<TSet>> failures;
+  int qTransactions;
+  int qSuccesses;
+  int qFailures;
+  bool failed;
+  /// Internal [T] builder for [DecodableI] purposes.
+  final TSet Function() _entityBuilder;
 
-  const EntityBatchOperation(this.successes, this.failures, this.qTransactions, this.qSuccesses, this.qFailures, this.failed);
-
-  factory EntityBatchOperation.des(
-      DataMap json, TSet Function(DataMap json) decoder) {
-    List<DataMap> decSuccesses = json.get(_kSuccesses);
-    List<DataMap> decFailures = json.get(_kFailures);
-
-    final List<TSet> successes = decSuccesses.map<TSet>((DataMap e) {
-      TSet set = decoder(e);
-      return set;
-    }).toList();
-    final List<EntityOperationFailure<TSet>> failures = decFailures.map<EntityOperationFailure<TSet>>(
-      (DataMap e) {
-        EntityOperationFailure<TSet> failure = EntityOperationFailure<TSet>.des(e, decoder);
-        return failure;
-      },
-    ).toList();
-
-    final int qTransactions = json.get(_kQTransactions);
-    final int qSuccesses = json.get(_kQSuccesses);
-    final int qFailures = json.get(_kQFailures);
-    final bool failed = json.get(_kFailed);
-
-    return EntityBatchOperation<TSet>(successes, failures, qTransactions, qSuccesses, qFailures, failed);
-  }
+  EntityBatchOperation(this.successes, this.failures, this.qTransactions, this.qSuccesses, this.qFailures, this.failed, this._entityBuilder);
 
   @override
   DataMap encode() {
@@ -55,5 +33,30 @@ final class EntityBatchOperation<TSet extends EntityB<TSet>> implements Encodabl
       _kQFailures: qFailures,
       _kFailed: failed,
     };
+  }
+  
+  @override
+  void decode(DataMap encode) {
+    qTransactions = encode.get(_kQTransactions);
+    qSuccesses = encode.get(_kQSuccesses);
+    qFailures = encode.get(_kQFailures);
+    failed = encode.get(_kFailed);
+
+    List<DataMap> decSuccesses = encode.get(_kSuccesses);
+    List<DataMap> decFailures = encode.get(_kFailures);
+
+    successes = decSuccesses.map<TSet>((DataMap e) {
+      TSet set = _entityBuilder();
+      set.decode(e);
+      return set;
+    }).toList();
+
+    failures = decFailures.map<EntityOperationFailure<TSet>>(
+      (DataMap e) {        
+        EntityOperationFailure<TSet> failure = EntityOperationFailure<TSet>(_entityBuilder);
+        failure.decode(e);
+        return failure;
+      },
+    ).toList();
   }
 }

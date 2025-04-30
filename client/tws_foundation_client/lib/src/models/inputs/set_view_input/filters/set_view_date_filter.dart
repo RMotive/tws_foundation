@@ -1,8 +1,8 @@
-
-import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/models/inputs/set_view_input/filters/set_view_filter_interface.dart';
 
 ///
-final class SetViewDateFilter<TSet extends EntityB<TSet>> implements SetViewFilterInterface<TSet> {
+final class SetViewDateFilter<TEntity extends EntityI<TEntity>> implements SetViewFilterInterface<TEntity> {
   @override
   final String discrimination = 'SetViewDateFilter`1';
 

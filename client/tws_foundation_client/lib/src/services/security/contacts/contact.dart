@@ -1,8 +1,7 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/constants.dart';
 
 /// Contact information set, handles information related to a person that uses an account to authenticate its usage.
-final class Contact implements EntityB<Contact> {
+final class Contact extends EntityB<Contact> {
   /// [name] property key.
   static const String kName = 'name';
 
@@ -14,18 +13,6 @@ final class Contact implements EntityB<Contact> {
 
   /// [phone] property key.
   static const String kPhone = 'phone';
-
-  /// Record database pointer.
-  @override
-  int id = 0;
-
-  /// Interface identifier.
-  @override
-  String discriminator = "";
-
-  /// Timestamp property.
-  @override
-  DateTime timestamp = DateTime.now();
 
   /// Contact name.
   String name = '';
@@ -39,76 +26,26 @@ final class Contact implements EntityB<Contact> {
   /// Contact phone.
   String phone = '';
 
-  /// Creates a new [Contact] object with the required properties
-  Contact(
-    this.id,
-    this.discriminator,
-    this.timestamp,
-    this.name,
-    this.lastName,
-    this.email,
-    this.phone, 
-  );
-
   /// Creates a new [Contact] object with default properties.
-  Contact.a();
-
-  /// Creates a new [Contact] object based on a [json] object.
-  factory Contact.des(DataMap json) {
-    int id = json.get(EntitiesCommonProperties.kId);
-    String discriminator = json.get(EntitiesCommonProperties.kDiscriminator, "");
-    DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
-    String name = json.get(kName);
-    String lastname = json.get(kLastName);
-    String email = json.get(kEmail);
-    String phone = json.get(kPhone);
-
-    return Contact(
-      id,
-      discriminator,
-      timestamp,
-      name,
-      lastname,
-      email,
-      phone,
-    );
-  }
-
-  /// Creates a new [Contact] object overriding the given properties.
-  Contact clone({
-    int? id,
-    String? discriminator,
-    DateTime? timestamp,
-    String? name,
-    String? lastName,
-    String? email,
-    String? phone,
-  }) =>
-      Contact(
-        id ?? this.id,
-        discriminator ?? this.discriminator,
-        timestamp ?? this.timestamp,
-        name ?? this.name,
-        lastName ?? this.lastName,
-        email ?? this.email,
-        phone ?? this.phone,
-      );
+  Contact();
 
   @override
   DataMap encode([DataMap? entityObject]) {
-    return <String, Object?>{
-      'id': id,
+    return super.encode(<String, Object?>{
       kName: name,
       kLastName: lastName,
       kEmail: email,
       kPhone: phone,
-      EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
-    };
+    });
   }
 
   @override
   void decode(DataMap encode) {
-    
+    super.decode(encode);
+    name = encode.get(kName);
+    lastName = encode.get(kLastName);
+    email = encode.get(kEmail);
+    phone = encode.get(kPhone);
   }
 
   @override

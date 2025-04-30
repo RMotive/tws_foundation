@@ -1,3 +1,9 @@
+import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/typdefs.dart';
+import 'package:tws_foundation_client/src/models/outputs/entity_update_output.dart';
+import 'package:tws_foundation_client/src/models/outputs/set_view_output.dart';
+import 'package:tws_foundation_client/src/services/security/solutions/solution.dart';
+import 'package:tws_foundation_client/src/services/security/solutions/solutions_service_base.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [SolutionsServiceBase] implementation.
@@ -17,19 +23,19 @@ final class SolutionsService extends SolutionsServiceBase {
 
   @override
   Effect<SetViewOutput<Solution>> view(SetViewOutput<Solution> options, String auth) async {
-    ResponseController actEffect = await twsPost('view', options, auth: auth);
-    return ServiceResolver<SetViewOutput<Solution>>(actEffect);
+    ResponseController actEffect = await postSecure('view', options, authToken: auth);
+    return FoundationResponseResolver<SetViewOutput<Solution>>(actEffect);
   }
 
   @override
   Effect<SetViewOutput<Solution>> create(List<Solution> solutions, String auth) async {
-    ResponseController actEffect = await twsPostList('create', solutions, auth: auth);
-    return ServiceResolver<SetViewOutput<Solution>>(actEffect);
+    ResponseController actEffect = await postListSecure('create', solutions, auth: auth);
+    return FoundationResponseResolver<SetViewOutput<Solution>>(actEffect);
   }
 
   @override
   Effect<EntityUpdateOutput<Solution>> update(Solution solution, String auth) async {
-    ResponseController actEffect = await twsPost('update', solution, auth: auth);
-    return ServiceResolver<EntityUpdateOutput<Solution>>(actEffect);
+    ResponseController actEffect = await postSecure('update', solution, authToken: auth);
+    return FoundationResponseResolver<EntityUpdateOutput<Solution>>(actEffect);
   }
 }

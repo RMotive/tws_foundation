@@ -1,23 +1,26 @@
+import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// Represents a standarized information for failures responses from the server source.
-final class FailureFrame {
+/// Data {class} implementation for an [FailureFrame].
+///
+///
+/// Defines a data constract for a frame that represents a [ServerI] implementation failed response with [ExceptionInfo].
+final class FailureFrame implements DecodableI {
   /// Unique server transaction identification.
-  final String tracer;
+  String tracer = '';
 
   /// Server exception reflection information.
-  final ExceptionInfo estela;
+  ExceptionInfo estela = ExceptionInfo();
 
-  /// Generates a new failure frame response object.
-  const FailureFrame(this.tracer, this.estela);
-
-  factory FailureFrame.des(DataMap json) {
-    String tracer = json.get('tracer');
-    DataMap estelaJson = json.get('estela', <String, dynamic>{});
-
-    return FailureFrame(
-      tracer,
-      ExceptionInfo.des(estelaJson),
-    );
+  /// Creates a new [FailureFrame] instance.
+  FailureFrame();
+  
+  @override
+  void decode(DataMap encode) {
+    tracer = encode.get('tracer');
+    
+    final DataMap estelaData = encode.get('estela');
+    estela = ExceptionInfo();
+    estela.decode(estelaData);
   }
 }

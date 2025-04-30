@@ -38,3 +38,12 @@ public class SetViewDateFilter<TSet>
         return Expression.Lambda<Func<TSet, bool>>(expression, param);
     }
 }
+
+
+
+
+
+
+
+
+

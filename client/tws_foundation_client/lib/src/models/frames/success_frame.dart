@@ -1,34 +1,32 @@
 import 'package:csm_client/csm_client.dart';
 
-/// Represents the success frame for responses from [TWSAdministration] source
-/// exposing static properties from transaction contexts.
+/// Data {class} implementation for an [FailureFrame].
 ///
-/// [TEstela] : Model object type that represents the transaction context result.
-final class SuccessFrame<TEstela extends EncodableI> implements EncodableI {
-  /// Unique transaction identifier.
-  final String tracer;
+///
+/// [T] type of the response body data object.
+///
+/// Defines a data constract for a frame that represents a [ServerI] implementation successfuly response with interest data.
+final class SuccessFrame<T extends DecodableI> implements DecodableI {
+  /// Unique operation identifier.
+  String tracer = '';
 
-  /// Transaction context object.
-  final TEstela estela;
+  /// Response data object.
+  late T estela;
 
-  /// Generates a new success frame object representation.
-  const SuccessFrame(this.tracer, this.estela);
+  /// Internal [T] builder for [DecodableI] purposes.
+  final T Function() _estelaBuilder;
 
-  /// Generates a new success frame object decoding a json object.
-  factory SuccessFrame.des(DataMap json, TEstela Function(DataMap json) estelaDecoder) {
-    String tracer = json.get('tracer');
-
-    DataMap objEstela = json.get('estela', <String, dynamic>{});
-    TEstela estelaObject = estelaDecoder(objEstela);
-
-    return SuccessFrame<TEstela>(tracer, estelaObject);
+  /// Creates a new [SuccessFrame] instance.
+  SuccessFrame(this._estelaBuilder) {
+    estela = _estelaBuilder();
   }
-
+  
   @override
-  DataMap encode() {
-    return <String, dynamic>{
-      'tracer': '',
-      'estela': estela.encode(),
-    };
+  void decode(DataMap encode) {
+    tracer = encode.get('tracer');
+
+    final DataMap estelaData = encode.get('estela');
+    estela = _estelaBuilder();
+    estela.decode(estelaData);
   }
 }

@@ -1,7 +1,9 @@
-import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/models/inputs/set_view_input/filters/set_view_filter_node_interface.dart';
+import 'package:tws_foundation_client/src/models/inputs/set_view_input/set_view_order_options.dart';
 
 ///
-final class SetViewInput<TSet extends EntityB<TSet>> implements EncodableI {
+final class SetViewInput<TSet extends EntityI<TSet>> implements EncodableI {
   ///
   final bool retroactive;
 
@@ -35,9 +37,3 @@ final class SetViewInput<TSet extends EntityB<TSet>> implements EncodableI {
     };
   }
 }
-
-
-
-
-
-

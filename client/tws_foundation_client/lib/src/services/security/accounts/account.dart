@@ -1,8 +1,8 @@
-import 'package:tws_foundation_client/src/constants.dart';
-import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/security/contacts/contact.dart';
 
 /// Account information set, handles all data related to an account object stored in security database.
-final class Account implements EntityB<Account> {
+final class Account extends EntityB<Account> {
   /// [user] property key.
   static const String kUser = "user";
 
@@ -10,19 +10,7 @@ final class Account implements EntityB<Account> {
   static const String kContact = 'contact';
 
   /// [contactNavigation] property key.
-  static const String kContactNavigation = 'ContactNavigation';
-  
-  /// Interface identifier.
-  @override
-  String discriminator = "";
-  
-  /// Record database pointer.
-  @override
-  int id = 0;
-  
-  /// Timestamp property.
-  @override
-  DateTime timestamp = DateTime.now();
+  static const String kContactNavigation = 'ContactNavigation'; 
 
   /// Foreign relation [contactNavigation] pointer.
   int contact = 0;
@@ -34,79 +22,32 @@ final class Account implements EntityB<Account> {
   Contact? contactNavigation;
 
   /// Creates a new [Account] object with the required properties.
-  Account(
-    this.id,
-    this.discriminator,
-    this.timestamp,
-    this.contact,
-    this.user,
-    this.contactNavigation,
-  );
-
-  /// Creates a new [Account] object with default properties.
-  Account.a();
-
-  /// Converts a [JObject] into an [Account] object.
-  factory Account.des(DataMap json) {
-    int id = json.get(EntitiesCommonProperties.kId);
-    String discriminator = json.get(EntitiesCommonProperties.kDiscriminator, "");
-    
-    int contact = json.get(kContact);
-    String user = json.get(kUser);
-    DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
-
-    Contact? contactNavigation;
-    if (json[kContactNavigation] != null) {
-      DataMap rawNavigation = json.get(kContactNavigation, <String, dynamic>{});
-      contactNavigation = Contact.des(rawNavigation);
-    }
-
-    return Account(
-      id,
-      discriminator,
-      timestamp,
-      contact,
-      user,
-      contactNavigation,
-    );
-  }
-
-  /// Creates an [Account] object cloning the current object with new overriden properties.
-  ///
-  /// [id] : Record database pointer.
-  ///
-  /// [contact] : Foreign relation [contactNavigation] pointer.
-  ///
-  /// [user] : User identification.
-  ///
-  /// [contactNavigation] : Foreign relation [contactNavigation] record entity.
-  Account clone({
-    int? id,
-    DateTime? timestamp,
-    String? discriminator,
-    int? contact,
-    String? user,
-    Contact? contactNavigation,
-  }) {
-    return Account(id ?? this.id, discriminator ?? this.discriminator, timestamp ?? this.timestamp, contact ?? this.contact, user ?? this.user, contactNavigation ?? this.contactNavigation);
-  }
+  Account();
 
   @override
   DataMap encode([DataMap? entityObject]) {
     final Map<String, dynamic>? contactNavEncode = contactNavigation?.encode();
 
-    return <String, dynamic>{
-      EntitiesCommonProperties.kId: id,
-      kContact: contact,
-      kUser: user,
-      EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
-      kContactNavigation: contactNavEncode,
-    };
+    return super.encode(
+      <String, Object?>{
+        kContact: contact,
+        kUser: user,
+        kContactNavigation: contactNavEncode,
+      }
+    );
   }
 
   @override
   void decode(DataMap encode) {
-
+    super.decode(encode);
+    contact = encode.get(kContact);
+    user = encode.get(kUser);
+    Contact? contactNavigation;
+    if (encode[kContactNavigation] != null) {
+      DataMap rawNavigation = encode.get(kContactNavigation, <String, dynamic>{});
+      contactNavigation = Contact();
+      contactNavigation.decode(rawNavigation);
+    }
   }
 
   @override

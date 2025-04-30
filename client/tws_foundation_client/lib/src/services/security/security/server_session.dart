@@ -1,36 +1,26 @@
-import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/security/contacts/contact.dart';
 
 /// Defines a privileges model, that stores different session descriptive data, like auth token,
 /// acceptable privileges, etc.
-final class ServerSession implements EncodableI {
+final class ServerSession implements EncodableI, DecodableI {
   /// Services auth token.
-  final String token;
+  String token;
 
   /// [token] timemark expiration
-  final DateTime expiration;
+  DateTime expiration;
 
   /// Current user identity.
-  final String identity;
+  String identity;
 
   /// Privileges wildcard, means can access everything.
-  final bool wildcard;
+  bool wildcard;
 
   /// User contact information.
-  final Contact contact;
+  Contact contact;
 
   /// Generates a new [ServerSession] object.
-  const ServerSession(this.token, this.expiration, this.identity, this.wildcard, this.contact);
-
-  /// Generates a new [ServerSession] object based on [JObject] deserealization.
-  factory ServerSession.des(DataMap json) {
-    String token = json.get('token');
-    DateTime expiration = json.get('expiration');
-    String identity = json.get('identity');
-    bool wildcard = json.get('wildcard', false);
-    Contact contact = Contact.des(json.get('contact', <String, dynamic>{}));
-
-    return ServerSession(token, expiration, identity, wildcard, contact);
-  }
+  ServerSession(this.token, this.expiration, this.identity, this.wildcard, this.contact);
 
   @override
   DataMap encode() {
@@ -41,5 +31,19 @@ final class ServerSession implements EncodableI {
       'wildcard': wildcard,
       'contact': contact.encode(),
     };
+  }
+  
+  @override
+  void decode(DataMap encode) {
+    token = encode.get('token');
+    expiration = encode.get('expiration');
+    identity = encode.get('identity');
+    wildcard = encode.get('wildcard');
+
+    if (encode['contact'] != null) {
+      DataMap rawContact = encode.get('contact', <String, dynamic>{});
+      contact = Contact();
+      contact.decode(rawContact);
+    }  
   }
 }
