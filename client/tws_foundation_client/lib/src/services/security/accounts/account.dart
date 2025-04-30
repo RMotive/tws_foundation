@@ -1,4 +1,4 @@
-import 'package:tws_foundation_client/src/constants.dart';
+import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Account information set, handles all data related to an account object stored in security database.

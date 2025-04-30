@@ -1,33 +1,35 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// Represents a server exception exposed information.
-final class ExceptionInfo {
-  /// Identification of situation.
-  final int situation;
+/// Data {class} implementation for an [ExceptionInfo].
+///
+///
+/// Defines a data constract for a [FoundationServer] implementation exception, storing diagnosticable exception information.
+final class ExceptionInfo implements DecodableI {
+  /// Where the exception got thrown ([ServerI] side).
+  String trace = '';
 
-  /// StackTrace from the exception source at server context.
-  final String trace;
+  /// Specific exception management situation code.
+  int situation = 0;
 
   /// User friendly advise message to display (recommended).
-  final String advise;
+  String advise = '';
 
   /// A system reflected type with message from the exception thrown at server context.
-  final String system;
+  String system = '';
 
   /// A custom collection of data, this is custom per exception definition.
-  final JObject factors;
+  DataMap factors = <String, Object?>{};
 
   /// Generates a new [ExceptionInfo] object.
-  const ExceptionInfo(this.situation, this.trace, this.advise, this.system, this.factors);
+  ExceptionInfo();
 
-  /// Generates a new [ExceptionInfo] object based on a [JObject] deserealization.
-  factory ExceptionInfo.des(JObject json) {
-    int situation = json.get('situation');
-    String trace = json.get('trace');
-    String advise = json.get('advise');
-    String system = json.get('system');
-    JObject factors = json.getDefault('factors', <String, dynamic>{});
-
-    return ExceptionInfo(situation, trace, advise, system, factors);
+  @override
+  void decode(DataMap encode) {
+    situation = encode.get('situation');
+    trace = encode.get('trace');
+    advise = encode.get('advise');
+    system = encode.get('system');
+    factors = encode.get('factors');
   }
 }

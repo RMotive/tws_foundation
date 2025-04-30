@@ -17,7 +17,7 @@ final class YardLogsService extends YardLogsServiceBase {
   ///
   @override
   Effect<SetViewOutput<YardLog>> view(SetViewInput<YardLog> input, String auth) async {
-    CSMActEffect actEffect = await twsPost('view', input, auth: auth);
+    CSMActEffect actEffect = await postSecure('view', input, authToken: auth);
 
     return ServiceResolver<SetViewOutput<YardLog>>(actEffect);
   }

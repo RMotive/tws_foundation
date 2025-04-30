@@ -11,7 +11,7 @@ dependencies:
   csm_client:
     git:
       url: https://github.com/RMotive/csm_client
-      ref: development#refactor-04.06-2025
+      ref: main
 
 dev_dependencies:
   lints: ^5.0.0

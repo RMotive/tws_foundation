@@ -1,5 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/constants.dart';
+import 'package:tws_foundation_client/src/core/constants.dart';
 
 /// Contact information set, handles information related to a person that uses an account to authenticate its usage.
 final class Contact implements CSMSetInterface {

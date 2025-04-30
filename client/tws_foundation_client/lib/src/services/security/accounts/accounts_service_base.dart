@@ -1,7 +1,7 @@
-import 'package:tws_foundation_client/src/services/tws_service_base.dart';
+import 'package:tws_foundation_client/src/services/foundation_service_b.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-abstract class AccountsServiceBase extends TWSServiceBase {
+abstract class AccountsServiceBase extends FoundationServiceB {
   AccountsServiceBase(
     super.host,
     super.servicePath, {
