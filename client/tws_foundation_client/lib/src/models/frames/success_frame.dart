@@ -4,7 +4,7 @@ import 'package:csm_client/csm_client.dart';
 /// exposing static properties from transaction contexts.
 ///
 /// [TEstela] : Model object type that represents the transaction context result.
-final class SuccessFrame<TEstela extends CSMEncodeInterface> implements CSMEncodeInterface {
+final class SuccessFrame<TEstela extends EncodableI> implements EncodableI {
   /// Unique transaction identifier.
   final String tracer;
 

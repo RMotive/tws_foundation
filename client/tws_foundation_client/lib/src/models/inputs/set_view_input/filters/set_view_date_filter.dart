@@ -1,8 +1,7 @@
-
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class SetViewDateFilter<TSet extends CSMSetInterface> implements SetViewFilterInterface<TSet> {
+final class SetViewDateFilter<TEntity extends EntityI> implements SetViewFilterInterface<TEntity> {
   @override
   final String discrimination = 'SetViewDateFilter`1';
 

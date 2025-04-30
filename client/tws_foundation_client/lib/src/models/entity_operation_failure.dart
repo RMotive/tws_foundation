@@ -1,34 +1,30 @@
 import 'package:csm_client/csm_client.dart';
 
-const String _kSet = 'set';
-const String _kSystem = 'system';
+/// [Class] stores data information about an [Entity] operation failure.
+final class EntityOperationFailure<TEntity extends EntityB> implements DecodableI {
+  /// [entity] property binding.
+  static const String kEntity = 'entity';
 
-///
-final class EntityOperationFailure<TSet extends CSMSetInterface> implements CSMEncodeInterface {
-  ///
-  final TSet set;
+  /// [message] property binding.
+  static const String kMessage = 'message';
 
-  ///
-  final String system;
+  /// [Entity] object instance where the operation failed.
+  late TEntity entity;
 
-  ///
-  const EntityOperationFailure(this.set, this.system);
+  /// System failure message.
+  String message = '';
 
-  ///
-  factory EntityOperationFailure.des(JObject json, TSet Function(JObject json) decoder) {
-    JObject decSet = json.get(_kSet);
-    TSet set = decoder(decSet);
+  /// [entity] object factory.
+  final TEntity Function() entityFactory;
 
-    String system = json.get(_kSystem);
-
-    return EntityOperationFailure<TSet>(set, system);
-  }
+  /// Creates a new [EntityOperationFailure] instance.
+  EntityOperationFailure(this.entityFactory);
 
   @override
-  JObject encode() {
-    return <String, dynamic>{
-      _kSet: set.encode(),
-      _kSystem: system,
-    };
+  void decode(JObject encode) {
+    entity = entityFactory();
+    entity.decode(encode[kEntity]);
+
+    message = encode[kMessage];
   }
 }

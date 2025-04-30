@@ -1,7 +1,7 @@
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class SetViewInput<TSet extends CSMSetInterface> implements CSMEncodeInterface {
+final class SetViewInput<TSet extends EntityI> implements EncodableI {
   ///
   final bool retroactive;
 
@@ -35,9 +35,3 @@ final class SetViewInput<TSet extends CSMSetInterface> implements CSMEncodeInter
     };
   }
 }
-
-
-
-
-
-

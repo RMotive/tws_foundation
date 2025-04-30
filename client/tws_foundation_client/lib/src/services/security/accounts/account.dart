@@ -14,11 +14,7 @@ final class Account implements CSMSetInterface {
 
   /// Private timestamp property.
   late final DateTime _timestamp;
-  DateTime get timestamp => _timestamp; 
-
-  /// Record database pointer.
-  @override
-  int id = 0;
+  DateTime get timestamp => _timestamp;
 
   /// Foreign relation [contactNavigation] pointer.
   int contact = 0;
@@ -30,10 +26,14 @@ final class Account implements CSMSetInterface {
   Contact? contactNavigation;
 
   /// Creates a new [Account] object with the required properties.
-  Account(this.id, this.contact, this.user, this.contactNavigation, { 
+  Account(
+    this.id,
+    this.contact,
+    this.user,
+    this.contactNavigation, {
     DateTime? timestamp,
-  }){
-    _timestamp = timestamp ?? DateTime.now(); 
+  }) {
+    _timestamp = timestamp ?? DateTime.now();
   }
 
   /// Creates a new [Account] object with default properties.
@@ -45,7 +45,6 @@ final class Account implements CSMSetInterface {
     int contact = json.get(kContact);
     String user = json.get(kUser);
     DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
-
 
     Contact? contactNavigation;
     if (json[kContactNavigation] != null) {

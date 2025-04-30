@@ -1,7 +1,7 @@
 import 'package:csm_client/csm_client.dart';
 
 ///
-abstract interface class SetViewFilterNodeInterface<TSet extends CSMSetInterface> implements CSMEncodeInterface {
+abstract interface class SetViewFilterNodeInterface<TSet extends EntityI> implements EncodableI {
   ///
   final String discrimination;
 
