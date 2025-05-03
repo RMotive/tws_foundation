@@ -6,7 +6,7 @@ using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Filters;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Server;
@@ -14,20 +14,11 @@ using CSM_Foundation.Server.Converters.JSON;
 using CSM_Foundation.Server.Managers;
 using CSM_Foundation.Server.Utils;
 
-using CSM_Security;
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
-using TWS_Business;
-using TWS_Business.Depots;
-using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Insurances;
-using TWS_Business.Entities.Maintenances;
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.USDOTs;
 
-using TWS_Customer.Features.Business;
 using TWS_Customer.Features.Security;
 using TWS_Customer.Managers.Session;
 
@@ -87,11 +78,11 @@ public partial class Program {
 
                         // --> JSON Converter for [IEntity] objects.
                         options.JsonSerializerOptions.Converters.Add(
-                                new EntityConverter {
-                                    Variations = [
+                                new EntityConverter(
+                                    [
                                         typeof(YardLog),
-                                    ],
-                                }
+                                    ]
+                                )
                             );
                     }
                 );
@@ -138,6 +129,8 @@ public partial class Program {
 
                 // --> [CSM Security]
                 ConnectionOptions securityDbConnectionOptions = DatabaseUtilities.Retrieve(CSM_Security.Database.SIGN);
+                new CSM_Security.Database(securityDbConnectionOptions).ValidateConnection();
+
                 Services.AddScoped(
                         (provider) => new CSM_Security.Database(securityDbConnectionOptions)
                     );

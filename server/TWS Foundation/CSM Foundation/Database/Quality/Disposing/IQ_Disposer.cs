@@ -1,7 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace CSM_Foundation.Database.Quality.Disposing;
 
 /// <summary>

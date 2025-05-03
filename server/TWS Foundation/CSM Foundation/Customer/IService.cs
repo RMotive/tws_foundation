@@ -1,9 +1,10 @@
 ﻿using System.Linq.Expressions;
 
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Input.Update;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Customer;
@@ -20,7 +21,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     The complex View results, a View is a paged and ordered collection of records based on the given <paramref name="Options"/>
     /// </returns>
-    Task<SetViewOutput<TEntity>> View(OperationInput<TEntity, SetViewInput<TEntity>> input);
+    Task<ViewOutput<TEntity>> View(OperationInput<TEntity, ViewInput<TEntity>> input);
 
     /// <summary>
     ///     Creates a new <see cref="TEntity"/> set records into the data storage.
@@ -36,7 +37,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     A complex batch result that provides information related to exceptions catched, record that belongs to the exception and successes.
     /// </returns>
-    Task<BatchOperationOutput<TEntity, TEntity>> Create(TEntity[] Entities, bool Sync = false);
+    Task<BatchOperationOutput<TEntity>> Create(TEntity[] Entities, bool Sync = false);
 
     /// <summary>
     /// 
@@ -45,7 +46,7 @@ public interface IService<TEntity>
     /// <param name="Filter"></param>
     /// <param name="Accumulate"></param>
     /// <returns></returns>
-    Task<BatchOperationOutput<TEntity, TEntity>> Read(EntityBatchBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, QueryProcessor<TEntity>? Accumulate = null);
+    Task<BatchOperationOutput<TEntity>> Read(EntityBatchBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, QueryProcessor<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Updates the given record, this is based on the <see cref="TEntity.Id"/> pointer to identify the record to update and override the given <paramref name="Solution"/> object.
@@ -56,7 +57,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     Complex update operation result.
     /// </returns>
-    Task<EntityUpdateOutput<TEntity>> Update(UpdateInput<TEntity> input);
+    Task<UpdateOutput<TEntity>> Update(UpdateInput<TEntity> input);
 
     /// <summary>
     /// 
@@ -70,5 +71,5 @@ public interface IService<TEntity>
     /// </summary>
     /// <param name="ids"></param>
     /// <returns></returns>
-    Task<BatchOperationOutput<TEntity, TEntity>> Delete(long[] ids);
+    Task<BatchOperationOutput<TEntity>> Delete(long[] ids);
 }

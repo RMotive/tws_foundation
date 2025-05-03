@@ -1,6 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Exceptions;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 using CSM_Security.Entities;
@@ -46,7 +45,7 @@ public class AccountsDepot
     public AccountsDepot(Database database, IDisposer? Disposer = null) : base(database, Disposer) { }
 
     public async Task<Permit[]> GetPermits(long Account) {
-        BatchOperationOutput<Account, Account> accountReadOut = await Read(
+        BatchOperationOutput<Account> accountReadOut = await Read(
                 EntityBatchBehaviors.First,
                 (record) => record.Id == Account,
                 (query) => {

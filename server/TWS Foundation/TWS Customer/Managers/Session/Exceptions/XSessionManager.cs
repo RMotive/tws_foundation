@@ -3,8 +3,6 @@
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
 
-using TWS_Customer.Managers.Session;
-
 namespace TWS_Customer.Managers.Session.Exceptions;
 
 /// <summary>

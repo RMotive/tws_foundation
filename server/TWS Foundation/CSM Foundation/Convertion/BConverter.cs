@@ -16,12 +16,13 @@ public abstract class BConverter<TBase>
     /// <summary>
     ///     Stores all the possible variations classes types to find the correct one.
     /// </summary>
-    public virtual Type[] Variations { get; init; } = [];
+    public Type[] Variations { get; init; }
 
     /// <summary>
     ///     Creates a new <see cref="BConverter{TBase}"/> instance.
     /// </summary>
-    public BConverter() {
+    public BConverter(Type[] variations) {
+        Variations = variations;
         ValidateVariations();
     }
 
@@ -34,6 +35,8 @@ public abstract class BConverter<TBase>
     ///     Thrown when a wrong variation is found.
     /// </exception>
     void ValidateVariations() {
+        if(Variations.Length == 0) return;
+
         IEnumerable<Type> wrongTypes = Variations.Where(
                 (variation) => {
                     return !variation.IsAssignableTo(typeof(TBase));

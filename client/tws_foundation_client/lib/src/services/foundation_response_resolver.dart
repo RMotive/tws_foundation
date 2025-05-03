@@ -14,13 +14,14 @@ final class FoundationResponseResolver<T extends DecodableI> extends ResponseRes
   ///
   ///
   /// [objectBuilder] building callback for the [T] object creation in order to call [DecodableI.decode] method from [DecodableI] interface.
-  Future<T> resolveDirect(T Function() objectBuilder) async {
+  T resolveDirect(T Function() objectBuilder) {
+    T? result;
     controller.resolve(
       (DataMap data) {
         final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
         successFrame.decode(data);
 
-        return successFrame;
+        result = successFrame.estela;
       },
       (DataMap data, int statusCode) {
         final FailureFrame failureFrame = FailureFrame();
@@ -32,7 +33,11 @@ final class FoundationResponseResolver<T extends DecodableI> extends ResponseRes
       },
     );
 
-    throw TracedException('Unable to resolve response controller', StackTrace.current);
+    if (result == null) {
+      throw TracedException('Unable to resolve response controller', StackTrace.current);
+    }
+
+    return result!;
   }
 
   /// Resolves the [ResponseController] with the given callback handlers.

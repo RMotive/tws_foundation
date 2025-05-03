@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Utilitites;
 
 namespace TWS_Business.Depots;

@@ -1,6 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Server;
 
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +33,9 @@ public class YardLogsController
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewInput<YardLog> input) {
-        SetViewOutput<YardLog> output = await _service.View(
-                new OperationInput<YardLog, SetViewInput<YardLog>> {
+    public async Task<IActionResult> View(ViewInput<YardLog> input) {
+        ViewOutput<YardLog> output = await _service.View(
+                new OperationInput<YardLog, ViewInput<YardLog>> {
                     Parameters = input
                 }
             );

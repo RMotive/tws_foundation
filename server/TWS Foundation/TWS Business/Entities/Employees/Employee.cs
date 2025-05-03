@@ -1,7 +1,6 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Drivers;

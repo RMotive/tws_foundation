@@ -2,8 +2,6 @@
 using TWS_Business.Entities;
 using TWS_Business.Entities.Employees;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Employees : BQ_Business<Employee, EmployeesDepot> {

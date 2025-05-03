@@ -3,32 +3,29 @@
 /// <summary>
 ///     [Record] that stores the information about a batch operation output result.
 /// </summary>
-/// <typeparam name="TEntity">
+/// <typeparam name="T">
 ///     Type of the <see cref="IEntity"/> affected by the operations.
 /// </typeparam>
-/// <typeparam name="TSuccess">
-///     Type of the success result for the batch operation.
-/// </typeparam>
-public record BatchOperationOutput<TEntity, TSuccess>
-    where TEntity : class, IEntity {
+public record BatchOperationOutput<T>
+    where T : class, IEntity {
 
     /// <summary>
     ///     Collection of batch operation successes.
     /// </summary>
-    public TSuccess[] Successes { get; init; }
+    public T[] Successes { get; init; }
 
     /// <summary>
     ///     Collection of batch operation failures. 
     /// </summary>
-    public EntityOperationFailure<TEntity>[] Failures { get; init; }
+    public EntityOperationFailure<T>[] Failures { get; init; }
 
     /// <summary>
-    ///     Wheter at least one operation iteration has failed.
+    ///     Whether at least one operation iteration has failed.
     /// </summary>
     public bool Failed { get; private set; }
 
     /// <summary>
-    ///     Wheter all operations have failed.   
+    ///     Whether all operations have failed.   
     /// </summary>
     public bool FullFailed { get; private set; }
 
@@ -47,7 +44,7 @@ public record BatchOperationOutput<TEntity, TSuccess>
     /// </summary>
     public int SuccessesCount { get; private set; }
 
-    public BatchOperationOutput(TSuccess[] Successes, EntityOperationFailure<TEntity>[] Failures) {
+    public BatchOperationOutput(T[] Successes, EntityOperationFailure<T>[] Failures) {
         this.Successes = Successes;
         this.Failures = Failures;
 

@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Server.Exceptions;
 
 using CSM_Security.Depots;

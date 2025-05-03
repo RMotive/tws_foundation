@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-using Action = CSM_Security.Entities.Action;
 
 namespace CSM_Security.Entities;
 

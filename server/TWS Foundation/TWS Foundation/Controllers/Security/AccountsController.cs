@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 
 using CSM_Security.Entities;
@@ -22,10 +22,10 @@ public class AccountsController
     }
 
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewInput<Account> options) {
+    public async Task<IActionResult> View(ViewInput<Account> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Account, SetViewInput<Account>> {
+                        new OperationInput<Account, ViewInput<Account>> {
                             Parameters = options
                         }
                     )

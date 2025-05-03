@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 
 using CSM_Security.Entities;
@@ -29,10 +29,10 @@ public class ContactsController
     }
 
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewInput<Contact> options) {
+    public async Task<IActionResult> View(ViewInput<Contact> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Contact, SetViewInput<Contact>> {
+                        new OperationInput<Contact, ViewInput<Contact>> {
                             Parameters = options
                         }
                     )

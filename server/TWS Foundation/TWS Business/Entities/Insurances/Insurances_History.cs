@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validations;
-using CSM_Foundation.Database.Validations.Validators;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

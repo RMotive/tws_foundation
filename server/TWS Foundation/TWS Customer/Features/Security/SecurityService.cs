@@ -1,4 +1,3 @@
-using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Models.Output;
 
@@ -17,13 +16,13 @@ public interface ISecurityService {
     /// <summary>
     ///     Authenticates a given credentials subscribing the session into the current <see cref="SessionManager"/> context.
     /// </summary>
-    /// <param name="Credentials">
+    /// <param name="input">
     ///     Authentication credentials.
     /// </param>
     /// <returns>
     ///     The <see cref="ServerSession"/> information referencing the given <see cref="AuthenticationInput"/> session.
     /// </returns>
-    Task<ServerSession> Authenticate(AuthenticationInput Credentials);
+    Task<ServerSession> Authenticate(AuthenticationInput input);
 }
 
 /// <summary>
@@ -54,7 +53,7 @@ public class SecurityService
 
     public async Task<ServerSession> Authenticate(AuthenticationInput Credentials) {
 
-        BatchOperationOutput<Account, Account> result = await AccountsDepot.Read(
+        BatchOperationOutput<Account> result = await AccountsDepot.Read(
                 EntityBatchBehaviors.First,
                 (account) => account.User == Credentials.Identity
             );
