@@ -17,12 +17,18 @@ public class Q_Employees : BQ_Business<Employee, EmployeesDepot> {
                     Description = Entropy,
                 }
             );
+        Status statusI = Store(
+                new Status {
+                    Name = "I" + Entropy,
+                    Description = Entropy,
+                }
+            );
 
         Identification identification = Store(
                  new Identification {
                      Name = Entropy,
                      Lastname = Entropy,
-                     Status = status,
+                     Status = statusI,
                  }
             );
 

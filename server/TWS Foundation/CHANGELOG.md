@@ -24,10 +24,14 @@
 
     6. Added the [Delete(int Id)] overload method for [IDepot_Delete] interface as was present in the [BDepot] but not in an interface and logic wasn't able to call that method.
 
+    7. Added Bussines quality project.
+    
+    8. Added Bussines Depots quality test.
+
 - Fixes:
 
     1. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].
-
+    2. Fixed [BQ_Disposer] SQL exceptions removing nested entities.
 - Dependencies:
 
 ## 7.1.1 - [29.01-2025]

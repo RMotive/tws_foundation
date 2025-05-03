@@ -1,14 +1,12 @@
 ﻿using TWS_Business.Depots;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Drivers;
-using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Drivers_Commons : BQ_Business<Driver_Common, Drivers_CommonsDepot> {
 
     protected override Driver_Common EntityFactory(string Entropy) {
-        DateOnly date = new(2030, 11, 11);
 
         Situation situation = Store(
                 new Situation {
@@ -24,19 +22,32 @@ public class Q_Drivers_Commons : BQ_Business<Driver_Common, Drivers_CommonsDepot
                 }
             );
 
+        Status statusI = Store(
+                new Status {
+                    Name = 'I' + Entropy,
+                    Description = Entropy,
+                }
+            );
+
         Identification identification = Store(
                   new Identification {
                       Name = Entropy,
                       Lastname = Entropy,
-                      Status = status,
+                      Status = statusI,
                   }
              );
+
+        DriverExternal external = Store(
+                new DriverExternal {
+                    Identification = identification,
+                }
+            );
 
         return new Driver_Common {
             License = Entropy[..12],
             Situation = situation,
             Status = status,
-           
+            External = external,
         };
     }
 }
