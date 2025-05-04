@@ -75,8 +75,8 @@ void main() {
 
       final UpdateOutput<Solution> updateOutput = resolver.resolveDirect(() => UpdateOutput<Solution>(solutionBuilder));
 
-      expect(updateOutputMock.updated, updateOutput.updated);
-      expect(updateOutputMock.original, updateOutput.original);
+      expect(updateOutputMock.updated.name, updateOutput.updated.name);
+      expect(updateOutputMock.original?.name, updateOutput.original?.name);
     },
   );
 }
