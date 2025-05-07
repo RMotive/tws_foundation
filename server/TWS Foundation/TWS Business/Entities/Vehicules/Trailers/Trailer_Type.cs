@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Validations;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -32,6 +32,7 @@ public class Trailer_Type
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -40,6 +41,7 @@ public class Trailer_Type
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Trailer_Class Class { get; set; } = default!;
 
     #endregion

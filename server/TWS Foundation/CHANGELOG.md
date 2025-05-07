@@ -27,11 +27,28 @@
     7. Added Bussines quality project.
     
     8. Added Bussines Depots quality test.
+    
+    9. Added Bussines Depots for the following entities:
+        - [Locations]
+        - [Addresses]
+        - [TrailerClasses]
 
+    10. Added the following bussines Services and Quality tests:
+        - [Addresses]
+        - [Employees]
+        - [Locations]
+        - [Sections]
+        - [TrailerClasses]
+        - [TrailerTypes]
+      
 - Fixes:
 
     1. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].
     2. Fixed [BQ_Disposer] SQL exceptions removing nested entities.
+    3. Fixed [BDepot] [Create] not saving method for created records.
+    4. Fixed [BDepot] [Update] not saving changes for new records.
+    5. Fixed [BDepot] [Delete] not saving changes for deleted records.
+
 - Dependencies:
 
 ## 7.1.1 - [29.01-2025]

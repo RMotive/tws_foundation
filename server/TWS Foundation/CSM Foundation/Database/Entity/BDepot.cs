@@ -333,7 +333,7 @@ public abstract class BDepot<TDatabase, TEntity>
                 failures = [.. failures, fail];
             }
         }
-
+        Database.SaveChanges();
         return new(attached, failures);
     }
 
@@ -510,6 +510,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
             overwritten = await Create(overwritten);
 
+            Database.SaveChanges();
             Disposer?.Push(overwritten);
             return new EntityUpdateOutput<TEntity> {
                 Original = null,
@@ -528,6 +529,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
             overwritten = await Create(overwritten);
 
+            Database.SaveChanges();
             Disposer?.Push(overwritten);
             return new EntityUpdateOutput<TEntity> {
                 Original = null,
@@ -536,6 +538,7 @@ public abstract class BDepot<TDatabase, TEntity>
         }
 
         UpdateHelper(original, overwritten);
+        Database.SaveChanges();
         Disposer?.Push(overwritten);
         return new EntityUpdateOutput<TEntity> {
             Original = original,
@@ -568,6 +571,7 @@ public abstract class BDepot<TDatabase, TEntity>
             ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {id}");
 
         Set.Remove(entity);
+        Database.SaveChanges();
         return entity;
     }
 
