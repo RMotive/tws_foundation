@@ -13,31 +13,34 @@ final class SolutionsService extends SolutionsServiceB {
         );
 
   @override
-  FoundationFutureResolver<ViewOutput<Solution>> view(ViewInput<Solution> input, String auth) async {
+  FoundationFutureResolver<ViewOutput<Solution>> view(ViewInput<Solution> input, String authToken) async {
     return FoundationResponseResolver<ViewOutput<Solution>>(
       await postSecure<ViewInput<Solution>>(
         'view',
         input,
+        authToken: authToken,
       ),
     );
   }
 
   @override
-  FoundationFutureResolver<BatchOperationOutput<Solution>> create(List<Solution> solutions, String auth) async {
+  FoundationFutureResolver<BatchOperationOutput<Solution>> create(List<Solution> solutions, String authToken) async {
     return FoundationResponseResolver<BatchOperationOutput<Solution>>(
       await postListSecure<Solution>(
         'create',
         solutions,
+        authToken: authToken,
       ),
     );
   }
 
   @override
-  FoundationFutureResolver<UpdateOutput<Solution>> update(UpdateInput<Solution> input, String auth) async {
+  FoundationFutureResolver<UpdateOutput<Solution>> update(UpdateInput<Solution> input, String authToken) async {
     return FoundationResponseResolver<UpdateOutput<Solution>>(
       await postSecure(
         'update',
         input,
+        authToken: authToken,
       ),
     );
   }

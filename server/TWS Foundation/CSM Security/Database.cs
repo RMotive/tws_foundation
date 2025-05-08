@@ -1,7 +1,7 @@
-﻿using CSM_Foundation.Advisor.Managers;
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
+using CSM_Foundation.Logging;
 
 using CSM_Security.Entities;
 
@@ -14,7 +14,7 @@ namespace CSM_Security;
 internal class DatabaseDesignFactory
     : IDesignTimeDbContextFactory<Database> {
     public Database CreateDbContext(string[] args) {
-        AdvisorManager.Warning("Using native [CSM] design time database context factory");
+        Logger.Warning("Using native [CSM] design time database context factory");
 
         ConnectionOptions connectionOptions = DatabaseUtilities.Retrieve("CSMS");
 

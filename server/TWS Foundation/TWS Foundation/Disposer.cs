@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 
-using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Logging;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -96,7 +96,7 @@ public class Disposer
 
     public void Dispose() {
         if (_dispositionStack.Empty()) {
-            AdvisorManager.Announce($"No records to dispose");
+            Logger.Announce($"No records to dispose");
         }
         foreach (KeyValuePair<Type, List<IEntity>> disposeLine in _dispositionStack) {
 
@@ -104,9 +104,9 @@ public class Disposer
 
             DbContext Database = (DbContext)servicerScope.ServiceProvider.GetRequiredService(disposeLine.Key);
 
-            AdvisorManager.Announce($"Disposing db ({Database.GetType()})");
+            Logger.Announce($"Disposing db ({Database.GetType()})");
             if (disposeLine.Value is null || disposeLine.Value.Count == 0) {
-                AdvisorManager.Announce($"No records to dispose");
+                Logger.Announce($"No records to dispose");
                 continue;
             }
             int corrects = 0;
@@ -117,7 +117,7 @@ public class Disposer
                     Database.SaveChanges();
 
                     corrects++;
-                    AdvisorManager.Success($"Disposed: ({record.GetType()}) | ({record.Id})");
+                    Logger.Success($"Disposed: ({record.GetType()}) | ({record.Id})");
                 } catch (DbUpdateConcurrencyException ex) {
                     foreach (EntityEntry entry in ex.Entries) {
                         if (entry.Entity.GetType() == record.GetType()) {
@@ -127,15 +127,15 @@ public class Disposer
 
                 } catch (Exception ex) {
                     incorrects++;
-                    AdvisorManager.Warning($"No disposed: ({record.GetType()}) | ({record.Id}) |> ({ex.Message})");
+                    Logger.Warning($"No disposed: ({record.GetType()}) | ({record.Id}) |> ({ex.Message})");
                 }
             }
 
 
             if (incorrects > 0) {
-                AdvisorManager.Warning($"Disposed with errors: (Errors: ({incorrects}) Successes: {corrects})");
+                Logger.Warning($"Disposed with errors: (Errors: ({incorrects}) Successes: {corrects})");
             } else {
-                AdvisorManager.Success($"Disposed: ({corrects} elements) at ({Database.GetType()})");
+                Logger.Success($"Disposed: ({corrects} elements) at ({Database.GetType()})");
             }
         }
         _dispositionStack.Clear();

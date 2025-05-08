@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:csm_client/csm_client.dart';
 
-/// (testing) {utilities} class implementation for [TestUtilities].
+/// (testing) {utilities} class implementation for [TestUtils].
 ///
 /// Defines utilities methods for testing purposes.
-final class TestUtilities {
+final class TestUtils {
   ///
   static DataMap createSuccessFrameDataMap(DataMap estela) {
     return <String, Object?>{

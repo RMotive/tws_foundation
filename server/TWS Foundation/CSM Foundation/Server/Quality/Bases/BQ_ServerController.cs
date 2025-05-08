@@ -10,36 +10,109 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace CSM_Foundation.Server.Quality.Bases;
-/// <summary>
-///     Defines base behaviors for quality operations to 
-///     <see cref="BQ_Controller"/> implementations.
-///     
-///     <br></br>
-///     <br> A Controller is the Server exposition for endpoints and another services. </br>
-/// </summary>
-/// <typeparam name="TEntry">
-///     Entry class that starts your Server project.
-/// </typeparam>
-public abstract class BQ_ServerController<TEntry>
-    : IClassFixture<WebApplicationFactory<TEntry>>
-    where TEntry : class {
-    private readonly JsonSerializerOptions SOptions = new();
-    private readonly string Service;
-    private readonly QM_ServerHost Host;
 
-    protected BQ_ServerController(string Service, string Sign, WebApplicationFactory<TEntry> Factory) {
-        this.Service = Service;
-        Host = new(Sign, Factory.CreateClient());
-        SOptions.Converters.Add(new ISetViewFilterConverterFactory());
-        SOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
+
+/// <summary>
+///     <see langword="abstract"/> class for <see cref="BQ_ServerController{T}"/>.
+///     
+///     <para> 
+///         Defines base behavior and contract for <see cref="BQ_ServerController{T}"/> implementations that defines classes for quality/testing purposes, handle members for a better <see cref="ControllerBase"/> implementation testing.
+///     </para>
+/// </summary>
+/// <typeparam name="T">
+///     Entry class that starts your server project usually known as Program.
+/// </typeparam>
+public abstract class BQ_ServerController<T>
+    : IClassFixture<WebApplicationFactory<T>>
+    where T : class {
+
+    /// <summary>
+    ///     Internal JSON serializer options.
+    /// </summary>
+    readonly JsonSerializerOptions _serializerOptions = new();
+
+    /// <summary>
+    ///     Server communication client internal manager object.
+    /// </summary>
+    readonly QM_ServerHost _serverHost;
+    
+    /// <summary>
+    ///     Service path to be qualified.
+    /// </summary>
+    readonly string _controllerPath;
+
+    /// <summary>
+    ///     Creates a new <see cref="BQ_ServerController{T}"/> instance.
+    /// </summary>
+    /// <param name="controllerPath">
+    ///     Relate path to the controller(service) used for simplified paths building at requests time.
+    /// </param>
+    /// <param name="solutionSign">
+    ///     Internal {CSM} management solution sign identifier, used to identify {Solution} information, metadata, security params, etc.
+    /// </param>
+    /// <param name="applicationFactory">
+    ///     Built-in <see cref="IClassFixture{TFixture}"/> application building for server simulation.
+    /// </param>
+    protected BQ_ServerController(string controllerPath, string solutionSign, WebApplicationFactory<T> applicationFactory) {
+        _controllerPath = controllerPath;
+
+        _serverHost = new(solutionSign, applicationFactory.CreateClient());
+
+        _serializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
+        _serializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
+
+        ConfigureSerializer(_serializerOptions);
     }
 
 
-    #region Protected Abstract Methods
+    /// <summary>
+    ///     Configures the internal <see cref="JsonSerializerOptions"/> instance for quality/testing purposes.
+    /// </summary>
+    /// <param name="jsonSerializerOptions">
+    ///     Internal serializer options instance to override needed options.
+    /// </param>
+    protected virtual void ConfigureSerializer(JsonSerializerOptions jsonSerializerOptions) { }
 
-    protected abstract Task<string> Authentication();
+    /// <summary>
+    ///     Authenticates a quality/testing purposes request with the server.
+    /// </summary>
+    /// <returns>
+    ///     Auth token.
+    /// </returns>
+    protected abstract Task<string> Authenticate();
 
-    #endregion
+    /// <summary>
+    ///     Serializes the given <paramref name="object"/> based on the internal configured <see cref="JsonSerializerOptions"/>.
+    /// </summary>
+    /// <typeparam name="T2">
+    ///     Type of the <paramref name="object"/> object to serialize.
+    /// </typeparam>
+    /// <param name="object">
+    ///     Object instance to serialize.
+    /// </param>
+    /// <returns>
+    ///     Serialization of given <paramref name="object"/>.
+    /// </returns>
+    protected string Serialize<T2>(T2 @object) {
+        return JsonSerializer.Serialize(@object, _serializerOptions);
+    }
+
+    /// <summary>
+    ///     Deserealizes the given <paramref name="serial"/> based on the internal configured <see cref="JsonSerializerOptions"/>.
+    /// </summary>
+    /// <typeparam name="T2">
+    ///     Type of the object the given <paramref name="serial"/> should be converted to.
+    /// </typeparam>
+    /// <param name="serial">
+    ///     Serialization value to deserealize.
+    /// </param>
+    /// <returns>
+    ///     Deserealized object from the given <paramref name="serial"/>.
+    /// </returns>
+    protected T2 Deserialize<T2>(string serial) {
+        return JsonSerializer.Deserialize<T2>(serial, _serializerOptions)
+            ?? throw new Exception("Unable to deserealize object");
+    }
 
     #region Protected Methods 
 
@@ -49,6 +122,7 @@ public abstract class BQ_ServerController<TEntry>
         TFrame frame = JsonSerializer.Deserialize<TFrame>(desContent)!;
         return frame;
     }
+
     protected async Task<(HttpStatusCode, GenericFrame)> Post<TRequest>(string Action, TRequest Request, bool Authenticate = false) {
         return await Post<GenericFrame, TRequest>(Action, Request, false, Authenticate);
     }
@@ -63,28 +137,17 @@ public abstract class BQ_ServerController<TEntry>
 
     #endregion
 
-    protected string Serialize<T>(T value) {
-        return JsonSerializer.Serialize(value, SOptions);
-    }
 
-    protected T Deserialize<T>(string json) {
-        return JsonSerializer.Deserialize<T>(json, SOptions)
-            ?? throw new Exception("Unable to deserealize object");
-    }
-
-    #region Private Methods 
-
-    private async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string Action, TRequest RequestBody, bool FreeAction, bool Authenticate = false, string Disposition = "Quality") {
-        if (Authenticate) {
-            string authToken = await Authentication();
-            Host.Authenticate(authToken);
+    private async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string endpoint, TRequest body, bool unrelative = false, bool useAuth = false, string disposition = "Quality") {
+        if (useAuth) {
+            string authToken = await Authenticate();
+            _serverHost.Authenticate(authToken);
         }
-        if (!FreeAction) {
-            Action = $"{Service}/{Action}";
+        if (!unrelative) {
+            endpoint = $"{_controllerPath}/{endpoint}";
         }
 
-        Host.Disposition(Disposition);
-        return await Host.Post<TResponse, TRequest>(Action, RequestBody, Options: SOptions);
+        _serverHost.Disposition(disposition);
+        return await _serverHost.Post<TResponse, TRequest>(endpoint, body, Options: _serializerOptions);
     }
-    #endregion
 }

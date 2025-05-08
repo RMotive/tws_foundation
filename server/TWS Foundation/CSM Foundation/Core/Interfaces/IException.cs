@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Advisor.Interfaces;
+using CSM_Foundation.Logging;
 using CSM_Foundation.Server.Records;
 
 namespace CSM_Foundation.Core.Interfaces;
@@ -11,7 +11,7 @@ namespace CSM_Foundation.Core.Interfaces;
 ///     be resolved but there arised an exception.
 /// </summary>
 public interface IException<TSituation>
-    : IAdvisingException, IException
+    : ILoggingException, IException
     where TSituation : Enum {
     /// <summary>
     ///     Enumeration of possible situations for this exception.

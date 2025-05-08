@@ -45,6 +45,10 @@ public class AuthAttribute
         string token = authToken[0];
         string sign = authToken[1];
 
+        if(string.IsNullOrWhiteSpace(token)) {
+            throw new XAuth(XAuthSituation.Unauthorized);
+        }
+
         SessionManager sessionManager = serProvider.GetRequiredService<SessionManager>();
         IAccountsDepot accounts = serProvider.GetRequiredService<IAccountsDepot>();
 

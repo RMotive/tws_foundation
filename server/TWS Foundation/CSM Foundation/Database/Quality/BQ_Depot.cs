@@ -221,7 +221,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public async Task CreateB() {
         TEntity[] samples = Sampling(3);
 
-        BatchOperationOutput<TEntity, TEntity> qOut = await Depot.Create(samples);
+        BatchOperationOutput<TEntity> qOut = await Depot.Create(samples);
         await CommitSampleEntities(samples);
 
         Assert.Multiple(
@@ -260,7 +260,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(20, EntityFactory);
         long[] sampleIds = [.. samples.Select(i => i.Id)];
 
-        BatchOperationOutput<TEntity, TEntity> readEntities = await Depot.Read(sampleIds);
+        BatchOperationOutput<TEntity> readEntities = await Depot.Read(sampleIds);
         Assert.Multiple(
                 [
                     () => Assert.Empty(readEntities.Failures),
@@ -287,7 +287,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(2, EntityFactory);
         TEntity samplePivot = samples[0];
 
-        BatchOperationOutput<TEntity, TEntity> readEntites = await Depot.Read(
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
                 EntityBatchBehaviors.First,
                 (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
             );
@@ -315,7 +315,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(2, EntityFactory);
         TEntity samplePivot = samples[1];
 
-        BatchOperationOutput<TEntity, TEntity> readEntites = await Depot.Read(
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
                 EntityBatchBehaviors.Last,
                 (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
             );
@@ -342,7 +342,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public virtual async Task ReadE() {
         TEntity[] samples = await Store(2, EntityFactory);
 
-        BatchOperationOutput<TEntity, TEntity> readEntites = await Depot.Read(
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
                 EntityBatchBehaviors.All,
                 (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
             );
@@ -503,7 +503,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public virtual async Task DeleteC() {
         TEntity entity = (await Store(10, EntityFactory))[0];
 
-        BatchOperationOutput<TEntity, TEntity> deleteOutput = await Depot.Delete(
+        BatchOperationOutput<TEntity> deleteOutput = await Depot.Delete(
                 new OperationInput<TEntity, BatchOperationInput<TEntity>>() {
                     Parameters = new BatchOperationInput<TEntity> {
                         Filter = (entityB) => entityB.Id == entity.Id,

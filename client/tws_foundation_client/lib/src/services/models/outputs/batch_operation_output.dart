@@ -53,7 +53,7 @@ final class BatchOperationOutput<T extends EntityI<T>> implements EncodableI, De
     failuresCount = encode.get('failuresCount');
     successesCount = encode.get('successesCount');
 
-    final List<DataMap> successesDataMap = encode.get('successes');
+    final List<DataMap> successesDataMap = encode.getList('successes');
     successes = successesDataMap.map(
       (Map<String, Object?> e) {
         final T entity = _entityBuilder();
@@ -62,7 +62,7 @@ final class BatchOperationOutput<T extends EntityI<T>> implements EncodableI, De
       },
     ).toList();
 
-    final List<DataMap> failuresDataMap = encode.get('failures');
+    final List<DataMap> failuresDataMap = encode.getList('failures');
     failures = failuresDataMap.map(
       (Map<String, Object?> e) {
         final EntityOperationFailure<T> entityOperationFailure = EntityOperationFailure<T>(_entityBuilder);

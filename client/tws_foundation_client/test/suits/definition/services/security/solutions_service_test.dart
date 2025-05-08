@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/src/services/models/outputs/batch_operatio
 import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../../../../test_utilities.dart';
+import '../../../../utils/test_utils.dart';
 
 void main() {
   final ViewOutput<Solution> viewOutputMock = ViewOutput<Solution>(solutionBuilder);
@@ -18,7 +18,7 @@ void main() {
       viewOutputMock.page = 1;
       viewOutputMock.pages = 1;
 
-      final MockClient mockClient = TestUtilities.createMockClient(
+      final MockClient mockClient = TestUtils.createMockClient(
         <String, EncodableI>{
           'view': viewOutputMock,
           'create': createBatchOutputMock,

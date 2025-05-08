@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../../../../test_utilities.dart';
+import '../../../../utils/test_utils.dart';
 
 void main() {
   late SecurityServiceI serviceMock;
@@ -23,7 +23,7 @@ void main() {
       final Client clientMock = MockClient(
         (Request request) async {
           DataMap dataMap = switch (request.url.pathSegments.last) {
-            'authenticate' => TestUtilities.createSuccessFrameDataMap(serverSessionMock.encode()),
+            'authenticate' => TestUtils.createSuccessFrameDataMap(serverSessionMock.encode()),
             _ => throw UnimplementedError(),
           };
 

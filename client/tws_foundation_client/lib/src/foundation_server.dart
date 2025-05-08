@@ -1,5 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
+import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {implementation} class for a [ServerB].
@@ -11,9 +12,13 @@ final class FoundationServer extends ServerB {
   /// 
   late final SecurityServiceI securityService;
 
+  ///
+  late final SolutionsServiceI solutionsService;
+
   /// Creates a new [FoundationServer] instance.
   FoundationServer({
     ServiceImplementationBuilder<SecurityServiceI>? securityServiceBuilder,
+    ServiceImplementationBuilder<SolutionsServiceI>? solutionsServiceBuilder,
   })
       : super(
           Uri(
@@ -22,6 +27,9 @@ final class FoundationServer extends ServerB {
             port: 5195,
           ),
         ) {
+
+
     securityService = securityServiceBuilder?.call(serverHost, httpClient) ?? SecurityService(serverHost, client: httpClient);
+    solutionsService = solutionsServiceBuilder?.call(serverHost, httpClient) ?? SolutionsService(serverHost, client: httpClient);
   }
 }

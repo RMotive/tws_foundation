@@ -40,6 +40,8 @@ public class FramingMiddleware
             HttpResponse response = context.Response;
             Stream responseStream = response.Body;
 
+
+
             if (!response.HasStarted) {
                 _ = bufferingStream.Seek(0, SeekOrigin.Begin);
                 string encodedContent = "";
@@ -89,6 +91,9 @@ public class FramingMiddleware
                             break;
                     }
                 } else {
+
+
+
                     Dictionary<string, dynamic> resolution = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(responseStream)!;
 
                     SuccessFrame<Dictionary<string, dynamic>> frame = new() {

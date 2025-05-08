@@ -6,13 +6,34 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 
 namespace CSM_Foundation.Server.Quality.Managers;
-public class QM_ServerHost(string Sign, HttpClient host) {
+
+
+/// <summary>
+///     <see langword="class"/> implementation for <see cref="QM_ServerHost"/>.
+///     
+/// 
+///     <para> 
+///         Defines a final implementation that manages a quality/testing purposes server mirror simulation for simplified server requests tests(integration)
+///     </para>
+/// </summary>
+/// <param name="Sign"></param>
+/// <param name="host"></param>
+public class QM_ServerHost {
     private const string AUTH_TOKEN = "CSMAuth";
+
     private const string DISPOSITION_TOKEN = "CSMDisposition";
-    private readonly HttpClient Host = host;
+
+    readonly HttpClient _httpClient;
+
+    readonly string _serverSign;
+
+    public QM_ServerHost(string serverSign, HttpClient httpClient) {
+        _serverSign = serverSign;
+        _httpClient = httpClient;
+    }
 
     public async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string Location, TRequest Request, JsonSerializerOptions? Options = null) {
-        HttpResponseMessage Response = await Host.PostAsJsonAsync(Location, Request, options: Options);
+        HttpResponseMessage Response = await _httpClient.PostAsJsonAsync(Location, Request, options: Options);
         HttpStatusCode resolutionCode = Response.StatusCode;
 
         TResponse resolution = await Response.Content.ReadFromJsonAsync<TResponse>()
@@ -23,17 +44,17 @@ public class QM_ServerHost(string Sign, HttpClient host) {
     }
 
     public void Dispose() {
-        Host.Dispose();
+        _httpClient.Dispose();
     }
     private void Restore() {
-        Host.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Clear();
     }
 
     public void Authenticate(string Token) {
-        Host.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_TOKEN, $"{Token}@{Sign}");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_TOKEN, $"{Token}@{_serverSign}");
     }
 
     public void Disposition(string Disposition) {
-        Host.DefaultRequestHeaders.Add(DISPOSITION_TOKEN, Disposition);
+        _httpClient.DefaultRequestHeaders.Add(DISPOSITION_TOKEN, Disposition);
     }
 }
