@@ -32,7 +32,7 @@ public class Identification
     /// <remarks>
     ///     For more than one name split with double space.
     /// </remarks>
-    [StringLength(100, MinimumLength = 1)]
+    [StringLength(32, MinimumLength = 1)]
     public string Lastname { get; set; } = string.Empty;
 
     /// <summary>

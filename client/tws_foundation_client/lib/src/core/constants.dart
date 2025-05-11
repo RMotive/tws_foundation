@@ -7,12 +7,7 @@ final class ContextConstants {
 final class EntitiesCommonProperties {
   
   ///
-  static const String kId = "id"; 
+  static const String kStatus = "status";
 
   ///
-  static const String kTimestamp = "timestamp";
-  ///
-  
-  static const String kDiscriminator = "discriminator";
-
 }

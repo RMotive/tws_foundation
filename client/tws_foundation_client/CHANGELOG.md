@@ -33,6 +33,8 @@
         - [CSMServiceBase] changed to [ServiceBase]
         - [twsPostList] changes to [PostListSecure]
         - [twsPost] changes to [PostSecure]
+        
+    5. Refactored Business services implementations.
 
 - Fixes:
 
