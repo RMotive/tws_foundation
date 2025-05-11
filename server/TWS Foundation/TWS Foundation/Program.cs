@@ -198,7 +198,7 @@ public partial class Program {
         string sl = FileUtils.FormatLocation(fp);
         Logger.Note(
             "Retrieving Server settings",
-            new Dictionary<string, dynamic> {
+            new Dictionary<string, object?> {
                 {"Workspace", ws },
                 {"Settings", sl },
                 {"Environment", EnvironmentManager.Mode }

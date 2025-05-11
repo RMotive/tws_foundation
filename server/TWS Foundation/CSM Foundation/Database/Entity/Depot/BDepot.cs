@@ -293,6 +293,8 @@ public abstract class BDepot<TDatabase, T>
         await Set.AddAsync(entity);
 
         Disposer?.Push(entity);
+        await Database.SaveChangesAsync();
+
         return entity;
     }
 
