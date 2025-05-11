@@ -28,9 +28,9 @@ final class SolutionsService extends SolutionsServiceBase {
   }
 
   @override
-  Effect<SetViewOutput<Solution>> create(List<Solution> solutions, String auth) async {
+  Effect<EntityBatchOperation<Solution>> create(List<Solution> solutions, String auth) async {
     ResponseController actEffect = await postListSecure('create', solutions, auth: auth);
-    return FoundationResponseResolver<SetViewOutput<Solution>>(actEffect);
+    return FoundationResponseResolver<EntityBatchOperation<Solution>>(actEffect);
   }
 
   @override

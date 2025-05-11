@@ -27,27 +27,6 @@ final class SetViewOutput<TSet extends EntityB<TSet>> implements EncodableI, Dec
   /// Creates a new [SetViewOutput] object.
   SetViewOutput(this.records, this.page, this.creation, this.pages, this.length, this.count);
 
-  /// Creates a new [SetViewOutput] object based on deserealization from a [JObject].
-  ///
-  /// [json] : The object to bind properties.
-  /// [setDecode] : Optional [CSMDecodeInterface] implementation to use on environment cases.
-  factory SetViewOutput.des(DataMap json, TSet Function(DataMap json) decoder) {
-
-    List<DataMap> rawRecords = json.get('records', <dynamic>[]).cast();
-    List<TSet> records = rawRecords
-        .map<TSet>(decoder)
-        .toList();
-
-    int pages = json.get('pages');
-    int page = json.get('page');
-    int length = json.get('length');
-    int count = json.get('count');
-
-    DateTime creation = json.get('creation');
-
-    return SetViewOutput<TSet>(records, page, creation, pages, length, count);
-  }
-
   @override
   DataMap encode() {
     return <String, dynamic>{
