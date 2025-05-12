@@ -1,5 +1,6 @@
-import 'package:csm_view/csm_view.dart';import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 /// [TwsArticleCreationStackItemProperty] Dedicated class to display the current item property value in [TWSArticleCreator].
 final class TwsArticleCreationStackItemProperty extends StatelessWidget {
   /// Propertie title.
@@ -28,8 +29,8 @@ final class TwsArticleCreationStackItemProperty extends StatelessWidget {
         minWidth: minWidth ?? maxWidth ?? 0,
         maxWidth: maxWidth ?? double.maxFinite,
       ),
-      child: CSMSpacingColumn(
-        crossAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 6,
         children: <Widget>[
           Text('$label:'),

@@ -1,7 +1,7 @@
 part of 'tws_article_creator.dart';
 /// [_TWSArticleCreationState] Dedicated State class manager for [TWSArticleCreation] widget.
 /// Add or remove current or change [TWSArticleCreationStackItem] selection, notifying subscribers.
-final class _TWSArticleCreationState<TModel> extends CSMStateBase {
+final class _TWSArticleCreationState<TModel> extends ReactorB {
   /// List of states for added items.
   late List<TWSArticleCreatorItemState<TModel>> states;
   
@@ -23,7 +23,7 @@ final class _TWSArticleCreationState<TModel> extends CSMStateBase {
     states.removeAt(index);
 
     current = 0;
-    effect();
+    react();
   }
 
   void addItem() {
@@ -32,11 +32,11 @@ final class _TWSArticleCreationState<TModel> extends CSMStateBase {
     TWSArticleCreatorItemState<TModel> newState = TWSArticleCreatorItemState<TModel>(modelFactoried);
     states.insert(0, newState);
     current = 0;
-    effect();
+    react();
   }
 
   void changeSelection(int index) {
     current = index;
-    effect();
+    react();
   }
 }

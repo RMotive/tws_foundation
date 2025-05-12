@@ -42,30 +42,37 @@ class TWSPagingSelector extends StatefulWidget {
 }
 
 class _TWSPagingSelectorState extends State<TWSPagingSelector> {
-  late CSMColorThemeOptions theme;
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  /// Color pallet for the component.
+  late SimpleTheming pageTheme;
 
   late int page;
   late int size;
 
-  void themeUpdate() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme<TWSFThemeBase>().page;
+      pageTheme = theme.page;
     });
   }
+
 
   @override
   void initState() {
     page = widget.page;
     size = widget.size;
-    theme = getTheme<TWSFThemeBase>(
-      updateEfect: themeUpdate,
-    ).page;
+    themeManager.addEffect(ref, themeUpdateListener);
+    pageTheme = themeManager.get().page;
     super.initState();
   }
 
   @override
   void dispose() {
-    disposeEffect(themeUpdate);
+    themeManager.removeEffect(ref);
     super.dispose();
   }
 
@@ -77,12 +84,12 @@ class _TWSPagingSelectorState extends State<TWSPagingSelector> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         // --> Items indicator
-        CSMResponsiveView(
+        ResponsiveWidget(
           onLarge: RichText(
             text: TextSpan(
               text: 'Showing ',
               style: TextStyle(
-                color: theme.fore,
+                color: pageTheme.fore,
                 fontWeight: FontWeight.w100,
                 fontStyle: FontStyle.italic,
               ),
@@ -148,8 +155,8 @@ class _TWSPagingSelectorState extends State<TWSPagingSelector> {
           ),
         ),
         Expanded(
-          child: CSMSpacingRow(
-            mainAlignment: MainAxisAlignment.end,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             spacing: 20,
             children: <Widget>[
               // --> Page range selector

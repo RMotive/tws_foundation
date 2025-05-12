@@ -21,8 +21,8 @@ final class TWSArticleTableEditor extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         // --> Editor actions
-        CSMSpacingRow(
-          mainAlignment: MainAxisAlignment.end,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           spacing: 8,
           children: <Widget>[
             _TWSArticleTableDetailsAction(

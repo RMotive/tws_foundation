@@ -43,10 +43,10 @@ class TwsListViewer<T> extends StatelessWidget {
   /// Consumer agent for async content.
   /// if both [agent] and [tilesContent] properties are not null, will cause an assert exception.
   /// Only [agent] value or [tilesContent] is valid.
-  final CSMConsumerAgent? agent;
+  final AsyncWidgetController? agent;
 
   /// Consume class for async data.
-  final Future<SetViewOut<dynamic>> Function()? consume;
+  final Future<SetViewOutput<dynamic>> Function()? consume;
   
   /// Default delay to consumer.
   final Duration delay;
@@ -73,9 +73,10 @@ class TwsListViewer<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CSMColorThemeOptions pageColorTheme = getTheme<TWSFThemeBase>().page;
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    SimpleTheming pageColorTheme = themeManager.get().page;
     Color tColor = textColor  ?? pageColorTheme.fore;
-    Color bColor = backgroundColor ?? pageColorTheme.main;
+    Color bColor = backgroundColor ?? pageColorTheme.back;
     return SizedBox(
       child: TWSSection(
         title: title, 
@@ -92,8 +93,8 @@ class TwsListViewer<T> extends StatelessWidget {
           title: title, 
           tileTitle: tileTitle
         ): 
-        CSMConsumer<SetViewOut<dynamic>>(
-          consume: consume!,
+        AsyncWidget<SetViewOutput<dynamic>>(
+          future: consume!,
           agent: agent,
           delay: delay,
           loadingBuilder: (BuildContext ctx) {
@@ -103,7 +104,7 @@ class TwsListViewer<T> extends StatelessWidget {
               ),
             );
           },
-          successBuilder:(BuildContext ctx, SetViewOut<dynamic> data) {
+          successBuilder:(BuildContext ctx, SetViewOutput<dynamic> data) {
             return _TwsListViewerBody<T>(
               content: data.records as List<T>, 
               tColor: tColor, 

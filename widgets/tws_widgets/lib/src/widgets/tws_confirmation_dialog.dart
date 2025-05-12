@@ -35,11 +35,28 @@ final class TWSConfirmationDialog extends StatefulWidget {
 }
 
 class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
+
+  late TWSFThemeBase theme;
+
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  /// Color pallet for the component.
+  late SimpleTheming pageTheme;
+  late SimpleTheming dangerTheme;
+
   bool loading = false;
 
   @override
   void initState() {
     ServicesBinding.instance.keyboard.addHandler(_keyHandler);
+    themeManager.addEffect(ref, themeUpdateListener);
+    theme = themeManager.get();
+    pageTheme = theme.page;
+    dangerTheme = theme.primaryCriticalControl;
 
     super.initState();
   }
@@ -47,8 +64,18 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
   @override
   void dispose() {
     ServicesBinding.instance.keyboard.removeHandler(_keyHandler);
+    themeManager.removeEffect(ref);
     super.dispose();
   }
+
+  void themeUpdateListener(TWSFThemeBase theme) {
+    setState(() {
+      this.theme = theme;
+      pageTheme = theme.page;
+      dangerTheme = theme.primaryCriticalControl;
+    });
+  }
+
 
   bool _keyHandler(KeyEvent event) {
     final String key = event.logicalKey.keyLabel;
@@ -69,10 +96,9 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final TWSFThemeBase theme = getTheme<TWSFThemeBase>();
 
-    final CSMColorThemeOptions pageTheme = theme.page;
-    final CSMColorThemeOptions dangerTheme = theme.primaryCriticalControl;
+    final SimpleTheming pageTheme = theme.page;
+    final SimpleTheming dangerTheme = theme.primaryCriticalControl;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -98,13 +124,13 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
             child: GestureDetector(
               onTap: () {},
               child: ColoredBox(
-                color: pageTheme.main,
+                color: pageTheme.back,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     // --> Dialog header
                     ColoredBox(
-                      color: pageTheme.highlight,
+                      color: pageTheme.accent,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -112,7 +138,7 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                             Text(
                               widget.title,
                               style: TextStyle(
-                                color:  pageTheme.hightlightAlt ?? pageTheme.fore,
+                                color:  pageTheme.accentAlt ?? pageTheme.fore,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -124,7 +150,7 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                                     onPressed: loading ? null : () => _close(context),
                                     icon: Icon(
                                       Icons.close,
-                                      color: dangerTheme.highlight,
+                                      color: dangerTheme.accent,
                                     ),
                                   ),
                                 ],
@@ -153,15 +179,15 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                     ),
                     // --> Dialog footer
                     ColoredBox(
-                      color: pageTheme.highlight,
+                      color: pageTheme.accent,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: 12,
                           horizontal: 20,
                         ),
-                        child: CSMSpacingRow(
+                        child: Row(
                           spacing: 12,
-                          mainAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             TWSButtonFlat(
                               label: widget.accept,

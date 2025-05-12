@@ -55,32 +55,35 @@ class TWSIncrementalList<TModel> extends StatefulWidget {
 }
 
 class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>> {
-  late TWSFThemeBase theme;
-  // Color pallet for the component.
-  late CSMColorThemeOptions criticalColorTheme;
-  late CSMColorThemeOptions primaryColorTheme;
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
 
-  void themeUpdateListener() {
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  /// Color pallet for the component.
+  late SimpleTheming primaryColorTheme;
+  late SimpleTheming criticalColorTheme;
+
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
-      criticalColorTheme = theme.primaryCriticalControl;
       primaryColorTheme = theme.primaryControlColor;
+      criticalColorTheme = theme.primaryCriticalControl;
     });
   }
+
+
   @override
   void initState() {
-    // tModelList = widget.recordList;
-    theme = getTheme(
-      updateEfect: themeUpdateListener,
-    );
-    criticalColorTheme = theme.primaryCriticalControl;
-    primaryColorTheme = theme.primaryControlColor;
+    themeManager.addEffect(ref, themeUpdateListener);
+    primaryColorTheme = themeManager.get().primaryControlColor;
+    criticalColorTheme = themeManager.get().primaryCriticalControl;
     super.initState();
   }
 
   @override
   void dispose() {
-    disposeEffect(themeUpdateListener);
+    themeManager.removeEffect(ref);
     super.dispose();
   }
 
@@ -88,27 +91,27 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-      child: CSMSpacingColumn(
+      child: Column(
         spacing: 1,
-        mainSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SizedBox(
             height: 50,
-            child: CSMSpacingRow(
+            child: Row(
               spacing: 10,
-              mainAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   "${widget.title}: (${widget.recordList.length})",
                   style: TextStyle(
-                    color: primaryColorTheme.highlight
+                    color: primaryColorTheme.accent
                   ),
                 ),
-                CSMSpacingRow(
+                Row(
                   spacing: 10,
                   children: <Widget>[
                     // --> Add option
-                    CSMPointerHandler(
+                    PointerArea(
                       cursor: SystemMouseCursors.click,
                       onClick: (){
                         // check if record limit has been reached.
@@ -120,11 +123,11 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
                       child: Icon(
                         size: 24,
                         Icons.add_circle,
-                        color: primaryColorTheme.highlight,
+                        color: primaryColorTheme.accent,
                       ),
                     ),
                     // --> Remove option
-                    CSMPointerHandler(
+                    PointerArea(
                       cursor: SystemMouseCursors.click,
                       onClick: (){
                         if(widget.recordList.isEmpty || widget.recordList.length == widget.recordMin) return;
@@ -135,7 +138,7 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
                       child: Icon(
                         size: 24,
                         Icons.remove_circle,
-                        color: criticalColorTheme.highlight,
+                        color: criticalColorTheme.accent,
                       ),
                     ),
                   ],

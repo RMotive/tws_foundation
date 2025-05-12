@@ -3,7 +3,7 @@ part of 'tws_autocomplete_field.dart';
 class _TWSAutocompleteList<T> extends StatelessWidget {
   final ScrollController controller;
   final List<T> list;
-  final CSMColorThemeOptions theme;
+  final SimpleTheming theme;
   final String Function(T?) displayLabel;
   final String Function(T?)? suffixLabel;
   final void Function(String label, T? item) onTap;
@@ -33,7 +33,7 @@ class _TWSAutocompleteList<T> extends StatelessWidget {
         return TwsListTile(
           label:'$label ${suffixLabel != null? suffixLabel!(currentItem) : ""}',
           evaluateSelection:() => false,
-          onHoverColor: theme.main,
+          onHoverColor: theme.back,
           onHoverTextColor: theme.foreAlt ?? theme.fore,
           textColor: theme.foreAlt ?? theme.fore,
           onTap: (_) => onTap(label, currentItem)

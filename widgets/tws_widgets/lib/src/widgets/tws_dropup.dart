@@ -43,8 +43,16 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
   /// Theme color scheme.
   // The theme behaviors may change in some statefull widgets. The [CSMGenericThemeOptions] and [CSMStateThemeOptions] approach is 
   // compatible with [TickerProviderStateMixin] and more complex states implementations.
-  late CSMGenericThemeOptions theme;
-  late CSMStateThemeOptions themeState;
+
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  late ComplexTheming theme;
+
+  late StateTheming themeState;
 
   /// Options cascade overlay entry.
   late OverlayEntry? overlay;
@@ -149,10 +157,9 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
       animController.forward();
     }
   }
-  void themeUpdate({TWSFThemeBase? theming}) {
+  void themeUpdate(TWSFThemeBase theming) {
     setState(() {
-      theming ??= getTheme();
-      themeState = theming!.primaryControlState;
+      themeState = theming.primaryControlState;
       theme = state.evaluateTheme(themeState);
     });
   }
@@ -196,11 +203,9 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
     ).animate(
       CurvedAnimation(parent: animController, curve: Curves.easeInOut),
     );
-
-    TWSFThemeBase theming = getTheme(
-      updateEfect: themeUpdate,
-    );
-    themeUpdate(theming: theming);
+    themeManager.addEffect(ref, themeUpdate);
+    themeState = themeManager.get().primaryControlState;
+    theme = state.evaluateTheme(themeState);
     if (widget.disabled) {
       updateState(CSMStates.hovered);
     }
@@ -209,7 +214,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
   @override
   void dispose() {
     super.dispose();
-    disposeEffect(themeUpdate);
+    themeManager.removeEffect(ref);
   }
 
   @override
@@ -218,7 +223,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
       message: widget.tooltip ?? '',
       child: CompositedTransformTarget(
         link: layerLink,
-        child: CSMPointerHandler(
+        child: PointerArea(
           onClick: () {
             if (widget.disabled) return;
             if (state == CSMStates.selected) {

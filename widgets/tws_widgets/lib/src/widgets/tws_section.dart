@@ -45,9 +45,9 @@ class TWSSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CSMColorThemeOptions pageStruct = getTheme<TWSFThemeBase>().page;
-
-    final Color bColor = isOptional ? pageStruct.fore.withValues(alpha: .5) : borderColor ?? pageStruct.highlight;
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final SimpleTheming pageTheme = themeManager.get().page;
+    final Color bColor = isOptional ? pageTheme.fore.withValues(alpha: .5) : borderColor ?? pageTheme.accent;
     return Padding(
       padding: padding,
       child: DecoratedBox(
@@ -69,14 +69,14 @@ class TWSSection extends StatelessWidget {
                 child: Transform.translate(
                   offset: const Offset(0, -35),
                   child: ColoredBox(
-                    color: pageStruct.main,
+                    color: pageTheme.back,
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         title,
                         style: textStyle ??
                         TextStyle(
-                          color: pageStruct.fore,
+                          color: pageTheme.fore,
                           fontSize: 18,
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.w600,

@@ -4,7 +4,7 @@ class _RecordsStack<TModel> extends StatelessWidget {
   /// State values for added items.
   final List<TWSArticleCreatorItemState<TModel>> states;
   /// theme colors scheme.
-  final CSMColorThemeOptions pageTheme;
+  final SimpleTheming pageTheme;
   /// Section width.
   final double creatorWidth;
   /// Custom item designer.
@@ -31,96 +31,101 @@ class _RecordsStack<TModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CSMColorThemeOptions dangerTheme = getTheme<TWSFThemeBase>().primaryCriticalControl;
+    final ThemeManagerI<TWSFThemeBase>  themeManager =  Injector.getThemeManager<TWSFThemeBase>();
+    SimpleTheming dangerTheme = themeManager.get().primaryCriticalControl;
 
-    return CSMSpacingColumn(
-      spacing: 12,
-      includeEnd: true,
-      children: <Widget>[
-        // --> Actions
-        CSMSpacingRow(
-          mainAlignment: MainAxisAlignment.end,
-          spacing: 8,
-          includeEnd: true,
-          includeStart: true,
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                'Records: (${states.length})',
-                style: TextStyle(
-                  color: pageTheme.fore,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        spacing: 12,
+        children: <Widget>[
+          // --> Actions
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              spacing: 8,
+            
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Records: (${states.length})',
+                    style: TextStyle(
+                      color: pageTheme.fore,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            // --> Add item action
-            CSMPointerHandler(
-              onClick: add,
-              cursor: SystemMouseCursors.click,
-              child: Icon(
-                Icons.add_circle,
-                size: 24,
-                color: pageTheme.fore,
-              ),
-            ),
-            // --> Remove selection
-            CSMPointerHandler(
-              onClick: () => remove(currentItemIndex),
-              cursor: SystemMouseCursors.click,
-              child: Icon(
-                Icons.remove_circle,
-                size: 24,
-                color: dangerTheme.highlight,
-              ),
-            ),
-          ],
-        ),
-        // --> Stack Display Content
-        Expanded(
-          child: LayoutBuilder(
-            builder: (_, BoxConstraints constrains) {
-              final ScrollController ctrl = ScrollController();
-              WidgetsBinding.instance.addPostFrameCallback(
-                (Duration timestamp) {
-                  ctrl.animateTo(0, duration: 300.miliseconds, curve: Curves.easeOut);
-                },
-              );
-
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: 0,
-                  maxHeight: constrains.maxHeight,
+                // --> Add item action
+                PointerArea(
+                  onClick: add,
+                  cursor: SystemMouseCursors.click,
+                  child: Icon(
+                    Icons.add_circle,
+                    size: 24,
+                    color: pageTheme.fore,
+                  ),
                 ),
-                child: ListView.builder(
-                  itemCount: states.length,
-                  controller: ctrl,
-                  itemBuilder: (BuildContext context, int index) {
-                    final bool currentActive = currentItemIndex == index;
-
-                    return CSMPointerHandler(
-                      cursor: currentActive ? MouseCursor.defer : SystemMouseCursors.click,
-                      onClick: () => changeItem(index),
-                      child: CSMDynamicWidget<TWSArticleCreatorItemState<TModel>>(
-                        state: states[index],
-                        designer: (BuildContext ctx, TWSArticleCreatorItemState<TModel> state) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              top: 3,
-                            ),
-                            child: SizedBox(
-                              width: creatorWidth,
-                              child: itemDesigner(state.model, currentActive, state.valid),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+                // --> Remove selection
+                PointerArea(
+                  onClick: () => remove(currentItemIndex),
+                  cursor: SystemMouseCursors.click,
+                  child: Icon(
+                    Icons.remove_circle,
+                    size: 24,
+                    color: dangerTheme.fore,
+                  ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
-        ),
-      ],
+          // --> Stack Display Content
+          Expanded(
+            child: LayoutBuilder(
+              builder: (_, BoxConstraints constrains) {
+                final ScrollController ctrl = ScrollController();
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (Duration timestamp) {
+                    ctrl.animateTo(0, duration: 300.miliseconds, curve: Curves.easeOut);
+                  },
+                );
+      
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: 0,
+                    maxHeight: constrains.maxHeight,
+                  ),
+                  child: ListView.builder(
+                    itemCount: states.length,
+                    controller: ctrl,
+                    itemBuilder: (BuildContext context, int index) {
+                      final bool currentActive = currentItemIndex == index;
+      
+                      return PointerArea(
+                        cursor: currentActive ? MouseCursor.defer : SystemMouseCursors.click,
+                        onClick: () => changeItem(index),
+                        child: ReactiveWidget<TWSArticleCreatorItemState<TModel>>(
+                          reactor: states[index],
+                          builder: (BuildContext ctx, TWSArticleCreatorItemState<TModel> state) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                top: 3,
+                              ),
+                              child: SizedBox(
+                                width: creatorWidth,
+                                child: itemDesigner(state.model, currentActive, state.valid),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

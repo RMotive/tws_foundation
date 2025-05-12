@@ -18,7 +18,9 @@ final class TWSPropertyViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TWSFThemeBase theme = getTheme<TWSFThemeBase>();
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final SimpleTheming pageTheme = themeManager.get().page;
+
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -27,13 +29,13 @@ final class TWSPropertyViewer extends StatelessWidget {
           '$label:',
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: theme.page.fore
+            color: pageTheme.fore
           ),
         ),
         Text(
           value ?? '---',
           style: TextStyle(
-            color: theme.page.fore
+            color: pageTheme.fore
           ),
         ),
       ],

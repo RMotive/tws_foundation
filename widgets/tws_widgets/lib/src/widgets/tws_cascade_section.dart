@@ -42,24 +42,34 @@ class TWSCascadeSection extends StatefulWidget {
 }
 
 class _TWSCascadeSectionState extends State<TWSCascadeSection> {
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  /// Color pallet for the component.
+  late SimpleTheming colorStruct;
+
   /// Cascade visibility flag.
   bool show = false;
+
   /// Waiting status.
   late bool waiting;
-  /// Color theme scheme.
-  late TWSFThemeBase theme;
-  late CSMColorThemeOptions colorStruct;
+
   /// Content internal state manager.
   late final TWSFStateHolder state;
-  void stateEffect = (){};
+  void stateEffect = () {};
+
   /// Widget cascade content;
   late Widget content;
   
-  void themeUpdateListener() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
+      colorStruct = theme.primaryControlColor;
     });
   }
+
 
   void showCascade() async {
     if(waiting) return;
@@ -75,7 +85,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
       await widget.loadOnPress(show);
     }
     waiting = false;
-    state.effect();
+    state.react();
 
   }
 
@@ -85,10 +95,9 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
     waiting = false;
     content = Placeholder();
     state = TWSFStateHolder();
-    theme = getTheme(
-      updateEfect: themeUpdateListener,
-    );
-    colorStruct = theme.primaryControlColor;
+    colorStruct = themeManager.get().primaryControlColor;
+    themeManager.addEffect(ref, themeUpdateListener);
+
   }
 
   @override
@@ -98,7 +107,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
 
   @override
   void dispose() {
-    disposeEffect(themeUpdateListener);
+    themeManager.removeEffect(ref);
     super.dispose();
   }
 
@@ -108,12 +117,12 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
     return TWSSection(
       padding: widget.padding,
       title: widget.title,
-      content: CSMSpacingColumn(
+      content: Column(
         spacing: 10,
         children: <Widget>[
-          CSMSpacingRow(
+          Row(
             spacing: 10,
-            mainAlignment: widget.mainAxisAlignment,
+            mainAxisAlignment: widget.mainAxisAlignment,
             children: <Widget>[
               widget.mainControl,
               IconButton(
@@ -122,7 +131,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
                 selectedIcon: const Icon(Icons.remove),
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
-                    colorStruct.hightlightAlt ?? colorStruct.highlight,
+                    colorStruct.accentAlt ?? colorStruct.accent,
                   ),
                 ),
                 padding: EdgeInsets.zero,
@@ -138,15 +147,15 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
           ),
           Visibility(
             visible: show,
-            child: CSMDynamicWidget<TWSFStateHolder>(
-              state: state, 
-              designer:(BuildContext ctx, TWSFStateHolder state) {
-                stateEffect = state.effect();
+            child: ReactiveWidget<TWSFStateHolder>(
+              reactor: state, 
+              builder:(BuildContext ctx, TWSFStateHolder state) {
+                stateEffect = state.react();
                 print('effect...');
                 return  Visibility(
                   visible: !waiting,
                   replacement: TwsfLoadingCircle(
-                    foreColor: colorStruct.hightlightAlt ?? colorStruct.highlight,
+                    foreColor: colorStruct.accentAlt ?? colorStruct.accent,
                   ),
                   child: content,
                 );

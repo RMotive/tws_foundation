@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 /// [TWSImageViewer] Displays an image component, that expands the image on tap, based on the display or windows app dimensions.
 class TWSImageViewer extends StatelessWidget {
   ///A base64 string image converted to bits.
@@ -49,10 +49,10 @@ class TWSImageViewer extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CSMSpacingRow(
+                    Row(
                       spacing: 10,
-                      crossAlignment: CrossAxisAlignment.center,
-                      mainAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           title ?? "",
@@ -60,9 +60,9 @@ class TWSImageViewer extends StatelessWidget {
                             fontWeight: FontWeight.bold
                           ),  
                         ),
-                        CSMPointerHandler(
+                        PointerArea(
                           cursor: SystemMouseCursors.click,
-                          onClick: () => CSMRouter.i.pop(),
+                          onClick: () => Injector.get<Router>().pop(),
                           child: const Icon(
                             Icons.cancel,
                             color: Colors.red,
@@ -84,8 +84,8 @@ class TWSImageViewer extends StatelessWidget {
       );
     }
 
-    return CSMSpacingColumn(
-      crossAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 8,
       children: <Widget>[
         if(title != null)
@@ -94,7 +94,7 @@ class TWSImageViewer extends StatelessWidget {
           textAlign: align,
           style: style
         ),
-        CSMPointerHandler(
+        PointerArea(
           cursor: SystemMouseCursors.click,
           onClick: () => imageViewDialog(img),
           child: ConstrainedBox(

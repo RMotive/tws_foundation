@@ -5,7 +5,7 @@ class _TWSAutocompleteNative<T> extends StatelessWidget {
   final List<T> suggestions;
   final List<T> rawData;
   final double tileHeigth;
-  final CSMColorThemeOptions theme;
+  final SimpleTheming theme;
   final String Function(T?) displayLabel;
   final void Function(String label, T? item) onTap;
   final List<T> Function() onFirstBuild;

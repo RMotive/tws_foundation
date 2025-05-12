@@ -9,26 +9,26 @@ CSMPackageLandingEntry _twsArticleCreationEntry = CSMPackageLandingEntry(
     ),
   ), 
   composeLanding: (BuildContext ctx) {
-    TWSFThemeBase theme = getTheme<TWSFThemeBase>();
-    TWSArticleCreatorAgent<Feature> agent = TWSArticleCreatorAgent<Feature>();
+    TWSFThemeBase theme = Injector.getTheme<TWSFThemeBase>();
+    TWSArticleCreatorAgent<TrailerClass> agent = TWSArticleCreatorAgent<TrailerClass>();
     return ColoredBox(
       color: theme.page.main,
-      child: CSMSpacingColumn(
+      child: Column(
         spacing: 10,
         children: <Widget>[
           Expanded(
             flex: 10,
-            child: TWSArticleCreator<Feature>(
-              factory:() => Feature(0, "", null),
+            child: TWSArticleCreator<TrailerClass>(
+              factory:() => TrailerClass(0, "", null),
               agent: agent,
-              onCreate: (List<Feature> records) {
+              onCreate: (List<TrailerClass> records) {
                 print('executing OnCreate...');
                 return <TWSArticleCreatorFeedback>[];
               },
-              modelValidator: (Feature model) {
+              modelValidator: (TrailerClass model) {
                 return model.evaluate().isEmpty;
               },
-              itemDesigner:(Feature actualModel, bool selected, bool valid) {
+              itemDesigner:(TrailerClass actualModel, bool selected, bool valid) {
                 return TWSArticleCreationStackItem(
                   properties: <TwsArticleCreationStackItemProperty>[
                     TwsArticleCreationStackItemProperty(
@@ -45,10 +45,10 @@ CSMPackageLandingEntry _twsArticleCreationEntry = CSMPackageLandingEntry(
                   selected: selected
                 );
               },
-              formDesigner:(TWSArticleCreatorItemState<Feature>? itemState) {
+              formDesigner:(TWSArticleCreatorItemState<TrailerClass>? itemState) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: CSMSpacingColumn(
+                  child: Column(
                     spacing: 10,
                     children: <Widget>[
                       TWSInputText(

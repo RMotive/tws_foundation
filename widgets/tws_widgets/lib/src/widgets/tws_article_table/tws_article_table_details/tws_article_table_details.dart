@@ -1,6 +1,6 @@
 part of '../tws_article_table.dart';
 
-final class _TWSArticleTableDetails<TArticle extends CSMEncodeInterface> extends StatelessWidget {
+final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends StatelessWidget {
   final TWSArticleTableAdapter<TArticle> adapter;
   final VoidCallback closeAction;
   final TArticle record;
@@ -26,20 +26,20 @@ final class _TWSArticleTableDetails<TArticle extends CSMEncodeInterface> extends
   Widget build(BuildContext context) {
     final _TWSArticleTableDetailsState state = _TWSArticleTableDetailsState();
 
-    final TWSFThemeBase themeBase = getTheme<TWSFThemeBase>();
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
 
-    final CSMColorThemeOptions tPage = themeBase.page;
-    final CSMStateThemeOptions tCritical = themeBase.criticalControlState;
+    final SimpleTheming tPage = themeManager.get().page;
+    final StateTheming tCritical = themeManager.get().criticalControlState;
 
     return ColoredBox(
-      color: tPage.main,
+      color: tPage.back,
       child: TWSFrameDecoration(
         topPadding: 0,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: CSMDynamicWidget<_TWSArticleTableDetailsState>(
-            state: state,
-            designer: (BuildContext ctx, _TWSArticleTableDetailsState state) {
+          child: ReactiveWidget<_TWSArticleTableDetailsState>(
+            reactor: state,
+            builder: (BuildContext ctx, _TWSArticleTableDetailsState state) {
               final Widget? editionForm = adapter.composeEditor(record, () => _closeDetails(state), context);
               if (state._editing && editionForm != null) {
                 return editionForm;
@@ -48,9 +48,9 @@ final class _TWSArticleTableDetails<TArticle extends CSMEncodeInterface> extends
               return Column(
                 children: <Widget>[
                   // --> Details section actions
-                  CSMSpacingRow(
+                  Row(
                     spacing: 8,
-                    mainAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       // --> Title
                       Expanded(

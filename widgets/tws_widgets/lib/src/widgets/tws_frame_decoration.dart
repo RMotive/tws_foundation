@@ -18,6 +18,8 @@ final class TWSFrameDecoration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+
     return Padding(
       padding: EdgeInsets.only(
         top: topPadding,
@@ -26,7 +28,7 @@ final class TWSFrameDecoration extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.fromBorderSide(
             BorderSide(
-              color: getTheme<TWSFThemeBase>().page.fore,
+              color: themeManager.get().page.fore,
               width: 2,
             ),
           ),

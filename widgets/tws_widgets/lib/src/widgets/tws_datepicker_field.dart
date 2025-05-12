@@ -64,25 +64,29 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
   final double borderWidth = 2;
   late TextEditingController ctrl;
   late final FocusNode fNode;
-  late TWSFThemeBase theme;
-  late CSMColorThemeOptions colorStruct;
-  late CSMColorThemeOptions disabledColorStruct;
-  late CSMColorThemeOptions errorColorStruct;
-  late CSMColorThemeOptions pageColorStruct;
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+  late SimpleTheming colorStruct;
+  late SimpleTheming disabledColorStruct;
+  late SimpleTheming errorColorStruct;
+  late SimpleTheming pageColorStruct;
 
   void initializeThemes() {
-    colorStruct = theme.primaryControlColor;
-    disabledColorStruct = theme.primaryDisabledControl;
-    errorColorStruct = theme.primaryCriticalControl;
-    pageColorStruct = theme.page;
+    colorStruct = themeManager.get().primaryControlColor;
+    disabledColorStruct = themeManager.get().primaryDisabledControl;
+    errorColorStruct = themeManager.get().primaryCriticalControl;
+    pageColorStruct = themeManager.get().page;
   }
 
-  void themeUpdateListener() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
       initializeThemes();
     });
   }
+
 
   @override
   void initState() {
@@ -92,9 +96,7 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
           text: widget.initialDate?.dateOnlyString,
         );
     fNode = widget.focusNode ?? FocusNode();
-    theme = getTheme(
-      updateEfect: themeUpdateListener,
-    );
+    themeManager.addEffect(ref, themeUpdateListener);
     initializeThemes();
     ctrl.addListener(() => setState(() {}));
   }
@@ -112,7 +114,7 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
   
   @override
   void dispose() {
-    disposeEffect(themeUpdateListener);
+    themeManager.removeEffect(ref);
     super.dispose();
   }
   
@@ -140,7 +142,7 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
               isDense: true,
               errorText: _error,
               errorMaxLines: 1,
-              suffixIconColor: colorStruct.main,
+              suffixIconColor: colorStruct.back,
               hintText: widget.hintText,
               labelText: widget.suffixLabel == null? widget.label : null,
               label: widget.suffixLabel != null
@@ -163,7 +165,7 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
                       tooltip: "Delete selection",
                       icon: Icon(
                         Icons.cancel,
-                        color: colorStruct.highlight,
+                        color: colorStruct.accent,
                         size: 20,
                       ),
                       onPressed: () {
@@ -189,30 +191,33 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: colorStruct.highlight.withValues(alpha: .6),
+                  color: colorStruct.accent.withValues(alpha: .6),
                   width: borderWidth,
                 ),
               ),
               disabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: disabledColorStruct.highlight,
+                  color: disabledColorStruct.accent,
                   width: borderWidth,
                 ),
               ),
               errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: errorColorStruct.highlight.withValues(alpha: .7),
+                  color: errorColorStruct.accent.withValues(alpha: .7),
                   width: borderWidth,
                 ),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: errorColorStruct.highlight,
+                  color: errorColorStruct.accent,
                   width: borderWidth,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: colorStruct.highlight, width: borderWidth),
+              borderSide: BorderSide(
+                color: colorStruct.accent,
+                width: borderWidth,
+              ),
               ),
             ),
           ),
@@ -223,8 +228,8 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
     return Theme(
       data: Theme.of(context).copyWith(
         colorScheme: ColorScheme.dark(
-          surface: pageColorStruct.main, //Background color
-          primary: pageColorStruct.main, // header background color
+          surface: pageColorStruct.accent, //Background color
+          primary: pageColorStruct.accent, // header background color
           onPrimary: pageColorStruct.fore, // header text color
           onSurface: pageColorStruct.fore // body text color
         ),

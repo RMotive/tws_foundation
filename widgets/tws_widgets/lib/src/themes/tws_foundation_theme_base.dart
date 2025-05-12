@@ -1,17 +1,17 @@
 import 'package:csm_view/csm_view.dart';
 
-abstract class TWSFThemeBase extends CSMThemeBase{
-  final CSMColorThemeOptions page;
-  final CSMColorThemeOptions masterLayout;
-  final CSMColorThemeOptions primaryControlColor;
-  final CSMColorThemeOptions primaryDisabledControl;
-  final CSMColorThemeOptions primaryCriticalControl;
-  final CSMStateThemeOptions masterLayoutMenuButtonState;
-  final CSMStateThemeOptions articlesLayoutActionButtonState;
-  final CSMStateThemeOptions articlesLayoutSelectorButtonState;
-  final CSMStateThemeOptions primaryControlState;
-  final CSMStateThemeOptions criticalControlState;
-
+abstract class TWSFThemeBase extends ThemeB{
+  final SimpleTheming page;
+  final SimpleTheming masterLayout;
+  final SimpleTheming primaryControlColor;
+  final SimpleTheming primaryDisabledControl;
+  final SimpleTheming primaryCriticalControl;
+  final StateTheming masterLayoutMenuButtonState;
+  final StateTheming articlesLayoutActionButtonState;
+  final StateTheming articlesLayoutSelectorButtonState;
+  final StateTheming primaryControlState;
+  final StateTheming criticalControlState;
+  // StateTheming
  const TWSFThemeBase(
     super.identifier, {
       super.frame,
@@ -24,7 +24,9 @@ abstract class TWSFThemeBase extends CSMThemeBase{
       required this.primaryCriticalControl,
       required this.articlesLayoutActionButtonState,
       required this.primaryDisabledControl,
-      required this.articlesLayoutSelectorButtonState,
+      required this.articlesLayoutSelectorButtonState, 
+      required super.icon, 
+      required super.iconBackground,
     } 
   );
 

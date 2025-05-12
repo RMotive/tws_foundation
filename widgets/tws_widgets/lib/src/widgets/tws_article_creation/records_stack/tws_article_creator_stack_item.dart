@@ -22,8 +22,9 @@ final class TWSArticleCreationStackItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CSMColorThemeOptions pageTheme = getTheme<TWSFThemeBase>().page;
-    final CSMColorThemeOptions dangerTheme = getTheme<TWSFThemeBase>().primaryCriticalControl;
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final SimpleTheming pageTheme = themeManager.get().page;
+    final SimpleTheming dangerTheme = themeManager.get().primaryCriticalControl;
 
     return DecoratedBox(
       position: DecorationPosition.foreground,
@@ -31,7 +32,7 @@ final class TWSArticleCreationStackItem extends StatelessWidget {
         border: Border.fromBorderSide(
           BorderSide(
             width: valid ? 0 : 1.5,
-            color: valid ? Colors.transparent : dangerTheme.highlight,
+            color: valid ? Colors.transparent : dangerTheme.accent,
           ),
         ),
       ),
@@ -41,7 +42,7 @@ final class TWSArticleCreationStackItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: DefaultTextStyle(
             style: TextStyle(
-              color: pageTheme.hightlightAlt ?? Colors.black,
+              color: pageTheme.accentAlt ?? Colors.black,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

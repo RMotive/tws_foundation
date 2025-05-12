@@ -11,7 +11,7 @@ part 'tws_autocomplete_list.dart';
 part 'tws_autocomplete_local.dart';
 
 /// State for future consume.
-final class _TWSAutoCompleteFieldFutureState<T> extends CSMStateBase {
+final class _TWSAutoCompleteFieldFutureState<T> extends ReactorB {
   List<T> preloadedItems = <T>[];
 }
 
@@ -114,20 +114,22 @@ class TWSAutoCompleteField<T> extends StatefulWidget {
 class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     with SingleTickerProviderStateMixin {
   final GlobalKey _fieldKey = GlobalKey();
-  late TWSFThemeBase theme;
-
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
   /// Future consume state.
   late _TWSAutoCompleteFieldFutureState<T> futureState;
 
   /// Consume method declaration in [adapter] property.
-  Future<List<SetViewOut<dynamic>>> Function()? consume;
+  Future<List<SetViewOutput<dynamic>>> Function()? consume;
 
   /// Internal scroll controller for overlay scrolling.
   late final ScrollController scrollController;
 
   /// Color pallet for the component.
-  late CSMColorThemeOptions primaryColorTheme;
-  late CSMColorThemeOptions pageColorTheme;
+  late SimpleTheming primaryColorTheme;
+  late SimpleTheming pageColorTheme;
 
   /// focus Node declaration.
   late final FocusNode focus;
@@ -176,7 +178,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
   }
 
   /// agent for future consume.
-  late CSMConsumerAgent agent;
+  late AsyncWidgetController agent;
   // Method to perform a local or future search, based on the given parameters.
   // This method manage the item selected and the data displayed on the overlay list view.
   //
@@ -235,7 +237,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
         if(tapSelection == null){
           if(query.isEmpty){
             futureState.preloadedItems =  rawOptionsList;
-            if(mounted) futureState.effect();
+            if(mounted) futureState.react();
           } else if(query.isNotEmpty) {
             futureState.preloadedItems =  <T>[];
             if(mounted) agent.refresh();
@@ -276,9 +278,8 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     }
   }
 
-  void themeUpdateListener() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
       primaryColorTheme = theme.primaryControlColor;
     });
   }
@@ -309,21 +310,20 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
 
   @override
   void initState() {
-    theme = getTheme( 
-      updateEfect: themeUpdateListener,
-    );
+    
+    primaryColorTheme = themeManager.get().primaryControlColor;
+    themeManager.addEffect(ref, themeUpdateListener);
     futureState = _TWSAutoCompleteFieldFutureState<T>();
     hasKeyValue = widget.hasKeyValue ?? (T? set) => true;
     scrollController = ScrollController();
-    primaryColorTheme = theme.primaryControlColor;
-    pageColorTheme = theme.page;
+    pageColorTheme = themeManager.get().page;
     ctrl = TextEditingController(text: widget.initialValue != null ? widget.displayValue(widget.initialValue) : null);
     focus = widget.focus ?? FocusNode();
     overlayController = OverlayPortalController();
     if(widget.initialValue != null) selectedOption = widget.initialValue;
     if (widget.adapter != null) {
-      agent = CSMConsumerAgent();
-      consume = () => widget.adapter!.consume(1, widget.quantityResults, <SetViewOrderOptions>[], "");
+      agent = AsyncWidgetController();
+      consume = () => widget.adapter!.consume(1, widget.quantityResults, <SetViewOutput<dynamic>>[], "");
     } else {
       rawOptionsList = widget.nativeList!;
     }
@@ -347,7 +347,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     focus.dispose();
     scrollController.dispose();
     ctrl.dispose();
-    disposeEffect(themeUpdateListener);
+    themeManager.removeEffect(ref);
     super.dispose();
   }
 
@@ -381,7 +381,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
             suffixIcon: Icon(
               Icons.arrow_drop_down,
               size: 24,
-              color: theme.primaryControlColor.fore,
+              color: primaryColorTheme.fore,
             ),
             validator: (String? text) {
               if (verifySelection()) return "Not exist an item with this value.";
@@ -401,7 +401,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
               offset: Offset(0, renderSize.height),
               link: link,
               // Overlay pointer handler
-              child: CSMPointerHandler(
+              child: PointerArea(
                 onHover: (bool hover) => isOvelayHovered = hover,
                 // Handle mobile gestures.
                 child: TextFieldTapRegion(
@@ -449,16 +449,16 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
                                 consume: () => widget.adapter!.consume(
                                   1,
                                   widget.quantityResults,
-                                  <SetViewOrderOptions>[],
+                                  <SetViewOutput<dynamic>>[],
                                   firstbuild ? "" : ctrl.text.trim(),
                                 ),
-                                onFetch: (List<SetViewOut<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) {
+                                onFetch: (List<SetViewOutput<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) {
                                   futureState = state;
                                   if(!firstbuild && (ctrl.text.trim().isEmpty || selectedOption != null)) {
                                     state.preloadedItems = rawOptionsList;
                                   } else {
                                     //Stores the properties results
-                                    for (SetViewOut<dynamic> view in data) {
+                                    for (SetViewOutput<dynamic> view in data) {
                                       suggestionsList = <T>[...view.records];
                                       if(firstbuild) rawOptionsList = <T>[...view.records];
                                     }

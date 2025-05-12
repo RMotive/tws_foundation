@@ -66,7 +66,7 @@ class _LandingViewState extends State<LandingView> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        CSMSpacingRow(
+        Row(
           spacing: 16,
           children: <Widget>[
             Expanded(
@@ -95,9 +95,9 @@ class _LandingViewState extends State<LandingView> {
         SizedBox(
           height: heigth - 40,
           child: 
-          CSMPackageLanding(
-            title: 'tws widgets example',
-            entries: <CSMPackageLandingEntry>[
+          PackageLanding(
+            name: 'tws widgets example',
+            landingEntries: <PackageLandingEntryI<>>[
               _twsButtonFlatEntry,
               // _twsSectionEntry,
               _twsCascadeSectionEntry,

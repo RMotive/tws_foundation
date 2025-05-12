@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  go_router: ^14.0.2
+  go_router: ^15.1.1
   file_picker: ^8.1.7
   camera_platform_interface: ^2.8.0
   camera_web: ^0.3.5
@@ -21,11 +21,16 @@ dependencies:
       url: https://github.com/RMotive/csm_view
       ref: main
 
+  csm_client:
+    git:
+      url: https://github.com/RMotive/csm_client
+      ref: main
+
   tws_foundation_client:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: 60#61
+      ref: development59#client_refactor
 
 dev_dependencies:
   flutter_test:

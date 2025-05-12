@@ -15,13 +15,12 @@ class _TWSArticleTableDetailsAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TWSFThemeBase themeBase = getTheme<TWSFThemeBase>();
-
-    final CSMColorThemeOptions tPage = themeBase.page;
-    final CSMColorThemeOptions tPrimary = themeBase.primaryControlColor;
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final SimpleTheming tPage = themeManager.get().page;
+    final SimpleTheming tPrimary = themeManager.get().primaryControlColor;
     return Tooltip(
       message: hint,
-      child: CSMPointerHandler(
+      child: PointerArea(
         cursor: SystemMouseCursors.click,
         onClick: action,
         child: DecoratedBox(
@@ -33,7 +32,7 @@ class _TWSArticleTableDetailsAction extends StatelessWidget {
             padding: const EdgeInsets.all(3),
             child: Icon(
               icon,
-              color: fore ?? tPrimary.foreAlt ?? tPrimary.main,
+              color: fore ?? tPrimary.foreAlt ?? tPrimary.back,
               size: 18,
             ),
           ),

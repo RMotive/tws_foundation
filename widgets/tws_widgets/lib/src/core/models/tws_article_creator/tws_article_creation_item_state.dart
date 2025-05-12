@@ -4,7 +4,7 @@ import 'package:csm_view/csm_view.dart';
 
 /// [TWSArticleCreatorItemState] Dedicated State class manager for [TWSArticleCreationStackItem] widget.
 /// Set the models/items values and validations status.
-final class TWSArticleCreatorItemState<TModel> extends CSMStateBase {
+final class TWSArticleCreatorItemState<TModel> extends ReactorB  {
   /// Item model value.
   late TModel _model;
   /// validation model status.
@@ -22,7 +22,7 @@ final class TWSArticleCreatorItemState<TModel> extends CSMStateBase {
   /// Update the model values notifying the suscribers.
   void updateModelRedrawing(TModel newModel) {
     _model = newModel;
-    effect();
+    react();
   }
 
   /// Update the validations status value without notify suscribers.
@@ -31,6 +31,6 @@ final class TWSArticleCreatorItemState<TModel> extends CSMStateBase {
   /// Update the model values notifying the suscribers.
   void updateInvalidRedrawing(bool newInvalid) {
     _valid = newInvalid;
-    effect();
+    react();
   }
 }

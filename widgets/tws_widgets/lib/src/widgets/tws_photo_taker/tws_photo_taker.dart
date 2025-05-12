@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:camera_platform_interface/camera_platform_interface.dart';
-import 'package:csm_view/csm_view.dart';
+import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_widgets/tws_widgets.dart';
 part 'tws_photo_taker_photo_preview.dart';
 part 'tws_photo_taker_camera.dart';
@@ -12,7 +12,7 @@ part 'tws_photo_taker_camera.dart';
 final CameraPlatform _cameraPlatform = CameraPlatform.instance;
 
 /// Logs advisor intializing.
-const CSMAdvisor _advisor = CSMAdvisor('TWSPhotoTaker');
+const Console _advisor = Console('TWSPhotoTaker');
 
 /// [TWSPhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
 /// 
@@ -69,6 +69,14 @@ final class TWSPhotoTaker extends StatefulWidget {
 }
 
 class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  late TWSFThemeBase theme;
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
   bool _loadingCamera = true;
 
   XFile? _photo;
@@ -126,6 +134,13 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
     super.dispose();
   }
 
+  void themeUpdateListener(TWSFThemeBase theme) {
+    setState(() {
+      this.theme = theme;
+    });
+  }
+
+
   void _openCameraDialog() {
     showDialog(
       context: context,
@@ -146,7 +161,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   @override
   Widget build(BuildContext context) {
     
-    return CSMSpacingColumn(
+    return Column(
       spacing: 8,
       children: <Widget>[
         if (widget.showFilePicker)
@@ -176,12 +191,12 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
                   : 'No hay cámaras disponibles',
           onTap: _openCameraDialog,
         ),
-        CSMSpacingRow(
+        Row(
           spacing: 12,
           children: <Widget>[
             Visibility(
               visible: widget.preLoadBase64 == null && _photo == null,
-              replacement: CSMPointerHandler(
+              replacement: PointerArea(
                 cursor: SystemMouseCursors.click,
                 onClick: () {
                   showDialog(
@@ -210,12 +225,12 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
               child: Icon(
                 Icons.photo,
                 size: 48,
-                color: getTheme<TWSFThemeBase>().page.fore,
+                color: theme.page.fore,
               ),
             ),
             Text(
               style: TextStyle(
-                color: getTheme<TWSFThemeBase>().page.fore,
+                color: theme.page.fore,
               ),
               _photo == null && widget.preLoadBase64 == null
                   ? 'Vacío'

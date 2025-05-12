@@ -6,7 +6,7 @@ import 'package:tws_widgets/src/widgets/twsf_loading_circule.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
 /// Header state class.
-final class _HeaderState extends CSMStateBase{}
+final class _HeaderState extends ReactorB{}
 
 /// [TwsSelectableList] Display a list of selectable items getted from a [TWSViewConsumeAdapter] class. 
 class TwsSelectableList<T> extends StatefulWidget {
@@ -79,23 +79,34 @@ class TwsSelectableList<T> extends StatefulWidget {
 }
 
 class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  /// Color pallet for the component.
+  late SimpleTheming primaryColorTheme;
+  late SimpleTheming pageColorTheme;
+
   /// Text color.
   late Color tcolor;
+
   /// Background color.
   late Color bcolor;
+
   /// Selected items list.
   late List<T> selectedItems;
-  /// Data result in [CSMConsumer].
+
+  /// Data result in [AsyncWidget].
   late List<T> fetchedList;
-  /// Color theme scheme.
-  late TWSFThemeBase theme;
+
   /// Declaration for header state.
   late _HeaderState headerState;
+
   /// Header state effect holder for use outside the [CSMDynamicWidget].
   late void Function() headerEffect;
-  /// Color pallet for the component.
-  late CSMColorThemeOptions primaryColorTheme;
-  late CSMColorThemeOptions pageColorTheme;
+
   /// Waiting widget state.
   late TWSFStateHolder waitingState;
   late void Function() waitingEffect;
@@ -105,13 +116,18 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   late bool waiting;
 
   // Theme method handler.
-  void themeUpdateListener() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
       primaryColorTheme = theme.primaryControlColor;
+      pageColorTheme = theme.page;
     });
   }
 
+  @override
+  void dispose() {
+    themeManager.removeEffect(ref);
+    super.dispose();
+  }
   @override
   void initState() {
     waitingState = TWSFStateHolder();
@@ -120,14 +136,11 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     headerState = _HeaderState();
     headerEffect = (){};
     waitingEffect = (){};
-    theme = getTheme( 
-      updateEfect: themeUpdateListener,
-    );
-
-    pageColorTheme = theme.page;
-    primaryColorTheme = theme.primaryControlColor;
+    themeManager.addEffect(ref, themeUpdateListener);
+    primaryColorTheme = themeManager.get().primaryControlColor;
+    pageColorTheme = themeManager.get().page;
     tcolor = widget.textColor ?? pageColorTheme.fore;
-    bcolor = widget.backgroundColor ?? pageColorTheme.main;
+    bcolor = widget.backgroundColor ?? pageColorTheme.back;
     super.initState();
   }
 
@@ -146,8 +159,9 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     tcolor = widget.enabled? widget.textColor ?? pageColorTheme.fore : widget.textColor?.withValues(alpha: 50) ?? pageColorTheme.fore.withAlpha(50);
     return TWSSection(
       title: widget.title, 
-      content: CSMConsumer<List<SetViewOut<dynamic>>>(
-        consume: () => widget.adapter.consume(1, 9999, <SetViewOrderOptions>[], ""), 
+      content: AsyncWidget<List<SetViewOutput<dynamic>>>(
+        future:
+            () => widget.adapter.consume(1, 9999, <SetViewOutput<dynamic>>[], ""), 
         loadingBuilder: (BuildContext ctx) {
           return Center(
             child: CircularProgressIndicator(
@@ -160,22 +174,22 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
             display: "Something go wrong",
           );
         },
-        successBuilder:(BuildContext ctx, List<SetViewOut<dynamic>> data) {
+        successBuilder:(BuildContext ctx, List<SetViewOutput<dynamic>> data) {
           fetchedList = data.first.records as List<T>;
           return Stack(
             children: <Widget>[
-              CSMSpacingColumn(
+              Column(
                 spacing: 5,
                 children: <Widget>[
                   widget.customHeader != null
                       ? widget.customHeader!
-                      : CSMDynamicWidget<_HeaderState>(
-                          state: headerState,
-                          designer: (BuildContext ctx, _HeaderState state) {
-                            headerEffect = state.effect;
-                            return CSMSpacingRow(
+                      : ReactiveWidget<_HeaderState>(
+                          reactor: headerState,
+                          builder: (BuildContext ctx, _HeaderState state) {
+                            headerEffect = state.react;
+                            return Row(
                               spacing: 10,
-                              mainAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
                                   "Selected: ${selectedItems.length}",
@@ -207,8 +221,8 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                               width: double.maxFinite,
                               label: title,
                               textColor: tcolor,
-                              onHoverColor: pageColorTheme.highlight,
-                              onHoverTextColor: pageColorTheme.hightlightAlt ?? pageColorTheme.fore,
+                              onHoverColor: pageColorTheme.accent,
+                              onHoverTextColor: pageColorTheme.accentAlt ?? pageColorTheme.fore,
                               onTap: (bool selected) async {
                                 waiting = true;
                                 waitingEffect();
@@ -246,10 +260,10 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                   ),
                 ],
               ),
-              CSMDynamicWidget<TWSFStateHolder>(
-                state: waitingState, 
-                designer:(BuildContext ctx, TWSFStateHolder state) {
-                  waitingEffect = state.effect;
+              ReactiveWidget<TWSFStateHolder>(
+                reactor: waitingState, 
+                builder:(BuildContext ctx, TWSFStateHolder state) {
+                  waitingEffect = state.react;
                   return Positioned.fill(
                     child: Visibility(
                       visible: waiting,
@@ -258,7 +272,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                           color: pageColorTheme.fore.withValues(alpha: 950),
                           child: TwsfLoadingCircle(
                             fit: BoxFit.scaleDown,
-                            foreColor: pageColorTheme.main,
+                            foreColor: pageColorTheme.back,
                           )
                         ),
                       ),

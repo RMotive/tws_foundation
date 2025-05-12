@@ -37,8 +37,15 @@ class TWSSwitchButton extends StatefulWidget {
 }
 
 class _TWSSwitchButtonState extends State<TWSSwitchButton> {
-  late TWSFThemeBase theme;
-  late CSMColorThemeOptions colorStruct;
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  /// Color pallet for the component.
+  late SimpleTheming primaryColorTheme;
+
   bool _value = false;
 
   /// Waiting status
@@ -48,25 +55,23 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
   void initState() {
     _value = widget.value;
     waiting = false;
-    theme = getTheme(
-      updateEfect: themeUpdateListener,
-    );
-    colorStruct = theme.primaryControlColor;
+    themeManager.addEffect(ref, themeUpdateListener);
+    primaryColorTheme = themeManager.get().primaryControlColor;
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    disposeEffect(themeUpdateListener);
+    themeManager.removeEffect(ref);
   }
 
-  void themeUpdateListener() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
-      colorStruct = theme.primaryControlColor;
+      primaryColorTheme = theme.primaryControlColor;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +82,12 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
           Text(
             widget.title,
             style: TextStyle(
-              color: colorStruct.fore,
+              color: primaryColorTheme.fore,
             ),
           ),
-          CSMSpacingRow(
+          Row(
             spacing: 10,
-            mainSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
                 height: widget.height,
@@ -92,8 +97,8 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
                     color: Colors.transparent,
                     child: Switch(
                       value: _value,
-                      activeColor: colorStruct.foreAlt,
-                      activeTrackColor: colorStruct.main,
+                      activeColor: primaryColorTheme.foreAlt,
+                      activeTrackColor: primaryColorTheme.back,
                       onChanged: (bool change) async {
                         if(waiting) return;
                         setState(() {
@@ -111,7 +116,7 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
                 visible: waiting,
                 child: TwsfLoadingCircle(
                   padding: EdgeInsets.zero,
-                  foreColor: colorStruct.highlight
+                  foreColor: primaryColorTheme.accent
                 ),
               ),
             ],

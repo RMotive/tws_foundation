@@ -110,7 +110,7 @@ class _TwsListTileState extends State<TwsListTile> {
     return SizedBox(
       height:widget.height,
       width: widget.width,
-      child: CSMPointerHandler(
+      child: PointerArea(
         cursor: widget.enabled? SystemMouseCursors.click : SystemMouseCursors.basic,
         onHover: (bool hover) {
           if(!widget.enabled) return;

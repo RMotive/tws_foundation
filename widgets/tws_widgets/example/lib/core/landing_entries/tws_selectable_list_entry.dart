@@ -14,11 +14,11 @@ CSMPackageLandingEntry _twsSelectableListEntry = CSMPackageLandingEntry(
         spacing: 20,
         children: <Widget>[
           Expanded(
-            child: TwsSelectableList<Feature>(
+            child: TwsSelectableList<TrailerClass>(
               title: "FutureOr callback Selectable List",
-              tileTitle: (Feature value) => "value: ${value.name}",
+              tileTitle: (TrailerClass value) => "value: ${value.name}",
               adapter: ViewConsumeAdapter(),
-              onSelect:(bool selected, Feature item) async {
+              onSelect:(bool selected, TrailerClass item) async {
                 print('waiting...');
                 await Future<void>.delayed(Duration(seconds: 1));
                 print("selected: $selected - ${item.name}");
@@ -26,11 +26,11 @@ CSMPackageLandingEntry _twsSelectableListEntry = CSMPackageLandingEntry(
             ),
           ),
           Expanded(
-            child: TwsSelectableList<Feature>(
+            child: TwsSelectableList<TrailerClass>(
               title: "TWS Selectable List",
-              tileTitle: (Feature value) => "value: ${value.name}",
+              tileTitle: (TrailerClass value) => "value: ${value.name}",
               adapter: ViewConsumeAdapter(),
-              onSelect:(bool selected, Feature item) {
+              onSelect:(bool selected, TrailerClass item) {
                 print("selected: $selected - ${item.name}");
               },
             ),

@@ -29,13 +29,13 @@ class _TwsListViewerBody<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CSMSpacingColumn(
+    return Column(
       spacing: 5,
       children: <Widget>[
         customHeader != null? customHeader!:
-        CSMSpacingRow(
+        Row(
           spacing: 10,
-          mainAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Text(
               "$title: ",

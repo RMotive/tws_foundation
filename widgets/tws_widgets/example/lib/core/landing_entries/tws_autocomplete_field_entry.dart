@@ -21,10 +21,10 @@ CSMPackageLandingEntry _twsAutoCompleteFieldEntry = CSMPackageLandingEntry(
             }, 
             nativeList: <String>["value1", 'value2', 'value3', 'value4', 'value5'],
           ),
-          TWSAutoCompleteField<Feature>(
+          TWSAutoCompleteField<TrailerClass>(
             label: "Async Data",
-            displayValue: (Feature? value) => value?.name ?? "---",
-            onChanged:(Feature? selection) {
+            displayValue: (TrailerClass? value) => value?.name ?? "---",
+            onChanged:(TrailerClass? selection) {
               print("Current selection: ${selection?.name}");
             }, 
             adapter: const ViewConsumeAdapter(),

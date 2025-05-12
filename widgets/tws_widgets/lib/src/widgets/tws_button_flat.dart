@@ -23,7 +23,7 @@ class TWSButtonFlat extends StatefulWidget {
   final bool disabled;
 
   /// Theme scheme options.
-  final CSMColorThemeOptions? themeOptions;
+  final SimpleTheming? themeOptions;
 
   /// Trigger method on tap control for [FutureOr] functions.
   final FutureOr<void> Function()? onTap;
@@ -44,11 +44,17 @@ class TWSButtonFlat extends StatefulWidget {
 
 class _TWSButtonFlatState extends State<TWSButtonFlat> {
   late bool waiting;
-  late TWSFThemeBase theme;
-  late CSMColorThemeOptions colorStruct;
+/// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
+  /// Color pallet for the component.
+  late SimpleTheming primaryColorTheme;
   
   Color bgStateColorize(StatesSet currentStates) {
-    final Color hlightColor = colorStruct.highlight;
+    final Color hlightColor = primaryColorTheme.accent;
     final Color reducedColor = hlightColor.withValues(alpha: .7);
     if (widget.disabled) {
       return reducedColor.withValues(alpha: .3);
@@ -61,7 +67,7 @@ class _TWSButtonFlatState extends State<TWSButtonFlat> {
   }
 
   Color olStateColorize(StatesSet currentStates) {
-    final Color hlightColor = colorStruct.hightlightAlt ?? Colors.blue.shade900;
+    final Color hlightColor = primaryColorTheme.accentAlt ?? Colors.blue.shade900;
     if (widget.disabled) {
       return Colors.transparent;
     }
@@ -71,25 +77,25 @@ class _TWSButtonFlatState extends State<TWSButtonFlat> {
     };
   }
 
-  void themeUpdateListener() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
+      primaryColorTheme = theme.primaryControlColor;
     });
+    
   }
 
   @override
   void initState() {
     super.initState();
     waiting = false;
-    theme = getTheme(
-      updateEfect: themeUpdateListener,
-    );
-    colorStruct = theme.primaryControlColor;
+    primaryColorTheme = themeManager.get().primaryControlColor;
+    themeManager.addEffect(ref, themeUpdateListener);
+
   }
 
   @override
   void dispose() {
-    disposeEffect(themeUpdateListener);
+    themeManager.removeEffect(ref);
     super.dispose();
   }
 
@@ -115,12 +121,12 @@ class _TWSButtonFlatState extends State<TWSButtonFlat> {
           child: Visibility(
             visible: !waiting,
             replacement: TwsfLoadingCircle(
-              foreColor: colorStruct.foreAlt ?? colorStruct.fore,
+              foreColor: primaryColorTheme.foreAlt ?? primaryColorTheme.fore,
             ),
             child: Text(
               widget.label,
               style: TextStyle(
-                color: colorStruct.foreAlt ?? colorStruct.fore,
+                color: primaryColorTheme.foreAlt ?? primaryColorTheme.fore,
               ),
             ),
           ),

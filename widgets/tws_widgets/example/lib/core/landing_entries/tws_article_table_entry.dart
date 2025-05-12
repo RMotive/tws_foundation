@@ -17,19 +17,19 @@ CSMPackageLandingEntry _twsArticleTable = CSMPackageLandingEntry(
         spacing: 10,
         children: <Widget>[
           Expanded(
-            child: TWSArticleTable<Feature>(
+            child: TWSArticleTable<TrailerClass>(
               size: 25,
               sizes: <int>[25, 50, 75, 100],
               adapter: const TableAdapter(),
               agent: agent,
-              fields: <TWSArticleTableFieldOptions<Feature>>[
-                TWSArticleTableFieldOptions<Feature>(
+              fields: <TWSArticleTableFieldOptions<TrailerClass>>[
+                TWSArticleTableFieldOptions<TrailerClass>(
                   'Name',
-                  (Feature item, int index, BuildContext ctx) => item.name,
+                  (TrailerClass item, int index, BuildContext ctx) => item.name,
                 ),
-                TWSArticleTableFieldOptions<Feature>(
+                TWSArticleTableFieldOptions<TrailerClass>(
                   'Description',
-                  (Feature item, int index, BuildContext ctx) => item.description ?? "---",
+                  (TrailerClass item, int index, BuildContext ctx) => item.description ?? "---",
                 ),
               ],
             ),

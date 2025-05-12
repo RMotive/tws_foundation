@@ -38,9 +38,10 @@ class TWSDisplayFlat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CSMColorThemeOptions colorStruct = getTheme<TWSFThemeBase>().primaryControlColor;
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final SimpleTheming colorStruct = themeManager.get().primaryControlColor;
 
-    Color baseColor = color ?? colorStruct.highlight;
+    Color baseColor = color ?? colorStruct.accent;
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -71,7 +72,7 @@ class TWSDisplayFlat extends StatelessWidget {
                   display,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: foreColor ?? colorStruct.hightlightAlt ?? colorStruct.fore,
+                    color: foreColor ?? colorStruct.accentAlt ?? colorStruct.fore,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

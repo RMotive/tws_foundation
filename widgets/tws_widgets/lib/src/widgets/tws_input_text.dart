@@ -128,16 +128,22 @@ class TWSInputText extends StatefulWidget {
 
 class _TWSInputTextState extends State<TWSInputText> {
   final GlobalKey _inputFieldKey = GlobalKey();
+
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+
   Timer? _deBouncer;
 
   final double borderWidth = 2;
   late TextEditingController ctrl;
   late final FocusNode fNode;
-  late TWSFThemeBase theme;
-  late CSMColorThemeOptions colorStruct;
-  late CSMColorThemeOptions disabledColorStruct;
-  late CSMColorThemeOptions errorColorStruct;
-  late CSMColorThemeOptions pageColorStruct;
+  late SimpleTheming colorStruct;
+  late SimpleTheming disabledColorStruct;
+  late SimpleTheming errorColorStruct;
+  late SimpleTheming pageColorStruct;
 
   @override
   void initState() {
@@ -145,9 +151,7 @@ class _TWSInputTextState extends State<TWSInputText> {
     ctrl = widget.controller ?? TextEditingController();
     fNode = widget.focusNode ?? FocusNode();
     if(widget.focusEvents) setFocus();
-    theme = getTheme(
-      updateEfect: themeUpdateListener,
-    );
+    themeManager.addEffect(ref, themeUpdateListener);
     initializeThemes();
   }
 
@@ -162,7 +166,7 @@ class _TWSInputTextState extends State<TWSInputText> {
 
   @override
   void dispose() {
-    disposeEffect(themeUpdateListener);
+    themeManager.removeEffect(ref);
     if(widget.focusEvents) fNode.dispose();
     _deBouncer?.cancel();
     super.dispose();
@@ -185,18 +189,18 @@ class _TWSInputTextState extends State<TWSInputText> {
     );
   }
   void initializeThemes() {
-    colorStruct = theme.primaryControlColor;
-    disabledColorStruct = theme.primaryDisabledControl;
-    errorColorStruct = theme.primaryCriticalControl;
-    pageColorStruct = theme.page;
+    colorStruct = themeManager.get().primaryControlColor;
+    disabledColorStruct = themeManager.get().primaryDisabledControl;
+    errorColorStruct = themeManager.get().primaryCriticalControl;
+    pageColorStruct = themeManager.get().page;
   }
 
-  void themeUpdateListener() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      theme = getTheme();
       initializeThemes();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     bool showSuffix = !widget.isOptional || widget.suffixLabel == null;
@@ -282,31 +286,31 @@ class _TWSInputTextState extends State<TWSInputText> {
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: widget.showErrorColor ? errorColorStruct.fore : colorStruct.highlight.withValues(alpha: .6),
+                color: widget.showErrorColor ? errorColorStruct.fore : colorStruct.accent.withValues(alpha: .6),
                 width: borderWidth,
               ),
             ),
             disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: disabledColorStruct.highlight,
+                color: disabledColorStruct.accent,
                 width: borderWidth,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: errorColorStruct.highlight.withValues(alpha: .7),
+                color: errorColorStruct.accent.withValues(alpha: .7),
                 width: borderWidth,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: errorColorStruct.highlight,
+                color: errorColorStruct.accent,
                 width: borderWidth,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: colorStruct.highlight,
+                color: colorStruct.accent,
                 width: borderWidth,
               ),
             ),

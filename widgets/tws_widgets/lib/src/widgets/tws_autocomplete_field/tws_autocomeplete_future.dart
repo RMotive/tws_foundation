@@ -1,17 +1,17 @@
 part of 'tws_autocomplete_field.dart';
 
 class _TWSAutocompleteFuture<T> extends StatelessWidget {
-  final Future<List<SetViewOut<dynamic>>> Function() consume;
+  final Future<List<SetViewOutput<dynamic>>> Function() consume;
   final ScrollController controller;
   final double tileHeigth;
-  final CSMColorThemeOptions theme;
+  final SimpleTheming theme;
   final String Function(T?) displayLabel;
   final String Function(T?)? suffixLabel;
   final void Function(String label, T? item) onTap;
-  final void Function(List<SetViewOut<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) onFetch;
+  final void Function(List<SetViewOutput<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) onFetch;
   final Color loadingColor;
   final Color hoverTextColor;
-  final CSMConsumerAgent agent;
+  final AsyncWidgetController agent;
   final _TWSAutoCompleteFieldFutureState<T> state;
 
   const _TWSAutocompleteFuture({
@@ -29,9 +29,9 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
     this.suffixLabel
   });
 
-  List<T> getSets(List<SetViewOut<dynamic>> rawData) {
+  List<T> getSets(List<SetViewOutput<dynamic>> rawData) {
     List<T> data = <T>[];
-    for (SetViewOut<dynamic> view in rawData) {
+    for (SetViewOutput<dynamic> view in rawData) {
       data = <T>[...data, ...view.records];
     }
     return data;
@@ -39,13 +39,13 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CSMConsumer<List<SetViewOut<dynamic>>>(
-      consume: consume,
+    return AsyncWidget<List<SetViewOutput<dynamic>>>(
+      future: consume,
       agent: agent,
-      emptyCheck: (List<SetViewOut<dynamic>> data) {
+      emptyCheck: (List<SetViewOutput<dynamic>> data) {
         onFetch(data, state); 
         int cont = 0;
-        for(SetViewOut<dynamic> view in data){
+        for(SetViewOutput<dynamic> view in data){
           cont += view.records.length;
         }
         return cont == 0? true: false;
@@ -60,7 +60,7 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
           ),
         );
       },
-      errorBuilder: (BuildContext ctx, Object? error, List<SetViewOut<dynamic>>? data) {
+      errorBuilder: (BuildContext ctx, Object? error, List<SetViewOutput<dynamic>>? data) {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: TWSDisplayFlat(
@@ -68,14 +68,14 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
           ),
         );
       },
-      successBuilder: (BuildContext ctx, List<SetViewOut<dynamic>> rawData) {     
+      successBuilder: (BuildContext ctx, List<SetViewOutput<dynamic>> rawData) {     
         return Scrollbar(
           trackVisibility: true,
           thumbVisibility: true,
           controller: controller,
-          child: CSMDynamicWidget<_TWSAutoCompleteFieldFutureState<T>>(
-            state: _TWSAutoCompleteFieldFutureState<T>(), 
-            designer:(BuildContext ctx, _TWSAutoCompleteFieldFutureState<T> state) {
+          child: ReactiveWidget<_TWSAutoCompleteFieldFutureState<T>>(
+            reactor: _TWSAutoCompleteFieldFutureState<T>(), 
+            builder:(BuildContext ctx, _TWSAutoCompleteFieldFutureState<T> state) {
               onFetch(rawData, state);
               List<T> data = state.preloadedItems;
               if(data.isEmpty){

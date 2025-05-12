@@ -1,18 +1,17 @@
-import 'package:csm_view/csm_view.dart';
 import 'package:example/core/adapters/view_consume_adapter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_widgets/tws_widgets.dart';
 
-final class TableAdapter implements TWSArticleTableAdapter<Feature> { 
+final class TableAdapter implements TWSArticleTableAdapter<TrailerClass> { 
   const TableAdapter();
 
   @override
-  TWSArticleTableEditor? composeEditor(Feature set, void Function() closeReinvoke, BuildContext context) {
+  TWSArticleTableEditor? composeEditor(TrailerClass set, void Function() closeReinvoke, BuildContext context) {
     return TWSArticleTableEditor(
       form: Padding(
         padding: EdgeInsets.all(16),
-        child: CSMSpacingColumn(
+        child: Column(
           spacing: 10,
           children: <Widget>[
             TWSInputText(
@@ -22,9 +21,8 @@ final class TableAdapter implements TWSArticleTableAdapter<Feature> {
                 text: set.name,
               ),
               onChanged: (String text) {
-                set = set.clone(
-                  name: text,
-                );
+                // set.name = text;
+                print(text);
               },
             ),
             TWSInputText(
@@ -34,9 +32,10 @@ final class TableAdapter implements TWSArticleTableAdapter<Feature> {
                 text: set.description,
               ),
               onChanged: (String text) {
-                set = set.clone(
-                  description: text,
-                );
+                // set = set.clone(
+                //   description: text,
+                // )
+                print(text);
               },
             ),
           ],
@@ -47,9 +46,9 @@ final class TableAdapter implements TWSArticleTableAdapter<Feature> {
   }
 
   @override
-  Widget composeViewer(Feature set, BuildContext context) {
+  Widget composeViewer(TrailerClass set, BuildContext context) {
     return SizedBox.expand(
-      child: CSMSpacingColumn(
+      child: Column(
         spacing: 10,
         children: <Widget>[
           TWSPropertyViewer(
@@ -66,13 +65,13 @@ final class TableAdapter implements TWSArticleTableAdapter<Feature> {
   }
 
   @override
-  Future<SetViewOut<Feature>> consume(int page, int range, List<SetViewOrderOptions> orderings) async {
-    List<SetViewOut<Feature>> records = await ViewConsumeAdapter().consume(page, range, orderings, "");
+  Future<SetViewOutput<TrailerClass>> consume(int page, int range, List<SetViewOrderOptions> orderings) async {
+    List<SetViewOutput<TrailerClass>> records = await ViewConsumeAdapter().consume(page, range, orderings, "");
     return records.first;
   }
   
   @override
-  void onRemoveRequest(Feature set, BuildContext context) {
+  void onRemoveRequest(TrailerClass set, BuildContext context) {
     print('removing: ${set.name}');
   }
 

@@ -48,7 +48,7 @@ final class _TWSPhotoTakerPhotoPreview extends StatelessWidget {
                       label: 'Close',
                       width: cts.maxWidth * .1,
                       onTap: () {
-                        CSMRouter.i.pop();
+                        Injector.get<Router>().pop();
                       },
                     ),
                   );

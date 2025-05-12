@@ -13,6 +13,8 @@ final class _TWSArticleTableHeader<TArticle> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         border: Border.fromBorderSide(
@@ -39,7 +41,7 @@ final class _TWSArticleTableHeader<TArticle> extends StatelessWidget {
                   child: Text(
                     fields[cont].name,
                     style: TextStyle(
-                      color: getTheme<TWSFThemeBase>().page.fore,
+                      color: themeManager.get().page.fore,
                       fontWeight: FontWeight.w900,
                     ),
                   ),

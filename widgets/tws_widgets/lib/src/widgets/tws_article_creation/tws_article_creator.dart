@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart';
+import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_widgets/tws_widgets.dart';
 
 part 'tws_article_creator_state.dart';
 
 part 'records_stack/tws_article_creator_records_stack.dart';
 
-final CSMRouter _router = CSMRouter.i;
+final Router _router = Injector.get();
 
 const double _kPadding = 8;
 const double _kColWidthLimit = 300;
@@ -54,11 +54,19 @@ final class TWSArticleCreator<TModel> extends StatefulWidget {
 
 class _TWSArticleCreatorState<TModel> extends State<TWSArticleCreator<TModel>> {
   late _TWSArticleCreationState<TModel> mainState;
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
+  /// Color pallet for the component.
+  late SimpleTheming pageColorTheme;
 
   @override
   void initState() {
     super.initState();
     mainState = _TWSArticleCreationState<TModel>(widget.factory);
+    pageColorTheme = themeManager.get().primaryControlColor;
+    themeManager.addEffect(ref, themeUpdateListener);
     widget.agent?.addListener(submitRecords);
   }
 
@@ -66,6 +74,18 @@ class _TWSArticleCreatorState<TModel> extends State<TWSArticleCreator<TModel>> {
   void didUpdateWidget(covariant TWSArticleCreator<TModel> oldWidget) {
     super.didUpdateWidget(oldWidget);
     widget.agent?.addListener(submitRecords);
+  }
+
+  @override
+  void dispose() {
+    themeManager.removeEffect(ref);
+    super.dispose();
+  }
+
+  void themeUpdateListener(TWSFThemeBase theme) {
+    setState(() {
+      pageColorTheme = theme.primaryControlColor;
+    });
   }
 
   void submitRecords() async {
@@ -87,7 +107,7 @@ class _TWSArticleCreatorState<TModel> extends State<TWSArticleCreator<TModel>> {
         error = true;
       }
 
-      mainState.effect();
+      mainState.react();
       if (error) {
         return;
       }
@@ -104,11 +124,10 @@ class _TWSArticleCreatorState<TModel> extends State<TWSArticleCreator<TModel>> {
 
   @override
   Widget build(BuildContext context) {
-    final TWSFThemeBase theme = getTheme();
 
-    return CSMDynamicWidget<_TWSArticleCreationState<TModel>>(
-      state: mainState,
-      designer: (BuildContext context, _TWSArticleCreationState<TModel> state) {
+    return ReactiveWidget<_TWSArticleCreationState<TModel>>(
+      reactor: mainState,
+      builder: (BuildContext context, _TWSArticleCreationState<TModel> state) {
         return LayoutBuilder(
           builder: (_, BoxConstraints cts) {
             final double calcWidth = ((cts.maxWidth / 2) - _kPadding);
@@ -135,7 +154,7 @@ class _TWSArticleCreatorState<TModel> extends State<TWSArticleCreator<TModel>> {
                     child: _RecordsStack<TModel>(
                       add: state.addItem,
                       remove: state.removeItem,
-                      pageTheme: theme.page,
+                      pageTheme: pageColorTheme,
                       states: state.states,
                       creatorWidth: sizeFactor.width,
                       itemDesigner: widget.itemDesigner,

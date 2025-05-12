@@ -9,93 +9,95 @@ class TWSFThemeLight extends TWSFThemeBase {
     : super(
         kIdentifier,
         frame: TWSFColors.warmWhite,
-        masterLayout: const CSMColorThemeOptions(
-          TWSFColors.oceanBlue,
-          TWSFColors.warmWhite,
-          Colors.transparent,
+        iconBackground: TWSFColors.warmWhite,
+        icon: const Icon(Icons.abc),
+        masterLayout: const SimpleTheming(
+          back: TWSFColors.oceanBlue,
+          fore: TWSFColors.warmWhite,
+          accent: Colors.transparent,
         ),
-        page: const CSMColorThemeOptions(
-          TWSFColors.warmWhite,
-          TWSFColors.lightDark,
-          TWSFColors.oceanBlue,
-          hightlightAlt: TWSFColors.warmWhite,
+        page: const SimpleTheming(
+          back: TWSFColors.warmWhite,
+          fore: TWSFColors.lightDark,
+          accent: TWSFColors.oceanBlue,
+          foreAlt: TWSFColors.warmWhite,
         ),
-        primaryControlColor: const CSMColorThemeOptions(
-          TWSFColors.oceanBlue,
-          TWSFColors.lightDark,
-          TWSFColors.oceanBlue,
+        primaryControlColor: const SimpleTheming(
+          back: TWSFColors.oceanBlue,
+          fore: TWSFColors.lightDark,
+          accent:TWSFColors.oceanBlue,
           foreAlt:TWSFColors.warmWhite,
         ),
-        primaryDisabledControl: const CSMColorThemeOptions(
-          TWSFColors.darkGrey,
-          TWSFColors.darkGrey,
-          TWSFColors.darkGrey,
+        primaryDisabledControl: const SimpleTheming(
+          back: TWSFColors.darkGrey,
+          fore: TWSFColors.darkGrey,
+          accent: TWSFColors.darkGrey,
           foreAlt: TWSFColors.darkGrey,
         ),
-        primaryCriticalControl: const CSMColorThemeOptions(
-          Colors.transparent,
-          Color.fromARGB(255, 208, 136, 130),
-          TWSFColors.smoothWine,
+        primaryCriticalControl: const SimpleTheming(
+          back: Colors.transparent,
+          fore: Color.fromARGB(255, 208, 136, 130),
+          accent: TWSFColors.smoothWine,
           foreAlt: Color.fromARGB(255, 208, 136, 130),
         ),
-        articlesLayoutSelectorButtonState: const CSMStateThemeOptions(
-          main: CSMGenericThemeOptions(
+        articlesLayoutSelectorButtonState: const StateTheming(
+          main: ComplexTheming(
             background: TWSFColors.oceanBlue,
             foreground: TWSFColors.warmWhite,
           ),
-          hoverStruct: CSMGenericThemeOptions(
+          hoverStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
-          selectStruct: CSMGenericThemeOptions(
+          selectStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
         ),
-        masterLayoutMenuButtonState: const CSMStateThemeOptions(
-          main: CSMGenericThemeOptions(
+        masterLayoutMenuButtonState: const StateTheming(
+          main: ComplexTheming(
             background: Colors.transparent,
             foreground: TWSFColors.warmWhite,
             textStyle: TextStyle(fontSize: 14),
           ),
-          hoverStruct: CSMGenericThemeOptions(background: Colors.white10),
-          selectStruct: CSMGenericThemeOptions(
+          hoverStruct: ComplexTheming(background: Colors.white10),
+          selectStruct: ComplexTheming(
             background: Colors.white10,
             foreground: TWSFColors.warmWhite,
           ),
         ),
-        articlesLayoutActionButtonState: const CSMStateThemeOptions(
-          main: CSMGenericThemeOptions(
+        articlesLayoutActionButtonState: const StateTheming(
+          main: ComplexTheming(
             background: TWSFColors.oceanBlue,
             foreground: TWSFColors.warmWhite,
           ),
-          hoverStruct: CSMGenericThemeOptions(
+          hoverStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
             foreground: Colors.white60,
           ),
-          selectStruct: CSMGenericThemeOptions(
+          selectStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
         ),
-        primaryControlState: const CSMStateThemeOptions(
-          main: CSMGenericThemeOptions(
+        primaryControlState: const StateTheming(
+          main: ComplexTheming(
             background: TWSFColors.oceanBlue,
             foreground: TWSFColors.warmWhite,
           ),
-          hoverStruct: CSMGenericThemeOptions(
+          hoverStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
-          selectStruct: CSMGenericThemeOptions(
+          selectStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
         ),
-        criticalControlState: const CSMStateThemeOptions(
-          main: CSMGenericThemeOptions(
+        criticalControlState: const StateTheming(
+          main: ComplexTheming(
             background: TWSFColors.smoothWine,
             foreground: TWSFColors.lightDark,
           ),
-          hoverStruct: CSMGenericThemeOptions(
+          hoverStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
-          selectStruct: CSMGenericThemeOptions(
+          selectStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
         ),

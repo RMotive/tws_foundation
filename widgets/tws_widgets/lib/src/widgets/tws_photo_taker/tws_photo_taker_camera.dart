@@ -20,8 +20,13 @@ final class _TWSPhotoTakerPhotoCamera extends StatefulWidget {
 }
 
 class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
-  ///
-  late TWSFThemeBase _theme;
+  /// Theme Manager injector.
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+
+  late TWSFThemeBase theme;
+
+  /// Theme reference key.
+  final UniqueKey ref = UniqueKey();
 
   ///
   int? _camera;
@@ -43,21 +48,19 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   }
 
   ///
-  void _themeEffect() {
+  void themeUpdateListener(TWSFThemeBase theme) {
     setState(() {
-      _theme = getTheme();
+      this.theme = theme;
     });
   }
+
 
   ///
   @override
   void initState() {
     super.initState();
-
-    _theme = getTheme(
-      updateEfect: _themeEffect,
-    );
-
+    themeManager.addEffect(ref, themeUpdateListener);
+    theme = themeManager.get();
     _cameraDefinition = widget.camera;
     if (_cameraDefinition != null) {
       _cameraPlatform.createCamera(_cameraDefinition!, ResolutionPreset.high).then(
@@ -94,7 +97,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   ///
   @override
   void dispose() {
-    disposeEffect(_themeEffect);
+    themeManager.removeEffect(ref);
     if (_camera != null) {
       _cameraPlatform.dispose(_camera!);
     }
@@ -106,7 +109,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: ColoredBox(
-        color: getTheme<TWSFThemeBase>().page.main,
+        color: theme.page.back,
         child: Stack(
           children: <Widget>[
             Visibility(
@@ -132,11 +135,11 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                 child: IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: _theme.primaryCriticalControl.fore,
+                    color: theme.primaryCriticalControl.fore,
                     size: 32,
                   ),
                   onPressed: () {
-                    CSMRouter.i.pop();
+                    Injector.get<Router>().pop();
                   },
                 ),
               ),
@@ -152,14 +155,14 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                   children: <Widget>[
                     Visibility(
                       visible: _photo != null,
-                      child: CSMSpacingRow(
+                      child: Row(
                         spacing: 8,
                         children: <Widget>[
                           TWSButtonFlat(
                             label: 'Guardar',
                             onTap: () {
                               widget.onSave(_photo!);
-                              CSMRouter.i.pop();
+                              Injector.get<Router>().pop();
                             },
                           ),
                           TWSButtonFlat(
@@ -179,8 +182,8 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                       visible: !(widget.camera == null || _photo != null),
                       child: IconButton(
                         enableFeedback: true,
-                        color: _theme.page.fore,
-                        disabledColor: _theme.primaryDisabledControl.main,
+                        color: theme.page.fore,
+                        disabledColor: theme.primaryDisabledControl.back,
                         icon: const Icon(
                           Icons.camera,
                           size: 48,

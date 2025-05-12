@@ -21,8 +21,8 @@ class TWSSectionDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? mainColor = color; 
     if(color == null){
-      CSMColorThemeOptions pageColorTheme = getTheme<TWSFThemeBase>().page;
-      mainColor = pageColorTheme.fore;
+    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+      mainColor = themeManager.get().page.fore;
     }
 
     return Padding(

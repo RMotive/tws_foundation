@@ -22,7 +22,7 @@ dependencies:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: 60#61
+      ref: development59#client_refactor
 
   csm_view:
     git:

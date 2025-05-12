@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:csm_view/csm_view.dart';
+import 'package:csm_client/csm_client.dart';
+import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_widgets/src/core/foundation_colors.dart';
@@ -16,7 +17,7 @@ part 'tws_article_table_header/tws_article_table_header.dart';
 part 'tws_article_table_error.dart';
 part 'tws_article_table_loading.dart';
 /// [TWSArticleTable] Create a data grid table, with custom headers, content and interactable rows and drawer options.
-class TWSArticleTable<TArticle extends CSMEncodeInterface> extends StatefulWidget {
+class TWSArticleTable<TArticle extends EntityB<TArticle>> extends StatefulWidget {
   /// Set the columns in the table and it's content.
   final List<TWSArticleTableFieldOptions<TArticle>> fields;
   /// Adapter for the selected row drawer options: Update and delete row record options.
@@ -53,19 +54,19 @@ class TWSArticleTable<TArticle extends CSMEncodeInterface> extends StatefulWidge
   State<TWSArticleTable<TArticle>> createState() => _TWSArticleTableState<TArticle>();
 }
 
-class _TWSArticleTableState<TArticle extends CSMEncodeInterface> extends State<TWSArticleTable<TArticle>> with SingleTickerProviderStateMixin {
+class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TWSArticleTable<TArticle>> with SingleTickerProviderStateMixin {
   static const double _kPagingHeight = 50;
   static const double _kMinFieldWidth = 200;
   static const double _kDetailsWidth = 400;
 
   /// Data consume function.
-  late Future<SetViewOut<TArticle>> Function() consume;
+  late Future<SetViewOutput<TArticle>> Function() consume;
   /// Drawer animation controller.
   late AnimationController detailsAnimationController;
   /// Horizontal scroll controller.
   late ScrollController horizontalController;
   /// Initialize consumer agent.
-  final CSMConsumerAgent agent = CSMConsumerAgent();
+  final AsyncWidgetController agent = AsyncWidgetController();
 
   late final TWSArticleTableAdapter<TArticle> adapter;
 
@@ -89,7 +90,7 @@ class _TWSArticleTableState<TArticle extends CSMEncodeInterface> extends State<T
     setState(() {
       this.page = page;
       this.size = size;
-      this.consume = () => adapter.consume(page, size, <SetViewOrderOptions>[]);
+      this.consume = () => adapter.consume(page, size, <SetViewOutput<TArticle>>[]);
     });
     agent.refresh();
   }
@@ -105,7 +106,7 @@ class _TWSArticleTableState<TArticle extends CSMEncodeInterface> extends State<T
     items = 0;
     adapter = widget.adapter;
     records = <TArticle>[];
-    consume = () => adapter.consume(page, size, <SetViewOrderOptions>[]);
+    consume = () => adapter.consume(page, size, <SetViewOutput<TArticle>>[]);
     detailsAnimationController = AnimationController(
       vsync: this,
       duration: 200.miliseconds,
@@ -123,7 +124,7 @@ class _TWSArticleTableState<TArticle extends CSMEncodeInterface> extends State<T
     super.dispose();
   }
 
-  void _updatePagingChanges(SetViewOut<TArticle> data) {
+  void _updatePagingChanges(SetViewOutput<TArticle> data) {
     // if (items != data.amount || pages != data.pages || records != data.sets) {
     if (items != data.count || pages != data.pages || records != data.records) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -217,15 +218,15 @@ class _TWSArticleTableState<TArticle extends CSMEncodeInterface> extends State<T
                                       ),
                                       // --> Table items
                                       Expanded(
-                                        child: CSMConsumer<SetViewOut<TArticle>>(
-                                          consume: consume,
+                                        child: AsyncWidget<SetViewOutput<TArticle>>(
+                                          future: consume,
                                           agent: agent,
-                                          emptyCheck: (SetViewOut<TArticle> data) => data.records.isEmpty,
+                                          emptyCheck: (SetViewOutput<TArticle> data) => data.records.isEmpty,
                                           loadingBuilder: (_) => _TWSArticleTableLoading(viewSize: viewSize),
                                           errorBuilder: (_, __, ___) => _TWSArticleTableError(
                                             viewSize: viewSize,
                                           ),
-                                          successBuilder: (_, SetViewOut<TArticle> data) {
+                                          successBuilder: (_, SetViewOutput<TArticle> data) {
                                             _updatePagingChanges(data);
 
                                             return SizedBox(
@@ -235,7 +236,7 @@ class _TWSArticleTableState<TArticle extends CSMEncodeInterface> extends State<T
                                                   children: List<Widget>.generate(
                                                     data.records.length,
                                                     (int index) {
-                                                      return CSMPointerHandler(
+                                                      return PointerArea(
                                                         cursor: SystemMouseCursors.click,
                                                         onClick: () => _selectRecord(index, data.records[index]),
                                                         child: DecoratedBox(

@@ -1,5 +1,4 @@
 import 'package:camera_platform_interface/camera_platform_interface.dart';
-import 'package:csm_view/csm_view.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_widgets/tws_widgets.dart';
@@ -94,7 +93,7 @@ class _TwsFilePickerState extends State<TwsFilePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return CSMSpacingRow(
+    return Row(
       spacing: 10,
       children: <Widget>[
         Expanded(
