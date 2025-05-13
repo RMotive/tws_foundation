@@ -93,8 +93,8 @@ public interface INamedEntity {
 public class EntityConverter
     : BConverter<IEntity> {
 
-    /// <summary>
-    ///     Stores all the types that inherits from 
-    /// </summary>
-    public override required Type[] Variations { get; init; }
+    public EntityConverter(Type[] variations) 
+        : base(variations) {
+
+    }
 }

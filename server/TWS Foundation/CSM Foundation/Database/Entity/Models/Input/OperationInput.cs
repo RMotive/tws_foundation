@@ -1,4 +1,6 @@
-﻿namespace CSM_Foundation.Database.Entity.Models.Input;
+﻿using CSM_Foundation.Database.Entity.Depot;
+
+namespace CSM_Foundation.Database.Entity.Models.Input;
 
 /// <summary>
 ///     [Record] for specific <see cref="IDepot{TEntity}"/> operations,

@@ -1,9 +1,6 @@
 ﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validations;
-using CSM_Foundation.Database.Validations.Validators;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Vehicules.Trailers;

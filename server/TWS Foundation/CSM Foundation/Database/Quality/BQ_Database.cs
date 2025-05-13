@@ -1,8 +1,5 @@
-﻿using System.Text.Json;
-
-using CSM_Foundation.Core.Extensions;
+﻿using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;

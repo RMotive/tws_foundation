@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Quality.Disposing;
+﻿using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Quality;
+using CSM_Foundation.Database.Entity.Depot;
 
 namespace TWS_Business.Quality.Q_Depots;
 

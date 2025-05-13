@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 
 namespace CSM_Security.Depots;
 

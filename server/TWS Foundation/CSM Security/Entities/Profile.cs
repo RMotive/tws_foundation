@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validations;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

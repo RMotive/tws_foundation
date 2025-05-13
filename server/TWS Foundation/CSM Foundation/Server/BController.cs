@@ -1,12 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CSM_Foundation.Customer;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace CSM_Foundation.Server;
 
 /// <summary>
-///     [Abstract] class for [CSM] base controllers, holding and keeping the concept of controller per service.
+///     <see langword="abstract"/> class for <see cref="BController{TService}"/>.
+///     
+///     <para>
+///         Defines base behavior for {CSM} controller implementations, that holds resolvable endpoints direction at the host server to trade data along remote clents.
+///     </para>
 /// </summary>
+/// <typeparam name="TService">
+///     Type of the <see cref="IService"/> implementation this <see cref="BController{TService}"/> implementation is based on.
+/// </typeparam>
 public abstract class BController<TService>
-    : ControllerBase {
+    : ControllerBase 
+    where TService : IService {
 
     /// <summary>
     ///     Feature main customer service 
@@ -14,12 +24,12 @@ public abstract class BController<TService>
     protected readonly TService _service;
 
     /// <summary>
-    ///     Creates a new <see cref="BController{TService}"/> instance
+    ///     Creates a new <see cref="BController{TService}"/> instance.
     /// </summary>
     /// <param name="service">
-    ///     [Required] dependency main feature service.
+    ///     Feature main customer service.
     /// </param>
     public BController(TService service) {
-        this._service = service;
+        _service = service;
     }
 }

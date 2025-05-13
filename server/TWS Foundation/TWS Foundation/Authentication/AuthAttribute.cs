@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Server.Exceptions;
 
 using CSM_Security.Depots;
@@ -39,18 +38,22 @@ public class AuthAttribute
         string authHedaer = headers.Authorization
             .Where(i => i is not null && i.Contains(AUTH_TOKEN_KEY))
             .FirstOrDefault()
-            ?? throw new XAuth(XAuthSituation.Lack);
+            ?? throw new XAuth(XAuthSituation.NoToken);
 
         string[] authToken = authHedaer.Split(' ')[1].Split('@');
 
         string token = authToken[0];
         string sign = authToken[1];
 
+        if(string.IsNullOrWhiteSpace(token)) {
+            throw new XAuth(XAuthSituation.Unauthorized);
+        }
+
         SessionManager sessionManager = serProvider.GetRequiredService<SessionManager>();
         IAccountsDepot accounts = serProvider.GetRequiredService<IAccountsDepot>();
 
         ServerSession session = await sessionManager.Get(Guid.Parse(token), accounts, true)
-            ?? throw new XAuth(XAuthSituation.Expired);
+            ?? throw new XAuth(XAuthSituation.TokenExpired);
 
         if (session.Wildcard) {
             return;

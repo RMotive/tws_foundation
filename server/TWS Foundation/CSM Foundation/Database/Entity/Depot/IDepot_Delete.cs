@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity.Models.Input;
+﻿using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
@@ -33,7 +32,7 @@ public interface IDepot_Delete<TEntity>
     /// <returns>
     ///     A batch operation result information object.
     /// </returns>
-    public Task<BatchOperationOutput<TEntity, TEntity>> Delete(long[] ids);
+    public Task<BatchOperationOutput<TEntity>> Delete(long[] ids);
 
     /// <summary>
     ///     Deletes one or more items based on the given <see cref="BatchOperationInput{TEntity}.Filter"/> and <see cref="BatchOperationInput{TEntity}.Behavior"/> combination, gathering all the <see cref="IEntity"/>s objects 
@@ -45,5 +44,5 @@ public interface IDepot_Delete<TEntity>
     /// <returns>
     ///     A batch operation result informaiton object.
     /// </returns>
-    public Task<BatchOperationOutput<TEntity, TEntity>> Delete(OperationInput<TEntity, BatchOperationInput<TEntity>> input);
+    public Task<BatchOperationOutput<TEntity>> Delete(OperationInput<TEntity, BatchOperationInput<TEntity>> input);
 }

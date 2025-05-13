@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using TWS_Business.Depots;
-using TWS_Business.Depots.Vehicles;
+﻿using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Vehicules;
 

@@ -1,5 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/constants.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Custom {abstract} class for [ServiceB] implementations.
 ///
@@ -40,7 +40,7 @@ abstract class FoundationServiceB extends ServiceB {
   }
 
   /// Post network call to connected server overriding [ServiceI] built-in [post] behavior overriding
-  /// the [auth] token sent, sending it as a compatible custom {TWS} servers auth tokens format.
+  /// the [authToken] token sent, sending it as a compatible custom {TWS} servers auth tokens format.
   ///
   /// format: authToken@solutionSign
   ///
@@ -58,9 +58,9 @@ abstract class FoundationServiceB extends ServiceB {
   Future<ResponseController> postListSecure<T extends EncodableI>(
     String act,
     List<T> request, {
-    String? auth,
+    String? authToken,
     Map<String, dynamic>? headers,
   }) {
-    return postList(act, request, auth: '$auth@${ContextConstants.sign}');
+    return postList(act, request, auth: '$authToken@${ContextConstants.sign}');
   }
 }

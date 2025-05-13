@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
 
+using CSM_Foundation.Database.Entity.Depot;
+
 namespace CSM_Foundation.Database.Entity.Models.Input;
 
 /// <summary>

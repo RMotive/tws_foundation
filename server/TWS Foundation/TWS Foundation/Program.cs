@@ -1,20 +1,16 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using CSM_Foundation.Advisor.Interfaces;
-using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Filters;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
+using CSM_Foundation.Logging;
 using CSM_Foundation.Server;
 using CSM_Foundation.Server.Converters.JSON;
-using CSM_Foundation.Server.Managers;
-using CSM_Foundation.Server.Utils;
 
-using CSM_Security;
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
@@ -25,12 +21,7 @@ using TWS_Business.Depots.Indicators;
 using TWS_Business.Depots.Vehicles;
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Insurances;
-using TWS_Business.Entities.Maintenances;
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.USDOTs;
 
-using TWS_Customer.Features.Business;
 using TWS_Customer.Features.Security;
 using TWS_Customer.Features.Security.Profiles;
 using TWS_Customer.Managers.Session;
@@ -40,14 +31,14 @@ using TWS_Foundation.Middlewares;
 namespace TWS_Foundation;
 
 public class Settings
-    : IAdvisingObject {
+    : ILoggingObject {
     public required string Tenant { get; init; }
     public required Solution Solution { get; init; }
     public required string Host { get; init; }
     public required string[] Listeners { get; set; }
     public string[] CORS { get; init; } = [];
 
-    public Dictionary<string, dynamic> Advise() {
+    public Dictionary<string, object?> Log() {
         return new() {
             {nameof(Tenant), Tenant },
             {nameof(Solution), $"{Solution.Name} (${Solution.Sign})" },
@@ -66,13 +57,13 @@ public partial class Program {
     static Settings? Settings_;
 
     static void Main(string[] args) {
-        AdvisorManager.Announce("Running engines ◉_◉");
+        Logger.Announce("Running engines ◉_◉");
 
         try {
             Settings s = Settings;
             Console.Title = $"{s.Solution.Name} | {s.Host}";
 
-            AdvisorManager.Success("Server settings loaded", s);
+            Logger.Success("Server settings loaded", s);
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             // Add services and overriding options to the container.
@@ -87,15 +78,15 @@ public partial class Program {
 
                         options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
                         options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
-                        options.JsonSerializerOptions.Converters.Add(new DateTimeWithUTCZoneConverter());
+                        options.JsonSerializerOptions.Converters.Add(new DateTimeZoneConverter());
 
                         // --> JSON Converter for [IEntity] objects.
                         options.JsonSerializerOptions.Converters.Add(
-                                new EntityConverter {
-                                    Variations = [
+                                new EntityConverter(
+                                    [
                                         typeof(YardLog),
-                                    ],
-                                }
+                                    ]
+                                )
                             );
                     }
                 );
@@ -112,7 +103,7 @@ public partial class Program {
 
                                     bool isCorsAllowed = corsPolicies.Contains(parsedUrl.Host);
                                     if (!isCorsAllowed) {
-                                        AdvisorManager.Warning(
+                                        Logger.Warning(
                                             CORS_BLOCK_MESSAGE,
                                             new() {
                                                 {nameof(isCorsAllowed), isCorsAllowed},
@@ -142,6 +133,8 @@ public partial class Program {
 
                 // --> [CSM Security]
                 ConnectionOptions securityDbConnectionOptions = DatabaseUtilities.Retrieve(CSM_Security.Database.SIGN);
+                new CSM_Security.Database(securityDbConnectionOptions).ValidateConnection();
+
                 Services.AddScoped(
                         (provider) => new CSM_Security.Database(securityDbConnectionOptions)
                     );
@@ -218,13 +211,13 @@ public partial class Program {
             );
             app.UseCors();
 
-            AdvisorManager.Announce($"Server set up ^_____^");
+            Logger.Announce($"Server set up ^_____^");
             app.Run();
-        } catch (Exception X) when (X is IAdvisingException AX) {
-            AdvisorManager.Exception(AX);
+        } catch (Exception X) when (X is ILoggingException AX) {
+            Logger.Exception(AX);
             throw;
         } catch (Exception X) {
-            AdvisorManager.Exception(new XSystem(X));
+            Logger.Exception(new XSystem(X));
         } finally {
             Console.WriteLine($"Press any key to close...");
             Console.ReadKey();
@@ -232,11 +225,11 @@ public partial class Program {
     }
 
     static void Dispose(IDisposer Disposer) {
-        AdvisorManager.Announce("Disposing quality context records");
+        Logger.Announce("Disposing quality context records");
         try {
             Disposer.Dispose();
         } catch (Exception X) {
-            AdvisorManager.Exception(new XSystem(X));
+            Logger.Exception(new XSystem(X));
         }
     }
 
@@ -252,9 +245,9 @@ public partial class Program {
         }
 
         string sl = FileUtils.FormatLocation(fp);
-        AdvisorManager.Note(
+        Logger.Note(
             "Retrieving Server settings",
-            new Dictionary<string, dynamic> {
+            new Dictionary<string, object?> {
                 {"Workspace", ws },
                 {"Settings", sl },
                 {"Environment", EnvironmentManager.Mode }

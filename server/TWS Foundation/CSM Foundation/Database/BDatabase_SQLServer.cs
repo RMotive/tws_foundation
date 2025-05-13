@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
-using CSM_Foundation.Server.Managers;
+using CSM_Foundation.Logging;
+using CSM_Foundation.Server;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -229,13 +229,13 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     ///     Validates database connection health.
     /// </summary>
     public void ValidateConnection() {
-        AdvisorManager.Announce($"ORM Setting up *^____^*", new() {
+        Logger.Announce($"ORM Setting up *^____^*", new() {
             {"Database", GetType()?.Namespace ?? "---" },
             {"Base", nameof(BDatabase_SQLServer<TDatabases>) }
         });
 
         if (Database.CanConnect()) {
-            AdvisorManager.Success($"[{GetType().Name}] Connection stable");
+            Logger.Success($"[{GetType().Name}] Connection stable");
             Evaluate();
         } else {
             try {
@@ -253,7 +253,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     public void Evaluate() {
         BEntity[] sets = ValidateSets();
 
-        AdvisorManager.Announce(
+        Logger.Announce(
             $"[{GetType().Name}] Validatig Sets...",
             new() {
                 { "Count", sets.Length }
@@ -264,7 +264,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
         foreach (BEntity set in sets) {
             Exception[] result = set.EvaluateDefinition();
             if (result.Length > 0) {
-                AdvisorManager.Warning(
+                Logger.Warning(
                     "Wrong [Set] definition",
                     new() {
                         { "Set", set.GetType().Name },
@@ -279,7 +279,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
         if (evResults.Length > 0) {
             throw new Exception("Database [Set] definition failures");
         } else {
-            AdvisorManager.Success($"[{GetType().Name}] Set validation succeeded");
+            Logger.Success($"[{GetType().Name}] Set validation succeeded");
         }
     }
 
@@ -301,9 +301,9 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
         optionsBuilder.UseSqlServer(connectionString);
 
         if (AppDomain.CurrentDomain.FriendlyName.Contains("ef")) {
-            AdvisorManager.Warning(
+            Logger.Warning(
                     $"Running EF Design Time Execution",
-                    new Dictionary<string, dynamic> {
+                    new Dictionary<string, object?> {
                         { "Environment", EnvironmentManager.Mode.ToString() },
                         { "Connection", connectionString },
                     }

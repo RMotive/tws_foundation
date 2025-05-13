@@ -3,7 +3,7 @@ using System.Net;
 
 using CSM_Foundation.Core.Constants;
 using CSM_Foundation.Core.Interfaces;
-using CSM_Foundation.Server.Records;
+using CSM_Foundation.Server;
 
 namespace CSM_Foundation.Core.Bases;
 

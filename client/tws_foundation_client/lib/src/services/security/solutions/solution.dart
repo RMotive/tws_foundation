@@ -1,18 +1,32 @@
 import 'package:csm_client/csm_client.dart';
 
-final class Solution extends NamedEntityB<Solution> {
-  static const String kSign = 'sign';
 
+///
+Solution solutionBuilder() => Solution();
+
+/// {implementation} class for an [EntityI].
+///
+///
+/// Defines a business entity that stores information about a [Solution] implementation along the whole business ecosystem, a [Solution] is an object identification for a
+/// [ServerI] or a user view application that have different data handling contexts.
+final class Solution extends NamedEntityB<Solution> { 
+  /// Specific identification sign.
   String sign = '';
 
-  /// Generates a new [Solution] instance from mandatory values.
+  /// Creates a new [Solution] instance.
   Solution();
+  
+  @override
+  void decode(DataMap encode) {
+    super.decode(encode);
+    sign = encode.get('sign');
+  }
   
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
-        <String, Object?>{
-        kSign: sign,
+      <String, Object?>{
+        'sign': sign,
       },
     );
   }

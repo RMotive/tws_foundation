@@ -31,7 +31,7 @@ public interface IDepot_Read<TEntity>
     /// <returns>
     ///     An <see cref="IEntity"/> batch operation result.
     /// </returns>
-    Task<BatchOperationOutput<TEntity, TEntity>> Read(long[] ids);
+    Task<BatchOperationOutput<TEntity>> Read(long[] ids);
 
     /// <summary>
     ///     Reads into the database for the <typeparamref name="TEntity"/> instances matched by the given <paramref name="filter"/>.
@@ -48,5 +48,5 @@ public interface IDepot_Read<TEntity>
     /// <returns>
     ///     Collection of <typeparamref name="TEntity"/> instances found.
     /// </returns>
-    Task<BatchOperationOutput<TEntity, TEntity>> Read(EntityBatchBehaviors behavior, Expression<Func<TEntity, bool>> filter, QueryProcessor<TEntity>? postProcessing = null);
+    Task<BatchOperationOutput<TEntity>> Read(EntityBatchBehaviors behavior, Expression<Func<TEntity, bool>> filter, QueryProcessor<TEntity>? postProcessing = null);
 }

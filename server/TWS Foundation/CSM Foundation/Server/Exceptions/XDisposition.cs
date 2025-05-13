@@ -1,21 +1,44 @@
-﻿using System.Net;
-
-using CSM_Foundation.Core.Bases;
+﻿using CSM_Foundation.Core.Bases;
 
 namespace CSM_Foundation.Server.Exceptions;
-public class XDisposition
-    : BException<XDispositionSituation> {
-    public XDisposition(XDispositionSituation Situation)
-        : base($"Wrong disposition configuration", Situation, HttpStatusCode.BadRequest, null) {
 
-        this.Situation = Situation;
-        Advise = Situation switch {
-            XDispositionSituation.Value => "Wrong CSMDisposition header acceptance value",
-            _ => throw new ArgumentException(null, nameof(Situation)),
+/// <summary>
+///     {exception} class from <see cref="BException{XDispositionSituation}"/>.
+///     
+///     <para>
+///         Defines an exception object thrown at {Disposition} data process. 
+///     </para>
+/// </summary>
+public class XDisposition
+    : BException<XDispositionSituations> {
+
+    /// <summary>
+    ///     Creates a new <see cref="XDisposition"/> instance.
+    /// </summary>
+    /// <param name="situation"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public XDisposition(XDispositionSituations situation)
+        : base($"Data disposition process exception", situation) {
+    }
+
+    protected override Dictionary<XDispositionSituations, string> AdviseFactory() {
+
+        return new Dictionary<XDispositionSituations, string> {
+            { XDispositionSituations.WrongToken, "Wrong {CSMDisposition} header value format" }
         };
     }
 }
 
-public enum XDispositionSituation {
-    Value,
+/// <summary>
+///     <see langword="enum"/> implementation.
+///     
+///     <para>
+///         Defines the available possible {Situations} for <see cref="XDisposition"/> exception invokation.
+///     </para>
+/// </summary>
+public enum XDispositionSituations {
+    /// <summary>
+    ///     
+    /// </summary>
+    WrongToken,
 }

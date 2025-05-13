@@ -181,7 +181,7 @@ public class Database
 
     #region Human Resources
 
-    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Employee> Employees { get; set; } = default!;
 
     public DbSet<Identification> Identifications { get; set; } = default!;
 

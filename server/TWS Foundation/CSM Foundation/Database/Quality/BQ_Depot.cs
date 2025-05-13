@@ -3,11 +3,11 @@ using System.Reflection;
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Exceptions;
-using CSM_Foundation.Database.Entity.Filters;
-using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Input.Update;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
@@ -221,7 +221,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public async Task CreateB() {
         TEntity[] samples = Sampling(3);
 
-        BatchOperationOutput<TEntity, TEntity> qOut = await Depot.Create(samples);
+        BatchOperationOutput<TEntity> qOut = await Depot.Create(samples);
         await CommitSampleEntities(samples);
 
         Assert.Multiple(
@@ -260,7 +260,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(20, EntityFactory);
         long[] sampleIds = [.. samples.Select(i => i.Id)];
 
-        BatchOperationOutput<TEntity, TEntity> readEntities = await Depot.Read(sampleIds);
+        BatchOperationOutput<TEntity> readEntities = await Depot.Read(sampleIds);
         Assert.Multiple(
                 [
                     () => Assert.Empty(readEntities.Failures),
@@ -287,7 +287,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(2, EntityFactory);
         TEntity samplePivot = samples[0];
 
-        BatchOperationOutput<TEntity, TEntity> readEntites = await Depot.Read(
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
                 EntityBatchBehaviors.First,
                 (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
             );
@@ -315,7 +315,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(2, EntityFactory);
         TEntity samplePivot = samples[1];
 
-        BatchOperationOutput<TEntity, TEntity> readEntites = await Depot.Read(
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
                 EntityBatchBehaviors.Last,
                 (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
             );
@@ -342,7 +342,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public virtual async Task ReadE() {
         TEntity[] samples = await Store(2, EntityFactory);
 
-        BatchOperationOutput<TEntity, TEntity> readEntites = await Depot.Read(
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
                 EntityBatchBehaviors.All,
                 (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
             );
@@ -376,7 +376,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public virtual async Task UpdateA() {
         TEntity sample = RunEntityFactory(EntityFactory);
 
-        EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+        UpdateOutput<TEntity> updateOutput = await Depot.Update(
                 new OperationInput<TEntity, UpdateInput<TEntity>> {
                     Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
@@ -405,7 +405,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
         XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
                 async () => {
-                    EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+                    UpdateOutput<TEntity> updateOutput = await Depot.Update(
                 new OperationInput<TEntity, UpdateInput<TEntity>> {
                     Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
@@ -425,7 +425,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
         XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
                 async () => {
-                    EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+                    UpdateOutput<TEntity> updateOutput = await Depot.Update(
                         new OperationInput<TEntity, UpdateInput<TEntity>> {
                             Parameters = new UpdateInput<TEntity> {
                                 Entity = sample,
@@ -446,7 +446,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
         Evaluable.SetValue(sample, Evaluable.GetValue(valueReference));
 
-        EntityUpdateOutput<TEntity> updateOutput = await Depot.Update(
+        UpdateOutput<TEntity> updateOutput = await Depot.Update(
                 new OperationInput<TEntity, UpdateInput<TEntity>> {
                     Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
@@ -503,7 +503,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public virtual async Task DeleteC() {
         TEntity entity = (await Store(10, EntityFactory))[0];
 
-        BatchOperationOutput<TEntity, TEntity> deleteOutput = await Depot.Delete(
+        BatchOperationOutput<TEntity> deleteOutput = await Depot.Delete(
                 new OperationInput<TEntity, BatchOperationInput<TEntity>>() {
                     Parameters = new BatchOperationInput<TEntity> {
                         Filter = (entityB) => entityB.Id == entity.Id,
@@ -540,8 +540,8 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         const int viewPage = 1;
         await Store(30, EntityFactory);
 
-        SetViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, SetViewInput<TEntity>> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new OperationInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
@@ -563,9 +563,9 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         const int viewPage = 2;
         await Store(30, EntityFactory);
 
-        SetViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, SetViewInput<TEntity>> { 
-                    Parameters = new SetViewInput<TEntity> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new OperationInput<TEntity, ViewInput<TEntity>> { 
+                    Parameters = new ViewInput<TEntity> {
                         Retroactive = false,
                         Range = 20,
                         Page = viewPage,
@@ -584,16 +584,16 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     [Fact(DisplayName = $"[View]: Specific ordering by property")]
     public async Task ViewC() {
 
-        SetViewOutput<TEntity> orderedViewOutput = await Depot.View(
-                        new OperationInput<TEntity, SetViewInput<TEntity>> {
+        ViewOutput<TEntity> orderedViewOutput = await Depot.View(
+                        new OperationInput<TEntity, ViewInput<TEntity>> {
                             Parameters = new() {
                                 Page = 1,
                                 Range = 20,
                                 Retroactive = false,
                                 Orderings = [
-                                    new SetViewOrderOptions {
+                                    new ViewOrdering {
                                         Property = Evaluable.Name,
-                                        Order = SetViewOrders.Descending,
+                                        Ordering = ViewOrderings.Descending,
                                     },
                                 ],
                             },
@@ -626,14 +626,14 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     [Fact(DisplayName = "[View]: Using Date filter")]
     public async Task ViewD() {
-        SetViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, SetViewInput<TEntity>> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new OperationInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Page = 1,
                         Range = 20,
                         Retroactive = false,
                         Filters = [
-                            new SetViewDateFilter<TEntity> {
+                            new ViewFilterDate<TEntity> {
                                 From = DateTime.UtcNow.Date,
                             },
                         ],
@@ -657,15 +657,15 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity sampleEntity = Store(EntityFactory);
         object? sampleValue = Evaluable.GetValue(sampleEntity);
 
-        SetViewOutput<TEntity> qOut = await Depot.View(
-                new OperationInput<TEntity, SetViewInput<TEntity>> {
+        ViewOutput<TEntity> qOut = await Depot.View(
+                new OperationInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
                         Page = 1,
                         Filters = [
-                            new SetViewPropertyFilter<TEntity> {
-                                Evaluation = SetViewFilterEvaluations.CONTAINS,
+                            new ViewFilterProperty<TEntity> {
+                                Operator = ViewFilterOperators.CONTAINS,
                                 Property = Evaluable.Name,
                                 Value = sampleValue,
                             }
@@ -688,28 +688,28 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] entities = await Store(2, EntityFactory);
 
         List<object?> possibleValues = [];
-        List<ISetViewFilter<TEntity>> filters = [];
+        List<IViewFilter<TEntity>> filters = [];
 
         foreach (TEntity entity in entities) {
             object? sampleValue = Evaluable.GetValue(entity);
             filters.Add(
-                    new SetViewPropertyFilter<TEntity> {
-                        Evaluation = SetViewFilterEvaluations.CONTAINS,
+                    new ViewFilterProperty<TEntity> {
+                        Operator = ViewFilterOperators.CONTAINS,
                         Property = Evaluable.Name,
                         Value = sampleValue,
                     }
                 );
             possibleValues.Add(sampleValue);
         }
-        SetViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, SetViewInput<TEntity>> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new OperationInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
                         Page = 1,
                         Filters = [
-                            new SetViewFilterLinearEvaluation<TEntity>{
-                                Operator = SetViewFilterEvaluationOperators.OR,
+                            new ViewFilterLogical<TEntity>{
+                                Operator = ViewFilterLogicalOperators.OR,
                                 Filters = [..filters],
                             },
                         ],

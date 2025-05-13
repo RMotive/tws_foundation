@@ -1,7 +1,6 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Input.Update;
-using CSM_Foundation.Database.Entity.Models.Output;
 
 using CSM_Security.Entities;
 
@@ -23,10 +22,10 @@ public class SolutionsController
     }
 
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewInput<Solution> options) {
+    public async Task<IActionResult> View(ViewInput<Solution> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Solution, SetViewInput<Solution>> {
+                        new OperationInput<Solution, ViewInput<Solution>> {
                             Parameters = options
                         }
                     )
@@ -40,7 +39,7 @@ public class SolutionsController
 
     [HttpPost(), Auth("Update")]
     public async Task<IActionResult> Update(UpdateInput<Solution> Solution) {
-        EntityUpdateOutput<Solution> Output = await Service.Update(Solution);
+        UpdateOutput<Solution> Output = await Service.Update(Solution);
         return Ok(Output);
     }
 

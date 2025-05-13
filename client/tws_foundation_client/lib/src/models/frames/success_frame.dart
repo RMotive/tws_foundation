@@ -20,6 +20,9 @@ final class SuccessFrame<T extends DecodableI> implements DecodableI {
   SuccessFrame(this._estelaBuilder) {
     estela = _estelaBuilder();
   }
+
+  /// Creates a new [SuccessFrame] instance with directly [estela] given.
+  SuccessFrame.a(this._estelaBuilder, this.estela);
   
   @override
   void decode(DataMap encode) {

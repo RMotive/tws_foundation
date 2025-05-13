@@ -53,7 +53,7 @@ public abstract partial class BEntity
                 foreach (BValidator validator in attributes) {
                     try {
                         validator.Evaluate(this);
-                    } catch (XIValidator_Evaluate x) { 
+                    } catch { 
                     
                     }
                 }
