@@ -66,14 +66,14 @@ packages:
     source: hosted
     version: "0.3.4+2"
   csm_client:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "."
       ref: main
-      resolved-ref: f3cf67442685159c592e27f0ad37f5bebe3886b6
+      resolved-ref: a7b878d654d91528e0e8672aa4a0cf73684c2c05
       url: "https://github.com/RMotive/csm_client"
     source: git
-    version: "7.0.0"
+    version: "8.0.1"
   csm_view:
     dependency: "direct main"
     description:
