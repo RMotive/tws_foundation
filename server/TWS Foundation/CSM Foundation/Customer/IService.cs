@@ -9,7 +9,13 @@ using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Customer;
 
-public interface IService<TEntity>
+
+public interface IService {
+
+}
+
+public interface IService<TEntity> 
+    : IService
     where TEntity : class, IEntity {
 
     /// <summary>

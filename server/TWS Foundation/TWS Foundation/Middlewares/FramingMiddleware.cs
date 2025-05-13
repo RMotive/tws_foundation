@@ -3,7 +3,7 @@ using System.Text.Json;
 
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Interfaces;
-using CSM_Foundation.Server.Records;
+using CSM_Foundation.Server;
 
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -64,8 +64,8 @@ public class FramingMiddleware
                     ExceptionInfo exPublish = failure.Publish();
 
                     FailureFrame frame = new() {
-                        Tracer = Tracer,
-                        Estela = exPublish,
+                        Id = Tracer,
+                        Content = exPublish,
                     };
 
                     response.StatusCode = (int)failure.Status;
@@ -79,8 +79,8 @@ public class FramingMiddleware
                         case 405: {
                                 ExceptionInfo publish = new XSystem(new MethodAccessException()).Publish();
                                 FailureFrame frame = new() {
-                                    Tracer = Tracer,
-                                    Estela = publish,
+                                    Id = Tracer,
+                                    Content = publish,
                                 };
                                 encodedContent = JsonSerializer.Serialize(frame);
                             }
@@ -88,8 +88,8 @@ public class FramingMiddleware
                         case 404: {
                                 ExceptionInfo publish = new XSystem(new Exception($"{context.Request.GetDisplayUrl()} not found")).Publish();
                                 FailureFrame frame = new() {
-                                    Tracer = Tracer,
-                                    Estela = publish,
+                                    Id = Tracer,
+                                    Content = publish,
                                 };
 
                                 encodedContent = JsonSerializer.Serialize(frame);
@@ -99,8 +99,8 @@ public class FramingMiddleware
                             Dictionary<string, object> jObject = JsonSerializer.Deserialize<Dictionary<string, object>>(responseStream)!;
 
                             SuccessFrame<Dictionary<string, dynamic>> defFrame = new() {
-                                Tracer = Tracer,
-                                Estela = jObject,
+                                Id = Tracer,
+                                Content = jObject,
                             };
                             encodedContent = JsonSerializer.Serialize(defFrame);
                             break;
@@ -110,8 +110,8 @@ public class FramingMiddleware
                     Dictionary<string, dynamic> resolution = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(responseStream)!;
 
                     SuccessFrame<Dictionary<string, dynamic>> frame = new() {
-                        Tracer = Tracer,
-                        Estela = resolution,
+                        Id = Tracer,
+                        Content = resolution,
                     };
 
                     response.StatusCode = (int)HttpStatusCode.OK;

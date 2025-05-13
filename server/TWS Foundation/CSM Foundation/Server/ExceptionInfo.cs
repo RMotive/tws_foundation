@@ -1,7 +1,11 @@
-﻿namespace CSM_Foundation.Server.Records;
+﻿namespace CSM_Foundation.Server;
 
 /// <summary>
-///     Stores public information to expose an Exception details.
+///     {model} record for <see cref="ExceptionInfo"/>.
+///     
+///     <para>
+///         Stores public information to expose an Exception details.
+///     </para>
 /// </summary>
 public record ExceptionInfo {
     /// <summary>

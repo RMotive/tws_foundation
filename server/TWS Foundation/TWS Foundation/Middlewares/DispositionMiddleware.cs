@@ -23,7 +23,7 @@ public class DispositionMiddleware : IMiddleware {
         bool Activate = false;
         if (headers.Count > 0) {
             if (!headers.Contains(DISP_HEAD_VALUE)) {
-                throw new XDisposition(XDispositionSituation.Value);
+                throw new XDisposition(XDispositionSituations.WrongToken);
             }
 
             Activate = true;

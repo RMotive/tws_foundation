@@ -38,7 +38,7 @@ public class AuthAttribute
         string authHedaer = headers.Authorization
             .Where(i => i is not null && i.Contains(AUTH_TOKEN_KEY))
             .FirstOrDefault()
-            ?? throw new XAuth(XAuthSituation.Lack);
+            ?? throw new XAuth(XAuthSituation.NoToken);
 
         string[] authToken = authHedaer.Split(' ')[1].Split('@');
 
@@ -53,7 +53,7 @@ public class AuthAttribute
         IAccountsDepot accounts = serProvider.GetRequiredService<IAccountsDepot>();
 
         ServerSession session = await sessionManager.Get(Guid.Parse(token), accounts, true)
-            ?? throw new XAuth(XAuthSituation.Expired);
+            ?? throw new XAuth(XAuthSituation.TokenExpired);
 
         if (session.Wildcard) {
             return;

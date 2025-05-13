@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Logging;
-using CSM_Foundation.Server.Records;
+using CSM_Foundation.Server;
 
 namespace CSM_Foundation.Core.Interfaces;
 /// <summary>

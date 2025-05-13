@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Text;
 
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Server.Quality.Bases;
-using CSM_Foundation.Server.Records;
+using CSM_Foundation.Server;
+using CSM_Foundation.Server.Quality;
+using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -45,14 +45,14 @@ public abstract class BQ_FoundationServerController
     }
 
     protected override async Task<string> Authenticate() {
-        (HttpStatusCode statusCode, GenericFrame frameResult) = await XPost<GenericFrame, AuthenticationInput>("Security/Authenticate", _qualityAuth);
+        (HttpStatusCode statusCode, ResponseSchema frameResult) = await XPost<ResponseSchema, AuthenticationInput>("Security/Authenticate", _qualityAuth);
 
-        Dictionary<string, object> estela = frameResult.Estela;
+        Dictionary<string, object> estela = frameResult.Content;
         if (statusCode != HttpStatusCode.OK) {
             Assert.Fail($"Failed request with: {estela[nameof(ExceptionInfo.System)]} \ndue to: {estela[nameof(ExceptionInfo.Advise)]} \nTried with: {_qualityAuth.Identity}");
         }
         SuccessFrame<ServerSession> successFrame = Framing<SuccessFrame<ServerSession>>(frameResult);
-        ServerSession session = successFrame.Estela;
+        ServerSession session = successFrame.Content;
 
         Assert.True(session.Wildcard, $"User {session.Identity} doesn't have wildcard enabled");
         Assert.Equal(_qualityAuth.Identity, session.Identity);
@@ -71,11 +71,11 @@ public abstract class BQ_FoundationServerController
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public abstract class BQ_FoundationServerController<T>
-    : BQ_FoundationServerController 
+    : BQ_FoundationServerController
     where T : IEntity {
 
 
-    protected BQ_FoundationServerController(string service, WebApplicationFactory<Program> hostFactory) 
+    protected BQ_FoundationServerController(string service, WebApplicationFactory<Program> hostFactory)
         : base(service, hostFactory) {
     }
 

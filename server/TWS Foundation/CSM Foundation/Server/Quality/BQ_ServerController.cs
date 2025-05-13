@@ -2,14 +2,13 @@
 using System.Text.Json;
 
 using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
-using CSM_Foundation.Server.Quality.Managers;
-using CSM_Foundation.Server.Records;
+using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using Xunit;
 
-namespace CSM_Foundation.Server.Quality.Bases;
+namespace CSM_Foundation.Server.Quality;
 
 
 /// <summary>
@@ -116,15 +115,15 @@ public abstract class BQ_ServerController<T>
 
     #region Protected Methods 
 
-    protected TFrame Framing<TFrame>(GenericFrame Generic) {
+    protected TFrame Framing<TFrame>(ResponseSchema Generic) {
         string desContent = JsonSerializer.Serialize(Generic);
 
         TFrame frame = JsonSerializer.Deserialize<TFrame>(desContent)!;
         return frame;
     }
 
-    protected async Task<(HttpStatusCode, GenericFrame)> Post<TRequest>(string Action, TRequest Request, bool Authenticate = false) {
-        return await Post<GenericFrame, TRequest>(Action, Request, false, Authenticate);
+    protected async Task<(HttpStatusCode, ResponseSchema)> Post<TRequest>(string Action, TRequest Request, bool Authenticate = false) {
+        return await Post<ResponseSchema, TRequest>(Action, Request, false, Authenticate);
     }
 
     protected async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string Action, TRequest Request, bool Authenticate = false) {

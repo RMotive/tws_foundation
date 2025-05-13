@@ -5,7 +5,7 @@ using System.Text.Json;
 
 using Microsoft.AspNetCore.Http;
 
-namespace CSM_Foundation.Server.Quality.Managers;
+namespace CSM_Foundation.Server.Quality;
 
 
 /// <summary>

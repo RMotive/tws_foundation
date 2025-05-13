@@ -10,8 +10,6 @@ using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Logging;
 using CSM_Foundation.Server;
 using CSM_Foundation.Server.Converters.JSON;
-using CSM_Foundation.Server.Managers;
-using CSM_Foundation.Server.Utils;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -73,7 +71,7 @@ public partial class Program {
 
                         options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
                         options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
-                        options.JsonSerializerOptions.Converters.Add(new DateTimeWithUTCZoneConverter());
+                        options.JsonSerializerOptions.Converters.Add(new DateTimeZoneConverter());
 
                         // --> JSON Converter for [IEntity] objects.
                         options.JsonSerializerOptions.Converters.Add(

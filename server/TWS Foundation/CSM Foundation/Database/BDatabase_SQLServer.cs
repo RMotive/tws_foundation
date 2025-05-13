@@ -6,7 +6,7 @@ using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Logging;
-using CSM_Foundation.Server.Managers;
+using CSM_Foundation.Server;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;

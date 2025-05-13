@@ -1,14 +1,6 @@
-﻿using CSM_Foundation.Core.Extensions;
-using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Server.Records;
-using System.Net;
-
-using CSM_Security.Entities;
+﻿using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc.Testing;
-
-using TWS_Foundation.Middlewares.Frames;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 
 namespace TWS_Foundation.Quality.Q_Controllers.Security;
 
@@ -23,7 +15,7 @@ public class Q_SolutionsController
     /// </summary>
     /// <param name="service"></param>
     /// <param name="hostFactory"></param>
-    public Q_SolutionsController(string service, WebApplicationFactory<Program> hostFactory) 
+    public Q_SolutionsController(string service, WebApplicationFactory<Program> hostFactory)
         : base(service, hostFactory) {
     }
 
@@ -34,4 +26,6 @@ public class Q_SolutionsController
             Sign = RandomSeed[..5],
         };
     }
+
+
 }
