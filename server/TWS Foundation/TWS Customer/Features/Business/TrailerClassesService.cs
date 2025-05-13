@@ -2,6 +2,7 @@
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Customer.Features.Business;
@@ -15,6 +16,7 @@ public interface ITrailerClassesService
 
 /// <summary>
 ///     [Service] for <see cref="Trailer_Class"/> based operations.
+/// </summary>
 /// </summary>
 public class TrailerClassesService
     : BService<Trailer_Class, ITrailerClassesDepot>, ITrailerClassesService {

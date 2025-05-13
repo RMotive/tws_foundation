@@ -22,7 +22,7 @@ public interface IDriversDepot
 ///     This is a shared common depot to get <see cref="Driver"/> and <see cref="DriverExternal"/> based on the <see cref="Driver_Common"/>.
 /// </remarks>
 public class DriversDepot
-    : BDepot<Database, Driver_Common> {
+    : BDepot<Database, Driver_Common>, IDriversDepot {
 
     /// <summary>
     ///     Creates a new <see cref="DriversDepot"/> instance.

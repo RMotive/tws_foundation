@@ -1,8 +1,5 @@
 import 'package:tws_foundation_client/src/core/typdefs.dart';
-import 'package:tws_foundation_client/src/models/inputs/set_view_input/set_view_input.dart';
-import 'package:tws_foundation_client/src/models/outputs/set_view_output.dart';
-import 'package:tws_foundation_client/src/services/business/trailer_classes/trailer_class.dart';
-import 'package:tws_foundation_client/src/services/foundation_service_b.dart';
+import 'package:tws_foundation_client/src/models/inputs/set_view_input/operation_input.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [TrailerClass] entity service base
@@ -19,5 +16,5 @@ abstract class TrailerClassServiceBase extends FoundationServiceB {
   });
 
   ///
-  Effect<SetViewOutput<TrailerClass>> view(SetViewInput<TrailerClass> input, String auth);
+  Effect<SetViewOutput<TrailerClass>> view(OperationalInput<TrailerClass> input, String auth);
 }

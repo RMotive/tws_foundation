@@ -20,7 +20,10 @@ using CSM_Security.Entities;
 
 using TWS_Business;
 using TWS_Business.Depots;
+using TWS_Business.Depots.Directories;
+using TWS_Business.Depots.Indicators;
 using TWS_Business.Depots.Vehicles;
+using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
@@ -29,6 +32,7 @@ using TWS_Business.Entities.USDOTs;
 
 using TWS_Customer.Features.Business;
 using TWS_Customer.Features.Security;
+using TWS_Customer.Features.Security.Profiles;
 using TWS_Customer.Managers.Session;
 
 using TWS_Foundation.Middlewares;
@@ -141,12 +145,56 @@ public partial class Program {
                 Services.AddScoped(
                         (provider) => new CSM_Security.Database(securityDbConnectionOptions)
                     );
+
+                // --> [TWS Business]
+                ConnectionOptions businessDbConnectionOptions = DatabaseUtilities.Retrieve(TWS_Business.Database.SIGN);
+                Services.AddScoped(
+                        (provider) => new TWS_Business.Database(businessDbConnectionOptions)
+                    );
+
                 Services.AddScoped<IAccountsDepot, AccountsDepot>();
                 Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
+                Services.AddScoped<IContactsDepot, ContactsDepot>();
+                Services.AddScoped<IFeaturesDepot, FeaturesDepot>();
+                Services.AddScoped<ISectionsDepot, SectionsDepot>();
+                Services.AddScoped<ISituationsDepot, SituationsDepot>();
+                Services.AddScoped<IStatusesDepot, StatusesDepot>();
+                Services.AddScoped<IYardLogsDepot, YardLogsDepot>();
+                Services.AddScoped<ICarriersDepot, CarriersDepot>();
+                Services.AddScoped<ILoadTypesDepot, LoadTypesDepot>();
+                Services.AddScoped<IManufacturersDepot, ManufacturersDepot>();
+                Services.AddScoped<IPlatesDepot, PlatesDepot>();
+                Services.AddScoped<ISCTsDepot, SCTDepot>();
+                Services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
+                Services.AddScoped<ITrucksDepot, TrucksDepot>();
+                Services.AddScoped<IVehiculesModelsDepot, VehiculeModelsDepot>();
+                Services.AddScoped<IAddressesDepot, AddressesDepot>();
+                Services.AddScoped<IApproachesDepot, ApproachesDepot>();
+                   Services.AddScoped<IDriversDepot, DriversDepot>();
+                Services.AddScoped<IApproachesDepot, ApproachesDepot>();
+                Services.AddScoped<IEmployeesDepot, EmployeesDepot>();
+                Services.AddScoped<ILocationsDepot, LocationsDepot>();
+                Services.AddScoped<IInsuranceDepot, InsurancesDepot>();
+                Services.AddScoped<IMaintenanceDepot, MaintenacesDepot>();
+                Services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
+                Services.AddScoped<ITrailersDepot, TrailersDepot>();
+                Services.AddScoped<ITrailersExternal, TrailersExternalsDepot>();
+                Services.AddScoped<ITrailerTypesDepot, TrailerTypesDepot>();
 
                 // --> [Customer] services.
                 Services.AddScoped<ISecurityService, SecurityService>();
                 Services.AddScoped<ISolutionsService, SolutionsService>();
+                Services.AddScoped<IAddressesService, AddressesService>();
+                Services.AddScoped<ICarriersService, CarriersService>();
+                Services.AddScoped<IDriversService, DriversService>();
+                Services.AddScoped<IEmployeesService, EmployeesService>();
+                Services.AddScoped<ILocationsService, LocationsService>();
+                Services.AddScoped<ISectionsService, SectionsService>();
+                Services.AddScoped<ITrailerClassesService, TrailerClassesService>();
+                Services.AddScoped<ITrailerTypesService, TrailerTypesService>();
+                Services.AddScoped<IYardLogsService, YardLogsService>();
+                Services.AddScoped<IAccountsService, AccountsService>();
+                Services.AddScoped<IContactsService, ContactsService>();
             }
 
             WebApplication app = builder.Build();
