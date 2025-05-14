@@ -2,10 +2,10 @@
 
 namespace CSM_Foundation.Server.Quality;
 /// <summary>
-///     Defines base behavior for <see cref="BQ_ServerMiddleware"/> implementations
+///     Defines base behavior for <see cref="BQ_Middleware"/> implementations
 ///     that qualifies Server [Middleware] operations and configurations.
 /// </summary>
-public abstract class BQ_ServerMiddleware {
+public abstract class BQ_Middleware {
     /// <summary>
     ///     Host manager to perform and test operations.
     /// </summary>
@@ -16,9 +16,9 @@ public abstract class BQ_ServerMiddleware {
     /// <returns></returns>
     protected abstract IHostBuilder Configuration();
     /// <summary>
-    ///     Generates a new <see cref="BQ_ServerMiddleware"/> middleware qualifications .
+    ///     Generates a new <see cref="BQ_Middleware"/> middleware qualifications .
     /// </summary>
-    public BQ_ServerMiddleware() {
+    public BQ_Middleware() {
         Host = Configuration();
     }
 }

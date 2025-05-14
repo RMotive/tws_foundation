@@ -12,16 +12,16 @@ namespace CSM_Foundation.Server.Quality;
 
 
 /// <summary>
-///     <see langword="abstract"/> class for <see cref="BQ_ServerController{T}"/>.
+///     <see langword="abstract"/> class from <see cref="IClassFixture{WebApplicationFactory{T}}"/>.
 ///     
 ///     <para> 
-///         Defines base behavior and contract for <see cref="BQ_ServerController{T}"/> implementations that defines classes for quality/testing purposes, handle members for a better <see cref="ControllerBase"/> implementation testing.
+///         Defines base behavior and contract for <see cref="BQ_Controller{T}"/> implementations that defines classes for quality/testing purposes, handle members for a better <see cref="ControllerBase"/> implementation testing.
 ///     </para>
 /// </summary>
 /// <typeparam name="T">
-///     Entry class that starts your server project usually known as Program.
+///     Entry class that starts your server project usually known as {Program.cs}.
 /// </typeparam>
-public abstract class BQ_ServerController<T>
+public abstract class BQ_Controller<T>
     : IClassFixture<WebApplicationFactory<T>>
     where T : class {
 
@@ -33,7 +33,7 @@ public abstract class BQ_ServerController<T>
     /// <summary>
     ///     Server communication client internal manager object.
     /// </summary>
-    readonly QM_ServerHost _serverHost;
+    readonly Q_ServerClient _serverClient;
     
     /// <summary>
     ///     Service path to be qualified.
@@ -41,7 +41,7 @@ public abstract class BQ_ServerController<T>
     readonly string _controllerPath;
 
     /// <summary>
-    ///     Creates a new <see cref="BQ_ServerController{T}"/> instance.
+    ///     Creates a new <see cref="BQ_Controller{T}"/> instance.
     /// </summary>
     /// <param name="controllerPath">
     ///     Relate path to the controller(service) used for simplified paths building at requests time.
@@ -52,10 +52,10 @@ public abstract class BQ_ServerController<T>
     /// <param name="applicationFactory">
     ///     Built-in <see cref="IClassFixture{TFixture}"/> application building for server simulation.
     /// </param>
-    protected BQ_ServerController(string controllerPath, string solutionSign, WebApplicationFactory<T> applicationFactory) {
+    protected BQ_Controller(string controllerPath, string solutionSign, WebApplicationFactory<T> applicationFactory) {
         _controllerPath = controllerPath;
 
-        _serverHost = new(solutionSign, applicationFactory.CreateClient());
+        _serverClient = new(solutionSign, applicationFactory.CreateClient());
 
         _serializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
         _serializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
@@ -137,16 +137,17 @@ public abstract class BQ_ServerController<T>
     #endregion
 
 
-    private async Task<(HttpStatusCode, TResponse)> Post<TResponse, TRequest>(string endpoint, TRequest body, bool unrelative = false, bool useAuth = false, string disposition = "Quality") {
+    private async Task<Q_ServerClient_Response<TResponse>> Post<TResponse, TRequest>(string endpoint, TRequest body, bool unrelative = false, bool useAuth = false, string disposition = "Quality") {
+        string? authToken = null;
+        
         if (useAuth) {
-            string authToken = await Authenticate();
-            _serverHost.Authenticate(authToken);
+            authToken = await Authenticate();
         }
+
         if (!unrelative) {
             endpoint = $"{_controllerPath}/{endpoint}";
         }
 
-        _serverHost.Disposition(disposition);
-        return await _serverHost.Post<TResponse, TRequest>(endpoint, body, Options: _serializerOptions);
+        return await _serverClient.Post<TResponse, TRequest>(endpoint, body, authToken, scopedJsonSerializerOptions: _serializerOptions);
     }
 }
