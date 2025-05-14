@@ -46,7 +46,7 @@ public class DatabaseUtilities {
     public static ConnectionOptions Retrieve(string DatabaseSign) {
         string wd = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
-        string prefix = EnvironmentManager.Mode switch {
+        string prefix = ServerUtils.Environment switch {
             ServerEnvironments.development => DevelopmentPrefix,
             ServerEnvironments.quality => QualityPrefix,
             ServerEnvironments.production => ProductionPrefix,

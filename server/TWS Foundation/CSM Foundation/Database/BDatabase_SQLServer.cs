@@ -304,7 +304,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             Logger.Warning(
                     $"Running EF Design Time Execution",
                     new Dictionary<string, object?> {
-                        { "Environment", EnvironmentManager.Mode.ToString() },
+                        { "Environment", ServerUtils.Environment.ToString() },
                         { "Connection", connectionString },
                     }
                 );

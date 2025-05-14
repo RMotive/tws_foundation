@@ -14,16 +14,18 @@ using CSM_Foundation.Server.Converters.JSON;
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
-using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Depots.Directories;
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Depots.Vehicles;
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Insurances;
+using TWS_Business.Entities.Maintenances;
+using TWS_Business.Entities.Trailers;
 
+using TWS_Customer.Features.Business;
 using TWS_Customer.Features.Security;
-using TWS_Customer.Features.Security.Profiles;
 using TWS_Customer.Managers.Session;
 
 using TWS_Foundation.Middlewares;
@@ -141,6 +143,7 @@ public partial class Program {
 
                 // --> [TWS Business]
                 ConnectionOptions businessDbConnectionOptions = DatabaseUtilities.Retrieve(TWS_Business.Database.SIGN);
+                new TWS_Business.Database(businessDbConnectionOptions).ValidateConnection();
                 Services.AddScoped(
                         (provider) => new TWS_Business.Database(businessDbConnectionOptions)
                     );
@@ -163,7 +166,7 @@ public partial class Program {
                 Services.AddScoped<IVehiculesModelsDepot, VehiculeModelsDepot>();
                 Services.AddScoped<IAddressesDepot, AddressesDepot>();
                 Services.AddScoped<IApproachesDepot, ApproachesDepot>();
-                   Services.AddScoped<IDriversDepot, DriversDepot>();
+                Services.AddScoped<IDriversDepot, DriversDepot>();
                 Services.AddScoped<IApproachesDepot, ApproachesDepot>();
                 Services.AddScoped<IEmployeesDepot, EmployeesDepot>();
                 Services.AddScoped<ILocationsDepot, LocationsDepot>();
@@ -206,7 +209,8 @@ public partial class Program {
                     using (IServiceScope scope = app.Services.CreateScope()) {
                         IDisposer disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
                         Dispose(disposer);
-                    };
+                    }
+                    ;
                 }
             );
             app.UseCors();
@@ -236,7 +240,7 @@ public partial class Program {
     static Settings GetSettings() {
         string ws = Directory.GetCurrentDirectory();
         string fp = SETTINGS_LOCATION;
-        switch (EnvironmentManager.Mode) {
+        switch (ServerUtils.Environment) {
             case ServerEnvironments.production:
                 fp = fp.Split(".json")[0] + ".production.json";
                 break;
@@ -250,7 +254,7 @@ public partial class Program {
             new Dictionary<string, object?> {
                 {"Workspace", ws },
                 {"Settings", sl },
-                {"Environment", EnvironmentManager.Mode }
+                {"Environment", ServerUtils.Environment }
             }
         );
         string host = ServerUtils.GetHost();

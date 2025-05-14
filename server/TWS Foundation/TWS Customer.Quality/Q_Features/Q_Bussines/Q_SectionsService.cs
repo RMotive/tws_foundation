@@ -1,9 +1,9 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Customer.Quality;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Input.Update;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots.Directories;
@@ -87,8 +87,8 @@ public class Q_SectionsService
     [Fact(DisplayName = "[View]: Records view")]
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
-        SetViewOutput<Section> viewOutput = await _service.View(
-                new OperationInput<Section, SetViewInput<Section>> {
+        ViewOutput<Section> viewOutput = await _service.View(
+                new OperationInput<Section, ViewInput<Section>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -109,7 +109,7 @@ public class Q_SectionsService
     [Fact(DisplayName = "[Read]: Reads matched records")]
     public async Task Read() {
         Section mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Section, Section> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
+        BatchOperationOutput<Section> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
 
         Assert.Multiple(
             () => Assert.False(readOutput.Failed),
@@ -125,7 +125,7 @@ public class Q_SectionsService
             GenerateMock(RandomUtils.String(16))
 
             ];
-        BatchOperationOutput<Section, Section> viewOutput = await _service.Create(mocks);
+        BatchOperationOutput<Section> viewOutput = await _service.Create(mocks);
 
         Assert.Multiple(
             () => Assert.False(viewOutput.Failed),
@@ -140,7 +140,7 @@ public class Q_SectionsService
         #region [Update] - Generate a new record.
         string entropy = RandomUtils.String(16);
         Section mock = GenerateMock(entropy);
-        EntityUpdateOutput<Section> updateOutput = await _service.Update(
+        UpdateOutput<Section> updateOutput = await _service.Update(
                 new UpdateInput<Section> {
                     Create = true,
                     Entity = mock,

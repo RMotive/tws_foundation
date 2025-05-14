@@ -1,6 +1,8 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Customer.Quality;
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -84,8 +86,8 @@ public class Q_EmployeesService
     [Fact(DisplayName = "[View]: Records view")]
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
-        SetViewOutput<Employee> viewOutput = await _service.View(
-                new OperationInput<Employee, SetViewInput<Employee>> {
+        ViewOutput<Employee> viewOutput = await _service.View(
+                new OperationInput<Employee, ViewInput<Employee>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -106,7 +108,7 @@ public class Q_EmployeesService
     [Fact(DisplayName = "[Read]: Reads matched records")]
     public async Task Read() {
         Employee mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Employee, Employee> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
+        BatchOperationOutput<Employee> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
 
         Assert.Multiple(
             () => Assert.False(readOutput.Failed),

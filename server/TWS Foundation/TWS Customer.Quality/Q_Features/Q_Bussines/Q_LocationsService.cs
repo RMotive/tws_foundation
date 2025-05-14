@@ -1,9 +1,9 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Customer.Quality;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Input.Update;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots;
@@ -65,8 +65,8 @@ public class Q_LocationsService
     [Fact(DisplayName = "[View]: Records view")]
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
-        SetViewOutput<Location> viewOutput = await _service.View(
-                new OperationInput<Location, SetViewInput<Location>> {
+        ViewOutput<Location> viewOutput = await _service.View(
+                new OperationInput<Location, ViewInput<Location>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -87,7 +87,7 @@ public class Q_LocationsService
     [Fact(DisplayName = "[Read]: Reads matched records")]
     public async Task Read() {
         Location mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Location, Location> readOutput = await _service.Read(EntityBatchBehaviors.First,location => location.Id == mock.Id);
+        BatchOperationOutput<Location> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
 
         Assert.Multiple(
             () => Assert.False(readOutput.Failed),
@@ -103,7 +103,7 @@ public class Q_LocationsService
             GenerateMock(RandomUtils.String(16))
 
             ];
-        BatchOperationOutput<Location, Location> viewOutput = await _service.Create(mocks);
+        BatchOperationOutput<Location> viewOutput = await _service.Create(mocks);
 
         Assert.Multiple(
             () => Assert.False(viewOutput.Failed),
@@ -118,7 +118,7 @@ public class Q_LocationsService
         #region [Update] - Generate a new record.
         string entropy = RandomUtils.String(16);
         Location mock = GenerateMock(entropy);
-        EntityUpdateOutput<Location> updateOutput = await _service.Update(
+        UpdateOutput<Location> updateOutput = await _service.Update(
                 new UpdateInput<Location> {
                     Create = true,
                     Entity = mock,

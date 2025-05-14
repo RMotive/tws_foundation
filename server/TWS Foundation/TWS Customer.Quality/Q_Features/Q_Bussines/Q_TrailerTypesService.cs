@@ -1,6 +1,8 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Customer.Quality;
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -58,8 +60,8 @@ public class Q_TrailerTypesService
     [Fact(DisplayName = "[View]: Records view")]
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
-        SetViewOutput<Trailer_Type> viewOutput = await _service.View(
-                new OperationInput<Trailer_Type, SetViewInput<Trailer_Type>> {
+        ViewOutput<Trailer_Type> viewOutput = await _service.View(
+                new OperationInput<Trailer_Type, ViewInput<Trailer_Type>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -80,7 +82,7 @@ public class Q_TrailerTypesService
     [Fact(DisplayName = "[Read]: Reads matched records")]
     public async Task Read() {
         Trailer_Type mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Trailer_Type, Trailer_Type> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
+        BatchOperationOutput<Trailer_Type> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
 
         Assert.Multiple(
             () => Assert.False(readOutput.Failed),
