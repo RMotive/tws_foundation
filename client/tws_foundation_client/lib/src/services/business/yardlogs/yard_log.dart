@@ -1,7 +1,8 @@
 import 'dart:typed_data';
+
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/entities/business/loadType.dart';
 import 'package:tws_foundation_client/src/services/business/employees/employee.dart';
+import 'package:tws_foundation_client/src/services/business/load_type/load_type.dart';
 import 'package:tws_foundation_client/src/services/business/sections/sections.dart';
 
 /// [Entity] that represents a vehicules control entry for a yard logging system where

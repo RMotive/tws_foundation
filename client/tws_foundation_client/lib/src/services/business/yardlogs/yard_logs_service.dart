@@ -1,28 +1,49 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/typdefs.dart';
-import 'package:tws_foundation_client/src/models/inputs/set_view_input/set_view_input.dart';
-import 'package:tws_foundation_client/src/models/outputs/set_view_output.dart';
-import 'package:tws_foundation_client/src/services/business/yardlogs/yard_log.dart';
-import 'package:tws_foundation_client/src/services/business/yardlogs/yard_logs_service_base.dart';
+import 'package:tws_foundation_client/src/services/business/yardlogs/yard_logs_service_b.dart';
+import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class YardLogsService extends YardLogsServiceBase {
+final class YardLogsService extends YardLogsServiceB {
   ///
   YardLogsService(
     Uri host, {
-    Client? client,
+    super.client,
   }) : super(
           host,
-          'YardLogs',
-          client: client,
+          'yardLogs',
         );
 
-  ///
   @override
-  Effect<SetViewOutput<YardLog>> view(SetViewInput<YardLog> input, String auth) async {
-    ResponseController actEffect = await postSecure('view', input, authToken: auth);
+  FoundationFutureResolver<ViewOutput<YardLog>> view(ViewInput<YardLog> input, String authToken) async {
+    return FoundationResponseResolver<ViewOutput<YardLog>>(
+      await postSecure<ViewInput<YardLog>>(
+        'view',
+        input,
+        authToken: authToken,
+      ),
+    );
+  }
 
-    return FoundationResponseResolver<SetViewOutput<YardLog>>(actEffect);
+  @override
+  FoundationFutureResolver<BatchOperationOutput<YardLog>> create(List<YardLog> yardlogs, String authToken) async {
+    return FoundationResponseResolver<BatchOperationOutput<YardLog>>(
+      await postListSecure<YardLog>(
+        'create',
+        yardlogs,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<UpdateOutput<YardLog>> update(UpdateInput<YardLog> input, String authToken) async {
+    return FoundationResponseResolver<UpdateOutput<YardLog>>(
+      await postSecure(
+        'update',
+        input,
+        authToken: authToken,
+      ),
+    );
   }
 }

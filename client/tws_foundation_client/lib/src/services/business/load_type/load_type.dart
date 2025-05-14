@@ -4,6 +4,14 @@ final class Loadtype extends NamedEntityB<Loadtype> {
 
   /// Generates a new [Loadtype] instance from mandatory values.
   Loadtype();
+
+  factory Loadtype.factory(String name, {String? description}) {
+    Loadtype loadtype = Loadtype();
+    loadtype.name = name;
+    loadtype.description = description;
+    
+    return loadtype;
+  }
   
   @override
   DataMap encode([DataMap? entityObject]) {

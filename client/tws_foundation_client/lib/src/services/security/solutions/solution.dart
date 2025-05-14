@@ -30,12 +30,6 @@ final class Solution extends NamedEntityB<Solution> {
       },
     );
   }
-  
-  @override
-  void decode(DataMap encode) {
-    super.decode(encode);
-    sign = encode.get(kSign);
-  }
 
   @override
   List<EntityInvalidation<Solution>> evaluate() {

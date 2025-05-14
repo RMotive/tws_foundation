@@ -19,7 +19,7 @@ final class Location extends NamedEntityB<Location> {
   /// [Status] navigation set.
   Status? status;
 
-  /// Generates a new [Solution] instance from mandatory values.
+  /// Generates a new [Location] instance from mandatory values.
   Location();
   
   @override
@@ -54,10 +54,10 @@ final class Location extends NamedEntityB<Location> {
     List<EntityInvalidation<Location>> results = <EntityInvalidation<Location>>[];
 
     if(name.isEmpty || name.length > 30) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntityKeys.name, String, name), " Must be 25 max lenght and non-empty", "strictLength(1,30)"));
-    if(address != null || (address != null && address!.id < 0)) results.add(EntityInvalidation<Location>(this, PropertyInfo(kAddress, Address, address),'Pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(address != null || (address != null && address!.id < BigInt.zero)) results.add(EntityInvalidation<Location>(this, PropertyInfo(kAddress, Address, address),'Pointer must be equal or greater than 0', 'pointerHandler()'));
     // if(waypoint != null || (waypoint != null && waypoint!.id < 0)) results.add(EntityInvalidation<Location>(this, PropertyInfo(kWaypoint, Waypoint, waypoint), '$kWaypoint pointer must be equal or greater than 0', 'pointerHandler()'));
 
-    if(status != null || (status != null && status!.id < 0)) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntitiesCommonProperties.kStatus, Status, status), 'Pointer must be equal or greater than 0', 'pointerHandler()'));    
+    if(status != null || (status != null && status!.id < BigInt.zero)) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntitiesCommonProperties.kStatus, Status, status), 'Pointer must be equal or greater than 0', 'pointerHandler()'));    
     
     return results;
   }

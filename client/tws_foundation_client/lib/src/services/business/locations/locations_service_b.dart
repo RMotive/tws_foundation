@@ -1,14 +1,14 @@
-import 'package:tws_foundation_client/src/services/business/carriers/carriers_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/locations/locations_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// [Carrier] entity service base
-abstract class CarriersServiceBase extends FoundationServiceB implements CarriersServiceI {
-  /// Creates a new [CarriersServiceBase] instance.
+/// [Location] entity service base
+abstract class LocationsServiceBase extends FoundationServiceB implements LocationsServiceI {
+  /// Creates a new [LocationsServiceBase] instance.
   ///
   /// [host] server host address.
   /// [servicePath] service path address.
   /// [client] custom network [Client] to testing/quality purposes.
-  CarriersServiceBase(
+  LocationsServiceBase(
     super.host,
     super.servicePath, {
     super.client,

@@ -72,12 +72,12 @@ final class Carrier extends NamedEntityB<Carrier> {
   List<EntityInvalidation<Carrier>> evaluate() {
     List<EntityInvalidation<Carrier>> results = <EntityInvalidation<Carrier>>[];
     if(name.length > 20) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 20 max length", "structLength(20)"));
-    if(approach == null || (approach != null && approach!.id <= 0)) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kApproach, Approach, approach), 'Required approach object. Must be at least one approach insertion property', 'requiredInsertion()'));
-    if(address == null || (address != null && address!.id <= 0)) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kAddress, Address, address), 'Required address object. Must be at least one address insertion property', 'requiredInsertion()'));
-    if(usdot != null && usdot!.id <= 0) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kUsdot, USDOT, usdot), 'USDOT pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(approach == null || (approach != null && approach!.id <= BigInt.zero)) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kApproach, Approach, approach), 'Required approach object. Must be at least one approach insertion property', 'requiredInsertion()'));
+    if(address == null || (address != null && address!.id <= BigInt.zero)) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kAddress, Address, address), 'Required address object. Must be at least one address insertion property', 'requiredInsertion()'));
+    if(usdot != null && usdot!.id <= BigInt.zero) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kUsdot, USDOT, usdot), 'USDOT pointer must be equal or greater than 0', 'pointerHandler()'));
 
-    if(usdot != null && usdot!.id <= 0) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kApproach, Approach, approach), 'Pointer must be equal or greater than 0', 'pointerHandler()'));
-    if(address != null && address!.id <= 0) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kAddress, Address, address), 'Pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(usdot != null && usdot!.id <= BigInt.zero) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kApproach, Approach, approach), 'Pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(address != null && address!.id <= BigInt.zero) results.add(EntityInvalidation<Carrier>(this, PropertyInfo(kAddress, Address, address), 'Pointer must be equal or greater than 0', 'pointerHandler()'));
 
     // if(approach != null) results = <EntityInvalidation<Carrier>>[...results, ...approach!.evaluate().cast()];
     // if(address != null) results = <EntityInvalidation<Carrier>>[...results, ...address!.evaluate().cast()]; 

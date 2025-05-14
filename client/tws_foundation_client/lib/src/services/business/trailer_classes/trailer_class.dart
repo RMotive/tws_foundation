@@ -4,6 +4,14 @@ final class TrailerClass extends NamedEntityB<TrailerClass> {
 
   /// Generates a new [TrailerClass] instance from mandatory values.
   TrailerClass();
+
+  factory TrailerClass.factory(String name, {String? description}) {
+    TrailerClass trailerClass = TrailerClass();
+    trailerClass.name = name;
+    trailerClass.description = description;
+    
+    return trailerClass;
+  }
   
   @override
   DataMap encode([DataMap? entityObject]) {

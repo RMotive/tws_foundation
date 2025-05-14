@@ -23,7 +23,8 @@ void main() {
         '[authenticate]: correctly gets {ServerSession} object',
         () async {
           final FoundationResponseResolver<ServerSession> resolver = await serviceMock.authenticate(input);
-          final ServerSession serverSession = resolver.resolveDirect(() => ServerSession());
+          final ServerSession serverSession =
+              resolver.resolveDirect(() => ServerSession());
 
           expect(serverSession.token, isNotEmpty);
           expect(serverSession.identity, input.identity);

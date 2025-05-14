@@ -41,7 +41,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   List<EntityInvalidation<VehiculeModel>> evaluate() {
     List<EntityInvalidation<VehiculeModel>> results = <EntityInvalidation<VehiculeModel>>[];
 
-   if (id < 0) results.add(EntityInvalidation<VehiculeModel>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+   if (id < BigInt.zero) results.add(EntityInvalidation<VehiculeModel>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
     if (name.trim().isEmpty || name.trim().length > 100) results.add(EntityInvalidation<VehiculeModel>(this, PropertyInfo(EntityKeys.name, String, name), 'Name must be empty or have a maximun 100 characters', 'strictLength()'));
     if (description != null && description!.trim().length > 200) results.add(EntityInvalidation<VehiculeModel>(this, PropertyInfo(EntityKeys.description, String, description), 'Description must be empty or have a maximun 200 characters', 'strictLength()'));
     return results;

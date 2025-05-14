@@ -1,9 +1,6 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/typdefs.dart';
-import 'package:tws_foundation_client/src/models/inputs/set_view_input/set_view_input.dart';
-import 'package:tws_foundation_client/src/models/outputs/set_view_output.dart';
-import 'package:tws_foundation_client/src/services/business/locations/location.dart';
-import 'package:tws_foundation_client/src/services/business/locations/locations_service_base.dart';
+import 'package:tws_foundation_client/src/services/business/locations/locations_service_b.dart';
+import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
@@ -11,18 +8,42 @@ final class LocationsService extends LocationsServiceBase {
   ///
   LocationsService(
     Uri host, {
-    Client? client,
+    super.client,
   }) : super(
           host,
-          'Locations',
-          client: client,
+          'locations',
         );
 
-  ///
-  @override
-  Effect<SetViewOutput<Location>> view(SetViewInput<Location> input, String auth) async {
-    ResponseController actEffect = await postSecure('view', input, authToken: auth);
+   @override
+  FoundationFutureResolver<ViewOutput<Location>> view(ViewInput<Location> input, String authToken) async {
+    return FoundationResponseResolver<ViewOutput<Location>>(
+      await postSecure<ViewInput<Location>>(
+        'view',
+        input,
+        authToken: authToken,
+      ),
+    );
+  }
 
-    return FoundationResponseResolver<SetViewOutput<Location>>(actEffect);
+  @override
+  FoundationFutureResolver<BatchOperationOutput<Location>> create(List<Location> locations, String authToken) async {
+    return FoundationResponseResolver<BatchOperationOutput<Location>>(
+      await postListSecure<Location>(
+        'create',
+        locations,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<UpdateOutput<Location>> update(UpdateInput<Location> input, String authToken) async {
+    return FoundationResponseResolver<UpdateOutput<Location>>(
+      await postSecure(
+        'update',
+        input,
+        authToken: authToken,
+      ),
+    );
   }
 }

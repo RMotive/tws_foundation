@@ -63,7 +63,7 @@ final class Plate extends EntityB<Plate> {
   List<EntityInvalidation<Plate>> evaluate() {
     List<EntityInvalidation<Plate>> results = <EntityInvalidation<Plate>>[];
 
-    if (id < 0) results.add(EntityInvalidation<Plate>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    if (id < BigInt.zero) results.add(EntityInvalidation<Plate>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
     if(identifier.length < 5 || identifier.length > 12) results.add(EntityInvalidation<Plate>(this, PropertyInfo(kIdentifier, String, kIdentifier), "Identifier length must be between 8 and 12", "strictLength(8,12)"));
     if(state != null){
       if(state!.length < 2 || state!.length > 4) results.add(EntityInvalidation<Plate>(this, PropertyInfo(kState, String, kState), "State length must be between 2 and 4", "strictLength(2,4)"));

@@ -34,7 +34,7 @@ final class Approach extends EntityB<Approach> {
   /// [Status] object.
   Status? status;
   
-  /// Generates a new [Solution] instance from mandatory values.
+  /// Generates a new [Approach] instance from mandatory values.
   Approach();
   
   @override

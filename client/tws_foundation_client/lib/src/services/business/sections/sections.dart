@@ -28,7 +28,7 @@ final class Section extends NamedEntityB<Section> {
   /// [Status] Section status.
   Status? status;
 
-  /// Generates a new [Solution] instance from mandatory values.
+  /// Generates a new [Section] instance from mandatory values.
   Section();
   
   @override

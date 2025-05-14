@@ -119,18 +119,18 @@ final class Employee extends NamedEntityB<Employee> {
   List<EntityInvalidation<Employee>> evaluate() {
     List<EntityInvalidation<Employee>> results = <EntityInvalidation<Employee>>[];
 
-    if (name.isEmpty) results.add(EntityInvalidation<Employee>(this, PropertyInfo('Name', String, name), 'Solution name can\'t be empty', 'notEmpty'));
-     if(identification == null || (identification != null && identification!.id < 0)) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kIdentification, Identification, identification), 'Identification pointer must be equal or greater than 0, or set a navigation', 'pointerHandler()'));
+    if (name.isEmpty) results.add(EntityInvalidation<Employee>(this, PropertyInfo('Name', String, name), 'Name can\'t be empty', 'notEmpty'));
+     if(identification == null || (identification != null && identification!.id < BigInt.zero)) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kIdentification, Identification, identification), 'Identification pointer must be equal or greater than 0, or set a navigation', 'pointerHandler()'));
    
     if(address != null){
-      if(address!.id < 0) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kAddress, Address, address), 'Address pointer must be equal or greater than 0', 'pointerHandler()'));
+      if(address!.id < BigInt.zero) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kAddress, Address, address), 'Address pointer must be equal or greater than 0', 'pointerHandler()'));
     }
 
     if(approach != null){
-      if(approach!.id < 0) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kApproach, Approach, approach), 'Approach pointer must be equal or greater than 0', 'pointerHandler()'));
+      if(approach!.id < BigInt.zero) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kApproach, Approach, approach), 'Approach pointer must be equal or greater than 0', 'pointerHandler()'));
     }
     
-    if(status == null || ( status != null && status!.id < 0)) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kStatus, Status, status), 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if(status == null || ( status != null && status!.id < BigInt.zero)) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kStatus, Status, status), 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
 
     if(curp != null){
       if(curp!.length != 18) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kCurp, String, curp), "CURP number must be 18 length", "strictLength(18)"));

@@ -1,28 +1,26 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/typdefs.dart';
-import 'package:tws_foundation_client/src/models/inputs/set_view_input/set_view_input.dart';
-import 'package:tws_foundation_client/src/models/outputs/set_view_output.dart';
-import 'package:tws_foundation_client/src/services/business/employees/employee.dart';
-import 'package:tws_foundation_client/src/services/business/employees/employees_service_base.dart';
+import 'package:tws_foundation_client/src/services/business/employees/employees_service_b.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class EmployeesService extends EmployeesServiceBase {
+final class EmployeesService extends EmployeesServiceB {
   ///
   EmployeesService(
     Uri host, {
-    Client? client,
+    super.client,
   }) : super(
           host,
-          'Employees',
-          client: client,
+          'employees',
         );
 
-  ///
   @override
-  Effect<SetViewOutput<Employee>> view(SetViewInput<Employee> input, String auth) async {
-    ResponseController actEffect = await postSecure('view', input, authToken: auth);
-
-    return FoundationResponseResolver<SetViewOutput<Employee>>(actEffect);
+  FoundationFutureResolver<ViewOutput<Employee>> view(ViewInput<Employee> input, String authToken) async {
+    return FoundationResponseResolver<ViewOutput<Employee>>(
+      await postSecure<ViewInput<Employee>>(
+        'view',
+        input,
+        authToken: authToken,
+      ),
+    );
   }
 }
