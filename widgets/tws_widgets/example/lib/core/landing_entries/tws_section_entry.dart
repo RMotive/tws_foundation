@@ -1,18 +1,16 @@
-part of '../landing_view/landing_view.dart';
 
-CSMPackageLandingEntry _twsSectionEntry = CSMPackageLandingEntry(
-  name: "TWS Section", 
-  description: RichText(
-    text: TextSpan(
-      text: "Defined to handle section separator along pages sections.",
-    ),
-  ), 
-  composeLanding: (BuildContext ctx) {
-    return TWSFLandingFrame(
-      child: TWSSection(
-        title: "Section Example", 
-        content: Container(),
-      ),
+import 'package:csm_view/csm_view.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_widgets/tws_widgets.dart';
+
+PackageLandingEntry<TWSFThemeBase> twsSectionEntry =
+    PackageLandingEntry<TWSFThemeBase>(
+      name: "TWS Section",
+      description:
+          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+            text: "Defined to handle section separator along pages sections.",
+          ),
+      contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+        return TWSSection(title: "Section Example", content: Container());
+      },
     );
-  }
-);

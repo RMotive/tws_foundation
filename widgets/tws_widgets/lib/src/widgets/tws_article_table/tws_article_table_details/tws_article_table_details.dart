@@ -26,7 +26,7 @@ final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends 
   Widget build(BuildContext context) {
     final _TWSArticleTableDetailsState state = _TWSArticleTableDetailsState();
 
-    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
 
     final SimpleTheming tPage = themeManager.get().page;
     final StateTheming tCritical = themeManager.get().criticalControlState;

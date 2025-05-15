@@ -39,7 +39,7 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
   late TWSFThemeBase theme;
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();

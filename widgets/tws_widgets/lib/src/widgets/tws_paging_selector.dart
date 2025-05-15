@@ -43,7 +43,7 @@ class TWSPagingSelector extends StatefulWidget {
 
 class _TWSPagingSelectorState extends State<TWSPagingSelector> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();

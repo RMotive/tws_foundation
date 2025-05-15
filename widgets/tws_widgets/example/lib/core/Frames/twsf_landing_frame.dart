@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tws_widgets/tws_widgets.dart';
 
 /// [TWSFLandingFrame] widget to wrap content for a proper layout handling in a [CSMPackageLanding] component.
 class TWSFLandingFrame extends StatelessWidget {
@@ -21,23 +20,19 @@ class TWSFLandingFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TWSFThemeBase theme = getTheme();
-    return ColoredBox(
-      color: theme.page.main,
-      child: Column(
-        children: <Widget>[
-          Center(
-            child: SizedBox(
-              width: width,
-              height: height,
-              child: Padding(
-                padding: padding,
-                child: child,
-              ),
+    return Column(
+      children: <Widget>[
+        Center(
+          child: SizedBox(
+            width: width,
+            height: height,
+            child: Padding(
+              padding: padding,
+              child: child,
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

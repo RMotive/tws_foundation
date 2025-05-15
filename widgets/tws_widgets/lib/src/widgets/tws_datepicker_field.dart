@@ -65,7 +65,7 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
   late TextEditingController ctrl;
   late final FocusNode fNode;
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();

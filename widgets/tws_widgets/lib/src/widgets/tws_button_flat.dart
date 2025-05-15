@@ -44,7 +44,7 @@ class TWSButtonFlat extends StatefulWidget {
 
 class _TWSButtonFlatState extends State<TWSButtonFlat> {
   late bool waiting;
-/// Theme Manager injector.
+  /// Theme Manager injector.
   final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
 
   /// Theme reference key.

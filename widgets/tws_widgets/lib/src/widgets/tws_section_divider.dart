@@ -21,7 +21,7 @@ class TWSSectionDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? mainColor = color; 
     if(color == null){
-    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
       mainColor = themeManager.get().page.fore;
     }
 

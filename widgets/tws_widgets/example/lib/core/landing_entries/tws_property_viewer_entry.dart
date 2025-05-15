@@ -1,20 +1,16 @@
-part of '../landing_view/landing_view.dart';
+import 'package:csm_view/csm_view.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_widgets/tws_widgets.dart';
 
-CSMPackageLandingEntry _twsPropertyViewerEntry = CSMPackageLandingEntry(
+PackageLandingEntry<TWSFThemeBase>
+wsPropertyViewerEntry = PackageLandingEntry<TWSFThemeBase>(
   name: "TWS Property viewer",
-  description: RichText(
-    text: TextSpan(
-      text:
-          "Shows a text format for properties: Property title and the property value.",
-    ),
-  ),
-  composeLanding: (BuildContext ctx) {
-    return TWSFLandingFrame(
-      width: 600,
-      child: TWSPropertyViewer(
-        label: "label example", 
-        value: "content",
+  description:
+      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+        text:
+            "Shows a text format for properties: Property title and the property value.",
       ),
-    );
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+    return TWSPropertyViewer(label: "label example", value: "content");
   },
 );

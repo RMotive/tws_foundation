@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 
-abstract class TWSFThemeBase extends ThemeB{
+abstract class TWSFThemeBase extends PackageLandingThemeB{
   final SimpleTheming page;
   final SimpleTheming masterLayout;
   final SimpleTheming primaryControlColor;
@@ -11,10 +11,9 @@ abstract class TWSFThemeBase extends ThemeB{
   final StateTheming articlesLayoutSelectorButtonState;
   final StateTheming primaryControlState;
   final StateTheming criticalControlState;
-  // StateTheming
+  
  const TWSFThemeBase(
     super.identifier, {
-      super.frame,
       required this.page,
       required this.masterLayout,
       required this.primaryControlState,
@@ -27,6 +26,9 @@ abstract class TWSFThemeBase extends ThemeB{
       required this.articlesLayoutSelectorButtonState, 
       required super.icon, 
       required super.iconBackground,
+      required super.pageTheming,
+      required super.headerTheming,
+      required super.welcomeCardTheming,
     } 
   );
 

@@ -22,7 +22,7 @@ final class TWSArticleCreationStackItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
     final SimpleTheming pageTheme = themeManager.get().page;
     final SimpleTheming dangerTheme = themeManager.get().primaryCriticalControl;
 

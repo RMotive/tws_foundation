@@ -45,7 +45,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
   // compatible with [TickerProviderStateMixin] and more complex states implementations.
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();

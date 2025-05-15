@@ -125,12 +125,15 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   @override
   void initState() {
     super.initState();
+    themeManager.addEffect(ref, themeUpdateListener);
+    theme = themeManager.get();
     if(widget.preLoadBase64 != null) originalImg = base64.decode(widget.preLoadBase64!);
     getCameras();
   }
 
   @override
   void dispose() {
+    themeManager.removeEffect(ref);
     super.dispose();
   }
 

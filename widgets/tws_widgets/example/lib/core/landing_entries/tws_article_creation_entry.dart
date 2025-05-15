@@ -1,25 +1,26 @@
-part of '../landing_view/landing_view.dart';
 
-CSMPackageLandingEntry _twsArticleCreationEntry = CSMPackageLandingEntry(
+import 'package:csm_view/csm_view.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_widgets/tws_widgets.dart';
+
+PackageLandingEntry<TWSFThemeBase> twsArticleCreationEntry = PackageLandingEntry<TWSFThemeBase>(
   name: "TWS Article Creation", 
-  description: RichText(
-    text: TextSpan(
-      text:
-          "Manage the creation and submit of generic [TModel] items",
-    ),
-  ), 
-  composeLanding: (BuildContext ctx) {
-    TWSFThemeBase theme = Injector.getTheme<TWSFThemeBase>();
+      description:
+          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+            text: "Manage the creation and submit of generic [TModel] items",
+          ),
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
     TWSArticleCreatorAgent<TrailerClass> agent = TWSArticleCreatorAgent<TrailerClass>();
     return ColoredBox(
-      color: theme.page.main,
+      color: theme.page.back,
       child: Column(
         spacing: 10,
         children: <Widget>[
           Expanded(
             flex: 10,
             child: TWSArticleCreator<TrailerClass>(
-              factory:() => TrailerClass(0, "", null),
+              factory:() => TrailerClass.factory(""),
               agent: agent,
               onCreate: (List<TrailerClass> records) {
                 print('executing OnCreate...');
@@ -57,10 +58,9 @@ CSMPackageLandingEntry _twsArticleCreationEntry = CSMPackageLandingEntry(
                         isOptional: true,
                         controller: TextEditingController(text: itemState?.model.name),
                         onChanged:(String text) {
+                          itemState?.model.name = text;
                           itemState?.updateModelRedrawing(
-                            itemState.model.clone(
-                              name: text,
-                            ),
+                            itemState.model
                           );
                         },
                       ),
@@ -70,10 +70,9 @@ CSMPackageLandingEntry _twsArticleCreationEntry = CSMPackageLandingEntry(
                         isEnabled: itemState != null,
                         controller: TextEditingController(text: itemState?.model.description),
                         onChanged:(String text) {
+                          itemState?.model.description = text;
                           itemState?.updateModelRedrawing(
-                            itemState.model.clone(
-                              description: text,
-                            ),
+                            itemState.model
                           );
                         },
                       )

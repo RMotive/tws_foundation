@@ -1,17 +1,16 @@
-part of '../landing_view/landing_view.dart';
+import 'package:csm_view/csm_view.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_widgets/tws_widgets.dart';
 
-CSMPackageLandingEntry _twsPhotoTakerEntry = CSMPackageLandingEntry(
+PackageLandingEntry<TWSFThemeBase>
+twsPhotoTakerEntry = PackageLandingEntry<TWSFThemeBase>(
   name: "TWS Photo taker",
-  description: RichText(
-    text: TextSpan(
-      text:
-          "This component can access to the device camera and picture storage to take photos or select stores images.",
-    ),
-  ),
-  composeLanding: (BuildContext ctx) {
-    return TWSFLandingFrame(
-      width: 400,
-      child: TWSPhotoTaker(),
-    );
+  description:
+      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+        text:
+            "This component can access to the device camera and picture storage to take photos or select stores images.",
+      ),
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+    return TWSPhotoTaker();
   },
 );

@@ -1,19 +1,21 @@
-part of '../landing_view/landing_view.dart';
 
-CSMPackageLandingEntry _twsArticleTable = CSMPackageLandingEntry(
+import 'package:csm_view/csm_view.dart';
+import 'package:example/core/adapters/view_table_adapter.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_widgets/tws_widgets.dart';
+
+PackageLandingEntry<TWSFThemeBase> twsArticleTable = PackageLandingEntry<TWSFThemeBase>(
   name: "TWSArticleTable", 
-  description: RichText(
-    text: TextSpan(
-      text:
-          "Create a data grid table, with custom headers, content and interactable rows and drawer options.",
-    ),
-  ), 
-  composeLanding: (BuildContext ctx) {
-    TWSFThemeBase theme = getTheme<TWSFThemeBase>();
+  description:
+          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+            text: "Create a data grid table, with custom headers, content and interactable rows and drawer options.",
+          ),
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
     final TWSArticleTableAgent agent = TWSArticleTableAgent();
     return ColoredBox(
-      color: theme.page.main,
-      child: CSMSpacingColumn(
+      color: theme.page.back,
+      child: Column(
         spacing: 10,
         children: <Widget>[
           Expanded(

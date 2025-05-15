@@ -6,13 +6,12 @@ import 'package:tws_widgets/src/core/foundation_colors.dart';
 import 'package:tws_widgets/src/themes/tws_foundation_theme_base.dart';
 
 class TWSFDarkTheme extends TWSFThemeBase{
-  static const String kIdentifier = 'foundation-dark-flat-theme';
+  
   const TWSFDarkTheme()
     : super(
-        kIdentifier,
+        'foundation-dark-flat-theme',
         iconBackground: TWSFColors.warmWhite,
         icon: const Icon(Icons.abc),
-        frame: TWSFColors.warmWhite,
         masterLayout: const SimpleTheming(
           back: TWSFColors.oceanBlue,
           fore: TWSFColors.warmWhite,
@@ -103,6 +102,23 @@ class TWSFDarkTheme extends TWSFThemeBase{
           selectStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
+        ),
+        pageTheming: const SimpleTheming(
+          back: TWSFColors.lightDark,
+          fore: TWSFColors.warmWhite,
+          accent: TWSFColors.oceanBlue,
+        ),
+        headerTheming: const SimpleTheming(
+          back: TWSFColors.darkGrey,
+          fore: TWSFColors.warmWhite,
+          accent:TWSFColors.oceanBlue,
+          foreAlt: TWSFColors.darkGrey ,
+          accentAlt: TWSFColors.warmWhite,
+        ),
+        welcomeCardTheming: const SimpleTheming(
+          back: TWSFColors.oceanBlue,
+          fore: TWSFColors.warmWhite,
+          accent: Colors.transparent,
         ),
       );
 }

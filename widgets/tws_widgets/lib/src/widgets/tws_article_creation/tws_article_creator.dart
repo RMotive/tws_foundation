@@ -55,7 +55,7 @@ final class TWSArticleCreator<TModel> extends StatefulWidget {
 class _TWSArticleCreatorState<TModel> extends State<TWSArticleCreator<TModel>> {
   late _TWSArticleCreationState<TModel> mainState;
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
   /// Color pallet for the component.

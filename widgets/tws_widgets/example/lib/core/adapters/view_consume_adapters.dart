@@ -22,8 +22,8 @@ final class ViewConsumeAdapter implements TWSViewConsumeAdapter{
     /// Filtering query
     late List<TrailerClass> filtered;
     if(input.trim().isNotEmpty){
-      filtered = records.where((TrailerClass f) {
-        return f.name.toLowerCase().contains(input.trim().toLowerCase());
+      filtered = records.where((TrailerClass t) {
+        return t.name.toLowerCase().contains(input.trim().toLowerCase());
       }).toList();
     }else{
       filtered = records;

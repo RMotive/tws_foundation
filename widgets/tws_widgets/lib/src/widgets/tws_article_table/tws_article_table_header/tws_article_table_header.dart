@@ -13,7 +13,7 @@ final class _TWSArticleTableHeader<TArticle> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
 
     return DecoratedBox(
       decoration: const BoxDecoration(

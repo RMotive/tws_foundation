@@ -130,7 +130,7 @@ class _TWSInputTextState extends State<TWSInputText> {
   final GlobalKey _inputFieldKey = GlobalKey();
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();

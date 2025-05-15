@@ -1,16 +1,19 @@
-part of '../landing_view/landing_view.dart';
 
-CSMPackageLandingEntry _twsButtonFlatEntry = CSMPackageLandingEntry(
-  name: "TWSButtonFlat", 
-  description: RichText(
-    text: TextSpan(
-      text:
-          "Simple TWS Custom action button with async capabilities. \nThis component has the same color scheme in dark and light themes.",
-    ),
-  ), 
-  composeLanding: (BuildContext ctx) {
+import 'package:csm_view/csm_view.dart';
+import 'package:example/core/Frames/twsf_landing_frame.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_widgets/tws_widgets.dart';
+
+PackageLandingEntry<TWSFThemeBase> twsButtonFlatEntry = PackageLandingEntry<TWSFThemeBase>(
+  name: "TWSButtonFlat",
+  description:
+      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+        text:
+            "Simple TWS Custom action button with async capabilities. \nThis component has the same color scheme in dark and light themes.",
+      ),
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
     return TWSFLandingFrame(
-      child: CSMSpacingRow(
+      child: Row(
         spacing: 20,
         children: <Widget>[
           Expanded(
@@ -32,5 +35,5 @@ CSMPackageLandingEntry _twsButtonFlatEntry = CSMPackageLandingEntry(
         ],
       ),
     );
-  }
+  },
 );

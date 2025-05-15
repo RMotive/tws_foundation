@@ -56,7 +56,7 @@ class TWSIncrementalList<TModel> extends StatefulWidget {
 
 class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();

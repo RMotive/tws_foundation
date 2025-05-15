@@ -73,7 +73,7 @@ class TwsListViewer<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
     SimpleTheming pageColorTheme = themeManager.get().page;
     Color tColor = textColor  ?? pageColorTheme.fore;
     Color bColor = backgroundColor ?? pageColorTheme.back;

@@ -18,7 +18,7 @@ final class TWSFrameDecoration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
     return Padding(
       padding: EdgeInsets.only(

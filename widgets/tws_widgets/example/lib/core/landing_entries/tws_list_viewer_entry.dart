@@ -1,29 +1,32 @@
-part of '../landing_view/landing_view.dart';
+import 'package:csm_view/csm_view.dart';
+import 'package:example/core/const/mock_data.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_widgets/tws_widgets.dart';
 
-CSMPackageLandingEntry _twslistViewerEntry = CSMPackageLandingEntry(
+PackageLandingEntry<TWSFThemeBase> twslistViewerEntry = PackageLandingEntry<TWSFThemeBase>(
   name: "TWS List Viewer", 
-  description: RichText(
-    text: TextSpan(
-      text:
-          "A simple list component to show a section that contains a list with a title and subtitle.",
-    ),
-  ), 
-  composeLanding: (BuildContext ctx) {
+  description:
+          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+            text: "A simple list component to show a section that contains a list with a title and subtitle.",
+          ),
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
     final AsyncWidgetController consumerAgent = AsyncWidgetController(); 
-      Future<SetViewOutput<TrailerClass>> features() async {
+      Future<ViewOutput<TrailerClass>> data() async {
         await Future<void>.delayed(Duration(seconds: 2));
-        return SetViewOutput<TrailerClass>(mockTrailerClasses, 1, DateTime.now(), 1, 11, 11);
+        ViewOutput<TrailerClass> view = ViewOutput<TrailerClass>(() => TrailerClass());
+        view.entities = mockTrailerClasses;
+        return view;
       }
 
-    return TWSFLandingFrame(
-      child: CSMSpacingRow(
+    return Row(
         spacing: 10,
         children: <Widget>[
           Expanded(
             child: TwsListViewer<TrailerClass>(
               title: "Features async data", 
               agent: consumerAgent ,
-              consume:() => features(),
+              consume:() => data(),
               tileTitle:(TrailerClass set) {
                 return set.name;
               },
@@ -39,7 +42,6 @@ CSMPackageLandingEntry _twslistViewerEntry = CSMPackageLandingEntry(
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 );

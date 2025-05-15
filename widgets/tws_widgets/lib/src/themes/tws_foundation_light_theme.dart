@@ -4,11 +4,9 @@ import 'package:tws_widgets/src/core/foundation_colors.dart';
 import 'package:tws_widgets/src/themes/tws_foundation_theme_base.dart';
 
 class TWSFThemeLight extends TWSFThemeBase {
-  static const String kIdentifier = 'foundation-light-flat-theme';
   const TWSFThemeLight()
     : super(
-        kIdentifier,
-        frame: TWSFColors.warmWhite,
+        'foundation-light-flat-theme',
         iconBackground: TWSFColors.warmWhite,
         icon: const Icon(Icons.abc),
         masterLayout: const SimpleTheming(
@@ -100,6 +98,23 @@ class TWSFThemeLight extends TWSFThemeBase {
           selectStruct: ComplexTheming(
             background: TWSFColors.oceanBlueH,
           ),
+        ),
+        pageTheming: const SimpleTheming(
+          back: TWSFColors.oceanBlue,
+          fore: TWSFColors.warmWhite,
+          accent: Colors.transparent,
+        ),
+        headerTheming: const SimpleTheming(
+          back: TWSFColors.warmWhite,
+          fore: TWSFColors.lightDark,
+          accent: TWSFColors.oceanBlue,
+          foreAlt: TWSFColors.warmWhite,
+        ),
+        welcomeCardTheming: const SimpleTheming(
+          back: TWSFColors.oceanBlue,
+          fore: TWSFColors.lightDark,
+          accent:TWSFColors.oceanBlue,
+          foreAlt:TWSFColors.warmWhite,
         ),
       );
 }

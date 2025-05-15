@@ -15,7 +15,7 @@ class _TWSArticleTableDetailsAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManager<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
     final SimpleTheming tPage = themeManager.get().page;
     final SimpleTheming tPrimary = themeManager.get().primaryControlColor;
     return Tooltip(

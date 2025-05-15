@@ -43,7 +43,7 @@ class TWSCascadeSection extends StatefulWidget {
 
 class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
