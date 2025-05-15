@@ -46,7 +46,7 @@ class TwsListViewer<T> extends StatelessWidget {
   final AsyncWidgetController? agent;
 
   /// Consume class for async data.
-  final Future<SetViewOutput<dynamic>> Function()? consume;
+  final Future<ViewOutput<dynamic>> Function()? consume;
   
   /// Default delay to consumer.
   final Duration delay;
@@ -93,7 +93,7 @@ class TwsListViewer<T> extends StatelessWidget {
           title: title, 
           tileTitle: tileTitle
         ): 
-        AsyncWidget<SetViewOutput<dynamic>>(
+        AsyncWidget<ViewOutput<dynamic>>(
           future: consume!,
           agent: agent,
           delay: delay,
@@ -104,9 +104,9 @@ class TwsListViewer<T> extends StatelessWidget {
               ),
             );
           },
-          successBuilder:(BuildContext ctx, SetViewOutput<dynamic> data) {
+          successBuilder:(BuildContext ctx, ViewOutput<dynamic> data) {
             return _TwsListViewerBody<T>(
-              content: data.records as List<T>, 
+              content: data.entities as List<T>, 
               tColor: tColor, 
               bColor: bColor, 
               heigth: heigth, 

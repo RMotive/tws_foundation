@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart';
-import 'package:example/core/adapters/view_consume_adapter.dart';
+import 'package:example/core/adapters/view_consume_adapters.dart';
 import 'package:example/core/adapters/view_table_adapter.dart';
 import 'package:example/core/const/image_base64.dart';
 import 'package:example/core/const/mock_data.dart';

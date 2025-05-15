@@ -60,7 +60,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
   static const double _kDetailsWidth = 400;
 
   /// Data consume function.
-  late Future<SetViewOutput<TArticle>> Function() consume;
+  late Future<ViewOutput<TArticle>> Function() consume;
   /// Drawer animation controller.
   late AnimationController detailsAnimationController;
   /// Horizontal scroll controller.
@@ -90,7 +90,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
     setState(() {
       this.page = page;
       this.size = size;
-      this.consume = () => adapter.consume(page, size, <SetViewOutput<TArticle>>[]);
+      this.consume = () => adapter.consume(size, page, <ViewOrdering>[]);
     });
     agent.refresh();
   }
@@ -106,7 +106,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
     items = 0;
     adapter = widget.adapter;
     records = <TArticle>[];
-    consume = () => adapter.consume(page, size, <SetViewOutput<TArticle>>[]);
+    consume = () => adapter.consume(size, page, <ViewOrdering>[]);
     detailsAnimationController = AnimationController(
       vsync: this,
       duration: 200.miliseconds,
@@ -124,13 +124,13 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
     super.dispose();
   }
 
-  void _updatePagingChanges(SetViewOutput<TArticle> data) {
+  void _updatePagingChanges(ViewOutput<TArticle> data) {
     // if (items != data.amount || pages != data.pages || records != data.sets) {
-    if (items != data.count || pages != data.pages || records != data.records) {
+    if (items != data.count || pages != data.pages || records != data.entities) {
       WidgetsBinding.instance.addPostFrameCallback(
         (Duration timeStamp) {
           setState(() {
-            records = data.records;
+            records = data.entities;
             items = data.count;
             pages = data.pages;
           });
@@ -218,15 +218,15 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
                                       ),
                                       // --> Table items
                                       Expanded(
-                                        child: AsyncWidget<SetViewOutput<TArticle>>(
+                                        child: AsyncWidget<ViewOutput<TArticle>>(
                                           future: consume,
                                           agent: agent,
-                                          emptyCheck: (SetViewOutput<TArticle> data) => data.records.isEmpty,
+                                          emptyCheck: (ViewOutput<TArticle> data) => data.entities.isEmpty,
                                           loadingBuilder: (_) => _TWSArticleTableLoading(viewSize: viewSize),
                                           errorBuilder: (_, __, ___) => _TWSArticleTableError(
                                             viewSize: viewSize,
                                           ),
-                                          successBuilder: (_, SetViewOutput<TArticle> data) {
+                                          successBuilder: (_, ViewOutput<TArticle> data) {
                                             _updatePagingChanges(data);
 
                                             return SizedBox(
@@ -234,11 +234,11 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
                                               child: SingleChildScrollView(
                                                 child: Column(
                                                   children: List<Widget>.generate(
-                                                    data.records.length,
+                                                    data.entities.length,
                                                     (int index) {
                                                       return PointerArea(
                                                         cursor: SystemMouseCursors.click,
-                                                        onClick: () => _selectRecord(index, data.records[index]),
+                                                        onClick: () => _selectRecord(index, data.entities[index]),
                                                         child: DecoratedBox(
                                                           decoration: BoxDecoration(
                                                             color: selected?.$1 == index ? Colors.blueGrey : Colors.transparent,
@@ -258,7 +258,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
                                                                         horizontal: 8,
                                                                       ),
                                                                       child: Builder(builder: (BuildContext context) {
-                                                                        final String cellValue = widget.fields[cont].factory(data.records[index], index, context);
+                                                                        final String cellValue = widget.fields[cont].factory(data.entities[index], index, context);
                                                                         final Widget textWidget = Text(
                                                                           cellValue,
                                                                           maxLines: 2,

@@ -1,4 +1,4 @@
-import 'package:example/core/adapters/view_consume_adapter.dart';
+import 'package:example/core/adapters/view_consume_adapters.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_widgets/tws_widgets.dart';
@@ -65,8 +65,8 @@ final class TableAdapter implements TWSArticleTableAdapter<TrailerClass> {
   }
 
   @override
-  Future<SetViewOutput<TrailerClass>> consume(int page, int range, List<SetViewOrderOptions> orderings) async {
-    List<SetViewOutput<TrailerClass>> records = await ViewConsumeAdapter().consume(page, range, orderings, "");
+  Future<ViewOutput<TrailerClass>> consume(int page, int range, List<ViewOrdering> orderings) async {
+    List<ViewOutput<TrailerClass>> records = await ViewConsumeAdapter().consume(page, range, "");
     return records.first;
   }
   

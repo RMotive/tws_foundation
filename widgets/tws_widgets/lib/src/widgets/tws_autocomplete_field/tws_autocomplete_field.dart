@@ -122,7 +122,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
   late _TWSAutoCompleteFieldFutureState<T> futureState;
 
   /// Consume method declaration in [adapter] property.
-  Future<List<SetViewOutput<dynamic>>> Function()? consume;
+  Future<List<ViewOutput<dynamic>>> Function()? consume;
 
   /// Internal scroll controller for overlay scrolling.
   late final ScrollController scrollController;
@@ -323,7 +323,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     if(widget.initialValue != null) selectedOption = widget.initialValue;
     if (widget.adapter != null) {
       agent = AsyncWidgetController();
-      consume = () => widget.adapter!.consume(1, widget.quantityResults, <SetViewOutput<dynamic>>[], "");
+      consume = () => widget.adapter!.consume(widget.quantityResults, 1, '');
     } else {
       rawOptionsList = widget.nativeList!;
     }
@@ -449,18 +449,17 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
                                 consume: () => widget.adapter!.consume(
                                   1,
                                   widget.quantityResults,
-                                  <SetViewOutput<dynamic>>[],
                                   firstbuild ? "" : ctrl.text.trim(),
                                 ),
-                                onFetch: (List<SetViewOutput<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) {
+                                onFetch: (List<ViewOutput<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) {
                                   futureState = state;
                                   if(!firstbuild && (ctrl.text.trim().isEmpty || selectedOption != null)) {
                                     state.preloadedItems = rawOptionsList;
                                   } else {
                                     //Stores the properties results
-                                    for (SetViewOutput<dynamic> view in data) {
-                                      suggestionsList = <T>[...view.records];
-                                      if(firstbuild) rawOptionsList = <T>[...view.records];
+                                    for (ViewOutput<dynamic> view in data) {
+                                      suggestionsList = <T>[...view.entities];
+                                      if(firstbuild) rawOptionsList = <T>[...view.entities];
                                     }
                                   }
                                   

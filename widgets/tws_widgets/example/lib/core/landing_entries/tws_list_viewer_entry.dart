@@ -12,7 +12,7 @@ CSMPackageLandingEntry _twslistViewerEntry = CSMPackageLandingEntry(
     final AsyncWidgetController consumerAgent = AsyncWidgetController(); 
       Future<SetViewOutput<TrailerClass>> features() async {
         await Future<void>.delayed(Duration(seconds: 2));
-        return SetViewOutput<TrailerClass>(mockFeatures, 1, DateTime.now(), 1, 11, 11);
+        return SetViewOutput<TrailerClass>(mockTrailerClasses, 1, DateTime.now(), 1, 11, 11);
       }
 
     return TWSFLandingFrame(
@@ -32,7 +32,7 @@ CSMPackageLandingEntry _twslistViewerEntry = CSMPackageLandingEntry(
           Expanded(
             child: TwsListViewer<TrailerClass>(
               title: "Features native data", 
-              tilesContent: mockFeatures,
+              tilesContent: mockTrailerClasses,
               tileTitle:(TrailerClass set) {
                 return set.name;
               },

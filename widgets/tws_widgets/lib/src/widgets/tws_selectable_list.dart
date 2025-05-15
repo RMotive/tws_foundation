@@ -159,9 +159,9 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     tcolor = widget.enabled? widget.textColor ?? pageColorTheme.fore : widget.textColor?.withValues(alpha: 50) ?? pageColorTheme.fore.withAlpha(50);
     return TWSSection(
       title: widget.title, 
-      content: AsyncWidget<List<SetViewOutput<dynamic>>>(
+      content: AsyncWidget<List<ViewOutput<dynamic>>>(
         future:
-            () => widget.adapter.consume(1, 9999, <SetViewOutput<dynamic>>[], ""), 
+            () => widget.adapter.consume(1, 9999, ""), 
         loadingBuilder: (BuildContext ctx) {
           return Center(
             child: CircularProgressIndicator(
@@ -174,8 +174,8 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
             display: "Something go wrong",
           );
         },
-        successBuilder:(BuildContext ctx, List<SetViewOutput<dynamic>> data) {
-          fetchedList = data.first.records as List<T>;
+        successBuilder:(BuildContext ctx, List<ViewOutput<dynamic>> data) {
+          fetchedList = data.first.entities as List<T>;
           return Stack(
             children: <Widget>[
               Column(
