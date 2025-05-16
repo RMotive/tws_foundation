@@ -1,0 +1,47 @@
+name: example
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_web_plugins:
+    sdk: flutter
+    
+  localstorage: ^5.0.0
+  file_picker: ^8.1.7
+  camera_platform_interface: ^2.8.0
+  camera_web: ^0.3.5
+  
+  tws_foundation_client:
+    git:
+      url: https://github.com/RMotive/tws_foundation
+      path: client/tws_foundation_client
+      ref: development59#client_refactor
+
+  csm_view:
+    git:
+      url: https://github.com/RMotive/csm_view
+      ref: main
+
+  csm_client:
+    git:
+      url: https://github.com/RMotive/csm_client
+      ref: main
+
+  tws_foundation_view:
+    path: ../
+    
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+
+flutter:
+  uses-material-design: true
