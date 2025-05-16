@@ -29,12 +29,27 @@ PackageLandingEntry<TWSFThemeBase> twsAutoCompleteFieldEntry = PackageLandingEnt
             ),
             TWSAutoCompleteField<TrailerClass>(
               width: 200,
+              quantityResults: 7,
               label: "Async Data",
-              quantityResults: 5,
               adapter: const ViewConsumeAdapter(),
               displayValue: (TrailerClass? value) => value?.name ?? "---",
               onChanged:(TrailerClass? selection) {
                 print("Current selection: ${selection?.name}");
+              }, 
+            ),
+
+            TWSAutoCompleteField<dynamic>(
+              width: 300,
+              quantityResults: 30,
+              label: "Mixed entities Data",
+              adapter: const ViewMultiConsumeAdapter(),
+              displayValue: (dynamic value) { 
+                if(value is TrailerClass) return value.name;
+                if(value is Loadtype) return value.name;
+                return 'Not valid entity';
+              },
+              onChanged:(dynamic selection) {
+                print("Current ${selection.runtimeType} selection: ${selection?.name}");
               }, 
             ),
           ],

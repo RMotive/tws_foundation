@@ -1,6 +1,5 @@
 
 import 'dart:async';
-
 import 'package:example/core/const/mock_data.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_widgets/tws_widgets.dart';
@@ -35,13 +34,13 @@ final class ViewConsumeAdapter implements TWSViewConsumeAdapter{
     setviewMock.length = 15;
     setviewMock.count = 15;
     setviewMock.timestamp = DateTime.now();
-    setviewMock.entities = filtered;
+    setviewMock.entities = filtered.length > range? filtered.getRange(0, range).toList() : filtered;
 
     return <ViewOutput<TrailerClass>>[setviewMock];
   }
 }
 
-/// [ViewMultiConsumeAdapter] Mock for async view consume simulation.
+/// [ViewMultiConsumeAdapter] Mock for async view consume simulation, using multiple entities types.
 final class ViewMultiConsumeAdapter implements TWSViewConsumeAdapter{
   const ViewMultiConsumeAdapter();
   
@@ -53,13 +52,37 @@ final class ViewMultiConsumeAdapter implements TWSViewConsumeAdapter{
     /// Simulating waiting time (getting the views consume data)
     await Future<void>.delayed(Duration(seconds: 1));
     
+    /// Raw data
+    List<TrailerClass> trailerClassesrecords = mockTrailerClasses;    /// Raw data
+    List<Loadtype> loadTypesrecords = mockloadstypes;
+
+     /// Filtering query
+    late List<TrailerClass> filteredTrailerClasses;
+    if(input.trim().isNotEmpty){
+      filteredTrailerClasses = trailerClassesrecords.where((TrailerClass t) {
+        return t.name.toLowerCase().contains(input.trim().toLowerCase());
+      }).toList();
+    } else {
+      filteredTrailerClasses = trailerClassesrecords;
+    }
+    
+     /// Filtering query
+    late List<Loadtype> filteredLoads;
+    if(input.trim().isNotEmpty){
+      filteredLoads = loadTypesrecords.where((Loadtype t) {
+        return t.name.toLowerCase().contains(input.trim().toLowerCase());
+      }).toList();
+    }else{
+      filteredLoads = loadTypesrecords;
+    }
+
     trailersClassMock = ViewOutput<TrailerClass>(() => TrailerClass());
     trailersClassMock.page = 1;
     trailersClassMock.pages = 1;
     trailersClassMock.length = 15;
     trailersClassMock.count = 15;
     trailersClassMock.timestamp = DateTime.now();
-    trailersClassMock.entities = mockTrailerClasses;
+    trailersClassMock.entities = filteredTrailerClasses;
 
     loadTypeMock = ViewOutput<Loadtype>(() => Loadtype());
     loadTypeMock.page = 1;
@@ -67,7 +90,7 @@ final class ViewMultiConsumeAdapter implements TWSViewConsumeAdapter{
     loadTypeMock.length = 15;
     loadTypeMock.count = 15;
     loadTypeMock.timestamp = DateTime.now();
-    loadTypeMock.entities = mockloadstypes;
+    loadTypeMock.entities = filteredLoads;
 
     /// Adding multiple Entitie view types in a dynamic list.
     List<ViewOutput<dynamic>> mixedView = <ViewOutput<dynamic>>[trailersClassMock, loadTypeMock];

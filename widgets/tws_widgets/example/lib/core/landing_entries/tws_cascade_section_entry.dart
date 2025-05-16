@@ -13,7 +13,6 @@ twsCascadeSectionEntry = PackageLandingEntry<TWSFThemeBase>(
       ),
   contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
     return TWSFLandingFrame(
-      height: 300,
       child: Row(
         spacing: 20,
         children: <Widget>[

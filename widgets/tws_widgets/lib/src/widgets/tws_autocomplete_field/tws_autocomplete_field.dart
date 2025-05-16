@@ -458,8 +458,8 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
                                   } else {
                                     //Stores the properties results
                                     for (ViewOutput<dynamic> view in data) {
-                                      suggestionsList = <T>[...view.entities];
-                                      if(firstbuild) rawOptionsList = <T>[...view.entities];
+                                    suggestionsList.addAll(view.entities as Iterable<T>);
+                                      if(firstbuild) rawOptionsList.addAll(view.entities as Iterable<T>);
                                     }
                                   }
                                   

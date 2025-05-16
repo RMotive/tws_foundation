@@ -100,15 +100,15 @@ class TWSFThemeLight extends TWSFThemeBase {
           ),
         ),
         pageTheming: const SimpleTheming(
-          back: TWSFColors.oceanBlue,
-          fore: TWSFColors.warmWhite,
-          accent: Colors.transparent,
+          back: TWSFColors.warmWhite,
+          fore: TWSFColors.oceanBlue,
+          accent: TWSFColors.warmWhite,
         ),
         headerTheming: const SimpleTheming(
-          back: TWSFColors.warmWhite,
+          back: TWSFColors.oceanBlue,
           fore: TWSFColors.lightDark,
           accent: TWSFColors.oceanBlue,
-          foreAlt: TWSFColors.warmWhite,
+          foreAlt: TWSFColors.ligthGrey,
         ),
         welcomeCardTheming: const SimpleTheming(
           back: TWSFColors.oceanBlue,
