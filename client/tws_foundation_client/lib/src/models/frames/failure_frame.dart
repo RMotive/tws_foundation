@@ -7,20 +7,20 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// Defines a data constract for a frame that represents a [ServerI] implementation failed response with [ExceptionInfo].
 final class FailureFrame implements DecodableI {
   /// Unique server transaction identification.
-  String tracer = '';
+  String id = '';
 
   /// Server exception reflection information.
-  ExceptionInfo estela = ExceptionInfo();
+  ExceptionInfo content = ExceptionInfo();
 
   /// Creates a new [FailureFrame] instance.
   FailureFrame();
   
   @override
   void decode(DataMap encode) {
-    tracer = encode.get('tracer');
+    id = encode.get('id');
     
-    final DataMap estelaData = encode.get('estela');
-    estela = ExceptionInfo();
-    estela.decode(estelaData);
+    final DataMap estelaData = encode.get('content');
+    content = ExceptionInfo();
+    content.decode(estelaData);
   }
 }

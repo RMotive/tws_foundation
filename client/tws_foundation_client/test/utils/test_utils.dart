@@ -7,10 +7,10 @@ import 'package:csm_client/csm_client.dart';
 /// Defines utilities methods for testing purposes.
 final class TestUtils {
   ///
-  static DataMap createSuccessFrameDataMap(DataMap estela) {
+  static DataMap createSuccessFrameDataMap(DataMap content) {
     return <String, Object?>{
-      'tracer': 'test_tracer',
-      'estela': estela,
+      'id': 'test_tracer',
+      'content': content,
     };
   }
 

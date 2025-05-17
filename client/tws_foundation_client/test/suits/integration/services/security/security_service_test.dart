@@ -3,7 +3,8 @@ import 'dart:core' hide Uri;
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../../../../test_configs.dart';
+import '../../../../../test_configs.dart';
+
 
 void main() {
   late SecurityServiceI serviceMock;

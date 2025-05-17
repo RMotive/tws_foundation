@@ -11,7 +11,7 @@ final class TrailerClassesService extends TrailerClassesServiceB implements Trai
     super.client,
   }) : super(
           host,
-          'trailerClasses',
+          'TrailerClasses',
         );
 
   @override

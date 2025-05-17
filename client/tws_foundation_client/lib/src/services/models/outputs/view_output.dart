@@ -44,7 +44,7 @@ final class ViewOutput<T extends EntityI<T>> implements DecodableI, EncodableI {
     count = encode.get('count');
     timestamp = encode.get(EntityKeys.timestamp);
 
-    final List<DataMap> rawEntities = encode.get('entities');
+    final List<DataMap> rawEntities = encode.getList('entities');
     entities = rawEntities.map(
       (DataMap rawEntity) {
         final T entity = _entityBuilder();

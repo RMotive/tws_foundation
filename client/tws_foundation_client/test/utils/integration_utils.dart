@@ -1,6 +1,7 @@
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../test_configs.dart';
+import '../../test_configs.dart';
+
 
 ///
 final class IntegrationUtils {
