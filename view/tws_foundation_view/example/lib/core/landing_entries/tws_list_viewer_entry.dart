@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase> twslistViewerEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twslistViewerEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS List Viewer", 
   description:
-          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+          (TWSFThemeB theme, Color foreColor) => TextSpan(
             text: "A simple list component to show a section that contains a list with a title and subtitle.",
           ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     final AsyncWidgetController consumerAgent = AsyncWidgetController(); 
       Future<ViewOutput<TrailerClass>> data() async {
         await Future<void>.delayed(Duration(seconds: 2));

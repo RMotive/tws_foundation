@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/foundation_colors.dart';
+import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/tws_view_consume_adapter.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/src/widgets/tws_input_text.dart';
 import 'package:tws_foundation_view/src/widgets/tws_list_tile.dart';
@@ -119,7 +119,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     with SingleTickerProviderStateMixin {
   final GlobalKey _fieldKey = GlobalKey();
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
   /// Future consume state.
@@ -282,7 +282,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     }
   }
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
     });
@@ -419,22 +419,22 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
                       child: ClipRRect(
                         child: DecoratedBox(
                           decoration: const BoxDecoration(
-                            color: TWSFColors.ligthGrey,
+                            color: TWSColors.ligthGrey,
                             borderRadius: BorderRadius.vertical(
                               bottom: Radius.circular(5),
                             ),
                             border: Border(
                               right: BorderSide(
                                 width: 2,
-                                color: TWSFColors.oceanBlue,
+                                color: TWSColors.oceanBlue,
                               ),
                               left: BorderSide(
                                 width: 2,
-                                color: TWSFColors.oceanBlue,
+                                color: TWSColors.oceanBlue,
                               ),
                               bottom: BorderSide(
                                 width: 2,
-                                color: TWSFColors.oceanBlue,
+                                color: TWSColors.oceanBlue,
                               ),
                             ),
                           ),

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_section.dart';
 import 'package:tws_foundation_view/src/widgets/twsf_loading_circule.dart';
 
@@ -44,7 +44,7 @@ class TWSCascadeSection extends StatefulWidget {
 
 class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -65,7 +65,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   /// Widget cascade content;
   late Widget content;
   
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       colorStruct = theme.primaryControlColor;
     });

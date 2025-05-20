@@ -4,7 +4,7 @@ import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router;
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_button_flat.dart';
 import 'package:tws_foundation_view/src/widgets/tws_file_picker.dart';
 part 'tws_photo_taker_photo_preview.dart';
@@ -72,9 +72,9 @@ final class TWSPhotoTaker extends StatefulWidget {
 
 class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
 
-  late TWSFThemeBase theme;
+  late TWSFThemeB theme;
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -139,7 +139,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
     super.dispose();
   }
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       this.theme = theme;
     });

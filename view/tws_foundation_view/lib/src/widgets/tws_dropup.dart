@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/core/foundation_colors.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/core/constants.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 
 /// [TWSDropup] Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.
 /// The content in this section is an interactable list of [T] items.
@@ -46,7 +46,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
   // compatible with [TickerProviderStateMixin] and more complex states implementations.
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -93,7 +93,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
                   child: SizeTransition(
                     sizeFactor: expandAnimation,
                     child: ColoredBox(
-                      color: theme.background ?? TWSFColors.ligthGrey,
+                      color: theme.background ?? TWSColors.ligthGrey,
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(
                           maxHeight: 250,
@@ -158,7 +158,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
       animController.forward();
     }
   }
-  void themeUpdate(TWSFThemeBase theming) {
+  void themeUpdate(TWSFThemeB theming) {
     setState(() {
       themeState = theming.primaryControlState;
       theme = state.evaluateTheme(themeState);
@@ -242,7 +242,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
             updateState($in ? CSMStates.hovered : CSMStates.none);
           },
           child: ColoredBox(
-            color: theme.background ?? TWSFColors.ligthGrey,
+            color: theme.background ?? TWSColors.ligthGrey,
             child: SizedBox(
               width: 75,
               height: 30,

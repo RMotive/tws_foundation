@@ -82,8 +82,7 @@ class _TwsListViewerBody<T> extends StatelessWidget {
         : SizedBox(
           height: 50,
           child: TWSDisplayFlat(
-            color: TWSFColors.oceanBlue,
-            foreColor: TWSFColors.warmWhite,
+            color: TWSColors.oceanBlue, foreColor: TWSColors.warmWhite,
             display: emptyContentMessage,
           ),
         ),

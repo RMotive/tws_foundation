@@ -1,24 +1,23 @@
-part of 'tws_article_creator.dart';
-/// [_TWSArticleCreationState] Dedicated State class manager for [TWSArticleCreation] widget.
+part of 'entity_creation_form.dart';
+
+/// [_EntityCreationFormState] Dedicated State class manager for [TWSArticleCreation] widget.
 /// Add or remove current or change [TWSArticleCreationStackItem] selection, notifying subscribers.
-final class _TWSArticleCreationState<TModel> extends ReactorB {
+final class _EntityCreationFormState<TModel> extends ReactorB {
   /// List of states for added items.
   late List<TWSArticleCreatorItemState<TModel>> states;
-  
+
   /// Method to build new generic items.
   late TModel Function() modelFactory;
-  
+
   /// selecte item index.
   int current = 0;
 
-  _TWSArticleCreationState(this.modelFactory) {
+  _EntityCreationFormState(this.modelFactory) {
     TModel model = modelFactory();
 
-    states = <TWSArticleCreatorItemState<TModel>>[
-      TWSArticleCreatorItemState<TModel>(model),
-    ];
+    states = <TWSArticleCreatorItemState<TModel>>[TWSArticleCreatorItemState<TModel>(model)];
   }
-  
+
   void removeItem(int index) {
     states.removeAt(index);
 

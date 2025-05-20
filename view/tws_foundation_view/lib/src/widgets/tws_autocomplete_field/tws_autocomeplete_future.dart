@@ -54,7 +54,7 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
           child: CircularProgressIndicator(
-            backgroundColor: TWSFColors.darkGrey,
+            backgroundColor: TWSColors.darkGrey,
             color: loadingColor,
             strokeWidth: 4,
           ),

@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase> twsAutoCompleteFieldEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsAutoCompleteFieldEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWSAutoCompleteField", 
   description:
-      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+      (TWSFThemeB theme, Color foreColor) => TextSpan(
         text:
             "This component stores a list of posibles options to select for the user.\n Performs a options filter based on user input text. \nThe Data is fetched throw Future async methods or non-async methods.",
       ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     return TWSFLandingFrame(
       child: Column(
           spacing: 10,

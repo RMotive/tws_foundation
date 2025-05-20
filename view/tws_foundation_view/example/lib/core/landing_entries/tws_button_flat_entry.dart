@@ -4,14 +4,14 @@ import 'package:example/core/Frames/twsf_landing_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase> twsButtonFlatEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsButtonFlatEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWSButtonFlat",
   description:
-      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+      (TWSFThemeB theme, Color foreColor) => TextSpan(
         text:
             "Simple TWS Custom action button with async capabilities. \nThis component has the same color scheme in dark and light themes.",
       ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     return TWSFLandingFrame(
       child: Row(
         spacing: 20,

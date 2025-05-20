@@ -4,13 +4,13 @@ import 'package:example/core/Frames/twsf_landing_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase> twsDatetimePickerEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsDatetimePickerEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS Datetime Picker", 
   description:
-          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+          (TWSFThemeB theme, Color foreColor) => TextSpan(
             text: "shows a datepicker dialog for date and time selection.",
           ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     return TWSFLandingFrame(
       child: TWSDatepicker(
           label: "label example",

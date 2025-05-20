@@ -1,7 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/core/datetime.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/core/extensions.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 
 /// [TWSDatepicker] shows a datepicker dialog for date and time selection.
 class TWSDatepicker extends StatefulWidget {
@@ -65,7 +65,7 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
   late TextEditingController ctrl;
   late final FocusNode fNode;
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -81,7 +81,7 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
     pageColorStruct = themeManager.get().page;
   }
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       initializeThemes();
     });

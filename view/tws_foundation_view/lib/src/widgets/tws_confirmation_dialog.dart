@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_button_flat.dart';
 
 /// [TWSConfirmationDialog] Widget designed to be implemented in a [showdialog] method.
@@ -37,10 +37,10 @@ final class TWSConfirmationDialog extends StatefulWidget {
 
 class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
 
-  late TWSFThemeBase theme;
+  late TWSFThemeB theme;
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -69,7 +69,7 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
     super.dispose();
   }
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       this.theme = theme;
       pageTheme = theme.page;

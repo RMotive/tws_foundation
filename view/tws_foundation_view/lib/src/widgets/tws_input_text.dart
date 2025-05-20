@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 
 /// TWS Business dedicated component
 ///
@@ -130,7 +130,7 @@ class _TWSInputTextState extends State<TWSInputText> {
   final GlobalKey _inputFieldKey = GlobalKey();
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -195,7 +195,7 @@ class _TWSInputTextState extends State<TWSInputText> {
     pageColorStruct = themeManager.get().page;
   }
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       initializeThemes();
     });

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase> twsArticleCreationEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsArticleCreationEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS Article Creation", 
       description:
-          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+          (TWSFThemeB theme, Color foreColor) => TextSpan(
             text: "Manage the creation and submit of generic [TModel] items",
           ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
-    TWSArticleCreatorAgent<TrailerClass> agent = TWSArticleCreatorAgent<TrailerClass>();
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
+    EntityCreationFormController<TrailerClass> agent = EntityCreationFormController<TrailerClass>();
     return ColoredBox(
       color: theme.page.back,
       child: Column(
@@ -19,17 +19,17 @@ PackageLandingEntry<TWSFThemeBase> twsArticleCreationEntry = PackageLandingEntry
         children: <Widget>[
           Expanded(
             flex: 10,
-            child: TWSArticleCreator<TrailerClass>(
+            child: EntityCreationForm<TrailerClass>(
               factory:() => TrailerClass.factory(""),
-              agent: agent,
+              controller: agent,
               onCreate: (List<TrailerClass> records) {
                 print('executing OnCreate...');
-                return <TWSArticleCreatorFeedback>[];
+                return <EntityCreationFormFeedback>[];
               },
-              modelValidator: (TrailerClass model) {
+              validator: (TrailerClass model) {
                 return model.evaluate().isEmpty;
               },
-              itemDesigner:(TrailerClass actualModel, bool selected, bool valid) {
+              entryDesigner: (TrailerClass actualModel, bool selected, bool valid) {
                 return TWSArticleCreationStackItem(
                   properties: <TwsArticleCreationStackItemProperty>[
                     TwsArticleCreationStackItemProperty(

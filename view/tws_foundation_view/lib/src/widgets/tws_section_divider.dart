@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 
 /// [TWSSectionDivider] a custom divider component to divide the sections or sub-sections.
 /// This component shows horizontal line with a centered section name, ideal for dividing sections in a column.
@@ -21,7 +21,7 @@ class TWSSectionDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? mainColor = color; 
     if(color == null){
-    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+      final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
       mainColor = themeManager.get().page.fore;
     }
 

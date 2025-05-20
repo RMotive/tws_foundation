@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 
 /// [TWSIncrementalList] Widget that shows a list of Generic [TModel] items.
@@ -57,7 +57,7 @@ class TWSIncrementalList<TModel> extends StatefulWidget {
 
 class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -66,7 +66,7 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
   late SimpleTheming primaryColorTheme;
   late SimpleTheming criticalColorTheme;
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
       criticalColorTheme = theme.primaryCriticalControl;

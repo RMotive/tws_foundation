@@ -4,15 +4,14 @@ import 'package:example/core/Frames/twsf_landing_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase>
-twsIncrementalListEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsIncrementalListEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS Incremental List",
   description:
-      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+      (TWSFThemeB theme, Color foreColor) => TextSpan(
         text:
             "Widget that shows a generic list of items. This list has an built-in options to increment or remove items.",
       ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     List<int> list = <int>[1, 2, 3, 4];
     return TWSFLandingFrame(
       child: TWSIncrementalList<int>(

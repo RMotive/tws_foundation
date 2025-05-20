@@ -38,7 +38,7 @@ class TWSSwitchButton extends StatefulWidget {
 
 class _TWSSwitchButtonState extends State<TWSSwitchButton> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -66,7 +66,7 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
     themeManager.removeEffect(ref);
   }
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
     });

@@ -31,17 +31,18 @@ void main() {
   usePathUrlStrategy();
   runApp(const MainApp());
 }
-class MainApp extends StatelessWidget {
+
+
+final class MainApp extends StatelessWidget {
   const MainApp({super.key});
   
   @override 
   Widget build(BuildContext context) {
-    return PackageLanding<TWSFThemeBase>(
+    return PackageLanding<TWSFThemeB>(
       name: "TWS Foundation View",
       description: (_, Color foreColor) {
         return TextSpan(
-          text:
-              'This package provides a wide widget collection for UI implementations in TWS solutions.',
+          text: 'This package provides a wide widget collection for UI implementations in TWS solutions.',
           style: TextStyle(
             color: foreColor,
             fontSize: 16,
@@ -49,11 +50,11 @@ class MainApp extends StatelessWidget {
         );
       },
       defaultTheme: TWSFDarkTheme(),
-      themes: <TWSFThemeBase>[
+      themes: <TWSFThemeB>[
         TWSFDarkTheme(),
         TWSFThemeLight(),
       ],
-      landingEntries: <PackageLandingEntryI<TWSFThemeBase>>[
+      landingEntries: <PackageLandingEntryI<TWSFThemeB>>[
         twsButtonFlatEntry,
         twsSectionEntry,
         twsCascadeSectionEntry,

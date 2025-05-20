@@ -5,15 +5,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase>
-twsFilePickerEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsFilePickerEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS File Picker",
   description:
-      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+      (TWSFThemeB theme, Color foreColor) => TextSpan(
         text:
             "Widget that shows a dialog (web or mobile) to select one or multiple specified extension files.",
       ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     return TWSFLandingFrame(
       width: 500,
       child: TwsFilePicker(

@@ -3,14 +3,13 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase> twsSwitchButtonEntry =
-    PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsSwitchButtonEntry = PackageLandingEntry<TWSFThemeB>(
       name: "TWS Switch Button",
       description:
-          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+          (TWSFThemeB theme, Color foreColor) => TextSpan(
             text: "This widget returns a boolean, based on the its state.",
           ),
-      contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
         return Row(
           spacing: 20,
           children: <Widget>[

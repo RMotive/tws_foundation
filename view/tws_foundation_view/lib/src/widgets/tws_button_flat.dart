@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/twsf_loading_circule.dart';
 
 typedef StatesSet = Set<WidgetState>;
@@ -45,7 +45,7 @@ class TWSButtonFlat extends StatefulWidget {
 class _TWSButtonFlatState extends State<TWSButtonFlat> {
   late bool waiting;
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -77,7 +77,7 @@ class _TWSButtonFlatState extends State<TWSButtonFlat> {
     };
   }
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
     });

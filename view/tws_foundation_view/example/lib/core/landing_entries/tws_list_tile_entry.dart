@@ -4,15 +4,14 @@ import 'package:example/core/Frames/twsf_landing_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase>
-twsListTileEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsListTileEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS List Tile",
   description:
-      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+      (TWSFThemeB theme, Color foreColor) => TextSpan(
         text:
             "Simple self-administered statefull list tile. Shows simple text data and updates it's internal state on mouse events.",
       ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     return TWSFLandingFrame(
       width: 400,
       child: TwsListTile(

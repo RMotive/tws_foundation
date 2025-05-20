@@ -18,8 +18,7 @@ class _TWSArticleTableLoading extends StatelessWidget {
         width: size,
         height: size,
         child: CircularProgressIndicator(
-          backgroundColor: TWSFColors.oceanBlueH,
-          color: TWSFColors.oceanBlue,
+          backgroundColor: TWSColors.oceanBlueH, color: TWSColors.oceanBlue,
           strokeWidth: 3,
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 
 /// [TWSDisplayFlat] Displays an stylized text container.
 class TWSDisplayFlat extends StatelessWidget {
@@ -38,7 +38,7 @@ class TWSDisplayFlat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+    final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
     final SimpleTheming colorStruct = themeManager.get().primaryControlColor;
 
     Color baseColor = color ?? colorStruct.accent;

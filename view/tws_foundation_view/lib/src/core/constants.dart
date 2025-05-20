@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-class TWSFColors {
+/// {constant} class.
+///
+/// Stores {TWS} specific business [Color]s information.
+final class TWSColors {
   static const Color lightDark = Color(0xff343635);
   static const Color darkGrey = Color(0xff525254);
   static const Color ligthGrey = Color(0xff878888);
@@ -12,5 +15,4 @@ class TWSFColors {
 
   static const Color deepWine = Color(0xff731015);
   static const Color smoothWine = Color(0xffca524a);
-  
 }

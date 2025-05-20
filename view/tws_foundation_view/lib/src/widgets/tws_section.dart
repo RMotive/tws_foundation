@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 
 /// TWS Business component.
 ///
@@ -46,7 +46,7 @@ class TWSSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeBase> themeManager =
+    final ThemeManagerI<TWSFThemeB> themeManager =
         Injector.getThemeManager();
     final SimpleTheming pageTheme = themeManager.get().page;
     final Color bColor = isOptional ? pageTheme.fore.withValues(alpha: .5) : borderColor ?? pageTheme.accent;

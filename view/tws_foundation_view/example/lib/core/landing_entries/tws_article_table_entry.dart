@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase> twsArticleTable = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsArticleTable = PackageLandingEntry<TWSFThemeB>(
   name: "TWSArticleTable", 
   description:
-          (TWSFThemeBase theme, Color foreColor) => TextSpan(
+          (TWSFThemeB theme, Color foreColor) => TextSpan(
             text: "Create a data grid table, with custom headers, content and interactable rows and drawer options.",
           ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     final TWSArticleTableAgent agent = TWSArticleTableAgent();
     return ColoredBox(
       color: theme.page.back,

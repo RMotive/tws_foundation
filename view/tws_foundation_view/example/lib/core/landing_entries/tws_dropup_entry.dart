@@ -2,15 +2,14 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase>
-twsDropupEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsDropupEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS Dropup",
   description:
-      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+      (TWSFThemeB theme, Color foreColor) => TextSpan(
         text:
             "Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.",
       ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     return Row(
       spacing: 20,
       children: <Widget>[

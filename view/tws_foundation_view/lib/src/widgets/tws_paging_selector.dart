@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_dropup.dart';
 
 /// [TWSPagingSelector] Widget Row that shows paging data and paging selector,
@@ -44,7 +44,7 @@ class TWSPagingSelector extends StatefulWidget {
 
 class _TWSPagingSelectorState extends State<TWSPagingSelector> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -55,7 +55,7 @@ class _TWSPagingSelectorState extends State<TWSPagingSelector> {
   late int page;
   late int size;
 
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       pageTheme = theme.page;
     });

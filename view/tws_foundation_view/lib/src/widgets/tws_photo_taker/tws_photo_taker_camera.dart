@@ -21,9 +21,9 @@ final class _TWSPhotoTakerPhotoCamera extends StatefulWidget {
 
 class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
 
-  late TWSFThemeBase theme;
+  late TWSFThemeB theme;
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -48,7 +48,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   }
 
   ///
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       this.theme = theme;
     });

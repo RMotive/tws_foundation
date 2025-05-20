@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/tws_view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/src/widgets/tws_list_tile.dart';
 import 'package:tws_foundation_view/src/widgets/tws_section.dart';
@@ -84,7 +84,7 @@ class TwsSelectableList<T> extends StatefulWidget {
 
 class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -120,7 +120,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   late bool waiting;
 
   // Theme method handler.
-  void themeUpdateListener(TWSFThemeBase theme) {
+  void themeUpdateListener(TWSFThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
       pageColorTheme = theme.page;

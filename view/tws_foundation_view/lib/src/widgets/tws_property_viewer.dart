@@ -1,7 +1,7 @@
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 /// [TWSPropertyViewer] Shows a text format for properties: Property title and the property value.
 final class TWSPropertyViewer extends StatelessWidget {
   /// Property name.
@@ -18,7 +18,7 @@ final class TWSPropertyViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.getThemeManager();
+    final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
     final SimpleTheming pageTheme = themeManager.get().page;
 
     return Wrap(

@@ -1,8 +1,8 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/foundation_colors.dart';
-import 'package:tws_foundation_view/src/themes/tws_foundation_theme_base.dart';
+import 'package:tws_foundation_view/src/core/constants.dart';
+import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/src/widgets/tws_section.dart';
 
@@ -75,7 +75,7 @@ class TwsListViewer<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeBase> themeManager = Injector.get();
+    final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
     SimpleTheming pageColorTheme = themeManager.get().page;
     Color tColor = textColor  ?? pageColorTheme.fore;
     Color bColor = backgroundColor ?? pageColorTheme.back;

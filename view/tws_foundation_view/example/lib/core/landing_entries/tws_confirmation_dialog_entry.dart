@@ -3,15 +3,14 @@ import 'package:example/core/Frames/twsf_landing_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-PackageLandingEntry<TWSFThemeBase>
-twsConfirmationDialogEntry = PackageLandingEntry<TWSFThemeBase>(
+PackageLandingEntry<TWSFThemeB> twsConfirmationDialogEntry = PackageLandingEntry<TWSFThemeB>(
   name: "TWS Confirmation Dialog",
   description:
-      (TWSFThemeBase theme, Color foreColor) => TextSpan(
+      (TWSFThemeB theme, Color foreColor) => TextSpan(
         text:
             "Displays a dialog window with a header, body content and confirmation action buttons.",
       ),
-  contentBuilder: (BuildContext ctx, Size size, TWSFThemeBase theme) {
+  contentBuilder: (BuildContext ctx, Size size, TWSFThemeB theme) {
     return TWSFLandingFrame(
       width: 300,
       child: TWSButtonFlat(

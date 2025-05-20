@@ -1,26 +1,25 @@
-
-
 import 'package:csm_view/csm_view.dart';
 
-/// [TWSArticleCreatorItemState] Dedicated State class manager for [TWSArticleCreationStackItem] widget.
-/// Set the models/items values and validations status.
-final class TWSArticleCreatorItemState<TModel> extends ReactorB  {
+/// {reactor} implementation.
+///
+/// Defines a [ReactorB] implementation for [_EntityCreationFormItem] that works as a dynamic access state simplified object outside its own scope.
+final class EntityCreationFormItemReactor<T> extends ReactorB {
   /// Item model value.
-  late TModel _model;
+  late T _model;
+
   /// validation model status.
   late bool _valid;
 
-  TWSArticleCreatorItemState(this._model) : _valid = true;
+  EntityCreationFormItemReactor(this._model) : _valid = true;
 
-
-  TModel get model => _model;
+  T get model => _model;
   bool get valid => _valid;
 
   /// Update the model values without notify suscribers.
-  void updateModel(TModel newModel) => _model = newModel;
+  void updateModel(T newModel) => _model = newModel;
 
   /// Update the model values notifying the suscribers.
-  void updateModelRedrawing(TModel newModel) {
+  void updateModelRedrawing(T newModel) {
     _model = newModel;
     react();
   }
