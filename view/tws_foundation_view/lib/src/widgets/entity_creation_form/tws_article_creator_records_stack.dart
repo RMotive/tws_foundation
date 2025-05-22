@@ -3,7 +3,7 @@ part of 'entity_creation_form.dart';
 /// [_RecordsStack] Section to display the [TModel] item value based on [itemDesigner] method.
 class _RecordsStack<TModel> extends StatelessWidget {
   /// State values for added items.
-  final List<TWSArticleCreatorItemState<TModel>> states;
+  final List<EntityCreationFormItemReactor<TModel>> states;
 
   /// theme colors scheme.
   final SimpleTheming pageTheme;
@@ -12,7 +12,8 @@ class _RecordsStack<TModel> extends StatelessWidget {
   final double creatorWidth;
 
   /// Custom item designer.
-  final Widget Function(TModel actualModel, bool isSelected, bool invalid) itemDesigner;
+  final Widget Function(TModel actualModel, bool isSelected, bool invalid)
+  itemDesigner;
 
   /// Selected item index.
   final int currentItemIndex;
@@ -39,7 +40,8 @@ class _RecordsStack<TModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager<TWSFThemeB>();
+    final ThemeManagerI<FoundationThemeB> themeManager =
+        Injector.getThemeManager<FoundationThemeB>();
     SimpleTheming dangerTheme = themeManager.get().primaryCriticalControl;
 
     return Padding(
@@ -55,11 +57,32 @@ class _RecordsStack<TModel> extends StatelessWidget {
               spacing: 8,
 
               children: <Widget>[
-                Expanded(child: Text('Records: (${states.length})', style: TextStyle(color: pageTheme.fore))),
+                Expanded(
+                  child: Text(
+                    'Records: (${states.length})',
+                    style: TextStyle(color: pageTheme.fore),
+                  ),
+                ),
                 // --> Add item action
-                PointerArea(onClick: add, cursor: SystemMouseCursors.click, child: Icon(Icons.add_circle, size: 24, color: pageTheme.fore)),
+                PointerArea(
+                  onClick: add,
+                  cursor: SystemMouseCursors.click,
+                  child: Icon(
+                    Icons.add_circle,
+                    size: 24,
+                    color: pageTheme.fore,
+                  ),
+                ),
                 // --> Remove selection
-                PointerArea(onClick: () => remove(currentItemIndex), cursor: SystemMouseCursors.click, child: Icon(Icons.remove_circle, size: 24, color: dangerTheme.fore)),
+                PointerArea(
+                  onClick: () => remove(currentItemIndex),
+                  cursor: SystemMouseCursors.click,
+                  child: Icon(
+                    Icons.remove_circle,
+                    size: 24,
+                    color: dangerTheme.fore,
+                  ),
+                ),
               ],
             ),
           ),
@@ -68,12 +91,21 @@ class _RecordsStack<TModel> extends StatelessWidget {
             child: LayoutBuilder(
               builder: (_, BoxConstraints constrains) {
                 final ScrollController ctrl = ScrollController();
-                WidgetsBinding.instance.addPostFrameCallback((Duration timestamp) {
-                  ctrl.animateTo(0, duration: 300.miliseconds, curve: Curves.easeOut);
+                WidgetsBinding.instance.addPostFrameCallback((
+                  Duration timestamp,
+                ) {
+                  ctrl.animateTo(
+                    0,
+                    duration: 300.miliseconds,
+                    curve: Curves.easeOut,
+                  );
                 });
 
                 return ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: 0, maxHeight: constrains.maxHeight),
+                  constraints: BoxConstraints(
+                    minHeight: 0,
+                    maxHeight: constrains.maxHeight,
+                  ),
                   child: ListView.builder(
                     itemCount: states.length,
                     controller: ctrl,
@@ -81,12 +113,30 @@ class _RecordsStack<TModel> extends StatelessWidget {
                       final bool currentActive = currentItemIndex == index;
 
                       return PointerArea(
-                        cursor: currentActive ? MouseCursor.defer : SystemMouseCursors.click,
+                        cursor:
+                            currentActive
+                                ? MouseCursor.defer
+                                : SystemMouseCursors.click,
                         onClick: () => changeItem(index),
-                        child: ReactiveWidget<TWSArticleCreatorItemState<TModel>>(
+                        child: ReactiveWidget<
+                          EntityCreationFormItemReactor<TModel>
+                        >(
                           reactor: states[index],
-                          builder: (BuildContext ctx, TWSArticleCreatorItemState<TModel> state) {
-                            return Padding(padding: const EdgeInsets.only(top: 3), child: SizedBox(width: creatorWidth, child: itemDesigner(state.model, currentActive, state.valid)));
+                          builder: (
+                            BuildContext ctx,
+                            EntityCreationFormItemReactor<TModel> state,
+                          ) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 3),
+                              child: SizedBox(
+                                width: creatorWidth,
+                                child: itemDesigner(
+                                  state.model,
+                                  currentActive,
+                                  state.valid,
+                                ),
+                              ),
+                            );
                           },
                         ),
                       );

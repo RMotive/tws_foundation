@@ -15,7 +15,7 @@ class _TWSArticleTableDetailsAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
+    final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
     final SimpleTheming tPage = themeManager.get().page;
     final SimpleTheming tPrimary = themeManager.get().primaryControlColor;
     return Tooltip(
@@ -24,10 +24,7 @@ class _TWSArticleTableDetailsAction extends StatelessWidget {
         cursor: SystemMouseCursors.click,
         onClick: action,
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: tPage.fore,
-          ),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: tPage.fore),
           child: Padding(
             padding: const EdgeInsets.all(3),
             child: Icon(

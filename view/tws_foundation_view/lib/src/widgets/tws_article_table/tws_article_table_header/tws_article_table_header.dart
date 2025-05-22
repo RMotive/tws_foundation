@@ -13,15 +13,12 @@ final class _TWSArticleTableHeader<TArticle> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
+    final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
 
     return DecoratedBox(
       decoration: const BoxDecoration(
         border: Border.fromBorderSide(
-          BorderSide(
-            width: 1,
-            color: Colors.blueGrey,
-          ),
+          BorderSide(width: 1, color: Colors.blueGrey),
         ),
       ),
       child: Row(

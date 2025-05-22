@@ -8,7 +8,7 @@ import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/tws_article_table_adapter.dart';
 import 'package:tws_foundation_view/src/core/models/tws_article_table/tws_article_table_agent.dart';
 import 'package:tws_foundation_view/src/core/models/tws_article_table/tws_article_table_field_options.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/src/widgets/tws_frame_decoration.dart';
 import 'package:tws_foundation_view/src/widgets/tws_paging_selector.dart';
@@ -22,24 +22,34 @@ part 'tws_article_table_header/tws_article_table_header.dart';
 
 part 'tws_article_table_error.dart';
 part 'tws_article_table_loading.dart';
+
 /// [TWSArticleTable] Create a data grid table, with custom headers, content and interactable rows and drawer options.
-class TWSArticleTable<TArticle extends EntityB<TArticle>> extends StatefulWidget {
+class TWSArticleTable<TArticle extends EntityB<TArticle>>
+    extends StatefulWidget {
   /// Set the columns in the table and it's content.
   final List<TWSArticleTableFieldOptions<TArticle>> fields;
+
   /// Adapter for the selected row drawer options: Update and delete row record options.
   final TWSArticleTableAdapter<TArticle> adapter;
+
   /// Table agent with reflesh methods.
   final TWSArticleTableAgent? agent;
+
   /// Title text showed in top of the drawer.
   final String viewerTitle;
+
   /// Enabled the drawer record update button.
   final bool editable;
+
   /// Enabled the delete record button.
   final bool removable;
+
   /// Initial records page.
   final int page;
+
   /// Size per page.
   final int size;
+
   /// List of available sizes per page.
   final List<int> sizes;
 
@@ -57,20 +67,26 @@ class TWSArticleTable<TArticle extends EntityB<TArticle>> extends StatefulWidget
   });
 
   @override
-  State<TWSArticleTable<TArticle>> createState() => _TWSArticleTableState<TArticle>();
+  State<TWSArticleTable<TArticle>> createState() =>
+      _TWSArticleTableState<TArticle>();
 }
 
-class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TWSArticleTable<TArticle>> with SingleTickerProviderStateMixin {
+class _TWSArticleTableState<TArticle extends EntityB<TArticle>>
+    extends State<TWSArticleTable<TArticle>>
+    with SingleTickerProviderStateMixin {
   static const double _kPagingHeight = 50;
   static const double _kMinFieldWidth = 200;
   static const double _kDetailsWidth = 400;
 
   /// Data consume function.
   late Future<ViewOutput<TArticle>> Function() consume;
+
   /// Drawer animation controller.
   late AnimationController detailsAnimationController;
+
   /// Horizontal scroll controller.
   late ScrollController horizontalController;
+
   /// Initialize consumer agent.
   final AsyncWidgetController agent = AsyncWidgetController();
 
@@ -79,16 +95,22 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
   // --> State resources
   /// Current selected item.
   late (int index, TArticle item)? selected;
+
   /// Current page records.
   late List<TArticle> records;
+
   /// The total quantity of available records at the data storage.
   late int items;
+
   /// Current selected page.
   late int page;
+
   /// Total amount of pages available.
   late int pages;
+
   /// Current size selected.
   late int size;
+
   /// Available page sizes options.
   late final List<int> sizes;
 
@@ -132,16 +154,16 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
 
   void _updatePagingChanges(ViewOutput<TArticle> data) {
     // if (items != data.amount || pages != data.pages || records != data.sets) {
-    if (items != data.count || pages != data.pages || records != data.entities) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (Duration timeStamp) {
-          setState(() {
-            records = data.entities;
-            items = data.count;
-            pages = data.pages;
-          });
-        },
-      );
+    if (items != data.count ||
+        pages != data.pages ||
+        records != data.entities) {
+      WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
+        setState(() {
+          records = data.entities;
+          items = data.count;
+          pages = data.pages;
+        });
+      });
     }
   }
 
@@ -163,9 +185,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
       builder: (_, BoxConstraints constrains) {
         BoxConstraints pageBounds = constrains;
         if (!constrains.hasBoundedHeight) {
-          pageBounds = constrains.tighten(
-            height: constrains.minHeight,
-          );
+          pageBounds = constrains.tighten(height: constrains.minHeight);
         }
 
         final Size viewSize = pageBounds.biggest;
@@ -183,15 +203,20 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
             child: AnimatedBuilder(
               animation: detailsDisplayAnimation,
               builder: (_, __) {
-                final double animationComputationValue = viewSize.width - detailsDisplayAnimation.value;
-                final double cellWidth = animationComputationValue / widget.fields.length;
+                final double animationComputationValue =
+                    viewSize.width - detailsDisplayAnimation.value;
+                final double cellWidth =
+                    animationComputationValue / widget.fields.length;
 
                 return Stack(
                   children: <Widget>[
                     // --> Table
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxWidth: detailsFullDisplay ? viewSize.width : animationComputationValue,
+                        maxWidth:
+                            detailsFullDisplay
+                                ? viewSize.width
+                                : animationComputationValue,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,10 +226,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
                             child: DecoratedBox(
                               decoration: const BoxDecoration(
                                 border: Border.fromBorderSide(
-                                  BorderSide(
-                                    width: 2,
-                                    color: Colors.blueGrey,
-                                  ),
+                                  BorderSide(width: 2, color: Colors.blueGrey),
                                 ),
                               ),
                               child: Scrollbar(
@@ -214,7 +236,8 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
                                   controller: horizontalController,
                                   scrollDirection: Axis.horizontal,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       // --> Table header draw
                                       _TWSArticleTableHeader<TArticle>(
@@ -224,72 +247,132 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
                                       ),
                                       // --> Table items
                                       Expanded(
-                                        child: AsyncWidget<ViewOutput<TArticle>>(
+                                        child: AsyncWidget<
+                                          ViewOutput<TArticle>
+                                        >(
                                           future: consume,
                                           agent: agent,
-                                          emptyCheck: (ViewOutput<TArticle> data) => data.entities.isEmpty,
-                                          loadingBuilder: (_) => _TWSArticleTableLoading(viewSize: viewSize),
-                                          errorBuilder: (_, __, ___) => _TWSArticleTableError(
-                                            viewSize: viewSize,
-                                          ),
-                                          successBuilder: (_, ViewOutput<TArticle> data) {
+                                          emptyCheck:
+                                              (ViewOutput<TArticle> data) =>
+                                                  data.entities.isEmpty,
+                                          loadingBuilder:
+                                              (_) => _TWSArticleTableLoading(
+                                                viewSize: viewSize,
+                                              ),
+                                          errorBuilder:
+                                              (_, __, ___) =>
+                                                  _TWSArticleTableError(
+                                                    viewSize: viewSize,
+                                                  ),
+                                          successBuilder: (
+                                            _,
+                                            ViewOutput<TArticle> data,
+                                          ) {
                                             _updatePagingChanges(data);
 
                                             return SizedBox(
-                                              height: pageBounds.maxHeight - 100,
+                                              height:
+                                                  pageBounds.maxHeight - 100,
                                               child: SingleChildScrollView(
                                                 child: Column(
-                                                  children: List<Widget>.generate(
-                                                    data.entities.length,
-                                                    (int index) {
-                                                      return PointerArea(
-                                                        cursor: SystemMouseCursors.click,
-                                                        onClick: () => _selectRecord(index, data.entities[index]),
-                                                        child: DecoratedBox(
-                                                          decoration: BoxDecoration(
-                                                            color: selected?.$1 == index ? Colors.blueGrey : Colors.transparent,
+                                                  children: List<
+                                                    Widget
+                                                  >.generate(data.entities.length, (
+                                                    int index,
+                                                  ) {
+                                                    return PointerArea(
+                                                      cursor:
+                                                          SystemMouseCursors
+                                                              .click,
+                                                      onClick:
+                                                          () => _selectRecord(
+                                                            index,
+                                                            data.entities[index],
                                                           ),
-                                                          child: Row(
-                                                            children: <Widget>[
-                                                              for (int cont = 0; cont < widget.fields.length; cont++)
-                                                                ConstrainedBox(
-                                                                  constraints: BoxConstraints(
-                                                                    minWidth: widget.fields[cont].width ?? _kMinFieldWidth,
-                                                                  ),
-                                                                  child: SizedBox(
-                                                                    width: widget.fields[cont].width ?? cellWidth,
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets.symmetric(
-                                                                        vertical: 6,
-                                                                        horizontal: 8,
-                                                                      ),
-                                                                      child: Builder(builder: (BuildContext context) {
-                                                                        final String cellValue = widget.fields[cont].factory(data.entities[index], index, context);
-                                                                        final Widget textWidget = Text(
+                                                      child: DecoratedBox(
+                                                        decoration: BoxDecoration(
+                                                          color:
+                                                              selected?.$1 ==
+                                                                      index
+                                                                  ? Colors
+                                                                      .blueGrey
+                                                                  : Colors
+                                                                      .transparent,
+                                                        ),
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            for (
+                                                              int cont = 0;
+                                                              cont <
+                                                                  widget
+                                                                      .fields
+                                                                      .length;
+                                                              cont++
+                                                            )
+                                                              ConstrainedBox(
+                                                                constraints: BoxConstraints(
+                                                                  minWidth:
+                                                                      widget
+                                                                          .fields[cont]
+                                                                          .width ??
+                                                                      _kMinFieldWidth,
+                                                                ),
+                                                                child: SizedBox(
+                                                                  width:
+                                                                      widget
+                                                                          .fields[cont]
+                                                                          .width ??
+                                                                      cellWidth,
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                          6,
+                                                                      horizontal:
+                                                                          8,
+                                                                    ),
+                                                                    child: Builder(
+                                                                      builder: (
+                                                                        BuildContext
+                                                                        context,
+                                                                      ) {
+                                                                        final String
+                                                                        cellValue = widget.fields[cont].factory(
+                                                                          data.entities[index],
+                                                                          index,
+                                                                          context,
+                                                                        );
+                                                                        final Widget
+                                                                        textWidget = Text(
                                                                           cellValue,
-                                                                          maxLines: 2,
+                                                                          maxLines:
+                                                                              2,
                                                                           style: TextStyle(
-                                                                            overflow: TextOverflow.ellipsis,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
                                                                           ),
                                                                         );
 
-                                                                        if (!widget.fields[cont].tip) {
+                                                                        if (!widget
+                                                                            .fields[cont]
+                                                                            .tip) {
                                                                           return textWidget;
                                                                         }
                                                                         return Tooltip(
-                                                                          message: cellValue,
-                                                                          child: textWidget,
+                                                                          message:
+                                                                              cellValue,
+                                                                          child:
+                                                                              textWidget,
                                                                         );
-                                                                      }),
+                                                                      },
                                                                     ),
                                                                   ),
                                                                 ),
-                                                            ],
-                                                          ),
+                                                              ),
+                                                          ],
                                                         ),
-                                                      );
-                                                    },
-                                                  ),
+                                                      ),
+                                                    );
+                                                  }),
                                                 ),
                                               ),
                                             );
@@ -331,7 +414,10 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>> extends State<TW
                     if (selected != null)
                       Positioned(
                         left: animationComputationValue,
-                        width: detailsFullDisplay ? viewSize.width : _kDetailsWidth,
+                        width:
+                            detailsFullDisplay
+                                ? viewSize.width
+                                : _kDetailsWidth,
                         height: viewSize.height,
                         child: _TWSArticleTableDetails<TArticle>(
                           viewerTitle: widget.viewerTitle,

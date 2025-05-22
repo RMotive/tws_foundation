@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router;
+
 /// [TWSImageViewer] Displays an image component, that expands the image on tap, based on the display or windows app dimensions.
 class TWSImageViewer extends StatelessWidget {
   ///A base64 string image converted to bits.
@@ -12,7 +13,7 @@ class TWSImageViewer extends StatelessWidget {
 
   /// Component height.
   final double? height;
-  
+
   /// Image title.
   final String? title;
 
@@ -32,9 +33,9 @@ class TWSImageViewer extends StatelessWidget {
       fontWeight: FontWeight.bold,
       overflow: TextOverflow.ellipsis,
     ),
-    this.align = TextAlign.center
+    this.align = TextAlign.center,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     void imageViewDialog(Uint8List img) {
@@ -56,9 +57,7 @@ class TWSImageViewer extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           title ?? "",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),  
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         PointerArea(
                           cursor: SystemMouseCursors.click,
@@ -66,18 +65,15 @@ class TWSImageViewer extends StatelessWidget {
                           child: const Icon(
                             Icons.cancel,
                             color: Colors.red,
-                            size: 48
+                            size: 48,
                           ),
                         ),
-                      ]
+                      ],
                     ),
-                    Image.memory(
-                      filterQuality: FilterQuality.high,  
-                      img,
-                    ),
+                    Image.memory(filterQuality: FilterQuality.high, img),
                   ],
                 ),
-              ]
+              ],
             ),
           );
         },
@@ -88,24 +84,19 @@ class TWSImageViewer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 8,
       children: <Widget>[
-        if(title != null)
-        Text(
-          title!,
-          textAlign: align,
-          style: style
-        ),
+        if (title != null) Text(title!, textAlign: align, style: style),
         PointerArea(
           cursor: SystemMouseCursors.click,
           onClick: () => imageViewDialog(img),
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: width ?? double.maxFinite,
-              maxHeight: height ?? double.maxFinite
+              maxHeight: height ?? double.maxFinite,
             ),
-            child: Image.memory(img)
-          )
+            child: Image.memory(img),
+          ),
         ),
-      ]
+      ],
     );
   }
 }

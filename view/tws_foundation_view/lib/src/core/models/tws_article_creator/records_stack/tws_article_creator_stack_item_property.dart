@@ -5,10 +5,13 @@ import 'package:flutter/widgets.dart';
 final class TwsArticleCreationStackItemProperty extends StatelessWidget {
   /// Propertie title.
   final String label;
+
   /// Propertie value.
   final String? value;
+
   /// Min text component width.
   final double? minWidth;
+
   /// Max text component width.
   final double? maxWidth;
 
@@ -34,12 +37,7 @@ final class TwsArticleCreationStackItemProperty extends StatelessWidget {
         spacing: 6,
         children: <Widget>[
           Text('$label:'),
-          Text(
-            val,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text(val, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),
     );

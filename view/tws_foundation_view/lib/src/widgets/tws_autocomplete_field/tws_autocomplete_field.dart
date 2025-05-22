@@ -1,18 +1,19 @@
 import 'dart:async';
+
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/tws_view_consume_adapter.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/widgets/text_input.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
-import 'package:tws_foundation_view/src/widgets/tws_input_text.dart';
 import 'package:tws_foundation_view/src/widgets/tws_list_tile.dart';
 
-part 'tws_autocomplete_not_found.dart';
 part 'tws_autocomeplete_future.dart';
 part 'tws_autocomplete_list.dart';
 part 'tws_autocomplete_local.dart';
+part 'tws_autocomplete_not_found.dart';
 
 /// State for future consume.
 final class _TWSAutoCompleteFieldFutureState<T> extends ReactorB {
@@ -72,7 +73,7 @@ class TWSAutoCompleteField<T> extends StatefulWidget {
   /// Return the input text and the item property for last suggested item available based on the user input.
   final void Function(T? selection) onChanged;
 
-  /// Optinal validator method for [TWSInputText] internal component.
+  /// Optinal validator method for [TextInput] internal component.
   final String? Function(String?)? validator;
 
   ///The max number for search query in future consume;
@@ -105,10 +106,14 @@ class TWSAutoCompleteField<T> extends StatefulWidget {
     this.quantityResults = 10,
     this.suffixResultLabel,
     this.hasKeyValue,
-  })  : assert(nativeList != null || adapter != null,
-            "At least one data type must be assigned"),
-        assert(nativeList == null || adapter == null,
-            "Only one data type must be assigned (local or future-async)");
+  }) : assert(
+         nativeList != null || adapter != null,
+         "At least one data type must be assigned",
+       ),
+       assert(
+         nativeList == null || adapter == null,
+         "Only one data type must be assigned (local or future-async)",
+       );
 
   @override
   State<TWSAutoCompleteField<T>> createState() =>
@@ -118,10 +123,13 @@ class TWSAutoCompleteField<T> extends StatefulWidget {
 class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     with SingleTickerProviderStateMixin {
   final GlobalKey _fieldKey = GlobalKey();
+
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
+  final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
+
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
+
   /// Future consume state.
   late _TWSAutoCompleteFieldFutureState<T> futureState;
 
@@ -174,7 +182,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
   /// Stores the previous query value.
   String previousQuery = "";
 
-
   /// Methoth that verify if the [TWSTextField] component has a valid input selection.
   bool verifySelection() {
     if (selectedOption != null) return true;
@@ -192,21 +199,24 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     selectedOption = tapSelection;
     String query = input.toLowerCase().trim();
     List<T> exactCoincidense = <T>[];
+
     /// filter the Original options list based on user input, for local data.
-    if(widget.adapter == null){
+    if (widget.adapter == null) {
       if (query.isNotEmpty) {
         //Do a search for the method input variable for parcial results.
-        suggestionsList = rawOptionsList.where((T set) {
-          return widget.displayValue(set).toLowerCase().contains(query);
-        }).toList();
+        suggestionsList =
+            rawOptionsList.where((T set) {
+              return widget.displayValue(set).toLowerCase().contains(query);
+            }).toList();
 
         //Do a search for exact coincidenses.
-        exactCoincidense = suggestionsList.where((T set) {
-          return widget.displayValue(set).toLowerCase() == query;
-        }).toList();
+        exactCoincidense =
+            suggestionsList.where((T set) {
+              return widget.displayValue(set).toLowerCase() == query;
+            }).toList();
 
         if (suggestionsList.isNotEmpty && exactCoincidense.isNotEmpty) {
-          if(!firstbuild) ctrl.text = input;
+          if (!firstbuild) ctrl.text = input;
           selectedOption = exactCoincidense.first;
         }
       } else {
@@ -215,40 +225,47 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
       }
       if (!firstbuild) {
         setState(() {
-          if (notifyChanges && previousSelection != selectedOption) widget.onChanged(selectedOption);
+          if (notifyChanges && previousSelection != selectedOption) {
+            widget.onChanged(selectedOption);
+          }
         });
       }
       previousSelection = selectedOption;
-    }else{
+    } else {
       // Search data using the adapter given in parameters.
       // When this method is used, is necesary to tap in any option to set an item selection.
-      if(query.isNotEmpty){
+      if (query.isNotEmpty) {
         //Do a search for exact coincidenses.
-        if(tapSelection == null){
-          exactCoincidense = suggestionsList.where((T set) {
-            return widget.displayValue(set).toLowerCase() == query;
-          }).toList();
-          
-          if (!firstbuild && suggestionsList.isNotEmpty && exactCoincidense.isNotEmpty) {
+        if (tapSelection == null) {
+          exactCoincidense =
+              suggestionsList.where((T set) {
+                return widget.displayValue(set).toLowerCase() == query;
+              }).toList();
+
+          if (!firstbuild &&
+              suggestionsList.isNotEmpty &&
+              exactCoincidense.isNotEmpty) {
             selectedOption = exactCoincidense.first;
           }
         }
-      }  
+      }
 
       // Trigger the Onchange callback when a search is triggered.
-      if(!firstbuild){
+      if (!firstbuild) {
         //Check if is necesary a list refresh.
-        if(tapSelection == null){
-          if(query.isEmpty){
-            futureState.preloadedItems =  rawOptionsList;
-            if(mounted) futureState.react();
-          } else if(query.isNotEmpty) {
-            futureState.preloadedItems =  <T>[];
-            if(mounted) agent.refresh();
-          } 
-        } 
-        if(notifyChanges && previousSelection != selectedOption) widget.onChanged(selectedOption);
-      } 
+        if (tapSelection == null) {
+          if (query.isEmpty) {
+            futureState.preloadedItems = rawOptionsList;
+            if (mounted) futureState.react();
+          } else if (query.isNotEmpty) {
+            futureState.preloadedItems = <T>[];
+            if (mounted) agent.refresh();
+          }
+        }
+        if (notifyChanges && previousSelection != selectedOption) {
+          widget.onChanged(selectedOption);
+        }
+      }
       previousSelection = selectedOption;
       previousQuery = query;
     }
@@ -270,8 +287,9 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
       String value = widget.displayValue(widget.initialValue);
       search(
         value,
-        tapSelection: hasKeyValue(widget.initialValue) ? widget.initialValue : null,
-        notifyChanges: notifyChanges
+        tapSelection:
+            hasKeyValue(widget.initialValue) ? widget.initialValue : null,
+        notifyChanges: notifyChanges,
       );
       ctrl.text = widget.displayValue(widget.initialValue);
     } else {
@@ -282,7 +300,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     }
   }
 
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
     });
@@ -304,27 +322,28 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
   void onTileTap(String label, T? item) {
     setState(() {
       ctrl.text = label;
-      search(
-        label,
-        tapSelection:  item,
-      );
+      search(label, tapSelection: item);
       show = false;
     });
   }
 
   @override
   void initState() {
-    
     primaryColorTheme = themeManager.get().primaryControlColor;
     themeManager.addEffect(ref, themeUpdateListener);
     futureState = _TWSAutoCompleteFieldFutureState<T>();
     hasKeyValue = widget.hasKeyValue ?? (T? set) => true;
     scrollController = ScrollController();
     pageColorTheme = themeManager.get().page;
-    ctrl = TextEditingController(text: widget.initialValue != null ? widget.displayValue(widget.initialValue) : null);
+    ctrl = TextEditingController(
+      text:
+          widget.initialValue != null
+              ? widget.displayValue(widget.initialValue)
+              : null,
+    );
     focus = widget.focus ?? FocusNode();
     overlayController = OverlayPortalController();
-    if(widget.initialValue != null) selectedOption = widget.initialValue;
+    if (widget.initialValue != null) selectedOption = widget.initialValue;
     if (widget.adapter != null) {
       agent = AsyncWidgetController();
       consume = () => widget.adapter!.consume(widget.quantityResults, 1, '');
@@ -339,7 +358,8 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
   void didUpdateWidget(covariant TWSAutoCompleteField<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     //Set a new local list if changes.
-    if(widget.nativeList != null && (widget.nativeList != oldWidget.nativeList)){
+    if (widget.nativeList != null &&
+        (widget.nativeList != oldWidget.nativeList)) {
       rawOptionsList = widget.nativeList!;
       suggestionsList = rawOptionsList;
     }
@@ -357,7 +377,8 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
 
   @override
   Widget build(BuildContext context) {
-    final Color highContrastColor = primaryColorTheme.foreAlt ?? primaryColorTheme.fore;
+    final Color highContrastColor =
+        primaryColorTheme.foreAlt ?? primaryColorTheme.fore;
     const double tileHeigth = 35;
     return SizedBox(
       width: widget.width,
@@ -365,7 +386,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
         controller: overlayController,
         child: CompositedTransformTarget(
           link: link,
-          child: TWSInputText(
+          child: TextInput(
             deBounce: const Duration(milliseconds: 300),
             autofocus: false,
             controller: ctrl,
@@ -373,7 +394,10 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
             width: widget.width,
             height: widget.height,
             suffixLabel: widget.suffixLabel,
-            showErrorColor: (selectedOption == null && (!widget.isOptional || ctrl.text.isNotEmpty)) && !firstbuild,
+            showErrorColor:
+                (selectedOption == null &&
+                    (!widget.isOptional || ctrl.text.isNotEmpty)) &&
+                !firstbuild,
             onChanged: (String text) => search(text),
             focusNode: focus,
             label: widget.label,
@@ -388,7 +412,9 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
               color: primaryColorTheme.fore,
             ),
             validator: (String? text) {
-              if (verifySelection()) return "Not exist an item with this value.";
+              if (verifySelection()) {
+                return "Not exist an item with this value.";
+              }
               if (widget.validator != null) return widget.validator!(text);
               return null;
             },
@@ -413,80 +439,95 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
                     visible: show,
                     maintainState: true,
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: widget.menuHeight,
-                      ),
+                      constraints: BoxConstraints(maxHeight: widget.menuHeight),
                       child: ClipRRect(
                         child: DecoratedBox(
                           decoration: const BoxDecoration(
-                            color: TWSColors.ligthGrey,
+                            color: FoundationColors.ligthGrey,
                             borderRadius: BorderRadius.vertical(
                               bottom: Radius.circular(5),
                             ),
                             border: Border(
                               right: BorderSide(
                                 width: 2,
-                                color: TWSColors.oceanBlue,
+                                color: FoundationColors.oceanBlue,
                               ),
                               left: BorderSide(
                                 width: 2,
-                                color: TWSColors.oceanBlue,
+                                color: FoundationColors.oceanBlue,
                               ),
                               bottom: BorderSide(
                                 width: 2,
-                                color: TWSColors.oceanBlue,
+                                color: FoundationColors.oceanBlue,
                               ),
                             ),
                           ),
-                          child: widget.adapter != null
-                              ? _TWSAutocompleteFuture<T>(
-                                agent: agent,
-                                controller: scrollController,
-                                tileHeigth: tileHeigth,
-                                displayLabel: widget.displayValue,
-                                theme: primaryColorTheme,
-                                loadingColor: highContrastColor,
-                                hoverTextColor: pageColorTheme.fore,
-                                suffixLabel: widget.suffixResultLabel,
-                                state: futureState,
-                                onTap: (String label, T? item) => onTileTap(label, item),
-                                consume: () => widget.adapter!.consume(
-                                  1,
-                                  widget.quantityResults,
-                                  firstbuild ? "" : ctrl.text.trim(),
-                                ),
-                                onFetch: (List<ViewOutput<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) {
-                                  futureState = state;
-                                  if(!firstbuild && (ctrl.text.trim().isEmpty || selectedOption != null)) {
-                                    state.preloadedItems = rawOptionsList;
-                                  } else {
-                                    //Stores the properties results
-                                    for (ViewOutput<dynamic> view in data) {
-                                    suggestionsList.addAll(view.entities as Iterable<T>);
-                                      if(firstbuild) rawOptionsList.addAll(view.entities as Iterable<T>);
-                                    }
-                                  }
-                                  
-                                  firstbuild = false;
-                                },
-                              )
-                              : _TWSAutocompleteNative<T>(
-                                  controller: scrollController,
-                                  suggestions: suggestionsList,
-                                  displayLabel: widget.displayValue,
-                                  theme: primaryColorTheme,
-                                  onTap: (String label, T? item) => onTileTap(label, item),
-                                  loadingColor: highContrastColor,
-                                  hoverTextColor: pageColorTheme.fore,
-                                  onFirstBuild: () {
-                                    search(ctrl.text);
-                                    firstbuild = false;
-                                    return suggestionsList;
-                                  },
-                                  tileHeigth: tileHeigth,
-                                  firstBuild: firstbuild,
-                                  rawData: widget.nativeList!,
-                                ),
+                          child:
+                              widget.adapter != null
+                                  ? _TWSAutocompleteFuture<T>(
+                                    agent: agent,
+                                    controller: scrollController,
+                                    tileHeigth: tileHeigth,
+                                    displayLabel: widget.displayValue,
+                                    theme: primaryColorTheme,
+                                    loadingColor: highContrastColor,
+                                    hoverTextColor: pageColorTheme.fore,
+                                    suffixLabel: widget.suffixResultLabel,
+                                    state: futureState,
+                                    onTap:
+                                        (String label, T? item) =>
+                                            onTileTap(label, item),
+                                    consume:
+                                        () => widget.adapter!.consume(
+                                          1,
+                                          widget.quantityResults,
+                                          firstbuild ? "" : ctrl.text.trim(),
+                                        ),
+                                    onFetch: (
+                                      List<ViewOutput<dynamic>> data,
+                                      _TWSAutoCompleteFieldFutureState<T> state,
+                                    ) {
+                                      futureState = state;
+                                      if (!firstbuild &&
+                                          (ctrl.text.trim().isEmpty ||
+                                              selectedOption != null)) {
+                                        state.preloadedItems = rawOptionsList;
+                                      } else {
+                                        //Stores the properties results
+                                        for (ViewOutput<dynamic> view in data) {
+                                          suggestionsList.addAll(
+                                            view.entities as Iterable<T>,
+                                          );
+                                          if (firstbuild) {
+                                            rawOptionsList.addAll(
+                                              view.entities as Iterable<T>,
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      firstbuild = false;
+                                    },
+                                  )
+                                  : _TWSAutocompleteNative<T>(
+                                    controller: scrollController,
+                                    suggestions: suggestionsList,
+                                    displayLabel: widget.displayValue,
+                                    theme: primaryColorTheme,
+                                    onTap:
+                                        (String label, T? item) =>
+                                            onTileTap(label, item),
+                                    loadingColor: highContrastColor,
+                                    hoverTextColor: pageColorTheme.fore,
+                                    onFirstBuild: () {
+                                      search(ctrl.text);
+                                      firstbuild = false;
+                                      return suggestionsList;
+                                    },
+                                    tileHeigth: tileHeigth,
+                                    firstBuild: firstbuild,
+                                    rawData: widget.nativeList!,
+                                  ),
                         ),
                       ),
                     ),

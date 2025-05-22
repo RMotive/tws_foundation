@@ -1,6 +1,7 @@
 part of '../tws_article_table.dart';
 
-final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends StatelessWidget {
+final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>>
+    extends StatelessWidget {
   final TWSArticleTableAdapter<TArticle> adapter;
   final VoidCallback closeAction;
   final TArticle record;
@@ -8,14 +9,13 @@ final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends 
   final bool editable;
   final bool removable;
 
-
   const _TWSArticleTableDetails({
     required this.closeAction,
     required this.adapter,
     required this.record,
     required this.editable,
     required this.removable,
-    required this.viewerTitle
+    required this.viewerTitle,
   });
 
   void _closeDetails(_TWSArticleTableDetailsState state) {
@@ -26,7 +26,7 @@ final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends 
   Widget build(BuildContext context) {
     final _TWSArticleTableDetailsState state = _TWSArticleTableDetailsState();
 
-    final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
+    final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
 
     final SimpleTheming tPage = themeManager.get().page;
     final StateTheming tCritical = themeManager.get().criticalControlState;
@@ -40,7 +40,11 @@ final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends 
           child: ReactiveWidget<_TWSArticleTableDetailsState>(
             reactor: state,
             builder: (BuildContext ctx, _TWSArticleTableDetailsState state) {
-              final Widget? editionForm = adapter.composeEditor(record, () => _closeDetails(state), context);
+              final Widget? editionForm = adapter.composeEditor(
+                record,
+                () => _closeDetails(state),
+                context,
+              );
               if (state._editing && editionForm != null) {
                 return editionForm;
               }
@@ -58,9 +62,9 @@ final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends 
                           viewerTitle,
                           style: const TextStyle(
                             fontWeight: FontWeight.w100,
-                            fontStyle: FontStyle.italic
-                          ),  
-                        )
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                       ),
                       // --> Close details action
                       _TWSArticleTableDetailsAction(
@@ -69,30 +73,29 @@ final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends 
                         action: closeAction,
                       ),
                       // --> Remove action.
-                      if(removable)
-                      _TWSArticleTableDetailsAction(
-                        hint: 'Remove record',
-                        icon: Icons.remove,
-                        fore: tCritical.main.background,
-                        action: () => adapter.onRemoveRequest(record, context),
-                      ),
-                      if(editable)
-                      if(editionForm != null)
+                      if (removable)
                         _TWSArticleTableDetailsAction(
-                          hint: 'Edit record',
-                          icon: Icons.edit,
-                          action: () {
-                            state.editing = true;
-                          },
+                          hint: 'Remove record',
+                          icon: Icons.remove,
+                          fore: tCritical.main.background,
+                          action:
+                              () => adapter.onRemoveRequest(record, context),
                         ),
+                      if (editable)
+                        if (editionForm != null)
+                          _TWSArticleTableDetailsAction(
+                            hint: 'Edit record',
+                            icon: Icons.edit,
+                            action: () {
+                              state.editing = true;
+                            },
+                          ),
                     ],
                   ),
                   // --> Details custom content
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 12,
-                      ),
+                      padding: const EdgeInsets.only(top: 12),
                       child: adapter.composeViewer(record, context),
                     ),
                   ),

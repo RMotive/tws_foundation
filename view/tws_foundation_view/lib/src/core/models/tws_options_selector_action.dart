@@ -1,5 +1,5 @@
 /// Custom class for action implementations on [TwsOptionSelector] widget.
-class TwsOptionSelectorAction<T>{
+class TwsOptionSelectorAction<T> {
   // Action title.
   final String title;
   // Action value. Returned when action is selected.

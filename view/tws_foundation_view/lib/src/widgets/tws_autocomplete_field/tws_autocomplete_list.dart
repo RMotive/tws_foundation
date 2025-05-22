@@ -21,7 +21,7 @@ class _TWSAutocompleteList<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  ListView.builder(
+    return ListView.builder(
       shrinkWrap: true,
       itemExtent: 35,
       controller: controller,
@@ -31,14 +31,15 @@ class _TWSAutocompleteList<T> extends StatelessWidget {
         final String label = displayLabel(currentItem);
         // Build the individual option component.
         return TwsListTile(
-          label:'$label ${suffixLabel != null? suffixLabel!(currentItem) : ""}',
-          evaluateSelection:() => false,
+          label:
+              '$label ${suffixLabel != null ? suffixLabel!(currentItem) : ""}',
+          evaluateSelection: () => false,
           onHoverColor: theme.back,
           onHoverTextColor: theme.foreAlt ?? theme.fore,
           textColor: theme.foreAlt ?? theme.fore,
-          onTap: (_) => onTap(label, currentItem)
-        ); 
-      }
+          onTap: (_) => onTap(label, currentItem),
+        );
+      },
     );
   }
 }

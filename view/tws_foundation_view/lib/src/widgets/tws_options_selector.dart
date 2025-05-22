@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/models/tws_options_selector_action.dart';
-import 'package:tws_foundation_view/src/widgets/tws_button_flat.dart';
+import 'package:tws_foundation_view/src/widgets/button_flat.dart';
 
 /// [TwsOptionsSelector] widget that display a [Wrap] that contains a list of selectable actions given in [options] property.
 class TwsOptionsSelector<T> extends StatefulWidget {
@@ -14,11 +14,12 @@ class TwsOptionsSelector<T> extends StatefulWidget {
 
   /// Preselected action.
   final T? initialValue;
-  
+
   /// Widget status flag.
   final bool enabled;
 
-  const TwsOptionsSelector({ super.key,
+  const TwsOptionsSelector({
+    super.key,
     required this.options,
     required this.onSelect,
     this.initialValue,
@@ -38,9 +39,10 @@ class _TwsOptionsSelectorState<T> extends State<TwsOptionsSelector<T>> {
     selected = widget.initialValue ?? widget.options.first.value;
     super.initState();
   }
+
   @override
   void didUpdateWidget(covariant TwsOptionsSelector<T> oldWidget) {
-    if(selected != widget.initialValue){
+    if (selected != widget.initialValue) {
       selected = widget.initialValue ?? selected;
     }
     super.didUpdateWidget(oldWidget);
@@ -60,35 +62,35 @@ class _TwsOptionsSelectorState<T> extends State<TwsOptionsSelector<T>> {
             children: <Builder>[
               for (int i = 0; i < widget.options.length; i++)
                 Builder(
-                  builder:(BuildContext context) {
-                    double maxWidth = widget.options[i].maxWidth - spacing/2;
+                  builder: (BuildContext context) {
+                    double maxWidth = widget.options[i].maxWidth - spacing / 2;
                     double minwidth =
                         widget.options[i].minWidth > widget.options[i].maxWidth
                             ? maxWidth
-                            : widget.options[i].minWidth - spacing/2;
-                    return  ConstrainedBox(
+                            : widget.options[i].minWidth - spacing / 2;
+                    return ConstrainedBox(
                       constraints: BoxConstraints(
                         minWidth: minwidth,
                         maxWidth: maxWidth,
                       ),
-                      child: TWSButtonFlat(
+                      child: ButtonFlat(
                         label: widget.options[i].title,
-                        disabled: widget.initialValue != null
-                            ? widget.options[i].value == selected
-                            : (widget.options[i].value == selected) || (!widget.enabled),
+                        disabled:
+                            widget.initialValue != null
+                                ? widget.options[i].value == selected
+                                : (widget.options[i].value == selected) ||
+                                    (!widget.enabled),
                         onTap: () async {
                           if (!widget.enabled) return;
                           setState(() {
                             selected = widget.options[i].value;
                           });
                           await widget.onSelect(widget.options[i].value);
-
                         },
                       ),
                     );
                   },
                 ),
-                
             ],
           ),
         );

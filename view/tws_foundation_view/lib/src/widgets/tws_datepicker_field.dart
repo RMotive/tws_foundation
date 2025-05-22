@@ -1,42 +1,57 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/extensions.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
 /// [TWSDatepicker] shows a datepicker dialog for date and time selection.
 class TWSDatepicker extends StatefulWidget {
   /// First selectable date.
   final DateTime firstDate;
+
   /// Last selectable date.
   final DateTime lastDate;
+
   /// Text field width.
   final double width;
+
   /// Text field heigth.
   final double height;
+
   /// Text field title.
   final String? label;
+
   /// Text field hintext.
   final String? hintText;
+
   /// Optional focus node.
   final FocusNode? focusNode;
+
   /// Default pre-selected Date.
   final DateTime? initialDate;
+
   /// Optional Text controller.
   final TextEditingController? controller;
+
   /// Defines if the user can interact with the widget.
   final bool isEnabled;
+
   /// show the prefix icon or not.
   final bool enablePrefix;
+
   /// Callback that return the selected options in the datepicker dialog.
   final void Function(String text)? onChanged;
+
   /// Validator for the text input.
   final String? Function(String? text)? validator;
+
   /// Suffix text at the end of [label] text.
   final String? suffixLabel;
+
   /// Add an aditional dialog to set the time in the date picked.
   final bool addTimePicker;
 
-  const TWSDatepicker({super.key,
+  const TWSDatepicker({
+    super.key,
     required this.firstDate,
     required this.lastDate,
     this.initialDate,
@@ -53,19 +68,21 @@ class TWSDatepicker extends StatefulWidget {
     this.suffixLabel,
     this.addTimePicker = false,
   });
-  
+
   @override
   State<TWSDatepicker> createState() => _TWSDatepickerState();
 }
 
 class _TWSDatepickerState extends State<TWSDatepicker> {
   String? _error;
-  
+
   final double borderWidth = 2;
   late TextEditingController ctrl;
   late final FocusNode fNode;
+
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager =
+      Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -81,26 +98,24 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
     pageColorStruct = themeManager.get().page;
   }
 
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       initializeThemes();
     });
   }
 
-
   @override
   void initState() {
     super.initState();
-    ctrl = widget.controller ??
-        TextEditingController(
-          text: widget.initialDate?.dateOnlyString,
-        );
+    ctrl =
+        widget.controller ??
+        TextEditingController(text: widget.initialDate?.dateOnlyString);
     fNode = widget.focusNode ?? FocusNode();
     themeManager.addEffect(ref, themeUpdateListener);
     initializeThemes();
     ctrl.addListener(() => setState(() {}));
   }
-  
+
   @override
   void didUpdateWidget(covariant TWSDatepicker oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -111,42 +126,41 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
 
     ctrl.addListener(() => setState(() {}));
   }
-  
+
   @override
   void dispose() {
     themeManager.removeEffect(ref);
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-        child: Material(
-          color: Colors.transparent,
-          child: TextFormField(
-            autofocus: true,
-            readOnly: true,
-            validator: widget.validator,
-            controller: ctrl,
-            focusNode: fNode,
-            enabled: widget.isEnabled,
-            cursorOpacityAnimates: true,
-            cursorWidth: 3,
-            cursorColor: colorStruct.fore,
-            onTap: () => _showDatePicker(),
-            style: TextStyle(
-              color: colorStruct.fore.withValues(alpha: .7),
-            ),
-            decoration: InputDecoration(
-              isDense: true,
-              errorText: _error,
-              errorMaxLines: 1,
-              suffixIconColor: colorStruct.back,
-              hintText: widget.hintText,
-              labelText: widget.suffixLabel == null? widget.label : null,
-              label: widget.suffixLabel != null
-                  ? Row(
+      child: Material(
+        color: Colors.transparent,
+        child: TextFormField(
+          autofocus: true,
+          readOnly: true,
+          validator: widget.validator,
+          controller: ctrl,
+          focusNode: fNode,
+          enabled: widget.isEnabled,
+          cursorOpacityAnimates: true,
+          cursorWidth: 3,
+          cursorColor: colorStruct.fore,
+          onTap: () => _showDatePicker(),
+          style: TextStyle(color: colorStruct.fore.withValues(alpha: .7)),
+          decoration: InputDecoration(
+            isDense: true,
+            errorText: _error,
+            errorMaxLines: 1,
+            suffixIconColor: colorStruct.back,
+            hintText: widget.hintText,
+            labelText: widget.suffixLabel == null ? widget.label : null,
+            label:
+                widget.suffixLabel != null
+                    ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(widget.label ?? ""),
@@ -159,9 +173,10 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
                         ),
                       ],
                     )
-                  : null,
-              prefixIcon: (widget.enablePrefix && ctrl.text.isNotEmpty)
-                  ? IconButton(
+                    : null,
+            prefixIcon:
+                (widget.enablePrefix && ctrl.text.isNotEmpty)
+                    ? IconButton(
                       tooltip: "Delete selection",
                       icon: Icon(
                         Icons.cancel,
@@ -176,70 +191,63 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
                         });
                       },
                     )
-                  : null,
-              suffixIcon: const Icon(
-                Icons.calendar_month,
+                    : null,
+            suffixIcon: const Icon(Icons.calendar_month),
+            labelStyle: TextStyle(color: colorStruct.fore),
+            errorStyle: TextStyle(color: errorColorStruct.fore),
+            hintStyle: TextStyle(color: colorStruct.fore),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: colorStruct.accent.withValues(alpha: .6),
+                width: borderWidth,
               ),
-              labelStyle: TextStyle(
-                color: colorStruct.fore,
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: disabledColorStruct.accent,
+                width: borderWidth,
               ),
-              errorStyle: TextStyle(
-                color: errorColorStruct.fore,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: errorColorStruct.accent.withValues(alpha: .7),
+                width: borderWidth,
               ),
-              hintStyle: TextStyle(
-                color: colorStruct.fore,
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: errorColorStruct.accent,
+                width: borderWidth,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: colorStruct.accent.withValues(alpha: .6),
-                  width: borderWidth,
-                ),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: disabledColorStruct.accent,
-                  width: borderWidth,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: errorColorStruct.accent.withValues(alpha: .7),
-                  width: borderWidth,
-                ),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: errorColorStruct.accent,
-                  width: borderWidth,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
+            ),
+            focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: colorStruct.accent,
                 width: borderWidth,
               ),
-              ),
             ),
           ),
-      )
+        ),
+      ),
     );
   }
-  Theme _themeDesigner(BuildContext context, Widget? child){
+
+  Theme _themeDesigner(BuildContext context, Widget? child) {
     return Theme(
       data: Theme.of(context).copyWith(
         colorScheme: ColorScheme.dark(
           surface: pageColorStruct.accent, //Background color
           primary: pageColorStruct.accent, // header background color
           onPrimary: pageColorStruct.fore, // header text color
-          onSurface: pageColorStruct.fore // body text color
+          onSurface: pageColorStruct.fore, // body text color
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: pageColorStruct.fore // button text color
-          )
-        )
+            foregroundColor: pageColorStruct.fore, // button text color
+          ),
+        ),
       ),
-      child: child!
+      child: child!,
     );
   }
 
@@ -252,20 +260,26 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
       context: context,
       initialDatePickerMode: DatePickerMode.year,
       initialDate: widget.initialDate,
-      firstDate: widget.firstDate, 
+      firstDate: widget.firstDate,
       lastDate: widget.lastDate,
-      builder: (BuildContext context, Widget? child) => _themeDesigner(context, child),
+      builder:
+          (BuildContext context, Widget? child) =>
+              _themeDesigner(context, child),
     );
 
-    if(widget.addTimePicker && mounted){
+    if (widget.addTimePicker && mounted) {
       time = await showTimePicker(
-        context: context, 
+        context: context,
         initialEntryMode: TimePickerEntryMode.inputOnly,
-        initialTime: TimeOfDay.fromDateTime(widget.initialDate ?? DateTime.now()),
-        builder: (BuildContext context, Widget? child) => _themeDesigner(context, child),
+        initialTime: TimeOfDay.fromDateTime(
+          widget.initialDate ?? DateTime.now(),
+        ),
+        builder:
+            (BuildContext context, Widget? child) =>
+                _themeDesigner(context, child),
       );
     }
-    if(date != null) {
+    if (date != null) {
       date = DateTime(
         date.year,
         date.month,
@@ -279,7 +293,8 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
       if (errorBuilt == null) {
         setState(() {
           _error = null;
-          ctrl.text = time != null? date!.fullDateString : date!.dateOnlyString;
+          ctrl.text =
+              time != null ? date!.fullDateString : date!.dateOnlyString;
           if (widget.onChanged != null) widget.onChanged!(ctrl.text);
         });
       } else {

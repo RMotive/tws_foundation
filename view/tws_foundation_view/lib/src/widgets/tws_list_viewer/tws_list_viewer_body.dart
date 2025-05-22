@@ -7,7 +7,7 @@ class _TwsListViewerBody<T> extends StatelessWidget {
   final Color tColor;
   final Color bColor;
   final String title;
-  final String Function(T set) tileTitle;  
+  final String Function(T set) tileTitle;
   final double? heigth;
   final TextAlign titleAlignment;
   final String emptyContentMessage;
@@ -24,7 +24,6 @@ class _TwsListViewerBody<T> extends StatelessWidget {
     required this.title,
     required this.tileTitle,
     this.customHeader,
-
   });
 
   @override
@@ -32,60 +31,52 @@ class _TwsListViewerBody<T> extends StatelessWidget {
     return Column(
       spacing: 5,
       children: <Widget>[
-        customHeader != null? customHeader!:
-        Row(
-          spacing: 10,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Text(
-              "$title: ",
-              style: TextStyle(
-                color: tColor,
-              ),
+        customHeader != null
+            ? customHeader!
+            : Row(
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text("$title: ", style: TextStyle(color: tColor)),
+                Text(
+                  content.length.toString(),
+                  style: TextStyle(color: tColor),
+                ),
+              ],
             ),
-            Text(
-              content.length.toString(),
-              style: TextStyle(
-                color: tColor,
-              ),
-            )
-          ],
-        ),
         const Divider(),
-        content.isNotEmpty? SizedBox(
-          height: heigth,
-          child: SingleChildScrollView(
-            child: Column(
-              children: List<Widget>.generate(content.length,
-              (int index){
-                return ColoredBox(
-                  color: bColor,
-                  child: SizedBox(
-                    width: double.maxFinite,
-                    child: Padding(
-                      padding: padding,
-                      child: Text(
-                        textAlign: titleAlignment,
-                        tileTitle(content[index]),
-                        style: TextStyle(
-                          color: tColor,
-                          fontSize: 15,
+        content.isNotEmpty
+            ? SizedBox(
+              height: heigth,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: List<Widget>.generate(content.length, (int index) {
+                    return ColoredBox(
+                      color: bColor,
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        child: Padding(
+                          padding: padding,
+                          child: Text(
+                            textAlign: titleAlignment,
+                            tileTitle(content[index]),
+                            style: TextStyle(color: tColor, fontSize: 15),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
+                ),
+              ),
+            )
+            : SizedBox(
+              height: 50,
+              child: TWSDisplayFlat(
+                color: FoundationColors.oceanBlue,
+                foreColor: FoundationColors.warmWhite,
+                display: emptyContentMessage,
+              ),
             ),
-          ),
-        )
-        : SizedBox(
-          height: 50,
-          child: TWSDisplayFlat(
-            color: TWSColors.oceanBlue, foreColor: TWSColors.warmWhite,
-            display: emptyContentMessage,
-          ),
-        ),
       ],
     );
   }

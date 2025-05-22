@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
 /// [TWSDropup] Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.
 /// The content in this section is an interactable list of [T] items.
@@ -36,17 +36,21 @@ class TWSDropup<T> extends StatefulWidget {
   State<TWSDropup<T>> createState() => _TWSDropupState<T>();
 }
 
-class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMixin {
+class _TWSDropupState<T> extends State<TWSDropup<T>>
+    with TickerProviderStateMixin {
   /// Cascade options link.
   final LayerLink layerLink = LayerLink();
+
   /// initialize State.
   CSMStates state = CSMStates.none;
+
   /// Theme color scheme.
-  // The theme behaviors may change in some statefull widgets. The [CSMGenericThemeOptions] and [CSMStateThemeOptions] approach is 
+  // The theme behaviors may change in some statefull widgets. The [CSMGenericThemeOptions] and [CSMStateThemeOptions] approach is
   // compatible with [TickerProviderStateMixin] and more complex states implementations.
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager =
+      Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -57,6 +61,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
 
   /// Options cascade overlay entry.
   late OverlayEntry? overlay;
+
   /// Currently selected item.
   late T currentItem;
   // --> Animations
@@ -75,9 +80,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            toogleDrawer(true).then(
-              (_) => updateState(CSMStates.none),
-            );
+            toogleDrawer(true).then((_) => updateState(CSMStates.none));
           },
           child: Stack(
             children: <Widget>[
@@ -93,28 +96,28 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
                   child: SizeTransition(
                     sizeFactor: expandAnimation,
                     child: ColoredBox(
-                      color: theme.background ?? TWSColors.ligthGrey,
+                      color: theme.background ?? FoundationColors.ligthGrey,
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 250,
-                        ),
+                        constraints: const BoxConstraints(maxHeight: 250),
                         child: SizedBox(
                           height: 16 + ((widget.items.length - 1) * 32),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             child: ListView.builder(
                               itemCount: widget.items.length,
                               itemBuilder: (_, int index) {
-                                bool current = widget.items[index] == currentItem;
+                                bool current =
+                                    widget.items[index] == currentItem;
                                 return MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {
                                       toogleDrawer(true).then(
-                                        (_) => updateState(CSMStates.none, currentItem: widget.items[index]),
+                                        (_) => updateState(
+                                          CSMStates.none,
+                                          currentItem: widget.items[index],
+                                        ),
                                       );
                                     },
                                     child: SizedBox(
@@ -124,7 +127,10 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
                                         child: Text(
                                           '${widget.items[index]}',
                                           style: TextStyle(
-                                            color: current ? theme.foreground : null,
+                                            color:
+                                                current
+                                                    ? theme.foreground
+                                                    : null,
                                           ),
                                         ),
                                       ),
@@ -158,7 +164,8 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
       animController.forward();
     }
   }
-  void themeUpdate(TWSFThemeB theming) {
+
+  void themeUpdate(FoundationThemeB theming) {
     setState(() {
       themeState = theming.primaryControlState;
       theme = state.evaluateTheme(themeState);
@@ -174,7 +181,6 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
       this.state = state;
       theme = state.evaluateTheme(themeState);
     });
-    
   }
 
   @override
@@ -187,7 +193,10 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
 
   @override
   void initState() {
-    assert(widget.items.isNotEmpty, 'The items list must have at least one item');
+    assert(
+      widget.items.isNotEmpty,
+      'The items list must have at least one item',
+    );
     super.initState();
     currentItem = widget.item;
     animController = AnimationController(
@@ -201,9 +210,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
     rotateAnimation = Tween<double>(
       begin: 0.0,
       end: .5,
-    ).animate(
-      CurvedAnimation(parent: animController, curve: Curves.easeInOut),
-    );
+    ).animate(CurvedAnimation(parent: animController, curve: Curves.easeInOut));
     themeManager.addEffect(ref, themeUpdate);
     themeState = themeManager.get().primaryControlState;
     theme = state.evaluateTheme(themeState);
@@ -242,7 +249,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
             updateState($in ? CSMStates.hovered : CSMStates.none);
           },
           child: ColoredBox(
-            color: theme.background ?? TWSColors.ligthGrey,
+            color: theme.background ?? FoundationColors.ligthGrey,
             child: SizedBox(
               width: 75,
               height: 30,
@@ -252,9 +259,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>> with TickerProviderStateMix
                 children: <Widget>[
                   Text(
                     '$currentItem',
-                    style: TextStyle(
-                      color: theme.foreground,
-                    ),
+                    style: TextStyle(color: theme.foreground),
                   ),
                   RotationTransition(
                     turns: rotateAnimation,

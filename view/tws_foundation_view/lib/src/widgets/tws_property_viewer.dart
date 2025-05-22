@@ -1,12 +1,12 @@
-
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
+
 /// [TWSPropertyViewer] Shows a text format for properties: Property title and the property value.
 final class TWSPropertyViewer extends StatelessWidget {
   /// Property name.
   final String label;
-  
+
   /// Property value.
   final String? value;
 
@@ -18,7 +18,8 @@ final class TWSPropertyViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+    final ThemeManagerI<FoundationThemeB> themeManager =
+        Injector.getThemeManager();
     final SimpleTheming pageTheme = themeManager.get().page;
 
     return Wrap(
@@ -27,17 +28,9 @@ final class TWSPropertyViewer extends StatelessWidget {
       children: <Widget>[
         Text(
           '$label:',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: pageTheme.fore
-          ),
+          style: TextStyle(fontWeight: FontWeight.w600, color: pageTheme.fore),
         ),
-        Text(
-          value ?? '---',
-          style: TextStyle(
-            color: pageTheme.fore
-          ),
-        ),
+        Text(value ?? '---', style: TextStyle(color: pageTheme.fore)),
       ],
     );
   }

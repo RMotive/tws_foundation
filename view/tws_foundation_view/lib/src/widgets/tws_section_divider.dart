@@ -1,27 +1,24 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
 /// [TWSSectionDivider] a custom divider component to divide the sections or sub-sections.
 /// This component shows horizontal line with a centered section name, ideal for dividing sections in a column.
 class TWSSectionDivider extends StatelessWidget {
   /// Divider color.
   final Color? color;
-  
+
   /// Centered text title.
   final String text;
-  
-  const TWSSectionDivider({
-    super.key,
-    this.color,
-    required this.text,
-  });
+
+  const TWSSectionDivider({super.key, this.color, required this.text});
 
   @override
   Widget build(BuildContext context) {
-    Color? mainColor = color; 
-    if(color == null){
-      final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+    Color? mainColor = color;
+    if (color == null) {
+      final ThemeManagerI<FoundationThemeB> themeManager =
+          Injector.getThemeManager();
       mainColor = themeManager.get().page.fore;
     }
 
@@ -29,11 +26,7 @@ class TWSSectionDivider extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: Divider(
-              color: mainColor,
-            )
-          ),
+          Expanded(child: Divider(color: mainColor)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
@@ -41,15 +34,11 @@ class TWSSectionDivider extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w100,
                 fontStyle: FontStyle.italic,
-                color: mainColor
+                color: mainColor,
               ),
             ),
           ),
-          Expanded(
-            child: Divider(
-              color: mainColor,
-            )
-          )
+          Expanded(child: Divider(color: mainColor)),
         ],
       ),
     );

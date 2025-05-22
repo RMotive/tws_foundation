@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/tws_view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/src/widgets/tws_list_tile.dart';
 import 'package:tws_foundation_view/src/widgets/tws_section.dart';
 import 'package:tws_foundation_view/src/widgets/twsf_loading_circule.dart';
 
 /// Header state class.
-final class _HeaderState extends ReactorB{}
+final class _HeaderState extends ReactorB {}
 
-/// [TwsSelectableList] Display a list of selectable items getted from a [TWSViewConsumeAdapter] class. 
+/// [TwsSelectableList] Display a list of selectable items getted from a [TWSViewConsumeAdapter] class.
 class TwsSelectableList<T> extends StatefulWidget {
   /// Section title.
   final String title;
@@ -28,7 +28,7 @@ class TwsSelectableList<T> extends StatefulWidget {
 
   /// Item background color.
   final Color? backgroundColor;
-  
+
   /// Item text color.
   final Color? textColor;
 
@@ -58,7 +58,7 @@ class TwsSelectableList<T> extends StatefulWidget {
 
   /// Interaction status flag.
   final bool enabled;
-  
+
   const TwsSelectableList({
     super.key,
     required this.title,
@@ -84,7 +84,8 @@ class TwsSelectableList<T> extends StatefulWidget {
 
 class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager =
+      Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -115,12 +116,11 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   late TWSFStateHolder waitingState;
   late void Function() waitingEffect;
 
-
   /// Waiting status.
   late bool waiting;
 
   // Theme method handler.
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
       pageColorTheme = theme.page;
@@ -132,14 +132,15 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     themeManager.removeEffect(ref);
     super.dispose();
   }
+
   @override
   void initState() {
     waitingState = TWSFStateHolder();
     waiting = false;
     selectedItems = widget.initialValues ?? <T>[];
     headerState = _HeaderState();
-    headerEffect = (){};
-    waitingEffect = (){};
+    headerEffect = () {};
+    waitingEffect = () {};
     themeManager.addEffect(ref, themeUpdateListener);
     primaryColorTheme = themeManager.get().primaryControlColor;
     pageColorTheme = themeManager.get().page;
@@ -150,35 +151,34 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
 
   @override
   void didUpdateWidget(covariant TwsSelectableList<T> oldWidget) {
-    if(selectedItems != widget.initialValues && widget.enabled){
+    if (selectedItems != widget.initialValues && widget.enabled) {
       selectedItems = widget.initialValues ?? selectedItems;
-    }else if(!widget.enabled){
+    } else if (!widget.enabled) {
       selectedItems = <T>[];
     }
     super.didUpdateWidget(oldWidget);
   }
-   
+
   @override
   Widget build(BuildContext context) {
-    tcolor = widget.enabled? widget.textColor ?? pageColorTheme.fore : widget.textColor?.withValues(alpha: 50) ?? pageColorTheme.fore.withAlpha(50);
+    tcolor =
+        widget.enabled
+            ? widget.textColor ?? pageColorTheme.fore
+            : widget.textColor?.withValues(alpha: 50) ??
+                pageColorTheme.fore.withAlpha(50);
     return TWSSection(
-      title: widget.title, 
+      title: widget.title,
       content: AsyncWidget<List<ViewOutput<dynamic>>>(
-        future:
-            () => widget.adapter.consume(1, 9999, ""), 
+        future: () => widget.adapter.consume(1, 9999, ""),
         loadingBuilder: (BuildContext ctx) {
           return Center(
-            child: CircularProgressIndicator(
-              color: pageColorTheme.fore,
-            ),
+            child: CircularProgressIndicator(color: pageColorTheme.fore),
           );
         },
-        errorBuilder:(__, Object? error, _) {
-          return const TWSDisplayFlat(
-            display: "Something go wrong",
-          );
+        errorBuilder: (__, Object? error, _) {
+          return const TWSDisplayFlat(display: "Something go wrong");
         },
-        successBuilder:(BuildContext ctx, List<ViewOutput<dynamic>> data) {
+        successBuilder: (BuildContext ctx, List<ViewOutput<dynamic>> data) {
           fetchedList = data.first.entities as List<T>;
           return Stack(
             children: <Widget>[
@@ -188,96 +188,98 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                   widget.customHeader != null
                       ? widget.customHeader!
                       : ReactiveWidget<_HeaderState>(
-                          reactor: headerState,
-                          builder: (BuildContext ctx, _HeaderState state) {
-                            headerEffect = state.react;
-                            return Row(
-                              spacing: 10,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  "Selected: ${selectedItems.length}",
-                                  style: TextStyle(
-                                    color: tcolor,
-                                  ),
-                                ),
-                                Text(
-                                  "${widget.title}: ${fetchedList.length.toString()}",
-                                  style: TextStyle(
-                                    color: tcolor,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                  const Divider(),
-                  fetchedList.isNotEmpty? 
-                    SizedBox(
-                      height: widget.heigth,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: List<Widget>.generate(fetchedList.length, (int index){
-                            T item = fetchedList[index];
-                            String title = widget.tileTitle(item);
-                            return TwsListTile(
-                              enabled: widget.enabled,
-                              width: double.maxFinite,
-                              label: title,
-                              textColor: tcolor,
-                              onHoverColor: pageColorTheme.accent,
-                              onHoverTextColor: pageColorTheme.accentAlt ?? pageColorTheme.fore,
-                              onTap: (bool selected) async {
-                                waiting = true;
-                                waitingEffect();
-
-                                if(selected){
-                                  selectedItems.add(item);
-                                }else{
-                                  selectedItems.remove(item);
-                                }
-                                await widget.onSelect(selected, item);
-                                waiting = false;
-                                waitingEffect();
-                                headerEffect();
-                              },
-                              evaluateSelection: () {
-                                if(widget.isEqual != null){
-                                  bool founded = false;
-                                  for(T selectedItem in selectedItems){
-                                    if(widget.isEqual!(selectedItem, item)){
-                                      founded = true;
-                                      break;
-                                    }
-                                  }
-                                  return founded;
-                                }
-                                return selectedItems.contains(item);
-                              },
-                            );
-                          }),
-                        ),
+                        reactor: headerState,
+                        builder: (BuildContext ctx, _HeaderState state) {
+                          headerEffect = state.react;
+                          return Row(
+                            spacing: 10,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                "Selected: ${selectedItems.length}",
+                                style: TextStyle(color: tcolor),
+                              ),
+                              Text(
+                                "${widget.title}: ${fetchedList.length.toString()}",
+                                style: TextStyle(color: tcolor),
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                    )
-                  : TWSDisplayFlat(
-                    display: widget.emptyContentMessage,
-                  ),
+                  const Divider(),
+                  fetchedList.isNotEmpty
+                      ? SizedBox(
+                        height: widget.heigth,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: List<Widget>.generate(
+                              fetchedList.length,
+                              (int index) {
+                                T item = fetchedList[index];
+                                String title = widget.tileTitle(item);
+                                return TwsListTile(
+                                  enabled: widget.enabled,
+                                  width: double.maxFinite,
+                                  label: title,
+                                  textColor: tcolor,
+                                  onHoverColor: pageColorTheme.accent,
+                                  onHoverTextColor:
+                                      pageColorTheme.accentAlt ??
+                                      pageColorTheme.fore,
+                                  onTap: (bool selected) async {
+                                    waiting = true;
+                                    waitingEffect();
+
+                                    if (selected) {
+                                      selectedItems.add(item);
+                                    } else {
+                                      selectedItems.remove(item);
+                                    }
+                                    await widget.onSelect(selected, item);
+                                    waiting = false;
+                                    waitingEffect();
+                                    headerEffect();
+                                  },
+                                  evaluateSelection: () {
+                                    if (widget.isEqual != null) {
+                                      bool founded = false;
+                                      for (T selectedItem in selectedItems) {
+                                        if (widget.isEqual!(
+                                          selectedItem,
+                                          item,
+                                        )) {
+                                          founded = true;
+                                          break;
+                                        }
+                                      }
+                                      return founded;
+                                    }
+                                    return selectedItems.contains(item);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      )
+                      : TWSDisplayFlat(display: widget.emptyContentMessage),
                 ],
               ),
               ReactiveWidget<TWSFStateHolder>(
-                reactor: waitingState, 
-                builder:(BuildContext ctx, TWSFStateHolder state) {
+                reactor: waitingState,
+                builder: (BuildContext ctx, TWSFStateHolder state) {
                   waitingEffect = state.react;
                   return Positioned.fill(
                     child: Visibility(
                       visible: waiting,
-                      child:AbsorbPointer(
+                      child: AbsorbPointer(
                         child: ColoredBox(
                           color: pageColorTheme.fore.withValues(alpha: 950),
                           child: TwsfLoadingCircle(
                             fit: BoxFit.scaleDown,
                             foreColor: pageColorTheme.back,
-                          )
+                          ),
                         ),
                       ),
                     ),

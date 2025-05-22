@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_dropup.dart';
 
 /// [TWSPagingSelector] Widget Row that shows paging data and paging selector,
@@ -23,7 +23,7 @@ class TWSPagingSelector extends StatefulWidget {
 
   /// Pages size options.
   final List<int> sizes;
-  
+
   /// Trigger method on select new page or size pages.
   final void Function(int page, int size) onChange;
 
@@ -44,7 +44,8 @@ class TWSPagingSelector extends StatefulWidget {
 
 class _TWSPagingSelectorState extends State<TWSPagingSelector> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager =
+      Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -55,12 +56,11 @@ class _TWSPagingSelectorState extends State<TWSPagingSelector> {
   late int page;
   late int size;
 
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       pageTheme = theme.page;
     });
   }
-
 
   @override
   void initState() {
@@ -97,18 +97,12 @@ class _TWSPagingSelectorState extends State<TWSPagingSelector> {
               children: <TextSpan>[
                 TextSpan(
                   text: '(${widget.items})',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w900,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w900),
                 ),
-                const TextSpan(
-                  text: ' records from ',
-                ),
+                const TextSpan(text: ' records from '),
                 TextSpan(
                   text: '(${widget.total})',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w900,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w900),
                 ),
               ],
             ),
@@ -127,9 +121,7 @@ class _TWSPagingSelectorState extends State<TWSPagingSelector> {
                   children: <TextSpan>[
                     TextSpan(
                       text: ' (${widget.total})',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w900),
                     ),
                   ],
                 ),
@@ -145,13 +137,11 @@ class _TWSPagingSelectorState extends State<TWSPagingSelector> {
                   children: <TextSpan>[
                     TextSpan(
                       text: ' (${widget.items})',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w900),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

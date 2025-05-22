@@ -2,7 +2,6 @@ part of 'tws_photo_taker.dart';
 
 ///
 final class _TWSPhotoTakerPhotoCamera extends StatefulWidget {
-
   ///
   final void Function(XFile) onSave;
 
@@ -10,20 +9,18 @@ final class _TWSPhotoTakerPhotoCamera extends StatefulWidget {
   final CameraDescription? camera;
 
   ///
-  const _TWSPhotoTakerPhotoCamera({
-    required this.camera,
-    required this.onSave,
-  });
+  const _TWSPhotoTakerPhotoCamera({required this.camera, required this.onSave});
 
   @override
-  State<_TWSPhotoTakerPhotoCamera> createState() => _TWSPhotoTakerPhotoCameraState();
+  State<_TWSPhotoTakerPhotoCamera> createState() =>
+      _TWSPhotoTakerPhotoCameraState();
 }
 
 class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
+  final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
 
-  late TWSFThemeB theme;
+  late FoundationThemeB theme;
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -48,12 +45,11 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   }
 
   ///
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       this.theme = theme;
     });
   }
-
 
   ///
   @override
@@ -63,34 +59,32 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
     theme = themeManager.get();
     _cameraDefinition = widget.camera;
     if (_cameraDefinition != null) {
-      _cameraPlatform.createCamera(_cameraDefinition!, ResolutionPreset.high).then(
-        (int cameraId) {
-          _cameraPlatform.initializeCamera(cameraId).then(
-            (_) {
-              setState(() {
-                _camera = cameraId;
-                initingCamera = false;
-              });
-            },
-          ).onError(
-            (Exception ex, StackTrace st) {
-              _advisor.exception('Unable to initialize camera', ex, st);
-              setState(() {
-                _camera = null;
-                initingCamera = false;
-              });
-            },
-          );
-        },
-      ).onError(
-        (Exception ex, StackTrace st) {
-          _advisor.exception('Unable to create camera', ex, st);
-          setState(() {
-            _camera = null;
-            initingCamera = false;
+      _cameraPlatform
+          .createCamera(_cameraDefinition!, ResolutionPreset.high)
+          .then((int cameraId) {
+            _cameraPlatform
+                .initializeCamera(cameraId)
+                .then((_) {
+                  setState(() {
+                    _camera = cameraId;
+                    initingCamera = false;
+                  });
+                })
+                .onError((Exception ex, StackTrace st) {
+                  _advisor.exception('Unable to initialize camera', ex, st);
+                  setState(() {
+                    _camera = null;
+                    initingCamera = false;
+                  });
+                });
+          })
+          .onError((Exception ex, StackTrace st) {
+            _advisor.exception('Unable to create camera', ex, st);
+            setState(() {
+              _camera = null;
+              initingCamera = false;
+            });
           });
-        },
-      );
     }
   }
 
@@ -125,7 +119,11 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                 child: _composeSafePreview(),
               ),
               child: Center(
-                child: Text(initingCamera ? 'Cargando cámara' : 'No hay cámaras disponibles'),
+                child: Text(
+                  initingCamera
+                      ? 'Cargando cámara'
+                      : 'No hay cámaras disponibles',
+                ),
               ),
             ),
             Align(
@@ -147,9 +145,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 24,
-                ),
+                padding: const EdgeInsets.only(bottom: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -158,23 +154,23 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                       child: Row(
                         spacing: 8,
                         children: <Widget>[
-                          TWSButtonFlat(
+                          ButtonFlat(
                             label: 'Guardar',
                             onTap: () {
                               widget.onSave(_photo!);
                               Injector.get<Router>().pop();
                             },
                           ),
-                          TWSButtonFlat(
+                          ButtonFlat(
                             label: 'Retomar',
                             onTap: () {
                               setState(() {
                                 _photo = null;
                               });
-                              
+
                               _cameraPlatform.resumePreview(_camera!);
                             },
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -184,23 +180,20 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                         enableFeedback: true,
                         color: theme.page.fore,
                         disabledColor: theme.primaryDisabledControl.back,
-                        icon: const Icon(
-                          Icons.camera,
-                          size: 48,
-                        ),
+                        icon: const Icon(Icons.camera, size: 48),
                         onPressed: () {
-                          if(_camera != null){
-                            _cameraPlatform.takePicture(_camera!).then(
-                              (XFile photo) {
-                                setState(() {
-                                  _photo = photo;
-                                });
-                              },
-                            );
+                          if (_camera != null) {
+                            _cameraPlatform.takePicture(_camera!).then((
+                              XFile photo,
+                            ) {
+                              setState(() {
+                                _photo = photo;
+                              });
+                            });
                           }
                         },
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

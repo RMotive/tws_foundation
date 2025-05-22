@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/widgets/tws_section.dart';
 import 'package:tws_foundation_view/src/widgets/twsf_loading_circule.dart';
 
@@ -11,19 +11,25 @@ import 'package:tws_foundation_view/src/widgets/twsf_loading_circule.dart';
 class TWSCascadeSection extends StatefulWidget {
   /// Section title.
   final String title;
+
   /// Header top display widget.
-  final Widget mainControl; 
+  final Widget mainControl;
+
   /// This method return a FutureOr widget to show when cascade is visible.
   /// This prevents unnecesary widget builds for a content that the user may not open.
-  /// 
+  ///
   /// [isShowing] is a cascade visibility status.
   final FutureOr<Widget> Function(bool isShowing) loadOnPress;
+
   /// Tool tip for colapse or expand icon.
   final String? tooltip;
+
   /// Section content padding.
   final EdgeInsets padding;
+
   /// Aligment for main controls row.
   final MainAxisAlignment mainAxisAlignment;
+
   /// Prevents the content to be rebuilded on press the cascade button.
   final bool preserveContent;
 
@@ -35,7 +41,7 @@ class TWSCascadeSection extends StatefulWidget {
     this.tooltip,
     this.preserveContent = true,
     this.padding = const EdgeInsets.symmetric(vertical: 10),
-    this.mainAxisAlignment =  MainAxisAlignment.spaceBetween,
+    this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
   });
 
   @override
@@ -44,7 +50,8 @@ class TWSCascadeSection extends StatefulWidget {
 
 class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager =
+      Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -64,30 +71,29 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
 
   /// Widget cascade content;
   late Widget content;
-  
-  void themeUpdateListener(TWSFThemeB theme) {
+
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       colorStruct = theme.primaryControlColor;
     });
   }
 
-
   void showCascade() async {
-    if(waiting) return;
+    if (waiting) return;
     waiting = true;
     setState(() {
       show = !show;
     });
+
     /// Validate if the widget builder was trigger.
-    if(!widget.preserveContent || content.runtimeType == Placeholder){
+    if (!widget.preserveContent || content.runtimeType == Placeholder) {
       content = await widget.loadOnPress(show);
-    }else{
+    } else {
       /// Use the current cascade content and execute the loadOnPress method, skipping rebuilding of the content.
       await widget.loadOnPress(show);
     }
     waiting = false;
     state.react();
-
   }
 
   @override
@@ -98,11 +104,10 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
     state = TWSFStateHolder();
     colorStruct = themeManager.get().primaryControlColor;
     themeManager.addEffect(ref, themeUpdateListener);
-
   }
 
   @override
-  void didUpdateWidget (TWSCascadeSection oldWidget) {
+  void didUpdateWidget(TWSCascadeSection oldWidget) {
     super.didUpdateWidget(oldWidget);
   }
 
@@ -114,7 +119,6 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
 
   @override
   Widget build(BuildContext context) {
-
     return TWSSection(
       padding: widget.padding,
       title: widget.title,
@@ -140,20 +144,18 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
                 color: Colors.white,
                 iconSize: 32,
                 onPressed: showCascade,
-                icon: const Icon(
-                  Icons.add,
-                ),
+                icon: const Icon(Icons.add),
               ),
             ],
           ),
           Visibility(
             visible: show,
             child: ReactiveWidget<TWSFStateHolder>(
-              reactor: state, 
-              builder:(BuildContext ctx, TWSFStateHolder state) {
+              reactor: state,
+              builder: (BuildContext ctx, TWSFStateHolder state) {
                 stateEffect = state.react();
                 print('effect...');
-                return  Visibility(
+                return Visibility(
                   visible: !waiting,
                   replacement: TwsfLoadingCircle(
                     foreColor: colorStruct.accentAlt ?? colorStruct.accent,

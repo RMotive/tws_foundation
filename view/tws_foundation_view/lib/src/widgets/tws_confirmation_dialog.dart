@@ -2,22 +2,27 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
-import 'package:tws_foundation_view/src/widgets/tws_button_flat.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/widgets/button_flat.dart';
 
 /// [TWSConfirmationDialog] Widget designed to be implemented in a [showdialog] method.
 /// Displays a dialog window with a header, body content and confirmation action buttons.
 final class TWSConfirmationDialog extends StatefulWidget {
   /// Dialog title.
   final String title;
+
   /// Text content.
   final Text? statement;
+
   /// Show an optional cancel button.
   final bool showCancelButton;
+
   /// Accept button text.
   final String accept;
+
   /// Trigger on close dialog.
   final VoidCallback? onClose;
+
   /// Trigger on accept dialog.
   final FutureOr<void> Function()? onAccept;
 
@@ -36,11 +41,11 @@ final class TWSConfirmationDialog extends StatefulWidget {
 }
 
 class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
-
-  late TWSFThemeB theme;
+  late FoundationThemeB theme;
 
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager =
+      Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -69,14 +74,13 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
     super.dispose();
   }
 
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       this.theme = theme;
       pageTheme = theme.page;
       dangerTheme = theme.primaryCriticalControl;
     });
   }
-
 
   bool _keyHandler(KeyEvent event) {
     final String key = event.logicalKey.keyLabel;
@@ -97,7 +101,6 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     final SimpleTheming pageTheme = theme.page;
     final SimpleTheming dangerTheme = theme.primaryCriticalControl;
 
@@ -112,16 +115,10 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
         Navigator.of(context).pop();
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 12,
-          horizontal: 20,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 600,
-              maxHeight: 450,
-            ),
+            constraints: const BoxConstraints(maxWidth: 600, maxHeight: 450),
             child: GestureDetector(
               onTap: () {},
               child: ColoredBox(
@@ -139,7 +136,7 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                             Text(
                               widget.title,
                               style: TextStyle(
-                                color:  pageTheme.accentAlt ?? pageTheme.fore,
+                                color: pageTheme.accentAlt ?? pageTheme.fore,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -148,7 +145,8 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   IconButton(
-                                    onPressed: loading ? null : () => _close(context),
+                                    onPressed:
+                                        loading ? null : () => _close(context),
                                     icon: Icon(
                                       Icons.close,
                                       color: dangerTheme.accent,
@@ -167,10 +165,9 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                         child: Padding(
                           padding: const EdgeInsets.all(20),
                           child: DefaultTextStyle(
-                            style: TextStyle(
-                              color: pageTheme.fore,
-                            ),
-                            child: widget.statement ??
+                            style: TextStyle(color: pageTheme.fore),
+                            child:
+                                widget.statement ??
                                 const Text(
                                   'Are you sure you want to continue?',
                                 ),
@@ -190,7 +187,7 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                           spacing: 12,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            TWSButtonFlat(
+                            ButtonFlat(
                               label: widget.accept,
                               onTap: () async {
                                 if (widget.onAccept == null) {
@@ -203,13 +200,13 @@ class _TWSConfirmationDialogState extends State<TWSConfirmationDialog> {
                             ),
                             Visibility(
                               visible: widget.showCancelButton,
-                              child: TWSButtonFlat(
+                              child: ButtonFlat(
                                 label: 'Cancel',
                                 disabled: loading,
                                 themeOptions: dangerTheme,
                                 onTap: () => _close(context),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

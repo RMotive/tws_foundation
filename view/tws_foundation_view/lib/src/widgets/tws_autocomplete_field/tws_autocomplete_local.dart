@@ -24,27 +24,25 @@ class _TWSAutocompleteNative<T> extends StatelessWidget {
     required this.onFirstBuild,
     required this.tileHeigth,
     required this.firstBuild,
-    required this.rawData
+    required this.rawData,
   });
 
   @override
   Widget build(BuildContext context) {
-    return suggestions.isNotEmpty || firstBuild? Scrollbar(
-      trackVisibility: true,
-      thumbVisibility: true,
-      controller: controller,
-      child: _TWSAutocompleteList<T>(
-        controller: controller,
-        list: firstBuild? onFirstBuild() : suggestions,
-        displayLabel: displayLabel,
-        theme: theme,
-        hoverTextColor: hoverTextColor,
-        onTap: onTap,
-      )
-    ) 
-    : _TWSAutocompleteNotfound(
-      height: tileHeigth, 
-      color: loadingColor
-    );
+    return suggestions.isNotEmpty || firstBuild
+        ? Scrollbar(
+          trackVisibility: true,
+          thumbVisibility: true,
+          controller: controller,
+          child: _TWSAutocompleteList<T>(
+            controller: controller,
+            list: firstBuild ? onFirstBuild() : suggestions,
+            displayLabel: displayLabel,
+            theme: theme,
+            hoverTextColor: hoverTextColor,
+            onTap: onTap,
+          ),
+        )
+        : _TWSAutocompleteNotfound(height: tileHeigth, color: loadingColor);
   }
 }

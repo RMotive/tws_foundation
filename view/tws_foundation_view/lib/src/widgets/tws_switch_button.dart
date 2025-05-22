@@ -38,7 +38,8 @@ class TWSSwitchButton extends StatefulWidget {
 
 class _TWSSwitchButtonState extends State<TWSSwitchButton> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager =
+      Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -66,12 +67,11 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
     themeManager.removeEffect(ref);
   }
 
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       primaryColorTheme = theme.primaryControlColor;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +79,7 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
       padding: widget.padding,
       child: Column(
         children: <Widget>[
-          Text(
-            widget.title,
-            style: TextStyle(
-              color: primaryColorTheme.fore,
-            ),
-          ),
+          Text(widget.title, style: TextStyle(color: primaryColorTheme.fore)),
           Row(
             spacing: 10,
             mainAxisSize: MainAxisSize.min,
@@ -100,7 +95,7 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
                       activeColor: primaryColorTheme.foreAlt,
                       activeTrackColor: primaryColorTheme.back,
                       onChanged: (bool change) async {
-                        if(waiting) return;
+                        if (waiting) return;
                         setState(() {
                           waiting = true;
                           _value = change;
@@ -116,7 +111,7 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
                 visible: waiting,
                 child: TwsfLoadingCircle(
                   padding: EdgeInsets.zero,
-                  foreColor: primaryColorTheme.accent
+                  foreColor: primaryColorTheme.accent,
                 ),
               ),
             ],

@@ -8,7 +8,11 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
   final String Function(T?) displayLabel;
   final String Function(T?)? suffixLabel;
   final void Function(String label, T? item) onTap;
-  final void Function(List<ViewOutput<dynamic>> data, _TWSAutoCompleteFieldFutureState<T> state) onFetch;
+  final void Function(
+    List<ViewOutput<dynamic>> data,
+    _TWSAutoCompleteFieldFutureState<T> state,
+  )
+  onFetch;
   final Color loadingColor;
   final Color hoverTextColor;
   final AsyncWidgetController agent;
@@ -26,7 +30,7 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
     required this.tileHeigth,
     required this.agent,
     required this.state,
-    this.suffixLabel
+    this.suffixLabel,
   });
 
   List<T> getSets(List<ViewOutput<dynamic>> rawData) {
@@ -43,47 +47,54 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
       future: consume,
       agent: agent,
       emptyCheck: (List<ViewOutput<dynamic>> data) {
-        onFetch(data, state); 
+        onFetch(data, state);
         int cont = 0;
-        for(ViewOutput<dynamic> view in data){
+        for (ViewOutput<dynamic> view in data) {
           cont += view.entities.length;
         }
-        return cont == 0? true: false;
+        return cont == 0 ? true : false;
       },
       loadingBuilder: (_) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
           child: CircularProgressIndicator(
-            backgroundColor: TWSColors.darkGrey,
+            backgroundColor: FoundationColors.darkGrey,
             color: loadingColor,
             strokeWidth: 4,
           ),
         );
       },
-      errorBuilder: (BuildContext ctx, Object? error, List<ViewOutput<dynamic>>? data) {
+      errorBuilder: (
+        BuildContext ctx,
+        Object? error,
+        List<ViewOutput<dynamic>>? data,
+      ) {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: TWSDisplayFlat(
-            display: error == null? 'No hay resultados' : "Problema al cargar",
+            display: error == null ? 'No hay resultados' : "Problema al cargar",
           ),
         );
       },
-      successBuilder: (BuildContext ctx, List<ViewOutput<dynamic>> rawData) {     
+      successBuilder: (BuildContext ctx, List<ViewOutput<dynamic>> rawData) {
         return Scrollbar(
           trackVisibility: true,
           thumbVisibility: true,
           controller: controller,
           child: ReactiveWidget<_TWSAutoCompleteFieldFutureState<T>>(
-            reactor: _TWSAutoCompleteFieldFutureState<T>(), 
-            builder:(BuildContext ctx, _TWSAutoCompleteFieldFutureState<T> state) {
+            reactor: _TWSAutoCompleteFieldFutureState<T>(),
+            builder: (
+              BuildContext ctx,
+              _TWSAutoCompleteFieldFutureState<T> state,
+            ) {
               onFetch(rawData, state);
               List<T> data = state.preloadedItems;
-              if(data.isEmpty){
+              if (data.isEmpty) {
                 data = getSets(rawData);
-              }  
+              }
               return _TWSAutocompleteList<T>(
                 controller: controller,
-                list: data ,
+                list: data,
                 suffixLabel: suffixLabel,
                 displayLabel: displayLabel,
                 theme: theme,

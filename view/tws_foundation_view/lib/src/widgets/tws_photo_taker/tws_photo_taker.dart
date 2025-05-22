@@ -4,8 +4,8 @@ import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router;
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
-import 'package:tws_foundation_view/src/widgets/tws_button_flat.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/widgets/button_flat.dart';
 import 'package:tws_foundation_view/src/widgets/tws_file_picker.dart';
 part 'tws_photo_taker_photo_preview.dart';
 part 'tws_photo_taker_camera.dart';
@@ -17,7 +17,7 @@ final CameraPlatform _cameraPlatform = CameraPlatform.instance;
 const Console _advisor = Console('TWSPhotoTaker');
 
 /// [TWSPhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
-/// 
+///
 /// This widget can:
 ///   - Take photos using devices with camera capabilities (mobile or PC).
 ///   - Select and load any image file in local storage (mobile or PC).
@@ -27,7 +27,7 @@ final class TWSPhotoTaker extends StatefulWidget {
 
   /// Trigger method on take a photo.
   final void Function(XFile photo)? onPhotoTaken;
-  
+
   /// Disable controls component.
   final bool disabled;
 
@@ -39,18 +39,18 @@ final class TWSPhotoTaker extends StatefulWidget {
 
   /// Preload and base64 img.
   /// An alternative for [Preload] property if an [XFile] image is not available.
-  /// 
+  ///
   /// This property is designed for manage state images while editing and updating records that not contain an [XFile] image.
-  /// In this cases this property must contain the image data reference that is beign updated. 
-  /// 
+  /// In this cases this property must contain the image data reference that is beign updated.
+  ///
   /// See update whispers implementations.
   final String? preLoadBase64;
 
   /// Method to trigger when the cancel button is clicked or the file selection dialog is closed and it's empty.
-  final void Function()? onCancel; 
+  final void Function()? onCancel;
 
   /// Enabled the cancel current image loaded.
-  /// 
+  ///
   /// Ideal when is updating some records and want to delete the preloaded image.
   final bool cancelButtonEnable;
 
@@ -72,9 +72,9 @@ final class TWSPhotoTaker extends StatefulWidget {
 
 class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   /// Theme Manager injector.
-  final ThemeManagerI<TWSFThemeB> themeManager = Injector.get();
+  final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
 
-  late TWSFThemeB theme;
+  late FoundationThemeB theme;
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -129,7 +129,9 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
     super.initState();
     themeManager.addEffect(ref, themeUpdateListener);
     theme = themeManager.get();
-    if(widget.preLoadBase64 != null) originalImg = base64.decode(widget.preLoadBase64!);
+    if (widget.preLoadBase64 != null) {
+      originalImg = base64.decode(widget.preLoadBase64!);
+    }
     getCameras();
   }
 
@@ -139,12 +141,11 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
     super.dispose();
   }
 
-  void themeUpdateListener(TWSFThemeB theme) {
+  void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
       this.theme = theme;
     });
   }
-
 
   void _openCameraDialog() {
     showDialog(
@@ -165,7 +166,6 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Column(
       spacing: 8,
       children: <Widget>[
@@ -173,7 +173,9 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
           TwsFilePicker(
             dialogTitle: "Select a picture",
             fileType: FileType.image,
-            cancelEnable: (_photo != null || widget.preLoadBase64 != null) && widget.cancelButtonEnable,
+            cancelEnable:
+                (_photo != null || widget.preLoadBase64 != null) &&
+                widget.cancelButtonEnable,
             onSelect: (List<XFile> xFiles, List<PlatformFile> files) {
               setState(() {
                 _photo = xFiles.first;
@@ -183,15 +185,16 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
             onCancel: () {
               setState(() {
                 _photo = null;
-                widget.onCancel?.call();            
+                widget.onCancel?.call();
               });
             },
           ),
-        TWSButtonFlat(
+        ButtonFlat(
           disabled: _loadingCamera || _cameras.isEmpty || widget.disabled,
-          label: _loadingCamera
-              ? 'Obteniendo información de las cámaras'
-              : _cameras.isNotEmpty
+          label:
+              _loadingCamera
+                  ? 'Obteniendo información de las cámaras'
+                  : _cameras.isNotEmpty
                   ? widget.label
                   : 'No hay cámaras disponibles',
           onTap: _openCameraDialog,
@@ -206,37 +209,30 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
                 onClick: () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) =>
-                        _TWSPhotoTakerPhotoPreview(
-                      file: _photo,
-                      originalBytes: originalImg,
-                    ),
+                    builder:
+                        (BuildContext context) => _TWSPhotoTakerPhotoPreview(
+                          file: _photo,
+                          originalBytes: originalImg,
+                        ),
                   );
                 },
-                child: _photo == null && originalImg != null
-                  ? SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: Image.memory(
-                        originalImg!
-                      ),
-                    )
-                  : Image.network(
-                  _photo?.path ?? '',
-                  width: 48,
-                  height: 48,
-                ),
+                child:
+                    _photo == null && originalImg != null
+                        ? SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: Image.memory(originalImg!),
+                        )
+                        : Image.network(
+                          _photo?.path ?? '',
+                          width: 48,
+                          height: 48,
+                        ),
               ),
-              child: Icon(
-                Icons.photo,
-                size: 48,
-                color: theme.page.fore,
-              ),
+              child: Icon(Icons.photo, size: 48, color: theme.page.fore),
             ),
             Text(
-              style: TextStyle(
-                color: theme.page.fore,
-              ),
+              style: TextStyle(color: theme.page.fore),
               _photo == null && widget.preLoadBase64 == null
                   ? 'Vacío'
                   : 'Foto guardada',

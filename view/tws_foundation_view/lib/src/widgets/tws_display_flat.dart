@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
 /// [TWSDisplayFlat] Displays an stylized text container.
 class TWSDisplayFlat extends StatelessWidget {
@@ -21,7 +21,7 @@ class TWSDisplayFlat extends StatelessWidget {
 
   /// Background Color.
   final Color? color;
-  
+
   /// Text color.
   final Color? foreColor;
 
@@ -38,24 +38,18 @@ class TWSDisplayFlat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeB> themeManager = Injector.getThemeManager();
+    final ThemeManagerI<FoundationThemeB> themeManager =
+        Injector.getThemeManager();
     final SimpleTheming colorStruct = themeManager.get().primaryControlColor;
 
     Color baseColor = color ?? colorStruct.accent;
 
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: maxHeight ?? double.infinity,
-      ),
+      constraints: BoxConstraints(maxHeight: maxHeight ?? double.infinity),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: baseColor.withValues(alpha: .3),
-          border: Border.fromBorderSide(
-            BorderSide(
-              color: baseColor,
-              width: 2,
-            ),
-          ),
+          border: Border.fromBorderSide(BorderSide(color: baseColor, width: 2)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: SizedBox(
@@ -72,7 +66,8 @@ class TWSDisplayFlat extends StatelessWidget {
                   display,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: foreColor ?? colorStruct.accentAlt ?? colorStruct.fore,
+                    color:
+                        foreColor ?? colorStruct.accentAlt ?? colorStruct.fore,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

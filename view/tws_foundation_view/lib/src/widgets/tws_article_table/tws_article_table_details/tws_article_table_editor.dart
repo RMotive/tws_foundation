@@ -1,10 +1,13 @@
 part of '../tws_article_table.dart';
+
 /// [TWSArticleTableEditor] Record update editor form for [TWSArticleTable].
 final class TWSArticleTableEditor extends StatelessWidget {
   /// Form content.
   final Widget form;
+
   /// On cancel or close form editor.
   final Function onCancel;
+
   /// On save form.
   final FutureOr<void> Function()? onSave;
 
@@ -44,12 +47,8 @@ final class TWSArticleTableEditor extends StatelessWidget {
         // --> Custom content
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(
-              top: 12,
-            ),
-            child: SizedBox(
-              child: form,
-            ),
+            padding: const EdgeInsets.only(top: 12),
+            child: SizedBox(child: form),
           ),
         ),
       ],

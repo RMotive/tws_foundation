@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/twsf_theme_b.dart';
+import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
 /// TWS Business component.
 ///
@@ -34,10 +34,7 @@ class TWSSection extends StatelessWidget {
   const TWSSection({
     super.key,
     this.isOptional = false,
-    this.padding = const EdgeInsets.symmetric(
-      horizontal: 15,
-      vertical: 20,
-    ),
+    this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
     this.borderColor,
     this.textStyle,
     required this.title,
@@ -46,19 +43,22 @@ class TWSSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<TWSFThemeB> themeManager =
+    final ThemeManagerI<FoundationThemeB> themeManager =
         Injector.getThemeManager();
     final SimpleTheming pageTheme = themeManager.get().page;
-    final Color bColor = isOptional ? pageTheme.fore.withValues(alpha: .5) : borderColor ?? pageTheme.accent;
+    final Color bColor =
+        isOptional
+            ? pageTheme.fore.withValues(alpha: .5)
+            : borderColor ?? pageTheme.accent;
     return Padding(
       padding: padding,
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.fromBorderSide(
             BorderSide(
-              width: 2, 
+              width: 2,
               color: bColor,
-              strokeAlign: BorderSide.strokeAlignCenter
+              strokeAlign: BorderSide.strokeAlignCenter,
             ),
           ),
         ),
@@ -76,22 +76,20 @@ class TWSSection extends StatelessWidget {
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
                         title,
-                        style: textStyle ??
-                        TextStyle(
-                          color: pageTheme.fore,
-                          fontSize: 18,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style:
+                            textStyle ??
+                            TextStyle(
+                              color: pageTheme.fore,
+                              fontSize: 18,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: content,
-              ),
+              Padding(padding: const EdgeInsets.all(20.0), child: content),
             ],
           ),
         ),
