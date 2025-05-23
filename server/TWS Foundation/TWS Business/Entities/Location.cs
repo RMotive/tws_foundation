@@ -64,6 +64,11 @@ public class Location
     /// </summary>
     public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
+    /// <summary>
+    ///     <see cref="Entities.Waypoint"/> dependant from this <see cref="Waypoint"/>.
+    /// </summary>
+    public Waypoint? Waypoint { get; set; }
+
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

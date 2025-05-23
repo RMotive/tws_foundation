@@ -15,7 +15,7 @@ public class Manufacturer
 
     #region Properties
 
-    [StringLength(100)]
+    [StringLength(100, MinimumLength = 1)]
     public string Name { get; set; } = default!;
 
     [StringLength(maximumLength: 200)]

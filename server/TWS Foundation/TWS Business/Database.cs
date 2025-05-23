@@ -169,6 +169,9 @@ public class Database
 
     public DbSet<Section> Sections { get; set; } = default!;
 
+    public DbSet<Waypoint> Waypoints { get; set; } = default!;
+
+
     #endregion
 
     #region YardLogs
