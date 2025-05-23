@@ -21,7 +21,7 @@ public class Identification
     /// <remarks>
     ///     For more than one name split with double space.
     /// </remarks>
-    [StringLength(100, MinimumLength = 1)]
+    [StringLength(32, MinimumLength = 1)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>

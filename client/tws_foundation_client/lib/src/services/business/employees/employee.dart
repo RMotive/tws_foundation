@@ -1,12 +1,13 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/constants.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/approach.dart';
 import 'package:tws_foundation_client/src/entities/business/identification.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/addresses/address.dart';
 import 'package:tws_foundation_client/src/services/business/employees/employee_dates.dart';
 
-final class Employee extends NamedEntityB<Employee> {
+final class Employee extends EntityB<Employee> {
   /// [curp] property key.
   static const String kCurp = "curp";
 
@@ -44,10 +45,13 @@ final class Employee extends NamedEntityB<Employee> {
   String? nss;
   
   /// [Identification] set navigation.
-  Identification? identification;
+  Identification identification = Identification();
 
   /// [Status] set navigation.
-  Status? status;
+  Status status = Status();
+
+  /// [EmployeeDates]/Contact set navigation.
+  EmployeeDates dates = EmployeeDates();
 
   /// [Address] set navigation.
   Address? address;
@@ -55,8 +59,6 @@ final class Employee extends NamedEntityB<Employee> {
   /// [Approach]/Contact set navigation.
   Approach? approach;
 
-  /// [EmployeeDates]/Contact set navigation.
-  EmployeeDates? dates;
 
   /// Generates a new [Employee] instance from mandatory values.
   Employee();
@@ -68,11 +70,11 @@ final class Employee extends NamedEntityB<Employee> {
           kCurp: curp,
           kRfc: rfc,
           kNss: nss,
-          kIdentification: identification?.encode(),
-          EntitiesCommonProperties.kStatus: status?.encode(),
+          kIdentification: identification.encode(),
+          EntitiesCommonProperties.kStatus: status.encode(),
           kAddress: address?.encode(),
           kApproach: approach?.encode(),
-          kEmployeeDates: dates?.encode(),
+          kEmployeeDates: dates.encode(),
           // TODO add drivers model
       },
     );
@@ -86,13 +88,13 @@ final class Employee extends NamedEntityB<Employee> {
     nss = encode.get(kNss, null);
     if(encode[EntitiesCommonProperties.kStatus] != null){
       status = Status();
-      status!.decode(
+      status.decode(
           encode.get(EntitiesCommonProperties.kStatus, <String, dynamic>{}));
     }
 
     if(encode[kIdentification] != null){
       identification = Identification();
-      identification!.decode(
+      identification.decode(
           encode.get(kIdentification, <String, dynamic>{}));
     }
 
@@ -110,7 +112,7 @@ final class Employee extends NamedEntityB<Employee> {
 
     if(encode[kEmployeeDates] != null){
       dates = EmployeeDates();
-      dates!.decode(
+      dates.decode(
           encode.get(kEmployeeDates, <String, dynamic>{}));
     }
   }
@@ -118,19 +120,7 @@ final class Employee extends NamedEntityB<Employee> {
   @override
   List<EntityInvalidation<Employee>> evaluate() {
     List<EntityInvalidation<Employee>> results = <EntityInvalidation<Employee>>[];
-
-    if (name.isEmpty) results.add(EntityInvalidation<Employee>(this, PropertyInfo('Name', String, name), 'Name can\'t be empty', 'notEmpty'));
-     if(identification == null || (identification != null && identification!.id < BigInt.zero)) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kIdentification, Identification, identification), 'Identification pointer must be equal or greater than 0, or set a navigation', 'pointerHandler()'));
-   
-    if(address != null){
-      if(address!.id < BigInt.zero) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kAddress, Address, address), 'Address pointer must be equal or greater than 0', 'pointerHandler()'));
-    }
-
-    if(approach != null){
-      if(approach!.id < BigInt.zero) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kApproach, Approach, approach), 'Approach pointer must be equal or greater than 0', 'pointerHandler()'));
-    }
-    
-    if(status == null || ( status != null && status!.id < BigInt.zero)) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kStatus, Status, status), 'Status pointer must be equal or greater than 0', 'pointerHandler()'));
+    if (id < BigInt.zero) results.add(EntityInvalidation<Employee>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
 
     if(curp != null){
       if(curp!.length != 18) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kCurp, String, curp), "CURP number must be 18 length", "strictLength(18)"));
@@ -143,10 +133,12 @@ final class Employee extends NamedEntityB<Employee> {
     if(nss != null){
       if(nss!.length != 11) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kNss, String, nss), "The NSS number must be 11 character length", "structLength(11)"));
     }
-
-    // if(identificationNavigation != null) results = <CSMSetValidationResult>[...results, ...identificationNavigation!.evaluate()];   
-    // if(addressNavigation != null) results = <CSMSetValidationResult>[...results, ...addressNavigation!.evaluate()];   
-    // if(approachNavigation != null) results = <CSMSetValidationResult>[...results, ...approachNavigation!.evaluate()];   
+    
+    results.validateDependency(this, status);
+    results.validateDependency(this, dates);
+    results.validateDependency(this, identification);
+    if(address != null) results.validateDependency(this, address!);
+    if(approach != null) results.validateDependency(this, approach!);
 
     return results;
   }

@@ -1,5 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/constants.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 
 final class Plate extends EntityB<Plate> {
@@ -35,7 +36,7 @@ final class Plate extends EntityB<Plate> {
   /// Trailer 
 
   /// Entity [Status] information.
-  Status?  status;
+  Status status = Status();
 
   /// Generates a new [Plate] instance from mandatory values.
   Plate();
@@ -44,7 +45,7 @@ final class Plate extends EntityB<Plate> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
         <String, Object?>{
-          EntitiesCommonProperties.kStatus: status?.encode(),
+          EntitiesCommonProperties.kStatus: status.encode(),
       },
     );
   }
@@ -52,11 +53,8 @@ final class Plate extends EntityB<Plate> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
-    if(encode[EntitiesCommonProperties.kStatus] != null){
-      status = Status();
-      status!.decode(
-          encode.get(EntitiesCommonProperties.kStatus, DataMap()));
-    }  
+    status = Status();
+    status.decode(encode.get(EntitiesCommonProperties.kStatus));
   }
 
   @override
@@ -64,11 +62,13 @@ final class Plate extends EntityB<Plate> {
     List<EntityInvalidation<Plate>> results = <EntityInvalidation<Plate>>[];
 
     if (id < BigInt.zero) results.add(EntityInvalidation<Plate>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
-    if(identifier.length < 5 || identifier.length > 12) results.add(EntityInvalidation<Plate>(this, PropertyInfo(kIdentifier, String, kIdentifier), "Identifier length must be between 8 and 12", "strictLength(8,12)"));
-    if(state != null){
-      if(state!.length < 2 || state!.length > 4) results.add(EntityInvalidation<Plate>(this, PropertyInfo(kState, String, kState), "State length must be between 2 and 4", "strictLength(2,4)"));
+    if (identifier.trim().length < 5 || identifier.length > 12) results.add(EntityInvalidation<Plate>(this, PropertyInfo(kIdentifier, String, kIdentifier), "Identifier length must be between 8 and 12", "strictLength(8,12)"));
+    if (state != null){
+      if (state!.length < 2 || state!.length > 4) results.add(EntityInvalidation<Plate>(this, PropertyInfo(kState, String, kState), "State length must be between 2 and 4", "strictLength(2,4)"));
     }
     if(country.length <2 || country.length > 3) results.add(EntityInvalidation<Plate>(this, PropertyInfo(kCountry, String, kCountry), "Country length must be between 2 and 3", "strictLength(2,3)"));
+    
+    results.validateDependency(this, status);
 
     return results;
   }

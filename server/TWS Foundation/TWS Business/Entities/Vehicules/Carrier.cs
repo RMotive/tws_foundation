@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,8 +18,10 @@ public class Carrier
     : BEntity, INamedEntity, IHistorical<Carrier_History> {
 
     #region Properties
-
+    [StringLength(100)]
     public string Name { get; set; } = string.Empty;
+
+    [StringLength(maximumLength: 200)]
     public string? Description { get; set; }
 
     #endregion

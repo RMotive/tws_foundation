@@ -22,7 +22,7 @@ public class TruckExternal
     /// <summary>
     ///     External truck vehicule number identifier.
     /// </summary>
-    [StringLength(17)]
+    [StringLength(17, MinimumLength = 1)]
     public string? VIN { get; set; }
 
     /// <summary>

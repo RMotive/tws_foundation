@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using CSM_Foundation.Database.Entity;
 
@@ -12,8 +13,10 @@ public class Trailer_Class
     : BEntity, INamedEntity {
 
     #region Properties
-
+    [StringLength(100)]
     public string Name { get; set; } = default!;
+
+    [StringLength(maximumLength: 200)]
     public string? Description { get; set; }
 
     #endregion

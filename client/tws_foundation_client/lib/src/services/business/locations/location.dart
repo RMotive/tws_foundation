@@ -1,5 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/constants.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/addresses/address.dart';
 
@@ -11,13 +12,13 @@ final class Location extends NamedEntityB<Location> {
   static const String kWaypoint = "waypoint";
 
   /// [Address] navigation set.
-  Address? address;
+  Address address = Address();
 
   /// [Waypoint] navigation set.
   // Waypoint? waypointNavigation;
 
   /// [Status] navigation set.
-  Status? status;
+  Status status = Status();
 
   /// Generates a new [Location] instance from mandatory values.
   Location();
@@ -25,10 +26,9 @@ final class Location extends NamedEntityB<Location> {
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
-        <String, Object?>{
-          EntitiesCommonProperties.kStatus: status?.encode(),
-          kAddress: address?.encode(),
-
+      <String, Object?>{
+        EntitiesCommonProperties.kStatus: status.encode(),
+        kAddress: address.encode(),
       },
     );
   }
@@ -38,27 +38,28 @@ final class Location extends NamedEntityB<Location> {
     super.decode(encode);
     if(encode[EntitiesCommonProperties.kStatus] != null){
       status = Status();
-      status!.decode(
-          encode.get(EntitiesCommonProperties.kStatus, <String, dynamic>{}));
+      status.decode(encode.get(EntitiesCommonProperties.kStatus));
     }  
 
     if(encode[kAddress] != null){
       address = Address();
-      address!.decode(
-          encode.get(kAddress, <String, dynamic>{}));
+      address.decode(encode.get(kAddress));
     }
   }
 
   @override
   List<EntityInvalidation<Location>> evaluate() {
     List<EntityInvalidation<Location>> results = <EntityInvalidation<Location>>[];
-
-    if(name.isEmpty || name.length > 30) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntityKeys.name, String, name), " Must be 25 max lenght and non-empty", "strictLength(1,30)"));
-    if(address != null || (address != null && address!.id < BigInt.zero)) results.add(EntityInvalidation<Location>(this, PropertyInfo(kAddress, Address, address),'Pointer must be equal or greater than 0', 'pointerHandler()'));
-    // if(waypoint != null || (waypoint != null && waypoint!.id < 0)) results.add(EntityInvalidation<Location>(this, PropertyInfo(kWaypoint, Waypoint, waypoint), '$kWaypoint pointer must be equal or greater than 0', 'pointerHandler()'));
-
-    if(status != null || (status != null && status!.id < BigInt.zero)) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntitiesCommonProperties.kStatus, Status, status), 'Pointer must be equal or greater than 0', 'pointerHandler()'));    
+    if (id < BigInt.zero) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    if (name.trim().isEmpty || name.length > 100) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 100 max length", "structLength(100)"));
+    if (description != null){
+      if (description!.length > 200) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntityKeys.description, String, description), "Description must be 200 max length", "strictLength(200)"));
+      if (description!.trim().isEmpty) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
+    }
     
+    results.validateDependency(this, status);
+    results.validateDependency(this, address);
+
     return results;
   }
 

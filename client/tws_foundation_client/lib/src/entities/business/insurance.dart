@@ -1,5 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/constants.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 
 final class Insurance extends EntityB<Insurance> {
@@ -23,7 +24,7 @@ final class Insurance extends EntityB<Insurance> {
   DateTime expiration = DateTime(0);
 
   /// Foreign relation [Status] object.
-  Status? status;
+  Status status = Status();
 
   /// Generates a new [Insurance] instance from mandatory values.
   Insurance();
@@ -31,11 +32,11 @@ final class Insurance extends EntityB<Insurance> {
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
-        <String, Object?>{
-          kPolicy: policy,
-          kCountry: country,
-          kExpiration: expiration.toUtc().toIso8601String(),
-          EntitiesCommonProperties.kStatus: status?.encode(),
+      <String, Object?>{
+        kPolicy: policy,
+        kCountry: country,
+        kExpiration: expiration.toUtc().toIso8601String(),
+        EntitiesCommonProperties.kStatus: status.encode(),
       },
     );
   }
@@ -46,20 +47,19 @@ final class Insurance extends EntityB<Insurance> {
     policy = encode.get(kPolicy);
     country = encode.get(kCountry);
     expiration = encode.get(kExpiration);
-    if(encode[EntitiesCommonProperties.kStatus] != null){
-      status = Status();
-      status!.decode(
-          encode.get(EntitiesCommonProperties.kStatus, DataMap()));
-    }
+    status = Status();
+    status.decode(encode.get(EntitiesCommonProperties.kStatus));
   }
 
   @override
   List<EntityInvalidation<Insurance>> evaluate() {
     List<EntityInvalidation<Insurance>> results = <EntityInvalidation<Insurance>>[];
-
-    if(policy.length > 20) results.add(EntityInvalidation<Insurance>(this, PropertyInfo(kPolicy, String, policy), "Policy must be 20 length", "strictLength(20)"));
-    if(country.length < 2 || country.length > 3) results.add(EntityInvalidation<Insurance>(this, PropertyInfo(kCountry, String, country),"Country must be between 2 and 3 length", "strictLength(2,3)"));
-    if(expiration == DateTime(0)) results.add(EntityInvalidation<Insurance>(this, PropertyInfo(kExpiration, DateTime, expiration), 'Invalid expiration value.', 'invalidDate()'));
+    if (id < BigInt.zero) results.add(EntityInvalidation<Insurance>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    if (policy.length > 20) results.add(EntityInvalidation<Insurance>(this, PropertyInfo(kPolicy, String, policy), "Policy must be 20 length", "strictLength(20)"));
+    if (country.length < 2 || country.length > 3) results.add(EntityInvalidation<Insurance>(this, PropertyInfo(kCountry, String, country),"Country must be between 2 and 3 length", "strictLength(2,3)"));
+    if (expiration == DateTime(0)) results.add(EntityInvalidation<Insurance>(this, PropertyInfo(kExpiration, DateTime, expiration), 'Invalid expiration value.', 'invalidDate()'));
+    
+    results.validateDependency(this, status);
 
     return results;
   }

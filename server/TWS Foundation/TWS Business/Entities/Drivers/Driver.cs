@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,26 +20,31 @@ public class Driver
     /// <summary>
     ///     Fast permit number.
     /// </summary>
+    [StringLength(12, MinimumLength = 12)]
     public string? Fast { get; set; }
 
     /// <summary>
     ///     TBD
     /// </summary>
+    [StringLength(24, MinimumLength = 24)]
     public string? ANAM { get; set; }
 
     /// <summary>
     ///     USA Visa document number.
     /// </summary>
+    [StringLength(12, MinimumLength = 12)]
     public string? VISA { get; set; }
 
     /// <summary>
     ///     TBD
     /// </summary>
+    [StringLength(12, MinimumLength = 12)]
     public string? TWIC { get; set; }
 
     /// <summary>
     ///     Driver type name.
     /// </summary>
+    [StringLength(12, MinimumLength = 12)]
     public string? DriverType { get; set; }
 
     /// <summary>

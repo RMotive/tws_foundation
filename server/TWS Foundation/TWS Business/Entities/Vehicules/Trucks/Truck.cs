@@ -21,12 +21,13 @@ public class Truck
     /// <summary>
     ///     Motor identifier.
     /// </summary>
+    [StringLength(16, MinimumLength = 1)]
     public string? Motor { get; set; }
 
     /// <summary>
     ///     Vehicule identifier number.
     /// </summary>
-    [StringLength(17, MinimumLength = 17)]
+    [StringLength(17, MinimumLength = 1)]
     public string VIN { get; set; } = string.Empty;
 
     #endregion

@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Entity;
 
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Insurances;
@@ -15,8 +17,10 @@ public class Status
 : BEntity, INamedEntity {
 
     #region Properites
-
+    [StringLength(100, MinimumLength = 1)]
     public string Name { get; set; } = default!;
+
+    [StringLength(200, MinimumLength = 1)]
     public string? Description { get; set; }
 
     #endregion

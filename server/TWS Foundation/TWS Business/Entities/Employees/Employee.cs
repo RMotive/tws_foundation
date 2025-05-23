@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,16 +20,19 @@ public class Employee
     /// <summary>
     ///     Mexico's unique people identifier (Clave Única de Registro de Población / Unique Population Registry Code).
     /// </summary>
+    [StringLength(18, MinimumLength = 18)]
     public string? CURP { get; set; }
 
     /// <summary>
     ///     Mexico's unique taxpayer identifier (Registro Federal de Contribuyentes / Federal Taxpaying Registry).
     /// </summary>
+    [StringLength(13, MinimumLength = 13)]
     public string? RFC { get; set; } = null!;
 
     /// <summary>
     ///     Mexico's unqiue people social security identifier (Número de Seguro Social / Social Security Number.)
     /// </summary>
+    [StringLength(11, MinimumLength = 11)]
     public string? NSS { get; set; } = null!;
 
     #endregion

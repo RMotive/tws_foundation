@@ -1,5 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/constants.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/trailer_classes/trailer_class.dart';
 
@@ -14,10 +15,10 @@ final class TrailerType extends EntityB<TrailerType> {
   String size = "";
 
   /// Foregin relation [Status] object.
-  Status? status;
+  Status status = Status();
 
   /// Foregin relation [TrailerClass] object.
-  TrailerClass? trailerClass;
+  TrailerClass trailerClass = TrailerClass();
 
   /// Generates a new [TrailerType] instance from mandatory values.
   TrailerType();
@@ -27,8 +28,8 @@ final class TrailerType extends EntityB<TrailerType> {
     return super.encode(
         <String, Object?>{
           kSize: size,
-          EntitiesCommonProperties.kStatus: status?.encode(),
-          ktrailerClass: trailerClass?.encode(),
+          EntitiesCommonProperties.kStatus: status.encode(),
+          ktrailerClass: trailerClass.encode(),
       },
     );
   }
@@ -36,27 +37,24 @@ final class TrailerType extends EntityB<TrailerType> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
+    trailerClass = TrailerClass();
+    status = Status();
     size = encode.get(kSize);
-    if(encode[EntitiesCommonProperties.kStatus] != null){
-      status = Status();
-      status!.decode(
-          encode.get(EntitiesCommonProperties.kStatus, DataMap()));
-    }
-    if(encode[ktrailerClass] != null){
-      trailerClass = TrailerClass();
-      trailerClass!.decode(
-          encode.get(ktrailerClass, DataMap()));
-    }
+    status.decode(encode.get(EntitiesCommonProperties.kStatus));
+    trailerClass.decode(encode.get(ktrailerClass, DataMap()));
   }
 
   @override
   List<EntityInvalidation<TrailerType>> evaluate() {
     List<EntityInvalidation<TrailerType>> results = <EntityInvalidation<TrailerType>>[];
+    if (id < BigInt.zero) results.add(EntityInvalidation<TrailerType>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
 
     if (size.trim().isEmpty) results.add(EntityInvalidation<TrailerType>(this, PropertyInfo(kSize, String, size), 'Size can\'t be empty', 'notEmpty'));
     if (size.length > 16) results.add(EntityInvalidation<TrailerType>(this, PropertyInfo(kSize, String, size), 'Size must be 16 max length', 'StrictLength(16)'));
+    
+    results.validateDependency(this, status);
+    results.validateDependency(this, trailerClass);
 
-    // if (sign.length != 5) results.add(EntityInvalidation(kSign, 'Solution sign must be 5 length', 'strictLength(5)'));
     return results;
   }
 

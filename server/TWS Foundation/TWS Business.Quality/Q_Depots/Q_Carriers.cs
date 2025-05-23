@@ -10,7 +10,6 @@ public class Q_Carriers : BQ_Business<Carrier, CarriersDepot> {
 
         return new Carrier {
             Name = Entropy,
-            Description = Entropy,
             Status = new Status {
                 Name = Entropy,
             },

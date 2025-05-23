@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/src/entities/business/status.dart';
 final class Situation extends NamedEntityB<Situation> {
 
   /// [Status] navigation set.
-  Status? status;
+  Status status = Status();
 
   /// Generates a new [Situation] instance from mandatory values.
   Situation();
@@ -14,8 +14,8 @@ final class Situation extends NamedEntityB<Situation> {
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
-        <String, Object?>{
-          EntitiesCommonProperties.kStatus: status?.encode(),
+      <String, Object?>{
+        EntitiesCommonProperties.kStatus: status.encode(),
       },
     );
   }
@@ -23,16 +23,19 @@ final class Situation extends NamedEntityB<Situation> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
-    if(encode[EntitiesCommonProperties.kStatus] != null){
-      status = Status();
-      status!.decode(
-          encode.get(EntitiesCommonProperties.kStatus, <String, dynamic>{}));
-    }  
+    status = Status();
+    status.decode(encode.get(EntitiesCommonProperties.kStatus));
   }
 
   @override
   List<EntityInvalidation<Situation>> evaluate() {
     List<EntityInvalidation<Situation>> results = <EntityInvalidation<Situation>>[];
+    if (id < BigInt.zero) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    if (name.trim().isEmpty || name.length > 100) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 100 max length", "structLength(100)"));
+    if (description != null){
+      if (description!.length > 200) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.description, String, description), "Description must be 200 max length", "strictLength(200)"));
+      if (description!.trim().isEmpty) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
+    }
     return results;
   }
 

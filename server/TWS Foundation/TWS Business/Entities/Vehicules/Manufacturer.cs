@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database.Entity;
 
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
@@ -13,7 +15,10 @@ public class Manufacturer
 
     #region Properties
 
+    [StringLength(100)]
     public string Name { get; set; } = default!;
+
+    [StringLength(maximumLength: 200)]
     public string? Description { get; set; }
 
     #endregion

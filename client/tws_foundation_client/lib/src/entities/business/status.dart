@@ -19,8 +19,12 @@ final class Status extends NamedEntityB<Status> {
   @override
   List<EntityInvalidation<Status>> evaluate() {
     List<EntityInvalidation<Status>> results = <EntityInvalidation<Status>>[];
-    if(name.length >25) results.add(EntityInvalidation<Status>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 25 length", "structLength(25)"));
-    if(description != null && description!.length > 150) results.add(EntityInvalidation<Status>(this, PropertyInfo(EntityKeys.description, String, description), "Description must be 150 max length", "structLength(0,150)"));    
+    if (id < BigInt.zero) results.add(EntityInvalidation<Status>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    if (name.trim().isEmpty || name.length > 100) results.add(EntityInvalidation<Status>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 100 max length", "structLength(100)"));
+    if (description != null){
+      if (description!.length > 200) results.add(EntityInvalidation<Status>(this, PropertyInfo(EntityKeys.description, String, description), "Description must be 200 max length", "strictLength(200)"));
+      if (description!.trim().isEmpty) results.add(EntityInvalidation<Status>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
+    }
     return results;
   }
 

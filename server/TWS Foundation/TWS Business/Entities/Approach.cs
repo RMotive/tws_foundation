@@ -40,7 +40,7 @@ public class Approach
     /// <summary>
     ///     Alternative phone number
     /// </summary>
-    [StringLength(13)]
+    [StringLength(30)]
     public string? Alternative { get; set; }
 
     #endregion
