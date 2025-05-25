@@ -11,7 +11,7 @@ void main() {
 
   setUp(
     () async {
-      service = FoundationServer().solutionsService;
+      service = FoundationServer(false).solutionsService;
 
       testAuthToken = await IntegrationUtils.getAuthToken();
     },
