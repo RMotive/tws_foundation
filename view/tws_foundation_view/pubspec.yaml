@@ -30,7 +30,7 @@ dependencies:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: development59#client_refactor
+      ref: development#widget_package
 
 dev_dependencies:
   flutter_test:
@@ -40,3 +40,4 @@ dev_dependencies:
 flutter:
   assets:
     - assets/business/
+    - assets/business/full_logo_white.webp

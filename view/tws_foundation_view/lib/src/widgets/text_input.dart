@@ -92,6 +92,9 @@ final class TextInput extends StatefulWidget {
   /// Set an keyboard type: Only characters, only numbers, etc...
   final TextInputType? keyboardType;
 
+  /// Text input auto fill platform hint.
+  final Iterable<String> autofillHints;
+
   const TextInput({
     super.key,
     this.label,
@@ -120,6 +123,7 @@ final class TextInput extends StatefulWidget {
     this.isPrivate = false,
     this.formatter,
     this.keyboardType,
+    this.autofillHints = const <String>[],
   });
 
   @override
@@ -238,6 +242,7 @@ class _TextInputState extends State<TextInput> {
           onTapOutside: widget.onTapOutside,
           maxLength: widget.maxLength,
           maxLines: widget.maxLines,
+          autofillHints: widget.autofillHints,
           onChanged: (String typedText) {
             if (widget.deBounce == null) {
               widget.onChanged?.call(typedText);
@@ -278,7 +283,7 @@ class _TextInputState extends State<TextInput> {
             counterStyle: TextStyle(color: counterColor),
             labelStyle: TextStyle(color: colorStruct.fore),
             errorStyle: TextStyle(color: errorColorStruct.fore),
-            hintStyle: TextStyle(color: colorStruct.fore),
+            hintStyle: TextStyle(color: colorStruct.fore.withValues(alpha: .7)),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color:

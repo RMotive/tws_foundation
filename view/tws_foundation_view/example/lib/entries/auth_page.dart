@@ -1,6 +1,8 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart'
+    show ServerSession;
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 
 ///
@@ -23,6 +25,9 @@ final class AuthPage extends PackageLandingEntryB<LandingThemeB> {
     Size windowSize,
     PackageLandingThemeB theme,
   ) {
-    return view.AuthPage();
+    return view.AuthPage(
+      solutionSign: 'TWSMF',
+      onAuthSuccess: (ServerSession serverSession) {},
+    );
   }
 }

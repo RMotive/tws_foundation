@@ -1,19 +1,31 @@
+import 'dart:async' show FutureOr;
+
+import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 part '_auth_page_form.dart';
-part '_auth_page_form_reactor.dart';
 part '_auth_page_business_logo.dart';
 
 /// {page} implementation.
 ///
 /// Defines an authentication entry point for {TWS} view solutions.
 final class AuthPage extends PageB {
+  /// Solution authentication scope sign identification.
+  final String solutionSign;
+
+  /// Callback when the [AuthPage] correctly authenticates the user information.
+  ///
+  ///
+  /// [serverSession] server session information from the given credentials.
+  final FutureOr<void> Function(ServerSession serverSession) onAuthSuccess;
+
   /// Creates a new [AuthPage] instance.
-  const AuthPage({super.key});
+  const AuthPage({super.key, required this.solutionSign, required this.onAuthSuccess});
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
@@ -24,14 +36,10 @@ final class AuthPage extends PageB {
     const double separatorHeight = rowSize * .55;
     const double offsetTransaltionAboveCenterForm = 100;
     const double maxHeightAllowedToTranslateForm = 850;
-    final Size screenSize = MediaQuery.sizeOf(buildContext);
-    final double screenWidth = screenSize.width;
 
-    final bool isFullView = screenWidth >= maxWidthAllowedFullView;
+    final bool isFullView = pageSize.width >= maxWidthAllowedFullView;
     final double translation =
-        screenSize.height <= maxHeightAllowedToTranslateForm
-            ? 0
-            : -offsetTransaltionAboveCenterForm;
+        pageSize.height <= maxHeightAllowedToTranslateForm ? 0 : -offsetTransaltionAboveCenterForm;
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -43,24 +51,18 @@ final class AuthPage extends PageB {
             offset: Offset(0, value),
             child: Center(
               child: SizedBox(
-                width: screenWidth,
+                width: pageSize.width,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Wrap(
                     runSpacing: itemSeparation * 2,
-                    alignment:
-                        isFullView
-                            ? WrapAlignment.spaceEvenly
-                            : WrapAlignment.center,
+                    alignment: isFullView ? WrapAlignment.spaceEvenly : WrapAlignment.center,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
                       // --> Business decorator.
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal:
-                              isFullView
-                                  ? 0
-                                  : (itemSeparation + separatorDecoratorWidth),
+                          horizontal: isFullView ? 0 : (itemSeparation + separatorDecoratorWidth),
                         ),
                         child: const FittedBox(child: _AuthPageBusinessLogo()),
                       ),
@@ -69,22 +71,14 @@ final class AuthPage extends PageB {
                         visible: isFullView,
                         child: ColoredBox(
                           color: Colors.grey,
-                          child: SizedBox.fromSize(
-                            size: Size(
-                              separatorDecoratorWidth,
-                              separatorHeight,
-                            ),
-                          ),
+                          child: SizedBox.fromSize(size: Size(separatorDecoratorWidth, separatorHeight)),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal:
-                              isFullView
-                                  ? 0
-                                  : (itemSeparation + separatorDecoratorWidth),
+                          horizontal: isFullView ? 0 : (itemSeparation + separatorDecoratorWidth),
                         ),
-                        child: const _AuthPageForm(),
+                        child: _AuthPageForm(solutionSign: solutionSign, onAuthSuccess: onAuthSuccess),
                       ),
                     ],
                   ),

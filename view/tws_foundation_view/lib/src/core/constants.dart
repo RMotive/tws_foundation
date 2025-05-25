@@ -20,7 +20,10 @@ final class FoundationColors {
 ///
 final class FoundationAssets {
   ///
-  static const String _businessPath = 'assets/business';
+  static const String _packagePath = 'packages/tws_foundation_view';
+
+  ///
+  static const String _businessPath = '$_packagePath/assets/business';
 
   ///
   static const String businessIcon = '$_businessPath/business_icon.webp';
@@ -53,9 +56,14 @@ final class FoundationAssets {
 ///
 final class FoundationMessages {
   ///
-  static const String stateManagementError =
-      'Unexpected state management error, contact support.';
+  static const String stateManagementError = 'Unexpected state management error, contact support.';
 
   ///
   static const String emptyInputError = 'Cannot be empty.';
+
+  ///
+  static const String connectionError = 'Unable to connect with server, contact administration support.';
+
+  ///
+  static const String unknownServerException = '(critical) Server error, contact administration support.';
 }
