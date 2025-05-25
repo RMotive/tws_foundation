@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TWSB.Connection\development.connection.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TWSB.Connection\development_connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

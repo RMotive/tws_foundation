@@ -8,8 +8,8 @@ final class _AuthPageForm extends StatefulWidget {
   final String solutionSign;
 
   /// Callback when the [AuthPage] correctly authenticates the user information.
-  /// 
-  /// 
+  ///
+  ///
   /// [serverSession] server session information from the given credentials.
   final FutureOr<void> Function(ServerSession serverSession) onAuthSuccess;
 
@@ -39,17 +39,17 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
   /// Current error message.
   String errorMsg = '';
 
-  /// Current identity scope error message.
-  String usrErrorMsg = '';
-
-  /// Current password scope error message.
-  String pwdErrorMsg = '';
-
   /// User/Identity value.
   String usrValue = '';
 
   /// Password value.
   String pwdValue = '';
+
+  /// Current identity scope error message.
+  String? usrErrorMsg;
+
+  /// Current password scope error message.
+  String? pwdErrorMsg;
 
   /// Validates the inners [TextInput] values.
   ///
@@ -67,8 +67,8 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
   /// Cleans all the current error messages states.
   void cleanState() {
     errorMsg = '';
-    usrErrorMsg = '';
-    pwdErrorMsg = '';
+    usrErrorMsg = null;
+    pwdErrorMsg = null;
   }
 
   /// {event} method when inner [ButtonFlat] is clicked, invoking the authentication process and validations.
@@ -118,7 +118,11 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
       onConnectionFailure: () {
         errorMsg = FoundationMessages.connectionError;
       },
-      onFinally: () => setState,
+      onFinally: () {
+        setState(() {
+          isLoading = false;
+        });
+      },
     );
   }
 
@@ -142,6 +146,7 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
               errorText: usrErrorMsg,
               width: _maxInputsWidth,
               isEnabled: !isLoading,
+              onChanged: (String text) => usrValue = text,
               validator: validateTextInput,
             ),
             TextInput(
@@ -152,6 +157,7 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
               errorText: pwdErrorMsg,
               width: _maxInputsWidth,
               isEnabled: !isLoading,
+              onChanged: (String text) => pwdValue = text,
               validator: validateTextInput,
             ),
             ButtonFlat(width: _maxInputsWidth, onTap: authenticate),

@@ -59,7 +59,7 @@ public partial class Program {
     static Settings? Settings_;
 
     static void Main(string[] args) {
-        Logger.Announce("Running engines ◉_◉");
+        Logger.Announce("Running [CSM] server engine...");
 
         try {
             Settings s = Settings;
@@ -195,7 +195,6 @@ public partial class Program {
                 Services.AddScoped<IManufacturersService, ManufacturersService>();
                 Services.AddScoped<ISituationsService, SituationsService>();
                 Services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
-
             }
 
             WebApplication app = builder.Build();

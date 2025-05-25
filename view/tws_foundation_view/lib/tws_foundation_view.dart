@@ -2,6 +2,10 @@
 
 library;
 
+// [core]
+export 'src/core/constants.dart';
+export 'src/core/extensions.dart';
+
 // [themes]
 export 'src/themes/foundation_theme_b.dart';
 export 'src/themes/foundation_theme_dark.dart';

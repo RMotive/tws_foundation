@@ -3,6 +3,7 @@ import 'package:example/entries/auth_page.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart' hide AuthPage;
@@ -29,7 +30,7 @@ final class MainApp extends StatelessWidget {
 
         Injector.addSingleton<ThemeManagerI<FoundationThemeB>>(themeInstance);
 
-        final FoundationServer foundationServer = FoundationServer();
+        final FoundationServer foundationServer = FoundationServer(kReleaseMode);
 
         Injector.addSingleton<FoundationServer>(foundationServer);
         Injector.addSingleton<SecurityServiceI>(foundationServer.securityService);

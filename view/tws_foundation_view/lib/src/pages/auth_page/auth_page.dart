@@ -4,7 +4,6 @@ import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -64,7 +63,7 @@ final class AuthPage extends PageB {
                         padding: EdgeInsets.symmetric(
                           horizontal: isFullView ? 0 : (itemSeparation + separatorDecoratorWidth),
                         ),
-                        child: const FittedBox(child: _AuthPageBusinessLogo()),
+                        child: FittedBox(child: _AuthPageBusinessLogo()),
                       ),
                       // --> Separator bar.
                       Visibility(

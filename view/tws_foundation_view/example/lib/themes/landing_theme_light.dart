@@ -3,7 +3,7 @@ import 'package:example/themes/landing_theme_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 ///
-final class LandingThemeLight extends PackageLandingThemeDark
+final class LandingThemeLight extends PackageLandingThemeLight
     implements LandingThemeB {
   final FoundationThemeLight _foundation = FoundationThemeLight();
 

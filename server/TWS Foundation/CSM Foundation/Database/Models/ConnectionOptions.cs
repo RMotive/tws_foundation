@@ -8,17 +8,21 @@ public record ConnectionOptions {
 
     public bool Encrypt { get; init; } = false;
 
+    public bool IntegratedSecurity { get; init; } = false;
+
     public bool Trust { get; init; } = false;
 
     public bool MARS { get; init; } = false;
 
     public string GenerateConnectionString() {
-        return $"Server={Host};" +
-            $"Database={Name};" +
-            $"User={User};" +
-            $"Password={Password};" +
-            $"Encrypt={Encrypt};" +
-            $"TrustServerCertificate={Trust};" +
-            $"MultipleActiveResultSets={MARS};";
+        string connectionString = $"Server={Host};Database={Name};";
+
+        if(IntegratedSecurity) {
+            connectionString += $"Integrated Security={IntegratedSecurity};";
+        } else {
+            connectionString += $"User={User};Password={Password};";
+        }
+
+        return connectionString + $"Encrypt={Encrypt};TrustServerCertificate={Trust};MultipleActiveResultSets={MARS};";
     }
 }

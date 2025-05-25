@@ -11,10 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  go_router: ^15.1.1
+
+  camera_web: ^0.3.5
   file_picker: ^8.1.7
   camera_platform_interface: ^2.8.0
-  camera_web: ^0.3.5
 
   csm_view:
     git:
