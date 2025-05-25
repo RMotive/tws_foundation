@@ -1,20 +1,18 @@
 ﻿
 using CSM_Foundation.Server.Exceptions;
-using CSM_Foundation.Database.Interfaces;
 
 using Microsoft.Extensions.Primitives;
-
-using TWS_Foundation.Managers;
+using CSM_Foundation.Database.Entity;
 
 namespace TWS_Foundation.Middlewares;
 
 public class DispositionMiddleware : IMiddleware {
     private const string DISP_HEAD_KEY = "CSMDisposition";
     private const string DISP_HEAD_VALUE = "Quality";
-    private readonly DispositionManager Disposer;
+    private readonly Disposer Disposer;
 
     public DispositionMiddleware(IDisposer Disposer) {
-        this.Disposer = (DispositionManager)Disposer;
+        this.Disposer = (Disposer)Disposer;
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next) {
@@ -25,13 +23,13 @@ public class DispositionMiddleware : IMiddleware {
         bool Activate = false;
         if (headers.Count > 0) {
             if (!headers.Contains(DISP_HEAD_VALUE)) {
-                throw new XDisposition(XDispositionSituation.Value);
+                throw new XDisposition(XDispositionSituations.WrongToken);
             }
 
             Activate = true;
         }
 
-        Disposer.Status(Activate);
+        Disposer.ChangeState(Activate);
         await next(context);
     }
 }

@@ -1,26 +1,35 @@
-﻿using CSM_Foundation.Database.Models.Options;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+using CSM_Foundation.Database.Entity.Models.Input;
+
+using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Customer.Services.Security.Solutions;
+using TWS_Customer.Features.Security;
 
 using TWS_Foundation.Authentication;
-
-using TWS_Security.Sets;
 
 namespace TWS_Foundation.Controllers.Security;
 
 [ApiController, Feature("Solution"), Route("[Controller]/[Action]")]
 public class SolutionsController
     : ControllerBase {
-    private readonly ISolutionsService Service;
+
+    readonly ISolutionsService Service;
     public SolutionsController(ISolutionsService Service) {
         this.Service = Service;
     }
 
     [HttpPost(), Auth("View")]
-    public async Task<IActionResult> View(SetViewOptions<Solution> Options) {
-        return Ok(await Service.View(Options));
+    public async Task<IActionResult> View(ViewInput<Solution> options) {
+        return Ok(
+                await Service.View(
+                        new OperationInput<Solution, ViewInput<Solution>> {
+                            Parameters = options
+                        }
+                    )
+            );
     }
 
     [HttpPost(), Auth("Create")]
@@ -29,8 +38,9 @@ public class SolutionsController
     }
 
     [HttpPost(), Auth("Update")]
-    public async Task<IActionResult> Update(Solution Solution) {
-        return Ok(await Service.Update(Solution));
+    public async Task<IActionResult> Update(UpdateInput<Solution> Solution) {
+        UpdateOutput<Solution> Output = await Service.Update(Solution);
+        return Ok(Output);
     }
 
     [HttpPost(), Auth("Delete")]

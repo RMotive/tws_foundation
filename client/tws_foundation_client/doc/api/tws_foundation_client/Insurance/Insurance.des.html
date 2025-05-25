@@ -77,12 +77,12 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Insurance.des(JObject json) {
   List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(SCK.kId);
-  int status = json.get(SCK.kStatus);
+  int id = json.get(EntitiesCommonProperties.kId);
+  int status = json.get(EntitiesCommonProperties.kStatus);
   String policy = json.get(kPolicy);
   DateTime expiration = json.get(kExpiration);
   String country = json.get(kCountry);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
   Status? statusNavigation;
   if (json[kstatusNavigation] != null) {
     JObject rawNavigation = json.getDefault(kstatusNavigation, &lt;String, dynamic&gt;{});

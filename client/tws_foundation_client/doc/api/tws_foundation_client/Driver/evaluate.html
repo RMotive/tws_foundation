@@ -92,7 +92,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   }
   if(employee &lt;= 0 &amp;&amp; employeeNavigation == null) results.add(CSMSetValidationResult(kEmployee, &#39;Debe ingresar los datos del empleado. Employee pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(common &lt;= 0 &amp;&amp; driverCommonNavigation == null) results.add(CSMSetValidationResult(kCommon, &#39;Debe ingresar los datos comunes del conductor. Common pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(EntitiesCommonProperties.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   if(driverCommonNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...driverCommonNavigation!.evaluate()];
   if(employeeNavigation != null) results = &lt;CSMSetValidationResult&gt;[...results, ...employeeNavigation!.evaluate()];
 

@@ -2,20 +2,19 @@
 
 using CSM_Foundation.Core.Extensions;
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Enumerators;
-using CSM_Foundation.Database.Models.Options;
-using CSM_Foundation.Database.Models.Options.Filters;
+using CSM_Foundation.Database.Entity.Filters;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
+
+using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets;
-
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Security.Sets.Solution>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<CSM_Security.Entities.Solution>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Security;
 
@@ -70,7 +69,7 @@ public class Q_SolutionsController
                     Evaluation = SetViewFilterEvaluations.CONTAINS,
                     Property = nameof(Solution.Name),
                     Value = refMock.Name,
-                },    
+                },
             ],
         }, true);
 
@@ -198,7 +197,7 @@ public class Q_SolutionsController
             }, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
+            EntityUpdateOut<Solution> creationResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
@@ -218,7 +217,7 @@ public class Q_SolutionsController
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Response).Estela;
+            EntityUpdateOut<Solution> creationResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(Response).Estela;
             Assert.Null(creationResult.Previous);
 
             Solution creationRecord = creationResult.Updated;
@@ -234,7 +233,7 @@ public class Q_SolutionsController
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-            RecordUpdateOut<Solution> updateResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(updateResponse.Response).Estela;
+            EntityUpdateOut<Solution> updateResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(updateResponse.Response).Estela;
 
             Assert.NotNull(updateResult.Previous);
 

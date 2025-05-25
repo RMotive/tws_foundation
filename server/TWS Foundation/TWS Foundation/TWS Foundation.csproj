@@ -9,28 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Properties\server_properties.json" />
-    <Content Remove="Properties\server_properties.production.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Properties\server_properties.production.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\server_properties.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <ProjectReference Include="..\CSM Security\CSM Security.csproj" />
     <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
     <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
-    <ProjectReference Include="..\TWS Security\TWS Security.csproj" />
   </ItemGroup>
 
 </Project>

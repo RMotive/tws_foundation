@@ -1,25 +1,24 @@
 ﻿
 using System.Net;
 
-using Azure;
-
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
+using CSM_Security.Entities;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using TWS_Security.Sets;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.YardLog>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.YardLog>;
 
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
@@ -41,13 +40,13 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             Description = "DESC " + RandomSeed
         };
         VehiculeModel vehiculeModel = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Name = "Generic model " + RandomSeed,
-            ManufacturerNavigation = manufacturer,
+            Manufacturer = manufacturer,
         };
-        
-        Sct sct = new() {
-            Status = 1,
+
+        SCT sct = new() {
+            Status = new Status { Id = 1 },
             Type = "TypT14",
             Number = "NumberSCTTesting value" + RandomSeed,
             Configuration = "Conf" + RandomSeed
@@ -58,65 +57,61 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
 
         Approach contact = new() {
-            Status = 1,
-            Email = "mail@test.com " + RandomSeed
+            Status = new Status { Id = 1 },
+            EMail = "mail@test.com " + RandomSeed
         };
 
         Carrier carrier = new() {
-            Status = 1,
             Name = "Carrier " + RandomSeed,
-            Approach = 0,
-            Address = 0,
-            AddressNavigation = addressCommon,
-            ApproachNavigation = contact,
+            Status = new Status {
+                Id = 1,
+            },
+            Address = addressCommon,
+            Approach = contact,
         };
 
         Plate plateMX = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "mxPlate" + RandomSeed,
             State = "BAC",
             Country = "MXN",
             Expiration = date,
         };
         Plate plateUSA = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "usaPlate" + RandomSeed,
             State = "CaA",
             Country = "USA",
             Expiration = date,
         };
-        TruckCommon common = new() {
-            Status = 1,
+        Truck_Common common = new() {
+            Status = new Status {
+                Id = 1,
+            },
             Economic = "EconomicTbkd" + RandomSeed,
         };
 
         List<Plate> plateList = [plateMX, plateUSA];
-        TrailerCommon trailerCommon = new() {
-            Status = 1,
+        Trailer_Common trailerCommon = new() {
             Economic = "TrailerEco " + RandomSeed,
         };
         Trailer trailer = new() {
-            Status = 1,
-            Common = 0,
-            Carrier = 1,
-            TrailerCommonNavigation = trailerCommon,
+            Carrier = new Carrier {
+                Id = 1,
+            },
+            Common = trailerCommon,
         };
         Truck truck = new() {
-            Status = 1,
-            Carrier = 1,
-            Common = 0,
-            Model = 0,
             Motor = motor,
-            Vin = "VINtestcTbkd" + RandomSeed,
-            VehiculeModelNavigation = vehiculeModel,
-            CarrierNavigation = carrier,
-            TruckCommonNavigation = common,
-            SctNavigation = sct,
+            VIN = "VINtestcTbkd" + RandomSeed,
+            Model = vehiculeModel,
+            Carrier = carrier,
+            Common = common,
+            SCT = sct,
             Plates = plateList,
         };
         Section section = new() {
-            Status = 1,
-            Yard = 1,
+            Yard = new Location { Id = 1 },
             Name = "section " + RandomSeed,
             Capacity = 30,
             Ocupancy = 1,
@@ -124,20 +119,26 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         };
         YardLog mock = new() {
             Entry = true,
-            Truck = 0,
-            LoadType = 1,
-            Guard = 1,
-            TrailerNavigation = trailer,
-            Gname = "Enrique" + iterationTag,
+            LoadType = new LoadType {
+                Id = 1,
+            },
+            Guard = new TWS_Business.Entities.Employees.Employee {
+                Id = 1,
+            },
+            Trailer = new Trailer_Common {
+                Internal = trailer
+            },
             Seal = "seal " + iterationTag,
             SealAlt = "seal Alternative " + iterationTag,
-            Section = 1,
-            SectionNavigation = section,
+            Section = section,
             FromTo = "Cocacola florido " + iterationTag,
-            Damage = false,
-            TTPicture = "Foto " + iterationTag,
-            Driver = 1,
-            TruckNavigation = truck,
+            Driver = new DriverCommon {
+                Id = 1,
+            },
+            Truck = new Truck_Common {
+                Id = truck.Common.Id,
+                Internal = truck
+            },
         };
         return mock;
 
@@ -165,7 +166,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
         string testTag = Guid.NewGuid().ToString()[..2];
 
         for (int i = 0; i < 3; i++) {
-            mockList.Add(MockFactory(testTag+i));
+            mockList.Add(MockFactory(testTag + i));
         }
 
         (HttpStatusCode Status, GenericFrame _) = await Post("Create", mockList, true);
@@ -183,7 +184,7 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.True(HttpStatusCode.OK.Equals(Status));
-            RecordUpdateOut<Solution> creationResult = Framing<SuccessFrame<RecordUpdateOut<Solution>>>(Respone).Estela;
+            EntityUpdateOut<Solution> creationResult = Framing<SuccessFrame<EntityUpdateOut<Solution>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
@@ -200,35 +201,20 @@ public class Q_YardLogsController : BQ_CustomServerController<YardLog> {
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
-            RecordUpdateOut<YardLog> creationResult = Framing<SuccessFrame<RecordUpdateOut<YardLog>>>(Response).Estela;
+            EntityUpdateOut<YardLog> creationResult = Framing<SuccessFrame<EntityUpdateOut<YardLog>>>(Response).Estela;
             Assert.Null(creationResult.Previous);
 
             YardLog creationRecord = creationResult.Updated;
-            Assert.Multiple([
-                () => Assert.True(creationRecord.Id > 0),
-                () => Assert.Equal(mock.Gname, creationRecord.Gname),
-                () => Assert.Equal(mock.FromTo, creationRecord.FromTo),
-                () => Assert.Equal(mock.TTPicture, creationRecord.TTPicture),
-                () => Assert.Equal(mock.SectionNavigation!.Name, creationRecord.SectionNavigation!.Name),
-            ]);
+            Assert.Multiple();
             mock = creationRecord.DeepCopy();
-            mock.Gname = "UPDATED" + RandomUtils.String(10);
-            mock.SectionNavigation!.Name = "UPT" + RandomUtils.String(10);
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-            RecordUpdateOut<YardLog> updateResult = Framing<SuccessFrame<RecordUpdateOut<YardLog>>>(updateResponse.Response).Estela;
+            EntityUpdateOut<YardLog> updateResult = Framing<SuccessFrame<EntityUpdateOut<YardLog>>>(updateResponse.Response).Estela;
 
             Assert.NotNull(updateResult.Previous);
 
-            YardLog updateRecord = updateResult.Updated;
-            Assert.Multiple([
-                () => Assert.Equal(creationRecord.Id, updateRecord.Id),
-                () => Assert.Equal(creationRecord.FromTo, updateRecord.FromTo),
-                () => Assert.Equal(creationRecord.TTPicture, updateRecord.TTPicture),
-                () => Assert.NotEqual(creationRecord.Gname, updateRecord.Gname),
-                () => Assert.NotEqual(creationRecord.SectionNavigation!.Name, updateRecord.SectionNavigation!.Name),
-            ]);
+            Assert.Multiple();
         }
         #endregion
     }

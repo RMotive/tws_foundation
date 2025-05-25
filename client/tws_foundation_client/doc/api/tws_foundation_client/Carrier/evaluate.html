@@ -87,7 +87,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(name.length &gt; 20) results.add(CSMSetValidationResult(SCK.kName, &quot;Name must be 20 max length&quot;, &quot;structLength(20)&quot;));
+  if(name.length &gt; 20) results.add(CSMSetValidationResult(EntitiesCommonProperties.kName, &quot;Name must be 20 max length&quot;, &quot;structLength(20)&quot;));
   if(approach &lt;= 0 &amp;&amp; approachNavigation == null) results.add(CSMSetValidationResult(&quot;[$kApproach, $kApproachNavigation]&quot;, &#39;Required approach object. Must be at least one approach insertion property&#39;, &#39;requiredInsertion()&#39;));
   if(address &lt;= 0 &amp;&amp; addressNavigation == null) results.add(CSMSetValidationResult(&quot;[$address, $addressNavigation]&quot;, &#39;Required address object. Must be at least one address insertion property&#39;, &#39;requiredInsertion()&#39;));
   if(usdot != null &amp;&amp; usdot! &lt; 0) results.add(CSMSetValidationResult(kUsdot, &#39;USDOT pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));

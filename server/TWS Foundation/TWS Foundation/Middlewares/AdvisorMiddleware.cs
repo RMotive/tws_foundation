@@ -1,9 +1,9 @@
 ﻿
 using System.Text.Json;
 
-using CSM_Foundation.Advisor.Managers;
+using CSM_Foundation.Logging;
 
-using JObject = System.Collections.Generic.Dictionary<string, dynamic>;
+using JObject = System.Collections.Generic.Dictionary<string, object?>;
 
 namespace TWS_Foundation.Middlewares;
 
@@ -11,7 +11,7 @@ public class AdvisorMiddleware
     : IMiddleware {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next) {
         try {
-            AdvisorManager.Announce(
+            Logger.Announce(
                 $"Received server request from ({context.Connection.RemoteIpAddress}:{context.Connection.RemotePort})",
                 new() {
                     {"Tracer", context.TraceIdentifier }
@@ -27,12 +27,12 @@ public class AdvisorMiddleware
                     JsonElement Estela = value;
                     JObject? EstelaObject = Estela.Deserialize<JObject>();
                     if (EstelaObject != null && EstelaObject.ContainsKey("Failure")) {
-                        AdvisorManager.Warning($"Reques served with failure", responseContent);
+                        Logger.Warning($"Reques served with failure", responseContent);
                     } else {
-                        AdvisorManager.Success($"Request served successful", responseContent);
+                        Logger.Success($"Request served successful", responseContent);
                     }
                 } else if (Response.StatusCode != 204) {
-                    AdvisorManager.Success($"Request served successful", responseContent);
+                    Logger.Success($"Request served successful", responseContent);
                 }
 
                 if (Response.StatusCode != 204) {

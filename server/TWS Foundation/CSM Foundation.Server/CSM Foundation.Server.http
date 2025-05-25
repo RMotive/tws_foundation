@@ -1,0 +1,6 @@
+@CSM_Foundation.Server_HostAddress = http://localhost:5011
+
+GET {{CSM_Foundation.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

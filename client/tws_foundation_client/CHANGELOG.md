@@ -23,6 +23,19 @@
 
         - [SetViewOut.Sets] changed to [SetViewOut.Records].
 
+    4. Refactored [csm_client] implementations:
+        - [JObject] changed to [DataMap]
+        - [CSMSetInterface] changed to [EntityB]
+        - [CSMEncodeInterface] changed to [EncodableI]
+        - [CSMUri] changed to [Uri]
+        - [CSMActEffect] changed to [ResponseController]
+        - [CSMServiceResolverBase] changed to [ResponseResolverB]
+        - [CSMServiceBase] changed to [ServiceBase]
+        - [twsPostList] changes to [PostListSecure]
+        - [twsPost] changes to [PostSecure]
+        
+    5. Refactored Business services implementations.
+
 - Fixes:
 
 - Dependencies:

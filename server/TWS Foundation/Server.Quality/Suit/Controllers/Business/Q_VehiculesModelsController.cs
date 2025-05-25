@@ -1,19 +1,16 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Database.Models.Options;
-using CSM_Foundation.Server.Quality.Bases;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Server.Records;
 
-using Microsoft.AspNetCore.Mvc.Testing;
+using CSM_Security.Entities;
 
-using TWS_Customer.Managers.Session;
-using TWS_Customer.Services.Records;
+using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
-using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.VehiculeModel>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Vehicules.VehiculeModel>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_VehiculesModelsController
@@ -25,7 +22,7 @@ public class Q_VehiculesModelsController
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,

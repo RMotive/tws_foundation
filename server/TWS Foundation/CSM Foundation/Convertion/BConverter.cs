@@ -4,15 +4,54 @@ using System.Text.Json.Serialization;
 namespace CSM_Foundation.Convertion;
 
 /// <summary>
-/// 
+///     [Abstraction] for serialization/deseralization custom converters.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public abstract class BConverter<T>
-    : JsonConverter<T>, IConverter
-    where T : IConverterVariation {
+/// <typeparam name="TBase">
+///     Type of the common inherited interface/class from the variants.
+/// </typeparam>
+public abstract class BConverter<TBase>
+    : JsonConverter<TBase>, IConverter<TBase>
+    where TBase : IConverterVariation {
 
+    /// <summary>
+    ///     Stores all the possible variations classes types to find the correct one.
+    /// </summary>
+    public Type[] Variations { get; init; }
 
-    public virtual Type[] Variations { get; init; } = [];
+    /// <summary>
+    ///     Creates a new <see cref="BConverter{TBase}"/> instance.
+    /// </summary>
+    public BConverter(Type[] variations) {
+        Variations = variations;
+        ValidateVariations();
+    }
+
+    #region Private Methods
+
+    /// <summary>
+    ///     Validates if the configured <see cref="Variations"/> correctly inherit from the <typeparamref name="TBase"/>.
+    /// </summary>
+    /// <exception cref="XBConverter">
+    ///     Thrown when a wrong variation is found.
+    /// </exception>
+    void ValidateVariations() {
+        if(Variations.Length == 0) return;
+
+        IEnumerable<Type> wrongTypes = Variations.Where(
+                (variation) => {
+                    return !variation.IsAssignableTo(typeof(TBase));
+                }
+            );
+
+        if (wrongTypes.Any()) {
+            throw new XBConverter(
+                    XBConverterSituations.InvalidVariations,
+                    [.. wrongTypes]
+                );
+        }
+    }
+
+    #endregion
 
     #region JSON Converter Methods
 
@@ -24,7 +63,7 @@ public abstract class BConverter<T>
     /// <param name="options"></param>
     /// <returns></returns>
     /// <exception cref="XBConverter"></exception>
-    public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+    public override TBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         JsonDocument document = JsonDocument.ParseValue(ref reader);
         JsonElement element = document.RootElement;
 
@@ -42,12 +81,15 @@ public abstract class BConverter<T>
         }
 
         foreach (Type variation in Variations) {
-            if (discriminator == variation.Name) {
-                return (T?)JsonSerializer.Deserialize(element, variation, options);
+            if (discriminator == variation.GetType().Name) {
+                return (TBase?)JsonSerializer.Deserialize(element, variation.GetType(), options);
             }
         }
 
-        throw new XBConverter(XBConverterSituations.NoVariation, discriminator);
+        throw new XBConverter(
+                XBConverterSituations.NoVariation,
+                discriminator: discriminator
+            );
     }
 
     /// <summary>
@@ -56,14 +98,15 @@ public abstract class BConverter<T>
     /// <param name="writer"></param>
     /// <param name="value"></param>
     /// <param name="options"></param>
-    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options) {
+    public override void Write(Utf8JsonWriter writer, TBase value, JsonSerializerOptions options) {
         foreach (Type variation in Variations) {
+
             if (value.GetType().GUID == variation.GUID) {
                 JsonSerializer.Serialize(writer, variation, options);
             }
         }
 
-        throw new XBConverter(XBConverterSituations.NoVariation, "Writing operation don't access discriminator");
+        throw new XBConverter(XBConverterSituations.NoVariation);
     }
 
     #endregion

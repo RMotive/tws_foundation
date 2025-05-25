@@ -1,52 +1,71 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using CSM_Foundation.Advisor.Interfaces;
-using CSM_Foundation.Advisor.Managers;
 using CSM_Foundation.Core.Exceptions;
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
+using CSM_Foundation.Database.Models;
+using CSM_Foundation.Database.Utilitites;
+using CSM_Foundation.Logging;
+using CSM_Foundation.Server;
 using CSM_Foundation.Server.Converters.JSON;
-using CSM_Foundation.Server.Enumerators;
-using CSM_Foundation.Server.Managers;
-using CSM_Foundation.Server.Utils;
 
-using TWS_Business;
+using CSM_Security.Depots;
+using CSM_Security.Entities;
+
 using TWS_Business.Depots;
-using TWS_Business.Sets;
+using TWS_Business.Depots.Directories;
+using TWS_Business.Depots.Indicators;
+using TWS_Business.Depots.Vehicles;
+using TWS_Business.Depots.Vehicles.Control;
+using TWS_Business.Entities;
+using TWS_Business.Entities.Insurances;
+using TWS_Business.Entities.Maintenances;
+using TWS_Business.Entities.Trailers;
 
-using TWS_Customer.Managers.Depot;
+using TWS_Customer.Features.Business;
+using TWS_Customer.Features.Security;
 using TWS_Customer.Managers.Session;
-using TWS_Customer.Services.Business;
-using TWS_Customer.Services.Interfaces;
-using TWS_Customer.Services.Security;
-using TWS_Customer.Services.Security.Solutions;
 
-using TWS_Foundation.Managers;
 using TWS_Foundation.Middlewares;
-using TWS_Foundation.Models;
-
-using TWS_Security;
-using TWS_Security.Depots;
-using TWS_Security.Depots.Accounts;
-using TWS_Security.Depots.Solutions;
 
 namespace TWS_Foundation;
 
-public partial class Program {
-    private const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
-    private const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
-    private static Settings? SettingsStore { get; set; }
-    public static Settings Settings => SettingsStore ??= RetrieveSettings();
+public class Settings
+    : ILoggingObject {
+    public required string Tenant { get; init; }
+    public required Solution Solution { get; init; }
+    public required string Host { get; init; }
+    public required string[] Listeners { get; set; }
+    public string[] CORS { get; init; } = [];
 
-    private static void Main(string[] args) {
-        Configure();
-        AdvisorManager.Announce("Running engines 🚀🚀🚀");
+    public Dictionary<string, object?> Log() {
+        return new() {
+            {nameof(Tenant), Tenant },
+            {nameof(Solution), $"{Solution.Name} (${Solution.Sign})" },
+            {nameof(Host), Host },
+            {nameof(Listeners), $"[{string.Join(", ", Listeners)}]" },
+            {nameof(CORS), $"[{string.Join(", ", CORS)}]" },
+        };
+    }
+}
+
+public partial class Program {
+    const string SETTINGS_LOCATION = "\\Properties\\server_properties.json";
+    const string CORS_BLOCK_MESSAGE = "Request blocked by cors, is not part of allowed hosts";
+
+    public static Settings Settings => Settings_ ??= GetSettings();
+    static Settings? Settings_;
+
+    static void Main(string[] args) {
+        Logger.Announce("Running engines ◉_◉");
 
         try {
             Settings s = Settings;
+            Console.Title = $"{s.Solution.Name} | {s.Host}";
 
-            AdvisorManager.Success("Server settings retrieved", s);
+            Logger.Success("Server settings loaded", s);
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             // Add services and overriding options to the container.
@@ -61,123 +80,127 @@ public partial class Program {
 
                         options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
                         options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
-                        options.JsonSerializerOptions.Converters.Add(new DateTimeWithUTCZoneConverter());
+                        options.JsonSerializerOptions.Converters.Add(new DateTimeZoneConverter());
 
-                        // --> JSON Converter for [ISet] objects.
+                        // --> JSON Converter for [IEntity] objects.
                         options.JsonSerializerOptions.Converters.Add(
-                                new ISetConverter {
-                                    Variations = [
+                                new EntityConverter(
+                                    [
                                         typeof(YardLog),
-                                    ],
-                                }
+                                    ]
+                                )
                             );
                     }
                 );
-            builder.Services.AddCors(setup => {
-                setup.AddDefaultPolicy(builder => {
-                    builder.AllowAnyHeader();
-                    builder.AllowAnyMethod();
-                    builder.SetIsOriginAllowed(origin => {
-                        string[] CorsPolicies = Settings.CORS;
-                        Uri parsedUrl = new(origin);
+            builder.Services.AddCors(
+                (CorsOptions) => {
+                    CorsOptions.AddDefaultPolicy(
+                        (PolicyBuilder) => {
+                            PolicyBuilder.AllowAnyHeader();
+                            PolicyBuilder.AllowAnyMethod();
+                            PolicyBuilder.SetIsOriginAllowed(
+                                (Origin) => {
+                                    string[] corsPolicies = Settings.CORS;
+                                    Uri parsedUrl = new(Origin);
 
-                        bool isCorsAllowed = CorsPolicies.Contains(parsedUrl.Host);
-                        if (!isCorsAllowed) {
-                            AdvisorManager.Warning(CORS_BLOCK_MESSAGE, new() {
-                                {nameof(isCorsAllowed), isCorsAllowed},
-                                {nameof(parsedUrl), parsedUrl}
-                            });
+                                    bool isCorsAllowed = corsPolicies.Contains(parsedUrl.Host);
+                                    if (!isCorsAllowed) {
+                                        Logger.Warning(
+                                            CORS_BLOCK_MESSAGE,
+                                            new() {
+                                                {nameof(isCorsAllowed), isCorsAllowed},
+                                                {nameof(parsedUrl), parsedUrl}
+                                            }
+                                        );
+                                    }
+                                    return isCorsAllowed;
+                                }
+                            );
                         }
-                        return isCorsAllowed;
-                    });
-                });
-            });
-
-            // --> Checking Database Health
-            new TWSSecurityDatabase().ValidateHealth();
-            new TWSBusinessDatabase().ValidateHealth();
+                    );
+                }
+            );
 
             // --> Adding customer services
             {
+                IServiceCollection Services = builder.Services;
+
                 // --> Application
-                builder.Services.AddSingleton<SessionManager>();
-                builder.Services.AddSingleton<DepotManager>();
-                builder.Services.AddSingleton<AnalyticsMiddleware>();
-                builder.Services.AddSingleton<AdvisorMiddleware>();
-                builder.Services.AddSingleton<FramingMiddleware>();
-                builder.Services.AddSingleton<DispositionMiddleware>();
-                builder.Services.AddSingleton<IDisposer, DispositionManager>();
+                Services.AddSingleton<SessionManager>();
+                Services.AddSingleton<AnalyticsMiddleware>();
+                Services.AddSingleton<AdvisorMiddleware>();
+                Services.AddSingleton<FramingMiddleware>();
+                Services.AddSingleton<DispositionMiddleware>();
+                Services.AddSingleton<IDisposer, Disposer>();
 
-                // --> Databasess contexts
-                builder.Services.AddDbContext<TWSSecurityDatabase>();
-                builder.Services.AddDbContext<TWSBusinessDatabase>();
+                // --> [CSM Security]
+                ConnectionOptions securityDbConnectionOptions = DatabaseUtilities.Retrieve(CSM_Security.Database.SIGN);
+                new CSM_Security.Database(securityDbConnectionOptions).ValidateConnection();
 
-                // --> Depots
-                builder.Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
-                builder.Services.AddScoped<IAccountsDepot, AccountsDepot>();
-                builder.Services.AddScoped<AddressesDepot>();
-                builder.Services.AddScoped<UsdotsDepot>();
-                builder.Services.AddScoped<CarriersDepot>();
-                builder.Services.AddScoped<ApproachesDepot>();
-                builder.Services.AddScoped<ContactsDepot>();
-                builder.Services.AddScoped<ManufacturersDepot>();
-                builder.Services.AddScoped<SituationsDepot>();
-                builder.Services.AddScoped<PlatesDepot>();
-                builder.Services.AddScoped<TruckDepot>();
-                builder.Services.AddScoped<InsurancesDepot>();
-                builder.Services.AddScoped<SctsDepot>();
-                builder.Services.AddScoped<MaintenacesDepot>();
-                builder.Services.AddScoped<StatusesDepot>();
-                builder.Services.AddScoped<AddressesDepot>();
-                builder.Services.AddScoped<ApproachesDepot>();
-                builder.Services.AddScoped<CarriersDepot>();
-                builder.Services.AddScoped<DriversDepot>();
-                builder.Services.AddScoped<DriversCommonsDepot>();
-                builder.Services.AddScoped<DriversExternalsDepot>();
-                builder.Services.AddScoped<EmployeesDepot>();
-                builder.Services.AddScoped<SectionsDepot>();
-                builder.Services.AddScoped<LocationsDepot>();
-                builder.Services.AddScoped<LoadTypesDepot>();
-                builder.Services.AddScoped<LocationsDepot>();
-                builder.Services.AddScoped<TrailerClassesDepot>();
-                builder.Services.AddScoped<TrailersCommonsDepot>();
-                builder.Services.AddScoped<TrailersExternalsDepot>();
-                builder.Services.AddScoped<TrailersDepot>();
-                builder.Services.AddScoped<IdentificationsDepot>();
-                builder.Services.AddScoped<TrucksExternalsDepot>();
-                builder.Services.AddScoped<TrucksCommonsDepot>();
-                builder.Services.AddScoped<TrailersTypesDepot>();
-                builder.Services.AddScoped<VehiculesModelsDepot>();
-                builder.Services.AddScoped<TrucksInventoriesDepot>();
-                builder.Services.AddScoped<YardLogsDepot>();
-                builder.Services.AddScoped<TrucksHDepot>();
+                Services.AddScoped(
+                        (provider) => new CSM_Security.Database(securityDbConnectionOptions)
+                    );
 
-                // --> Services
-                builder.Services.AddScoped<ISolutionsService, SolutionsService>();
-                builder.Services.AddScoped<IAccountsService, AccountsService>();
-                builder.Services.AddScoped<ISecurityService, SecurityService>();
-                builder.Services.AddScoped<IManufacturersService, ManufacturersService>();
-                builder.Services.AddScoped<ISituationsService, SituationsService>();
-                builder.Services.AddScoped<IPlatesService, PlatesServices>();
-                builder.Services.AddScoped<ITrucksService, TrucksService>();
-                builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
-                builder.Services.AddScoped<IContactsService, ContactsService>();
-                builder.Services.AddScoped<IDriversService, DriversService>();
-                builder.Services.AddScoped<IDriversExternalsService, DriversExternalsService>();
-                builder.Services.AddScoped<ITrucksExternalsService, TrucksExternalsService>();
-                builder.Services.AddScoped<ITrailersService, TrailersService>();
-                builder.Services.AddScoped<ITrailersExternalsService, TrailersExternalsService>();
-                builder.Services.AddScoped<ILoadTypesService, LoadTypesService>();
-                builder.Services.AddScoped<ISectionsService, SectionsService>();
-                builder.Services.AddScoped<IYardLogsService, YardLogsService>();
-                builder.Services.AddScoped<ICarriersService, CarriersService>();
-                builder.Services.AddScoped<IVehiculesModelsService, VehiculeModelService>();
-                builder.Services.AddScoped<ITrucksInventoriesService, TruckInventoryService>();
+                // --> [TWS Business]
+                ConnectionOptions businessDbConnectionOptions = DatabaseUtilities.Retrieve(TWS_Business.Database.SIGN);
+                new TWS_Business.Database(businessDbConnectionOptions).ValidateConnection();
+                Services.AddScoped(
+                        (provider) => new TWS_Business.Database(businessDbConnectionOptions)
+                    );
 
+                Services.AddScoped<IAccountsDepot, AccountsDepot>();
+                Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
+                Services.AddScoped<IContactsDepot, ContactsDepot>();
+                Services.AddScoped<IFeaturesDepot, FeaturesDepot>();
+                Services.AddScoped<ISectionsDepot, SectionsDepot>();
+                Services.AddScoped<ISituationsDepot, SituationsDepot>();
+                Services.AddScoped<IStatusesDepot, StatusesDepot>();
+                Services.AddScoped<IYardLogsDepot, YardLogsDepot>();
+                Services.AddScoped<ICarriersDepot, CarriersDepot>();
+                Services.AddScoped<ILoadTypesDepot, LoadTypesDepot>();
+                Services.AddScoped<IManufacturersDepot, ManufacturersDepot>();
+                Services.AddScoped<IPlatesDepot, PlatesDepot>();
+                Services.AddScoped<ISCTsDepot, SCTDepot>();
+                Services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
+                Services.AddScoped<ITrucksDepot, TrucksDepot>();
+                Services.AddScoped<IVehiculesModelsDepot, VehiculeModelsDepot>();
+                Services.AddScoped<IAddressesDepot, AddressesDepot>();
+                Services.AddScoped<IApproachesDepot, ApproachesDepot>();
+                Services.AddScoped<IDriversDepot, DriversDepot>();
+                Services.AddScoped<IApproachesDepot, ApproachesDepot>();
+                Services.AddScoped<IEmployeesDepot, EmployeesDepot>();
+                Services.AddScoped<ILocationsDepot, LocationsDepot>();
+                Services.AddScoped<IInsuranceDepot, InsurancesDepot>();
+                Services.AddScoped<IMaintenanceDepot, MaintenacesDepot>();
+                Services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
+                Services.AddScoped<ITrailersDepot, TrailersDepot>();
+                Services.AddScoped<ITrailersExternal, TrailersExternalsDepot>();
+                Services.AddScoped<ITrailerTypesDepot, TrailerTypesDepot>();
+
+                // --> [Customer] services.
+                Services.AddScoped<ISecurityService, SecurityService>();
+                Services.AddScoped<ISolutionsService, SolutionsService>();
+                Services.AddScoped<IAddressesService, AddressesService>();
+                Services.AddScoped<ICarriersService, CarriersService>();
+                Services.AddScoped<IDriversService, DriversService>();
+                Services.AddScoped<IEmployeesService, EmployeesService>();
+                Services.AddScoped<ILocationsService, LocationsService>();
+                Services.AddScoped<ISectionsService, SectionsService>();
+                Services.AddScoped<ITrailerClassesService, TrailerClassesService>();
+                Services.AddScoped<ITrailerTypesService, TrailerTypesService>();
+                Services.AddScoped<IYardLogsService, YardLogsService>();
+                Services.AddScoped<IAccountsService, AccountsService>();
+                Services.AddScoped<IContactsService, ContactsService>();
+                Services.AddScoped<ILoadTypesService, LoadTypesService>();
+                Services.AddScoped<IManufacturersService, ManufacturersService>();
+                Services.AddScoped<ISituationsService, SituationsService>();
+                Services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
 
             }
+
             WebApplication app = builder.Build();
             app.MapControllers();
+
             // --> Injecting middlewares to Server
             {
                 app.UseMiddleware<AnalyticsMiddleware>();
@@ -185,45 +208,44 @@ public partial class Program {
                 app.UseMiddleware<FramingMiddleware>();
                 app.UseMiddleware<DispositionMiddleware>();
             }
-            app.Lifetime.ApplicationStopping.Register(() => {
-                using (IServiceScope scope = app.Services.CreateScope()) {
-                    IDisposer disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
-                    OnProcessExit(disposer).GetAwaiter().GetResult();
-                };
-            });
+
+            app.Lifetime.ApplicationStopping.Register(
+                () => {
+                    using (IServiceScope scope = app.Services.CreateScope()) {
+                        IDisposer disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
+                        Dispose(disposer);
+                    }
+                    ;
+                }
+            );
             app.UseCors();
 
-
-            AdvisorManager.Announce($"Server ready to listen ^_____^");
+            Logger.Announce($"Server set up ^_____^");
             app.Run();
-        } catch (Exception X) when (X is IAdvisingException AX) {
-            AdvisorManager.Exception(AX);
+        } catch (Exception X) when (X is ILoggingException AX) {
+            Logger.Exception(AX);
             throw;
         } catch (Exception X) {
-            AdvisorManager.Exception(new XSystem(X));
+            Logger.Exception(new XSystem(X));
         } finally {
             Console.WriteLine($"Press any key to close...");
             Console.ReadKey();
         }
     }
 
-    private static void Configure() {
-        Console.Title = $"{Settings.Solution.Name} | {Settings.Host}";
-    }
-
-    private static async Task OnProcessExit(IDisposer Disposer) {
-        AdvisorManager.Announce("Disposing quality context records");
+    static void Dispose(IDisposer Disposer) {
+        Logger.Announce("Disposing quality context records");
         try {
-            await Disposer.Dispose();
+            Disposer.Dispose();
         } catch (Exception X) {
-            AdvisorManager.Exception(new XSystem(X));
+            Logger.Exception(new XSystem(X));
         }
     }
 
-    private static Settings RetrieveSettings() {
+    static Settings GetSettings() {
         string ws = Directory.GetCurrentDirectory();
         string fp = SETTINGS_LOCATION;
-        switch (EnvironmentManager.Mode) {
+        switch (ServerUtils.Environment) {
             case ServerEnvironments.production:
                 fp = fp.Split(".json")[0] + ".production.json";
                 break;
@@ -232,18 +254,23 @@ public partial class Program {
         }
 
         string sl = FileUtils.FormatLocation(fp);
-        Dictionary<string, dynamic> tempModel = FileUtils.Deserealize<Dictionary<string, dynamic>>($"{ws}{sl}");
-        AdvisorManager.Note("Retrieving Server settings", new Dictionary<string, dynamic> {
-            {"Workspace", ws },
-            {"Settings", sl },
-            {"Environment", EnvironmentManager.Mode }
-        });
+        Logger.Note(
+            "Retrieving Server settings",
+            new Dictionary<string, object?> {
+                {"Workspace", ws },
+                {"Settings", sl },
+                {"Environment", ServerUtils.Environment }
+            }
+        );
         string host = ServerUtils.GetHost();
         string[] listeners = Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Split(";") ?? [];
-        tempModel.Add("Host", host);
-        tempModel.Add("Listeners", listeners);
 
-        return JsonSerializer.Deserialize<Settings>(JsonSerializer.Serialize(tempModel)) ?? throw new Exception();
+
+        Dictionary<string, dynamic> tmpObject = FileUtils.Deserealize<Dictionary<string, dynamic>>($"{ws}{sl}");
+        tmpObject.Add("Host", host);
+        tmpObject.Add("Listeners", listeners);
+
+        return JsonSerializer.Deserialize<Settings>(JsonSerializer.Serialize(tmpObject)) ?? throw new Exception($"Wrong [Settings] file format.");
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CSM_Foundation.Core.Bases;
 
@@ -8,12 +9,9 @@ namespace CSM_Foundation.Core.Bases;
 ///     that need specific equality comparisson between their properties.
 /// </summary>
 public abstract class BObject<TObject> {
-    protected virtual PropertyInfo[] EqualityExceptions() {
-        return [];
-    }
 
     public override bool Equals(object? Comparer) {
-        PropertyInfo[] exceptions = EqualityExceptions();
+        PropertyInfo[] exceptions = [];
 
         if (this is null && Comparer is null) {
             return true;
@@ -85,7 +83,13 @@ public abstract class BObject<TObject> {
             jsonReference.Add(prop.Name, prop.GetValue(this));
         }
 
-        return JsonSerializer.Serialize(jsonReference);
+        return JsonSerializer.Serialize(
+                jsonReference, 
+                options: new () {
+                    WriteIndented = true,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                }
+            );
     }
     public override int GetHashCode() {
         return base.GetHashCode();

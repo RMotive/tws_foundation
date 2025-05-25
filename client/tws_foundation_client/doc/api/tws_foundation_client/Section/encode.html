@@ -86,15 +86,15 @@ JObject encode() {
   JObject? locationNav = locationNavigation?.encode();
   if(yard != 0) locationNav = null;
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
     kYard: yard,
-    SCK.kName: name,
+    EntitiesCommonProperties.kName: name,
     kCapacity: capacity,
     kOcupancy: ocupancy,
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kLocationNavigation: locationNav,
-    SCK.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
   };
 }</code></pre>
 </section>

@@ -1,13 +1,18 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Models.Options;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Models.Out;
 using CSM_Foundation.Server.Records;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
+using TWS_Business.Entities.Insurances;
+using TWS_Business.Entities.Maintenances;
+using TWS_Business.Entities.USDOTs;
+using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
@@ -16,7 +21,7 @@ using TWS_Foundation.Middlewares.Frames;
 using TWS_Foundation.Quality.Bases;
 
 using Account = TWS_Foundation.Quality.Secrets.Account;
-using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Sets.Truck>;
+using View = CSM_Foundation.Database.Models.Out.SetViewOut<TWS_Business.Entities.Vehicules.Trucks.Truck>;
 
 namespace TWS_Foundation.Quality.Suit.Controllers.Business;
 public class Q_TrucksController : BQ_CustomServerController<Truck> {
@@ -43,12 +48,12 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Description = "DESC " + RandomSeed
         };
         VehiculeModel vehiculeModel = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Name = "Generic model " + RandomSeed,
-            ManufacturerNavigation = manufacturer,
+            Manufacturer = manufacturer,
         };
         Insurance insurance = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Policy = "P232Policy" + RandomSeed,
             Expiration = date,
             Country = "MEX"
@@ -58,12 +63,12 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Description = "Description test " + RandomSeed
         };
         Maintenance maintenance = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Anual = date,
             Trimestral = date,
         };
-        Sct sct = new() {
-            Status = 1,
+        SCT sct = new() {
+            Status = new Status { Id = 1 },
             Type = "TypT14",
             Number = "NumberSCTTesting value" + RandomSeed,
             Configuration = "Conf" + RandomSeed
@@ -77,36 +82,36 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Country = "USA"
         };
 
-        Usdot usdot = new() {
-            Status = 1,
-            Mc = "mc- " + RandomSeed,
-            Scac = "s" + RandomSeed
+        USDOT usdot = new() {
+            Status = new Status { Id = 1 },
+            MC = "mc- " + RandomSeed,
+            SCAC = "s" + RandomSeed
         };
 
         Approach contact = new() {
-            Status = 1,
-            Email = "mail@test.com " + RandomSeed
+            Status = new Status { Id = 1 },
+            EMail = "mail@test.com " + RandomSeed
         };
 
         Carrier carrier = new() {
-            Status = 1,
             Name = "Carrier " + RandomSeed,
-            Approach = 0,
-            Address = 0,
-            AddressNavigation = addressCommon,
-            ApproachNavigation = contact,
-            UsdotNavigation = usdot,
+            Status = new Status {
+                Id = 1,
+            },
+            Address = addressCommon,
+            Approach = contact,
+            USDOT = usdot,
         };
 
         Plate plateMX = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "mxPlate" + RandomSeed,
             State = "BAC",
             Country = "MXN",
             Expiration = date,
         };
         Plate plateUSA = new() {
-            Status = 1,
+            Status = new Status { Id = 1 },
             Identifier = "usaPlate" + RandomSeed,
             State = "CaA",
             Country = "USA",
@@ -114,41 +119,36 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
         };
         Location location = new() {
             Name = "random location: " + RandomSeed,
-            Status = 1,
-            Address = 0,
-            AddressNavigation = address,
+            Status = new Status {
+                Id = 1,
+            },
+            Address = address,
         };
-        TruckCommon common = new() {
-            Status = 1,
+        Truck_Common common = new() {
+            Status = new Status { Id = 1 },
             Economic = "EconomicTbkd" + RandomSeed,
-            Location = 0,
-            Situation = 0,
-            LocationNavigation = location,
-            SituationNavigation = situation
+            Location = location,
+            Situation = situation
 
         };
 
         List<Plate> plateList = [plateMX, plateUSA];
         Truck truck = new() {
-            Status = 1,
-            Carrier = 0,
-            Common = 0,
-            Model = 0,
             Motor = motor,
-            Vin = "VIN " + RandomSeed,
-            VehiculeModelNavigation = vehiculeModel,
-            CarrierNavigation = carrier,
-            InsuranceNavigation = insurance,
-            TruckCommonNavigation = common,
-            MaintenanceNavigation = maintenance,
-            SctNavigation = sct,
+            VIN = "VIN " + RandomSeed,
+            Model = vehiculeModel,
+            Carrier = carrier,
+            Insurance = insurance,
+            Common = common,
+            Maintenance = maintenance,
+            SCT = sct,
             Plates = plateList,
         };
         return truck;
     }
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<TWS_Security.Sets.Account> {
+        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new SetViewOptions<CSM_Security.Entities.Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -185,7 +185,7 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             (HttpStatusCode Status, GenericFrame Respone) = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, Status);
-            RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Respone).Estela;
+            EntityUpdateOut<Truck> creationResult = Framing<SuccessFrame<EntityUpdateOut<Truck>>>(Respone).Estela;
 
             Assert.Null(creationResult.Previous);
 
@@ -204,13 +204,13 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
 
             Assert.Equal(HttpStatusCode.OK, Status);
 
-            RecordUpdateOut<Truck> creationResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(Response).Estela;
+            EntityUpdateOut<Truck> creationResult = Framing<SuccessFrame<EntityUpdateOut<Truck>>>(Response).Estela;
             Assert.Null(creationResult.Previous);
 
             Truck creationRecord = creationResult.Updated;
             Assert.Multiple([
                 () => Assert.True(creationRecord.Id > 0),
-                () => Assert.Equal(mock.Vin, creationRecord.Vin),
+                () => Assert.Equal(mock.VIN, creationRecord.VIN),
                 () => Assert.Equal(mock.Motor, creationRecord.Motor),
             ]);
             #endregion
@@ -222,15 +222,15 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             string modifiedMotor = updatedTag + RandomUtils.String(11);
             mock = creationRecord;
 
-            mock.Vin = modifiedVin;
+            mock.VIN = modifiedVin;
             mock.Motor = modifiedMotor;
-            mock.TruckCommonNavigation!.Economic = modifiedMotor;
-            Plate plate = mock.Plates.First();
+            mock.Common.Economic = modifiedMotor;
+            Plate plate = mock.Plates?.First() ?? new Plate();
             plate.Identifier = "identfy" + updatedTag;
             (HttpStatusCode Status, GenericFrame Response) updateResponse = await Post("Update", mock, true);
 
             Assert.Equal(HttpStatusCode.OK, updateResponse.Status);
-            RecordUpdateOut<Truck> updateResult = Framing<SuccessFrame<RecordUpdateOut<Truck>>>(updateResponse.Response).Estela;
+            EntityUpdateOut<Truck> updateResult = Framing<SuccessFrame<EntityUpdateOut<Truck>>>(updateResponse.Response).Estela;
 
             Assert.NotNull(updateResult.Previous);
 
@@ -239,11 +239,11 @@ public class Q_TrucksController : BQ_CustomServerController<Truck> {
             Assert.Multiple([
                 () => Assert.Equal(creationRecord.Id, updateRecord.Id),
                 () => Assert.Equal(creationRecord.Model, updateRecord.Model),
-                () => Assert.Equal(creationRecord.CarrierNavigation?.Id, updateRecord.CarrierNavigation?.Id),
-                () => Assert.NotEqual(previousRecord.Vin, updateRecord.Vin),
+                () => Assert.Equal(creationRecord.Carrier.Id, updateRecord.Carrier.Id),
+                () => Assert.NotEqual(previousRecord.VIN, updateRecord.VIN),
                 () => Assert.NotEqual(previousRecord.Plates.First().Identifier, updateRecord.Plates.First().Identifier),
                 () => Assert.NotEqual(previousRecord.Motor, updateRecord.Motor),
-                () => Assert.NotEqual(previousRecord.TruckCommonNavigation!.Economic, updateRecord.TruckCommonNavigation!.Economic)
+                () => Assert.NotEqual(previousRecord.Common.Economic, updateRecord.Common.Economic)
             ]);
             #endregion
         }

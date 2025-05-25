@@ -1,20 +1,38 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities.Drivers;
 
 namespace TWS_Business.Depots;
+
 /// <summary>
-///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
-///     representing a depot to handle <see cref="Driver"/> dataDatabases entity mirror.
+///     [Depot] for <see cref="Driver_Common"/> based [Depot] implementations. 
 /// </summary>
-public class DriversDepot : BDepot<TWSBusinessDatabase, Driver> {
+/// <remarks>
+///     This is a shared depot to get <see cref="Driver"/> and <see cref="DriverExternal"/>.
+/// </remarks>
+public interface IDriversDepot
+    : IDepot<Driver_Common> {
+
+}
+
+/// <summary>
+///     [Depot] implementation for <see cref="Driver_Common"/> based operations. 
+/// </summary>
+/// <remarks>
+///     This is a shared common depot to get <see cref="Driver"/> and <see cref="DriverExternal"/> based on the <see cref="Driver_Common"/>.
+/// </remarks>
+public class DriversDepot
+    : BDepot<Database, Driver_Common>, IDriversDepot {
+
     /// <summary>
-    ///     Generates a new depot handler for <see cref="Driver"/>.
+    ///     Creates a new <see cref="DriversDepot"/> instance.
     /// </summary>
-    public DriversDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
-        : base(Databases, Disposer) {
-    }
-    public DriversDepot() : base(new(), null) {
-    }
+    /// <param name="Database">
+    ///     Database context handler to be used.
+    /// </param>
+    /// <param name="Disposer">
+    ///     Data disposition manager handler to be used.
+    /// </param>
+    public DriversDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
 }

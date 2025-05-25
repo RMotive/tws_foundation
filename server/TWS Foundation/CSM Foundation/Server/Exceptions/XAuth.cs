@@ -4,35 +4,56 @@ using CSM_Foundation.Core.Bases;
 using CSM_Foundation.Core.Constants;
 
 namespace CSM_Foundation.Server.Exceptions;
+
+/// <summary>
+///     {exception} class from <see cref="BException{XAuthSituation}"/>.
+///     
+///     <para>
+///         Defines an exception object thrown at {Authentication} server processes. 
+///     </para>
+/// </summary>
 public class XAuth
     : BException<XAuthSituation> {
 
-    public XAuth(XAuthSituation Situation)
-        : base($"Unauthorized transaction request", Situation, HttpStatusCode.Unauthorized, null) {
+    /// <summary>
+    ///     Creates a new <see cref="XAuth"/> instance.
+    /// </summary>
+    /// <param name="siutation">
+    ///     Exception invokation situation.
+    /// </param>
+    public XAuth(XAuthSituation siutation)
+        : base($"Unauthorized server transaction", siutation, HttpStatusCode.Unauthorized, null) {
     }
 
     protected override Dictionary<XAuthSituation, string> AdviseFactory() {
 
         return new Dictionary<XAuthSituation, string> {
-            { XAuthSituation.Lack, AdvisesConstants.SERVER_CONTACT_ADVISE },
-            { XAuthSituation.Format,  $"Wrong authentication format {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
+            { XAuthSituation.NoToken, AdvisesConstants.SERVER_CONTACT_ADVISE },
+            { XAuthSituation.WrongTokenFormat,  $"Wrong authentication format {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
             { XAuthSituation.Unauthorized, $"Account is unautorized to the requested feature" },
-            { XAuthSituation.SystemUCL, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
-            { XAuthSituation.SystemACL, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
-            { XAuthSituation.Expired, $"Your session token is expired" },
+            { XAuthSituation.SystemException, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
+            { XAuthSituation.ProcessException, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
+            { XAuthSituation.TokenExpired, $"Your session token is expired" },
         };
     }
 }
 
+/// <summary>
+///     <see langword="enum"/> implementation.
+///     
+///     <para>
+///         Defines the available possible {Situations} for <see cref="XAuth"/> exception invokation.
+///     </para>
+/// </summary>
 public enum XAuthSituation {
     /// <summary>
     ///     When the auth header wasn't found.
     /// </summary>
-    Lack,
+    NoToken,
     /// <summary>
     ///     When the auth token isn't in a propertly format.
     /// </summary>
-    Format,
+    WrongTokenFormat,
     /// <summary>
     ///     When the acount isn't authorized to the requested features/actions/solutions.
     /// </summary>
@@ -40,13 +61,13 @@ public enum XAuthSituation {
     /// <summary>
     ///     When a system unrecognized exception is catched.
     /// </summary>
-    SystemUCL,
+    SystemException,
     /// <summary>
     ///     When a system recognized exception is catched
     /// </summary>
-    SystemACL,
+    ProcessException,
     /// <summary>
     ///     Session token expired.
     /// </summary>
-    Expired,
+    TokenExpired,
 }

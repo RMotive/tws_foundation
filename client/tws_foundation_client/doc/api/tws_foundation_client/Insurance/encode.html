@@ -85,13 +85,13 @@ JObject encode() {
   String e = expiration.toString().substring(0, 10);
 
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
     kPolicy: policy,
     kExpiration: e,
     kCountry: country,
     kstatusNavigation: statusNavigation?.encode(),
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kTrucks: trucks.map((Truck i) =&gt; i.encode()).toList(),
   };
 }</code></pre>

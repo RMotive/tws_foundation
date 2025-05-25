@@ -87,8 +87,8 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(name.length &gt;25) results.add(CSMSetValidationResult(SCK.kName, &quot;Name must be 25 length&quot;, &quot;structLength(25)&quot;));
-  if(description != null &amp;&amp; description!.length &gt; 150) results.add(CSMSetValidationResult(SCK.kDescription, &quot;Description must be 150 max length&quot;, &quot;structLength(0,150)&quot;));
+  if(name.length &gt;25) results.add(CSMSetValidationResult(EntitiesCommonProperties.kName, &quot;Name must be 25 length&quot;, &quot;structLength(25)&quot;));
+  if(description != null &amp;&amp; description!.length &gt; 150) results.add(CSMSetValidationResult(EntitiesCommonProperties.kDescription, &quot;Description must be 150 max length&quot;, &quot;structLength(0,150)&quot;));
   return results;
 }</code></pre>
 </section>

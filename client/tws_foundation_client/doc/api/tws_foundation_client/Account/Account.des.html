@@ -76,10 +76,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Account.des(JObject json) {
-  int id = json.get(SCK.kId);
+  int id = json.get(EntitiesCommonProperties.kId);
   int contact = json.get(kContact);
   String user = json.get(kUser);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
 
 
   Contact? contactNavigation;

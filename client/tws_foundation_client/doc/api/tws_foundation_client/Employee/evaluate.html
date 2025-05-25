@@ -94,7 +94,7 @@ List&lt;CSMSetValidationResult&gt; evaluate() {
   if(approach != null){
     if(approach! &lt; 0) results.add(CSMSetValidationResult(kApproach, &#39;Approach pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
   }
-  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(EntitiesCommonProperties.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
   if(curp != null){
     if(curp!.length != 18) results.add(CSMSetValidationResult(kCurp, &quot;CURP number must be 18 length&quot;, &quot;strictLength(18)&quot;));

@@ -15,21 +15,25 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <Folder Include="Q_Managers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -85,12 +85,12 @@ JObject encode() {
   String a = anual.toString().substring(0,10);
   String t = trimestral.toString().substring(0,10);
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
     kAnual: a,
     kTrimestral:t,
-    SCK.kTimestamp: timestamp.toIso8601String(),
-    SCK.kStatusNavigation: statusNavigation,
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation,
     kTrucks: trucks.map((Truck i) =&gt; i.encode()).toList(),
   };
 }</code></pre>

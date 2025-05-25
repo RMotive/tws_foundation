@@ -3,7 +3,7 @@ using System.Net;
 
 using CSM_Foundation.Core.Constants;
 using CSM_Foundation.Core.Interfaces;
-using CSM_Foundation.Server.Records;
+using CSM_Foundation.Server;
 
 namespace CSM_Foundation.Core.Bases;
 
@@ -90,8 +90,8 @@ public abstract class BException<TSituation>
         return advise;
     }
 
-    public ExceptionExposition Publish() {
-        return new ExceptionExposition() {
+    public ExceptionInfo Publish() {
+        return new ExceptionInfo() {
             Advise = Advise,
             Situation = Convert.ToInt32(Situation),
             System = (System?.GetType().ToString() ?? "N/A") + $"|{Message}",

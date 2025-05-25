@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Interfaces;
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Server.Quality.Bases;
 using CSM_Foundation.Server.Records;
 
@@ -47,7 +47,7 @@ public abstract class BQ_CustomServerController
 
 public abstract class BQ_CustomServerController<TSet>
     : BQ_CustomServerController
-    where TSet : ISet {
+    where TSet : IEntity {
     protected BQ_CustomServerController(string Service, WebApplicationFactory<Program> hostFactory)
         : base(Service, hostFactory) {
     }
