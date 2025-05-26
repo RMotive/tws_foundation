@@ -12,6 +12,7 @@ public class Q_Drivers_Commons : BQ_Business<Driver_Common, Drivers_CommonsDepot
                 new Situation {
                     Name = Entropy,
                     Description = Entropy,
+                    Reference = Entropy[..8],
                 }
             );
 
@@ -19,6 +20,7 @@ public class Q_Drivers_Commons : BQ_Business<Driver_Common, Drivers_CommonsDepot
                 new Status {
                     Name = Entropy,
                     Description = Entropy,
+                    Reference = Entropy[..8],
                 }
             );
 
@@ -26,6 +28,7 @@ public class Q_Drivers_Commons : BQ_Business<Driver_Common, Drivers_CommonsDepot
                 new Status {
                     Name = 'I' + Entropy,
                     Description = Entropy,
+                    Reference = "I" + Entropy[..7],
                 }
             );
 

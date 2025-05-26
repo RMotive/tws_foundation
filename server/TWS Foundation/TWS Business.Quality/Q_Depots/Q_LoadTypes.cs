@@ -10,6 +10,7 @@ public class Q_LoadTypes : BQ_Business<LoadType, LoadTypesDepot> {
         return new LoadType {
             Name = Entropy,
             Description = Entropy,
+            Reference = Entropy[..8],
         };
     }
 }

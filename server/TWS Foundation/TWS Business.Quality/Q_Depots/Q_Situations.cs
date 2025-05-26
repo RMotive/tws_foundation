@@ -10,6 +10,7 @@ public class Q_Situations : BQ_Business<Situation, SituationsDepot> {
         return new Situation {
             Name = Entropy,
             Description = Entropy,
+            Reference = Entropy[..8],
         };
     }
 }

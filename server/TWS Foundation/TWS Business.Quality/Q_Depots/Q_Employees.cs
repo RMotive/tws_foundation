@@ -13,12 +13,15 @@ public class Q_Employees : BQ_Business<Employee, EmployeesDepot> {
                 new Status {
                     Name = Entropy,
                     Description = Entropy,
+                    Reference = Entropy[..8],
                 }
             );
         Status statusI = Store(
                 new Status {
                     Name = "I" + Entropy,
                     Description = Entropy,
+                    Reference = "I" + Entropy[..7],
+
                 }
             );
 

@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Insurances;
@@ -22,6 +26,9 @@ public class Status
 
     [StringLength(200, MinimumLength = 1)]
     public string? Description { get; set; }
+
+    [StringLength(8, MinimumLength = 8)]
+    public string Reference { get; set; } = default!;
 
     #endregion
 
@@ -98,4 +105,10 @@ public class Status
     public ICollection<Plate_History> PlatesHistories { get; set; } = [];
 
     #endregion
+
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.Property(nameof(Reference)).HasMaxLength(8).IsRequired().IsFixedLength();
+        etBuilder.HasIndex(nameof(Reference)).IsUnique();
+
+    }
 }

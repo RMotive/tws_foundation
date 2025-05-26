@@ -11,6 +11,7 @@ public class Q_Plates : BQ_Business<Plate, PlatesDepot> {
         Status status = Store(
                 new Status {
                     Name = Entropy,
+                    Reference = Entropy[..8],
                 }
             );
         return new Plate {

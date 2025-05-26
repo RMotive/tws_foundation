@@ -11,6 +11,7 @@ public class Q_VehiculeModels : BQ_Business<VehiculeModel, VehiculeModelsDepot> 
         Status status = Store(
                 new Status {
                     Name = Entropy,
+                    Reference = Entropy[..8],
                 }
             );
 

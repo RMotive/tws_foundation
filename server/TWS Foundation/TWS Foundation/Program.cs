@@ -176,6 +176,7 @@ public partial class Program {
                 Services.AddScoped<ITrailersDepot, TrailersDepot>();
                 Services.AddScoped<ITrailersExternal, TrailersExternalsDepot>();
                 Services.AddScoped<ITrailerTypesDepot, TrailerTypesDepot>();
+                Services.AddScoped<IWaypointsDepot, WaypointsDepot>();
 
                 // --> [Customer] services.
                 Services.AddScoped<ISecurityService, SecurityService>();

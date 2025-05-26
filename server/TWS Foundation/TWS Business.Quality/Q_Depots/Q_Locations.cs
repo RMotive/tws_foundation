@@ -12,6 +12,7 @@ public class Q_Locations : BQ_Business<Location, LocationsDepot> {
             Status = Store(
                    new Status {
                        Name = Entropy,
+                       Reference = Entropy[..8]
                    }
                 ),
             Address = Store(

@@ -17,6 +17,7 @@ public class Q_Approaches
             Status = new Status {
                 Name = Entropy,
                 Description = Entropy,
+                Reference = Entropy[..8]
             },
         };
     }

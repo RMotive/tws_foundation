@@ -10,6 +10,7 @@ public class Q_SCT : BQ_Business<SCT, SCTDepot> {
         Status status = Store(
                 new Status {
                     Name = Entropy,
+                    Reference = Entropy[..8],
                 }
             );
 

@@ -13,6 +13,7 @@ public class Q_Trailer_Types : BQ_Business<Trailer_Type, TrailerTypesDepot> {
             Status = Store(
                    new Status {
                        Name = Entropy,
+                       Reference = Entropy[..8],
                    }
                 ),
             Class = Store(

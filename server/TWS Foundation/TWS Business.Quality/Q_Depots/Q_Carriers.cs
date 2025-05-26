@@ -12,11 +12,13 @@ public class Q_Carriers : BQ_Business<Carrier, CarriersDepot> {
             Name = Entropy,
             Status = new Status {
                 Name = Entropy,
+                Reference = Entropy[..8]
             },
             Approach = new Approach {
                 EMail = Entropy,
                 Status = new Status {
                     Name = "A" + Entropy,
+                    Reference = "A" + Entropy[..7],
                 }
             },
             Address = new Address {
