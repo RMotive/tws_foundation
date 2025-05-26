@@ -42,50 +42,70 @@ final class AuthPage extends PageB {
 
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: TweenAnimationBuilder<double>(
-        tween: Tween<double>(begin: 0, end: translation),
-        duration: 600.miliseconds,
-        builder: (BuildContext context, double value, Widget? child) {
-          return Transform.translate(
-            offset: Offset(0, value),
-            child: Center(
-              child: SizedBox(
-                width: pageSize.width,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Wrap(
-                    runSpacing: itemSeparation * 2,
-                    alignment: isFullView ? WrapAlignment.spaceEvenly : WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: <Widget>[
-                      // --> Business decorator.
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isFullView ? 0 : (itemSeparation + separatorDecoratorWidth),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0, end: translation),
+              duration: 600.miliseconds,
+              builder: (BuildContext context, double value, Widget? child) {
+                return Transform.translate(
+                  offset: Offset(0, value),
+                  child: Center(
+                    child: SizedBox(
+                      width: pageSize.width,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Wrap(
+                          runSpacing: itemSeparation * 2,
+                          alignment: isFullView ? WrapAlignment.spaceEvenly : WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: <Widget>[
+                            // --> Business decorator.
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isFullView ? 0 : (itemSeparation + separatorDecoratorWidth),
+                              ),
+                              child: FittedBox(child: _AuthPageBusinessLogo()),
+                            ),
+                            // --> Separator bar.
+                            Visibility(
+                              visible: isFullView,
+                              child: ColoredBox(
+                                color: Colors.grey,
+                                child: SizedBox.fromSize(size: Size(separatorDecoratorWidth, separatorHeight)),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isFullView ? 0 : (itemSeparation + separatorDecoratorWidth),
+                              ),
+                              child: _AuthPageForm(solutionSign: solutionSign, onAuthSuccess: onAuthSuccess),
+                            ),
+                          ],
                         ),
-                        child: FittedBox(child: _AuthPageBusinessLogo()),
                       ),
-                      // --> Separator bar.
-                      Visibility(
-                        visible: isFullView,
-                        child: ColoredBox(
-                          color: Colors.grey,
-                          child: SizedBox.fromSize(size: Size(separatorDecoratorWidth, separatorHeight)),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isFullView ? 0 : (itemSeparation + separatorDecoratorWidth),
-                        ),
-                        child: _AuthPageForm(solutionSign: solutionSign, onAuthSuccess: onAuthSuccess),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-          );
-        },
+          ),
+
+          Builder(
+            builder: (BuildContext context) {
+              final double keyboardInset = MediaQuery.of(context).viewInsets.bottom;
+
+              return AnimatedSize(
+                duration: 2.seconds,
+                child: SizedBox(
+                  width: pageSize.width,
+                  height: keyboardInset,
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
