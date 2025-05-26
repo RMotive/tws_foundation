@@ -24,3 +24,4 @@ export 'src/layouts/navigation_layout/navigation_layout.dart';
 
 // [pages]
 export 'src/pages/auth_page/auth_page.dart';
+export 'src/pages/yardlogs_page/yardlogs_page.dart';
