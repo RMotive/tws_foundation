@@ -6,7 +6,7 @@ extension EntityInvalidationList<T extends EntityI<T>> on List<EntityInvalidatio
   /// Validate a dependecy class and cast the [EntityI] result into the original [EntityI] type List if result is not empty.
   /// - [entity] Main entity that contains the dependency to evaluate.
   /// - [evaluate] Dependency to evaluate in main entity.
-  validateDependency(T entity, EntityI<Object?> evaluate) {
+  void validateDependency(T entity, EntityI<Object?> evaluate) {
     List<EntityInvalidation<Object?>> results = evaluate.evaluate();
     if(results.isNotEmpty) {
       /// For each invalidation result, perfom a cast values and insert the result into the original list.

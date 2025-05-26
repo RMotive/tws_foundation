@@ -1,6 +1,5 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 class FoundationThemeLight extends FoundationThemeB {
