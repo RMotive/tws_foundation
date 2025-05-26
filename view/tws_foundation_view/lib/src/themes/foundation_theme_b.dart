@@ -4,10 +4,17 @@ import 'package:csm_view/csm_view.dart';
 ///
 /// Defines a base contract theme for any {TWS Foundation View} usage.
 abstract class FoundationThemeB extends ThemeB {
-  final String authPageBusinessLogoAssetAccess;
 
+  ///
+  final String businessLogo;
+
+  ///
   final SimpleTheming page;
-  final SimpleTheming masterLayout;
+
+  ///
+  final SimpleTheming navigationLayout;
+
+  ///
   final SimpleTheming primaryControlColor;
   final SimpleTheming primaryDisabledControl;
   final SimpleTheming primaryCriticalControl;
@@ -19,9 +26,9 @@ abstract class FoundationThemeB extends ThemeB {
 
   const FoundationThemeB(
     super.identifier, {
-    required this.authPageBusinessLogoAssetAccess,
+    required this.businessLogo,
     required this.page,
-    required this.masterLayout,
+    required this.navigationLayout,
     required this.primaryControlState,
     required this.primaryControlColor,
     required this.criticalControlState,

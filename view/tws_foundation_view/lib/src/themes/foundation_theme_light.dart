@@ -6,10 +6,10 @@ class FoundationThemeLight extends FoundationThemeB {
   const FoundationThemeLight()
     : super(
         'foundation-light-flat-theme',
-        authPageBusinessLogoAssetAccess: FoundationAssets.fullLogoBlackWebp,
+        businessLogo: FoundationAssets.fullLogoBlackWebp,
         iconBackground: FoundationColors.warmWhite,
         icon: const Icon(Icons.abc),
-        masterLayout: const SimpleTheming(
+        navigationLayout: const SimpleTheming(
           back: FoundationColors.oceanBlue,
           fore: FoundationColors.warmWhite,
           accent: Colors.transparent,

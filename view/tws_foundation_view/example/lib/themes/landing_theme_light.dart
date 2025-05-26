@@ -19,14 +19,13 @@ final class LandingThemeLight extends PackageLandingThemeLight
       _foundation.articlesLayoutSelectorButtonState;
 
   @override
-  String get authPageBusinessLogoAssetAccess =>
-      _foundation.authPageBusinessLogoAssetAccess;
+  String get businessLogo => _foundation.businessLogo;
 
   @override
   StateTheming get criticalControlState => _foundation.criticalControlState;
 
   @override
-  SimpleTheming get masterLayout => _foundation.masterLayout;
+  SimpleTheming get navigationLayout => _foundation.navigationLayout;
 
   @override
   StateTheming get masterLayoutMenuButtonState =>

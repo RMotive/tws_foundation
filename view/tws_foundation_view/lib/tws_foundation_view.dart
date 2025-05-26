@@ -19,7 +19,8 @@ export 'src/widgets/button_flat.dart';
 export 'src/widgets/entity_creation_form/entity_creation_form_agent.dart';
 export 'src/widgets/entity_creation_form/entity_creation_form.dart';
 
-// [pages]
+// [layouts]
+export 'src/layouts/navigation_layout/navigation_layout.dart';
 
-// [pages.auth_page]
+// [pages]
 export 'src/pages/auth_page/auth_page.dart';

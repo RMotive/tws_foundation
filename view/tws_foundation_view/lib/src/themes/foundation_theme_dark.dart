@@ -7,10 +7,10 @@ class FoundationThemeDark extends FoundationThemeB {
   const FoundationThemeDark()
     : super(
         'foundation-dark-flat-theme',
-        authPageBusinessLogoAssetAccess: FoundationAssets.fullLogoWhiteWebp,
+        businessLogo: FoundationAssets.fullLogoWhiteWebp,
         iconBackground: FoundationColors.warmWhite,
         icon: const Icon(Icons.abc),
-        masterLayout: const SimpleTheming(
+        navigationLayout: const SimpleTheming(
           back: FoundationColors.oceanBlue,
           fore: FoundationColors.warmWhite,
           accent: Colors.transparent,

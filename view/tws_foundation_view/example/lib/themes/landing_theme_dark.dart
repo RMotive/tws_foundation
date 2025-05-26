@@ -19,15 +19,14 @@ final class LandingThemeDark extends PackageLandingThemeDark
       _foundation.articlesLayoutSelectorButtonState;
 
   @override
-  String get authPageBusinessLogoAssetAccess =>
-      _foundation.authPageBusinessLogoAssetAccess;
+  String get businessLogo => _foundation.businessLogo;
 
   @override
   StateTheming get criticalControlState => _foundation.criticalControlState;
 
   @override
   // TODO: implement masterLayout
-  SimpleTheming get masterLayout => throw UnimplementedError();
+  SimpleTheming get navigationLayout => throw UnimplementedError();
 
   @override
   StateTheming get masterLayoutMenuButtonState =>

@@ -18,7 +18,7 @@ final class _AuthPageBusinessLogo extends StatelessWidget {
           child: Image(
             isAntiAlias: true,
             filterQuality: FilterQuality.high,
-            image: AssetImage(theme.authPageBusinessLogoAssetAccess),
+            image: AssetImage(theme.businessLogo),
           ),
         ),
       ),
