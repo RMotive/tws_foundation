@@ -71,6 +71,8 @@ final class FoundationServer extends ServerB {
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
     bool isRelease, {
+    Uri? devHost,
+    Uri? prodHost,
     ServiceImplementationBuilder<SecurityServiceI>? securityServiceBuilder,
     ServiceImplementationBuilder<SolutionsServiceI>? solutionsServiceBuilder,
     ServiceImplementationBuilder<AddressServiceI>? addressesServiceBuilder,
@@ -88,11 +90,13 @@ final class FoundationServer extends ServerB {
   })
       : super(
           isRelease: isRelease,
-          Uri(
+            devHost ??
+                Uri(
             'localhost',
             '',
             port: 5195,
           ),
+            prodHost: prodHost
         ) {
 
 
