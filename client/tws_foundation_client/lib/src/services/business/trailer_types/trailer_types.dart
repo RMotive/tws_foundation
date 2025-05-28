@@ -4,6 +4,11 @@ import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/trailer_classes/trailer_class.dart';
 
+/// [TrailerType] default builder.
+TrailerType trailertypeBuilder() => TrailerType();
+
+
+/// Defines a business entity that stores relevant data for a trailer operation, like [size] or [TrailerClass]. 
 final class TrailerType extends EntityB<TrailerType> {
   /// [size] property key.
   static const String kSize = "size";

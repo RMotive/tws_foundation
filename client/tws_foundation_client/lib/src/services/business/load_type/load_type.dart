@@ -1,5 +1,9 @@
 import 'package:csm_client/csm_client.dart';
 
+/// [Loadtype] default builder.
+Loadtype loadtypeBuilder() => Loadtype();
+
+/// Defines a business entity that stores the data for load types that can be asigned to [Trailer] entities.
 final class Loadtype extends NamedEntityB<Loadtype> {
 
   /// [reference] property key.

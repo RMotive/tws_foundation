@@ -1,5 +1,10 @@
 import 'package:csm_client/csm_client.dart';
 
+/// [TrailerClass] default builder.
+TrailerClass trailerClassBuilder() => TrailerClass();
+
+/// Defines a business entity that stores the trailer type data, 
+/// indicating the suitable load for the [Trailer] in this [TrailerClass].
 final class TrailerClass extends NamedEntityB<TrailerClass> {
 
   /// Generates a new [TrailerClass] instance from mandatory values.

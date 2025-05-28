@@ -3,6 +3,11 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 
+/// [Situation] default builder.
+Situation situationBuilder() => Situation();
+
+/// Defines a business entity that stores data for other business entities operating [Situation] status.
+/// Defines if and entity is on the way, stored, parked, out of service, etc.
 final class Situation extends NamedEntityB<Situation> {
 
   /// [reference] property key.

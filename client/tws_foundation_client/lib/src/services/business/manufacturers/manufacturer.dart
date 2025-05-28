@@ -3,6 +3,10 @@ import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 
+/// [Manufacturer] default builder.
+Manufacturer manufacturerBuilder() => Manufacturer();
+
+/// Defines a business entity that stores the [Manufacturer] data for [Trucks] entities.
 final class Manufacturer extends NamedEntityB<Manufacturer> {
 
   /// Entity [Status] information.

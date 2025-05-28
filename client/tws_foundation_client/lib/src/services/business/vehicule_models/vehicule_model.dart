@@ -3,6 +3,9 @@ import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/entities/business/status.dart';
 
+/// [VehiculeModel] default builder.
+VehiculeModel vehiculemodelBuilder() => VehiculeModel();
+
 final class VehiculeModel extends NamedEntityB<VehiculeModel> {
 
   /// [year] property key.

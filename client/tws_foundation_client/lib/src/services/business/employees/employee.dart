@@ -7,6 +7,10 @@ import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/addresses/address.dart';
 import 'package:tws_foundation_client/src/services/business/employees/employee_dates.dart';
 
+/// [Employee] default builder.
+Employee employeeBuilder() => Employee();
+
+/// Defines a business entity that stores the personal data for each [Employee] in TWS operations.
 final class Employee extends EntityB<Employee> {
   /// [curp] property key.
   static const String kCurp = "curp";
