@@ -10,11 +10,11 @@ import '../../../../utils/test_utils.dart';
 
 void main() {
   late SecurityServiceI serviceMock;
-  late ServerSession serverSessionMock;
+  late SessionData serverSessionMock;
 
   setUp(
     () {
-      serverSessionMock = ServerSession();
+      serverSessionMock = SessionData();
       serverSessionMock.expiration = DateTime.now().toUtc();
       serverSessionMock.wildcard = true;
       serverSessionMock.token = 'test_token';
@@ -50,8 +50,8 @@ void main() {
       test(
         '[authenticate]: correctly gets {ServerSession} object',
         () async {
-          final FoundationResponseResolver<ServerSession> resolver = await serviceMock.authenticate(input);
-          final ServerSession serverSession = resolver.resolveDirect(() => ServerSession());
+          final FoundationResponseResolver<SessionData> resolver = await serviceMock.authenticate(input);
+          final SessionData serverSession = resolver.resolveDirect(() => SessionData());
 
           expect(serverSession.token, serverSessionMock.token);
           expect(serverSession.identity, serverSessionMock.identity);

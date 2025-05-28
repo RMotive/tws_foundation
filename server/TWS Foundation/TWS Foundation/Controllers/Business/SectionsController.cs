@@ -24,23 +24,23 @@ public class SectionsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Section> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Section, ViewInput<Section>> {
+                        new QueryInput<Section, ViewInput<Section>> {
                             Parameters = options
                         }
                     )
             );
     }
 
-    [HttpPost(), Auth("Create")]
+    [HttpPost(), Action("Create")]
     public async Task<IActionResult> Create(Section[] Sections) {
         return Ok(await Service.Create(Sections));
     }
 
-    [HttpPost(), Auth("Update")]
+    [HttpPost(), Action("Update")]
     public async Task<IActionResult> Update(UpdateInput<Section> Section) {
         UpdateOutput<Section> Output = await Service.Update(Section);
         return Ok(Output);

@@ -23,11 +23,11 @@ public class LoadTypesController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<LoadType> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<LoadType, ViewInput<LoadType>> {
+                        new QueryInput<LoadType, ViewInput<LoadType>> {
                             Parameters = options
                         }
                     )

@@ -23,11 +23,11 @@ public class CarriersController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Carrier> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Carrier, ViewInput<Carrier>> {
+                        new QueryInput<Carrier, ViewInput<Carrier>> {
                             Parameters = options
                         }
                     )

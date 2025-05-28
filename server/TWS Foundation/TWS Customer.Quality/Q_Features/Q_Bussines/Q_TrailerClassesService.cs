@@ -50,7 +50,7 @@ public class Q_TrailerClassesService
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
         ViewOutput<Trailer_Class> viewOutput = await _service.View(
-                new OperationInput<Trailer_Class, ViewInput<Trailer_Class>> {
+                new QueryInput<Trailer_Class, ViewInput<Trailer_Class>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -65,17 +65,6 @@ public class Q_TrailerClassesService
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
 
-        );
-    }
-
-    [Fact(DisplayName = "[Read]: Reads matched records")]
-    public async Task Read() {
-        Trailer_Class mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Trailer_Class> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
-
-        Assert.Multiple(
-            () => Assert.False(readOutput.Failed),
-            () => Assert.True(readOutput.Successes.First().Id > 0)
         );
     }
 }

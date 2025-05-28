@@ -202,7 +202,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>>
             width: viewSize.width,
             child: AnimatedBuilder(
               animation: detailsDisplayAnimation,
-              builder: (_, __) {
+              builder: (_, _) {
                 final double animationComputationValue =
                     viewSize.width - detailsDisplayAnimation.value;
                 final double cellWidth =
@@ -260,7 +260,7 @@ class _TWSArticleTableState<TArticle extends EntityB<TArticle>>
                                                 viewSize: viewSize,
                                               ),
                                           errorBuilder:
-                                              (_, __, ___) =>
+                                              (_, _, _) =>
                                                   _TWSArticleTableError(
                                                     viewSize: viewSize,
                                                   ),

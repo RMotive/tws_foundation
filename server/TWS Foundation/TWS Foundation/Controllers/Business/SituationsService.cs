@@ -23,11 +23,11 @@ public class SituationsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Situation> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Situation, ViewInput<Situation>> {
+                        new QueryInput<Situation, ViewInput<Situation>> {
                             Parameters = options
                         }
                     )

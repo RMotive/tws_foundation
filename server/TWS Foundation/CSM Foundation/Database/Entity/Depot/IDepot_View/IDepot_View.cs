@@ -35,5 +35,5 @@ public interface IDepot_View<T>
     /// <returns> 
     ///     The final View resolutions, giving metadata related to the created View and records resolved 
     /// </returns>
-    Task<ViewOutput<T>> View(OperationInput<T, ViewInput<T>> input);
+    Task<ViewOutput<T>> View(QueryInput<T, ViewInput<T>> input);
 }

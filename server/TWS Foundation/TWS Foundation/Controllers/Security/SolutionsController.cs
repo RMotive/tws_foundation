@@ -21,29 +21,29 @@ public class SolutionsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Solution> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Solution, ViewInput<Solution>> {
+                        new QueryInput<Solution, ViewInput<Solution>> {
                             Parameters = options
                         }
                     )
             );
     }
 
-    [HttpPost(), Auth("Create")]
+    [HttpPost(), Action("Create")]
     public async Task<IActionResult> Create(Solution[] Solutions) {
         return Ok(await Service.Create(Solutions));
     }
 
-    [HttpPost(), Auth("Update")]
+    [HttpPost(), Action("Update")]
     public async Task<IActionResult> Update(UpdateInput<Solution> Solution) {
         UpdateOutput<Solution> Output = await Service.Update(Solution);
         return Ok(Output);
     }
 
-    [HttpPost(), Auth("Delete")]
+    [HttpPost(), Action("Delete")]
     public async Task<IActionResult> Delete(int Id) {
         return Ok(await Service.Delete(Id));
     }

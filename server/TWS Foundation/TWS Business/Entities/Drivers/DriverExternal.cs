@@ -10,7 +10,7 @@ namespace TWS_Business.Entities.Drivers;
 ///     [etBuilder] that represents an external driver not handled by the business administration, a third party driver.
 /// </summary>
 public partial class DriverExternal
-    : TWSScopeEntity<Driver_Common> {
+    : CommonEntityEdge<Driver_Common> {
 
     #region Relations
 

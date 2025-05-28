@@ -9,8 +9,12 @@ abstract class _NavigationLayoutB extends StatelessWidget {
   final Widget page;
 
   ///
+  final Route? rootRoute;
+
+  ///
   const _NavigationLayoutB({
     required this.routeData,
     required this.page,
+    this.rootRoute,
   });
 }

@@ -6,9 +6,9 @@ namespace TWS_Business.Depots;
 
 public class BCommonDepot<TInternal, TExternal, TCommon>
     : BDepot<Database, TCommon>
-    where TCommon : TWSScopeCommonEntity<TInternal, TExternal>, new() 
-    where TInternal : TWSScopeEntity<TCommon> 
-    where TExternal : TWSScopeEntity<TCommon> {
+    where TCommon : CommonEntity<TInternal, TExternal>, new() 
+    where TInternal : CommonEntityEdge<TCommon> 
+    where TExternal : CommonEntityEdge<TCommon> {
 
     public BCommonDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
 

@@ -23,11 +23,11 @@ public class VehiculeModelsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<VehiculeModel> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<VehiculeModel, ViewInput<VehiculeModel>> {
+                        new QueryInput<VehiculeModel, ViewInput<VehiculeModel>> {
                             Parameters = options
                         }
                     )

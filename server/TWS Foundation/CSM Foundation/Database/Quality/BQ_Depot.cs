@@ -4,6 +4,7 @@ using System.Reflection;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
@@ -288,8 +289,12 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity samplePivot = samples[0];
 
         BatchOperationOutput<TEntity> readEntites = await Depot.Read(
-                EntityBatchBehaviors.First,
-                (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
+                new QueryInput<TEntity, FilterQueryInput<TEntity>> {
+                    Parameters = new FilterQueryInput<TEntity> {
+                        Behavior = FilteringBehaviors.First,
+                        Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
+                    }
+                }
             );
 
         Assert.Multiple(
@@ -316,8 +321,12 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity samplePivot = samples[1];
 
         BatchOperationOutput<TEntity> readEntites = await Depot.Read(
-                EntityBatchBehaviors.Last,
-                (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
+                new QueryInput<TEntity, FilterQueryInput<TEntity>> {
+                    Parameters = new FilterQueryInput<TEntity> {
+                        Behavior = FilteringBehaviors.Last,
+                        Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
+                    }
+                }
             );
 
         Assert.Multiple(
@@ -343,8 +352,12 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity[] samples = await Store(2, EntityFactory);
 
         BatchOperationOutput<TEntity> readEntites = await Depot.Read(
-                EntityBatchBehaviors.All,
-                (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
+                new QueryInput<TEntity, FilterQueryInput<TEntity>> {
+                    Parameters = new FilterQueryInput<TEntity> {
+                        Behavior = FilteringBehaviors.All,
+                        Filter = (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
+                    }
+                }
             );
 
         Assert.Multiple(
@@ -377,7 +390,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity sample = RunEntityFactory(EntityFactory);
 
         UpdateOutput<TEntity> updateOutput = await Depot.Update(
-                new OperationInput<TEntity, UpdateInput<TEntity>> {
+                new QueryInput<TEntity, UpdateInput<TEntity>> {
                     Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
                         Create = true,
@@ -406,7 +419,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
                 async () => {
                     UpdateOutput<TEntity> updateOutput = await Depot.Update(
-                new OperationInput<TEntity, UpdateInput<TEntity>> {
+                new QueryInput<TEntity, UpdateInput<TEntity>> {
                     Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
                     },
@@ -426,7 +439,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
                 async () => {
                     UpdateOutput<TEntity> updateOutput = await Depot.Update(
-                        new OperationInput<TEntity, UpdateInput<TEntity>> {
+                        new QueryInput<TEntity, UpdateInput<TEntity>> {
                             Parameters = new UpdateInput<TEntity> {
                                 Entity = sample,
                             },
@@ -447,7 +460,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         Evaluable.SetValue(sample, Evaluable.GetValue(valueReference));
 
         UpdateOutput<TEntity> updateOutput = await Depot.Update(
-                new OperationInput<TEntity, UpdateInput<TEntity>> {
+                new QueryInput<TEntity, UpdateInput<TEntity>> {
                     Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
                     },
@@ -504,8 +517,8 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         TEntity entity = (await Store(10, EntityFactory))[0];
 
         BatchOperationOutput<TEntity> deleteOutput = await Depot.Delete(
-                new OperationInput<TEntity, BatchOperationInput<TEntity>>() {
-                    Parameters = new BatchOperationInput<TEntity> {
+                new QueryInput<TEntity, FilterQueryInput<TEntity>>() {
+                    Parameters = new FilterQueryInput<TEntity> {
                         Filter = (entityB) => entityB.Id == entity.Id,
                     }
                 }
@@ -522,10 +535,10 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
                         Assert.Equal(entity.Id, deletedEntity.Id);
                     },
-                    () => { 
+                    () => {
                         Assert.Null(
                                 Database.Set<TEntity>().Find(entity.Id)
-                            );    
+                            );
                     }
                 ]
             );
@@ -541,7 +554,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         await Store(30, EntityFactory);
 
         ViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, ViewInput<TEntity>> {
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
@@ -564,7 +577,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         await Store(30, EntityFactory);
 
         ViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, ViewInput<TEntity>> { 
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new ViewInput<TEntity> {
                         Retroactive = false,
                         Range = 20,
@@ -585,7 +598,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     public async Task ViewC() {
 
         ViewOutput<TEntity> orderedViewOutput = await Depot.View(
-                        new OperationInput<TEntity, ViewInput<TEntity>> {
+                        new QueryInput<TEntity, ViewInput<TEntity>> {
                             Parameters = new() {
                                 Page = 1,
                                 Range = 20,
@@ -599,10 +612,10 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                             },
                         }
                    );
-          
+
 
         // --> Manual ordering undordered result for reference.
-        TEntity[] orderedReferenceRecords = [..orderedViewOutput.Entities];
+        TEntity[] orderedReferenceRecords = [.. orderedViewOutput.Entities];
         {
             Type setType = typeof(TEntity);
             ParameterExpression parameterExpression = Expression.Parameter(setType, $"X0");
@@ -627,7 +640,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     [Fact(DisplayName = "[View]: Using Date filter")]
     public async Task ViewD() {
         ViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, ViewInput<TEntity>> {
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Page = 1,
                         Range = 20,
@@ -640,10 +653,10 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                     },
                 }
             );
-            
+
 
         Assert.All(
-            viewOutput.Entities, 
+            viewOutput.Entities,
             (i) => {
                 Assert.True(DateTime.Compare(i.Timestamp, DateTime.UtcNow.Date) > 0);
             }
@@ -658,7 +671,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         object? sampleValue = Evaluable.GetValue(sampleEntity);
 
         ViewOutput<TEntity> qOut = await Depot.View(
-                new OperationInput<TEntity, ViewInput<TEntity>> {
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
@@ -702,7 +715,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
             possibleValues.Add(sampleValue);
         }
         ViewOutput<TEntity> viewOutput = await Depot.View(
-                new OperationInput<TEntity, ViewInput<TEntity>> {
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,

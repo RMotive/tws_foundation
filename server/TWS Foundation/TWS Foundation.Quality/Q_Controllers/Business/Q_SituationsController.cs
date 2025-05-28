@@ -1,6 +1,7 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+using CSM_Foundation.Server.Scheming;
 
 using CSM_Security.Entities;
 
@@ -33,7 +34,7 @@ public class Q_SitutationsController
 
     [Fact]
     public async Task View() {
-        (HttpStatusCode Status, GenericFrame Response) = await Post("View", new ViewInput<TWS_Security.Sets.Account> {
+        (HttpStatusCode Status, ResponseSchema Response) = await Post("View", new ViewInput<Account> {
             Page = 1,
             Range = 10,
             Retroactive = false,
@@ -41,8 +42,8 @@ public class Q_SitutationsController
 
         Assert.Equal(HttpStatusCode.OK, Status);
 
-        View Estela = Framing<SuccessFrame<View>>(Response).Estela;
-        Assert.True(Estela.Records.Length > 0);
+        ViewOutput<Account> Estela = Framing<SuccessFrame<ViewOutput<Account>>>(Response).Content;
+        Assert.True(Estela.Entities.Length > 0);
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }

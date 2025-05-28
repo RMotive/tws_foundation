@@ -175,7 +175,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
             child: CircularProgressIndicator(color: pageColorTheme.fore),
           );
         },
-        errorBuilder: (__, Object? error, _) {
+        errorBuilder: (_, Object? error, _) {
           return const TWSDisplayFlat(display: "Something go wrong");
         },
         successBuilder: (BuildContext ctx, List<ViewOutput<dynamic>> data) {

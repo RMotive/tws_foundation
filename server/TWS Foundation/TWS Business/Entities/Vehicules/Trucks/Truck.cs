@@ -14,7 +14,7 @@ namespace TWS_Business.Entities.Vehicules.Trucks;
 ///     [Entity] that represents a physical <see cref="Truck"/> for business operations.
 /// </summary>
 public class Truck
-    : TWSScopeEntity<Truck_Common>, IHistorical<Truck_History> {
+    : CommonEntityEdge<Truck_Common>, IHistorical<Truck_History> {
 
     #region Properties
 

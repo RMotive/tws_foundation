@@ -27,7 +27,7 @@ public interface IService<TEntity>
     /// <returns>
     ///     The complex View results, a View is a paged and ordered collection of records based on the given <paramref name="Options"/>
     /// </returns>
-    Task<ViewOutput<TEntity>> View(OperationInput<TEntity, ViewInput<TEntity>> input);
+    Task<ViewOutput<TEntity>> View(QueryInput<TEntity, ViewInput<TEntity>> input);
 
     /// <summary>
     ///     Creates a new <see cref="TEntity"/> set records into the data storage.
@@ -44,15 +44,6 @@ public interface IService<TEntity>
     ///     A complex batch result that provides information related to exceptions catched, record that belongs to the exception and successes.
     /// </returns>
     Task<BatchOperationOutput<TEntity>> Create(TEntity[] Entities, bool Sync = false);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="Behavior"></param>
-    /// <param name="Filter"></param>
-    /// <param name="Accumulate"></param>
-    /// <returns></returns>
-    Task<BatchOperationOutput<TEntity>> Read(EntityBatchBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, QueryProcessor<TEntity>? Accumulate = null);
 
     /// <summary>
     ///     Updates the given record, this is based on the <see cref="TEntity.Id"/> pointer to identify the record to update and override the given <paramref name="Solution"/> object.

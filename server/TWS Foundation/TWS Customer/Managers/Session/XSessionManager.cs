@@ -1,9 +1,8 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Core.Constants;
 
-namespace TWS_Customer.Managers.Session.Exceptions;
+namespace TWS_Customer.Managers.Session;
 
 /// <summary>
 ///     Custom <see cref="Exception"/> to handle <see cref="SessionManager"/> exceptions.
@@ -24,7 +23,10 @@ public class XSessionManager
         : base($"Session Manager Exception | [{Situation}]", Situation, HttpStatusCode.InternalServerError, System) {
 
         this.Situation = Situation;
-        Advise = AdvisesConstants.SERVER_CONTACT_ADVISE;
+    }
+
+    protected override Dictionary<XSessionManagerSituations, string> ResolveAdvise() {
+        return [];
     }
 }
 
@@ -33,11 +35,7 @@ public class XSessionManager
 /// </summary>
 public enum XSessionManagerSituations {
     /// <summary>
-    ///     When the manager tried to add an unsafe token to the Sessions context.
+    ///     When the <see cref="ISessionManager.Action(Services.Records.AuthInput)"/> requires the request context scope but is not being given.
     /// </summary>
-    UNSAFE_TOKEN,
-    /// <summary>
-    ///     When the session context was tried to be modified but another transaction already changed it.
-    /// </summary>
-    UNSAFE_UPDATE
+    NO_REQ_CONTEXT,
 }

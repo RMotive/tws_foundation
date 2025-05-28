@@ -23,11 +23,11 @@ public class EmployeesController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Employee> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Employee, ViewInput<Employee>> {
+                        new QueryInput<Employee, ViewInput<Employee>> {
                             Parameters = options
                         }
                     )

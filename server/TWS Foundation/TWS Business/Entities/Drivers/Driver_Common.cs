@@ -12,7 +12,7 @@ namespace TWS_Business.Entities.Drivers;
 ///     [Entity] that represent common information for [Drivers] (<see cref="Driver"/> / <see cref="DriverExternal"/>).
 /// </summary>
 public class Driver_Common
-    : TWSScopeCommonEntity<Driver, DriverExternal> {
+    : CommonEntity<Driver, DriverExternal> {
 
     #region Properties
 
@@ -87,3 +87,4 @@ public class Driver_Common
             );
     }
 }
+   

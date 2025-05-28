@@ -9,7 +9,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 ///     [Entity] that stores information about not business managed trailers, are external trailers with minimal control.
 /// </summary>
 public class TrailerExternal
-    : TWSScopeEntity<Trailer_Common> {
+    : CommonEntityEdge<Trailer_Common> {
 
     #region Properties
 

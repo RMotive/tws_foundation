@@ -32,10 +32,10 @@ public class YardLogsController
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<YardLog> input) {
         ViewOutput<YardLog> output = await _service.View(
-                new OperationInput<YardLog, ViewInput<YardLog>> {
+                new QueryInput<YardLog, ViewInput<YardLog>> {
                     Parameters = input
                 }
             );

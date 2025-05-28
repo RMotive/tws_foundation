@@ -25,8 +25,7 @@ final class LandingThemeDark extends PackageLandingThemeDark
   StateTheming get criticalControlState => _foundation.criticalControlState;
 
   @override
-  // TODO: implement masterLayout
-  SimpleTheming get navigationLayout => throw UnimplementedError();
+  SimpleTheming get navigationLayout => _foundation.navigationLayout;
 
   @override
   StateTheming get masterLayoutMenuButtonState =>

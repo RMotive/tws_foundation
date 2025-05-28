@@ -25,11 +25,11 @@ public class XAuth
         : base($"Unauthorized server transaction", siutation, HttpStatusCode.Unauthorized, null) {
     }
 
-    protected override Dictionary<XAuthSituation, string> AdviseFactory() {
+    protected override Dictionary<XAuthSituation, string> ResolveAdvise() {
 
         return new Dictionary<XAuthSituation, string> {
-            { XAuthSituation.NoToken, AdvisesConstants.SERVER_CONTACT_ADVISE },
-            { XAuthSituation.WrongTokenFormat,  $"Wrong authentication format {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
+            { XAuthSituation.NO_TOKEN, AdvisesConstants.SERVER_CONTACT_ADVISE },
+            { XAuthSituation.WRONG_TOKEN_FORMAT,  $"Wrong authentication format {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
             { XAuthSituation.Unauthorized, $"Account is unautorized to the requested feature" },
             { XAuthSituation.SystemException, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
             { XAuthSituation.ProcessException, $"Unrecognized system exception, {AdvisesConstants.SERVER_CONTACT_ADVISE}" },
@@ -49,11 +49,11 @@ public enum XAuthSituation {
     /// <summary>
     ///     When the auth header wasn't found.
     /// </summary>
-    NoToken,
+    NO_TOKEN,
     /// <summary>
     ///     When the auth token isn't in a propertly format.
     /// </summary>
-    WrongTokenFormat,
+    WRONG_TOKEN_FORMAT,
     /// <summary>
     ///     When the acount isn't authorized to the requested features/actions/solutions.
     /// </summary>

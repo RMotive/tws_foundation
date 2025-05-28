@@ -6,7 +6,7 @@ namespace CSM_Foundation.Database.Entity.Models.Input;
 ///     [Record] for specific <see cref="IDepot{TEntity}"/> operations,
 ///     is a required parameters for operations related with database data management.
 /// </summary>
-public record OperationInput<TEntity, TParameters>
+public record QueryInput<TEntity, TParameters>
     where TEntity : class, IEntity {
 
     /// <summary>
@@ -17,10 +17,10 @@ public record OperationInput<TEntity, TParameters>
     /// <summary>
     ///     Custom query process to apply before the operation commit.
     /// </summary>
-    public QueryProcessor<TEntity>? PreOperation { get; set; }
+    public QueryProcessor<TEntity>? PreProcessor { get; set; }
 
     /// <summary>
     ///     Custom query process to apply after the operation commit.
     /// </summary>
-    public QueryProcessor<TEntity>? PostOperation { get; set; }
+    public QueryProcessor<TEntity>? PostProcessor { get; set; }
 }

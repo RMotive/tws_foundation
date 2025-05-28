@@ -1,8 +1,7 @@
-﻿using System.Linq.Expressions;
-
+﻿using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
-namespace CSM_Foundation.Database.Entity.Depot;
+namespace CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 
 /// <summary>
 ///     [Interface] to expose common [Read] action methods for <see cref="IDepot{TSet}"/> implementations.
@@ -34,19 +33,10 @@ public interface IDepot_Read<TEntity>
     Task<BatchOperationOutput<TEntity>> Read(long[] ids);
 
     /// <summary>
-    ///     Reads into the database for the <typeparamref name="TEntity"/> instances matched by the given <paramref name="filter"/>.
+    ///     Reads into the database for the <typeparamref name="TEntity"/> instances matched by the given <paramref name="input"/> parameters given.
     /// </summary>
-    /// <param name="behavior">
-    ///     How the function will behave about the result.
+    /// <param name="input">
+    ///     Query input parameters.
     /// </param>
-    /// <param name="filter">
-    ///     How the function will pick the correct records to take.
-    /// </param>
-    /// <param name="postProcessing">
-    ///     Post processing function to catch the native operation resulted query and modify for custom needs.
-    /// </param>
-    /// <returns>
-    ///     Collection of <typeparamref name="TEntity"/> instances found.
-    /// </returns>
-    Task<BatchOperationOutput<TEntity>> Read(EntityBatchBehaviors behavior, Expression<Func<TEntity, bool>> filter, QueryProcessor<TEntity>? postProcessing = null);
+    Task<BatchOperationOutput<TEntity>> Read(QueryInput<TEntity, FilterQueryInput<TEntity>> input);
 }

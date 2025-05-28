@@ -18,48 +18,44 @@ public class BService<TEntity, TDepot>
     /// <summary>
     /// 
     /// </summary>
-    protected readonly TDepot Depot;
+    protected readonly TDepot _depot;
 
     readonly QueryProcessor<TEntity>? PreOperation;
 
     readonly QueryProcessor<TEntity>? PostOperation;
 
     public BService(TDepot Depot, QueryProcessor<TEntity>? preOperation = null, QueryProcessor<TEntity>? postOperation = null) {
-        this.Depot = Depot;
+        this._depot = Depot;
         PreOperation = preOperation;
         PostOperation = postOperation;
     }
 
-    protected OperationInput<TEntity, TParameters> GetOperationInput<TParameters>(TParameters parameters)
+    protected QueryInput<TEntity, TParameters> GetOperationInput<TParameters>(TParameters parameters)
     => new() {
         Parameters = parameters,
-        PreOperation = PreOperation,
-        PostOperation = PostOperation
+        PreProcessor = PreOperation,
+        PostProcessor = PostOperation
     };
 
-    public virtual Task<ViewOutput<TEntity>> View(OperationInput<TEntity, ViewInput<TEntity>> input) {
-        return Depot.View(input);
+    public virtual Task<ViewOutput<TEntity>> View(QueryInput<TEntity, ViewInput<TEntity>> input) {
+        return _depot.View(input);
     }
 
     public virtual Task<BatchOperationOutput<TEntity>> Create(TEntity[] Entities, bool Sync = false) {
-        return Depot.Create(Entities, Sync);
-    }
-
-    public virtual Task<BatchOperationOutput<TEntity>> Read(EntityBatchBehaviors Behavior, Expression<Func<TEntity, bool>> Filter, QueryProcessor<TEntity>? Accumulate = null) {
-        return Depot.Read(Behavior, Filter);
+        return _depot.Create(Entities, Sync);
     }
 
     public virtual Task<UpdateOutput<TEntity>> Update(UpdateInput<TEntity> input) {
-        return Depot.Update(
+        return _depot.Update(
                 GetOperationInput(input)
             );
     }
 
     public virtual Task<TEntity> Delete(long id) {
-        return Depot.Delete(id);
+        return _depot.Delete(id);
     }
 
     public virtual Task<BatchOperationOutput<TEntity>> Delete(long[] ids) {
-        return Depot.Delete(ids);
+        return _depot.Delete(ids);
     }
 }

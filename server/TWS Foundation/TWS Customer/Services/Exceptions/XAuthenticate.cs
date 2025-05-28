@@ -1,21 +1,20 @@
 ﻿using System.Net;
 
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Core.Constants;
 
 namespace TWS_Customer.Services.Exceptions;
 public class XAuthenticate
     : BException<XAuthenticateSituation> {
     public XAuthenticate(XAuthenticateSituation Situation)
-        : base($"Authentication request has failed", Situation, HttpStatusCode.Unauthorized, null) {
+        : base($"Authentication request has failed", Situation, HttpStatusCode.Unauthorized) {
+    }
 
-        this.Situation = Situation;
-        Advise = Situation switch {
-            XAuthenticateSituation.IDENTITY_UNFOUND => $"Identity not found",
-            XAuthenticateSituation.WRONG_PASSWORD => $"Wrong password",
-            XAuthenticateSituation.SOLUTION_DISABLED => $"The solution is currently disabled",
-            XAuthenticateSituation.UNAUTHORIZED_SOLUTION => $"Unathurozied access to that solution",
-            _ => AdvisesConstants.SERVER_CONTACT_ADVISE,
+    protected override Dictionary<XAuthenticateSituation, string> ResolveAdvise() {
+        return new Dictionary<XAuthenticateSituation, string> {
+            { XAuthenticateSituation.IDENTITY_UNFOUND, $"Identity not found" },
+            { XAuthenticateSituation.WRONG_PASSWORD, $"Wrong password" },
+            { XAuthenticateSituation.SOLUTION_DISABLED, $"The solution is currently disabled" },
+            { XAuthenticateSituation.UNAUTHORIZED_SOLUTION, $"Unathurozied access to that solution" },
         };
     }
 }

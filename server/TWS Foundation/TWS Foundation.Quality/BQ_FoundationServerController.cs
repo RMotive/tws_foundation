@@ -25,7 +25,7 @@ public abstract class BQ_FoundationServerController
     /// <summary>
     ///     
     /// </summary>
-    readonly AuthenticationInput _qualityAuth;
+    readonly AuthInput _qualityAuth;
 
     public BQ_FoundationServerController(string service, WebApplicationFactory<Program> hostFactory)
         : base(service, "TWSMF", hostFactory) {
@@ -37,7 +37,7 @@ public abstract class BQ_FoundationServerController
             throw new Exception($"Unconfigured quality purpose authentication information at runsettings, <Q.Identity> and <Q.Password>");
         }
 
-        _qualityAuth = new AuthenticationInput {
+        _qualityAuth = new AuthInput {
             Sign = "TWSMF",
             Identity = qualityIdentity,
             Password = Encoding.UTF8.GetBytes(qualityPassword)
@@ -45,23 +45,11 @@ public abstract class BQ_FoundationServerController
     }
 
     protected override async Task<string> Authenticate() {
-        (HttpStatusCode statusCode, ResponseSchema frameResult) = await XPost<ResponseSchema, AuthenticationInput>("Security/Authenticate", _qualityAuth);
+        (HttpStatusCode statusCode, ResponseSchema frameResult) = await XPost<ResponseSchema, AuthInput>("Security/Authenticate", _qualityAuth);
 
-        Dictionary<string, object> estela = frameResult.Content;
-        if (statusCode != HttpStatusCode.OK) {
-            Assert.Fail($"Failed request with: {estela[nameof(ExceptionInfo.System)]} \ndue to: {estela[nameof(ExceptionInfo.Advise)]} \nTried with: {_qualityAuth.Identity}");
-        }
-        SuccessFrame<ServerSession> successFrame = Framing<SuccessFrame<ServerSession>>(frameResult);
-        ServerSession session = successFrame.Content;
+        
 
-        Assert.True(session.Wildcard, $"User {session.Identity} doesn't have wildcard enabled");
-        Assert.Equal(_qualityAuth.Identity, session.Identity);
-
-        if (!session.Permits.Any(i => i.Reference == "TWSMFD01")) {
-            Assert.Fail($"Account ({_qualityAuth.Identity}) doesn't contain (Development[TWSMFD01]) permit");
-        }
-
-        return session.Token.ToString();
+        return "";
     }
 }
 

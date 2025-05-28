@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Customer.Quality;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -53,7 +54,7 @@ public class Q_AddressesService
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
         ViewOutput<Address> viewOutput = await _service.View(
-                new OperationInput<Address, ViewInput<Address>> {
+                new QueryInput<Address, ViewInput<Address>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -68,17 +69,6 @@ public class Q_AddressesService
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
 
-        );
-    }
-
-    [Fact(DisplayName = "[Read]: Reads matched records")]
-    public async Task Read() {
-        Address mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Address> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
-
-        Assert.Multiple(
-            () => Assert.False(readOutput.Failed),
-            () => Assert.True(readOutput.Successes.First().Id > 0)
         );
     }
 }

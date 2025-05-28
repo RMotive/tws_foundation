@@ -1,12 +1,13 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:example/entries/auth_page.dart';
+import 'package:example/entries/navigation_layout.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/tws_foundation_view.dart' hide AuthPage;
+import 'package:tws_foundation_view/tws_foundation_view.dart' hide AuthPage, NavigationLayout;
 
 void main() {
   runApp(const MainApp());
@@ -17,6 +18,11 @@ final class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<LandingThemeB> themes = <LandingThemeB>[
+      LandingThemeDark(),
+      LandingThemeLight(),
+    ];
+
     return PackageLanding<LandingThemeB>(
       name: "TWS Foundation View",
       description: (_, Color foreColor) {
@@ -36,8 +42,13 @@ final class MainApp extends StatelessWidget {
         Injector.addSingleton<SecurityServiceI>(foundationServer.securityService);
       },
       defaultTheme: LandingThemeDark(),
-      themes: <LandingThemeB>[LandingThemeDark(), LandingThemeLight()],
-      landingEntries: <PackageLandingEntryI<LandingThemeB>>[AuthPage()],
+      themes: themes,
+      landingEntries: <PackageLandingEntryI<LandingThemeB>>[
+        AuthPage(),
+        NavigationLayout(
+          appThemes: themes,
+        ),
+      ],
     );
   }
 }

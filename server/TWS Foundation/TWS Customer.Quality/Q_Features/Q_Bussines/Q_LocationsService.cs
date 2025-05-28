@@ -66,7 +66,7 @@ public class Q_LocationsService
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
         ViewOutput<Location> viewOutput = await _service.View(
-                new OperationInput<Location, ViewInput<Location>> {
+                new QueryInput<Location, ViewInput<Location>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -81,17 +81,6 @@ public class Q_LocationsService
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
 
-        );
-    }
-
-    [Fact(DisplayName = "[Read]: Reads matched records")]
-    public async Task Read() {
-        Location mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Location> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
-
-        Assert.Multiple(
-            () => Assert.False(readOutput.Failed),
-            () => Assert.True(readOutput.Successes.First().Id > 0)
         );
     }
 

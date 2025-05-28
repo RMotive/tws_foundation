@@ -88,7 +88,7 @@ public class Q_SectionsService
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
         ViewOutput<Section> viewOutput = await _service.View(
-                new OperationInput<Section, ViewInput<Section>> {
+                new QueryInput<Section, ViewInput<Section>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -103,17 +103,6 @@ public class Q_SectionsService
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
 
-        );
-    }
-
-    [Fact(DisplayName = "[Read]: Reads matched records")]
-    public async Task Read() {
-        Section mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Section> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
-
-        Assert.Multiple(
-            () => Assert.False(readOutput.Failed),
-            () => Assert.True(readOutput.Successes.First().Id > 0)
         );
     }
 

@@ -1,25 +1,8 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 
 namespace CSM_Foundation.Database.Entity.Depot;
-
-/// <summary>
-///     Indicates how operations that handles a batch of <see cref="IEntity"/> will interact.
-/// </summary>
-public enum EntityBatchBehaviors {
-    /// <summary>
-    ///     First record found that matches.
-    /// </summary>
-    First,
-    /// <summary>
-    ///     Last record found that matches.
-    /// </summary>
-    Last,
-    /// <summary>
-    ///     All records found that match.
-    /// </summary>
-    All,
-}
 
 /// <summary>
 ///     [Delegate] declaration to expose an easier API to generate the accumulative instructions for the query after filtering.

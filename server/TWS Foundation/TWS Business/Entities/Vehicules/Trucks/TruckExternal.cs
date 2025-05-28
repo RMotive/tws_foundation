@@ -9,7 +9,7 @@ namespace TWS_Business.Entities.Vehicules.Trucks;
 ///     [Entity]
 /// </summary>
 public class TruckExternal
-    : TWSScopeEntity<Truck_Common> {
+    : CommonEntityEdge<Truck_Common> {
 
     #region Properties
 

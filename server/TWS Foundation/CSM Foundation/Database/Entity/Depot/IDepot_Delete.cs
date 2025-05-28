@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Models.Input;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
@@ -44,5 +45,5 @@ public interface IDepot_Delete<TEntity>
     /// <returns>
     ///     A batch operation result informaiton object.
     /// </returns>
-    public Task<BatchOperationOutput<TEntity>> Delete(OperationInput<TEntity, BatchOperationInput<TEntity>> input);
+    public Task<BatchOperationOutput<TEntity>> Delete(QueryInput<TEntity, FilterQueryInput<TEntity>> input);
 }

@@ -8,9 +8,9 @@ final class IntegrationUtils {
   static Future<String> getAuthToken() async {
     final SecurityServiceI securityService = FoundationServer(false).securityService;
 
-    final FoundationResponseResolver<ServerSession> authenticateResolver = await securityService.authenticate(TestConfigs.qualityAuth);
+    final FoundationResponseResolver<SessionData> authenticateResolver = await securityService.authenticate(TestConfigs.qualityAuth);
 
-    final ServerSession serverSession = authenticateResolver.resolveDirect(() => ServerSession());
+    final SessionData serverSession = authenticateResolver.resolveDirect(() => SessionData());
 
     return serverSession.token;
   }

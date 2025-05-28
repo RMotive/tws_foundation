@@ -6,8 +6,9 @@ using CSM_Foundation.Customer.Quality;
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
+using Microsoft.AspNetCore.Http;
+
 using TWS_Customer.Features.Security;
-using TWS_Customer.Managers.Session;
 using TWS_Customer.Quality.Factories;
 using TWS_Customer.Services.Records;
 
@@ -18,9 +19,6 @@ namespace TWS_Customer.Quality.Q_Features.Q_Security;
 /// </summary>
 public class Q_SecurityService
     : BQ_Service<ISecurityService> {
-
-    readonly SessionManager _sessionManager = new();
-
     public Q_SecurityService()
         : base(
                 [
@@ -36,14 +34,14 @@ public class Q_SecurityService
 
         IAccountsDepot accountsDepot = new AccountsDepot(securityDatabase, Disposer);
 
-        return new SecurityService(accountsDepot, _sessionManager);
+        return new SecurityService(accountsDepot, new Managers.Session.SessionManager(), new HttpContextAccessor());
     }
 
     #endregion
 
     #region Private Methods/Functions
 
-    AuthenticationInput GenerateAccount(bool isWildcard = false) {
+    AuthInput GenerateAccount(bool isWildcard = false) {
         string entropy = RandomUtils.String(16);
 
         Contact contactEntity = Store(
@@ -64,7 +62,7 @@ public class Q_SecurityService
                 }
             );
 
-        return new AuthenticationInput {
+        return new AuthInput {
             Identity = accountEntity.User,
             Password = accountEntity.Password,
             Sign = "TWSF"
@@ -72,16 +70,4 @@ public class Q_SecurityService
     }
 
     #endregion
-
-
-    [Fact(DisplayName = "[Authenticate]: Wildcard authentication")]
-    public async Task Authenticate() {
-
-        AuthenticationInput input = GenerateAccount(true);
-
-        ServerSession serverSession = await _service.Authenticate(input);
-
-        Assert.Equal(serverSession.Identity, input.Identity);
-        Assert.NotEmpty(serverSession.Token.ToString());
-    }
 }

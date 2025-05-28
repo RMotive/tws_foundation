@@ -21,11 +21,11 @@ public class AccountsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Account> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Account, ViewInput<Account>> {
+                        new QueryInput<Account, ViewInput<Account>> {
                             Parameters = options
                         }
                     )

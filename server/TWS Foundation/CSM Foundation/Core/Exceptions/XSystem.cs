@@ -9,10 +9,13 @@ public class XSystem
         : base("Exception exception caught on transaction operation", XSystemSituations.System, HttpStatusCode.InternalServerError, Exception) {
 
         Situation = XSystemSituations.System;
-        Advise = "Contact your service administrator";
         Factors = new() {
             { "Exception", Exception.Message }
         };
+    }
+
+    protected override Dictionary<XSystemSituations, string> ResolveAdvise() {
+        return [];
     }
 }
 

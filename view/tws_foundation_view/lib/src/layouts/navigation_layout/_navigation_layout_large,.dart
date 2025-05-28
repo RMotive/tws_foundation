@@ -2,9 +2,13 @@ part of 'navigation_layout.dart';
 
 ///
 final class _MasterLayoutLarge extends _NavigationLayoutB {
+  final List<ThemeI> appThemes;
+
   const _MasterLayoutLarge({
     required super.routeData,
     required super.page,
+    required this.appThemes,
+    super.rootRoute,
   });
 
   @override
@@ -14,7 +18,10 @@ final class _MasterLayoutLarge extends _NavigationLayoutB {
         Expanded(
           child: Column(
             children: <Widget>[
-              const _MasterLayoutHeader(),
+              _MasterLayoutHeader(
+                appThemes: appThemes,
+                rootRoute: rootRoute,
+              ),
               Expanded(
                 child: page,
               ),

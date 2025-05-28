@@ -1,74 +1,78 @@
 ﻿using System.Collections.Concurrent;
+using System.Linq.Expressions;
 
-using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Server.Exceptions;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-using TWS_Customer.Managers.Session.Exceptions;
+using TWS_Customer.Features.Security;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
-using CredentialsExpiration = (TWS_Customer.Services.Records.AuthenticationInput Credentials, System.DateTime Expiration);
+using SessionsBag = System.Collections.Concurrent.ConcurrentDictionary<System.Guid, (TWS_Customer.Services.Records.AuthInput Credentials, System.DateTime Expiration)>;
+using SessionScope = (TWS_Customer.Services.Records.AuthInput authInput, System.DateTime expiration);
 
 namespace TWS_Customer.Managers.Session;
 
 /// <summary>
-/// 
+///     {interface} definition for a {Session} scope {Manager}, responsible to handle and manage storing and calculations about the
+///     current server runtime sessions authenticated and identification of them.
 /// </summary>
-public record ServerSession {
-    public required Guid Token { get; init; }
-    public required DateTime Expiration { get; init; }
-    public required string Identity { get; init; }
-    public required bool Wildcard { get; init; }
-    public required Permit[] Permits { get; init; }
-    public required Contact Contact { get; init; }
+/// <remarks>
+///     <b> 
+///         Warning: custom implementations must consider asynchronous access for dictionaries and another batch data structures,
+///     </b> 
+/// </remarks>
+public interface ISessionManager {
+
+    /// <summary>
+    ///     
+    /// </summary>
+    /// <param name="authInput"></param>
+    /// <param name="feature"></param>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public Task<SessionData> Action(AuthInput authInput);
+}
+
+/// <summary>
+///     {Manager} implementation that handles all the sessions currently operating in all TWS solutions environment.
+/// </summary>
+public sealed class SessionManager
+    : ISessionManager {
 
     /// <summary>
     /// 
     /// </summary>
-    /// <returns></returns>
-    public ServerSession Copy(Guid? Token = null, DateTime? Expiration = null, string? Identity = null, bool? Wildcard = null, Permit[]? Permits = null, Contact? Contact = null) {
-        return new ServerSession {
-            Token = Token ?? this.Token,
-            Expiration = Expiration ?? this.Expiration,
-            Identity = Identity ?? this.Identity,
-            Wildcard = Wildcard ?? this.Wildcard,
-            Permits = Permits ?? this.Permits,
-            Contact = Contact ?? this.Contact
-        };
-    }
-}
+    const string AUTH_TOKEN_KEY = "CSMAuth";
 
-/// <summary>
-///     Manager that handles all the sessions currently operating in all TWS solutions environment.
-/// </summary>
-public sealed class SessionManager {
-    private readonly TimeSpan EXPIRATION_RANGE = TimeSpan.FromHours(3);
-    private readonly ConcurrentDictionary<Guid, CredentialsExpiration> CurrentSessions = [];
-    private readonly ConcurrentBag<Guid> CurrentTokens = [];
 
     /// <summary>
-    ///     Authorizes the given <paramref name="Credentials"/> unsafely into the current [Sessions] context.
+    ///     Expiration time aggregation for token refreshing, this value is aggregated to the current expirations to get a final expiration timestamp.
     /// </summary>
-    /// <remarks>
-    ///       <b> Warning: </b> With unsafely we are refering to this method at first instance doesn't check if the <paramref name="Credentials"/> exist and are valid, that
-    ///       was a work of the method that invoked this one.
-    /// </remarks>
-    /// <exception cref="XSessionManager"></exception>
-    /// <exception cref="XSessionManagerSituations.UNSAFE_TOKEN"></exception>
-    public Guid Authorize(AuthenticationInput Credentials) {
-        Guid safeToken = GenerateToken();
-
-        GenerateSession(safeToken, Credentials);
-        return safeToken;
-    }
+    readonly TimeSpan EXPIRE_THRESHOLD = TimeSpan.FromHours(6);
 
     /// <summary>
-    ///     Tries to get a <see cref="ServerSession"/> stored in the context based on the given <paramref name="Token"/>
+    ///     Stores all the current <see cref="SessionManager"/> stored sessions keyed by the calculated unique token.
+    /// </summary>
+    readonly SessionsBag _sessionsBag = [];
+
+    /// <summary>
+    ///     Stores all the current calculated unique tokens managed, used to validate token related relations with no need to access <see cref="_sessionsBag"/> dictionary.
+    /// </summary>
+    readonly ConcurrentBag<Guid> _tokensBag = [];
+
+
+    /// <summary>
+    ///     Tries to get a <see cref="SessionData"/> stored in the context based on the given <paramref name="Token"/>
     /// </summary>
     /// <param name="Token">
     ///     Token to identify the session context.
@@ -81,31 +85,34 @@ public sealed class SessionManager {
     /// </param>
     /// <returns>
     ///     <see langword="null"/>: The session wasn't found.
-    ///     <para> <see cref="ServerSession"/>: when it got found. </para>
+    ///     <para> <see cref="SessionData"/>: when it got found. </para>
     /// </returns>
     /// <remarks>
     ///     <paramref name="Refresh"/> by default is false indicating that the expiration won't be refreshed.
     /// </remarks>
     /// <exception cref="XSetOperation{TSet}"></exception>
-    public async Task<ServerSession?> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
-        if (!CurrentSessions.TryGetValue(Token, out CredentialsExpiration Session)) {
+    public async Task<SessionData?> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
+        if (!_sessionsBag.TryGetValue(Token, out SessionScope Session)) {
             return null;
         }
 
-        CredentialsExpiration safeSession = Session;
+        SessionScope safeSession = Session;
         if (Refresh) {
             safeSession = RefreshToken(Token, Session);
         }
 
-        AuthenticationInput safeCredentials = safeSession.Credentials;
+        AuthInput safeCredentials = safeSession.authInput;
         BatchOperationOutput<Account> readAccountOut = await Accounts.Read(
-            EntityBatchBehaviors.First,
-            (Account i) => i.User == safeCredentials.Identity,
-            (query) => {
-                return query
-                    .Include((System.Linq.Expressions.Expression<Func<Account, Contact?>>)(i => i.Contact));
-            }
-        );
+                new QueryInput<Account, FilterQueryInput<Account>> {
+                    Parameters = new FilterQueryInput<Account> {
+                        Behavior = FilteringBehaviors.First,
+                        Filter = i => i.User == safeCredentials.Identity,
+                    },
+                    PostProcessor = (query) => {
+                        return query.Include((Expression<Func<Account, Contact?>>)(i => i.Contact));
+                    },
+                }
+            );
 
         if (readAccountOut.Failed) {
             throw new XSetOperation<Account>(readAccountOut.Failures);
@@ -114,18 +121,16 @@ public sealed class SessionManager {
         Account account = readAccountOut.Successes[0];
         Permit[] permits = await Accounts.GetPermits(account.Id);
 
-        return new ServerSession {
+        return new SessionData {
             Token = Token,
-            Permits = permits,
-            Contact = account.Contact!,
             Wildcard = account.Wildcard,
-            Identity = Session.Credentials.Identity,
-            Expiration = safeSession.Expiration,
+            Expiration = safeSession.expiration,
+            Account = account,
         };
     }
 
     /// <summary>
-    ///     Tries to get a <see cref="ServerSession"/> stored in the context based on the given <paramref name="Token"/>
+    ///     Tries to get a <see cref="SessionData"/> stored in the context based on the given <paramref name="Token"/>
     /// </summary>
     /// <param name="Token">
     ///     Token to identify the session context.
@@ -141,13 +146,10 @@ public sealed class SessionManager {
     /// </param>
     /// <returns>
     ///     <see langword="null"/>: The session wasn't found.
-    ///     <para> <see cref="ServerSession"/>: when it got found. </para>
+    ///     <para> <see cref="SessionData"/>: when it got found. </para>
     /// </returns>
     /// <remarks>
     ///     <paramref name="Refresh"/> by default is false indicating that the expiration won't be refreshed.
-    ///     
-    ///     
-    ///     
     ///     <para> <b>
     ///         This method override allows the invoker to pass directly the <paramref name="Account"/> and <paramref name="Permits"/> directly
     ///         with no needed the method does with the <see cref="AccountsDepot"/> dependency. This removes the need of an async call.
@@ -156,40 +158,72 @@ public sealed class SessionManager {
     ///     </b> </para>
     /// </remarks>
     /// <exception cref="XSetOperation{TSet}"></exception>
-    public ServerSession? Get(Guid Token, Account Account, Permit[] Permits, bool Refresh = false) {
-        if (!CurrentSessions.TryGetValue(Token, out CredentialsExpiration Session)) {
+    public SessionData? Get(Guid Token, Account Account, Permit[] Permits, bool Refresh = false) {
+        if (!_sessionsBag.TryGetValue(Token, out SessionScope Session)) {
             return null;
         }
 
-        CredentialsExpiration safeSession = Session;
+        SessionScope safeSession = Session;
         if (Refresh) {
             safeSession = RefreshToken(Token, Session);
         }
 
-        return new ServerSession {
+        return new SessionData {
             Token = Token,
-            Permits = Permits,
-            Contact = Account.Contact!,
             Wildcard = Account.Wildcard,
-            Identity = Session.Credentials.Identity,
-            Expiration = safeSession.Expiration,
+            Expiration = safeSession.expiration,
+            Account = Account,
         };
     }
 
+    #region Public Methods / Functions
 
+
+    public async Task<SessionData> Action(AuthInput authInput) {
+        HttpContext? reqContext = (authInput.RequestContextAccessor?.HttpContext)
+            ?? throw new XSessionManager(XSessionManagerSituations.NO_REQ_CONTEXT);
+
+
+        IServiceProvider serviceProvider = reqContext.RequestServices;
+        IAccountsService accountsService = serviceProvider.GetRequiredService<IAccountsService>();
+
+        Account userAccount = await accountsService.Get(authInput.Identity);
+
+
+        return new SessionData {
+            Account = userAccount,
+            Expiration = DateTime.Now,
+            Token = Guid.NewGuid(),
+            Wildcard = false
+        };
+    }
+
+    #endregion
+
+    #region Private Methods / Functions
 
     /// <summary>
-    ///     Generates a safe <see cref="Guid"/> token looking at the currently created ones.
+    ///     Internaly generates and stores into the current manager sessions the given <see cref="AuthInput"/> information.
     /// </summary>
-    /// <returns> Safe Token </returns>
-    private Guid GenerateToken() {
-        Guid tempGuid;
+    /// <param name="authInput">
+    ///     Authentication input information.
+    /// </param>
+    /// <exception cref="XSessionManager">
+    ///     For more details check innser <see cref="XSessionManagerSituations"/>.
+    /// </exception>
+    void GenSession(AuthInput authInput) {
+        Guid token = Guid.NewGuid();
+        SessionScope sessionScope = (
+                authInput,
+                DateTime.UtcNow.Add(EXPIRE_THRESHOLD)
+            );
 
-        do {
-            tempGuid = Guid.NewGuid();
-        } while (CurrentTokens.Contains(tempGuid));
+        if (_sessionsBag.TryAdd(token, sessionScope)) {
+            _tokensBag.Add(token);
+            return;
+        }
 
-        return tempGuid;
+        throw new XSessionManager(XSessionManagerSituations.NO_REQ_CONTEXT);
     }
 
     /// <summary>
@@ -200,33 +234,13 @@ public sealed class SessionManager {
     /// <returns></returns>
     /// <exception cref="XSessionManager"></exception>
     /// <exception cref="XSessionManagerSituations.UNSAFE_UPDATE"></exception>
-    private CredentialsExpiration RefreshToken(Guid Token, CredentialsExpiration Session) {
-        (AuthenticationInput Credentials, DateTime Expiration) safeUpdate = (Session.Credentials, DateTime.UtcNow.Add(EXPIRATION_RANGE));
+    SessionScope RefreshToken(Guid Token, SessionScope Session) {
+        (AuthInput Credentials, DateTime Expiration) safeUpdate = (Session.authInput, DateTime.UtcNow.Add(EXPIRE_THRESHOLD));
 
-        return CurrentSessions.TryUpdate(Token, safeUpdate, Session)
+        return _sessionsBag.TryUpdate(Token, safeUpdate, Session)
             ? safeUpdate
-            : throw new XSessionManager(XSessionManagerSituations.UNSAFE_UPDATE);
+            : throw new XSessionManager(XSessionManagerSituations.NO_REQ_CONTEXT);
     }
 
-    /// <summary>
-    ///     Safely creates and subscribes a new session to <see cref="CurrentSessions"/> context.
-    /// </summary>
-    /// <param name="SafeToken">
-    ///     Expected a completely safe token to set session key.
-    /// </param>
-    /// <param name="Credentials">
-    ///     Credentials to identify account changes and permit calculations.
-    /// </param>
-    /// <exception cref="XSessionManager"></exception>
-    /// <exception cref="XSessionManagerSituations.UNSAFE_TOKEN"></exception>
-    private void GenerateSession(Guid SafeToken, AuthenticationInput Credentials) {
-        CredentialsExpiration safeExpiration = (Credentials, DateTime.UtcNow.Add(EXPIRATION_RANGE));
-
-        if (CurrentSessions.TryAdd(SafeToken, safeExpiration)) {
-            CurrentTokens.Add(SafeToken);
-            return;
-        }
-
-        throw new XSessionManager(XSessionManagerSituations.UNSAFE_TOKEN);
-    }
+    #endregion
 }

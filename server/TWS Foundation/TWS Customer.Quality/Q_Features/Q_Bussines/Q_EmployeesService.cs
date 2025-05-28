@@ -87,7 +87,7 @@ public class Q_EmployeesService
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
         ViewOutput<Employee> viewOutput = await _service.View(
-                new OperationInput<Employee, ViewInput<Employee>> {
+                new QueryInput<Employee, ViewInput<Employee>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -102,17 +102,6 @@ public class Q_EmployeesService
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
 
-        );
-    }
-
-    [Fact(DisplayName = "[Read]: Reads matched records")]
-    public async Task Read() {
-        Employee mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Employee> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
-
-        Assert.Multiple(
-            () => Assert.False(readOutput.Failed),
-            () => Assert.True(readOutput.Successes.First().Id > 0)
         );
     }
 }

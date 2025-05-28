@@ -1,5 +1,7 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 using CSM_Security.Entities;
@@ -46,13 +48,17 @@ public class AccountsDepot
 
     public async Task<Permit[]> GetPermits(long Account) {
         BatchOperationOutput<Account> accountReadOut = await Read(
-                EntityBatchBehaviors.First,
-                (record) => record.Id == Account,
-                (query) => {
-                    return query
-                        .Include(a => a.Permits)
-                        .Include(a => a.Profiles)
-                            .ThenInclude(p => p.Permits);
+                new QueryInput<Account, FilterQueryInput<Account>> {
+                    Parameters = new FilterQueryInput<Account> {
+                        Behavior = FilteringBehaviors.First,
+                        Filter = (record) => record.Id == Account,
+                    },
+                    PostProcessor = (query) => {
+                        return query
+                            .Include(a => a.Permits)
+                            .Include(a => a.Profiles)
+                                .ThenInclude(p => p.Permits);
+                    },
                 }
             );
 

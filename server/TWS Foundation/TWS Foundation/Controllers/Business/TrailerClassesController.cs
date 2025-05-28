@@ -23,11 +23,11 @@ public class TrailerClassesController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Trailer_Class> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Trailer_Class, ViewInput<Trailer_Class>> {
+                        new QueryInput<Trailer_Class, ViewInput<Trailer_Class>> {
                             Parameters = options
                         }
                     )

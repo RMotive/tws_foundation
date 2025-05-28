@@ -12,7 +12,7 @@ using TWS_Customer.Features.Business;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Security;
+namespace TWS_Foundation.Controllers.Business;
 
 [ApiController, Feature("Locations"), Route("[Controller]/[Action]")]
 public class LocationsController
@@ -23,23 +23,23 @@ public class LocationsController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Location> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Location, ViewInput<Location>> {
+                        new QueryInput<Location, ViewInput<Location>> {
                             Parameters = options
                         }
                     )
             );
     }
 
-    [HttpPost(), Auth("Create")]
+    [HttpPost(), Action("Create")]
     public async Task<IActionResult> Create(Location[] Locations) {
         return Ok(await Service.Create(Locations));
     }
 
-    [HttpPost(), Auth("Update")]
+    [HttpPost(), Action("Update")]
     public async Task<IActionResult> Update(UpdateInput<Location> Location) {
         UpdateOutput<Location> Output = await Service.Update(Location);
         return Ok(Output);

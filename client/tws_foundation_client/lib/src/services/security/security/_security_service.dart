@@ -16,8 +16,8 @@ final class SecurityService extends SecurityServiceB {
         );
 
   @override
-  FoundationFutureResolver<ServerSession> authenticate(AuthenticationInput input) async {
+  FoundationFutureResolver<SessionData> authenticate(AuthenticationInput input) async {
     final ResponseController controller = await postSecure('authenticate', input);
-    return FoundationResponseResolver<ServerSession>(controller);
+    return FoundationResponseResolver<SessionData>(controller);
   }
 }
