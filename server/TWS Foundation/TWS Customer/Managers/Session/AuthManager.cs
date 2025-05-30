@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
+using TWS_Customer.Features;
 using TWS_Customer.Features.Security;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
@@ -31,7 +32,7 @@ namespace TWS_Customer.Managers.Session;
 ///         Warning: custom implementations must consider asynchronous access for dictionaries and another batch data structures,
 ///     </b> 
 /// </remarks>
-public interface ISessionManager {
+public interface IAuthManager {
 
     /// <summary>
     ///     
@@ -40,14 +41,14 @@ public interface ISessionManager {
     /// <param name="feature"></param>
     /// <param name="action"></param>
     /// <returns></returns>
-    public Task<SessionData> Action(AuthInput authInput);
+    public Task<SessionData> Auth(AuthInput authInput);
 }
 
 /// <summary>
 ///     {Manager} implementation that handles all the sessions currently operating in all TWS solutions environment.
 /// </summary>
-public sealed class SessionManager
-    : ISessionManager {
+public sealed class AuthManager
+    : IAuthManager {
 
     /// <summary>
     /// 
@@ -61,7 +62,7 @@ public sealed class SessionManager
     readonly TimeSpan EXPIRE_THRESHOLD = TimeSpan.FromHours(6);
 
     /// <summary>
-    ///     Stores all the current <see cref="SessionManager"/> stored sessions keyed by the calculated unique token.
+    ///     Stores all the current <see cref="AuthManager"/> stored sessions keyed by the calculated unique token.
     /// </summary>
     readonly SessionsBag _sessionsBag = [];
 
@@ -179,23 +180,29 @@ public sealed class SessionManager
     #region Public Methods / Functions
 
 
-    public async Task<SessionData> Action(AuthInput authInput) {
+    public async Task<SessionData> Auth(AuthInput authInput) {
         HttpContext? reqContext = (authInput.RequestContextAccessor?.HttpContext)
-            ?? throw new XSessionManager(XSessionManagerSituations.NO_REQ_CONTEXT);
+            ?? throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
 
 
         IServiceProvider serviceProvider = reqContext.RequestServices;
         IAccountsService accountsService = serviceProvider.GetRequiredService<IAccountsService>();
 
-        Account userAccount = await accountsService.Get(authInput.Identity);
+        try {
+            Account userAccount = await accountsService.Get(authInput.Identity);
 
+            if (!authInput.Password.SequenceEqual(userAccount.Password))
+                throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
 
-        return new SessionData {
-            Account = userAccount,
-            Expiration = DateTime.Now,
-            Token = Guid.NewGuid(),
-            Wildcard = false
-        };
+            return new SessionData {
+                Account = userAccount,
+                Expiration = DateTime.Now,
+                Token = Guid.NewGuid(),
+                Wildcard = false
+            };
+        } catch (XRead<Account> readException) when (readException.Situation == XReadReasons.UNFOUND) {
+            throw new XAuth(XAuthReasons.UNFOUND_USR);
+        }
     }
 
     #endregion
@@ -208,8 +215,8 @@ public sealed class SessionManager
     /// <param name="authInput">
     ///     Authentication input information.
     /// </param>
-    /// <exception cref="XSessionManager">
-    ///     For more details check innser <see cref="XSessionManagerSituations"/>.
+    /// <exception cref="XAuth">
+    ///     For more details check innser <see cref="XAuthReasons"/>.
     /// </exception>
     void GenSession(AuthInput authInput) {
         Guid token = Guid.NewGuid();
@@ -223,7 +230,7 @@ public sealed class SessionManager
             return;
         }
 
-        throw new XSessionManager(XSessionManagerSituations.NO_REQ_CONTEXT);
+        throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
     }
 
     /// <summary>
@@ -232,14 +239,14 @@ public sealed class SessionManager
     /// <param name="Token"></param>
     /// <param name="Session"></param>
     /// <returns></returns>
-    /// <exception cref="XSessionManager"></exception>
-    /// <exception cref="XSessionManagerSituations.UNSAFE_UPDATE"></exception>
+    /// <exception cref="XAuth"></exception>
+    /// <exception cref="XAuthReasons.UNSAFE_UPDATE"></exception>
     SessionScope RefreshToken(Guid Token, SessionScope Session) {
         (AuthInput Credentials, DateTime Expiration) safeUpdate = (Session.authInput, DateTime.UtcNow.Add(EXPIRE_THRESHOLD));
 
         return _sessionsBag.TryUpdate(Token, safeUpdate, Session)
             ? safeUpdate
-            : throw new XSessionManager(XSessionManagerSituations.NO_REQ_CONTEXT);
+            : throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
     }
 
     #endregion

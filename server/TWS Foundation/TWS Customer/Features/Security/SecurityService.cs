@@ -16,7 +16,7 @@ namespace TWS_Customer.Features.Security;
 public interface ISecurityService {
 
     /// <summary>
-    ///     Authenticates a given credentials subscribing the session into the current <see cref="SessionManager"/> context.
+    ///     Authenticates a given credentials subscribing the session into the current <see cref="AuthManager"/> context.
     /// </summary>
     /// <param name="input">
     ///     Authentication credentials.
@@ -41,7 +41,7 @@ public class SecurityService
     /// <summary>
     ///     Manager for session handling and context.
     /// </summary>
-    readonly ISessionManager SessionManager;
+    readonly IAuthManager SessionManager;
 
     /// <summary>
     ///     [Depot] handler for <see cref="Account"/> entity.
@@ -52,7 +52,7 @@ public class SecurityService
 
     public SecurityService(
             IAccountsDepot accounts, 
-            ISessionManager sessionManager, 
+            IAuthManager sessionManager, 
             IHttpContextAccessor contextAccesor
         ) {
         AccountsDepot = accounts;
@@ -62,7 +62,7 @@ public class SecurityService
 
     public async Task<SessionData> Authenticate(AuthInput input) {
         input.RequestContextAccessor = _contextAccesor;
-        return await SessionManager.Action(input);
+        return await SessionManager.Auth(input);
     }
 
 }

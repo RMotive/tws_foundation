@@ -18,15 +18,15 @@ public interface IAccountsDepot
     : IDepot<Account> {
 
     /// <summary>
-    ///     Calculates the effective permits from an Account.
+    ///     Calculates the effective permits from the given <paramref name="id"/> as an <see cref="Account"/>.
     /// </summary>
-    /// <param name="Acccount">
+    /// <param name="id">
     ///     <see cref="IEntity.Id"/> pointer identifier for the <see cref="Account"/> to calculate its effective permits.
     /// </param>
     /// <returns>
     ///     Effective <see cref="Permit"/> collection for the given <see cref="Account"/>.
     /// </returns>
-    Task<Permit[]> GetPermits(long Acccount);
+    Task<Permit[]> GetPermits(long id);
 }
 
 /// <summary>
@@ -46,12 +46,12 @@ public class AccountsDepot
     /// </param>
     public AccountsDepot(Database database, IDisposer? Disposer = null) : base(database, Disposer) { }
 
-    public async Task<Permit[]> GetPermits(long Account) {
-        BatchOperationOutput<Account> accountReadOut = await Read(
+    public async Task<Permit[]> GetPermits(long id) {
+        BatchOperationOutput<Account> readOutput = await Read(
                 new QueryInput<Account, FilterQueryInput<Account>> {
                     Parameters = new FilterQueryInput<Account> {
                         Behavior = FilteringBehaviors.First,
-                        Filter = (record) => record.Id == Account,
+                        Filter = (record) => record.Id == id,
                     },
                     PostProcessor = (query) => {
                         return query
@@ -62,10 +62,13 @@ public class AccountsDepot
                 }
             );
 
-        if (accountReadOut.Failed) {
-            throw new XDepot<Account>(XDepotSituations.Unfound, $"Account.Id = {Account}");
-        }
-        Account account = accountReadOut.Successes[0];
+        if (readOutput.Failed)
+            throw readOutput.Failures[0].Exception;
+
+        if (readOutput.SuccessesCount <= 0)
+            throw new XDepot<Account>(XDepotSituations.Unfound);
+
+        Account account = readOutput.Successes[0];
         Permit[] directPermits = [.. account.Permits];
         Profile[] profiles = [.. account.Profiles];
 

@@ -126,7 +126,7 @@ public partial class Program {
                 IServiceCollection Services = builder.Services;
 
                 // --> Application
-                Services.AddSingleton<SessionManager>();
+                Services.AddSingleton<AuthManager>();
                 Services.AddSingleton<AnalyticsMiddleware>();
                 Services.AddSingleton<AdvisorMiddleware>();
                 Services.AddSingleton<FramingMiddleware>();

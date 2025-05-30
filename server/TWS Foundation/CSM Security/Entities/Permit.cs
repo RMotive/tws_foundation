@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,6 +19,9 @@ public class Permit
     /// <summary>
     ///     Unique identifier reference.
     /// </summary>
+    /// <remarks>
+    ///     Strictly 8 length value
+    /// </remarks>
     [StringLength(8, MinimumLength = 8)]
     public string Reference { get; set; } = string.Empty;
 
@@ -36,6 +40,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Solution Solution { get; set; } = default!;
 
     /// <summary>
@@ -44,6 +49,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Feature Feature { get; set; } = default!;
 
     /// <summary>
@@ -52,6 +58,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Action Action { get; set; } = default!;
 
     #endregion
@@ -61,11 +68,13 @@ public class Permit
     /// <summary>
     ///     <see cref="Profile"/> dependants from this <see cref="Permit"/>.
     /// </summary>
+    [Relation]
     public ICollection<Profile> Profiles { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Account"/> dependants from this <see cref="Permit"/>.
     /// </summary>
+    [Relation]
     public ICollection<Account> Accounts { get; set; } = [];
 
     #endregion

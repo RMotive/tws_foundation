@@ -1,36 +1,24 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Customer.Quality;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
 
-using TWS_Business.Depots;
 using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 
 using TWS_Customer.Features.Business;
-using TWS_Customer.Quality.Factories;
 
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_TrailerClassesService
-    : BQ_Service<ITrailerClassesService> {
-    public Q_TrailerClassesService()
-        : base(
-                [
-                    DatabaseFactories.BusinessDatabaseFactory,
-                ]
-            ) {
+    : BQ_ServicesCustomer<ITrailerClassesService> {
+    public Q_TrailerClassesService() {
 
     }
 
     #region [BQ_Service] implementations
     protected override ITrailerClassesService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = DatabaseFactories.BusinessDatabaseFactory();
+        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
 
         ITrailerClassesDepot TrailerClassesDepot = new TrailerClassesDepot(BussinesDatabase, Disposer);
 

@@ -1,15 +1,8 @@
-﻿using System.Text;
-using System.Text.Unicode;
-
-using CSM_Foundation.Customer.Quality;
-using CSM_Foundation.Database.Entity.Depot;
-
-using CSM_Security.Depots;
+﻿using CSM_Security.Depots;
 using CSM_Security.Entities;
 
 using TWS_Customer.Features;
 using TWS_Customer.Features.Security;
-using TWS_Customer.Quality.Factories;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Security;
 
@@ -17,28 +10,20 @@ namespace TWS_Customer.Quality.Q_Features.Q_Security;
 ///     
 /// </summary>
 public class Q_AccountsService
-    : BQ_Service<IAccountsService> {
+    : BQ_ServicesCustomer<IAccountsService> {
 
     /// <summary>
     ///     
     /// </summary>
-    public Q_AccountsService()
-        : base(
-                [
-                    DatabaseFactories.SecurityDatabaseFactory,
-                ]
-            ) {
-    }
+    public Q_AccountsService() { }
 
     protected override AccountsService ServiceFactory() {
-        CSM_Security.Database securityDatabase = DatabaseFactories.SecurityDatabaseFactory();
+        CSM_Security.Database securityDatabase = SecurityDatabaseFactory();
 
         IAccountsDepot accountsDepot = new AccountsDepot(securityDatabase, Disposer);
 
         return new AccountsService(accountsDepot);
     }
-
-
 
     [Fact(DisplayName = "GetByUser: Throws exception cause user doesn't exist")]
     public async Task Get() {
@@ -52,27 +37,44 @@ public class Q_AccountsService
 
     [Fact(DisplayName = "GetByUser: Correctly gets the Account object by user")]
     public async Task GetA() {
-
-        Contact contactSample = Store(
-                new Contact {
-                    Name = "testing_name",
-                    Lastname = "testing_lastname",
-                    Phone = Guid.NewGuid().ToString()[..10],
-                    EMail = "testing@csm.com"
-                }
-            );
-
-        Account accountSample = Store(
-                new Account {
-                    User = "testing_user",
-                    Password = Encoding.UTF8.GetBytes("testing_password"),
-                    Contact = contactSample,
-                }
-            );
-
+        Account accountSample = SampleAccount();
 
         Account fetchdAccount = await _service.Get(accountSample.User);
 
         Assert.Equal(accountSample.Id, fetchdAccount.Id);
+    }
+
+    [Fact(DisplayName = "GetPermits: Correctly gets the effective permits the user has access to")]
+    public async Task GetPermits() {
+
+        Permit enDirectPermit = SamplePermit();
+        Permit disDirectPermit = SamplePermit(
+                enabled: false
+            );
+        Permit enProfilePermit = SamplePermit();
+        Permit disProfilePermit = SamplePermit(
+                enabled: false
+            );
+
+        Profile profileSample = SampleProfile(
+                [
+                    enProfilePermit,
+                    disProfilePermit,
+                ]
+            );
+
+        Account accountSample = SampleAccount(
+                permits: [
+                        enDirectPermit,
+                        disDirectPermit,
+                    ],
+                profiles: [
+                        profileSample,
+                    ]
+            );
+
+        Permit[] effectivePermits = await _service.GetPermits(accountSample.Id);
+
+        Assert.NotEmpty(effectivePermits);
     }
 }

@@ -1,6 +1,4 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Customer.Quality;
-using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
@@ -10,26 +8,20 @@ using TWS_Business.Depots.Directories;
 using TWS_Business.Entities;
 
 using TWS_Customer.Features.Business;
-using TWS_Customer.Quality.Factories;
 
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_SectionsService
-    : BQ_Service<ISectionsService> {
+    : BQ_ServicesCustomer<ISectionsService> {
 
-    public Q_SectionsService()
-        : base(
-                [
-                    DatabaseFactories.BusinessDatabaseFactory,
-                ]
-            ) {
+    public Q_SectionsService() {
 
     }
 
     #region [BQ_Service] implementations
     protected override ISectionsService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = DatabaseFactories.BusinessDatabaseFactory();
+        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
 
         ISectionsDepot SectionsDepot = new SectionsDepot(BussinesDatabase, Disposer);
 

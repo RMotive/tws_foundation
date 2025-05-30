@@ -7,6 +7,7 @@ using CSM_Foundation.Database.Models;
 using CSM_Foundation.Server;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CSM_Foundation.Database.Utilitites;
 public class DatabaseUtilities {
@@ -126,8 +127,15 @@ public class DatabaseUtilities {
 
             object? rawDbSet = dbContextSetMethod.Invoke(database, null)
                 ?? throw new Exception($"Unable to locate DbSet of Type ({relationType.Name}) for Database ({database.GetType().Name})");
-            IQueryable<IEntity> dbSet = rawDbSet as IQueryable<IEntity> 
-                ?? throw new Exception();
+            
+            
+            if(rawDbSet is IQueryable<IEnumerable<IEntity>> collectionRelation) {
+                continue;
+            } 
+
+            if(rawDbSet is not IQueryable<IEntity> dbSet) {
+                throw new Exception($"Unable to cast DbSet to IQueryable<IEntity>");
+            }
 
             if (relationValue is IEntity relationEntity) {
                 if (relationEntity.Id <= 0) {
@@ -140,6 +148,11 @@ public class DatabaseUtilities {
                     ?? throw new Exception($"Couldn't find pointing relation of Type ({relationType}) with Id ({relationEntity.Id})");
 
                 relationProperty.SetValue(entity, tmpDependency);
+                EntityEntry entityEntry = database.Entry(tmpDependency);
+                if(entityEntry.State == EntityState.Detached) {
+                    entityEntry.State = EntityState.Unchanged;
+                }
+
             } else if (relationValue is ICollection<IEntity> relatedEntities) {
 
                 List<IEntity> trackedCollection = [];
