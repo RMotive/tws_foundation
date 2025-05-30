@@ -1,5 +1,6 @@
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart' hide Router, Route;
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
 part '_navigation_layout_b.dart';

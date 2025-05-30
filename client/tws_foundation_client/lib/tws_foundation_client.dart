@@ -78,7 +78,7 @@ export 'src/services/security/security/security_service_i.dart';
 export 'src/services/security/security/security_service_b.dart';
 
 // --> Exporting [src.services.security.security.models]
-export 'src/services/security/security/models/server_session.dart';
+export 'src/services/security/security/models/session_data.dart';
 export 'src/services/security/security/models/authentication_input.dart';
 
 // --> Exporting [src.services.security.solutions]
