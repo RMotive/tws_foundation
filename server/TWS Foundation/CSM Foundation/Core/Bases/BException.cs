@@ -22,7 +22,7 @@ public abstract class BException<TEvents>
     public string Subject { get; protected set; } = string.Empty;
     public string Advise { get; private init; }
     public Exception? System { get; init; } = null;
-    public TEvents Situation { get; protected set; } = default!;
+    public TEvents Reason { get; private init; } = default!;
     public Dictionary<string, dynamic> Details { get; init; } = [];
     public Dictionary<string, dynamic> Factors { get; init; } = [];
     public HttpStatusCode Status { get; init; }
@@ -50,7 +50,7 @@ public abstract class BException<TEvents>
 
         this.Subject = Subject;
         this.System = System;
-        this.Situation = Situation;
+        this.Reason = Situation;
         this.Status = Status;
 
         Advise = DetermineAdvise();
@@ -58,7 +58,7 @@ public abstract class BException<TEvents>
 
     /// <summary>
     ///     Builds a configuration for the exception implementation, this configuration will determine what <see cref="Advise"/> to load based on the
-    ///     given <see cref="Situation"/> at the object construction time. 
+    ///     given <see cref="Reason"/> at the object construction time. 
     ///     
     ///     <para>
     ///         This is a <see langword="virtual"/> method 'cause it's optional, but it needs to be a factory method due to sometimes might Advises message contain
@@ -69,7 +69,7 @@ public abstract class BException<TEvents>
     protected abstract Dictionary<TEvents, string> ResolveAdvise();
 
     /// <summary>
-    ///     Evaluates each advise configuration from <see cref="ResolveAdvise"/> to determine based on the <see cref="Situation"/> the advise to load.
+    ///     Evaluates each advise configuration from <see cref="ResolveAdvise"/> to determine based on the <see cref="Reason"/> the advise to load.
     /// </summary>
     /// <returns>
     ///     The exception user friendly advise.
@@ -79,7 +79,7 @@ public abstract class BException<TEvents>
 
         string advise = AdvisesConstants.SERVER_CONTACT_ADVISE;
         foreach (KeyValuePair<TEvents, string> possibleAdvise in advises) {
-            if (Situation.Equals(possibleAdvise.Key)) {
+            if (Reason.Equals(possibleAdvise.Key)) {
                 advise = possibleAdvise.Value;
                 break;
             }
@@ -88,10 +88,10 @@ public abstract class BException<TEvents>
         return advise;
     }
 
-    public ExceptionInfo Publish() {
+    public ExceptionInfo Expose() {
         return new ExceptionInfo() {
             Advise = Advise,
-            Situation = Convert.ToInt32(Situation),
+            Situation = Convert.ToInt32(Reason),
             System = (System?.GetType().ToString() ?? "N/A") + $"|{Message}",
             Trace = Trace[..200],
         };

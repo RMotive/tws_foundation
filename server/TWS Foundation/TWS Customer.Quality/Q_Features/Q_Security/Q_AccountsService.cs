@@ -32,7 +32,7 @@ public class Q_AccountsService
                 async () => await _service.Get(Guid.NewGuid().ToString())
             );
 
-        Assert.Equal(XReadReasons.UNFOUND, exception.Situation);
+        Assert.Equal(XReadReasons.UNFOUND, exception.Reason);
     }
 
     [Fact(DisplayName = "GetByUser: Correctly gets the Account object by user")]
@@ -76,5 +76,13 @@ public class Q_AccountsService
         Permit[] effectivePermits = await _service.GetPermits(accountSample.Id);
 
         Assert.NotEmpty(effectivePermits);
+        Assert.Equal(2, effectivePermits.Length);
+        Assert.All(
+                effectivePermits, 
+                permit => {
+                    Assert.True(permit.Enabled);
+                    Assert.True( permit.Id == enDirectPermit.Id || permit.Id == enProfilePermit.Id );
+                }
+            );
     }
 }

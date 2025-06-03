@@ -200,7 +200,7 @@ public sealed class AuthManager
                 Token = Guid.NewGuid(),
                 Wildcard = false
             };
-        } catch (XRead<Account> readException) when (readException.Situation == XReadReasons.UNFOUND) {
+        } catch (XRead<Account> readException) when (readException.Reason == XReadReasons.UNFOUND) {
             throw new XAuth(XAuthReasons.UNFOUND_USR);
         }
     }

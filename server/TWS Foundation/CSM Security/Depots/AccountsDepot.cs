@@ -69,23 +69,34 @@ public class AccountsDepot
             throw new XDepot<Account>(XDepotSituations.Unfound);
 
         Account account = readOutput.Successes[0];
-        Permit[] directPermits = [.. account.Permits];
-        Profile[] profiles = [.. account.Profiles];
 
-        Permit[] totalPermits = [.. directPermits];
-        foreach (Profile profile in profiles) {
+        List<Permit> effectivePermits = [];
 
-            Permit[] profilePermits = [.. profile.Permits];
+        bool VerifyEffective(Permit permit) {
+            return 
+                permit.Enabled
+                && permit.Feature.Enabled
+                && permit.Action.Enabled
+                && !effectivePermits.Any(ePermit => ePermit.Id == permit.Id);
+        }
 
-            foreach (Permit profilePermit in profilePermits) {
-                if (totalPermits.Any(i => i.Id == profilePermit.Id)) {
+
+        foreach (Profile profile in account.Profiles) {
+            foreach (Permit profilePermit in profile.Permits) {
+                if (!VerifyEffective(profilePermit))
                     continue;
-                }
 
-                totalPermits = [.. totalPermits, profilePermit];
+                effectivePermits.Add(profilePermit);
             }
         }
 
-        return totalPermits;
+        foreach (Permit permit in account.Permits) {
+            if (!VerifyEffective(permit))
+                continue;
+
+            effectivePermits.Add(permit);
+        }
+
+        return [..effectivePermits];
     }
 }

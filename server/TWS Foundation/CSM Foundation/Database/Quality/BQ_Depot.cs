@@ -428,7 +428,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                 }
             );
 
-        Assert.Equal(XDepotSituations.CreateDisabled, depotException.Situation);
+        Assert.Equal(XDepotSituations.CreateDisabled, depotException.Reason);
     }
 
     [Fact(DisplayName = $"[Update Entity]: Throws Unfound exception situation")]
@@ -447,7 +447,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                     );
                 }
             );
-        Assert.Equal(XDepotSituations.Unfound, depotException.Situation);
+        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
     }
 
     [Fact(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
@@ -498,7 +498,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
                 }
             );
 
-        Assert.Equal(XDepotSituations.Unfound, depotException.Situation);
+        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
     }
 
     [Fact(DisplayName = $"[Delete Entity]: Deletes correctly an Entity with a given Id")]

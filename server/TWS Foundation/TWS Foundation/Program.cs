@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using CSM_Foundation.Core.Exceptions;
+using CSM_Foundation.Core;
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
@@ -225,7 +225,7 @@ public partial class Program {
             Logger.Exception(AX);
             throw;
         } catch (Exception X) {
-            Logger.Exception(new XSystem(X));
+            Logger.Exception(new XSystem($"Engine start exception", X));
         } finally {
             Console.WriteLine($"Press any key to close...");
             Console.ReadKey();
@@ -237,7 +237,7 @@ public partial class Program {
         try {
             Disposer.Dispose();
         } catch (Exception X) {
-            Logger.Exception(new XSystem(X));
+            Logger.Exception(new XSystem("", X));
         }
     }
 
