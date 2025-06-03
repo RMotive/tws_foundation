@@ -40,7 +40,17 @@
         - [Sections]
         - [TrailerClasses]
         - [TrailerTypes]
+     
+    11. Added the following custom classes for Common Entities:
+        - [BCommonDepot]
+        - [BQ_Common]
+        - [BQ_CommonDataHandler]
+        - [BQ_CommonDepot]
       
+    12. Changed [TWSScopeEntity] -> [CommonEntity] for main common entity.
+    13. Changed [TWSScopeEntity] -> [CommonEntityEdge] for dependent entities (Internal - External).
+    
+
 - Fixes:
 
     1. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].

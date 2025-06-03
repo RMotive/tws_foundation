@@ -8,16 +8,16 @@ namespace TWS_Business;
 /// </summary>
 /// <typeparam name="InternalT"></typeparam>
 /// <typeparam name="ExternalT"></typeparam>
-public abstract class TWSScopeCommonEntity<InternalT, ExternalT>
+public abstract class CommonEntity<InternalT, ExternalT>
     : BEntity
     where InternalT : class, IEntity
     where ExternalT : class, IEntity {
 
     [Relation, ExclusiveValidator]
-    public InternalT? Internal { get; set; }
+    public virtual InternalT? Internal { get; set; }
 
     [Relation, ExclusiveValidator]
-    public ExternalT? External { get; set; }
+    public virtual ExternalT? External { get; set; }
 }
 
 
@@ -25,7 +25,7 @@ public abstract class TWSScopeCommonEntity<InternalT, ExternalT>
 /// 
 /// </summary>
 /// <typeparam name="TCommon"></typeparam>
-public abstract class TWSScopeEntity<TCommon>
+public abstract class CommonEntityEdge<TCommon>
     : BEntity
     where TCommon : class, IEntity {
 
@@ -33,7 +33,7 @@ public abstract class TWSScopeEntity<TCommon>
     ///     <typeparamref name="TCommon"/> information.
     /// </summary>
     [Relation]
-    public TCommon Common { get; set; } = default!;
+    public virtual TCommon Common { get; set; } = default!;
 }
 
 /// <summary>

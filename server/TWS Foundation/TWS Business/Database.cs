@@ -76,7 +76,7 @@ public class Database
             Type? evalType = entityType;
 
             while (evalType != null) {
-                if (evalType.IsGenericType && evalType.GetGenericTypeDefinition() == typeof(TWSScopeEntity<>)) {
+                if (evalType.IsGenericType && evalType.GetGenericTypeDefinition() == typeof(CommonEntityEdge<>)) {
                     return true;
                 }
 
@@ -87,7 +87,7 @@ public class Database
         }
 
         if (HasCommonDefinition()) {
-            PropertyInfo commonProperty = entity.GetProperty(nameof(TWSScopeEntity<IEntity>.Common));
+            PropertyInfo commonProperty = entity.GetProperty(nameof(CommonEntityEdge<IEntity>.Common));
             Type commonType = commonProperty.PropertyType;
             PropertyInfo commonTypeTargetProp = commonType
                 .GetProperties()

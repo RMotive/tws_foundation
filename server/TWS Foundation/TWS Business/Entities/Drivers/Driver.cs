@@ -13,7 +13,7 @@ namespace TWS_Business.Entities.Drivers;
 ///     [Entity] that represents an internal business driver (Tuck operator).
 /// </summary>
 public class Driver
-    : TWSScopeEntity<Driver_Common> {
+    : CommonEntityEdge<Driver_Common> {
 
     #region Properties
 

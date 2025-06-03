@@ -10,7 +10,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 ///     [Entity] for <see cref="Trailer"/> business operations.
 /// </summary>
 public class Trailer
-    : TWSScopeEntity<Trailer_Common> {
+    : CommonEntityEdge<Trailer_Common> {
 
     #region Relations
 
