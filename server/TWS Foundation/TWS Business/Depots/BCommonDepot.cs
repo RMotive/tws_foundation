@@ -72,7 +72,6 @@ public class BCommonDepot<TInternal, TExternal, TCommon>
 
         IQueryable<TCommon> query = Set;
         query = ValidateProcessor(query, input.PreOperation);
-        /* TODO: */
         query = query.AsTracking()
             .Where(parameters.Filter)
             .Include(e => e.Internal)

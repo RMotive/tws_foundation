@@ -49,6 +49,7 @@
       
     12. Changed [TWSScopeEntity] -> [CommonEntity] for main common entity.
     13. Changed [TWSScopeEntity] -> [CommonEntityEdge] for dependent entities (Internal - External).
+    14. Added Theory depot tests for [InternalEdge] and [ExternalEdge] properties in [CommonEntity].
     
 
 - Fixes:

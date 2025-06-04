@@ -140,10 +140,11 @@ public class BQ_CommonDataHandler
             internalRelation.Common = toStore;
             internalRelation.Timestamp = DateTime.UtcNow;
 
-            database.Set<TInternalEdge>().Add(internalRelation);
+            await database.Set<TInternalEdge>().AddAsync(internalRelation);
             Disposer.Push(internalRelation);
-
             toStore.Internal = internalRelation;
+
+            await database.SaveChangesAsync();
             return toStore;
         }
 
