@@ -4,5 +4,9 @@ import 'package:tws_foundation_client/src/services/security/security/models/auth
 ///
 final class TestConfigs {
   ///
-  static final AuthenticationInput qualityAuth = AuthenticationInput.a('TWSMF', 'csm_quality', 'csmquality2025\$'.bytes,);  
+  static final AuthenticationInput localUser = AuthenticationInput.a(
+    'TWSMF',
+    'local_user',
+    'local_user'.bytes,
+  );  
 }

@@ -27,6 +27,9 @@ export 'src/entities/business/plate.dart';
 export 'src/entities/business/status.dart';
 export 'src/entities/business/usdot.dart';
 
+// --> Exporting [src.entities.security]
+export 'src/entities/security/contact.dart';
+
 // --> Exporting [src.services.business]
 export 'src/services/business/addresses/address.dart';
 export 'src/services/business/addresses/addresses_service.dart';

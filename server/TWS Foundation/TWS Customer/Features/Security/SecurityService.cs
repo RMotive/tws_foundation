@@ -41,7 +41,7 @@ public class SecurityService
     /// <summary>
     ///     Manager for session handling and context.
     /// </summary>
-    readonly IAuthManager SessionManager;
+    readonly IAuthManager authManager;
 
     /// <summary>
     ///     [Depot] handler for <see cref="Account"/> entity.
@@ -56,13 +56,13 @@ public class SecurityService
             IHttpContextAccessor contextAccesor
         ) {
         AccountsDepot = accounts;
-        SessionManager = sessionManager;
+        authManager = sessionManager;
         _contextAccesor = contextAccesor;
     }
 
     public async Task<SessionData> Authenticate(AuthInput input) {
         input.RequestContextAccessor = _contextAccesor;
-        return await SessionManager.Auth(input);
+        return await authManager.Auth(input);
     }
 
 }

@@ -127,6 +127,7 @@ public sealed class AuthManager
             Wildcard = account.Wildcard,
             Expiration = safeSession.expiration,
             Account = account,
+            Contact = account.Contact,
         };
     }
 
@@ -174,6 +175,7 @@ public sealed class AuthManager
             Wildcard = Account.Wildcard,
             Expiration = safeSession.expiration,
             Account = Account,
+            Contact = Account.Contact,
         };
     }
 
@@ -194,11 +196,15 @@ public sealed class AuthManager
             if (!authInput.Password.SequenceEqual(userAccount.Password))
                 throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
 
+            Contact sessionContact = userAccount.Contact;
+            sessionContact.Account = null;
+
             return new SessionData {
                 Account = userAccount,
                 Expiration = DateTime.Now,
                 Token = Guid.NewGuid(),
-                Wildcard = false
+                Wildcard = userAccount.Wildcard,
+                Contact = sessionContact,
             };
         } catch (XRead<Account> readException) when (readException.Reason == XReadReasons.UNFOUND) {
             throw new XAuth(XAuthReasons.UNFOUND_USR);

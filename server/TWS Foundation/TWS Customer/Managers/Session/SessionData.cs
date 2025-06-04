@@ -25,8 +25,13 @@ public record SessionData {
     public required DateTime Expiration { get; set; }
 
     /// <summary>
+    ///     User contact information.
+    /// </summary>
+    public required Contact Contact { get; set; }
+
+    /// <summary>
     ///     {Server Side} account scope data.
     /// </summary>
     [JsonIgnore]
-    public required Account Account { get; init; }
+    public Account Account { get; init; } = default!;
 }

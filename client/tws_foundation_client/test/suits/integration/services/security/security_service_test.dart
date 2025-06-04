@@ -17,17 +17,21 @@ void main() {
   group(
     '[Integration] Security Service Tests',
     () {
-      final AuthenticationInput input = TestConfigs.qualityAuth;
+      final AuthenticationInput input = TestConfigs.localUser;
 
       test(
         '[authenticate]: correctly gets {ServerSession} object',
         () async {
           final FoundationResponseResolver<SessionData> resolver = await serviceMock.authenticate(input);
-          final SessionData serverSession = resolver.resolveDirect(() => SessionData());
+          final SessionData sessionData = resolver.resolveDirect(
+            () => SessionData(),
+          );
 
-          expect(serverSession.token, isNotEmpty);
-          expect(serverSession.identity, input.identity);
-          expect(serverSession.wildcard, true);
+          expect(sessionData.token, isNotEmpty);
+          expect(sessionData.wildcard, true);
+
+          Contact sessionContact = sessionData.contact;
+          expect(sessionContact.id > BigInt.zero, true);
         },
       );
     },

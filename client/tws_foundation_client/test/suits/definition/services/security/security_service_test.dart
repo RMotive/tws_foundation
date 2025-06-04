@@ -10,20 +10,26 @@ import '../../../../utils/test_utils.dart';
 
 void main() {
   late SecurityServiceI serviceMock;
-  late SessionData serverSessionMock;
+  late SessionData sessionDataMock;
 
   setUp(
     () {
-      serverSessionMock = SessionData();
-      serverSessionMock.expiration = DateTime.now().toUtc();
-      serverSessionMock.wildcard = true;
-      serverSessionMock.token = 'test_token';
-      serverSessionMock.identity = 'test_identity';
+      Contact contactMock = Contact();
+      contactMock.name = 'definition_test_contact_name';
+      contactMock.lastName = 'definition_test_contact_lastName';
+      contactMock.eMail = 'definition_test_contact_eMail';
+      contactMock.phone = '6640000001';
+
+      sessionDataMock = SessionData();
+      sessionDataMock.expiration = DateTime.now().toUtc();
+      sessionDataMock.wildcard = true;
+      sessionDataMock.token = 'test_token';
+      sessionDataMock.contact = contactMock;
 
       final Client clientMock = MockClient(
         (Request request) async {
           DataMap dataMap = switch (request.url.pathSegments.last) {
-            'authenticate' => TestUtils.createSuccessFrameDataMap(serverSessionMock.encode()),
+            'authenticate' => TestUtils.createSuccessFrameDataMap(sessionDataMock.encode()),
             _ => throw UnimplementedError(),
           };
 
@@ -53,10 +59,11 @@ void main() {
           final FoundationResponseResolver<SessionData> resolver = await serviceMock.authenticate(input);
           final SessionData serverSession = resolver.resolveDirect(() => SessionData());
 
-          expect(serverSession.token, serverSessionMock.token);
-          expect(serverSession.identity, serverSessionMock.identity);
-          expect(serverSession.wildcard, serverSessionMock.wildcard);
-          expect(serverSession.expiration, serverSessionMock.expiration);
+          expect(serverSession.token, sessionDataMock.token);
+          expect(serverSession.wildcard, sessionDataMock.wildcard);
+          expect(serverSession.expiration, sessionDataMock.expiration);
+
+          expect(serverSession.contact.name, sessionDataMock.contact.name);
         },
       );
     },

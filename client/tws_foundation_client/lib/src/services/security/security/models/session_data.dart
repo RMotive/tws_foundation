@@ -11,11 +11,11 @@ final class SessionData implements DecodableI, EncodableI {
   /// Services auth token.
   String token = '';
 
-  /// Current user identity.
-  String identity = '';
-
   /// [token] timemark expiration
   DateTime expiration = DateTime(0);
+
+  /// User contact information.
+  Contact contact = Contact();
 
   /// Generates a new [SessionData] instance.
   SessionData();
@@ -23,17 +23,21 @@ final class SessionData implements DecodableI, EncodableI {
   @override
   void decode(DataMap encode) {
     token = encode.get('token');
-    identity = encode.get('identity');
     expiration = encode.get('expiration');
     wildcard = encode.get('wildcard', false);
+
+    DataMap contactDataMap = encode.get('contact');
+
+    contact = Contact();
+    contact.decode(contactDataMap);
   }
 
   @override
   DataMap encode() {
     return <String, Object?>{
-      'wildcard': wildcard,
       'token': token,
-      'identity': identity,
+      'wildcard': wildcard,
+      'contact': contact.encode(),
       'expiration': expiration.toIso8601String(),
     };
   }

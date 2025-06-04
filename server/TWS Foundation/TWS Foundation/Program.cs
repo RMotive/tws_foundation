@@ -123,78 +123,81 @@ public partial class Program {
 
             // --> Adding customer services
             {
-                IServiceCollection Services = builder.Services;
+                IServiceCollection services = builder.Services;
+
+
 
                 // --> Application
-                Services.AddSingleton<AuthManager>();
-                Services.AddSingleton<AnalyticsMiddleware>();
-                Services.AddSingleton<AdvisorMiddleware>();
-                Services.AddSingleton<FramingMiddleware>();
-                Services.AddSingleton<DispositionMiddleware>();
-                Services.AddSingleton<IDisposer, Disposer>();
+                services.AddHttpContextAccessor();
+                services.AddSingleton<IAuthManager, AuthManager>();
+                services.AddSingleton<AnalyticsMiddleware>();
+                services.AddSingleton<AdvisorMiddleware>();
+                services.AddSingleton<FramingMiddleware>();
+                services.AddSingleton<DispositionMiddleware>();
+                services.AddSingleton<IDisposer, Disposer>();
 
                 // --> [CSM Security]
                 ConnectionOptions securityDbConnectionOptions = DatabaseUtilities.Retrieve(CSM_Security.Database.SIGN);
                 new CSM_Security.Database(securityDbConnectionOptions).ValidateConnection();
 
-                Services.AddScoped(
+                services.AddScoped(
                         (provider) => new CSM_Security.Database(securityDbConnectionOptions)
                     );
 
                 // --> [TWS Business]
                 ConnectionOptions businessDbConnectionOptions = DatabaseUtilities.Retrieve(TWS_Business.Database.SIGN);
                 new TWS_Business.Database(businessDbConnectionOptions).ValidateConnection();
-                Services.AddScoped(
+                services.AddScoped(
                         (provider) => new TWS_Business.Database(businessDbConnectionOptions)
                     );
 
-                Services.AddScoped<IAccountsDepot, AccountsDepot>();
-                Services.AddScoped<ISolutionsDepot, SolutionsDepot>();
-                Services.AddScoped<IContactsDepot, ContactsDepot>();
-                Services.AddScoped<IFeaturesDepot, FeaturesDepot>();
-                Services.AddScoped<ISectionsDepot, SectionsDepot>();
-                Services.AddScoped<ISituationsDepot, SituationsDepot>();
-                Services.AddScoped<IStatusesDepot, StatusesDepot>();
-                Services.AddScoped<IYardLogsDepot, YardLogsDepot>();
-                Services.AddScoped<ICarriersDepot, CarriersDepot>();
-                Services.AddScoped<ILoadTypesDepot, LoadTypesDepot>();
-                Services.AddScoped<IManufacturersDepot, ManufacturersDepot>();
-                Services.AddScoped<IPlatesDepot, PlatesDepot>();
-                Services.AddScoped<ISCTsDepot, SCTDepot>();
-                Services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
-                Services.AddScoped<ITrucksDepot, TrucksDepot>();
-                Services.AddScoped<IVehiculesModelsDepot, VehiculeModelsDepot>();
-                Services.AddScoped<IAddressesDepot, AddressesDepot>();
-                Services.AddScoped<IApproachesDepot, ApproachesDepot>();
-                Services.AddScoped<IDriversDepot, DriversDepot>();
-                Services.AddScoped<IApproachesDepot, ApproachesDepot>();
-                Services.AddScoped<IEmployeesDepot, EmployeesDepot>();
-                Services.AddScoped<ILocationsDepot, LocationsDepot>();
-                Services.AddScoped<IInsuranceDepot, InsurancesDepot>();
-                Services.AddScoped<IMaintenanceDepot, MaintenacesDepot>();
-                Services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
-                Services.AddScoped<ITrailersDepot, TrailersDepot>();
-                Services.AddScoped<ITrailersExternal, TrailersExternalsDepot>();
-                Services.AddScoped<ITrailerTypesDepot, TrailerTypesDepot>();
+                services.AddScoped<IAccountsDepot, AccountsDepot>();
+                services.AddScoped<ISolutionsDepot, SolutionsDepot>();
+                services.AddScoped<IContactsDepot, ContactsDepot>();
+                services.AddScoped<IFeaturesDepot, FeaturesDepot>();
+                services.AddScoped<ISectionsDepot, SectionsDepot>();
+                services.AddScoped<ISituationsDepot, SituationsDepot>();
+                services.AddScoped<IStatusesDepot, StatusesDepot>();
+                services.AddScoped<IYardLogsDepot, YardLogsDepot>();
+                services.AddScoped<ICarriersDepot, CarriersDepot>();
+                services.AddScoped<ILoadTypesDepot, LoadTypesDepot>();
+                services.AddScoped<IManufacturersDepot, ManufacturersDepot>();
+                services.AddScoped<IPlatesDepot, PlatesDepot>();
+                services.AddScoped<ISCTsDepot, SCTDepot>();
+                services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
+                services.AddScoped<ITrucksDepot, TrucksDepot>();
+                services.AddScoped<IVehiculesModelsDepot, VehiculeModelsDepot>();
+                services.AddScoped<IAddressesDepot, AddressesDepot>();
+                services.AddScoped<IApproachesDepot, ApproachesDepot>();
+                services.AddScoped<IDriversDepot, DriversDepot>();
+                services.AddScoped<IApproachesDepot, ApproachesDepot>();
+                services.AddScoped<IEmployeesDepot, EmployeesDepot>();
+                services.AddScoped<ILocationsDepot, LocationsDepot>();
+                services.AddScoped<IInsuranceDepot, InsurancesDepot>();
+                services.AddScoped<IMaintenanceDepot, MaintenacesDepot>();
+                services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
+                services.AddScoped<ITrailersDepot, TrailersDepot>();
+                services.AddScoped<ITrailersExternal, TrailersExternalsDepot>();
+                services.AddScoped<ITrailerTypesDepot, TrailerTypesDepot>();
 
                 // --> [Customer] services.
-                Services.AddScoped<ISecurityService, SecurityService>();
-                Services.AddScoped<ISolutionsService, SolutionsService>();
-                Services.AddScoped<IAddressesService, AddressesService>();
-                Services.AddScoped<ICarriersService, CarriersService>();
-                Services.AddScoped<IDriversService, DriversService>();
-                Services.AddScoped<IEmployeesService, EmployeesService>();
-                Services.AddScoped<ILocationsService, LocationsService>();
-                Services.AddScoped<ISectionsService, SectionsService>();
-                Services.AddScoped<ITrailerClassesService, TrailerClassesService>();
-                Services.AddScoped<ITrailerTypesService, TrailerTypesService>();
-                Services.AddScoped<IYardLogsService, YardLogsService>();
-                Services.AddScoped<IAccountsService, AccountsService>();
-                Services.AddScoped<IContactsService, ContactsService>();
-                Services.AddScoped<ILoadTypesService, LoadTypesService>();
-                Services.AddScoped<IManufacturersService, ManufacturersService>();
-                Services.AddScoped<ISituationsService, SituationsService>();
-                Services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
+                services.AddScoped<ISecurityService, SecurityService>();
+                services.AddScoped<ISolutionsService, SolutionsService>();
+                services.AddScoped<IAddressesService, AddressesService>();
+                services.AddScoped<ICarriersService, CarriersService>();
+                services.AddScoped<IDriversService, DriversService>();
+                services.AddScoped<IEmployeesService, EmployeesService>();
+                services.AddScoped<ILocationsService, LocationsService>();
+                services.AddScoped<ISectionsService, SectionsService>();
+                services.AddScoped<ITrailerClassesService, TrailerClassesService>();
+                services.AddScoped<ITrailerTypesService, TrailerTypesService>();
+                services.AddScoped<IYardLogsService, YardLogsService>();
+                services.AddScoped<IAccountsService, AccountsService>();
+                services.AddScoped<IContactsService, ContactsService>();
+                services.AddScoped<ILoadTypesService, LoadTypesService>();
+                services.AddScoped<IManufacturersService, ManufacturersService>();
+                services.AddScoped<ISituationsService, SituationsService>();
+                services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
             }
 
             WebApplication app = builder.Build();
