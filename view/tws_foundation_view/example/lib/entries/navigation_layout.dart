@@ -22,6 +22,11 @@ final class NavigationLayout extends PackageLandingEntryB<LandingThemeB> {
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, PackageLandingThemeB theme) {
     return view.NavigationLayout(
+      user: view.NavigationLayoutHeaderUser(
+        name: 'Package',
+        email: 'package_landing@csm.com',
+        lastName: 'Landing',
+      ),
       appThemes: appThemes,
       routeData: RouteData(
         route: Route(''),

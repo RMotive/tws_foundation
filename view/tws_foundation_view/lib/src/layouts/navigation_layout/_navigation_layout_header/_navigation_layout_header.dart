@@ -1,17 +1,27 @@
 part of '../navigation_layout.dart';
 
+/// {widget} class.
 ///
-final class _MasterLayoutHeader extends StatelessWidget {
-  ///
-  final List<ThemeI> appThemes;
-
-  ///
+/// Draws the [NavigationLayout] header.
+final class _NavigationLayoutHeader extends StatelessWidget {
+  /// Default root [Route], used to draw and handle a Home button that directs to this [Route].
   final Route? rootRoute;
 
-  /// Creates a new [_MasterLayoutHeader] instance.
-  const _MasterLayoutHeader({
-    required this.appThemes,
+  /// Application [ThemeI] collection.
+  final List<ThemeI> appThemes;
+
+  /// User information, used to draw an User Button to access information and options.
+  final NavigationLayoutHeaderUserI? user;
+
+  /// {internal} Reactor reference for [_NavigationLayoutNavigation] state.
+  final _NavigationLayourNavigationReactor navReactor;
+
+  /// Creates a new [_NavigationLayoutHeader] instance.
+  const _NavigationLayoutHeader({
+    this.user,
     this.rootRoute,
+    required this.appThemes,
+    required this.navReactor,
   });
 
   @override
@@ -36,7 +46,7 @@ final class _MasterLayoutHeader extends StatelessWidget {
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: navReactor.toogle,
                     child: Icon(
                       Icons.menu,
                       color: theme.fore,
@@ -61,13 +71,18 @@ final class _MasterLayoutHeader extends StatelessWidget {
 
                   if (appThemes.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 6,
+                      ),
                       child: ThemeSwitcher(
                         applicationThemes: appThemes,
                       ),
                     ),
 
-                  _NavigationHeaderUserButton(),
+                  if (user != null)
+                    _NavigationHeaderUserButton(
+                      user: user!,
+                    ),
                 ],
               ),
             ],

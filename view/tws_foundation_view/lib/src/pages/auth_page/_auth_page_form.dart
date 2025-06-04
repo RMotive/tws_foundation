@@ -10,8 +10,8 @@ final class _AuthPageForm extends StatefulWidget {
   /// Callback when the [AuthPage] correctly authenticates the user information.
   ///
   ///
-  /// [serverSession] server session information from the given credentials.
-  final FutureOr<void> Function(ServerSession serverSession) onAuthSuccess;
+  /// [SessionData] server session information from the given credentials.
+  final FutureOr<void> Function(SessionData sessionData) onAuthSuccess;
 
   /// Creates a new [_AuthPageForm] instance.
   const _AuthPageForm({required this.solutionSign, required this.onAuthSuccess});
@@ -89,13 +89,13 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
       isLoading = true;
     });
 
-    final FoundationResponseResolver<ServerSession> authResolver = await securityService.authenticate(
+    final FoundationResponseResolver<SessionData> authResolver = await securityService.authenticate(
       AuthenticationInput.a(widget.solutionSign, usrValue, pwdValue.bytes),
     );
 
     authResolver.resolve(
-      objectBuilder: () => ServerSession(),
-      onSuccess: (SuccessFrame<ServerSession> success) => widget.onAuthSuccess(success.content),
+      objectBuilder: () => SessionData(),
+      onSuccess: (SuccessFrame<SessionData> success) => widget.onAuthSuccess(success.content),
       onFailure: (FailureFrame failure, int status) {
         if (status != 401) {
           errorMsg = FoundationMessages.unknownServerException;

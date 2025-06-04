@@ -21,7 +21,7 @@ final class AuthPage extends PageB {
   ///
   ///
   /// [serverSession] server session information from the given credentials.
-  final FutureOr<void> Function(ServerSession serverSession) onAuthSuccess;
+  final FutureOr<void> Function(SessionData serverSession) onAuthSuccess;
 
   /// Creates a new [AuthPage] instance.
   const AuthPage({super.key, required this.solutionSign, required this.onAuthSuccess});
