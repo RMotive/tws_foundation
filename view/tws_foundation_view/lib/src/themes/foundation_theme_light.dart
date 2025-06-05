@@ -38,7 +38,7 @@ class FoundationThemeLight extends FoundationThemeB {
           accent: FoundationColors.smoothWine,
           foreAlt: Color.fromARGB(255, 208, 136, 130),
         ),
-        articlesLayoutSelectorButtonState: const StateTheming(
+        categoryLayoutRibbonButton: const StateTheming(
           main: ComplexTheming(
             background: FoundationColors.oceanBlue,
             foreground: FoundationColors.warmWhite,
@@ -57,17 +57,6 @@ class FoundationThemeLight extends FoundationThemeB {
             background: Colors.white10,
             foreground: FoundationColors.warmWhite,
           ),
-        ),
-        articlesLayoutActionButtonState: const StateTheming(
-          main: ComplexTheming(
-            background: FoundationColors.oceanBlue,
-            foreground: FoundationColors.warmWhite,
-          ),
-          hoverStruct: ComplexTheming(
-            background: FoundationColors.oceanBlueH,
-            foreground: Colors.white60,
-          ),
-          selectStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
         ),
         primaryControlState: const StateTheming(
           main: ComplexTheming(

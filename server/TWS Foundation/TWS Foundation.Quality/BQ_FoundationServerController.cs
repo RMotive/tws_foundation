@@ -20,7 +20,7 @@ namespace TWS_Foundation.Quality;
 /// 
 /// </summary>
 public abstract class BQ_FoundationServerController
-    : BQ_ServerController<Program> {
+    : BQ_Controller<Program> {
 
     /// <summary>
     ///     

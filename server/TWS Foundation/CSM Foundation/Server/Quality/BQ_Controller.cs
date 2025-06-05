@@ -12,16 +12,16 @@ namespace CSM_Foundation.Server.Quality;
 
 
 /// <summary>
-///     <see langword="abstract"/> class for <see cref="BQ_ServerController{T}"/>.
+///     <see langword="abstract"/> class for <see cref="BQ_Controller{T}"/>.
 ///     
 ///     <para> 
-///         Defines base behavior and contract for <see cref="BQ_ServerController{T}"/> implementations that defines classes for quality/testing purposes, handle members for a better <see cref="ControllerBase"/> implementation testing.
+///         Defines base behavior and contract for <see cref="BQ_Controller{T}"/> implementations that defines classes for quality/testing purposes, handle members for a better <see cref="ControllerBase"/> implementation testing.
 ///     </para>
 /// </summary>
 /// <typeparam name="T">
 ///     Entry class that starts your server project usually known as Program.
 /// </typeparam>
-public abstract class BQ_ServerController<T>
+public abstract class BQ_Controller<T>
     : IClassFixture<WebApplicationFactory<T>>
     where T : class {
 
@@ -41,7 +41,7 @@ public abstract class BQ_ServerController<T>
     readonly string _controllerPath;
 
     /// <summary>
-    ///     Creates a new <see cref="BQ_ServerController{T}"/> instance.
+    ///     Creates a new <see cref="BQ_Controller{T}"/> instance.
     /// </summary>
     /// <param name="controllerPath">
     ///     Relate path to the controller(service) used for simplified paths building at requests time.
@@ -52,7 +52,7 @@ public abstract class BQ_ServerController<T>
     /// <param name="applicationFactory">
     ///     Built-in <see cref="IClassFixture{TFixture}"/> application building for server simulation.
     /// </param>
-    protected BQ_ServerController(string controllerPath, string solutionSign, WebApplicationFactory<T> applicationFactory) {
+    protected BQ_Controller(string controllerPath, string solutionSign, WebApplicationFactory<T> applicationFactory) {
         _controllerPath = controllerPath;
 
         _serverHost = new(solutionSign, applicationFactory.CreateClient());

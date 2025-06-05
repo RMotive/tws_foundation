@@ -15,6 +15,43 @@ part '_navigation_layout_header/_navigation_layout_header_user_button_menu.dart'
 part '_navigation_layout_navigation/_navigation_layout_navigation.dart';
 part '_navigation_layout_navigation/_navigation_layout_navigation_reactor.dart';
 
+/// {LayoutNode} class.
+///
+/// Implements a [RouteLayout] node to simplify the routing tree subscription for [NavigationLayout] configurations.
+final class NavigationLayoutNode extends RouteLayoutB {
+  /// Home [Route] used to draw a direction header button to access it easier.
+  final Route? rootRoute;
+
+  /// Application themes available that will be handled by a Theme Switcher at the header.
+  final List<ThemeI> appThemes;
+
+  /// Solution specific user information builder to get and calculate user information to display at header user button.
+  final NavigationLayoutHeaderUserI? Function()? userBuilder;
+
+  /// The navigation entries to be handled, drawing navigation buttons and the routing behavior.
+  final List<NavigationLayoutEntryI> navigationEntries;
+
+  /// Creates a new [NavigationLayoutNode] instance.
+  NavigationLayoutNode({
+    this.rootRoute,
+    this.userBuilder,
+    required super.routes,
+    this.appThemes = const <ThemeI>[],
+    this.navigationEntries = const <NavigationLayoutEntryI>[],
+  }) : super(
+         layoutBuilder: (BuildContext ctx, RouteData routeData, Widget page) {
+           return NavigationLayout(
+             page: page,
+             rootRoute: rootRoute,
+             appThemes: appThemes,
+             user: userBuilder?.call(),
+             routeData: routeData,
+             navigationEntries: navigationEntries,
+           );
+         },
+       );
+}
+
 ///
 final class NavigationLayout extends LayoutB {
   ///

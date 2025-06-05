@@ -19,6 +19,13 @@ export 'src/widgets/button_flat.dart';
 export 'src/widgets/entity_creation_form/entity_creation_form_agent.dart';
 export 'src/widgets/entity_creation_form/entity_creation_form.dart';
 
+// [layouts.category_layout]
+export 'src/layouts/category_layout/category_layout.dart';
+export 'src/layouts/category_layout/category_layout_entry.dart';
+export 'src/layouts/category_layout/_category_layout_ribbon/category_layout_ribbon_controller.dart';
+export 'src/layouts/category_layout/_category_layout_ribbon/category_layout_ribbon_data_transfer_group_controller.dart';
+export 'src/layouts/category_layout/_category_layout_ribbon/category_layout_ribbon_data_management_group_controller.dart';
+
 // [layouts.navigation_layout]
 export 'src/layouts/navigation_layout/navigation_layout.dart';
 export 'src/layouts/navigation_layout/_navigation_layout_navigation/navigation_layout_entry.dart';

@@ -11,12 +11,7 @@ final class LandingThemeDark extends PackageLandingThemeDark
   final FoundationThemeDark _foundation = FoundationThemeDark();
 
   @override
-  StateTheming get articlesLayoutActionButtonState =>
-      _foundation.articlesLayoutActionButtonState;
-
-  @override
-  StateTheming get articlesLayoutSelectorButtonState =>
-      _foundation.articlesLayoutSelectorButtonState;
+  StateTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
 
   @override
   String get businessLogo => _foundation.businessLogo;
