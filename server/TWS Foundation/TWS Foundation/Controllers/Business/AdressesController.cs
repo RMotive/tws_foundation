@@ -23,11 +23,11 @@ public class AddressesController
         this.Service = Service;
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Address> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Address, ViewInput<Address>> {
+                        new QueryInput<Address, ViewInput<Address>> {
                             Parameters = options
                         }
                     )

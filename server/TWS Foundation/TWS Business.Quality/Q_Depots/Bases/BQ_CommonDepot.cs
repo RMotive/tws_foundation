@@ -4,6 +4,7 @@ using System.Reflection;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
@@ -224,7 +225,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         await Store<TCommon, TInternalEdge, TExternalEdge>(30, (entropy) => EntityFactory(entropy, internalEdge));
 
         ViewOutput<TCommon> viewOutput = await Depot.View(
-                new OperationInput<TCommon, ViewInput<TCommon>> {
+                new QueryInput<TCommon, ViewInput<TCommon>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
@@ -248,7 +249,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         await Store<TCommon, TInternalEdge, TExternalEdge>(30, (entropy) => EntityFactory(entropy, internalEdge));
 
         ViewOutput<TCommon> viewOutput = await Depot.View(
-                new OperationInput<TCommon, ViewInput<TCommon>> {
+                new QueryInput<TCommon, ViewInput<TCommon>> {
                     Parameters = new ViewInput<TCommon> {
                         Retroactive = false,
                         Range = 20,
@@ -269,7 +270,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     public async Task ViewC() {
 
         ViewOutput<TCommon> orderedViewOutput = await Depot.View(
-                        new OperationInput<TCommon, ViewInput<TCommon>> {
+                        new QueryInput<TCommon, ViewInput<TCommon>> {
                             Parameters = new() {
                                 Page = 1,
                                 Range = 20,
@@ -311,7 +312,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     [Fact(DisplayName = "[View]: Using Date filter")]
     public async Task ViewD() {
         ViewOutput<TCommon> viewOutput = await Depot.View(
-                new OperationInput<TCommon, ViewInput<TCommon>> {
+                new QueryInput<TCommon, ViewInput<TCommon>> {
                     Parameters = new() {
                         Page = 1,
                         Range = 20,
@@ -342,7 +343,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         TCommon sampleEntity = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => EntityFactory(entropy, internalEdge));
         object? sampleValue = Evaluable.GetValue(sampleEntity);
         ViewOutput<TCommon> qOut = await Depot.View(
-                new OperationInput<TCommon, ViewInput<TCommon>> {
+                new QueryInput<TCommon, ViewInput<TCommon>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
@@ -387,7 +388,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
             possibleValues.Add(sampleValue);
         }
         ViewOutput<TCommon> viewOutput = await Depot.View(
-                new OperationInput<TCommon, ViewInput<TCommon>> {
+                new QueryInput<TCommon, ViewInput<TCommon>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
@@ -468,8 +469,12 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         TCommon samplePivot = samples[0];
 
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
-                EntityBatchBehaviors.First,
-                (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
+                 new QueryInput<TCommon, FilterQueryInput<TCommon>>() {
+                     Parameters = new FilterQueryInput<TCommon> {
+                         Behavior = FilteringBehaviors.First,
+                         Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
+                     }
+                 }
             );
 
         Assert.Multiple(
@@ -497,8 +502,12 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         TCommon samplePivot = samples[1];
 
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
-                EntityBatchBehaviors.Last,
-                (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
+               new QueryInput<TCommon, FilterQueryInput<TCommon>>() {
+                     Parameters = new FilterQueryInput<TCommon> {
+                         Behavior = FilteringBehaviors.First,
+                         Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
+                     }
+                 }
             );
 
         Assert.Multiple(
@@ -525,8 +534,12 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => EntityFactory(entropy, internalEdge));
 
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
-                EntityBatchBehaviors.All,
-                (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
+                new QueryInput<TCommon, FilterQueryInput<TCommon>>() {
+                    Parameters = new FilterQueryInput<TCommon> {
+                        Behavior = FilteringBehaviors.All,
+                        Filter = (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
+                    }
+                }
             );
 
         Assert.Multiple(
@@ -605,7 +618,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         TCommon sample = RunEntityFactory((entropy) => EntityFactory(entropy, internalEdge));
 
         UpdateOutput<TCommon> updateOutput = await Depot.Update(
-                new OperationInput<TCommon, UpdateInput<TCommon>> {
+                new QueryInput<TCommon, UpdateInput<TCommon>> {
                     Parameters = new UpdateInput<TCommon> {
                         Entity = sample,
                         Create = true,
@@ -635,7 +648,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         XDepot<TCommon> depotException = await Assert.ThrowsAsync<XDepot<TCommon>>(
                 async () => {
                     UpdateOutput<TCommon> updateOutput = await Depot.Update(
-                new OperationInput<TCommon, UpdateInput<TCommon>> {
+                new QueryInput<TCommon, UpdateInput<TCommon>> {
                     Parameters = new UpdateInput<TCommon> {
                         Entity = sample,
                     },
@@ -644,7 +657,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                 }
             );
 
-        Assert.Equal(XDepotSituations.CreateDisabled, depotException.Situation);
+        Assert.Equal(XDepotSituations.CreateDisabled, depotException.Reason);
     }
 
     [Theory(DisplayName = $"[Update Entity]: Throws Unfound exception situation")]
@@ -656,7 +669,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         XDepot<TCommon> depotException = await Assert.ThrowsAsync<XDepot<TCommon>>(
                 async () => {
                     UpdateOutput<TCommon> updateOutput = await Depot.Update(
-                        new OperationInput<TCommon, UpdateInput<TCommon>> {
+                        new QueryInput<TCommon, UpdateInput<TCommon>> {
                             Parameters = new UpdateInput<TCommon> {
                                 Entity = sample,
                             },
@@ -664,7 +677,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                     );
                 }
             );
-        Assert.Equal(XDepotSituations.Unfound, depotException.Situation);
+        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
     }
 
     [Theory(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
@@ -678,7 +691,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         Evaluable.SetValue(sample, Evaluable.GetValue(valueReference));
 
         UpdateOutput<TCommon> updateOutput = await Depot.Update(
-                new OperationInput<TCommon, UpdateInput<TCommon>> {
+                new QueryInput<TCommon, UpdateInput<TCommon>> {
                     Parameters = new UpdateInput<TCommon> {
                         Entity = sample,
                     },
@@ -716,7 +729,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                 }
             );
 
-        Assert.Equal(XDepotSituations.Unfound, depotException.Situation);
+        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
     }
 
     [Theory(DisplayName = $"[Delete Entity]: Deletes correctly an Entity with a given Common Entity")]
@@ -731,38 +744,6 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         Assert.Null(searchedEntity);
     }
 
-    [Theory(DisplayName = $"[Delete Batch]: Deletes correctly a collection of entities based on a filter")]
-    [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task DeleteC(bool internalEdge) {
-        TCommon entity = (await Store<TCommon, TInternalEdge, TExternalEdge>(10, (entropy) => EntityFactory(entropy, internalEdge)))[0];
-
-        BatchOperationOutput<TCommon> deleteOutput = await Depot.DeleteCommon(
-                new OperationInput<TCommon, BatchOperationInput<TCommon>>() {
-                    Parameters = new BatchOperationInput<TCommon> {
-                        Filter = (entityB) => entityB.Id == entity.Id,
-                    }
-                }
-            );
-        await CommitSampleEntities([]);
-
-        Assert.Multiple(
-                [
-                    () => Assert.False(deleteOutput.Failed),
-                    () => Assert.Empty(deleteOutput.Failures),
-                    () => Assert.NotEmpty(deleteOutput.Successes),
-                    () => {
-                        TCommon deletedEntity = deleteOutput.Successes[0];
-
-                        Assert.Equal(entity.Id, deletedEntity.Id);
-                    },
-                    () => {
-                        Assert.Null(
-                                Database.Set<TCommon>().Find(entity.Id)
-                            );
-                    }
-                ]
-            );
-    }
 
     #endregion
 

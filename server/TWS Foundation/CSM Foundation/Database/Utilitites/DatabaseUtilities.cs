@@ -1,12 +1,17 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Text.Json;
 
+using CSM_Foundation.Core;
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Server;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.VisualBasic;
 
 namespace CSM_Foundation.Database.Utilitites;
 public class DatabaseUtilities {
@@ -101,61 +106,116 @@ public class DatabaseUtilities {
     ///     Thrown when the relation entity couldn't be found in the database.
     /// </exception>
     public static TEntity SanitizeEntity<TEntity>(DbContext database, TEntity entity) {
-        if (entity == null) {
-            return entity;
-        }
 
-        IEnumerable<PropertyInfo> relationsProperties = entity.GetType().GetProperties().Where(
-                (pi) => pi.GetCustomAttribute<RelationAttribute>() != null
-            );
-
-        foreach (PropertyInfo relationProperty in relationsProperties) {
-            Type relationType = relationProperty.PropertyType;
-            object? relationValue = relationProperty.GetValue(entity);
-            if (relationValue is null) {
-                continue;
-            }
-
-            MethodInfo dbContextSetMethod = typeof(DbContext)
+        
+        IQueryable<IEntity> GetDbSet(Type entityType) {
+            object objectDbSet = typeof(DbContext)
                 .GetMethods()
                 .Where(
                     m => m.Name == nameof(DbContext.Set) && m.IsGenericMethod && m.GetGenericArguments().Length == 1
                 )
-                .FirstOrDefault()?.MakeGenericMethod(relationType)
-                ?? throw new Exception($"Unreasonable problem, DbContext doesn´t have longer the Set method to build DbSet generically");
+                .FirstOrDefault()?
+                .MakeGenericMethod(entityType)
+                .Invoke(database, null)
+                ?? throw new XSystem($"DbContext({database.GetType().Name}) doesn´t have the neccesary DbSet({entityType.Name}) method", null);
 
-            object? rawDbSet = dbContextSetMethod.Invoke(database, null)
-                ?? throw new Exception($"Unable to locate DbSet of Type ({relationType.Name}) for Database ({database.GetType().Name})");
-            IQueryable<IEntity> dbSet = rawDbSet as IQueryable<IEntity> 
-                ?? throw new Exception();
+            return (IQueryable<IEntity>)objectDbSet;
+        }
 
-            if (relationValue is IEntity relationEntity) {
-                if (relationEntity.Id <= 0) {
-                    throw new Exception($"Dependencies aren't allowed to be auto-created on main Entity creation, you need to create the Dependency first in its corresponding [Depot]");
+        if (entity == null) {
+            return entity;
+        }
+
+        IEnumerable<PropertyInfo> relationProperties = entity
+            .GetType()
+            .GetProperties()
+            .Where(
+                (pi) => pi.GetCustomAttribute<RelationAttribute>() != null
+            );
+
+        foreach (PropertyInfo relationProperty in relationProperties) {
+            Type relationType = relationProperty.PropertyType;
+            object? relationValue = relationProperty.GetValue(entity);
+
+            if (relationValue is null) {
+                continue;
+            }
+
+            bool isCollection = relationValue is IEnumerable<IEntity>;
+            bool isEntity = relationValue is IEntity;
+
+            if (!isEntity && !isCollection) {
+                throw new XSystem($"Entity relation integrity problem, relation has [Relation] attribute but is not a IEnumerable<IEntity> neither IEntity assignable relation", null);
+            }
+
+            if (isEntity) {
+                IEntity relEntity = (IEntity)relationValue;
+
+                if (relEntity.Id <= 0) {
+                    throw new XSystem($"Dependencies aren't allowed to be created on main Entity creation", null);
                 }
 
-                IEntity tmpDependency = dbSet.Where(
-                    i => i.Id == relationEntity.Id
-                    ).FirstOrDefault()
-                    ?? throw new Exception($"Couldn't find pointing relation of Type ({relationType}) with Id ({relationEntity.Id})");
+                IQueryable<IEntity> dbSet = GetDbSet(relEntity.GetType());
 
-                relationProperty.SetValue(entity, tmpDependency);
-            } else if (relationValue is ICollection<IEntity> relatedEntities) {
+                IEntity dbRelEntity = dbSet.Where(
+                        entity => entity.Id == relEntity.Id
+                    )
+                    .FirstOrDefault()
+                    ?? throw new XSystem($"Couldn't find relation entity ({relEntity.GetType().Name})[{relEntity.Id}]", null);
 
-                List<IEntity> trackedCollection = [];
-                foreach (IEntity relatedEntity in relatedEntities) {
+                relationProperty.SetValue(entity, dbRelEntity);
+                EntityEntry entityEntry = database.Entry(dbRelEntity);
+                if (entityEntry.State == EntityState.Detached) {
+                    entityEntry.State = EntityState.Unchanged;
+                }
+            } else { 
+                /// --> At this point we already know it's a collection relation.
+                IEnumerable<IEntity> relCollection = (IEnumerable<IEntity>)relationValue;
+                if(!relCollection.Any())
+                    continue;
 
-                    IEntity tmpDependency = dbSet.Where(
-                        i => i.Id == relatedEntity.Id
-                        ).FirstOrDefault()
-                        ?? throw new Exception($"Couldn't find pointing relation of Type ({relationType}) with Id ({relatedEntity.Id})");
+                IEnumerable<object> dbRelCollection = [];
+                Type relEntityType = relCollection.First().GetType();
+                IQueryable<IEntity> dbSet = GetDbSet(relEntityType);
 
-                    trackedCollection.Add(tmpDependency);
+                foreach (IEntity relEntity in relCollection) {
+
+                    IEntity dbRelEntity = dbSet.Where(
+                            entity => entity.Id == relEntity.Id
+                        )
+                        .FirstOrDefault()
+                        ?? throw new XSystem($"Couldn't find relation entity ({relEntity.GetType().Name})[{relEntity.Id}]", null); ;
+
+                    EntityEntry relEntityEntry = database.Entry(dbRelEntity);
+                    if(relEntityEntry.State == EntityState.Detached) {
+                        relEntityEntry.State = EntityState.Unchanged;
+                    }
+
+                    dbRelCollection = dbRelCollection.Append(dbRelEntity);
                 }
 
-                relationProperty.SetValue(entity, trackedCollection);
-            } else {
-                throw new InvalidOperationException($"The relation isn't an IEntity implementation neither a Collection of IEntity");
+                object castedCollection = typeof(Enumerable)
+                    .GetMethod("Cast")?
+                    .MakeGenericMethod(relEntityType)
+                    .Invoke(null, 
+                        [ 
+                            dbRelCollection 
+                        ]
+                    ) 
+                    ?? throw new XSystem($"Unable to cast IEntity to Entity type object", null);
+
+                castedCollection = typeof(Enumerable)
+                    .GetMethod("ToList")?
+                    .MakeGenericMethod(relEntityType)
+                    .Invoke(
+                        null,
+                        [
+                            castedCollection
+                        ]
+                    )
+                    ?? throw new XSystem("Unable to convert entity collection", null);
+
+                relationProperty.SetValue(entity, castedCollection);
             }
         }
         return entity;
@@ -197,10 +257,10 @@ public class DatabaseUtilities {
         ConnectionOptions connection = JsonSerializer.Deserialize<ConnectionOptions>(fileReader)
             ?? throw new Exception($"File ({connectionPath}) doesn't contain the correct format for (ConnectionOptions)");
 
-        
+
 
         TDatabase? Database;
-        if(options == null) {
+        if (options == null) {
             Database = (TDatabase?)Activator.CreateInstance(typeof(TDatabase), connection);
         } else {
             Database = (TDatabase?)Activator.CreateInstance(typeof(TDatabase), connection, options);

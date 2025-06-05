@@ -28,6 +28,7 @@ public class Feature
     /// <summary>
     ///     <see cref="Permit"/> dependants from this <see cref="Feature"/>.
     /// </summary>
+    [Relation]
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion

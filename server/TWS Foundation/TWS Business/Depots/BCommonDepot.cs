@@ -1,5 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -67,41 +68,5 @@ public class BCommonDepot<TInternal, TExternal, TCommon>
         return Entity;
     }
 
-    public Task<BatchOperationOutput<TCommon>> DeleteCommon(OperationInput<TCommon, BatchOperationInput<TCommon>> input) {
-        BatchOperationInput<TCommon> parameters = input.Parameters;
-
-        IQueryable<TCommon> query = Set;
-        query = ValidateProcessor(query, input.PreOperation);
-        query = query.AsTracking()
-            .Where(parameters.Filter)
-            .Include(e => e.Internal)
-            .Include(e => e.External);
-
-        query = ValidateProcessor(query, input.PostOperation);
-
-        List<TCommon> successes = [];
-        List<EntityOperationFailure<TCommon>> failures = [];
-        foreach (TCommon entity in query) {
-            try {
-                
-                if (entity.Internal != null) {
-                    Database.Set<TInternal>().Remove(entity.Internal);
-                } else {
-                    Database.Set<TExternal>().Remove(entity.External!);
-                }
-
-                Set.Remove(entity);
-
-                successes.Add(entity);
-            } catch (Exception exception) {
-                failures.Add(
-                        new EntityOperationFailure<TCommon>(entity, exception)
-                    );
-            }
-        }
-
-        return Task.FromResult(
-                new BatchOperationOutput<TCommon>([.. successes], [.. failures])
-            );
-    }
+    
 }

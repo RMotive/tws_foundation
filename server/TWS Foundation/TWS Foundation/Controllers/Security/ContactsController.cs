@@ -23,16 +23,16 @@ public class ContactsController
         Service = service;
     }
 
-    [HttpPost(), Auth("Create")]
+    [HttpPost(), Action("Create")]
     public async Task<IActionResult> Create(Contact[] contacts) {
         return Ok(await Service.Create(contacts));
     }
 
-    [HttpPost(), Auth("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Contact> options) {
         return Ok(
                 await Service.View(
-                        new OperationInput<Contact, ViewInput<Contact>> {
+                        new QueryInput<Contact, ViewInput<Contact>> {
                             Parameters = options
                         }
                     )

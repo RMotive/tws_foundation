@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-using CSM_Foundation.Core.Exceptions;
+using CSM_Foundation.Core;
 using CSM_Foundation.Core.Interfaces;
 using CSM_Foundation.Server;
 
@@ -49,7 +49,7 @@ public class FramingMiddleware
 
             await securityDatabaseTransaction.RollbackAsync();
         } catch (Exception ex) {
-            XSystem systemEx = new(ex);
+            XSystem systemEx = new("System engine exception", ex);
             failure = systemEx;
 
             await securityDatabaseTransaction.RollbackAsync();
@@ -61,7 +61,7 @@ public class FramingMiddleware
                 _ = reqProxyBuffer.Seek(0, SeekOrigin.Begin);
                 string encodedContent = "";
                 if (failure is not null) {
-                    ExceptionInfo exPublish = failure.Publish();
+                    ExceptionInfo exPublish = failure.Expose();
 
                     FailureFrame frame = new() {
                         Id = Tracer,
@@ -77,7 +77,8 @@ public class FramingMiddleware
                             encodedContent = "{}";
                             break;
                         case 405: {
-                                ExceptionInfo publish = new XSystem(new MethodAccessException()).Publish();
+                                ExceptionInfo publish = new XSystem("Unsuported HTTP method", null)
+                                    .Expose();
                                 FailureFrame frame = new() {
                                     Id = Tracer,
                                     Content = publish,
@@ -86,7 +87,8 @@ public class FramingMiddleware
                             }
                             break;
                         case 404: {
-                                ExceptionInfo publish = new XSystem(new Exception($"{context.Request.GetDisplayUrl()} not found")).Publish();
+                                ExceptionInfo publish = new XSystem($"{context.Request.GetDisplayUrl()} not found", null)
+                                    .Expose();
                                 FailureFrame frame = new() {
                                     Id = Tracer,
                                     Content = publish,

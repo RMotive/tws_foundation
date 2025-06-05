@@ -8,11 +8,10 @@ public class XConfigurationManager
     : BException<XConfigurationManagerSituation> {
     public XConfigurationManager(XConfigurationManagerSituation Situation, Exception? System = null)
         : base($"Configuration Manager Exception | [{Situation}]", Situation, HttpStatusCode.InternalServerError, System) {
+    }
 
-        this.Situation = Situation;
-        Advise = AdvisesConstants.SERVER_CONTACT_ADVISE;
-
-
+    protected override Dictionary<XConfigurationManagerSituation, string> ResolveAdvise() {
+        return [];
     }
 }
 

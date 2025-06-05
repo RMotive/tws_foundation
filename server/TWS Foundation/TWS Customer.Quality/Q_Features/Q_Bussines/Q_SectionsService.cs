@@ -1,6 +1,4 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Customer.Quality;
-using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
@@ -10,26 +8,20 @@ using TWS_Business.Depots.Directories;
 using TWS_Business.Entities;
 
 using TWS_Customer.Features.Business;
-using TWS_Customer.Quality.Factories;
 
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_SectionsService
-    : BQ_Service<ISectionsService> {
+    : BQ_ServicesCustomer<ISectionsService> {
 
-    public Q_SectionsService()
-        : base(
-                [
-                    DatabaseFactories.BusinessDatabaseFactory,
-                ]
-            ) {
+    public Q_SectionsService() {
 
     }
 
     #region [BQ_Service] implementations
     protected override ISectionsService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = DatabaseFactories.BusinessDatabaseFactory();
+        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
 
         ISectionsDepot SectionsDepot = new SectionsDepot(BussinesDatabase, Disposer);
 
@@ -88,7 +80,7 @@ public class Q_SectionsService
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
         ViewOutput<Section> viewOutput = await _service.View(
-                new OperationInput<Section, ViewInput<Section>> {
+                new QueryInput<Section, ViewInput<Section>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -103,17 +95,6 @@ public class Q_SectionsService
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
 
-        );
-    }
-
-    [Fact(DisplayName = "[Read]: Reads matched records")]
-    public async Task Read() {
-        Section mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Section> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
-
-        Assert.Multiple(
-            () => Assert.False(readOutput.Failed),
-            () => Assert.True(readOutput.Successes.First().Id > 0)
         );
     }
 

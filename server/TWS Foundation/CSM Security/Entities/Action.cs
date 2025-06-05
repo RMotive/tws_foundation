@@ -26,6 +26,7 @@ public class Action
     /// <summary>
     ///     <see cref="Permit"/> dependats from this <see cref="Action"/>.
     /// </summary>
+    [Relation]
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion

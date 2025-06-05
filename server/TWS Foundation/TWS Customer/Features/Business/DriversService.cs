@@ -17,7 +17,7 @@ public interface IDriversService
 ///     [Service] native implementation for <see cref="Driver_Common"/> based operations.
 /// </summary>
 public class DriversService
-    : BService<Driver_Common, IDriversDepot>, IDriversService {
+    : BService<Driver_Common, IDriversCommonsDepot>, IDriversService {
 
     /// <summary>
     ///     Creates a new of <see cref="DriversService"/> instance.
@@ -25,5 +25,5 @@ public class DriversService
     /// <param name="Depot">
     ///     <see cref="Driver_Common"/> based <see cref="IDepot{TEntity}"/> handler to be used.
     /// </param>
-    public DriversService(IDriversDepot Depot) : base(Depot) { }
+    public DriversService(IDriversCommonsDepot Depot) : base(Depot) { }
 }

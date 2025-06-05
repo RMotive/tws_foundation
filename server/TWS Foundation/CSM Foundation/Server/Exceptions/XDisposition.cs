@@ -21,7 +21,7 @@ public class XDisposition
         : base($"Data disposition process exception", situation) {
     }
 
-    protected override Dictionary<XDispositionSituations, string> AdviseFactory() {
+    protected override Dictionary<XDispositionSituations, string> ResolveAdvise() {
 
         return new Dictionary<XDispositionSituations, string> {
             { XDispositionSituations.WrongToken, "Wrong {CSMDisposition} header value format" }

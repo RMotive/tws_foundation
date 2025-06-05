@@ -69,7 +69,10 @@ final class FoundationServer extends ServerB {
   late final YardlogsServiceI yardlogsService;
 
   /// Creates a new [FoundationServer] instance.
-  FoundationServer({
+  FoundationServer(
+    bool isRelease, {
+    Uri? devHost,
+    Uri? prodHost,
     ServiceImplementationBuilder<SecurityServiceI>? securityServiceBuilder,
     ServiceImplementationBuilder<SolutionsServiceI>? solutionsServiceBuilder,
     ServiceImplementationBuilder<AddressServiceI>? addressesServiceBuilder,
@@ -84,14 +87,16 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<TrailerTypesServiceI>? trailerTypesServiceBuilder,
     ServiceImplementationBuilder<VehiculeModelsServiceI>? vehiculemodelsServiceBuilder,
     ServiceImplementationBuilder<YardlogsServiceI>? yardlogsServiceBuilder,
-
   })
       : super(
-          Uri(
+          isRelease: isRelease,
+            devHost ??
+                Uri(
             'localhost',
             '',
             port: 5195,
           ),
+            prodHost: prodHost
         ) {
 
 

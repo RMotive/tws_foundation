@@ -11,7 +11,7 @@ public class XAccounts
         : base("Account Set", Situation, HttpStatusCode.InternalServerError, null) {
     }
 
-    protected override Dictionary<XAccountsSituations, string> AdviseFactory() {
+    protected override Dictionary<XAccountsSituations, string> ResolveAdvise() {
         return [];
     }
 }

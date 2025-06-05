@@ -35,6 +35,7 @@ public class LoadType
     /// <summary>
     ///     <see cref="YardLog"/> dependants from this <see cref="LoadType"/>.
     /// </summary>
+    
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
     #endregion

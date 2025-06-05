@@ -6,34 +6,34 @@ namespace TWS_Business;
 /// <summary>
 ///     
 /// </summary>
-/// <typeparam name="InternalT"></typeparam>
-/// <typeparam name="ExternalT"></typeparam>
-public abstract class CommonEntity<InternalT, ExternalT>
+/// <typeparam name="TInternal"></typeparam>
+/// <typeparam name="TExternal"></typeparam>
+public abstract class CommonEntity<TInternal, TExternal>
     : BEntity
-    where InternalT : class, IEntity
-    where ExternalT : class, IEntity {
+    where TInternal : class, IEntity
+    where TExternal : class, IEntity {
 
     [Relation, ExclusiveValidator]
-    public virtual InternalT? Internal { get; set; }
+    public TInternal? Internal { get; set; }
 
     [Relation, ExclusiveValidator]
-    public virtual ExternalT? External { get; set; }
+    public TExternal? External { get; set; }
 }
 
 
 /// <summary>
 /// 
 /// </summary>
-/// <typeparam name="TCommon"></typeparam>
-public abstract class CommonEntityEdge<TCommon>
+/// <typeparam name="TCommonEntity"></typeparam>
+public abstract class CommonEntityEdge<TCommonEntity>
     : BEntity
-    where TCommon : class, IEntity {
+    where TCommonEntity : class, IEntity {
 
     /// <summary>
-    ///     <typeparamref name="TCommon"/> information.
+    ///     <typeparamref name="TCommonEntity"/> information.
     /// </summary>
     [Relation]
-    public virtual TCommon Common { get; set; } = default!;
+    public TCommonEntity Common { get; set; } = default!;
 }
 
 /// <summary>

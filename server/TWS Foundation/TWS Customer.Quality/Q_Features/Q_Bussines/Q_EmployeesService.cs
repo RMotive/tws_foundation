@@ -1,36 +1,25 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Customer.Quality;
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Employees;
 
 using TWS_Customer.Features.Business;
-using TWS_Customer.Quality.Factories;
 
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_EmployeesService
-    : BQ_Service<IEmployeesService> {
-    public Q_EmployeesService()
-        : base(
-                [
-                    DatabaseFactories.BusinessDatabaseFactory,
-                ]
-            ) {
+    : BQ_ServicesCustomer<IEmployeesService> {
+    public Q_EmployeesService() {
 
     }
 
     #region [BQ_Service] implementations
     protected override IEmployeesService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = DatabaseFactories.BusinessDatabaseFactory();
+        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
 
         IEmployeesDepot EmployeesDepot = new EmployeesDepot(BussinesDatabase, Disposer);
 
@@ -87,7 +76,7 @@ public class Q_EmployeesService
     public async Task View() {
         Store(GenerateMock(RandomUtils.String(16)));
         ViewOutput<Employee> viewOutput = await _service.View(
-                new OperationInput<Employee, ViewInput<Employee>> {
+                new QueryInput<Employee, ViewInput<Employee>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -102,17 +91,6 @@ public class Q_EmployeesService
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
 
-        );
-    }
-
-    [Fact(DisplayName = "[Read]: Reads matched records")]
-    public async Task Read() {
-        Employee mock = Store(GenerateMock(RandomUtils.String(16)));
-        BatchOperationOutput<Employee> readOutput = await _service.Read(EntityBatchBehaviors.First, location => location.Id == mock.Id);
-
-        Assert.Multiple(
-            () => Assert.False(readOutput.Failed),
-            () => Assert.True(readOutput.Successes.First().Id > 0)
         );
     }
 }

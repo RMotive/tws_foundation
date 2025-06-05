@@ -1,0 +1,11 @@
+{
+    "[dart]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [],
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": true,
+        "editor.suggest.insertMode": "replace",
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.inlayHints.enabled": "offUnlessPressed"
+    },
+}

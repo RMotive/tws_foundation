@@ -31,6 +31,7 @@ public class Solution
     /// <summary>
     ///     <see cref="Permit"/> dependants from this <see cref="Solution"/>.
     /// </summary>
+    [Relation]
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion

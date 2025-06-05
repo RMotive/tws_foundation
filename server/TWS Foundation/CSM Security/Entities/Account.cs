@@ -42,11 +42,13 @@ public class Account
     /// <summary>
     ///     <see cref="Permit"/> related to this <see cref="Account"/>
     /// </summary>
+    [Relation]
     public ICollection<Permit> Permits { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Profile"/> related to this <see cref="Account"/>
     /// </summary>
+    [Relation]
     public ICollection<Profile> Profiles { get; set; } = [];
 
     #endregion

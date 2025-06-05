@@ -4,12 +4,12 @@
 ///     {model} class for <see cref="ViewOutput{TEntity}"/>.
 ///     
 ///     <para>
-///         Defines a data model class that represents an {output} object from the <see cref="IDepot_View{TEntity}.View(Models.Input.OperationInput{TEntity, ViewInput{TEntity}})"/> operation along different
+///         Defines a data model class that represents an {output} object from the <see cref="IDepot_View{TEntity}.View(Models.Input.QueryInput{TEntity, ViewInput{TEntity}})"/> operation along different
 ///         <see cref="IEntity"/> implementations.
 ///     </para>
 /// </summary>
 /// <typeparam name="TEntity">
-///     type of the <see cref="IEntity"/> implementation the <see cref="IDepot_View{TEntity}.View(Models.Input.OperationInput{TEntity, ViewInput{TEntity}})"/> was called for.
+///     type of the <see cref="IEntity"/> implementation the <see cref="IDepot_View{TEntity}.View(Models.Input.QueryInput{TEntity, ViewInput{TEntity}})"/> was called for.
 /// </typeparam>
 public class ViewOutput<TEntity>
     where TEntity : IEntity {

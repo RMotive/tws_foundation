@@ -34,8 +34,8 @@ public class SecurityController
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost()]
-    public async Task<IActionResult> Authenticate([FromBody] AuthenticationInput input) {
-        ServerSession output = await Service.Authenticate(input);
+    public async Task<IActionResult> Authenticate([FromBody] AuthInput input) {
+        SessionData output = await Service.Authenticate(input);
         return Ok(output);
     }
 }

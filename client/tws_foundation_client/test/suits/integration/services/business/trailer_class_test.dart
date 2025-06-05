@@ -10,7 +10,7 @@ void main() {
 
   setUp(
     () async {
-      service = FoundationServer().trailerClassesService;
+      service = FoundationServer(false).trailerClassesService;
       testAuthToken = await IntegrationUtils.getAuthToken();
     },
   );

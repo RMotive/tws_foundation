@@ -22,11 +22,13 @@ public class Profile
     /// <summary>
     ///     <see cref="Permit"/> related to this <see cref="Profile"/>.
     /// </summary>
+    [Relation]
     public ICollection<Permit> Permits { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Account"/> related to this <see cref="Profile"/>.
     /// </summary>
+    [Relation]
     public ICollection<Account> Accounts { get; set; } = default!;
 
     #endregion

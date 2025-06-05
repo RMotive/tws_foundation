@@ -1,7 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data;
+using System.Linq.Expressions;
 using System.Reflection;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
@@ -21,18 +23,18 @@ namespace CSM_Foundation.Database.Entity.Depot;
 ///     shared behaviors.
 ///     
 ///     A <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> provides methods to 
-///     serve dataDatabases attached transactions for <see cref="T"/>.
+///     serve dataDatabases attached transactions for <see cref="TEntity"/>.
 /// </summary>
 /// <typeparam name="TDatabase">
 ///     What Database implementation belongs this depot.
 /// </typeparam>
-/// <typeparam name="T">
+/// <typeparam name="TEntity">
 ///     Migration mirror concept that this depot handles.
 /// </typeparam>
-public abstract class BDepot<TDatabase, T>
-    : IDepot<T>
+public abstract class BDepot<TDatabase, TEntity>
+    : IDepot<TEntity>
     where TDatabase : BDatabase_SQLServer<TDatabase>
-    where T : class, IEntity, new() {
+    where TEntity : class, IEntity, new() {
 
     /// <summary>
     /// 
@@ -45,23 +47,50 @@ public abstract class BDepot<TDatabase, T>
     protected readonly TDatabase Database;
 
     /// <summary>
-    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="T"/> 
+    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TEntity"/> 
     /// </summary>
-    protected readonly DbSet<T> Set;
+    protected readonly DbSet<TEntity> Set;
 
     /// <summary>
     ///     Generates a new instance of a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> base.
     /// </summary>
     /// <param name="Database">
-    ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="T"/> concept.
+    ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TEntity"/> concept.
     /// </param>
     public BDepot(TDatabase Database, IDisposer? Disposer) {
         this.Database = Database;
         this.Disposer = Disposer;
-        Set = Database.Set<T>();
+        Set = Database.Set<TEntity>();
     }
 
-    #region (Private / Protected) Functions
+    #region (Private / Protected) Functions / Methods
+
+    /// <summary>
+    ///     Processes the source enitty query over the complex pre processors validation and applying the custom querying process from each
+    ///     method implementation, after that returns the fully processed query.
+    /// </summary>
+    /// <param name="input">
+    ///     Query input parameters.
+    /// </param>
+    /// <param name="process">
+    ///     Method scope query process.
+    /// </param>
+    /// <returns></returns>
+    protected IQueryable<TEntity> ProcessQuery<TParameters>(QueryInput<TEntity, TParameters> input, Func<IQueryable<TEntity>, IQueryable<TEntity>> process) {
+        IQueryable<TEntity> query = Set;
+
+        if (input.PreProcessor != null) {
+            query = input.PreProcessor(query);
+        }
+
+        query = process(query);
+
+        if (input.PostProcessor != null) {
+            query = input.PostProcessor(query);
+        }
+
+        return query;
+    }
 
     /// <summary>
     ///     Applies the given <paramref name="filters"/> to the given <paramref name="query"/>.
@@ -75,14 +104,14 @@ public abstract class BDepot<TDatabase, T>
     /// <returns>
     ///     The filtered calculated 
     /// </returns>
-    protected IQueryable<T> FilterQuery(IQueryable<T> query, IViewFilterNode<T>[] filters) {
+    protected IQueryable<TEntity> FilterQuery(IQueryable<TEntity> query, IViewFilterNode<TEntity>[] filters) {
         if (filters.Length > 0) {
             var orderedFilters = filters.OrderBy(
                     (filter) => filter.Order
                 );
 
-            foreach (IViewFilterNode<T> filter in orderedFilters) {
-                Expression<Func<T, bool>> queryExpression = filter.Compose();
+            foreach (IViewFilterNode<TEntity> filter in orderedFilters) {
+                Expression<Func<TEntity, bool>> queryExpression = filter.Compose();
                 query = query.Where(queryExpression);
             }
         }
@@ -108,11 +137,11 @@ public abstract class BDepot<TDatabase, T>
     /// <returns>
     ///     The pagination operation result information.
     /// </returns>
-    protected async Task<PaginationOutput<T>> PaginateQuery(IQueryable<T> query, int page, int range, bool export = false) {
+    protected async Task<PaginationOutput<TEntity>> PaginateQuery(IQueryable<TEntity> query, int page, int range, bool export = false) {
         int entitiesCount = await query.CountAsync();
         if (export) {
 
-            return new PaginationOutput<T> {
+            return new PaginationOutput<TEntity> {
                 Query = query,
                 PagesCount = 1,
                 EntitiesCount = entitiesCount,
@@ -131,7 +160,7 @@ public abstract class BDepot<TDatabase, T>
             .Skip(paginationStart)
             .Take(paginationEnd);
 
-        return new PaginationOutput<T> {
+        return new PaginationOutput<TEntity> {
             Query = query,
             PagesCount = pages,
             EntitiesCount = entitiesCount,
@@ -153,14 +182,14 @@ public abstract class BDepot<TDatabase, T>
     /// <exception cref="TypeAccessException">
     ///     When a given <see cref="ViewOrdering"/> has configured a wrong property that doesn't exist in the main <see cref="IEntity"/> declaration.
     /// </exception>
-    protected IQueryable<T> OrderQuery(IQueryable<T> query, ViewOrdering[] orderings) {
+    protected IQueryable<TEntity> OrderQuery(IQueryable<TEntity> query, ViewOrdering[] orderings) {
         int orderingsCount = orderings.Length;
         if (orderingsCount <= 0) {
             return query;
         }
 
-        Type entityDeclarationType = typeof(T);
-        IOrderedQueryable<T> orderingQuery = default!;
+        Type entityDeclarationType = typeof(TEntity);
+        IOrderedQueryable<TEntity> orderingQuery = default!;
         for (int orderingsIteration = 0; orderingsIteration < orderingsCount; orderingsIteration++) {
             ParameterExpression parameterExpression = Expression.Parameter(entityDeclarationType, $"X{orderingsIteration}");
             ViewOrdering ordering = orderings[orderingsIteration];
@@ -170,7 +199,7 @@ public abstract class BDepot<TDatabase, T>
 
             MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, property);
             UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
-            Expression<Func<T, object>> orderingExpression = Expression.Lambda<Func<T, object>>(translationExpression, parameterExpression);
+            Expression<Func<TEntity, object>> orderingExpression = Expression.Lambda<Func<TEntity, object>>(translationExpression, parameterExpression);
             if (orderingsIteration == 0) {
                 orderingQuery = ordering.Ordering switch {
                     ViewOrderings.Ascending => query.OrderBy(orderingExpression),
@@ -187,68 +216,6 @@ public abstract class BDepot<TDatabase, T>
             };
         }
         return orderingQuery;
-    }
-
-    /// <summary>
-    ///     Processes a complex View for a database set, this includes the following order of operations:
-    ///     
-    ///     <list type="number"> 
-    ///         <item>
-    ///             Validates and processes <see cref="OperationInput{TEntity, TParameters}.PreOperation"/>
-    ///         </item>
-    ///         <item>
-    ///             Orders the query with <see cref="OrderQuery(IQueryable{T}, ViewOrdering[])"/>
-    ///         </item>
-    ///         <item> 
-    ///             Filters the query with <see cref="FilterQuery(IQueryable{T}, IViewFilterNode{T}[])"/> 
-    ///         </item>
-    ///         <item>
-    ///             Validates and processes <see cref="OperationInput{TEntity, TParameters}.PostOperation"/>
-    ///         </item>
-    ///     </list>
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    protected async Task<ViewOutput<T>> ProcessView(OperationInput<T, ViewInput<T>> input) {
-        ViewInput<T> parameters = input.Parameters;
-
-        IQueryable<T> query = Set.AsNoTracking();
-
-        query = ValidateProcessor(query, input.PreOperation);
-
-        query = OrderQuery(query, parameters.Orderings);
-        query = FilterQuery(query, parameters.Filters);
-
-        query = ValidateProcessor(query, input.PostOperation);
-
-        PaginationOutput<T> paginationOutput = await PaginateQuery(query, parameters.Page, parameters.Range, parameters.Export);
-
-        return new ViewOutput<T>() {
-            Page = parameters.Page,
-            Pages = paginationOutput.PagesCount,
-            Count = paginationOutput.EntitiesCount,
-            Entities = [.. paginationOutput.Query],
-        };
-    }
-
-    /// <summary>
-    ///     Validates if the given <paramref name="accumulation"/> is invokable.
-    /// </summary>
-    /// <param name="query">
-    ///     Main operation query to apply accumulation.
-    /// </param>
-    /// <param name="accumulation">
-    ///     Query accumulation process to validate.
-    /// </param>
-    /// <returns>
-    ///     The updated query.
-    /// </returns>
-    protected IQueryable<T> ValidateProcessor(IQueryable<T> query, QueryProcessor<T>? accumulation) {
-        if (accumulation == null) {
-            return query;
-        }
-
-        return accumulation(query);
     }
 
     protected TEntity2 ValidateDependency<TEntity2>(TEntity2 dependencyEntity)
@@ -268,8 +235,27 @@ public abstract class BDepot<TDatabase, T>
 
     #region View 
 
-    public Task<ViewOutput<T>> View(OperationInput<T, ViewInput<T>> input) {
-        return ProcessView(input);
+    public async Task<ViewOutput<TEntity>> View(QueryInput<TEntity, ViewInput<TEntity>> input) {
+        ViewInput<TEntity> parameters = input.Parameters;
+
+        IQueryable<TEntity> processedQuery = ProcessQuery(
+                input,
+                (query) => {
+                    processedQuery = OrderQuery(query, parameters.Orderings);
+                    processedQuery = FilterQuery(query, parameters.Filters);
+
+                    return query;
+                }
+            );
+
+        PaginationOutput<TEntity> paginationOutput = await PaginateQuery(processedQuery, parameters.Page, parameters.Range, parameters.Export);
+
+        return new ViewOutput<TEntity>() {
+            Page = parameters.Page,
+            Pages = paginationOutput.PagesCount,
+            Count = paginationOutput.EntitiesCount,
+            Entities = [.. paginationOutput.Query],
+        };
     }
 
     #endregion
@@ -280,12 +266,12 @@ public abstract class BDepot<TDatabase, T>
     ///     Creates a new overwritten into the dataDatabases.
     /// </summary>
     /// <param name="entity">
-    ///     <see cref="T"/> to store.
+    ///     <see cref="TEntity"/> to store.
     /// </param>
     /// <returns> 
     ///     The stored object. (Object Id is always auto-generated)
     /// </returns>
-    public virtual async Task<T> Create(T entity) {
+    public virtual async Task<TEntity> Create(TEntity entity) {
         entity.Timestamp = DateTime.UtcNow;
         entity.EvaluateWrite();
 
@@ -317,20 +303,20 @@ public abstract class BDepot<TDatabase, T>
     /// <returns>
     ///     A <see cref="EntityBatchOut{TSet}"/> that stores a collection of failures, and successes caught.
     /// </returns>
-    public virtual async Task<BatchOperationOutput<T>> Create(ICollection<T> entities, bool sync = false) {
-        T[] attached = [];
-        EntityOperationFailure<T>[] failures = [];
+    public virtual async Task<BatchOperationOutput<TEntity>> Create(ICollection<TEntity> entities, bool sync = false) {
+        TEntity[] attached = [];
+        EntityOperationFailure<TEntity>[] failures = [];
 
-        foreach (T entity in entities) {
+        foreach (TEntity entity in entities) {
             try {
-                T attachedEntity = await Create(entity);
+                TEntity attachedEntity = await Create(entity);
                 attached = [.. attached, attachedEntity];
             } catch (Exception excep) {
                 if (sync) {
                     throw;
                 }
 
-                EntityOperationFailure<T> fail = new(entity, excep);
+                EntityOperationFailure<TEntity> fail = new(entity, excep);
                 failures = [.. failures, fail];
             }
         }
@@ -343,39 +329,39 @@ public abstract class BDepot<TDatabase, T>
     #region Read
 
     /// <summary>
-    ///     Reads into the <see cref="T"/> database [Entity] for matched records.
+    ///     Reads into the <see cref="TEntity"/> database [Entity] for matched records.
     /// </summary>
     /// <param name="id">
-    ///     Identifier of the desired <typeparamref name="T"/>.
+    ///     Identifier of the desired <typeparamref name="TEntity"/>.
     /// </param>
-    /// <returns> <see cref="T"/> insatcne found </returns>
+    /// <returns> <see cref="TEntity"/> insatcne found </returns>
     /// <exeption cref="XDepot">
-    ///     Thrown when the <see cref="T"/> couldn't be found.
+    ///     Thrown when the <see cref="TEntity"/> couldn't be found.
     /// </exeption>
-    public async Task<T> Read(long id) {
-        T? entity = await Set.Where(
+    public async Task<TEntity> Read(long id) {
+        TEntity? entity = await Set.Where(
                 e => e.Id == id
             )
             .FirstOrDefaultAsync()
-            ?? throw new XDepot<T>(XDepotSituations.Unfound, $"{nameof(IEntity.Id)} = {id}");
+            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{nameof(IEntity.Id)} = {id}");
 
         entity.EvaluateRead();
         return entity;
     }
 
-    public async Task<BatchOperationOutput<T>> Read(long[] ids) {
+    public async Task<BatchOperationOutput<TEntity>> Read(long[] ids) {
 
-        List<T> successes = [];
-        List<EntityOperationFailure<T>> failures = [];
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
         foreach (long id in ids) {
 
             try {
-                T success = await Read(id);
+                TEntity success = await Read(id);
                 successes.Add(success);
             } catch (Exception ex) {
                 failures.Add(
-                        new EntityOperationFailure<T>(
-                                new T {
+                        new EntityOperationFailure<TEntity>(
+                                new TEntity {
                                     Id = id
                                 },
                                 ex
@@ -384,39 +370,48 @@ public abstract class BDepot<TDatabase, T>
             }
         }
 
-        return new BatchOperationOutput<T>([.. successes], [.. failures]);
+        return new BatchOperationOutput<TEntity>([.. successes], [.. failures]);
     }
 
-    public async Task<BatchOperationOutput<T>> Read(EntityBatchBehaviors behavior, Expression<Func<T, bool>> filter, QueryProcessor<T>? postProcessing = null) {
-        IQueryable<T> query = Set.Where(filter);
-        if (postProcessing != null) {
-            query = postProcessing(query);
+    public async Task<BatchOperationOutput<TEntity>> Read(QueryInput<TEntity, FilterQueryInput<TEntity>> input) {
+        FilterQueryInput<TEntity> parameters = input.Parameters;
+
+        IQueryable<TEntity> processedQuery = ProcessQuery(
+                input,
+                sourceQuery => {
+                    sourceQuery = Set.Where(parameters.Filter);
+                    return sourceQuery;
+                }
+            );
+
+        if (!processedQuery.Any()) {
+            return new BatchOperationOutput<TEntity>([], []);
         }
 
-        if (!query.Any()) {
-            return new BatchOperationOutput<T>([], []);
-        }
-
-        T[] items = behavior switch {
-            EntityBatchBehaviors.First => [await query.FirstAsync()],
-            EntityBatchBehaviors.Last => [await query.Order().LastAsync()],
-            EntityBatchBehaviors.All => await query.ToArrayAsync(),
-            _ => throw new NotImplementedException(behavior.ToString())
+        TEntity[] resultItems = parameters.Behavior switch {
+            FilteringBehaviors.First => [await processedQuery.FirstAsync()],
+            FilteringBehaviors.Last => [await processedQuery.Order().LastAsync()],
+            FilteringBehaviors.All => await processedQuery.ToArrayAsync(),
+            _ => throw new NotImplementedException(),
         };
 
-        List<T> successes = [];
-        List<EntityOperationFailure<T>> failures = [];
-        foreach (T item in items) {
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
+        foreach (TEntity item in resultItems) {
             try {
                 item.EvaluateRead();
                 successes.Add(item);
             } catch (Exception exception) {
-                EntityOperationFailure<T> failure = new(item, exception);
+                EntityOperationFailure<TEntity> failure = new(item, exception);
                 failures.Add(failure);
             }
         }
 
-        return new BatchOperationOutput<T>(
+        if (parameters.Behavior == FilteringBehaviors.First && failures.Count > 0) {
+            throw failures[0].Exception;
+        }
+
+        return new BatchOperationOutput<TEntity>(
                 [.. successes],
                 [.. failures]
             );
@@ -487,7 +482,7 @@ public abstract class BDepot<TDatabase, T>
     /// <summary>
     ///     Updates the given record calculating the current stored values with the given <paramref name="entity"/> to update and store the new values.
     /// </summary>
-    /// <param name="Input">
+    /// <param name="input">
     ///     Operation input parameters.
     /// </param>
     /// <returns></returns>
@@ -498,41 +493,40 @@ public abstract class BDepot<TDatabase, T>
     /// <exception cref="XDepot{TEntity}">
     ///     <see cref="IDepot{TEntity}"/> related exception.
     /// </exception>
-    public async Task<UpdateOutput<T>> Update(OperationInput<T, UpdateInput<T>> Input) {
-        IQueryable<T> query = ValidateProcessor(Set, Input.PreOperation);
+    public async Task<UpdateOutput<TEntity>> Update(QueryInput<TEntity, UpdateInput<TEntity>> input) {
+        UpdateInput<TEntity> parameters = input.Parameters;
+        IQueryable<TEntity> processedQuery = Set;
 
-        UpdateInput<T> parameters = Input.Parameters;
-
-        T overwritten = parameters.Entity;
+        TEntity overwritten = parameters.Entity;
         if (overwritten.Id == 0) {
             if (!parameters.Create) {
-                throw new XDepot<T>(XDepotSituations.CreateDisabled);
+                throw new XDepot<TEntity>(XDepotSituations.CreateDisabled);
             }
 
             overwritten = await Create(overwritten);
 
             Database.SaveChanges();
             Disposer?.Push(overwritten);
-            return new UpdateOutput<T> {
+            return new UpdateOutput<TEntity> {
                 Original = null,
                 Updated = overwritten,
             };
         }
 
-        T? original = await query
+        TEntity? original = await processedQuery
             .Where(r => r.Id == overwritten.Id)
             .AsNoTracking()
             .FirstOrDefaultAsync()
-            ?? throw new XDepot<T>(XDepotSituations.Unfound);
+            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound);
         if (original == null) {
             if (!parameters.Create)
-                throw new XDepot<T>(XDepotSituations.Unfound, $"{typeof(T).Name}.Id = {overwritten.Id}");
+                throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {overwritten.Id}");
 
             overwritten = await Create(overwritten);
 
             Database.SaveChanges();
             Disposer?.Push(overwritten);
-            return new UpdateOutput<T> {
+            return new UpdateOutput<TEntity> {
                 Original = null,
                 Updated = overwritten,
             };
@@ -541,7 +535,7 @@ public abstract class BDepot<TDatabase, T>
         UpdateHelper(original, overwritten);
         Database.SaveChanges();
         Disposer?.Push(overwritten);
-        return new UpdateOutput<T> {
+        return new UpdateOutput<TEntity> {
             Original = original,
             Updated = overwritten,
         };
@@ -552,24 +546,24 @@ public abstract class BDepot<TDatabase, T>
     #region Delete
 
     /// <summary>
-    ///     Deletes the <see cref="T"/> record based on its <see cref="IEntity.Id"/> value.
+    ///     Deletes the <see cref="TEntity"/> record based on its <see cref="IEntity.Id"/> value.
     /// </summary>
     /// <param name="Id">
     ///     <see cref="IEntity.Id"/> to match.
     /// </param>
     /// <returns>
-    ///     Deleted <see cref="T"/> record.
+    ///     Deleted <see cref="TEntity"/> record.
     /// </returns>
     /// <exception cref="XDepot{TEntity}">
     ///     <see cref="IDepot{TEntity}"/> based exception, more info see inner Situation.
     /// </exception>
-    public async Task<T> Delete(long id) {
-        T entity = await Set
+    public async Task<TEntity> Delete(long id) {
+        TEntity entity = await Set
             .AsNoTracking()
             .FirstOrDefaultAsync(
                 e => e.Id == id
             )
-            ?? throw new XDepot<T>(XDepotSituations.Unfound, $"{typeof(T).Name}.Id = {id}");
+            ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {id}");
 
         Set.Remove(entity);
         Database.SaveChanges();
@@ -577,18 +571,18 @@ public abstract class BDepot<TDatabase, T>
     }
 
 
-    public async Task<BatchOperationOutput<T>> Delete(long[] ids) {
-        List<T> successes = [];
-        List<EntityOperationFailure<T>> failures = [];
+    public async Task<BatchOperationOutput<TEntity>> Delete(long[] ids) {
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
         foreach (long id in ids) {
 
             try {
-                T success = await Delete(id);
+                TEntity success = await Delete(id);
                 successes.Add(success);
             } catch (Exception ex) {
                 failures.Add(
-                        new EntityOperationFailure<T>(
-                                new T {
+                        new EntityOperationFailure<TEntity>(
+                                new TEntity {
                                     Id = id
                                 },
                                 ex
@@ -597,37 +591,35 @@ public abstract class BDepot<TDatabase, T>
             }
         }
 
-        return new BatchOperationOutput<T>([.. successes], [.. failures]);
+        return new BatchOperationOutput<TEntity>([.. successes], [.. failures]);
     }
 
-    public Task<BatchOperationOutput<T>> Delete(OperationInput<T, BatchOperationInput<T>> input) {
-        BatchOperationInput<T> parameters = input.Parameters;
+    public async Task<BatchOperationOutput<TEntity>> Delete(QueryInput<TEntity, FilterQueryInput<TEntity>> input) {
+        FilterQueryInput<TEntity> parameters = input.Parameters;
 
-        IQueryable<T> query = Set;
+        IQueryable<TEntity> query = ProcessQuery(
+                input,
+                (query) => {
+                    return query
+                        .AsNoTracking()
+                        .Where(parameters.Filter);
+                }
+            );
 
-        query = ValidateProcessor(query, input.PreOperation);
-
-        query = query.AsNoTracking().Where(parameters.Filter);
-
-        query = ValidateProcessor(query, input.PostOperation);
-
-        List<T> successes = [];
-        List<EntityOperationFailure<T>> failures = [];
-        foreach (T entity in query) {
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
+        foreach (TEntity entity in query) {
             try {
-                Set.Remove(entity);
-
-                successes.Add(entity);
+                TEntity deletedEntity = await Delete(entity.Id);
+                successes.Add(deletedEntity);
             } catch (Exception exception) {
                 failures.Add(
-                        new EntityOperationFailure<T>(entity, exception)
+                        new EntityOperationFailure<TEntity>(entity, exception)
                     );
             }
         }
 
-        return Task.FromResult(
-                new BatchOperationOutput<T>([.. successes], [.. failures])
-            );
+        return new BatchOperationOutput<TEntity>([.. successes], [.. failures]);
     }
 
     #endregion

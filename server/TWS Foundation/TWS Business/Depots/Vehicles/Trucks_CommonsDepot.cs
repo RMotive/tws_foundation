@@ -1,17 +1,29 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Depots.Vehicles;
 
+
+/// <summary>
+///     [Depot] for <see cref="Truck_Common"/> based [Depot] implementations. 
+/// </summary>
+/// <remarks>
+///     This is a shared depot to get <see cref="Truck"/> and <see cref="TruckExternal"/>.
+/// </remarks>
+public interface ITrucksCommonsDepot
+    : IDepot<Truck_Common> {
+
+}
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Truck"/> dataDatabases entity mirror.
 /// </summary>
 public class Trucks_CommonsDepot 
-    : BCommonDepot<Truck, TruckExternal, Truck_Common> {
+    : BCommonDepot<Truck, TruckExternal, Truck_Common>, ITrucksCommonsDepot {
     /// <summary>
     ///     Creates a new <see cref="Trucks_CommonsDepot"/> instance with custom handlers.
     /// </summary>

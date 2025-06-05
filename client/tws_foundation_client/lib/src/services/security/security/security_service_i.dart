@@ -12,5 +12,5 @@ abstract interface class SecurityServiceI extends FoundationServiceB implements 
   ///
   ///
   /// [input] operation input parameters.
-  FoundationFutureResolver<ServerSession> authenticate(AuthenticationInput input);
+  FoundationFutureResolver<SessionData> authenticate(AuthenticationInput input);
 }

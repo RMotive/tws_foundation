@@ -44,11 +44,13 @@ public class XBConverter
         : base("CSM Converter Exception", situation) {
 
         wrongVariations ??= [];
-
-        Advise = AdvisesConstants.SERVER_CONTACT_ADVISE;
         Factors = new Dictionary<string, dynamic> {
             { nameof(discriminator), discriminator },
             { nameof(wrongVariations), wrongVariations },
         };
+    }
+
+    protected override Dictionary<XBConverterSituations, string> ResolveAdvise() {
+        return [];
     }
 }

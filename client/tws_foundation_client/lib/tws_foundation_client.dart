@@ -27,6 +27,9 @@ export 'src/entities/business/plate.dart';
 export 'src/entities/business/status.dart';
 export 'src/entities/business/usdot.dart';
 
+// --> Exporting [src.entities.security]
+export 'src/entities/security/contact.dart';
+
 // --> Exporting [src.services.business]
 export 'src/services/business/addresses/address.dart';
 export 'src/services/business/addresses/addresses_service.dart';
@@ -78,7 +81,7 @@ export 'src/services/security/security/security_service_i.dart';
 export 'src/services/security/security/security_service_b.dart';
 
 // --> Exporting [src.services.security.security.models]
-export 'src/services/security/security/models/server_session.dart';
+export 'src/services/security/security/models/session_data.dart';
 export 'src/services/security/security/models/authentication_input.dart';
 
 // --> Exporting [src.services.security.solutions]
