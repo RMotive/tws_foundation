@@ -1,4 +1,4 @@
-part of '../tws_article_table.dart';
+part of '../entity_table.dart';
 
 final class _TWSArticleTableDetailsState extends ReactorB {
   bool _editing = false;

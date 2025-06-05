@@ -1,7 +1,7 @@
-part of '../tws_article_table.dart';
+part of '../entity_table.dart';
 
 final class _TWSArticleTableHeader<TArticle> extends StatelessWidget {
-  final List<TWSArticleTableFieldOptions<TArticle>> fields;
+  final List<EntityTableColumnOptions<TArticle>> fields;
   final double minFieldWidth;
   final double fieldWidth;
 
@@ -36,7 +36,7 @@ final class _TWSArticleTableHeader<TArticle> extends StatelessWidget {
                     horizontal: 8,
                   ),
                   child: Text(
-                    fields[cont].name,
+                    fields[cont].title,
                     style: TextStyle(
                       color: themeManager.get().page.fore,
                       fontWeight: FontWeight.w900,

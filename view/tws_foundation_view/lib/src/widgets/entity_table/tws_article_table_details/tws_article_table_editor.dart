@@ -1,6 +1,6 @@
-part of '../tws_article_table.dart';
+part of '../entity_table.dart';
 
-/// [TWSArticleTableEditor] Record update editor form for [TWSArticleTable].
+/// [TWSArticleTableEditor] Record update editor form for [EntityTable].
 final class TWSArticleTableEditor extends StatelessWidget {
   /// Form content.
   final Widget form;

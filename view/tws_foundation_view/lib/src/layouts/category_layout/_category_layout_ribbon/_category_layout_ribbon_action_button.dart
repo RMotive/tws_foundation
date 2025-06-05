@@ -27,7 +27,7 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
   late StateTheming stateTheming;
 
   /// [Widget] current state.
-  late CSMStates state;
+  CSMStates state = CSMStates.none;
 
   /// Whether the current [Widget] is waiting to finish invokation.
   bool isLoading = false;
@@ -57,6 +57,7 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
   void onClick() async {
     setState(() {
       isLoading = true;
+      state = CSMStates.selected;
     });
 
     await widget.options.onInvoke();
@@ -80,6 +81,7 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
     return Tooltip(
       message: widget.options.description,
       child: PointerArea(
+        cursor: isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
         onClick: isLoading ? null : onClick,
         onHover: isLoading ? null : onHover,
         child: AspectRatio(
@@ -89,6 +91,7 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
             child: Padding(
               padding: const EdgeInsets.all(1.0),
               child: Visibility(
+                visible: !isLoading,
                 child: Column(
                   spacing: 1,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -112,8 +115,14 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
                     ),
                   ],
                 ),
-                replacement: CircularProgressIndicator(
-                  color: theming.foreground,
+                replacement: Transform.scale(
+                  scale: .5,
+                  child: CircularProgressIndicator(
+                    color: theming.foreground?.withValues(
+                      alpha: .7,
+                    ),
+                    strokeWidth: 3,
+                  ),
                 ),
               ),
             ),

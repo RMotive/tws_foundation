@@ -1,4 +1,4 @@
-part of '../tws_article_table.dart';
+part of '../entity_table.dart';
 
 class _TWSArticleTableDetailsAction extends StatelessWidget {
   final String? hint;

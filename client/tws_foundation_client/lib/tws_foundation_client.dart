@@ -58,6 +58,7 @@ export 'src/services/business/yardlogs/yard_log.dart';
 export 'src/services/business/yardlogs/yard_logs_service.dart';
 
 // --> Exporting [src.services]
+export 'src/services/view_service_i.dart';
 export 'src/services/foundation_service_b.dart';
 export 'src/services/foundation_response_resolver.dart';
 

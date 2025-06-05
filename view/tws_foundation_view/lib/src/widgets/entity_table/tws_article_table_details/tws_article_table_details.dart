@@ -1,7 +1,6 @@
-part of '../tws_article_table.dart';
+part of '../entity_table.dart';
 
-final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>>
-    extends StatelessWidget {
+final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>> extends StatelessWidget {
   final TWSArticleTableAdapter<TArticle> adapter;
   final VoidCallback closeAction;
   final TArticle record;
@@ -78,8 +77,7 @@ final class _TWSArticleTableDetails<TArticle extends EntityB<TArticle>>
                           hint: 'Remove record',
                           icon: Icons.remove,
                           fore: tCritical.main.background,
-                          action:
-                              () => adapter.onRemoveRequest(record, context),
+                          action: () => adapter.onRemoveRequest(record, context),
                         ),
                       if (editable)
                         if (editionForm != null)

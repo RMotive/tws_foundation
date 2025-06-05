@@ -1,6 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:example/entries/auth_page.dart';
 import 'package:example/entries/category_layout.dart';
+import 'package:example/entries/entity_table.dart';
 import 'package:example/entries/navigation_layout.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
@@ -47,6 +48,7 @@ final class MainApp extends StatelessWidget {
       landingEntries: <PackageLandingEntryI<LandingThemeB>>[
         AuthPage(),
         CategoryLayout(),
+        EntityTable(),
         NavigationLayout(
           appThemes: themes,
         ),

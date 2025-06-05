@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Defines a contract that works as a controller for [CategoryLayout] actions ribbon behavior.
 abstract interface class CategoryLayoutRibbonControllerI {
   /// Callback performed when the {refresh} action button is clicked.
-  final VoidCallback? onRefresh;
+  final FutureOr<void> Function()? onRefresh;
 
   /// {DataManagement} group invokations controller.
   final CategoryLayoutRibbonDataManagementGroupControllerI? dataManagementController;

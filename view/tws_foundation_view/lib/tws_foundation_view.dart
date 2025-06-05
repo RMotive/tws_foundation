@@ -14,6 +14,7 @@ export 'src/themes/foundation_theme_light.dart';
 // [widgets]
 export 'src/widgets/text_input.dart';
 export 'src/widgets/button_flat.dart';
+export 'src/widgets/entity_table/entity_table.dart';
 
 // [widgets.entity_creation_form]
 export 'src/widgets/entity_creation_form/entity_creation_form_agent.dart';

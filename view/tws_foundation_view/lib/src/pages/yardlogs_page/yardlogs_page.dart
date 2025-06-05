@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 final class YardlogsPage extends PageB {
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
-    return Center(
-      child: Text(
-        'HELLO THIS IS YARDLOG PAGE',
-      ),
-    );
+    return SizedBox();
   }
 }

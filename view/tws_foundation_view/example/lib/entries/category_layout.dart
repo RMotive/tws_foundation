@@ -33,7 +33,9 @@ final class CategoryLayout extends PackageLandingEntryB<LandingThemeB> {
           title: 'Landing Overview',
           pageBuilder: (BuildContext ctx, RouteData routeData) => _EntryPage(),
           ribbonController: view.CategoryLayoutRibbonController(
-            onRefresh: () {},
+            onRefresh: () async {
+              await Future<void>.delayed(3.seconds);
+            },
           ),
           iconBuilder: (Color? foreColor) {
             return Icon(

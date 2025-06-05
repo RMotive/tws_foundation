@@ -31,10 +31,6 @@ final class Plate extends EntityB<Plate> {
 
   DateTime? expiration;
 
-  // TODO ->
-  /// Truck
-  /// Trailer 
-
   /// Entity [Status] information.
   Status status = Status();
 
