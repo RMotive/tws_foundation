@@ -34,6 +34,7 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -42,6 +43,7 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Approach Approach { get; set; } = default!;
 
     /// <summary>
@@ -50,11 +52,13 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Address Address { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="USDOTs.USDOT"/> information.
     /// </summary>
+    [Relation]
     public USDOT? USDOT { get; set; }
 
     #endregion

@@ -102,7 +102,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     ///     A boolean flag to set the InternalEdge property configuration.
     /// </returns>
     public static TheoryData<bool> GetEdgeConfiguration() {
-        return [true, false]; // Return a internalEdge has true.
+        return [true, false]; 
     }
 
 

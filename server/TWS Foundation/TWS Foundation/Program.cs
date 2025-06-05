@@ -162,7 +162,7 @@ public partial class Program {
                 Services.AddScoped<IPlatesDepot, PlatesDepot>();
                 Services.AddScoped<ISCTsDepot, SCTDepot>();
                 Services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
-                Services.AddScoped<ITrucksDepot, TrucksDepot>();
+                Services.AddScoped<ITrucksCommonDepot, Trucks_CommonsDepot>();
                 Services.AddScoped<IVehiculesModelsDepot, VehiculeModelsDepot>();
                 Services.AddScoped<IAddressesDepot, AddressesDepot>();
                 Services.AddScoped<IApproachesDepot, ApproachesDepot>();

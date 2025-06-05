@@ -21,6 +21,7 @@ public class Plate
     /// <summary>
     ///     Plate identifier number.
     /// </summary>
+    [StringLength(12, MinimumLength = 1)]
     public string Identifier { get; set; } = string.Empty;
 
     /// <summary>
@@ -60,11 +61,13 @@ public class Plate
     /// <summary>
     ///     <see cref="Trucks.Truck"/> information.
     /// </summary>
+    [Relation]
     public Truck? Truck { get; set; }
 
     /// <summary>
     ///     <see cref="Trailers.Trailer"/> information.
     /// </summary>
+    [Relation]
     public Trailer? Trailer { get; set; }
 
     #endregion

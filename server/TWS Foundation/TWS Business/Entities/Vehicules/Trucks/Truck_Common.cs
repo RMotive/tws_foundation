@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,7 +11,7 @@ namespace TWS_Business.Entities.Vehicules.Trucks;
 ///     [Entity] that stores shared information along trucks. (<see cref="Truck"/> / <see cref="TruckExternal"/>).
 /// </summary>
 public class Truck_Common
-    : BEntity {
+    : CommonEntity<Truck, TruckExternal> {
 
     #region Properties
 
@@ -27,11 +28,13 @@ public class Truck_Common
     /// <summary>
     ///     <see cref="Entities.Location"/> information.
     /// </summary>
+    [Relation]
     public Location? Location { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
+    [Relation]
     public Situation? Situation { get; set; }
 
     /// <summary>
@@ -40,17 +43,8 @@ public class Truck_Common
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
-
-    /// <summary>
-    ///     <see cref="Truck"/> information.
-    /// </summary>
-    public Truck? Internal { get; set; }
-
-    /// <summary>
-    ///     <see cref="TruckExternal"/> information.
-    /// </summary>
-    public TruckExternal? External { get; set; }
 
     #endregion
 

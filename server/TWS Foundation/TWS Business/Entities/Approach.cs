@@ -53,6 +53,7 @@ public class Approach
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     #endregion
