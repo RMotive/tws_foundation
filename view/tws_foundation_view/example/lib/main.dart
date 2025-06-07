@@ -42,6 +42,7 @@ final class MainApp extends StatelessWidget {
 
         Injector.addSingleton<FoundationServer>(foundationServer);
         Injector.addSingleton<SecurityServiceI>(foundationServer.securityService);
+        Injector.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
       },
       defaultTheme: LandingThemeDark(),
       themes: themes,

@@ -11,7 +11,7 @@ final class EntityTableColumnOptions<T> {
   final double? width;
 
   /// Column content factory, builds how at each entity row the column content value.
-  final String Function(T entity, int index, BuildContext buildContext) factory;
+  final String? Function(T entity, int index, BuildContext buildContext) factory;
 
   /// Creates a new [EntityTableColumnOptions] instance.
   const EntityTableColumnOptions({

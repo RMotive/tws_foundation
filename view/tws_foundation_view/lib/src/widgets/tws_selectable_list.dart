@@ -169,7 +169,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     return TWSSection(
       title: widget.title,
       content: AsyncWidget<List<ViewOutput<dynamic>>>(
-        future: () => widget.adapter.consume(1, 9999, ""),
+        future: widget.adapter.consume(1, 9999, ""),
         loadingBuilder: (BuildContext ctx) {
           return Center(
             child: CircularProgressIndicator(color: pageColorTheme.fore),

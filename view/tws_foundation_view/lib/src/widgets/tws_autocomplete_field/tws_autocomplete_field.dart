@@ -187,9 +187,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     if (selectedOption != null) return true;
     return false;
   }
-
-  /// agent for future consume.
-  late AsyncWidgetController agent;
   // Method to perform a local or future search, based on the given parameters.
   // This method manage the item selected and the data displayed on the overlay list view.
   //
@@ -259,7 +256,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
             if (mounted) futureState.react();
           } else if (query.isNotEmpty) {
             futureState.preloadedItems = <T>[];
-            if (mounted) agent.refresh();
           }
         }
         if (notifyChanges && previousSelection != selectedOption) {
@@ -345,7 +341,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     overlayController = OverlayPortalController();
     if (widget.initialValue != null) selectedOption = widget.initialValue;
     if (widget.adapter != null) {
-      agent = AsyncWidgetController();
       consume = () => widget.adapter!.consume(widget.quantityResults, 1, '');
     } else {
       rawOptionsList = widget.nativeList!;
@@ -465,7 +460,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
                           child:
                               widget.adapter != null
                                   ? _TWSAutocompleteFuture<T>(
-                                    agent: agent,
                                     controller: scrollController,
                                     tileHeigth: tileHeigth,
                                     displayLabel: widget.displayValue,

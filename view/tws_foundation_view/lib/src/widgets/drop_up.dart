@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
-/// [TWSDropup] Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.
+/// {widget} class.
+///
+/// [DropUp] Displays a interactable control. When this control is tapped, deploy an aditional section in a drop up animation.
 /// The content in this section is an interactable list of [T] items.
-class TWSDropup<T> extends StatefulWidget {
+class DropUp<T> extends StatefulWidget {
   /// Initial selection item.
   final T item;
 
@@ -23,7 +25,7 @@ class TWSDropup<T> extends StatefulWidget {
   /// Flag to enabled or disabled widget.
   final bool disabled;
 
-  const TWSDropup({
+  const DropUp({
     super.key,
     this.tooltip,
     this.disabled = false,
@@ -33,11 +35,10 @@ class TWSDropup<T> extends StatefulWidget {
   });
 
   @override
-  State<TWSDropup<T>> createState() => _TWSDropupState<T>();
+  State<DropUp<T>> createState() => _DropUpState<T>();
 }
 
-class _TWSDropupState<T> extends State<TWSDropup<T>>
-    with TickerProviderStateMixin {
+class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMixin {
   /// Cascade options link.
   final LayerLink layerLink = LayerLink();
 
@@ -49,8 +50,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>>
   // compatible with [TickerProviderStateMixin] and more complex states implementations.
 
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager =
-      Injector.getThemeManager();
+  final ThemeManagerI<FoundationThemeB> themeManager = Injector.getThemeManager();
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -106,8 +106,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>>
                             child: ListView.builder(
                               itemCount: widget.items.length,
                               itemBuilder: (_, int index) {
-                                bool current =
-                                    widget.items[index] == currentItem;
+                                bool current = widget.items[index] == currentItem;
                                 return MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
@@ -127,10 +126,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>>
                                         child: Text(
                                           '${widget.items[index]}',
                                           style: TextStyle(
-                                            color:
-                                                current
-                                                    ? theme.foreground
-                                                    : null,
+                                            color: current ? theme.foreground : null,
                                           ),
                                         ),
                                       ),
@@ -184,7 +180,7 @@ class _TWSDropupState<T> extends State<TWSDropup<T>>
   }
 
   @override
-  void didUpdateWidget(covariant TWSDropup<T> oldWidget) {
+  void didUpdateWidget(covariant DropUp<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.disabled && widget.disabled != oldWidget.disabled) {
       updateState(CSMStates.hovered);
@@ -228,12 +224,13 @@ class _TWSDropupState<T> extends State<TWSDropup<T>>
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: widget.tooltip ?? '',
+      message: widget.disabled ? '' : widget.tooltip ?? '',
       child: CompositedTransformTarget(
         link: layerLink,
         child: PointerArea(
           onClick: () {
             if (widget.disabled) return;
+
             if (state == CSMStates.selected) {
               updateState(CSMStates.hovered);
               toogleDrawer(true);

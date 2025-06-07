@@ -1,3 +1,4 @@
+import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,34 @@ final class EntityTable extends PackageLandingEntryB<LandingThemeB> {
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, PackageLandingThemeB theme) {
-    return view.EntityTable<Solution>(
+    return view.EntityTable<Solution, SolutionsServiceI>(
+      entityFactory: () => Solution(),
+      authGenerator: () async {
+        final SecurityServiceI securityService = Injector.get<SecurityServiceI>();
+
+        final FoundationResponseResolver<SessionData> authOutputResolver = await securityService.authenticate(
+          AuthenticationInput.a('TWSMF', 'local_user', 'local_user'.bytes),
+        );
+
+        return authOutputResolver
+            .resolveDirect(
+              () => SessionData(),
+            )
+            .token;
+      },
       columns: <view.EntityTableColumnOptions<Solution>>[
+        
+        view.EntityTableColumnOptions<Solution>(
+          title: 'Sign',
+          factory: (Solution entity, int index, BuildContext buildContext) => entity.sign,
+        ),
         view.EntityTableColumnOptions<Solution>(
           title: 'Name',
           factory: (Solution entity, int index, BuildContext buildContext) => entity.name,
+        ),
+        view.EntityTableColumnOptions<Solution>(
+          title: 'Description',
+          factory: (Solution entity, int index, BuildContext buildContext) => entity.description,
         ),
       ],
     );
