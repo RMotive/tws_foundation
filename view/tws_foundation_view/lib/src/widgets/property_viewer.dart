@@ -2,15 +2,17 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
-/// [TWSPropertyViewer] Shows a text format for properties: Property title and the property value.
-final class TWSPropertyViewer extends StatelessWidget {
+/// {widget} class.
+///
+/// Draws a {CSM} design property viewer to easely display a property name and its context value friendly to the user.
+final class PropertyViewer extends StatelessWidget {
   /// Property name.
   final String label;
 
   /// Property value.
   final String? value;
 
-  const TWSPropertyViewer({
+  const PropertyViewer({
     super.key,
     required this.label,
     required this.value,
@@ -18,8 +20,7 @@ final class TWSPropertyViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<FoundationThemeB> themeManager =
-        Injector.getThemeManager();
+    final ThemeManagerI<FoundationThemeB> themeManager = Injector.getThemeManager();
     final SimpleTheming pageTheme = themeManager.get().page;
 
     return Wrap(

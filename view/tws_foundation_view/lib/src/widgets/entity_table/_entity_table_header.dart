@@ -1,11 +1,13 @@
 part of 'entity_table.dart';
 
-///
+/// {widget} class.
+/// 
+/// Draws the columns titles and table header for [EntityTable].
 final class _EntityTableHeader<TEntity> extends StatelessWidget {
-  ///
+  /// Configrued [EntityTable] managed columns.
   final List<EntityTableColumnOptions<TEntity>> columns;
 
-  ///
+  /// Creates a new [_EntityTableHeader] instance.
   const _EntityTableHeader({
     required this.columns,
   });

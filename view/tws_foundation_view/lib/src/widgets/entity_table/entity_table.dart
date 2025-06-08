@@ -6,19 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/widgets/bordered_box.dart';
+import 'package:tws_foundation_view/src/widgets/entity_table/entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/widgets/pagination.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
-import 'package:tws_foundation_view/src/widgets/tws_frame_decoration.dart';
+
+part 'entity_table_column_options.dart';
 
 part '_entity_table_content.dart';
-part '_entity_table_drawer/_entity_table_drawer.dart';
-part '_entity_table_drawer/tws_article_table_details_action.dart';
-part '_entity_table_drawer/tws_article_table_details_state.dart';
-part '_entity_table_drawer/tws_article_table_editor.dart';
 part '_entity_table_error.dart';
 part '_entity_table_header.dart';
 part '_entity_table_loader.dart';
-part 'entity_table_column_options.dart';
+
+part '_entity_table_drawer/_entity_table_drawer.dart';
+part '_entity_table_drawer/_entity_table_drawer_action.dart';
 
 /// Default column width.
 const double _kColumnWidth = 200;
@@ -40,13 +41,16 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
   /// Available ranges per page.
   final List<int> ranges;
 
+  /// Object initialization factory, since Front-End frameworks don't use to have {reflections} to auto detect parameterless constructors.
+  final TEntity Function() entityFactory;
+
+  /// Table interactions adapter callbacks.
+  final EntityTableAdapterB<TEntity> adapter;
+
   /// [ViewServiceI.view] methods use to need [auth] properties that represents an unique session auth token
   /// to authenticate operation, {FoundationView} package doesn't have access to this session managing context, reason why this
   /// callback generator is required.
   final FutureOr<String> Function() authGenerator;
-
-  /// Object initialization factory, since Front-End frameworks don't use to have {reflections} to auto detect parameterless constructors.
-  final TEntity Function() entityFactory;
 
   /// Column options.
   final List<EntityTableColumnOptions<TEntity>> columns;
@@ -62,6 +66,7 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
       100,
       200,
     ],
+    required this.adapter,
     required this.columns,
     required this.authGenerator,
     required this.entityFactory,
@@ -89,7 +94,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   /// {state} Whether the table is loading new data.
   bool isLoading = false;
 
-  /// {state} Current selected [TEntity] instance.
+  /// {state} Current selected index item reference.
   int? selItem;
 
   @override
@@ -111,6 +116,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
       animationBehavior: AnimationBehavior.preserve,
     );
 
+    onEntitySelectionChange(0);
     super.initState();
   }
 
@@ -131,7 +137,9 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   /// {event} triggered when the item selection has changed.
   void onEntitySelectionChange(int? newSelItem) {
     if (newSelItem == selItem) return;
-    selItem = newSelItem;
+    setState(() {
+      selItem = newSelItem;
+    });
 
     if (newSelItem == null) {
       drawerAnimationCtrl.reverse();
@@ -144,6 +152,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   Future<ViewOutput<TEntity>> _viewInvokation() async {
     setState(() {
       isLoading = true;
+      onEntitySelectionChange(null);
     });
 
     final TService viewService = Injector.get();
@@ -189,24 +198,29 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
           animation: drawerAnimationCtrl,
           builder: (_, _) {
             final double drawerAnimationValue = boxSize.width - drawerAnimationTween.value;
+            final BoxConstraints drawerAnimationConstraint = BoxConstraints(
+              minWidth: drawerAnimationValue,
+            );
 
             return SizedBox.fromSize(
               size: boxSize,
               child: Stack(
                 children: <Widget>[
                   /// --> Table Layout
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: drawerAnimationValue,
-                      ),
+                  SizedBox(
+                    width: drawerAnimationValue,
+                    height: boxSize.height,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           /// --> Table header (column titles)
-                          _EntityTableHeader<TEntity>(
-                            columns: widget.columns,
+                          ConstrainedBox(
+                            constraints: drawerAnimationConstraint,
+                            child: _EntityTableHeader<TEntity>(
+                              columns: widget.columns,
+                            ),
                           ),
 
                           /// --> Table content
@@ -219,27 +233,33 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                                 future: asyncInvokation,
                                 errorBuilder:
                                     (BuildContext ctx, Object? error, ViewOutput<TEntity>? data) => _EntityTableError(),
-                                successBuilder:
-                                    (BuildContext buildContext, ViewOutput<TEntity> data) =>
-                                        _EntityTableContent<TEntity>(
-                                          preSelect: selItem,
-                                          entities: data.entities,
-                                          columns: widget.columns,
-                                          onSelection: onEntitySelectionChange,
-                                        ),
+                                successBuilder: (BuildContext buildContext, ViewOutput<TEntity> data) {
+                                  return ConstrainedBox(
+                                    constraints: drawerAnimationConstraint,
+                                    child: _EntityTableContent<TEntity>(
+                                      preSelect: selItem,
+                                      entities: data.entities,
+                                      columns: widget.columns,
+                                      onSelection: onEntitySelectionChange,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ),
 
                           /// --> Table footer (paging)
                           ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth: boxConstraints.boxed().biggest.width,
-                            ),
-                            child: Pagination(
-                              disabled: isLoading,
-                              options: paginationOptions,
-                              onChange: onPaginationChange,
+                            constraints: drawerAnimationConstraint,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: Pagination(
+                                disabled: isLoading,
+                                options: paginationOptions,
+                                onChange: onPaginationChange,
+                              ),
                             ),
                           ),
                         ],
@@ -252,7 +272,15 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                     left: drawerAnimationValue,
                     width: fullDrawer ? boxSize.width : _kDetailsWidth,
                     height: boxSize.height,
-                    child: _EntityTableDrawer<TEntity>(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: _EntityTableDrawer<TEntity>(
+                        selReference: selItem,
+                        adapter: widget.adapter,
+                        onCloseDrawer: () => onEntitySelectionChange(null),
+                        viewInvokation: asyncInvokation,
+                      ),
+                    ),
                   ),
                 ],
               ),

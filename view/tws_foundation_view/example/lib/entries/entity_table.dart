@@ -7,16 +7,16 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 
 ///
-final class EntityTable extends PackageLandingEntryB<LandingThemeB> {
-  /// Creates a new [EntityTable] instance.
-  EntityTable({
+final class SolutionsEntityTable extends PackageLandingEntryB<LandingThemeB> {
+  /// Creates a new [SolutionsEntityTable] instance.
+  SolutionsEntityTable({
     super.key,
   }) : super(
-         name: 'Entity Table',
+         name: 'Solutions Entity Table',
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:
-                 'Draws a complex data table widget for a business entity base, filtering, ordering and searching entity items',
+                 'Foundation {CSM} Entity Table representing [Solution] entity data and interactions, handles foundation possible interactions related with [Solutions] data management, like details drawer viewer, inline entity edition, entity remotion, etc.',
              style: TextStyle(
                color: foreColor,
              ),
@@ -26,36 +26,22 @@ final class EntityTable extends PackageLandingEntryB<LandingThemeB> {
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, PackageLandingThemeB theme) {
-    return view.EntityTable<Solution, SolutionsServiceI>(
-      entityFactory: () => Solution(),
-      authGenerator: () async {
-        final SecurityServiceI securityService = Injector.get<SecurityServiceI>();
+    return view.SolutionsEntityTable(
+      adapter: view.SolutionsEntityTableAdapter(
+        authBuilder: () async {
+          SecurityServiceI securityService = Injector.get();
 
-        final FoundationResponseResolver<SessionData> authOutputResolver = await securityService.authenticate(
-          AuthenticationInput.a('TWSMF', 'local_user', 'local_user'.bytes),
-        );
+          FoundationResponseResolver<SessionData> resResolver = await securityService.authenticate(
+            AuthenticationInput.a('TWSFV', 'local_user', 'local_user'.bytes),
+          );
 
-        return authOutputResolver
-            .resolveDirect(
-              () => SessionData(),
-            )
-            .token;
-      },
-      columns: <view.EntityTableColumnOptions<Solution>>[
-        
-        view.EntityTableColumnOptions<Solution>(
-          title: 'Sign',
-          factory: (Solution entity, int index, BuildContext buildContext) => entity.sign,
-        ),
-        view.EntityTableColumnOptions<Solution>(
-          title: 'Name',
-          factory: (Solution entity, int index, BuildContext buildContext) => entity.name,
-        ),
-        view.EntityTableColumnOptions<Solution>(
-          title: 'Description',
-          factory: (Solution entity, int index, BuildContext buildContext) => entity.description,
-        ),
-      ],
+          SessionData sessionData = resResolver.resolveDirect(
+            () => SessionData(),
+          );
+
+          return sessionData.token;
+        },
+      ),
     );
   }
 }

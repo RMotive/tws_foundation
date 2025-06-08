@@ -49,7 +49,7 @@ final class MainApp extends StatelessWidget {
       landingEntries: <PackageLandingEntryI<LandingThemeB>>[
         AuthPage(),
         CategoryLayout(),
-        EntityTable(),
+        SolutionsEntityTable(),
         NavigationLayout(
           appThemes: themes,
         ),

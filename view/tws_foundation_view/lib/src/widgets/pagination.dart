@@ -79,7 +79,10 @@ final class Pagination extends StatefulWidget {
   State<Pagination> createState() => _PaginationState();
 }
 
-class _PaginationState extends State<Pagination> {
+/// {state} class.
+///
+/// Handles the [State] for [Pagination] {widget}.
+final class _PaginationState extends State<Pagination> {
   /// Theme effect reference key.
   final UniqueKey themingRef = UniqueKey();
 
@@ -142,100 +145,111 @@ class _PaginationState extends State<Pagination> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        /// --> Current data indicator
-        ResponsiveWidget(
-          onLarge: RichText(
-            text: TextSpan(
-              text: 'Showing ',
-              style: TextStyle(
-                color: pageTheming.fore,
-                fontWeight: FontWeight.w100,
-                fontStyle: FontStyle.italic,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: '(${options.pageCount})',
-                  style: const TextStyle(fontWeight: FontWeight.w900),
-                ),
-                const TextSpan(text: ' records from '),
-                TextSpan(
-                  text: '(${options.total})',
-                  style: const TextStyle(fontWeight: FontWeight.w900),
-                ),
-              ],
-            ),
-          ),
-          onSmall: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RichText(
-                text: TextSpan(
-                  text: 'Showing',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 10,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: ' (${options.pageCount})',
-                      style: const TextStyle(fontWeight: FontWeight.w900),
-                    ),
-                  ],
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                  text: 'from',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 10,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: ' (${options.total})',
-                      style: const TextStyle(fontWeight: FontWeight.w900),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+    return LayoutBuilder(
+      builder: (_, BoxConstraints boxConstraints) {
+        boxConstraints = boxConstraints.boxed();
 
-        /// --> Pagination controls
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            spacing: 20,
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: boxConstraints.biggest.width,
+          ),
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 12,
             children: <Widget>[
-              /// --> Page range selector
-              DropUp<int>(
-                disabled: widget.disabled,
-                tooltip: 'Page range selection',
-                item: options.range,
-                items: options.ranges,
-                onChange: onRangeChange,
-              ),
-              // --> Page selector
-              DropUp<int>(
-                disabled: widget.disabled,
-                tooltip: 'Page selection',
-                item: options.page,
-                items: List<int>.generate(
-                  options.pages,
-                  (int i) => i + 1,
+              /// --> Current data indicator
+              ResponsiveWidget(
+                onLarge: RichText(
+                  text: TextSpan(
+                    text: 'Showing ',
+                    style: TextStyle(
+                      color: pageTheming.fore,
+                      fontWeight: FontWeight.w100,
+                      fontStyle: FontStyle.italic,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: '(${options.pageCount})',
+                        style: const TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                      const TextSpan(text: ' records from '),
+                      TextSpan(
+                        text: '(${options.total})',
+                        style: const TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                    ],
+                  ),
                 ),
-                onChange: onPageChange,
+                onSmall: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                        text: 'Showing',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 10,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' (${options.pageCount})',
+                            style: const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'from',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 10,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' (${options.total})',
+                            style: const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              /// --> Pagination controls
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                spacing: 12,
+                children: <Widget>[
+                  /// --> Page range selector
+                  DropUp<int>(
+                    disabled: widget.disabled,
+                    tooltip: 'Page range selection',
+                    item: options.range,
+                    items: options.ranges,
+                    onChange: onRangeChange,
+                  ),
+                  // --> Page selector
+                  DropUp<int>(
+                    disabled: widget.disabled,
+                    tooltip: 'Page selection',
+                    item: options.page,
+                    items: List<int>.generate(
+                      options.pages,
+                      (int i) => i + 1,
+                    ),
+                    onChange: onPageChange,
+                  ),
+                ],
               ),
             ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

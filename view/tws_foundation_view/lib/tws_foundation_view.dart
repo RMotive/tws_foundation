@@ -16,6 +16,9 @@ export 'src/widgets/text_input.dart';
 export 'src/widgets/button_flat.dart';
 export 'src/widgets/entity_table/entity_table.dart';
 
+// [widgets.foundation_entity_tables]
+export 'src/widgets/foundation_entity_tables/solutions_entity_table.dart';
+
 // [widgets.entity_creation_form]
 export 'src/widgets/entity_creation_form/entity_creation_form_agent.dart';
 export 'src/widgets/entity_creation_form/entity_creation_form.dart';

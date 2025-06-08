@@ -42,6 +42,10 @@ final class _EntityTableContentState<TEntity> extends State<_EntityTableContent<
     if (oldWidget.entities != widget.entities) {
       selEntity = null;
     }
+
+    if (oldWidget.preSelect != widget.preSelect) {
+      selEntity = widget.preSelect;
+    }
   }
 
   @override

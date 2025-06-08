@@ -28,16 +28,16 @@ final class TWSArticleTableEditor extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           spacing: 8,
           children: <Widget>[
-            _TWSArticleTableDetailsAction(
+            _EntityTableDrawerAction(
               icon: Icons.close_rounded,
-              hint: 'Cancel editing',
-              action: () => onCancel(),
+              action: 'Cancel editing',
+              onClick: () => onCancel(),
             ),
             if (onSave != null)
-              _TWSArticleTableDetailsAction(
+              _EntityTableDrawerAction(
                 icon: Icons.save_alt_rounded,
-                hint: 'Save',
-                action: () async {
+                action: 'Save',
+                onClick: () async {
                   await onSave?.call();
                 },
               ),
