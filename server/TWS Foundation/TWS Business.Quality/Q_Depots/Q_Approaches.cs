@@ -14,11 +14,14 @@ public class Q_Approaches
             Enterprise = Entropy[..13],
             Personal = Entropy[..13],
             Alternative = Entropy[..13],
-            Status = new Status {
-                Name = Entropy,
-                Description = Entropy,
-                Reference = Entropy[..8]
-            },
+            Status = Store(
+                        new Status {
+                        Name = Entropy,
+                        Description = Entropy,
+                        Reference = Entropy[..8],
+                    }
+                ),
+
         };
     }
 }

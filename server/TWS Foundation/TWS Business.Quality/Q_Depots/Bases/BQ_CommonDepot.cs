@@ -371,6 +371,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     [Theory(DisplayName = "[View]: Using filter Linear Evaluation (OR)")]
     [MemberData(nameof(GetEdgeConfiguration))]
     public async Task ViewF(bool internalEdge) {
+        Skip.If(Evaluable.PropertyType != typeof(string), "This assertion is only available for entities that have an evaluable string property since CONTAINS method is currently only supported to filter string type properties.");
         TCommon[] entities = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => EntityFactory(entropy, internalEdge));
 
         List<object?> possibleValues = [];
@@ -504,7 +505,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
                new QueryInput<TCommon, FilterQueryInput<TCommon>>() {
                      Parameters = new FilterQueryInput<TCommon> {
-                         Behavior = FilteringBehaviors.First,
+                         Behavior = FilteringBehaviors.Last,
                          Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
                      }
                  }

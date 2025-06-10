@@ -20,7 +20,7 @@ namespace CSM_Foundation.Database.Entity.Depot;
 /// <summary>
 ///     Defines base behaviors for a <see cref="IDepot{TMigrationSet}"/>
 ///     implementation describing <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
-///     shared behaviors.
+///     shared behaviors.`
 ///     
 ///     A <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> provides methods to 
 ///     serve dataDatabases attached transactions for <see cref="TEntity"/>.
@@ -78,6 +78,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <returns></returns>
     protected IQueryable<TEntity> ProcessQuery<TParameters>(QueryInput<TEntity, TParameters> input, Func<IQueryable<TEntity>, IQueryable<TEntity>> process) {
         IQueryable<TEntity> query = Set;
+
 
         if (input.PreProcessor != null) {
             query = input.PreProcessor(query);
@@ -242,11 +243,12 @@ public abstract class BDepot<TDatabase, TEntity>
                 input,
                 (query) => {
                     processedQuery = OrderQuery(query, parameters.Orderings);
-                    processedQuery = FilterQuery(query, parameters.Filters);
+                    processedQuery = FilterQuery(processedQuery, parameters.Filters);
 
-                    return query;
+                    return processedQuery;
                 }
             );
+
 
         PaginationOutput<TEntity> paginationOutput = await PaginateQuery(processedQuery, parameters.Page, parameters.Range, parameters.Export);
 
@@ -608,7 +610,10 @@ public abstract class BDepot<TDatabase, TEntity>
 
         List<TEntity> successes = [];
         List<EntityOperationFailure<TEntity>> failures = [];
-        foreach (TEntity entity in query) {
+
+        TEntity[] entities = await query.ToArrayAsync();
+
+        foreach (TEntity entity in entities) {
             try {
                 TEntity deletedEntity = await Delete(entity.Id);
                 successes.Add(deletedEntity);

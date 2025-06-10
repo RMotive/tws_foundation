@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Q_Controllers\Business\" />
     <Folder Include="Q_Middlewares\" />
   </ItemGroup>
 
