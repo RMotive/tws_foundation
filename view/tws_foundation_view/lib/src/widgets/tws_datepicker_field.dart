@@ -92,9 +92,9 @@ class _TWSDatepickerState extends State<TWSDatepicker> {
   late SimpleTheming pageColorStruct;
 
   void initializeThemes() {
-    colorStruct = themeManager.get().primaryControlColor;
-    disabledColorStruct = themeManager.get().primaryDisabledControl;
-    errorColorStruct = themeManager.get().primaryCriticalControl;
+    colorStruct = themeManager.get().primControl;
+    disabledColorStruct = themeManager.get().primControl;
+    errorColorStruct = themeManager.get().errorTheming;
     pageColorStruct = themeManager.get().page;
   }
 

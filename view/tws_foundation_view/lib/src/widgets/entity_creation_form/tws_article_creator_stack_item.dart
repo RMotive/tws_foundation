@@ -30,7 +30,7 @@ final class TWSArticleCreationStackItem extends StatelessWidget {
     final ThemeManagerI<FoundationThemeB> themeManager =
         Injector.getThemeManager();
     final SimpleTheming pageTheme = themeManager.get().page;
-    final SimpleTheming dangerTheme = themeManager.get().primaryCriticalControl;
+    final SimpleTheming dangerTheme = themeManager.get().errorTheming;
 
     return DecoratedBox(
       position: DecorationPosition.foreground,

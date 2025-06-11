@@ -1,8 +1,9 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:example/entries/auth_page.dart';
-import 'package:example/entries/category_layout.dart';
-import 'package:example/entries/entity_table.dart';
-import 'package:example/entries/navigation_layout.dart';
+import 'package:example/entries/auth_page_entry.dart';
+import 'package:example/entries/category_layout_entry.dart';
+import 'package:example/entries/navigation_layout_entry.dart';
+import 'package:example/entries/solutions_entity_table_entry.dart';
+import 'package:example/entries/yard_logs_page_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
@@ -47,12 +48,13 @@ final class MainApp extends StatelessWidget {
       defaultTheme: LandingThemeDark(),
       themes: themes,
       landingEntries: <PackageLandingEntryI<LandingThemeB>>[
-        AuthPage(),
-        CategoryLayout(),
-        SolutionsEntityTable(),
-        NavigationLayout(
+        AuthPageEntry(),
+        YardLogsPageEntry(),
+        CategoryLayoutEntry(),
+        NavigationLayoutEntry(
           appThemes: themes,
         ),
+        SolutionsEntityTableEntry(),
       ],
     );
   }

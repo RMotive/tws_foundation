@@ -33,7 +33,7 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
   final UniqueKey themingEffectRef = UniqueKey();
 
   /// {state} [FoundationThemeB.page] theming reference.
-  late SimpleTheming pageTheming;
+  late FoundationThemeB foundationTheming;
 
   /// {state} current calcualted button fore color.
   late Color foreColor;
@@ -45,17 +45,19 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
   void initState() {
     super.initState();
 
-    final FoundationThemeB foundationTheming = Theming.get();
-    pageTheming = foundationTheming.page;
+    foundationTheming = Theming.get();
 
-    foreColor = widget.fore ?? pageTheming.accent;
-    backColor = pageTheming.fore;
+    foreColor = widget.fore ?? foundationTheming.page.accent;
+    backColor = foundationTheming.entityTableTheming.drawerActionBackground;
 
     Injector.getThemeManager<FoundationThemeB>().addEffect(
       themingEffectRef,
       (FoundationThemeB theme) {
         setState(() {
-          pageTheming = theme.page;
+          foundationTheming = theme;
+
+          foreColor = widget.fore ?? foundationTheming.page.accent;
+          backColor = foundationTheming.entityTableTheming.drawerActionBackground;
         });
       },
     );
@@ -64,7 +66,7 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
   @override
   void didUpdateWidget(covariant _EntityTableDrawerAction oldWidget) {
     if (oldWidget.fore != widget.fore) {
-      foreColor = widget.fore ?? pageTheming.accent;
+      foreColor = widget.fore ?? foundationTheming.page.accent;
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -83,7 +85,7 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
         cursor: SystemMouseCursors.click,
         onHover: (bool $in) {
           setState(() {
-            backColor = pageTheming.fore;
+            backColor = foundationTheming.entityTableTheming.drawerActionBackground;
             if ($in) {
               backColor = backColor.withValues(
                 alpha: .85,

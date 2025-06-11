@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/business/employees/employee.dart';
-import 'package:tws_foundation_client/src/services/business/load_type/load_type.dart';
-import 'package:tws_foundation_client/src/services/business/sections/sections.dart';
+import 'package:tws_foundation_client/src/services/business/load_types/load_type.dart';
+import 'package:tws_foundation_client/src/services/business/sections/section.dart';
 
 /// [Entity] that represents a vehicules control entry for a yard logging system where
 /// guards write down an entry/exit journal of vehicles at business locations.
@@ -27,16 +27,27 @@ final class YardLog extends EntityB<YardLog> {
   /// [guard] property key.
   static const String kSection = 'section';
 
+  //! --> Properties
+
   /// Wheter the record is an entry or exit entry.
   bool entry = false;
 
   /// Trailer seal information.
+  /// 
+  /// Rules > 
+  ///   1. 65 > length > 9 
   String? seal = "";
 
   /// Trailer alternative seal information.
+  /// 
+  /// Rules > 
+  ///   1. 65 > length > 9
   String? sealAlt = "";
 
   /// Vehicule origin / destination information.
+  /// 
+  /// Rules > 
+  ///   1. 101 > length > 9
   String fromTo = "";
 
   /// Vehicule entry image evidence.
@@ -44,6 +55,10 @@ final class YardLog extends EntityB<YardLog> {
 
   /// Vehicule damage image evidence.
   Uint8List? damage;
+
+  //! <-- Properties 
+
+  //! --> Relations
 
   /// Trailer load type.
   Loadtype? loadType;
@@ -53,6 +68,11 @@ final class YardLog extends EntityB<YardLog> {
 
   /// Guard filling out the yard log.
   Section? section;
+
+  
+
+  //! <-- Relations
+
 
   /// Creates a new [YardLog] instance with default values.
   YardLog();

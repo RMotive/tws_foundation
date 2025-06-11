@@ -1,4 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';

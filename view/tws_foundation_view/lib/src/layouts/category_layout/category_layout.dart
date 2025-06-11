@@ -13,26 +13,28 @@ part '_category_layout_ribbon/category_layout_ribbon_node_i.dart';
 part '_category_layout_ribbon/category_layout_ribbon_action_options.dart';
 part '_category_layout_ribbon/_category_layout_ribbon_group_options.dart';
 
-///
+/// {layout route node} class.
+/// 
+/// Implements a [RouteLayoutB] storing default configuration for a correct {layout} type [RouteNode] usage at the [Router] tree.
 final class CategoryLayoutNode extends RouteLayoutB {
-  ///
-  final List<CategoryLayoutEntryI> articles;
+  /// Pages grouped at this category.
+  final List<CategoryLayoutPageI> pages;
 
-  /// Creates a new []
+  /// Creates a new [CategoryLayoutNode] instance.
   CategoryLayoutNode({
-    required this.articles,
+    required this.pages,
   }) : super(
          routes: <RouteB>[
-           for (CategoryLayoutEntryI article in articles)
+           for (CategoryLayoutPageI page in pages)
              RouteNode(
-               article.route,
-               pageBuilder: article.pageBuilder,
+               page.route,
+               pageBuilder: page.composePage,
              ),
          ],
          layoutBuilder: (BuildContext ctx, RouteData routeData, Widget page) {
            return CategoryLayout(
              page: page,
-             articles: articles,
+             articles: pages,
              routeData: routeData,
            );
          },
@@ -45,7 +47,7 @@ final class CategoryLayout extends LayoutB {
   final RouteData routeData;
 
   ///
-  final List<CategoryLayoutEntryI> articles;
+  final List<CategoryLayoutPageI> articles;
 
   /// Creates a new [CategoryLayout] instance.
   const CategoryLayout({

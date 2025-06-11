@@ -13,20 +13,21 @@ final class _EntityTableLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (_, BoxConstraints constrains) {
-        final Size boxingSize = constrains.biggest;
+      builder: (_, BoxConstraints boxConstraints) {
 
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: (boxingSize.width / 2) - (_loaderSize / 2),
-            vertical: (boxingSize.height / 2) - (_loaderSize * 2),
-          ),
-          child: SizedBox.fromSize(
-            size: Size.square(_loaderSize),
-            child: CircularProgressIndicator(
-              backgroundColor: FoundationColors.oceanBlueH,
-              color: FoundationColors.oceanBlue,
-              strokeWidth: 3,
+        boxConstraints = boxConstraints.boxed();
+        final Size boxingSize = boxConstraints.biggest;
+
+        return SizedBox.fromSize(
+          size: boxingSize,
+          child: Center(
+            child: SizedBox.fromSize(
+              size: Size.square(_loaderSize),
+              child: CircularProgressIndicator(
+                backgroundColor: FoundationColors.oceanBlueH,
+                color: FoundationColors.oceanBlue,
+                strokeWidth: 3,
+              ),
             ),
           ),
         );

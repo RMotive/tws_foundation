@@ -122,7 +122,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   // Theme method handler.
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      primaryColorTheme = theme.primaryControlColor;
+      primaryColorTheme = theme.primControl;
       pageColorTheme = theme.page;
     });
   }
@@ -142,7 +142,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     headerEffect = () {};
     waitingEffect = () {};
     themeManager.addEffect(ref, themeUpdateListener);
-    primaryColorTheme = themeManager.get().primaryControlColor;
+    primaryColorTheme = themeManager.get().primControl;
     pageColorTheme = themeManager.get().page;
     tcolor = widget.textColor ?? pageColorTheme.fore;
     bcolor = widget.backgroundColor ?? pageColorTheme.back;

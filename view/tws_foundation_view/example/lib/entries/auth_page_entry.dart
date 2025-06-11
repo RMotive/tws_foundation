@@ -5,9 +5,9 @@ import 'package:tws_foundation_client/tws_foundation_client.dart' show SessionDa
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 
 ///
-final class AuthPage extends PackageLandingEntryB<LandingThemeB> {
+final class AuthPageEntry extends PackageLandingEntryB<LandingThemeB> {
   ///
-  AuthPage({super.key})
+  AuthPageEntry({super.key})
     : super(
         name: 'Auth Page',
         image: AssetImage(view.FoundationAssets.businessIcon),

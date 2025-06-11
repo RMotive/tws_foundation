@@ -6,7 +6,7 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
   final Route currentRoute;
 
   /// Article entries.
-  final List<CategoryLayoutEntryI> articles;
+  final List<CategoryLayoutPageI> articles;
 
   /// Creates a new [_CategoryLayoutRibbon] instance.
   const _CategoryLayoutRibbon({
@@ -16,8 +16,8 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CategoryLayoutEntryI currentEntry = articles.firstWhere(
-      (CategoryLayoutEntryI article) => article.route == currentRoute,
+    final CategoryLayoutPageI currentEntry = articles.firstWhere(
+      (CategoryLayoutPageI article) => article.route == currentRoute,
     );
 
     final CategoryLayoutRibbonControllerI? ribbonController = currentEntry.ribbonController;
@@ -105,7 +105,7 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
             Expanded(
               child: _CategoryLayoutRibbonSection(
                 children: <Widget>[
-                  for (CategoryLayoutEntryI article in articles)
+                  for (CategoryLayoutPageI article in articles)
                     _CategoryLayoutRibbonArticleButton(
                       isCurrent: currentEntry == article,
                       articleEntry: article,

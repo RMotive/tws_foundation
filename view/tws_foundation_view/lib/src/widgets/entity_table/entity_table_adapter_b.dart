@@ -2,6 +2,16 @@ import 'package:csm_client/csm_client.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
+/// {implementation} class.
+///
+/// Implements a [ChangeNotifier] providing rebuilding instructions with no specific values.
+final class _RefreshNotifier extends ChangeNotifier {
+  /// Notify listeners to refresh.
+  void refresh() {
+    notifyListeners();
+  }
+}
+
 /// {model} class.
 ///
 /// Defines a data model to store on remove event configruation for [EntityTableAdapterB.composeDeleter].
@@ -33,8 +43,8 @@ final class EntityTableAdapterEditor<TEntity> {
   final void Function(BuildContext buildContext, TEntity entity) onUpdate;
 
   /// Editor form building function.
-  /// 
-  /// 
+  ///
+  ///
   /// [buildContext] built-in [Widget] tree reference context.
   ///
   /// [entity] entity instance being edited.
@@ -52,12 +62,32 @@ final class EntityTableAdapterEditor<TEntity> {
 /// Defines a base behavior to handle an [EntityTable] adaption along this patter code clients from this implementations
 /// can dynamically interact with the [EntityTable] instance by this adapter reference allowing to handle operations and callbacks for
 /// user interactions or direct invokations.
-abstract class EntityTableAdapterB<TEntity extends EntityB<TEntity>> extends ChangeNotifier {
-  /// Composes the conifgurations adapted for {Deeltion} [EntityTable] behavior.
-  EntityTableAdapterDeleter<TEntity>? composeDeleter() => null;
+abstract class EntityTableAdapterB<TEntity extends EntityB<TEntity>> {
+  /// Internal reference for [refresh] notification to listeners.
+  final _RefreshNotifier _refreshNotifier = _RefreshNotifier();
+
+  /// Adds a callback action triggered when the [refresh] operation has been called.
+  ///
+  /// [callback] action callback to subscribe to notifier handle.
+  @mustCallSuper
+  void listenRefresh(VoidCallback callback) {
+    _refreshNotifier.addListener(callback);
+  }
+
+  /// Disposes [EntityTableAdapterB] instance resources.
+  @mustCallSuper
+  void dispose() {
+    _refreshNotifier.dispose();
+  }
+
+  /// Refreshes the [EntityTable] instance adapted.
+  void refresh() => _refreshNotifier.refresh();
 
   /// Composes the conifgurations adapted for {Edition} [EntityTable] behavior.
   EntityTableAdapterEditor<TEntity>? composeEditor() => null;
+
+  /// Composes the conifgurations adapted for {Deeltion} [EntityTable] behavior.
+  EntityTableAdapterDeleter<TEntity>? composeDeleter() => null;
 
   /// Composes the view details drawer at the [EntityTable].
   Widget composeViewer(BuildContext buildContext, TEntity entity);

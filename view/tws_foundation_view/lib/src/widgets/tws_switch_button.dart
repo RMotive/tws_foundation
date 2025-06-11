@@ -57,7 +57,7 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
     _value = widget.value;
     waiting = false;
     themeManager.addEffect(ref, themeUpdateListener);
-    primaryColorTheme = themeManager.get().primaryControlColor;
+    primaryColorTheme = themeManager.get().primControl;
     super.initState();
   }
 
@@ -69,7 +69,7 @@ class _TWSSwitchButtonState extends State<TWSSwitchButton> {
 
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      primaryColorTheme = theme.primaryControlColor;
+      primaryColorTheme = theme.primControl;
     });
   }
 

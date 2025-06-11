@@ -12,43 +12,43 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 ///
 /// Implements a custom [EntityTableAdapterB] for a [Solution] based [EntityTable] providing a foundation
 /// {csm} data handling table for [Solution].
-final class SolutionsEntityTableAdapter extends EntityTableAdapterB<Solution> {
+final class YardLogsEntityTableAdapter extends EntityTableAdapterB<YardLog> {
   /// Callback to get authentication token due to [SolutionsServiceI.update] service needs authorization token,
   /// {FoundationView} package doesn't have authentication or session control.
   final FutureOr<String> Function() authBuilder;
 
-  /// Creates a new [SolutionsEntityTableAdapter] instance.
-  SolutionsEntityTableAdapter({
+  /// Creates a new [YardLogsEntityTableAdapter] instance.
+  YardLogsEntityTableAdapter({
     required this.authBuilder,
   });
 
   @override
-  Widget composeViewer(BuildContext buildContext, Solution entity) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 12,
-      children: <Widget>[
-        /// --> Name property viewer
-        PropertyViewer(
-          label: 'Sign',
-          value: entity.sign,
-        ),
+  Widget composeViewer(BuildContext buildContext, YardLog entity) {
+    return SizedBox.expand(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: <Widget>[
+            /// --> Event property view.
+            PropertyViewer(
+              label: 'Event',
+              value: entity.entry ? 'In' : 'Out',
+            ),
 
-        PropertyViewer(
-          label: 'Name',
-          value: entity.name,
-        ),
+            /// --> Load Type property view.
+            PropertyViewer(
+              label: 'Load Type',
+              value: entity.loadType?.name,
+            ),
 
-        PropertyViewer(
-          label: 'Description',
-          value: entity.description,
+            PropertyViewer(
+              label: 'Timestamp',
+              value: entity.timestamp.fullDateString,
+            ),
+          ],
         ),
-
-        PropertyViewer(
-          label: 'Timestamp',
-          value: entity.timestamp.fullDateString,
-        ),
-      ],
+      ),
     );
   }
 
@@ -206,12 +206,12 @@ final class SolutionsEntityTableAdapter extends EntityTableAdapterB<Solution> {
 /// {widget} class.
 ///
 /// Draws a {CSM} foundation [Solution] based [EntityTable], providing default interactions and management for [Solution] entity.
-final class SolutionsEntityTable extends StatelessWidget {
+final class YardLogsEntityTable extends StatelessWidget {
   /// Table adapter handler.
-  final SolutionsEntityTableAdapter adapter;
+  final YardLogsEntityTableAdapter adapter;
 
-  /// Creates a new [SolutionsEntityTable] instance.
-  const SolutionsEntityTable({
+  /// Creates a new [YardLogsEntityTable] instance.
+  const YardLogsEntityTable({
     super.key,
     required this.adapter,
   });

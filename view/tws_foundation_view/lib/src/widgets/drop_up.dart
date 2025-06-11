@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
 /// {widget} class.
@@ -38,65 +37,179 @@ class DropUp<T> extends StatefulWidget {
   State<DropUp<T>> createState() => _DropUpState<T>();
 }
 
-class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMixin {
-  /// Cascade options link.
+/// {state} class.
+///
+/// Hanldes [State] for [DropUp] {widget}.
+final class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMixin {
+  /// {state} theming effect reference.
+  final UniqueKey themingRef = UniqueKey();
+
+  /// Layer link instance for overlaying control.
   final LayerLink layerLink = LayerLink();
 
-  /// initialize State.
-  CSMStates state = CSMStates.none;
-
-  /// Theme color scheme.
-  // The theme behaviors may change in some statefull widgets. The [CSMGenericThemeOptions] and [CSMStateThemeOptions] approach is
-  // compatible with [TickerProviderStateMixin] and more complex states implementations.
-
-  /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager = Injector.getThemeManager();
-
-  /// Theme reference key.
-  final UniqueKey ref = UniqueKey();
-
-  late ComplexTheming theme;
-
-  late StateTheming themeState;
-
   /// Options cascade overlay entry.
-  late OverlayEntry? overlay;
+  OverlayEntry? overlay;
 
   /// Currently selected item.
-  late T currentItem;
-  // --> Animations
-  late AnimationController animController;
-  late Animation<double> expandAnimation;
-  late Animation<double> rotateAnimation;
+  late T currValue = widget.items[0];
 
-  OverlayEntry composeOverlay() {
+  /// {state} current application theming information.
+  late FoundationThemeB fountTheming;
+
+  /// {state} [Widget] {csm} handled state.
+  CSMStates state = CSMStates.none;
+
+  /// {state} [Widget] background color.
+  late Color backColor;
+
+  /// {state} [Widget] foreground color.
+  late Color foreColor;
+
+  /// --> {DropUp} Animation Configuration <--
+
+  /// Controller for {DropUp} animation interactions.
+  late final AnimationController dropUpAnimCtrl = AnimationController(
+    vsync: this,
+    duration: 300.miliseconds,
+  );
+
+  /// Animation value handler for {DropUp} linked animation.
+  late Animation<double> dropUpAnimTween = CurvedAnimation(
+    parent: dropUpAnimCtrl,
+    curve: Curves.easeInOut,
+  );
+
+  /// Animation value handler for {IconRotation} linked animation.
+  late final Animation<double> iconRotAnimTween = Tween<double>(
+    begin: 0.0,
+    end: .5,
+  ).animate(
+    CurvedAnimation(
+      parent: dropUpAnimCtrl,
+      curve: Curves.easeInOut,
+    ),
+  );
+
+  @override
+  void initState() {
+    assert(
+      widget.items.isNotEmpty,
+      'The items list can\'t be empty',
+    );
+
+    fountTheming = Theming.get();
+    Injector.getThemeManager<FoundationThemeB>().addEffect(
+      themingRef,
+      (FoundationThemeB theme) {
+        setState(() {
+          fountTheming = theme;
+        });
+      },
+    );
+
+    _defineColors();
+
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant DropUp<T> oldWidget) {
+    if (widget.disabled != oldWidget.disabled) {
+      _defineColors();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    dropUpAnimCtrl.dispose();
+    Injector.getThemeManager<FoundationThemeB>().removeEffect(themingRef);
+    super.dispose();
+  }
+
+  /// {event} triggered when [DropUp] has been clicked.
+  void onClick() {
+    debugPrint('onClicked');
+    if (widget.disabled) return;
+
+    toogleDropUp(overlay != null);
+  }
+
+  /// {event} triggered when [DropUp] has a {hover} interaction.
+  void onHover(bool $in) {
+    setState(() {
+      state = $in ? CSMStates.hovered : CSMStates.none;
+      _defineColors();
+    });
+  }
+
+  /// Defines the [DropUp] {widget} background color dependning on the current [state].
+  void _defineColors() {
+    foreColor = fountTheming.page.foreAlt ?? fountTheming.page.fore;
+
+    if (widget.disabled) {
+      backColor = fountTheming.page.back;
+      return;
+    }
+
+    backColor = fountTheming.page.accent;
+    if (state == CSMStates.hovered) {
+      backColor = backColor.withValues(alpha: .85);
+    }
+  }
+
+  /// Toogles the drop up component handled opning / closing it.
+  ///
+  ///
+  /// [close] whether the action is to close it.
+  Future<void> toogleDropUp([bool close = false]) async {
+    if (close) {
+      await dropUpAnimCtrl.reverse().then(
+        (void value) {
+          setState(() {});
+        },
+      );
+      overlay?.remove();
+      overlay = null;
+      return;
+    }
+
+    overlay = _composeOverlay();
+    Overlay.of(context).insert(overlay as OverlayEntry);
+    dropUpAnimCtrl.forward().then(
+      (void value) {
+        setState(() {});
+      },
+    );
+  }
+
+  /// Composes the overlayed {DropUp} drawer widget and it's linked positioned relative with the main [DropUp] {widget}.AboutDialog
+  OverlayEntry _composeOverlay() {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
-    Size size = renderBox.size;
-    Offset offset = renderBox.localToGlobal(Offset.zero);
-    double topOffset = offset.dy + size.height;
+    Size boxSize = renderBox.size;
+    Offset boxOffset = renderBox.localToGlobal(Offset.zero);
+    double topOffset = boxOffset.dy + boxSize.height;
 
     return OverlayEntry(
       builder: (BuildContext context) {
-        return GestureDetector(
+        return Listener(
           behavior: HitTestBehavior.translucent,
-          onTap: () {
-            toogleDrawer(true).then((_) => updateState(CSMStates.none));
-          },
+          onPointerDown: (PointerDownEvent event) => toogleDropUp(true),
           child: Stack(
             children: <Widget>[
               Positioned(
-                left: offset.dx,
                 bottom: topOffset,
-                width: size.width,
+                left: boxOffset.dx,
+                width: boxSize.width,
                 child: CompositedTransformFollower(
                   link: layerLink,
                   followerAnchor: Alignment.bottomLeft,
                   offset: const Offset(0, 0),
                   showWhenUnlinked: false,
                   child: SizeTransition(
-                    sizeFactor: expandAnimation,
+                    sizeFactor: dropUpAnimTween,
                     child: ColoredBox(
-                      color: theme.background ?? FoundationColors.ligthGrey,
+                      color: fountTheming.page.accent,
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxHeight: 250),
                         child: SizedBox(
@@ -106,27 +219,32 @@ class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMixin {
                             child: ListView.builder(
                               itemCount: widget.items.length,
                               itemBuilder: (_, int index) {
-                                bool current = widget.items[index] == currentItem;
+                                bool current = widget.items[index] == currValue;
+
                                 return MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {
-                                      toogleDrawer(true).then(
-                                        (_) => updateState(
-                                          CSMStates.none,
-                                          currentItem: widget.items[index],
-                                        ),
+                                      toogleDropUp(true).then(
+                                        (void value) {
+                                          if (current != currValue) {
+                                            setState(() {
+                                              currValue = widget.items[index];
+                                              widget.onChange(currValue);
+                                            });
+                                          }
+                                        },
                                       );
                                     },
                                     child: SizedBox(
                                       height: 32,
-                                      width: size.width,
+                                      width: boxSize.width,
                                       child: Center(
                                         child: Text(
                                           '${widget.items[index]}',
                                           style: TextStyle(
-                                            color: current ? theme.foreground : null,
+                                            color: foreColor,
                                           ),
                                         ),
                                       ),
@@ -149,104 +267,19 @@ class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMixin {
     );
   }
 
-  Future<void> toogleDrawer([bool close = false]) async {
-    if (close) {
-      await animController.reverse();
-      overlay?.remove();
-      overlay = null;
-    } else {
-      overlay = composeOverlay();
-      Overlay.of(context).insert(overlay!);
-      animController.forward();
-    }
-  }
-
-  void themeUpdate(FoundationThemeB theming) {
-    setState(() {
-      themeState = theming.primaryControlState;
-      theme = state.evaluateTheme(themeState);
-    });
-  }
-
-  void updateState(CSMStates state, {T? currentItem}) async {
-    this.currentItem = currentItem ?? this.currentItem;
-    if (currentItem != null) {
-      await widget.onChange(currentItem);
-    }
-    setState(() {
-      this.state = state;
-      theme = state.evaluateTheme(themeState);
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant DropUp<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.disabled && widget.disabled != oldWidget.disabled) {
-      updateState(CSMStates.hovered);
-    }
-  }
-
-  @override
-  void initState() {
-    assert(
-      widget.items.isNotEmpty,
-      'The items list must have at least one item',
-    );
-    super.initState();
-    currentItem = widget.item;
-    animController = AnimationController(
-      vsync: this,
-      duration: 300.miliseconds,
-    );
-    expandAnimation = CurvedAnimation(
-      parent: animController,
-      curve: Curves.easeInOut,
-    );
-    rotateAnimation = Tween<double>(
-      begin: 0.0,
-      end: .5,
-    ).animate(CurvedAnimation(parent: animController, curve: Curves.easeInOut));
-    themeManager.addEffect(ref, themeUpdate);
-    themeState = themeManager.get().primaryControlState;
-    theme = state.evaluateTheme(themeState);
-    if (widget.disabled) {
-      updateState(CSMStates.hovered);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    themeManager.removeEffect(ref);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: widget.disabled ? '' : widget.tooltip ?? '',
+      waitDuration: 300.miliseconds,
+      message: widget.disabled || overlay != null ? '' : widget.tooltip ?? '',
       child: CompositedTransformTarget(
         link: layerLink,
         child: PointerArea(
-          onClick: () {
-            if (widget.disabled) return;
-
-            if (state == CSMStates.selected) {
-              updateState(CSMStates.hovered);
-              toogleDrawer(true);
-            } else {
-              updateState(CSMStates.selected);
-              toogleDrawer();
-            }
-          },
-          cursor: SystemMouseCursors.click,
-          onHover: (bool $in) {
-            if (widget.disabled) return;
-            if (state == CSMStates.selected) return;
-            updateState($in ? CSMStates.hovered : CSMStates.none);
-          },
+          cursor: widget.disabled ? MouseCursor.defer : SystemMouseCursors.click,
+          onClick: onClick,
+          onHover: onHover,
           child: ColoredBox(
-            color: theme.background ?? FoundationColors.ligthGrey,
+            color: backColor,
             child: SizedBox(
               width: 75,
               height: 30,
@@ -255,14 +288,16 @@ class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Text(
-                    '$currentItem',
-                    style: TextStyle(color: theme.foreground),
+                    '$currValue',
+                    style: TextStyle(
+                      color: foreColor,
+                    ),
                   ),
                   RotationTransition(
-                    turns: rotateAnimation,
+                    turns: iconRotAnimTween,
                     child: Icon(
                       Icons.arrow_drop_up_rounded,
-                      color: theme.foreground,
+                      color: foreColor,
                       size: 30,
                     ),
                   ),

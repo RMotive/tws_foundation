@@ -77,7 +77,7 @@ class _EntityCreationFormState<TModel>
   void initState() {
     super.initState();
     mainState = _EntityCreationFormReactor<TModel>(widget.factory);
-    pageColorTheme = themeManager.get().primaryControlColor;
+    pageColorTheme = themeManager.get().primControl;
     themeManager.addEffect(ref, themeUpdateListener);
     widget.controller?.addListener(submitRecords);
   }
@@ -96,7 +96,7 @@ class _EntityCreationFormState<TModel>
 
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      pageColorTheme = theme.primaryControlColor;
+      pageColorTheme = theme.primControl;
     });
   }
 

@@ -298,7 +298,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
 
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      primaryColorTheme = theme.primaryControlColor;
+      primaryColorTheme = theme.primControl;
     });
   }
 
@@ -325,7 +325,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
 
   @override
   void initState() {
-    primaryColorTheme = themeManager.get().primaryControlColor;
+    primaryColorTheme = themeManager.get().primControl;
     themeManager.addEffect(ref, themeUpdateListener);
     futureState = _TWSAutoCompleteFieldFutureState<T>();
     hasKeyValue = widget.hasKeyValue ?? (T? set) => true;

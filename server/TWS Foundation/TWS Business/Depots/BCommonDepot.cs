@@ -22,18 +22,18 @@ public class BCommonDepot<TInternal, TExternal, TCommon>
         entity.Internal = null;
         entity.External = null;
 
-        entity = DatabaseUtilities.SanitizeEntity(Database, entity);
+        entity = DatabaseUtilities.SanitizeEntity(_db, entity);
         
-        await Set.AddAsync(entity);
+        await _dbSet.AddAsync(entity);
 
         if(internalRelation != null) {
             internalRelation.EvaluateWrite();
 
-            internalRelation = DatabaseUtilities.SanitizeEntity(Database, internalRelation);
+            internalRelation = DatabaseUtilities.SanitizeEntity(_db, internalRelation);
             internalRelation.Common = entity;
             internalRelation.Timestamp = DateTime.UtcNow;
 
-            await Database.Set<TInternal>().AddAsync(internalRelation);
+            await _db.Set<TInternal>().AddAsync(internalRelation);
 
             entity.Internal = internalRelation;
             return entity;
@@ -42,11 +42,11 @@ public class BCommonDepot<TInternal, TExternal, TCommon>
 
         externalRelation!.EvaluateWrite();
 
-        externalRelation = DatabaseUtilities.SanitizeEntity(Database, externalRelation);
+        externalRelation = DatabaseUtilities.SanitizeEntity(_db, externalRelation);
         externalRelation.Common = entity;
         externalRelation.Timestamp = DateTime.UtcNow;
 
-        await Database.Set<TExternal>().AddAsync(externalRelation);
+        await _db.Set<TExternal>().AddAsync(externalRelation);
 
         entity.External = externalRelation;
         return entity;

@@ -2,12 +2,11 @@ import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart' hide Route;
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
-import 'package:tws_foundation_view/tws_foundation_view.dart' show CategoryLayoutEntry;
 
 ///
-final class CategoryLayout extends PackageLandingEntryB<LandingThemeB> {
+final class CategoryLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
   ///
-  CategoryLayout({
+  CategoryLayoutEntry({
     super.key,
   }) : super(
          name: 'Category Layout',
@@ -27,8 +26,8 @@ final class CategoryLayout extends PackageLandingEntryB<LandingThemeB> {
     final Route entryRoute = Route('landing_page');
 
     return view.CategoryLayout(
-      articles: <view.CategoryLayoutEntryI>[
-        CategoryLayoutEntry(
+      articles: <view.CategoryLayoutPageI>[
+        view.CategoryLayoutPage(
           route: entryRoute,
           title: 'Landing Overview',
           pageBuilder: (BuildContext ctx, RouteData routeData) => _EntryPage(),

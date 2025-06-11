@@ -197,7 +197,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
                   : _cameras.isNotEmpty
                   ? widget.label
                   : 'No hay cámaras disponibles',
-          onTap: _openCameraDialog,
+          onClick: _openCameraDialog,
         ),
         Row(
           spacing: 12,

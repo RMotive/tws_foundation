@@ -160,7 +160,7 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
               onChanged: (String text) => pwdValue = text,
               validator: validateTextInput,
             ),
-            ButtonFlat(width: _maxInputsWidth, onTap: authenticate),
+            ButtonFlat(width: _maxInputsWidth, onClick: authenticate),
           ],
         ),
       ),

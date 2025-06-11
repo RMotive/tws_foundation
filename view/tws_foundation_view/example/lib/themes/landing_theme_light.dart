@@ -9,37 +9,30 @@ final class LandingThemeLight extends PackageLandingThemeLight
 
   ///
   LandingThemeLight();
-  
-  @override
-  StateTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
 
+  @override
+  SimpleTheming get page => _foundation.page;
+  
   @override
   String get businessLogo => _foundation.businessLogo;
 
   @override
-  StateTheming get criticalControlState => _foundation.criticalControlState;
+  SimpleTheming get errorTheming => _foundation.errorTheming;
+
+  @override
+  SimpleTheming get warnTheming => _foundation.warnTheming;
+
+  @override
+  SimpleTheming get succTheming => _foundation.succTheming;
+
+  @override
+  SimpleTheming get primControl => _foundation.primControl;
 
   @override
   SimpleTheming get navigationLayout => _foundation.navigationLayout;
+  @override
+  EntityTableTheming get entityTableTheming => _foundation.entityTableTheming;
 
   @override
-  StateTheming get masterLayoutMenuButtonState =>
-      _foundation.masterLayoutMenuButtonState;
-
-  @override
-  SimpleTheming get page => _foundation.page;
-
-  @override
-  SimpleTheming get primaryControlColor => _foundation.primaryControlColor;
-
-  @override
-  StateTheming get primaryControlState => _foundation.primaryControlState;
-
-  @override
-  SimpleTheming get primaryCriticalControl =>
-      _foundation.primaryCriticalControl;
-
-  @override
-  SimpleTheming get primaryDisabledControl =>
-      _foundation.primaryDisabledControl;
+  StateTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
 }

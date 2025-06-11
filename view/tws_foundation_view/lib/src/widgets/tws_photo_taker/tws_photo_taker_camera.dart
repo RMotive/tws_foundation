@@ -133,7 +133,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                 child: IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: theme.primaryCriticalControl.fore,
+                    color: theme.errorTheming.fore,
                     size: 32,
                   ),
                   onPressed: () {
@@ -156,14 +156,14 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                         children: <Widget>[
                           ButtonFlat(
                             label: 'Guardar',
-                            onTap: () {
+                            onClick: () {
                               widget.onSave(_photo!);
                               Injector.get<Router>().pop();
                             },
                           ),
                           ButtonFlat(
                             label: 'Retomar',
-                            onTap: () {
+                            onClick: () {
                               setState(() {
                                 _photo = null;
                               });
@@ -179,7 +179,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                       child: IconButton(
                         enableFeedback: true,
                         color: theme.page.fore,
-                        disabledColor: theme.primaryDisabledControl.back,
+                        disabledColor: theme.primControl.back,
                         icon: const Icon(Icons.camera, size: 48),
                         onPressed: () {
                           if (_camera != null) {

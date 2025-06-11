@@ -39,7 +39,7 @@ final class _TWSPhotoTakerPhotoPreview extends StatelessWidget {
                     child: ButtonFlat(
                       label: 'Close',
                       width: cts.maxWidth * .1,
-                      onTap: () {
+                      onClick: () {
                         Injector.get<Router>().pop();
                       },
                     ),

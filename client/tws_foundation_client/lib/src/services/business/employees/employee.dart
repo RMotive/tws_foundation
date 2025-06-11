@@ -1,9 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/entities/business/approach.dart';
-import 'package:tws_foundation_client/src/entities/business/identification.dart';
-import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/addresses/address.dart';
 import 'package:tws_foundation_client/src/services/business/employees/employee_dates.dart';
 
@@ -43,21 +39,12 @@ final class Employee extends EntityB<Employee> {
 
   /// 11 lenght Mexican Social Asurance Number (NSS). 
   String? nss;
-  
-  /// [Identification] set navigation.
-  Identification identification = Identification();
-
-  /// [Status] set navigation.
-  Status status = Status();
 
   /// [EmployeeDates]/Contact set navigation.
   EmployeeDates dates = EmployeeDates();
 
   /// [Address] set navigation.
   Address? address;
-
-  /// [Approach]/Contact set navigation.
-  Approach? approach;
 
 
   /// Generates a new [Employee] instance from mandatory values.
@@ -69,13 +56,9 @@ final class Employee extends EntityB<Employee> {
         <String, Object?>{
           kCurp: curp,
           kRfc: rfc,
-          kNss: nss,
-          kIdentification: identification.encode(),
-          EntitiesCommonProperties.kStatus: status.encode(),
-          kAddress: address?.encode(),
-          kApproach: approach?.encode(),
-          kEmployeeDates: dates.encode(),
-          // TODO add drivers model
+        kNss: nss,
+        kAddress: address?.encode(),
+        kEmployeeDates: dates.encode(),
       },
     );
   }
@@ -86,28 +69,11 @@ final class Employee extends EntityB<Employee> {
     curp = encode.get(kCurp, null);
     rfc = encode.get(kRfc, null);
     nss = encode.get(kNss, null);
-    if(encode[EntitiesCommonProperties.kStatus] != null){
-      status = Status();
-      status.decode(
-          encode.get(EntitiesCommonProperties.kStatus, <String, dynamic>{}));
-    }
-
-    if(encode[kIdentification] != null){
-      identification = Identification();
-      identification.decode(
-          encode.get(kIdentification, <String, dynamic>{}));
-    }
 
     if(encode[kAddress] != null){
       address = Address();
       address!.decode(
           encode.get(kAddress, <String, dynamic>{}));
-    }
-
-    if(encode[kApproach] != null){
-      approach = Approach();
-      approach!.decode(
-          encode.get(kApproach, <String, dynamic>{}));
     }
 
     if(encode[kEmployeeDates] != null){
@@ -134,11 +100,8 @@ final class Employee extends EntityB<Employee> {
       if(nss!.length != 11) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kNss, String, nss), "The NSS number must be 11 character length", "structLength(11)"));
     }
     
-    results.validateDependency(this, status);
     results.validateDependency(this, dates);
-    results.validateDependency(this, identification);
-    if(address != null) results.validateDependency(this, address!);
-    if(approach != null) results.validateDependency(this, approach!);
+    if (address != null) results.validateDependency(this, address!);
 
     return results;
   }

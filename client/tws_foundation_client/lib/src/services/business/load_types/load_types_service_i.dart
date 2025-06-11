@@ -1,12 +1,12 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// {interface} for [LoadtypeServiceI].
+/// {interface} for [LoadTypesServiceI].
 ///
-/// Defines base contract for [LoadtypeServiceI] implementations that specifies the methods to have providing [Loadtype] based operations and management.
-abstract interface class LoadtypeServiceI extends FoundationServiceB implements ServiceI {
-  /// Creates a new [LoadtypeServiceI] instance.
-  LoadtypeServiceI(super.host, super.servicePath);
+/// Defines base contract for [LoadTypesServiceI] implementations that specifies the methods to have providing [Loadtype] based operations and management.
+abstract interface class LoadTypesServiceI extends FoundationServiceB implements ServiceI {
+  /// Creates a new [LoadTypesServiceI] instance.
+  LoadTypesServiceI(super.host, super.servicePath);
 
   /// Generates a complex [View] for [Loadtype] set.
   ///
@@ -15,5 +15,4 @@ abstract interface class LoadtypeServiceI extends FoundationServiceB implements 
   ///
   /// [auth] server authorization token.
   FoundationFutureResolver<ViewOutput<Loadtype>> view(ViewInput<Loadtype> input, String auth);
-
 }

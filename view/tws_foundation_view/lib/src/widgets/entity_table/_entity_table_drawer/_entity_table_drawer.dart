@@ -59,13 +59,12 @@ final class _EntityTableDrawerState<TEntity extends EntityB<TEntity>> extends St
   void initState() {
     super.initState();
     composeAdaption();
-
-    errTheming = Theming.get<FoundationThemeB>().primaryCriticalControl;
+    errTheming = Theming.get<FoundationThemeB>().errorTheming;
     Injector.getThemeManager<FoundationThemeB>().addEffect(
       themingRef,
       (FoundationThemeB theme) {
         setState(() {
-          errTheming = theme.primaryCriticalControl;
+          errTheming = theme.errorTheming;
         });
       },
     );
@@ -82,6 +81,7 @@ final class _EntityTableDrawerState<TEntity extends EntityB<TEntity>> extends St
 
   @override
   void dispose() {
+    widget.adapter.dispose();
     Injector.getThemeManager().removeEffect(themingRef);
     super.dispose();
   }
@@ -92,6 +92,8 @@ final class _EntityTableDrawerState<TEntity extends EntityB<TEntity>> extends St
       padding: const EdgeInsets.all(12.0),
       child: AsyncWidget<ViewOutput<TEntity>>(
         future: widget.viewInvokation,
+        errorBuilder: (_, _, _) => _EntityTableError(),
+        loadingBuilder: (_) => _EntityTableLoader(),
         successBuilder: (BuildContext buildContext, ViewOutput<TEntity> data) {
           final TEntity? entityRef = widget.selReference == null ? null : data.entities[widget.selReference as int];
 

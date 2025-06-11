@@ -8,7 +8,7 @@ class _CategoryLayoutRibbonArticleButton extends StatefulWidget {
   final bool isCurrent;
 
   /// Article entry options.
-  final CategoryLayoutEntryI articleEntry;
+  final CategoryLayoutPageI articleEntry;
 
   const _CategoryLayoutRibbonArticleButton({
     required this.isCurrent,
@@ -71,7 +71,7 @@ final class _CategoryLayoutRibbonArticleButtonState extends State<_CategoryLayou
   @override
   Widget build(BuildContext context) {
     final ComplexTheming theming = state.evaluateTheme(stateTheming);
-    final CategoryLayoutEntryI articleEntry = widget.articleEntry;
+    final CategoryLayoutPageI articleEntry = widget.articleEntry;
 
     return PointerArea(
       cursor: !widget.isCurrent ? SystemMouseCursors.click : MouseCursor.defer,
@@ -87,7 +87,11 @@ final class _CategoryLayoutRibbonArticleButtonState extends State<_CategoryLayou
               spacing: 1,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                articleEntry.iconBuilder(theming.foreground),
+                articleEntry.composeIcon(theming.foreground) ??
+                    Icon(
+                      Icons.square_outlined,
+                      color: theming.foreground,
+                    ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 5,

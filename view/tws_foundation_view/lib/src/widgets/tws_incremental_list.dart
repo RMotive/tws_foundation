@@ -71,16 +71,16 @@ class _TWSIncrementalListState<TModel>
 
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      primaryColorTheme = theme.primaryControlColor;
-      criticalColorTheme = theme.primaryCriticalControl;
+      primaryColorTheme = theme.primControl;
+      criticalColorTheme = theme.errorTheming;
     });
   }
 
   @override
   void initState() {
     themeManager.addEffect(ref, themeUpdateListener);
-    primaryColorTheme = themeManager.get().primaryControlColor;
-    criticalColorTheme = themeManager.get().primaryCriticalControl;
+    primaryColorTheme = themeManager.get().primControl;
+    criticalColorTheme = themeManager.get().errorTheming;
     super.initState();
   }
 

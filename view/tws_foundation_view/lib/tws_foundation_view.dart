@@ -12,6 +12,7 @@ export 'src/themes/foundation_theme_dark.dart';
 export 'src/themes/foundation_theme_light.dart';
 
 // [widgets]
+export 'src/widgets/dialog.dart';
 export 'src/widgets/text_input.dart';
 export 'src/widgets/button_flat.dart';
 export 'src/widgets/entity_table/entity_table.dart';
@@ -25,7 +26,7 @@ export 'src/widgets/entity_creation_form/entity_creation_form.dart';
 
 // [layouts.category_layout]
 export 'src/layouts/category_layout/category_layout.dart';
-export 'src/layouts/category_layout/category_layout_entry.dart';
+export 'src/layouts/category_layout/category_layout_page.dart';
 export 'src/layouts/category_layout/_category_layout_ribbon/category_layout_ribbon_controller.dart';
 export 'src/layouts/category_layout/_category_layout_ribbon/category_layout_ribbon_data_transfer_group_controller.dart';
 export 'src/layouts/category_layout/_category_layout_ribbon/category_layout_ribbon_data_management_group_controller.dart';

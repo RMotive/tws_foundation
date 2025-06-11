@@ -7,9 +7,9 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 
 ///
-final class SolutionsEntityTable extends PackageLandingEntryB<LandingThemeB> {
-  /// Creates a new [SolutionsEntityTable] instance.
-  SolutionsEntityTable({
+final class SolutionsEntityTableEntry extends PackageLandingEntryB<LandingThemeB> {
+  /// Creates a new [SolutionsEntityTableEntry] instance.
+  SolutionsEntityTableEntry({
     super.key,
   }) : super(
          name: 'Solutions Entity Table',

@@ -10,36 +10,31 @@ final class LandingThemeDark extends PackageLandingThemeDark
 
   final FoundationThemeDark _foundation = FoundationThemeDark();
 
-  @override
-  StateTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
 
+  @override
+  SimpleTheming get page => _foundation.page;
+  
   @override
   String get businessLogo => _foundation.businessLogo;
 
   @override
-  StateTheming get criticalControlState => _foundation.criticalControlState;
+  SimpleTheming get errorTheming => _foundation.errorTheming;
 
   @override
   SimpleTheming get navigationLayout => _foundation.navigationLayout;
 
   @override
-  StateTheming get masterLayoutMenuButtonState =>
-      _foundation.masterLayoutMenuButtonState;
+  SimpleTheming get warnTheming => _foundation.warnTheming;
 
   @override
-  SimpleTheming get page => _foundation.page;
+  SimpleTheming get succTheming => _foundation.succTheming;
 
   @override
-  SimpleTheming get primaryControlColor => _foundation.primaryControlColor;
+  SimpleTheming get primControl => _foundation.primControl;
 
   @override
-  StateTheming get primaryControlState => _foundation.primaryControlState;
+  EntityTableTheming get entityTableTheming => _foundation.entityTableTheming;
 
   @override
-  SimpleTheming get primaryCriticalControl =>
-      _foundation.primaryCriticalControl;
-
-  @override
-  SimpleTheming get primaryDisabledControl =>
-      _foundation.primaryDisabledControl;
+  StateTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
 }

@@ -1,7 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/entities/business/maintenance.dart';
-import 'package:tws_foundation_client/src/entities/business/sct.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 final class Truck extends EntityB<Truck> {
@@ -33,18 +31,6 @@ final class Truck extends EntityB<Truck> {
 
   /// [VehiculeModel] information.
   VehiculeModel model = VehiculeModel();
-  
-  /// Vehicule [Insurance] information.
-  Insurance? insurance;
-
-  /// Vehicule [Maintenance] information.
-  Maintenance? maintenance;
-
-  /// Vehicule [SCT] information.
-  SCT? sct;
-
-  /// Plates for this truck.
-  List<Plate> plates = <Plate>[];
 
   /// Generates a new [Truck] instance from mandatory values.
   Truck();
@@ -56,9 +42,6 @@ final class Truck extends EntityB<Truck> {
         kVin: vin,
         kMotor: motor,
         kCarrier: carrier.encode(),
-        kInsurance: insurance?.encode(),
-        kMaintenance: maintenance?.encode(),
-        kSct: sct?.encode(),
       },
     );
   }
@@ -69,30 +52,6 @@ final class Truck extends EntityB<Truck> {
     motor = encode.get(kMotor, null);
     carrier.decode(encode.get(kCarrier));
     model.decode(encode.get(kModel));
-
-    List<DataMap> rawPlateArray = encode.getList(kPlates);
-    plates = rawPlateArray.map(
-      (Map<String, Object?> e) {
-        final Plate plate = Plate();
-        plate.decode(e);
-        return plate;
-      },
-    ).toList();
-
-    if (encode[kInsurance] != null) {
-      insurance = Insurance();
-      insurance!.decode(encode.get(kInsurance, <String, dynamic>{}));
-    }
-
-    if (encode[kMaintenance] != null) {
-      maintenance = Maintenance();
-      maintenance!.decode(encode.get(kMaintenance, <String, dynamic>{}));
-    }
-
-    if (encode[kSct] != null) {
-      sct = SCT();
-      sct!.decode(encode.get(kSct, <String, dynamic>{}));
-    }
 
     super.decode(encode);
   }
@@ -108,9 +67,6 @@ final class Truck extends EntityB<Truck> {
     
     results.validateDependency(this, carrier);
     results.validateDependency(this, model);
-    if (insurance != null) results.validateDependency(this, insurance!);
-    if (maintenance != null) results.validateDependency(this, maintenance!);
-    if (sct != null) results.validateDependency(this, sct!);
 
     return results;
   }

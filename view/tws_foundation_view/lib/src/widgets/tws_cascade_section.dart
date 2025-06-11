@@ -74,7 +74,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
 
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      colorStruct = theme.primaryControlColor;
+      colorStruct = theme.primControl;
     });
   }
 
@@ -102,7 +102,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
     waiting = false;
     content = Placeholder();
     state = TWSFStateHolder();
-    colorStruct = themeManager.get().primaryControlColor;
+    colorStruct = themeManager.get().primControl;
     themeManager.addEffect(ref, themeUpdateListener);
   }
 

@@ -11,6 +11,8 @@ import 'package:tws_foundation_view/src/widgets/entity_table/entity_table_adapte
 import 'package:tws_foundation_view/src/widgets/pagination.dart';
 import 'package:tws_foundation_view/src/widgets/tws_display_flat.dart';
 
+part 'entity_table_theming.dart';
+
 part 'entity_table_column_options.dart';
 
 part '_entity_table_content.dart';
@@ -116,8 +118,18 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
       animationBehavior: AnimationBehavior.preserve,
     );
 
+    widget.adapter.listenRefresh(refreshView);
+
     onEntitySelectionChange(0);
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant EntityTable<TEntity, TService> oldWidget) {
+    if (oldWidget.adapter != widget.adapter) {
+      widget.adapter.listenRefresh(refreshView);
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -126,12 +138,19 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
     super.dispose();
   }
 
-  /// {event} triggered when the [EntityTable] pagination options has changed.
-  void onPaginationChange(PaginationOptions newOptions) {
+  ///
+  void refreshView() {
     setState(() {
-      this.paginationOptions = newOptions;
+      selItem = null;
+      drawerAnimationCtrl.reverse();
       asyncInvokation = _viewInvokation();
     });
+  }
+
+  /// {event} triggered when the [EntityTable] pagination options has changed.
+  void onPaginationChange(PaginationOptions newOptions) {
+    this.paginationOptions = newOptions;
+    refreshView();
   }
 
   /// {event} triggered when the item selection has changed.
@@ -231,8 +250,13 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                               ),
                               child: AsyncWidget<ViewOutput<TEntity>>(
                                 future: asyncInvokation,
+                                loadingBuilder:
+                                    (BuildContext ctx) => ConstrainedBox(
+                                      constraints: drawerAnimationConstraint,
+                                      child: _EntityTableLoader(),
+                                    ),
                                 errorBuilder:
-                                    (BuildContext ctx, Object? error, ViewOutput<TEntity>? data) => _EntityTableError(),
+                                    (_, _, _) => _EntityTableError(),
                                 successBuilder: (BuildContext buildContext, ViewOutput<TEntity> data) {
                                   return ConstrainedBox(
                                     constraints: drawerAnimationConstraint,
@@ -273,7 +297,9 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                     width: fullDrawer ? boxSize.width : _kDetailsWidth,
                     height: boxSize.height,
                     child: Padding(
-                      padding: const EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 3,
+                      ),
                       child: _EntityTableDrawer<TEntity>(
                         selReference: selItem,
                         adapter: widget.adapter,

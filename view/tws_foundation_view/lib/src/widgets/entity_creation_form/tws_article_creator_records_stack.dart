@@ -42,7 +42,7 @@ class _RecordsStack<TModel> extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeManagerI<FoundationThemeB> themeManager =
         Injector.getThemeManager<FoundationThemeB>();
-    SimpleTheming dangerTheme = themeManager.get().primaryCriticalControl;
+    SimpleTheming dangerTheme = themeManager.get().errorTheming;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),

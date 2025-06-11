@@ -1,7 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/trailer_classes/trailer_class.dart';
 
 final class TrailerType extends EntityB<TrailerType> {
@@ -14,33 +12,27 @@ final class TrailerType extends EntityB<TrailerType> {
   /// Trailer dimensions.
   String size = "";
 
-  /// Foregin relation [Status] object.
-  Status status = Status();
-
   /// Foregin relation [TrailerClass] object.
   TrailerClass trailerClass = TrailerClass();
 
   /// Generates a new [TrailerType] instance from mandatory values.
   TrailerType();
-  
+
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
-        <String, Object?>{
-          kSize: size,
-          EntitiesCommonProperties.kStatus: status.encode(),
-          ktrailerClass: trailerClass.encode(),
+      <String, Object?>{
+        kSize: size,
+        ktrailerClass: trailerClass.encode(),
       },
     );
   }
-  
+
   @override
   void decode(DataMap encode) {
     super.decode(encode);
     trailerClass = TrailerClass();
-    status = Status();
     size = encode.get(kSize);
-    status.decode(encode.get(EntitiesCommonProperties.kStatus));
     trailerClass.decode(encode.get(ktrailerClass, DataMap()));
   }
 
@@ -51,11 +43,9 @@ final class TrailerType extends EntityB<TrailerType> {
 
     if (size.trim().isEmpty) results.add(EntityInvalidation<TrailerType>(this, PropertyInfo(kSize, String, size), 'Size can\'t be empty', 'notEmpty'));
     if (size.length > 16) results.add(EntityInvalidation<TrailerType>(this, PropertyInfo(kSize, String, size), 'Size must be 16 max length', 'StrictLength(16)'));
-    
-    results.validateDependency(this, status);
+
     results.validateDependency(this, trailerClass);
 
     return results;
   }
-
 }

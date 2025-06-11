@@ -4,12 +4,12 @@ import 'package:flutter/material.dart' hide Route;
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 
 ///
-final class NavigationLayout extends PackageLandingEntryB<LandingThemeB> {
+final class NavigationLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
   ///
   final List<ThemeI> appThemes;
 
-  /// Creates a new [NavigationLayout] instance.
-  NavigationLayout({
+  /// Creates a new [NavigationLayoutEntry] instance.
+  NavigationLayoutEntry({
     super.key,
     required this.appThemes,
   }) : super(
