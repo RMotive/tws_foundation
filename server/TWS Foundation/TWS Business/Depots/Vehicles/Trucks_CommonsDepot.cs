@@ -23,7 +23,7 @@ public interface ITrucksCommonsDepot
 ///     representing a depot to handle <see cref="Truck"/> dataDatabases entity mirror.
 /// </summary>
 public class Trucks_CommonsDepot 
-    : BCommonDepot<Truck, TruckExternal, Truck_Common>, ITrucksCommonsDepot {
+    : BCommonDepot<Database, Truck, TruckExternal, Truck_Common>, ITrucksCommonsDepot {
     /// <summary>
     ///     Creates a new <see cref="Trucks_CommonsDepot"/> instance with custom handlers.
     /// </summary>

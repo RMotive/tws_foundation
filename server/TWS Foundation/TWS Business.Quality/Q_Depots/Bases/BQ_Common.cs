@@ -19,7 +19,7 @@ public abstract class BQ_Common<TCommon,TInternalEdge, TExternalEdge, TDepot>
     where TCommon : CommonEntity<TInternalEdge, TExternalEdge>, new()
     where TInternalEdge : CommonEntityEdge<TCommon>
     where TExternalEdge : CommonEntityEdge<TCommon>
-    where TDepot : BCommonDepot<TInternalEdge, TExternalEdge, TCommon> {
+    where TDepot : BCommonDepot<Database, TInternalEdge, TExternalEdge, TCommon> {
 
     /// <summary>
     ///     Creates a new <see cref="BQ_Business{TEntity, TDepot}"/> instance.

@@ -4,11 +4,13 @@ using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trucks;
 using TWS_Business.Quality.Q_Depots.Bases;
 
+using static Azure.Core.HttpHeader;
+
 namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Trucks_Commons : BQ_Common<Truck_Common, Truck, TruckExternal, Trucks_CommonsDepot> {
 
-    protected override Truck_Common EntityFactory(string Entropy, bool internalEdge) {
+    protected override Truck_Common EntityFactory(string Entropy) {
 
         Situation situation = Store(
                 new Situation {
@@ -26,6 +28,24 @@ public class Q_Trucks_Commons : BQ_Common<Truck_Common, Truck, TruckExternal, Tr
                 }
             );
 
+        
+        Truck_Common common = new() {
+            Economic = Entropy,
+            Status = status,
+            Situation = situation,
+        };
+
+        return common;
+    }
+
+    protected override TruckExternal ExternalEdgeFactory(string Entropy) {
+        return new TruckExternal() {
+            Carrier = Entropy,
+        };
+    }
+
+    protected override Truck InternalEdgeFactory(string Entropy) {
+
         Status statusI = Store(
                 new Status {
                     Name = 'I' + Entropy,
@@ -34,56 +54,48 @@ public class Q_Trucks_Commons : BQ_Common<Truck_Common, Truck, TruckExternal, Tr
                 }
             );
 
-        Truck_Common common = new() {
-            Economic = Entropy,
-            Status = status,
-            Situation = situation,
-        };
-
-
-        if (internalEdge) {
-            common.Internal = new() {
-                VIN = Entropy,
-                Carrier = Store(
-                       new Carrier() {
+        return new Truck() {
+            VIN = Entropy,
+            Carrier = Store(
+                      new Carrier() {
+                          Name = Entropy,
+                          Status = statusI,
+                          Approach = Store(
+                                  new Approach() {
+                                      EMail = Entropy,
+                                      Status = Store(
+                                              new Status() {
+                                                  Reference = "A" + Entropy[..7],
+                                                  Name = "A" + Entropy,
+                                              }
+                                          ),
+                                  }
+                              ),
+                          Address = Store(
+                                   new Address() {
+                                       Country = Entropy[..3],
+                                   }
+                              ),
+                      }
+                   ),
+            Model = Store(
+                       new VehiculeModel() {
                            Name = Entropy,
-                           Status = statusI,
-                           Approach = Store(
-                                   new Approach() {
-                                       EMail = Entropy,
-                                       Status = Store(
-                                               new Status() {
-                                                   Reference = "A" + Entropy[..7],
-                                                   Name = "A" + Entropy,
-                                               }
-                                           ),
+                           Status = Store(
+                                   new Status() {
+                                       Reference = "VM" + Entropy[..6],
+                                       Name = "VM" + Entropy,
                                    }
                                ),
-                           Address = Store(
-                                    new Address() {
-                                        Country = Entropy[..3],
-                                    }
+                           Manufacturer = Store(
+                                   new Manufacturer() {
+                                       Name = Entropy,
+                                   }
                                ),
                        }
-                    ),
-                Model = Store(
-                        new VehiculeModel() {
-                            Name = Entropy,
-                            Status = Store(
-                                    new Status() {
-                                        Reference = "VM" + Entropy[..6],
-                                        Name = "VM" + Entropy,
-                                    }
-                                ),
-                            Manufacturer = Store(
-                                    new Manufacturer() {
-                                        Name = Entropy,
-                                    }
-                                ),
-                        }
-                    ),
-                Plates = [
-                    Store(
+                   ),
+            Plates = [
+                   Store(
                             new Plate() {
                                 Identifier = Entropy[..12],
                                 Country = Entropy[..3],
@@ -96,13 +108,6 @@ public class Q_Trucks_Commons : BQ_Common<Truck_Common, Truck, TruckExternal, Tr
                             }
                         ),
                 ],
-            };
-
-        } else {
-            common.External = new() {
-                Carrier = Entropy,
-            };
-        }
-        return common;
+        };
     }
 }

@@ -9,7 +9,7 @@ namespace TWS_Business.Depots;
 ///     [Depot] handler for <see cref="Driver_Common"/>
 /// </summary>
 public class Drivers_CommonsDepot
-    : BCommonDepot<Driver, DriverExternal, Driver_Common> {
+    : BCommonDepot<Database, Driver, DriverExternal, Driver_Common> {
 
     /// <summary>
     ///     Creates a new <see cref="Drivers_CommonsDepot"/> instance with custom handlers.

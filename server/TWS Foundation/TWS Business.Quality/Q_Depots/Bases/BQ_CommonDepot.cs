@@ -24,7 +24,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     where TCommon : CommonEntity<TInternalEdge, TExternalEdge>, new()
     where TInternalEdge : CommonEntityEdge<TCommon>
     where TExternalEdge : CommonEntityEdge<TCommon>
-    where TDepot : BCommonDepot<TInternalEdge, TExternalEdge, TCommon>
+    where TDepot : BCommonDepot<TDatabase, TInternalEdge, TExternalEdge, TCommon>
     where TDatabase : BDatabase_SQLServer<TDatabase> {
 
     /// <summary>
@@ -94,13 +94,27 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     /// <returns>
     ///     A correctly built <see cref="TCommon"/>.
     /// </returns>
-    protected abstract TCommon EntityFactory(string Entropy, bool internalEdge);
+    protected abstract TCommon EntityFactory(string Entropy);
+
 
     /// <summary>
-    /// Set the internalEdge value in EntityFactory to incluide an external or internal property.
+    ///     Creates a context [CommonEntityEdge] for testing data creation and assertion.
+    /// </summary>
+    /// <param name="Entropy">
+    ///     Random 16 length value for unique properties.
+    /// </param>
+    /// <returns>
+    ///     A correctly built <see cref="TCommon"/>.
+    /// </returns>
+    protected abstract TInternalEdge InternalEdgeFactory(string Entropy);
+
+    protected abstract TExternalEdge ExternalEdgeFactory(string Entropy);
+
+    /// <summary>
+    /// Set the DefaultEdge value in EntityFactory to incluide an external or internal property.
     /// </summary>
     /// <returns>
-    ///     A boolean flag to set the InternalEdge property configuration.
+    ///     A boolean flag to set the DefaultEdge property configuration.
     /// </returns>
     public static TheoryData<bool> GetEdgeConfiguration() {
         return [true, false]; 
@@ -111,6 +125,20 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     #endregion
 
     #region Private / Protected Functions
+
+
+
+    protected TCommon WrappedFactory(string Entropy, bool DefaultEdge) {
+        TCommon common = EntityFactory(Entropy);
+        if(DefaultEdge) {
+            common.Internal = InternalEdgeFactory(Entropy);
+        } else {
+            common.External = ExternalEdgeFactory(Entropy);
+        }
+
+         return common;
+    }
+
 
     /// <summary>
     ///     
@@ -136,8 +164,6 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
            
         }
     }
-
-
 
     /// <summary>
     /// 
@@ -193,8 +219,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     /// <remarks>
     ///     This <see cref="IEntity"/> instance is created but not stored in the database.
     /// </remarks>
-    protected TCommon Sampling(bool internalEdge) {
-        return RunEntityFactory((entropy) => EntityFactory(entropy, internalEdge));
+    protected TCommon Sampling(bool DefaultEdge) {
+        return RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
     }
 
     /// <summary>
@@ -209,8 +235,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     /// <remarks>
     ///     This <see cref="IEntity"/> instance collection is created but not stored in the database.
     /// </remarks>
-    protected TCommon[] Sampling(int Count, bool internalEdge) {
-        return [.. Enumerable.Range(0, Count).Select(_ => RunEntityFactory((entropy) => EntityFactory(entropy, internalEdge)))];
+    protected TCommon[] Sampling(int Count, bool DefaultEdge) {
+        return [.. Enumerable.Range(0, Count).Select(_ => RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge)))];
     }
 
     #endregion
@@ -220,9 +246,9 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[View]: Simple view calculation")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public async Task ViewA(bool internalEdge) {
+    public async Task ViewA(bool DefaultEdge) {
         const int viewPage = 1;
-        await Store<TCommon, TInternalEdge, TExternalEdge>(30, (entropy) => EntityFactory(entropy, internalEdge));
+        await Store<TCommon, TInternalEdge, TExternalEdge>(30, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
         ViewOutput<TCommon> viewOutput = await Depot.View(
                 new QueryInput<TCommon, ViewInput<TCommon>> {
@@ -244,9 +270,9 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[View]: Specific page selected")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public async Task ViewB(bool internalEdge) {
+    public async Task ViewB(bool DefaultEdge) {
         const int viewPage = 2;
-        await Store<TCommon, TInternalEdge, TExternalEdge>(30, (entropy) => EntityFactory(entropy, internalEdge));
+        await Store<TCommon, TInternalEdge, TExternalEdge>(30, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
         ViewOutput<TCommon> viewOutput = await Depot.View(
                 new QueryInput<TCommon, ViewInput<TCommon>> {
@@ -337,10 +363,10 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[View]: Using Property filter (Contains)")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public async Task ViewE(bool internalEdge) {
+    public async Task ViewE(bool DefaultEdge) {
         Skip.If(Evaluable.PropertyType != typeof(string), "This assertion is only available for entities that have an evaluable string property since CONTAINS method is currently only supported to filter string type properties.");
 
-        TCommon sampleEntity = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => EntityFactory(entropy, internalEdge));
+        TCommon sampleEntity = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => WrappedFactory(entropy, DefaultEdge));
         object? sampleValue = Evaluable.GetValue(sampleEntity);
         ViewOutput<TCommon> qOut = await Depot.View(
                 new QueryInput<TCommon, ViewInput<TCommon>> {
@@ -370,9 +396,9 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[View]: Using filter Linear Evaluation (OR)")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public async Task ViewF(bool internalEdge) {
+    public async Task ViewF(bool DefaultEdge) {
         Skip.If(Evaluable.PropertyType != typeof(string), "This assertion is only available for entities that have an evaluable string property since CONTAINS method is currently only supported to filter string type properties.");
-        TCommon[] entities = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => EntityFactory(entropy, internalEdge));
+        TCommon[] entities = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
         List<object?> possibleValues = [];
         List<IViewFilter<TCommon>> filters = [];
@@ -418,8 +444,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[Read]: Reads an Entity by {Id}.")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task ReadA(bool internalEdge) {
-        TCommon sample = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task ReadA(bool DefaultEdge) {
+        TCommon sample = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => WrappedFactory(entropy, DefaultEdge));
 
         TCommon readEntity = await Depot.Read(sample.Id);
         Assert.Multiple(
@@ -437,8 +463,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[Read]: Reads a collection of entities by a collection of {Id}")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task ReadB(bool internalEdge) {
-        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(20, (entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task ReadB(bool DefaultEdge) {
+        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(20, (entropy) => WrappedFactory(entropy, DefaultEdge));
         long[] sampleIds = [.. samples.Select(i => i.Id)];
 
         BatchOperationOutput<TCommon> readEntities = await Depot.Read(sampleIds);
@@ -465,8 +491,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[Read]: Reads for the first entity matching the filter")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task ReadC(bool internalEdge) {
-        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task ReadC(bool DefaultEdge) {
+        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
         TCommon samplePivot = samples[0];
 
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
@@ -498,8 +524,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[Read]: Reads for the last entity matching the filter")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task ReadD(bool internalEdge) {
-        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task ReadD(bool DefaultEdge) {
+        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
         TCommon samplePivot = samples[1];
 
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
@@ -531,8 +557,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[Read]: Reads for all entities matching the filter")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task ReadE(bool internalEdge) {
-        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task ReadE(bool DefaultEdge) {
+        TCommon[] samples = await Store<TCommon, TInternalEdge, TExternalEdge>(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
                 new QueryInput<TCommon, FilterQueryInput<TCommon>>() {
@@ -570,8 +596,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[Create]: Record created and unique store check")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public async Task CreateA(bool internalEdge) {
-        TCommon sample = Sampling(internalEdge);
+    public async Task CreateA(bool DefaultEdge) {
+        TCommon sample = Sampling(DefaultEdge);
 
         TCommon storedEntity = await Depot.Create(sample);
         await CommitSampleEntities([storedEntity]);
@@ -593,8 +619,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = "[Create]: Multiple records created")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public async Task CreateB(bool internalEdge) {
-        TCommon[] samples = Sampling(3, internalEdge);        
+    public async Task CreateB(bool DefaultEdge) {
+        TCommon[] samples = Sampling(3, DefaultEdge);        
 
         BatchOperationOutput<TCommon> qOut = await Depot.Create(samples);
         await CommitSampleEntities(samples);
@@ -615,8 +641,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = $"[Update Entity]: Created when Create parameter enabled")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task UpdateA(bool internalEdge) {
-        TCommon sample = RunEntityFactory((entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task UpdateA(bool DefaultEdge) {
+        TCommon sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
         UpdateOutput<TCommon> updateOutput = await Depot.Update(
                 new QueryInput<TCommon, UpdateInput<TCommon>> {
@@ -643,8 +669,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = $"[Update Entity]: Throws CreateDisabled exception situation.")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task UpdateB(bool internalEdge) {
-        TCommon sample = RunEntityFactory((entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task UpdateB(bool DefaultEdge) {
+        TCommon sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
         XDepot<TCommon> depotException = await Assert.ThrowsAsync<XDepot<TCommon>>(
                 async () => {
@@ -663,8 +689,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = $"[Update Entity]: Throws Unfound exception situation")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task UpdateC(bool internalEdge) {
-        TCommon sample = RunEntityFactory((entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task UpdateC(bool DefaultEdge) {
+        TCommon sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
         sample.Id = await GeneratePointer();
 
         XDepot<TCommon> depotException = await Assert.ThrowsAsync<XDepot<TCommon>>(
@@ -683,9 +709,9 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task UpdateD(bool internalEdge) {
-        TCommon sample = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => EntityFactory(entropy, internalEdge));
-        TCommon valueReference = RunEntityFactory((entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task UpdateD(bool DefaultEdge) {
+        TCommon sample = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TCommon valueReference = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
         object? sampleOriginalValue = Evaluable.GetValue(sample);
 
@@ -735,10 +761,10 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     [Theory(DisplayName = $"[Delete Entity]: Deletes correctly an Entity with a given Common Entity")]
     [MemberData(nameof(GetEdgeConfiguration))]
-    public virtual async Task DeleteB(bool internalEdge) {
-        TCommon entity = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => EntityFactory(entropy, internalEdge));
+    public virtual async Task DeleteB(bool DefaultEdge) {
+        TCommon entity = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        await Depot.DeleteCommon(entity);
+        await Depot.Delete(entity);
         await CommitSampleEntities([]);
 
         TCommon? searchedEntity = Database.Set<TCommon>().Find(entity.Id);
