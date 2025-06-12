@@ -70,7 +70,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "2d04751afc31e20501a6da971f0e5028569cf13d"
+      resolved-ref: "302d5d938f5bbacaf5df1426ea6df79f69f66c33"
       url: "https://github.com/RMotive/csm_client"
     source: git
     version: "8.0.2"
@@ -404,7 +404,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "development#widget_package"
-      resolved-ref: "14c491a29424508709ff27b65e4a1288bc103dab"
+      resolved-ref: "450efdaf0608353dccb8a248d2c4be60844fa6d9"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

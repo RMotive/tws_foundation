@@ -9,7 +9,7 @@ using TWS_Business.Entities.Vehicules.Trucks;
 namespace TWS_Business.Entities.Maintenances;
 
 /// <summary>
-///     [Entity] that stores information abour maintenance scheduling for maintenable assets (<see cref="Truck"/> / <see cref="Trailer"/>)
+///     [Entity] that stores information about maintenance scheduling for maintenable assets (<see cref="Truck"/> / <see cref="Trailer"/>)
 /// </summary>
 public class Maintenance
     : BEntity, IHistorical<Maintenance_History> {

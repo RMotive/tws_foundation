@@ -25,9 +25,12 @@ public class Truck_Common
     #region Relations
 
     /// <summary>
-    ///     <see cref="Entities.Location"/> information.
+    ///     <see cref="Entities.Status"/> information.
     /// </summary>
-    public Location? Location { get; set; }
+    /// <remarks>
+    ///     Auto included relation.
+    /// </remarks>
+    public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
@@ -35,12 +38,9 @@ public class Truck_Common
     public Situation? Situation { get; set; }
 
     /// <summary>
-    ///     <see cref="Entities.Status"/> information.
+    ///     <see cref="Entities.Location"/> information.
     /// </summary>
-    /// <remarks>
-    ///     Auto included relation.
-    /// </remarks>
-    public Status Status { get; set; } = default!;
+    public Location? Location { get; set; }
 
     /// <summary>
     ///     <see cref="Truck"/> information.
@@ -51,10 +51,6 @@ public class Truck_Common
     ///     <see cref="TruckExternal"/> information.
     /// </summary>
     public TruckExternal? External { get; set; }
-
-    #endregion
-
-    #region Dependants 
 
     #endregion
 

@@ -27,16 +27,16 @@ public class Driver_Common
     #region Relations
 
     /// <summary>
-    ///     <see cref="Entities.Situation"/> information.
-    /// </summary>
-    [Relation]
-    public Situation Situation { get; set; } = default!;
-
-    /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
     [Relation]
     public Status Status { get; set; } = default!;
+
+    /// <summary>
+    ///     <see cref="Entities.Situation"/> information.
+    /// </summary>
+    [Relation]
+    public Situation Situation { get; set; } = default!;
 
     #endregion
 

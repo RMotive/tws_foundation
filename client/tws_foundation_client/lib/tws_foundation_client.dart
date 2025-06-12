@@ -65,8 +65,34 @@ export 'src/services/models/view_filters/view_filter_date.dart';
 export 'src/services/models/view_filters/view_filter_logical.dart';
 export 'src/services/models/view_filters/view_filter_property.dart';
 
+
+//! --> Business services
+
 // --> Exporting [src.services.business.load_types]
 export 'src/services/business/load_types/load_type.dart';
+
+// --> Exporting [src.services.business.statuses]
+export 'src/services/business/statuses/status.dart';
+
+// --> Exporting [src.services.business.situations]
+export 'src/services/business/situations/situation.dart';
+
+// --> Exporting [src.services.business.sct]
+export 'src/services/business/scts/sct.dart';
+
+// --> Exporting [src.services.business.maintenance]
+export 'src/services/business/maintenances/maintenance.dart';
+
+// --> Exporting [src.services.business.plates]
+export 'src/services/business/plates/plate.dart';
+
+// --> Exporting [src.services.business.trailers]
+export 'src/services/business/trailers/trailer.dart';
+export 'src/services/business/trailers/trailer_common.dart';
+export 'src/services/business/trailers/trailer_external.dart';
+
+//! <-- Business services
+
 
 // --> Exporting [src.services.security.security]
 export 'src/services/security/security/security_service_i.dart';

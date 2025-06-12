@@ -38,7 +38,7 @@ final class FoundationServer extends ServerB {
   /// [Employee] Entity service.
   late final EmployeesServiceI employeesService;
 
-  /// [Loadtype] Entity service.
+  /// [LoadType] Entity service.
   late final LoadTypesServiceI loadtypeService;
 
   /// [Location] Entity service.

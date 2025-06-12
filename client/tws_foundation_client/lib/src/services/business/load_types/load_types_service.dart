@@ -13,9 +13,9 @@ final class LoadTypesService extends LoadTypesServiceB {
         );
 
   @override
-  FoundationFutureResolver<ViewOutput<Loadtype>> view(ViewInput<Loadtype> input, String authToken) async {
-    return FoundationResponseResolver<ViewOutput<Loadtype>>(
-      await postSecure<ViewInput<Loadtype>>(
+  FoundationFutureResolver<ViewOutput<LoadType>> view(ViewInput<LoadType> input, String authToken) async {
+    return FoundationResponseResolver<ViewOutput<LoadType>>(
+      await postSecure<ViewInput<LoadType>>(
         'view',
         input,
         authToken: authToken,
