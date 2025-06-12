@@ -38,13 +38,13 @@ public class Q_Trucks_Commons : BQ_Common<Truck_Common, Truck, TruckExternal, Tr
         return common;
     }
 
-    protected override TruckExternal ExternalEdgeFactory(string Entropy) {
+    protected override TruckExternal ExternalFactory(string Entropy) {
         return new TruckExternal() {
             Carrier = Entropy,
         };
     }
 
-    protected override Truck InternalEdgeFactory(string Entropy) {
+    protected override Truck InternalFactory(string Entropy) {
 
         Status statusI = Store(
                 new Status {

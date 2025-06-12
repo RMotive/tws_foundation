@@ -4,8 +4,6 @@ using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Quality.Q_Depots.Bases;
 
-using static Azure.Core.HttpHeader;
-
 namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal, Drivers_CommonsDepot> {
@@ -36,11 +34,11 @@ public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal
             Status = status,
         };
 
-       
+
         return common;
     }
 
-    protected override DriverExternal ExternalEdgeFactory(string Entropy) {
+    protected override DriverExternal ExternalFactory(string Entropy) {
 
         Status statusI = Store(
                 new Status {
@@ -63,7 +61,7 @@ public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal
         };
     }
 
-    protected override Driver InternalEdgeFactory(string Entropy) {
+    protected override Driver InternalFactory(string Entropy) {
 
         Status statusI = Store(
                 new Status {
@@ -91,6 +89,7 @@ public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal
                }
 
            );
+
         Employee employee = Store(
                 new Employee {
                     Identification = identification,
@@ -99,6 +98,7 @@ public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal
 
                 }
             );
+
         return new Driver {
             Employee = employee,
         };

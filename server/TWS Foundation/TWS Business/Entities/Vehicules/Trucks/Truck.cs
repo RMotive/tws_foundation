@@ -73,6 +73,7 @@ public class Truck
     /// <summary>
     ///     <see cref="Plate"/>s referencing this <see cref="Truck"/>.
     /// </summary>
+    [Relation]
     public ICollection<Plate> Plates { get; set; } = [];
 
     #endregion

@@ -50,7 +50,11 @@
     12. Changed [TWSScopeEntity] -> [CommonEntity] for main common entity.
     13. Changed [TWSScopeEntity] -> [CommonEntityEdge] for dependent entities (Internal - External).
     14. Added Theory depot tests for [InternalEdge] and [ExternalEdge] properties in [CommonEntity].
-    
+    15. [BQ_Disposer] now is able to remove ICollection properties from entities.
+    16. Custom [BCommonDepot] for the correct DB handling of [CommonEntity]. 
+    17. Custom [BQ_CommonDepot] for [CommonEntity] Depots testing.
+    18. Custom [BQ_CommonDataHandler] for [CommonEntity] Data handling in tests.
+    19. Added [BQ_CommonAtribbute] for [Theory] tests from [BQ_CommoDepot].
 
 - Fixes:
 
@@ -59,6 +63,7 @@
     3. Fixed [BDepot] [Create] not saving method for created records.
     4. Fixed [BDepot] [Update] not saving changes for new records.
     5. Fixed [BDepot] [Delete] not saving changes for deleted records.
+
 
 - Dependencies:
 

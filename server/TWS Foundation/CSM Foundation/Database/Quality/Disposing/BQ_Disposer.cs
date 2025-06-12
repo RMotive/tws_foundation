@@ -82,6 +82,24 @@ public abstract class BQ_Disposer
                     continue;
                 }
 
+                // Delete ICollection Entities before deleting the main entity.
+                foreach (var property in committedEntity.GetType().GetProperties()) {
+                    if (typeof(IEnumerable<IEntity>).IsAssignableFrom(property.PropertyType)) {
+                        var collection = property.GetValue(committedEntity) as IEnumerable<IEntity>;
+                        if (collection != null) {
+                            foreach (var item in collection) {
+                                EntityEntry subEntry = database.Entry(item);
+                                if (subEntry.GetDatabaseValues() is null) {
+                                    continue;
+                                }
+
+                                subEntry.State = EntityState.Deleted;
+                            }
+                        }
+                    }
+                }
+
+
                 entry.DetectChanges();
                 entry.State = EntityState.Deleted;
                 database.SaveChanges();
