@@ -5,17 +5,9 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [YardlogsServiceI].
 ///
 /// Defines base contract for [YardlogsServiceI] implementations that specifies the methods to have providing [YardLog] based operations and management.
-abstract interface class YardlogsServiceI extends FoundationServiceB implements ServiceI {
+abstract interface class YardlogsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<YardLog> {
   /// Creates a new [YardlogsServiceI] instance.
   YardlogsServiceI(super.host, super.servicePath);
-
-  /// Generates a complex [View] for [YardLog] set.
-  ///
-  ///
-  /// [options] how the method will build the [View] result, are instructions for the paging, ordering, etc.
-  ///
-  /// [auth] server authorization token.
-  FoundationFutureResolver<ViewOutput<YardLog>> view(ViewInput<YardLog> input, String auth);
 
   /// Creates a [YardLog] collection.
   ///

@@ -12,7 +12,6 @@ import 'package:tws_foundation_client/src/services/business/situations/situatuti
 import 'package:tws_foundation_client/src/services/business/trailer_classes/trailer_classes_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/trailer_types/trailer_types_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/vehicule_models/vehicule_models_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/yardlogs/yardlogs_service_i.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';

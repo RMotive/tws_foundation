@@ -6,11 +6,11 @@ abstract interface class ViewServiceI<TEntity extends EntityI<TEntity>> {
   /// Creates a new [ViewServiceI] instance.
   const ViewServiceI();
 
-  /// Generates a complex {View} for [Solution] set.
+  /// Generates a {view} complex object from [TEntity] entity.
   ///
   ///
   /// [options] how the method will build the {View} result, are instructions for the paging, ordering, etc.
   ///
   /// [auth] server authorization token.
-  FoundationFutureResolver<ViewOutput<TEntity>> view(ViewInput<Solution> input, String auth);
+  FoundationFutureResolver<ViewOutput<TEntity>> view(ViewInput<TEntity> input, String auth);
 }

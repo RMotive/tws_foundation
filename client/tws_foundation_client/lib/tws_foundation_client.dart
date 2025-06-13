@@ -42,8 +42,6 @@ export 'src/services/business/trucks/truck_external.dart';
 export 'src/services/business/trucks/truck_service.dart';
 export 'src/services/business/vehicule_models/vehicule_model.dart';
 export 'src/services/business/vehicule_models/vehicule_model_service.dart';
-export 'src/services/business/yardlogs/yard_log.dart';
-export 'src/services/business/yardlogs/yard_logs_service.dart';
 
 // --> Exporting [src.services]
 export 'src/services/view_service_i.dart';
@@ -90,6 +88,11 @@ export 'src/services/business/plates/plate.dart';
 export 'src/services/business/trailers/trailer.dart';
 export 'src/services/business/trailers/trailer_common.dart';
 export 'src/services/business/trailers/trailer_external.dart';
+
+// --> Exporing [src.services.business.yardlogs]
+export 'src/services/business/yardlogs/yard_log.dart';
+export 'src/services/business/yardlogs/yard_logs_service.dart';
+export 'src/services/business/yardlogs/yardlogs_service_i.dart';
 
 //! <-- Business services
 

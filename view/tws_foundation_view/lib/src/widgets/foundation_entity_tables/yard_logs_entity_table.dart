@@ -39,7 +39,7 @@ final class YardLogsEntityTableAdapter extends EntityTableAdapterB<YardLog> {
             /// --> Load Type property view.
             PropertyViewer(
               label: 'Load Type',
-              value: entity.loadType?.name,
+              value: entity.loadType.name,
             ),
 
             PropertyViewer(
@@ -49,156 +49,6 @@ final class YardLogsEntityTableAdapter extends EntityTableAdapterB<YardLog> {
           ],
         ),
       ),
-    );
-  }
-
-  @override
-  EntityTableAdapterEditor<Solution>? composeEditor() {
-    return EntityTableAdapterEditor<Solution>(
-      onUpdate: (BuildContext buildContext, Solution entity) {
-        final Router router = Injector.get();
-
-        showDialog(
-          context: buildContext,
-          useRootNavigator: true,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return Dialog(
-              acceptLabel: 'Update',
-              title: 'Confirm Solution Update',
-              content: Text.rich(
-                TextSpan(
-                  text: 'Are you sure you want to update solution ',
-                  children: <InlineSpan>[
-                    TextSpan(
-                      text: '(${entity.sign}):',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '\n',
-                    ),
-                    const TextSpan(
-                      text: '\n\u2022 Description:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    WidgetSpan(
-                      baseline: TextBaseline.alphabetic,
-                      alignment: PlaceholderAlignment.bottom,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Text('\n${entity.description}'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onAccept: () async {
-                SolutionsServiceI solutionsService = Injector.get();
-
-                String authToken = await authBuilder();
-
-                FoundationResponseResolver<UpdateOutput<Solution>> resResolver = await solutionsService.update(
-                  UpdateInput<Solution>(entity),
-                  authToken,
-                );
-
-                String? errMessage;
-                resResolver.resolve(
-                  objectBuilder:
-                      () => UpdateOutput<Solution>(
-                        () => Solution(),
-                      ),
-                  onSuccess: (SuccessFrame<UpdateOutput<Solution>> success) {
-                    refresh();
-                  },
-                  onFailure: (FailureFrame failure, int status) {
-                    errMessage = failure.content.advise;
-                  },
-                  onException: (TracedException exception) {
-                    errMessage = FoundationMessages.unknownServerException;
-                  },
-                  onConnectionFailure: () {
-                    errMessage = FoundationMessages.connectionError;
-                  },
-                  onFinally: () {
-                    router.pop();
-                    if (errMessage == null) return;
-
-                    showDialog(
-                      context: buildContext,
-                      useRootNavigator: true,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          showCancelButton: false,
-                          title: 'Error Updating Solution',
-                          content: Text(
-                            errMessage as String,
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          theming: Theming.get<FoundationThemeB>().errorTheming,
-                          onAccept: () {
-                            router.pop();
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
-      formBuilder: (BuildContext buildContext, Solution entity) {
-        return Column(
-          spacing: 18,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            /// --> Sign Property Input
-            TextInput(
-              label: 'Sign',
-              isEnabled: false,
-              maxLength: 5,
-              controller: TextEditingController(
-                text: entity.sign,
-              ),
-            ),
-
-            /// --> Name Property Input
-            TextInput(
-              label: 'Name',
-              isEnabled: false,
-              controller: TextEditingController(
-                text: entity.name,
-              ),
-            ),
-
-            /// --> Description Property Input
-            TextInput(
-              label: 'Description',
-              controller: TextEditingController(
-                text: entity.description,
-              ),
-              onChanged: (String newDescription) => entity.description = newDescription,
-            ),
-
-            /// --> Timestamp Property Input
-            PropertyViewer(
-              label: 'Timestamp',
-              value: entity.timestamp.fullDateString,
-            ),
-          ],
-        );
-      },
     );
   }
 }
@@ -218,7 +68,7 @@ final class YardLogsEntityTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Solution, SolutionsServiceI>(
+    return EntityTable<YardLog, YardLogsServiceI>(
       adapter: adapter,
       entityFactory: () => Solution(),
       authGenerator: () async {
