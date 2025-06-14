@@ -43,6 +43,42 @@ final class TrailerCommon extends EntityB<TrailerCommon> {
 
   //! <-- Relations
 
+  //! --> Getters
+
+  /// Gets the display value for the current {trailer} plates.
+  ///
+  /// Format: {USA Plate} / {MX Plate}
+  String? get plates {
+    if (internal == null && external == null) return null;
+
+    if (internal != null) {
+      List<Plate> plates = internal?.plates as List<Plate>;
+
+      Plate? usPlate;
+      Plate? mxPlate;
+
+      for (Plate plate in plates) {
+        if (plate.country == "MEX" && mxPlate == null) {
+          mxPlate = plate;
+        }
+
+        if (plate.country == "USA" && usPlate == null) {
+          usPlate = plate;
+        }
+
+        if (usPlate != null && mxPlate != null) {
+          break;
+        }
+      }
+
+      return '${usPlate?.identifier ?? '---'} ${mxPlate?.identifier ?? '---'}';
+    }
+
+    return '${external?.usaPlate ?? '---'} / ${external?.mxPlate ?? '---'}';
+  }
+
+  //! <-- Getters
+
   /// Creates a new [TrailerCommon] instance.
   TrailerCommon();
 

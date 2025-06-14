@@ -102,12 +102,16 @@ final class YardLogsEntityTable extends StatelessWidget {
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.truck.economic,
         ),
         EntityTableColumnOptions<YardLog>(
+          title: 'Truck Plate',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.truck.plates,
+        ),
+        EntityTableColumnOptions<YardLog>(
           title: 'Trailer Number',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer.economic,
         ),
         EntityTableColumnOptions<YardLog>(
           title: 'Trailer Plate',
-          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer.economic,
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer.plates,
         ),
         EntityTableColumnOptions<YardLog>(
           title: 'Seal',
