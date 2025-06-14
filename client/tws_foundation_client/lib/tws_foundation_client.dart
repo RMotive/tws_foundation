@@ -81,8 +81,16 @@ export 'src/services/business/scts/sct.dart';
 // --> Exporting [src.services.business.maintenance]
 export 'src/services/business/maintenances/maintenance.dart';
 
+// --> Exporting [src.services.business.identifications]
+export 'src/services/business/identifications/identification.dart';
+
 // --> Exporting [src.services.business.plates]
 export 'src/services/business/plates/plate.dart';
+
+// --> Exporting [src.services.business.drivers]
+export 'src/services/business/drivers/driver.dart';
+export 'src/services/business/drivers/driver_common.dart';
+export 'src/services/business/drivers/driver_external.dart';
 
 // --> Exporting [src.services.business.trailers]
 export 'src/services/business/trailers/trailer.dart';

@@ -4,6 +4,7 @@ import 'package:example/entries/category_layout_entry.dart';
 import 'package:example/entries/navigation_layout_entry.dart';
 import 'package:example/entries/solutions_entity_table_entry.dart';
 import 'package:example/entries/yard_logs_page_entry.dart';
+import 'package:example/entries/yardlogs_entity_table_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
@@ -43,6 +44,7 @@ final class MainApp extends StatelessWidget {
 
         Injector.addSingleton<FoundationServer>(foundationServer);
         Injector.addSingleton<SecurityServiceI>(foundationServer.securityService);
+        Injector.addSingleton<YardlogsServiceI>(foundationServer.yardlogsService);
         Injector.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
       },
       defaultTheme: LandingThemeDark(),
@@ -54,6 +56,7 @@ final class MainApp extends StatelessWidget {
         NavigationLayoutEntry(
           appThemes: themes,
         ),
+        YardLogsEntityTableEntry(),
         SolutionsEntityTableEntry(),
       ],
     );

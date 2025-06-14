@@ -11,12 +11,19 @@ final class EntityTableColumnOptions<T> {
   final double? width;
 
   /// Column content factory, builds how at each entity row the column content value.
-  final String? Function(T entity, int index, BuildContext buildContext) factory;
+  final String? Function(T entity, int index, BuildContext buildContext)? factory;
+
+  /// Column content factory with a custom [Widget] to put into the cell content.
+  final Widget Function(T entity, int index, BuildContext buildContext)? customFactory; 
 
   /// Creates a new [EntityTableColumnOptions] instance.
   const EntityTableColumnOptions({
     this.width,
+    this.factory,
+    this.customFactory,
     required this.title,
-    required this.factory,
-  });
+  }) : assert(
+         (factory != null) != (customFactory != null),
+         'factory or customFactory must be provided, both can\'t be provided, only one',
+       );
 }

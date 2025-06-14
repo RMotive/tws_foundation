@@ -49,11 +49,6 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
   /// Table interactions adapter callbacks.
   final EntityTableAdapterB<TEntity> adapter;
 
-  /// [ViewServiceI.view] methods use to need [auth] properties that represents an unique session auth token
-  /// to authenticate operation, {FoundationView} package doesn't have access to this session managing context, reason why this
-  /// callback generator is required.
-  final FutureOr<String> Function() authGenerator;
-
   /// Column options.
   final List<EntityTableColumnOptions<TEntity>> columns;
 
@@ -70,7 +65,6 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
     ],
     required this.adapter,
     required this.columns,
-    required this.authGenerator,
     required this.entityFactory,
   }) : assert(ranges.length > 0, 'Paging ranges must have at least one configured');
 
@@ -119,8 +113,6 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
     );
 
     widget.adapter.listenRefresh(refreshView);
-
-    onEntitySelectionChange(0);
     super.initState();
   }
 
@@ -176,10 +168,10 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
     final TService viewService = Injector.get();
 
-    final String auth = await widget.authGenerator();
+    final String auth = await widget.adapter.composeAuth();
 
     final FoundationResponseResolver<ViewOutput<TEntity>> viewOutputResolver = await viewService.view(
-      ViewInput<Solution>.b(paginationOptions.range, paginationOptions.page),
+      ViewInput<TEntity>.b(paginationOptions.range, paginationOptions.page),
       auth,
     );
 
@@ -256,15 +248,34 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                                       child: _EntityTableLoader(),
                                     ),
                                 errorBuilder:
-                                    (_, _, _) => _EntityTableError(),
+                                    (_, _, _) => ConstrainedBox(
+                                      constraints: drawerAnimationConstraint,
+                                      child: _EntityTableError(),
+                                    ),
                                 successBuilder: (BuildContext buildContext, ViewOutput<TEntity> data) {
                                   return ConstrainedBox(
                                     constraints: drawerAnimationConstraint,
-                                    child: _EntityTableContent<TEntity>(
-                                      preSelect: selItem,
-                                      entities: data.entities,
-                                      columns: widget.columns,
-                                      onSelection: onEntitySelectionChange,
+                                    child: Visibility(
+                                      visible: data.entities.isNotEmpty,
+                                      child: _EntityTableContent<TEntity>(
+                                        preSelect: selItem,
+                                        entities: data.entities,
+                                        columns: widget.columns,
+                                        onSelection: onEntitySelectionChange,
+                                      ),
+                                      replacement: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 16,
+                                        ),
+                                        child: Text(
+                                          'No entities found',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   );
                                 },

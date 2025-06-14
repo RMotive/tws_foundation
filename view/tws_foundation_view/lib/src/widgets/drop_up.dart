@@ -129,8 +129,8 @@ final class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMix
 
   /// {event} triggered when [DropUp] has been clicked.
   void onClick() {
-    debugPrint('onClicked');
     if (widget.disabled) return;
+    if (widget.items.isEmpty) return;
 
     toogleDropUp(overlay != null);
   }

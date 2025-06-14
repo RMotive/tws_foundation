@@ -201,6 +201,9 @@ final class SolutionsEntityTableAdapter extends EntityTableAdapterB<Solution> {
       },
     );
   }
+
+  @override
+  FutureOr<String> composeAuth() => authBuilder();
 }
 
 /// {widget} class.
@@ -221,19 +224,6 @@ final class SolutionsEntityTable extends StatelessWidget {
     return EntityTable<Solution, SolutionsServiceI>(
       adapter: adapter,
       entityFactory: () => Solution(),
-      authGenerator: () async {
-        final SecurityServiceI securityService = Injector.get<SecurityServiceI>();
-
-        final FoundationResponseResolver<SessionData> authOutputResolver = await securityService.authenticate(
-          AuthenticationInput.a('TWSMF', 'local_user', 'local_user'.bytes),
-        );
-
-        return authOutputResolver
-            .resolveDirect(
-              () => SessionData(),
-            )
-            .token;
-      },
       columns: <EntityTableColumnOptions<Solution>>[
         EntityTableColumnOptions<Solution>(
           title: 'Sign',

@@ -28,7 +28,7 @@ public class Q_YardLogs : BQ_Business<YardLog, YardLogsDepot> {
         Identification identification = Store(
                  new Identification {
                      Name = Entropy,
-                     Lastname = Entropy,
+                     LastName = Entropy,
                      Status = status,
                  }
         );

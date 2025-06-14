@@ -62,13 +62,14 @@ public class Driver_Common
             if (ident == null)
                 return null;
 
-            return $"{ident.Name} {ident.Lastname}";
+            return $"{ident.Name} {ident.LastName}";
         }
     }
 
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+
         etBuilder.ToTable("Drivers_Commons");
 
         etBuilder.Property(nameof(License)).HasMaxLength(12);

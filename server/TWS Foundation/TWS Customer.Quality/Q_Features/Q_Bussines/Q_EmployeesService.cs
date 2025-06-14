@@ -47,7 +47,7 @@ public class Q_EmployeesService
         Identification identification = Store(
                  new Identification {
                      Name = Entropy,
-                     Lastname = Entropy,
+                     LastName = Entropy,
                      Status = statusI,
                  }
             );

@@ -32,7 +32,7 @@ public class Q_Drivers_Commons : BQ_Business<Driver_Common, Drivers_CommonsDepot
         Identification identification = Store(
                   new Identification {
                       Name = Entropy,
-                      Lastname = Entropy,
+                      LastName = Entropy,
                       Status = statusI,
                   }
              );

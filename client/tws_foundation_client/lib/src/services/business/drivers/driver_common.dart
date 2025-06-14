@@ -1,5 +1,4 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/situations/situation.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
@@ -27,7 +26,32 @@ final class DriverCommon extends EntityB<DriverCommon> {
   /// [Situation] information.
   Situation situation = Situation();
 
+  /// [Driver] information.
+  Driver? internal;
+
+  /// [DriverExternal] information.
+  DriverExternal? external;
+
   //! <-- Relations
+
+  //! --> Getters
+
+  /// Gets the {driver} name.
+  String? get name {
+    Identification? ident;
+
+    if (internal != null) {
+      ident = internal?.employee.identification;
+    } else {
+      ident = external?.identification;
+    }
+
+    if (ident == null) return null;
+
+    return '${ident.name} ${ident.lastName}';
+  }
+
+  //! <-- Getters
 
   /// Creates a new [DriverCommon] instance.
   DriverCommon();

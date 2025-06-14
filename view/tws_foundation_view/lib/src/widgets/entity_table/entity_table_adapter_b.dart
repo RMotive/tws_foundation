@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csm_client/csm_client.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -91,4 +93,7 @@ abstract class EntityTableAdapterB<TEntity extends EntityB<TEntity>> {
 
   /// Composes the view details drawer at the [EntityTable].
   Widget composeViewer(BuildContext buildContext, TEntity entity);
+
+  /// Composes the auth token to use for direct {csm} services comunication.
+  FutureOr<String> composeAuth();
 }

@@ -121,8 +121,12 @@ final class _EntityTableContentState<TEntity> extends State<_EntityTableContent<
                                     ),
                                     child: Builder(
                                       builder: (BuildContext context) {
+                                        if (column.customFactory != null) {
+                                          return column.customFactory!(entity, index, context);
+                                        }
+
                                         final String cellValue =
-                                            column.factory(
+                                            column.factory!(
                                               entity,
                                               index,
                                               context,

@@ -11,6 +11,9 @@ export 'src/themes/foundation_theme_b.dart';
 export 'src/themes/foundation_theme_dark.dart';
 export 'src/themes/foundation_theme_light.dart';
 
+
+//! --> [Widgets]
+
 // [widgets]
 export 'src/widgets/dialog.dart';
 export 'src/widgets/text_input.dart';
@@ -19,10 +22,13 @@ export 'src/widgets/entity_table/entity_table.dart';
 
 // [widgets.foundation_entity_tables]
 export 'src/widgets/foundation_entity_tables/solutions_entity_table.dart';
+export 'src/widgets/foundation_entity_tables/yard_logs_entity_table.dart';
 
 // [widgets.entity_creation_form]
 export 'src/widgets/entity_creation_form/entity_creation_form_agent.dart';
 export 'src/widgets/entity_creation_form/entity_creation_form.dart';
+ 
+//! <-- [Widgets] 
 
 // [layouts.category_layout]
 export 'src/layouts/category_layout/category_layout.dart';

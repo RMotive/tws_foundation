@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:csm_client/csm_client.dart';
-import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/widgets/entity_table/entity_table_adapter_b.dart';
@@ -51,6 +49,9 @@ final class YardLogsEntityTableAdapter extends EntityTableAdapterB<YardLog> {
       ),
     );
   }
+
+  @override
+  FutureOr<String> composeAuth() => authBuilder();
 }
 
 /// {widget} class.
@@ -68,34 +69,69 @@ final class YardLogsEntityTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<YardLog, YardLogsServiceI>(
+    return EntityTable<YardLog, YardlogsServiceI>(
       adapter: adapter,
-      entityFactory: () => Solution(),
-      authGenerator: () async {
-        final SecurityServiceI securityService = Injector.get<SecurityServiceI>();
-
-        final FoundationResponseResolver<SessionData> authOutputResolver = await securityService.authenticate(
-          AuthenticationInput.a('TWSMF', 'local_user', 'local_user'.bytes),
-        );
-
-        return authOutputResolver
-            .resolveDirect(
-              () => SessionData(),
-            )
-            .token;
-      },
-      columns: <EntityTableColumnOptions<Solution>>[
-        EntityTableColumnOptions<Solution>(
-          title: 'Sign',
-          factory: (Solution entity, int index, BuildContext buildContext) => entity.sign,
+      entityFactory: () => YardLog(),
+      columns: <EntityTableColumnOptions<YardLog>>[
+        EntityTableColumnOptions<YardLog>(
+          title: 'Entry',
+          customFactory: (YardLog entity, int index, BuildContext buildContext) {
+            return Icon(
+              entity.entry ? Icons.check : Icons.close,
+            );
+          },
         ),
-        EntityTableColumnOptions<Solution>(
-          title: 'Name',
-          factory: (Solution entity, int index, BuildContext buildContext) => entity.name,
+        EntityTableColumnOptions<YardLog>(
+          title: 'Date',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.timestamp.toIso8601String(),
         ),
-        EntityTableColumnOptions<Solution>(
-          title: 'Description',
-          factory: (Solution entity, int index, BuildContext buildContext) => entity.description,
+        EntityTableColumnOptions<YardLog>(
+          title: 'Load Type',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.loadType.name,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Drivers License',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.driver.license,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Driver',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.driver.name,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Truck Number',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.truck.economic,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Trailer Number',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer.economic,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Trailer Plate',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer.economic,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Seal',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.seal,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Seal #2',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.sealAlt,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Origin - Destination',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.fromTo,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Damaged',
+          customFactory: (YardLog entity, int index, BuildContext buildContext) {
+            return Icon(
+              entity.damage != null ? Icons.check : Icons.close,
+            );
+          },
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Section',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.section.name,
         ),
       ],
     );
