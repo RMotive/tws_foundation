@@ -19,6 +19,7 @@ export 'src/widgets/dialog.dart';
 export 'src/widgets/text_input.dart';
 export 'src/widgets/button_flat.dart';
 export 'src/widgets/entity_table/entity_table.dart';
+export 'src/widgets/entity_table/entity_table_adapter_b.dart';
 
 // [widgets.foundation_entity_tables]
 export 'src/widgets/foundation_entity_tables/solutions_entity_table.dart';

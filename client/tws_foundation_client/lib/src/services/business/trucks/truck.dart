@@ -10,7 +10,7 @@ final class Truck extends EntityB<Truck> {
   static const String kMotor = 'motor';
 
   /// [vin] property key.
-  static const String kVin = 'model';
+  static const String kVin = 'vin';
 
   /// [carrier] property key.
   static const String kCarrier = 'carrier';

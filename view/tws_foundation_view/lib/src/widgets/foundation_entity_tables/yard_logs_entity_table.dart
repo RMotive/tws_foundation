@@ -1,8 +1,7 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/widgets/entity_table/entity_table_adapter_b.dart';
+import 'package:tws_foundation_view/src/widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -10,14 +9,11 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 ///
 /// Implements a custom [EntityTableAdapterB] for a [Solution] based [EntityTable] providing a foundation
 /// {csm} data handling table for [Solution].
-final class YardLogsEntityTableAdapter extends EntityTableAdapterB<YardLog> {
-  /// Callback to get authentication token due to [SolutionsServiceI.update] service needs authorization token,
-  /// {FoundationView} package doesn't have authentication or session control.
-  final FutureOr<String> Function() authBuilder;
+final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<YardLog> {
 
   /// Creates a new [YardLogsEntityTableAdapter] instance.
   YardLogsEntityTableAdapter({
-    required this.authBuilder,
+    required super.authBuilder,
   });
 
   @override
@@ -49,9 +45,6 @@ final class YardLogsEntityTableAdapter extends EntityTableAdapterB<YardLog> {
       ),
     );
   }
-
-  @override
-  FutureOr<String> composeAuth() => authBuilder();
 }
 
 /// {widget} class.
@@ -136,6 +129,14 @@ final class YardLogsEntityTable extends StatelessWidget {
         EntityTableColumnOptions<YardLog>(
           title: 'Section',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.section.name,
+        ),
+        EntityTableColumnOptions<YardLog>(
+          title: 'Guard',
+          factory: (YardLog entity, int index, BuildContext buildContext) {
+            Identification guardIdent = entity.guard.identification;
+
+            return '${guardIdent.name} ${guardIdent.lastName}';
+          },
         ),
       ],
     );

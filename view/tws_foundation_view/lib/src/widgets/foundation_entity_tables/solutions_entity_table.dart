@@ -1,10 +1,9 @@
-import 'dart:async';
 
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/widgets/entity_table/entity_table_adapter_b.dart';
+import 'package:tws_foundation_view/src/widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -12,14 +11,11 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 ///
 /// Implements a custom [EntityTableAdapterB] for a [Solution] based [EntityTable] providing a foundation
 /// {csm} data handling table for [Solution].
-final class SolutionsEntityTableAdapter extends EntityTableAdapterB<Solution> {
-  /// Callback to get authentication token due to [SolutionsServiceI.update] service needs authorization token,
-  /// {FoundationView} package doesn't have authentication or session control.
-  final FutureOr<String> Function() authBuilder;
+final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<Solution> {
 
   /// Creates a new [SolutionsEntityTableAdapter] instance.
   SolutionsEntityTableAdapter({
-    required this.authBuilder,
+    required super.authBuilder,
   });
 
   @override
@@ -201,9 +197,6 @@ final class SolutionsEntityTableAdapter extends EntityTableAdapterB<Solution> {
       },
     );
   }
-
-  @override
-  FutureOr<String> composeAuth() => authBuilder();
 }
 
 /// {widget} class.

@@ -64,9 +64,12 @@ final class EntityTableAdapterEditor<TEntity> {
 /// Defines a base behavior to handle an [EntityTable] adaption along this patter code clients from this implementations
 /// can dynamically interact with the [EntityTable] instance by this adapter reference allowing to handle operations and callbacks for
 /// user interactions or direct invokations.
-abstract class EntityTableAdapterB<TEntity extends EntityB<TEntity>> {
+abstract class EntityTableAdapterB<TEntity extends EntityI<TEntity>> {
   /// Internal reference for [refresh] notification to listeners.
   final _RefreshNotifier _refreshNotifier = _RefreshNotifier();
+
+  /// Creates a new [EntityTableAdapterB] instance.
+  EntityTableAdapterB();
 
   /// Adds a callback action triggered when the [refresh] operation has been called.
   ///
