@@ -61,6 +61,12 @@ final class Employee extends EntityB<Employee> {
 
   //! <-- Relations
 
+  //! --> Getters
+
+  String get fullName => '${identification.name} ${identification.lastName}';
+
+  //! <-- Getters
+
   /// Generates a new [Employee] instance from mandatory values.
   Employee();
 
