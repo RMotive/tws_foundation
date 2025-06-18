@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 
+using TWS_Business.Depots.Bases;
 using TWS_Business.Entities;
 
 namespace TWS_Business.Depots.Vehicles.Control;

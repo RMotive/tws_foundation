@@ -1,7 +1,6 @@
-﻿using CSM_Foundation.Database.Quality;
+﻿using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
-
-using TWS_Business.Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots.Bases;
 
@@ -14,12 +13,10 @@ namespace TWS_Business.Quality.Q_Depots.Bases;
 /// <typeparam name="TDepot">
 ///     Type of the depot based on test.    
 /// </typeparam>
-public abstract class BQ_Common<TCommon, TInternalEdge, TExternalEdge, TDepot>
-    : BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot, Database>
-    where TCommon : CommonEntity<TInternalEdge, TExternalEdge>, new()
-    where TInternalEdge : CommonEntityEdge<TCommon>
-    where TExternalEdge : CommonEntityEdge<TCommon>
-    where TDepot : BCommonDepot<Database, TInternalEdge, TExternalEdge, TCommon> {
+public abstract class BQ_CommonDependence<TCommonDependence, TDepot>
+    : BQ_CommonDependenceDepot<TDepot, Database, TCommonDependence>
+    where TCommonDependence : CommonDependeceEntity, new()
+    where TDepot : BDepot<Database, TCommonDependence> {
 
     /// <summary>
     ///     Creates a new <see cref="BQ_Business{TEntity, TDepot}"/> instance.
@@ -31,5 +28,5 @@ public abstract class BQ_Common<TCommon, TInternalEdge, TExternalEdge, TDepot>
     ///     Collateral used databases factories to be used.
     /// </param>'
 
-    protected BQ_Common(DatabaseFactory? Database = null, params DatabaseFactory[] Factories) : base("TWSB", Database, Factories) { }
+    protected BQ_CommonDependence(DatabaseFactory? Database = null, params DatabaseFactory[] Factories) : base("TWSB", Database, Factories) { }
 }

@@ -286,6 +286,7 @@ public abstract class BDepot<TDatabase, TEntity>
         return entity;
     }
 
+
     /// <summary>
     ///     Creates a collection of records into the dataDatabases. 
     ///     <br>
@@ -625,6 +626,12 @@ public abstract class BDepot<TDatabase, TEntity>
         }
 
         return new BatchOperationOutput<TEntity>([.. successes], [.. failures]);
+    }
+
+    public async Task<TEntity> Delete(TEntity Entity) {
+        Set.Remove(Entity);
+        await Database.SaveChangesAsync();
+        return Entity;
     }
 
     #endregion

@@ -16,7 +16,7 @@ using CSM_Foundation.Database.Utilitites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace TWS_Business.Depots;
+namespace TWS_Business.Depots.Bases;
 
 public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     : IDepot<TCommon>
@@ -226,6 +226,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     #region Create
 
     public async Task<TCommon> Create(TCommon entity) {
+        entity.Timestamp = DateTime.UtcNow;
         entity.EvaluateWrite();
 
         TInternal? internalRelation = entity.Internal;
@@ -237,6 +238,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         entity = DatabaseUtilities.SanitizeEntity(Database, entity);
 
         await Set.AddAsync(entity);
+        Disposer?.Push(entity);
 
         if (internalRelation != null) {
             internalRelation.EvaluateWrite();
@@ -246,20 +248,25 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
             internalRelation.Timestamp = DateTime.UtcNow;
 
             await Database.Set<TInternal>().AddAsync(internalRelation);
+            Disposer?.Push(internalRelation);
 
             entity.Internal = internalRelation;
-            return entity;
+
+        } else {
+            externalRelation!.EvaluateWrite();
+
+            externalRelation = DatabaseUtilities.SanitizeEntity(Database, externalRelation);
+            externalRelation.Timestamp = DateTime.UtcNow;
+            externalRelation.Common = entity;
+
+            await Database.Set<TExternal>().AddAsync(externalRelation);
+
+            entity.External = externalRelation;
+            Disposer?.Push(externalRelation);
         }
 
-        externalRelation!.EvaluateWrite();
+        await Database.SaveChangesAsync();
 
-        externalRelation = DatabaseUtilities.SanitizeEntity(Database, externalRelation);
-        externalRelation.Timestamp = DateTime.UtcNow;
-        externalRelation.Common = entity;
-
-        await Database.Set<TExternal>().AddAsync(externalRelation);
-
-        entity.External = externalRelation;
         return entity;
     }
 

@@ -55,6 +55,8 @@
     17. Custom [BQ_CommonDepot] for [CommonEntity] Depots testing.
     18. Custom [BQ_CommonDataHandler] for [CommonEntity] Data handling in tests.
     19. Added [BQ_CommonAtribbute] for [Theory] tests from [BQ_CommoDepot].
+    20. Added [CommonDependenceEntity] class to handle common dependent entities.
+    20. Added [BQ_CommonDependenceDepot] for [CommonDependenceEntity] Depots testing.
 
 - Fixes:
 

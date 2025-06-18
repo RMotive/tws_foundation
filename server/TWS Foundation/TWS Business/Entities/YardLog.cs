@@ -18,7 +18,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] for <see cref="YardLog"/> entries. A <see cref="YardLog"/> record stores information about an entry or exit from the main business [Yards].
 /// </summary>
 public class YardLog
-    : BEntity {
+    : CommonDependeceEntity {
 
     #region Properties
 
@@ -76,23 +76,6 @@ public class YardLog
     /// </summary>
     [Relation]
     public Section Section { get; set; } = default!;
-
-    /// <summary>
-    ///     <see cref="Drivers.Driver_Common"/> information.
-    /// </summary>
-    [Relation]
-    public Driver_Common Driver { get; set; } = default!;
-
-    /// <summary>
-    ///     <see cref="Vehicules.Trucks.Truck_Common"/> information.
-    /// </summary>
-    [Relation]
-    public Truck_Common Truck { get; set; } = default!;
-
-    /// <summary>
-    ///     <see cref="Vehicules.Trailers.Trailer_Common"/> information.
-    /// </summary>
-    public Trailer_Common? Trailer { get; set; }
 
     #endregion
 

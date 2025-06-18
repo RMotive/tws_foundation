@@ -4,8 +4,6 @@ using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trucks;
 using TWS_Business.Quality.Q_Depots.Bases;
 
-using static Azure.Core.HttpHeader;
-
 namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Trucks_Commons : BQ_Common<Truck_Common, Truck, TruckExternal, Trucks_CommonsDepot> {
@@ -28,7 +26,7 @@ public class Q_Trucks_Commons : BQ_Common<Truck_Common, Truck, TruckExternal, Tr
                 }
             );
 
-        
+
         Truck_Common common = new() {
             Economic = Entropy,
             Status = status,
