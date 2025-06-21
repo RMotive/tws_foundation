@@ -14,16 +14,16 @@ using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 
 using TWS_Business;
-using TWS_Business.Entities.Drivers;
-using TWS_Business.Entities.Vehicules.Trailers;
-using TWS_Business.Entities.Vehicules.Trucks;
+using TWS_Business.Quality.Q_Depots.Q_Validators;
+
+using BEntity = TWS_Business.BEntity;
 
 namespace CSM_Foundation.Database.Quality;
 
-public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDependence>
+public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
     : BQ_DataHandler
-    where TCommonDependence : CommonDependeceEntity, new()
-    where TDepot : BDepot<TDatabase, TCommonDependence>
+    where TEntity : BEntity, new()
+    where TDepot : BDepot<TDatabase, TEntity>
     where TDatabase : BDatabase_SQLServer<TDatabase> {
 
     /// <summary>
@@ -37,7 +37,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     protected readonly TDatabase Database;
 
     /// <summary>
-    ///     Stores the most valid evaluable property from the current <see cref="TCommonDependence"/>. used for ordering and filtering at View operations and evaluate their quality.
+    ///     Stores the most valid evaluable property from the current <see cref="TEntity"/>. used for ordering and filtering at View operations and evaluate their quality.
     /// </summary>
     protected readonly PropertyInfo Evaluable;
 
@@ -45,13 +45,13 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     ///     Generates a new behavior base for <see cref="BQ_Depot{TMigrationSet, TMigrationDepot, TMigrationDatabases}"/>.
     /// </summary>
     /// <param name="Factories">
-    ///     Database factories for relations sampleEntity at external databases needed for <see cref="TCommonDependence"/>.
+    ///     Database factories for relations sampleEntity at external databases needed for <see cref="TEntity"/>.
     /// </param>
     /// <param name="Sign">
     ///     Database sign for identification purposes.
     /// </param>
     /// <param name="Database">
-    ///     Main Entity <see cref="TCommonDependence"/> database handler instance. If isn't given will use a default built instance.
+    ///     Main Entity <see cref="TEntity"/> database handler instance. If isn't given will use a default built instance.
     /// </param>
     public BQ_CommonDependenceDepot(string Sign, DatabaseFactory? Database = null, params DatabaseFactory[] Factories)
         : base(
@@ -64,7 +64,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
         this.Database = (TDatabase)(Database?.Invoke() ?? DatabaseUtilities.Q_Construct<TDatabase>(Sign));
         Depot = (TDepot)Activator.CreateInstance(typeof(TDepot), this.Database, null)!;
 
-        PropertyInfo[] entityProperties = typeof(TCommonDependence).GetProperties();
+        PropertyInfo[] entityProperties = typeof(TEntity).GetProperties();
 
         PropertyInfo? orderableTmp = null;
         foreach (PropertyInfo propertyInfo in entityProperties) {
@@ -79,7 +79,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
             break;
         }
 
-        Evaluable = orderableTmp ?? typeof(TCommonDependence).GetProperty(nameof(IEntity.Id))!; // By default if the [Entity] doesn't have a valid evaluable property will use the Id. 
+        Evaluable = orderableTmp ?? typeof(TEntity).GetProperty(nameof(IEntity.Id))!; // By default if the [Entity] doesn't have a valid evaluable property will use the Id. 
     }
 
     #region Abtraction
@@ -91,85 +91,110 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     ///     Random 16 length value for unique properties.
     /// </param>
     /// <returns>
-    ///     A correctly built <see cref="TCommonDependence"/>.
+    ///     A correctly built <see cref="TEntity"/>.
     /// </returns>
-    protected abstract TCommonDependence EntityFactory(string entropy);
+    protected abstract TEntity EntityFactory(string entropy);
 
-    /// <summary>
-    ///     Creates a context [CommonEntityEdge] for testing data creation and assertion.
-    /// </summary>
-    /// <param name="entropy">
-    ///     Random 16 length value for unique properties.
-    /// </param>
-    /// <returns>
-    ///     A correctly built <see cref="TCommon"/>.
-    /// </returns>
-    protected abstract Truck_Common InternalTruckFactory(string entropy);
-
-    protected abstract Truck_Common ExternalTruckFactory(string entropy);
-
-    protected abstract Trailer_Common InternalTrailerFactory(string entropy);
-
-    protected abstract Trailer_Common ExternalTrailerFactory(string entropy);
-
-    protected abstract Driver_Common InternalDriverFactory(string entropy);
-
-    protected abstract Driver_Common ExternalDriverFactory(string entropy);
-
+    protected abstract TEntity ComposedEntity(TEntity entity);
 
     #endregion
 
     #region Private / Protected Functions
-    protected TCommonDependence WrappedFactory(string entropy, bool isInternal) {
-        TCommonDependence commonDependent = EntityFactory(entropy);
 
-        if (isInternal) {
-            commonDependent.Truck = InternalTruckFactory(entropy);
-            commonDependent.Trailer = InternalTrailerFactory(entropy);
-            commonDependent.Driver = InternalDriverFactory(entropy);
-        } else {
-            commonDependent.Truck = ExternalTruckFactory(entropy);
-            commonDependent.Trailer = ExternalTrailerFactory(entropy);
-            commonDependent.Driver = ExternalDriverFactory(entropy);
+    /// <summary>
+    ///  True when the given <paramref name="type"/> is derived from the given <paramref name="genericBase"/> type.
+    ///  Implemented to check for CommonEntity dependencies.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="genericBase"></param>
+    /// <returns></returns>
+    private bool IsDerivedFromGenericBase(Type type, Type genericBase) {
+        while (type != null && type != typeof(object)) {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == genericBase)
+                return true;
+
+            type = type.BaseType!;
         }
+        return false;
+    }
+
+
+    /// <summary>
+    /// Loads and initializes dependencies for the specified common dependent entity based on its properties.
+    /// </summary>
+    /// <remarks>This method scans the properties of the specified entity to identify dependencies marked with
+    /// <see cref="RelationAttribute"/> and inheriting from <c>CommonEntity&lt;,&gt;</c>. It then uses the appropriate
+    /// dependency creation method, either internal or external, based on the value of <paramref name="isInternal"/>. If
+    /// a property does not meet the required criteria, an exception is thrown.</remarks>
+    /// 
+    /// <param name="entropy">A string value used as input for dependency creation. This is typically required by the dependency creation
+    /// methods to generate or configure the dependencies.</param>
+    /// 
+    /// <param name="isInternal">A boolean value indicating whether internal or external dependencies should be created. If <see
+    /// langword="true"/>, internal dependencies are created; otherwise, external dependencies are created.</param>
+    /// 
+    /// <param name="entity">The entity for which dependencies are to be loaded. The entity must have properties marked with <see
+    /// cref="RelationAttribute"/> and inheriting from <c>CommonEntity&lt;,&gt;</c>.</param>
+    /// 
+    /// <exception cref="InvalidOperationException">Thrown if no properties in the entity are marked with <see cref="RelationAttribute"/> and inherit from
+    /// <c>CommonEntity&lt;,&gt;</c>, or if a property marked with <see cref="RelationAttribute"/> does not have a valid
+    /// <c>BAdapterAttribute&lt;,,&gt;</c> for dependency creation.</exception>
+    private void LoadDependencies(string entropy, bool isInternal, TEntity entity) {
+        // Get all common properties in main entity.
+        IEnumerable<PropertyInfo> commonDependencies = typeof(TEntity)
+            .GetProperties()
+            .Where(pi =>
+                pi.GetCustomAttribute<RelationAttribute>() != null &&
+                IsDerivedFromGenericBase(pi.PropertyType, typeof(CommonEntity<,>))
+            ).ToList();
+
+        if (!commonDependencies.Any()) throw new InvalidOperationException($"No common dependencies found in {typeof(TEntity).Name}. Ensure properties are marked with RelationAttribute and inherit from CommonEntity<,>.");
+
+        // Generate commonDependencies.
+        foreach (PropertyInfo prop in commonDependencies) {
+            var attribute = prop.GetCustomAttributes(inherit: true)
+                        .FirstOrDefault(pi => IsDerivedFromGenericBase(pi.GetType(), typeof(BAdapterAttribute<,,>)));
+
+            if (attribute != null) {
+                MethodInfo createMethod;
+                if (isInternal) {
+                    createMethod = attribute.GetType().GetMethod("CreateInternal")!;
+                    prop.SetValue(entity, createMethod.Invoke(attribute, [entropy]));
+                } else {
+                    createMethod = attribute.GetType().GetMethod("CreateExternal")!;
+                    prop.SetValue(entity, createMethod.Invoke(attribute, [entropy]));
+                }
+                continue;
+            }
+
+            throw new InvalidOperationException($"Property {prop.Name} in {typeof(TEntity).Name} is marked with RelationAttribute but does not have a valid BAdapterAttribute for dependency creation.");
+
+        }
+
+    }
+    
+    /// <summary>
+    /// Creates and returns an entity after applying additional composition and loading dependencies.
+    /// </summary>
+    /// <param name="entropy">A string used to generate the initial entity and load its dependencies. Cannot be null or empty.</param>
+    /// <param name="isInternal">A boolean indicating whether the dependencies should be loaded in internal mode.  <see langword="true"/> for
+    /// internal mode; otherwise, <see langword="false"/>.</param>
+    /// <returns>The fully composed entity with all dependencies loaded.</returns>
+    private TEntity WrappedFactory(string entropy, bool isInternal) {
+        TEntity commonDependent = EntityFactory(entropy);
+        LoadDependencies(entropy, isInternal, commonDependent);
+        commonDependent = ComposedEntity(commonDependent);
 
         return commonDependent;
-    }
-    /// <summary>
-    /// Commit the 
-    /// </summary>
-    /// <typeparam name="TCommon"></typeparam>
-    /// <typeparam name="TInternal"></typeparam>
-    /// <typeparam name="TExternal"></typeparam>
-    /// <param name="common"></param>
-    private void CommitDependences<TCommon, TInternal, TExternal>(TCommon common)
-        where TCommon : CommonEntity<TInternal, TExternal>
-        where TInternal : CommonEntityEdge<TCommon>
-        where TExternal : CommonEntityEdge<TCommon> {
-
-        TInternal? internalRelation = common.Internal;
-        TExternal? externalRelation = common.External;
-
-        common.Internal = null;
-        common.External = null;
-
-        Disposer.Push(common);
-
-        if (internalRelation != null) {
-            Disposer.Push(internalRelation);
-            return;
-        }
-
-        Disposer.Push(externalRelation!);
     }
 
     /// <summary>
     ///     
     /// </summary>
     /// <param name="SampleEntities"></param>
-    protected async Task CommitSampleEntities(ICollection<TCommonDependence> SampleEntities) {
+    protected async Task CommitSampleEntities(ICollection<TEntity> SampleEntities) {
         await Database.SaveChangesAsync();
-        foreach (TCommonDependence commonDependent in SampleEntities.Reverse()) {
+        foreach (TEntity commonDependent in SampleEntities.Reverse()) {
             Disposer.Push(commonDependent);
         }
     }
@@ -179,7 +204,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     /// </summary>
     /// <param name="expected"></param>
     /// <param name="actual"></param>
-    protected void AssertEvaluable(TCommonDependence expected, TCommonDependence actual) {
+    protected void AssertEvaluable(TEntity expected, TEntity actual) {
         object? sampleEvaluableValue = Evaluable.GetValue(expected);
         object? overwrittenEvaluableValue = Evaluable.GetValue(actual);
 
@@ -191,7 +216,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     /// </summary>
     /// <param name="noStored">
     ///     Wheter the generator should verify the generated <see cref="IEntity.Id"/> isn't used
-    ///     for a stored <typeparamref name="TCommonDependence"/> yet.
+    ///     for a stored <typeparamref name="TEntity"/> yet.
     /// </param>
     /// <returns>
     ///     A valid random value for <see cref="IEntity.Id"/>
@@ -211,7 +236,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
 
         bool iteratorLock;
         do {
-            iteratorLock = await Database.Set<TCommonDependence>().FindAsync(randomLong) is not null;
+            iteratorLock = await Database.Set<TEntity>().FindAsync(randomLong) is not null;
         } while (iteratorLock);
 
         return randomLong;
@@ -222,29 +247,29 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     #region Sampling
 
     /// <summary>
-    ///     Creates a new <see cref="TCommonDependence"/> instance based on the <see cref="EntityFactory(string)"/> implementation.
+    ///     Creates a new <see cref="TEntity"/> instance based on the <see cref="EntityFactory(string)"/> implementation.
     /// </summary>
-    /// <returns> A new <see cref="TCommonDependence"/> instance </returns>
+    /// <returns> A new <see cref="TEntity"/> instance </returns>
     /// <remarks>
     ///     This <see cref="IEntity"/> instance is created but not stored in the database.
     /// </remarks>
-    protected TCommonDependence Sampling(bool DefaultEdge) {
+    protected TEntity Sampling(bool DefaultEdge) {
         return RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
     }
 
     /// <summary>
-    ///    Creates a new collection of <see cref="TCommonDependence"/> instances based on the <see cref="EntityFactory(string)"/> implementation.
+    ///    Creates a new collection of <see cref="TEntity"/> instances based on the <see cref="EntityFactory(string)"/> implementation.
     /// </summary>
     /// <param name="Count">
     ///     Number of instances to create.
     /// </param>
     /// <returns>
-    ///     A new <see cref="TCommonDependence"/> instance collection.
+    ///     A new <see cref="TEntity"/> instance collection.
     /// </returns>
     /// <remarks>
     ///     This <see cref="IEntity"/> instance collection is created but not stored in the database.
     /// </remarks>
-    protected TCommonDependence[] Sampling(int Count, bool DefaultEdge) {
+    protected TEntity[] Sampling(int Count, bool DefaultEdge) {
         return [.. Enumerable.Range(0, Count).Select(_ => RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge)))];
     }
 
@@ -258,8 +283,8 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
         const int viewPage = 1;
         await Store(30, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        ViewOutput<TCommonDependence> viewOutput = await Depot.View(
-                new QueryInput<TCommonDependence, ViewInput<TCommonDependence>> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
@@ -282,9 +307,9 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
         const int viewPage = 2;
         await Store(30, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        ViewOutput<TCommonDependence> viewOutput = await Depot.View(
-                new QueryInput<TCommonDependence, ViewInput<TCommonDependence>> {
-                    Parameters = new ViewInput<TCommonDependence> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new QueryInput<TEntity, ViewInput<TEntity>> {
+                    Parameters = new ViewInput<TEntity> {
                         Retroactive = false,
                         Range = 20,
                         Page = viewPage,
@@ -303,8 +328,8 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Fact(DisplayName = $"[View]: Specific ordering by property")]
     public async Task ViewC() {
 
-        ViewOutput<TCommonDependence> orderedViewOutput = await Depot.View(
-                        new QueryInput<TCommonDependence, ViewInput<TCommonDependence>> {
+        ViewOutput<TEntity> orderedViewOutput = await Depot.View(
+                        new QueryInput<TEntity, ViewInput<TEntity>> {
                             Parameters = new() {
                                 Page = 1,
                                 Range = 20,
@@ -321,23 +346,23 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
 
 
         // --> Manual ordering undordered result for reference.
-        TCommonDependence[] orderedReferenceRecords = [.. orderedViewOutput.Entities];
+        TEntity[] orderedReferenceRecords = [.. orderedViewOutput.Entities];
         {
-            Type setType = typeof(TCommonDependence);
+            Type setType = typeof(TEntity);
             ParameterExpression parameterExpression = Expression.Parameter(setType, $"X0");
 
             MemberExpression memberExpression = Expression.MakeMemberAccess(parameterExpression, Evaluable);
             UnaryExpression translationExpression = Expression.Convert(memberExpression, typeof(object));
-            Expression<Func<TCommonDependence, object>> orderingExpression = Expression.Lambda<Func<TCommonDependence, object>>(translationExpression, parameterExpression);
+            Expression<Func<TEntity, object>> orderingExpression = Expression.Lambda<Func<TEntity, object>>(translationExpression, parameterExpression);
 
-            IQueryable<TCommonDependence> sorted = orderedReferenceRecords.AsQueryable();
+            IQueryable<TEntity> sorted = orderedReferenceRecords.AsQueryable();
             sorted = sorted.OrderByDescending(orderingExpression);
             orderedReferenceRecords = [.. sorted];
         }
 
         for (int i = 0; i < orderedReferenceRecords.Length; i++) {
-            TCommonDependence expected = orderedReferenceRecords[i];
-            TCommonDependence actual = orderedViewOutput.Entities[i];
+            TEntity expected = orderedReferenceRecords[i];
+            TEntity actual = orderedViewOutput.Entities[i];
 
             Assert.Equal(Evaluable.GetValue(expected), Evaluable.GetValue(actual));
         }
@@ -345,14 +370,14 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
 
     [Fact(DisplayName = "[View]: Using Date filter")]
     public async Task ViewD() {
-        ViewOutput<TCommonDependence> viewOutput = await Depot.View(
-                new QueryInput<TCommonDependence, ViewInput<TCommonDependence>> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Page = 1,
                         Range = 20,
                         Retroactive = false,
                         Filters = [
-                            new ViewFilterDate<TCommonDependence> {
+                            new ViewFilterDate<TEntity> {
                                 From = DateTime.UtcNow.Date,
                             },
                         ],
@@ -374,16 +399,16 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     public async Task ViewE(bool DefaultEdge) {
         Skip.If(Evaluable.PropertyType != typeof(string), "This assertion is only available for entities that have an evaluable string property since CONTAINS method is currently only supported to filter string type properties.");
 
-        TCommonDependence sampleEntity = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity sampleEntity = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
         object? sampleValue = Evaluable.GetValue(sampleEntity);
-        ViewOutput<TCommonDependence> qOut = await Depot.View(
-                new QueryInput<TCommonDependence, ViewInput<TCommonDependence>> {
+        ViewOutput<TEntity> qOut = await Depot.View(
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
                         Page = 1,
                         Filters = [
-                            new ViewFilterProperty<TCommonDependence> {
+                            new ViewFilterProperty<TEntity> {
                                 Operator = ViewFilterOperators.CONTAINS,
                                 Property = Evaluable.Name,
                                 Value = sampleValue,
@@ -406,15 +431,15 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [CommonFactData]
     public async Task ViewF(bool DefaultEdge) {
         Skip.If(Evaluable.PropertyType != typeof(string), "This assertion is only available for entities that have an evaluable string property since CONTAINS method is currently only supported to filter string type properties.");
-        TCommonDependence[] entities = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity[] entities = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
         List<object?> possibleValues = [];
-        List<IViewFilter<TCommonDependence>> filters = [];
+        List<IViewFilter<TEntity>> filters = [];
 
-        foreach (TCommonDependence entity in entities) {
+        foreach (TEntity entity in entities) {
             object? sampleValue = Evaluable.GetValue(entity);
             filters.Add(
-                    new ViewFilterProperty<TCommonDependence> {
+                    new ViewFilterProperty<TEntity> {
                         Operator = ViewFilterOperators.CONTAINS,
                         Property = Evaluable.Name,
                         Value = sampleValue,
@@ -422,14 +447,14 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
                 );
             possibleValues.Add(sampleValue);
         }
-        ViewOutput<TCommonDependence> viewOutput = await Depot.View(
-                new QueryInput<TCommonDependence, ViewInput<TCommonDependence>> {
+        ViewOutput<TEntity> viewOutput = await Depot.View(
+                new QueryInput<TEntity, ViewInput<TEntity>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 20,
                         Page = 1,
                         Filters = [
-                            new ViewFilterLogical<TCommonDependence>{
+                            new ViewFilterLogical<TEntity>{
                                 Operator = ViewFilterLogicalOperators.OR,
                                 Filters = [..filters],
                             },
@@ -453,9 +478,9 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = "[Read]: Reads an Entity by {Id}.")]
     [CommonFactData]
     public virtual async Task ReadA(bool DefaultEdge) {
-        TCommonDependence sample = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity sample = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        TCommonDependence readEntity = await Depot.Read(sample.Id);
+        TEntity readEntity = await Depot.Read(sample.Id);
         Assert.Multiple(
                 [
                     () => Assert.Equal(sample.Id, readEntity.Id),
@@ -472,10 +497,10 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = "[Read]: Reads a collection of entities by a collection of {Id}")]
     [CommonFactData]
     public virtual async Task ReadB(bool DefaultEdge) {
-        TCommonDependence[] samples = await Store(20, (entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity[] samples = await Store(20, (entropy) => WrappedFactory(entropy, DefaultEdge));
         long[] sampleIds = [.. samples.Select(i => i.Id)];
 
-        BatchOperationOutput<TCommonDependence> readEntities = await Depot.Read(sampleIds);
+        BatchOperationOutput<TEntity> readEntities = await Depot.Read(sampleIds);
         Assert.Multiple(
                 [
                     () => Assert.Empty(readEntities.Failures),
@@ -483,7 +508,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
                     () => Assert.All(
                         readEntities.Successes,
                         (entity) => {
-                            TCommonDependence sample = samples.First(j => j.Id == entity.Id);
+                            TEntity sample = samples.First(j => j.Id == entity.Id);
 
                             Assert.Equal(sample.Id, entity.Id);
                             Assert.Equal(sample.Timestamp, entity.Timestamp);
@@ -500,12 +525,12 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = "[Read]: Reads for the first entity matching the filter")]
     [CommonFactData]
     public virtual async Task ReadC(bool DefaultEdge) {
-        TCommonDependence[] samples = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
-        TCommonDependence samplePivot = samples[0];
+        TEntity[] samples = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity samplePivot = samples[0];
 
-        BatchOperationOutput<TCommonDependence> readEntites = await Depot.Read(
-                 new QueryInput<TCommonDependence, FilterQueryInput<TCommonDependence>>() {
-                     Parameters = new FilterQueryInput<TCommonDependence> {
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
+                 new QueryInput<TEntity, FilterQueryInput<TEntity>>() {
+                     Parameters = new FilterQueryInput<TEntity> {
                          Behavior = FilteringBehaviors.First,
                          Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[1].Id
                      }
@@ -517,7 +542,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
                     () => Assert.Empty(readEntites.Failures),
                     () => Assert.Equal(1, readEntites.SuccessesCount),
                     () => {
-                        TCommonDependence readEntity = readEntites.Successes[0];
+                        TEntity readEntity = readEntites.Successes[0];
 
                         Assert.Equal(samplePivot.Id, readEntity.Id);
                         Assert.Equal(samplePivot.Timestamp, readEntity.Timestamp);
@@ -533,12 +558,12 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = "[Read]: Reads for the last entity matching the filter")]
     [CommonFactData]
     public virtual async Task ReadD(bool DefaultEdge) {
-        TCommonDependence[] samples = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
-        TCommonDependence samplePivot = samples[1];
+        TEntity[] samples = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity samplePivot = samples[1];
 
-        BatchOperationOutput<TCommonDependence> readEntites = await Depot.Read(
-               new QueryInput<TCommonDependence, FilterQueryInput<TCommonDependence>>() {
-                   Parameters = new FilterQueryInput<TCommonDependence> {
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
+               new QueryInput<TEntity, FilterQueryInput<TEntity>>() {
+                   Parameters = new FilterQueryInput<TEntity> {
                        Behavior = FilteringBehaviors.Last,
                        Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
                    }
@@ -550,7 +575,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
                     () => Assert.Empty(readEntites.Failures),
                     () => Assert.Equal(1, readEntites.SuccessesCount),
                     () => {
-                        TCommonDependence readEntity = readEntites.Successes[0];
+                        TEntity readEntity = readEntites.Successes[0];
 
                         Assert.Equal(samplePivot.Id, readEntity.Id);
                         Assert.Equal(samplePivot.Timestamp, readEntity.Timestamp);
@@ -566,11 +591,11 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = "[Read]: Reads for all entities matching the filter")]
     [CommonFactData]
     public virtual async Task ReadE(bool DefaultEdge) {
-        TCommonDependence[] samples = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity[] samples = await Store(2, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        BatchOperationOutput<TCommonDependence> readEntites = await Depot.Read(
-                new QueryInput<TCommonDependence, FilterQueryInput<TCommonDependence>>() {
-                    Parameters = new FilterQueryInput<TCommonDependence> {
+        BatchOperationOutput<TEntity> readEntites = await Depot.Read(
+                new QueryInput<TEntity, FilterQueryInput<TEntity>>() {
+                    Parameters = new FilterQueryInput<TEntity> {
                         Behavior = FilteringBehaviors.All,
                         Filter = (entity) => entity.Id == samples[0].Id || entity.Id == samples[1].Id
                     }
@@ -584,7 +609,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
                     () => Assert.All(
                             samples,
                             (sample) => {
-                                TCommonDependence entity = readEntites.Successes.First(i => i.Id == sample.Id);
+                                TEntity entity = readEntites.Successes.First(i => i.Id == sample.Id);
 
                                 Assert.Equal(sample.Id, entity.Id);
                                 Assert.Equal(sample.Timestamp, entity.Timestamp);
@@ -605,9 +630,9 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = "[Create]: Record created and unique store check")]
     [CommonFactData]
     public async Task CreateA(bool DefaultEdge) {
-        TCommonDependence sample = Sampling(DefaultEdge);
+        TEntity sample = Sampling(DefaultEdge);
 
-        TCommonDependence storedEntity = await Depot.Create(sample);
+        TEntity storedEntity = await Depot.Create(sample);
         await CommitSampleEntities([storedEntity]);
 
         Assert.Multiple(
@@ -628,9 +653,9 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = "[Create]: Multiple records created")]
     [CommonFactData]
     public async Task CreateB(bool DefaultEdge) {
-        TCommonDependence[] samples = Sampling(3, DefaultEdge);
+        TEntity[] samples = Sampling(3, DefaultEdge);
 
-        BatchOperationOutput<TCommonDependence> qOut = await Depot.Create(samples);
+        BatchOperationOutput<TEntity> qOut = await Depot.Create(samples);
         await CommitSampleEntities(samples);
 
         Assert.Multiple(
@@ -650,11 +675,11 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = $"[Update Entity]: Created when Create parameter enabled")]
     [CommonFactData]
     public virtual async Task UpdateA(bool DefaultEdge) {
-        TCommonDependence sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        UpdateOutput<TCommonDependence> updateOutput = await Depot.Update(
-                new QueryInput<TCommonDependence, UpdateInput<TCommonDependence>> {
-                    Parameters = new UpdateInput<TCommonDependence> {
+        UpdateOutput<TEntity> updateOutput = await Depot.Update(
+                new QueryInput<TEntity, UpdateInput<TEntity>> {
+                    Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
                         Create = true,
                     },
@@ -666,7 +691,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
                 [
                     () => Assert.Null(updateOutput.Original),
                     () => {
-                        TCommonDependence overwritten = updateOutput.Updated;
+                        TEntity overwritten = updateOutput.Updated;
 
                         Assert.True(overwritten.Id > 0);
                         AssertEvaluable(sample, overwritten);
@@ -678,13 +703,13 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = $"[Update Entity]: Throws CreateDisabled exception situation.")]
     [CommonFactData]
     public virtual async Task UpdateB(bool DefaultEdge) {
-        TCommonDependence sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        XDepot<TCommonDependence> depotException = await Assert.ThrowsAsync<XDepot<TCommonDependence>>(
+        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
                 async () => {
-                    UpdateOutput<TCommonDependence> updateOutput = await Depot.Update(
-                new QueryInput<TCommonDependence, UpdateInput<TCommonDependence>> {
-                    Parameters = new UpdateInput<TCommonDependence> {
+                    UpdateOutput<TEntity> updateOutput = await Depot.Update(
+                new QueryInput<TEntity, UpdateInput<TEntity>> {
+                    Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
                     },
                 }
@@ -698,14 +723,14 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = $"[Update Entity]: Throws Unfound exception situation")]
     [CommonFactData]
     public virtual async Task UpdateC(bool DefaultEdge) {
-        TCommonDependence sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
         sample.Id = await GeneratePointer();
 
-        XDepot<TCommonDependence> depotException = await Assert.ThrowsAsync<XDepot<TCommonDependence>>(
+        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
                 async () => {
-                    UpdateOutput<TCommonDependence> updateOutput = await Depot.Update(
-                        new QueryInput<TCommonDependence, UpdateInput<TCommonDependence>> {
-                            Parameters = new UpdateInput<TCommonDependence> {
+                    UpdateOutput<TEntity> updateOutput = await Depot.Update(
+                        new QueryInput<TEntity, UpdateInput<TEntity>> {
+                            Parameters = new UpdateInput<TEntity> {
                                 Entity = sample,
                             },
                         }
@@ -718,16 +743,16 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
     [CommonFactData]
     public virtual async Task UpdateD(bool DefaultEdge) {
-        TCommonDependence sample = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
-        TCommonDependence valueReference = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity sample = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity valueReference = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
         object? sampleOriginalValue = Evaluable.GetValue(sample);
 
         Evaluable.SetValue(sample, Evaluable.GetValue(valueReference));
 
-        UpdateOutput<TCommonDependence> updateOutput = await Depot.Update(
-                new QueryInput<TCommonDependence, UpdateInput<TCommonDependence>> {
-                    Parameters = new UpdateInput<TCommonDependence> {
+        UpdateOutput<TEntity> updateOutput = await Depot.Update(
+                new QueryInput<TEntity, UpdateInput<TEntity>> {
+                    Parameters = new UpdateInput<TEntity> {
                         Entity = sample,
                     },
                 }
@@ -737,7 +762,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
                 [
                     () => Assert.NotNull(updateOutput.Original),
                     () => {
-                        TCommonDependence overwritten = updateOutput.Updated;
+                        TEntity overwritten = updateOutput.Updated;
 
                         Assert.NotEqual(updateOutput.Original, overwritten);
 
@@ -758,7 +783,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     public virtual async Task DeleteA() {
         long unexistPointer = await GeneratePointer(true);
 
-        XDepot<TCommonDependence> depotException = await Assert.ThrowsAsync<XDepot<TCommonDependence>>(
+        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
                 async () => {
                     await Depot.Delete(unexistPointer);
                 }
@@ -770,12 +795,12 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TCommonDepende
     [Theory(DisplayName = $"[Delete Entity]: Deletes correctly an Entity with a given Common Entity")]
     [CommonFactData]
     public virtual async Task DeleteB(bool DefaultEdge) {
-        TCommonDependence entity = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
+        TEntity entity = Store((entropy) => WrappedFactory(entropy, DefaultEdge));
 
         await Depot.Delete(entity);
         await CommitSampleEntities([]);
 
-        TCommonDependence? searchedEntity = Database.Set<TCommonDependence>().Find(entity.Id);
+        TEntity? searchedEntity = Database.Set<TEntity>().Find(entity.Id);
         Assert.Null(searchedEntity);
     }
 

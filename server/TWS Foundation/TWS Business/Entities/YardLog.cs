@@ -11,6 +11,7 @@ using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
+using TWS_Business.Quality.Q_Depots.Q_Validators;
 
 namespace TWS_Business.Entities;
 
@@ -18,7 +19,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] for <see cref="YardLog"/> entries. A <see cref="YardLog"/> record stores information about an entry or exit from the main business [Yards].
 /// </summary>
 public class YardLog
-    : CommonDependeceEntity {
+    : BEntity {
 
     #region Properties
 
@@ -76,6 +77,27 @@ public class YardLog
     /// </summary>
     [Relation]
     public Section Section { get; set; } = default!;
+
+    /// <summary>
+    ///     <see cref="Vehicules.Trucks.Truck_Common"/> information.
+    /// </summary>
+
+    [Relation, QualityTruckAdapterAttribute]
+    public Truck_Common? Truck { get; set; }
+
+    /// <summary>
+    ///     <see cref="Vehicules.Trailers.Trailer_Common"/> information.
+    /// </summary>
+
+    [Relation, QualityTrailerAdapterAttribute]
+    public Trailer_Common? Trailer { get; set; }
+
+    /// <summary>
+    ///     <see cref="Drivers.Driver_Common"/> information.
+    /// </summary>
+
+    [Relation, QualityDriverAdapterAttribute]
+    public Driver_Common? Driver { get; set; }
 
     #endregion
 

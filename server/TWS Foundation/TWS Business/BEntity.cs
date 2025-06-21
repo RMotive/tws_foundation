@@ -1,37 +1,7 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validations.Validators;
 
-using TWS_Business.Entities.Drivers;
-using TWS_Business.Entities.Vehicules.Trailers;
-using TWS_Business.Entities.Vehicules.Trucks;
-
 namespace TWS_Business;
-
-public abstract class CommonDependeceEntity
-    : BEntity {
-
-    /// <summary>
-    ///     <see cref="Vehicules.Trucks.Truck_Common"/> information.
-    /// </summary>
-
-    [Relation]
-    public Truck_Common? Truck { get; set; }
-
-    /// <summary>
-    ///     <see cref="Vehicules.Trailers.Trailer_Common"/> information.
-    /// </summary>
-
-    [Relation]
-    public Trailer_Common? Trailer { get; set; }
-
-    /// <summary>
-    ///     <see cref="Drivers.Driver_Common"/> information.
-    /// </summary>
-
-    [Relation]
-    public Driver_Common? Driver { get; set; }
-
-}
 
 /// <summary>
 ///     

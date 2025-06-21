@@ -23,4 +23,8 @@
     <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Q_Depots\Q_Validators\" />
+  </ItemGroup>
+
 </Project>

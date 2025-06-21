@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
 
@@ -15,7 +16,7 @@ namespace TWS_Business.Quality.Q_Depots.Bases;
 /// </typeparam>
 public abstract class BQ_CommonDependence<TCommonDependence, TDepot>
     : BQ_CommonDependenceDepot<TDepot, Database, TCommonDependence>
-    where TCommonDependence : CommonDependeceEntity, new()
+    where TCommonDependence : BEntity, new()
     where TDepot : BDepot<Database, TCommonDependence> {
 
     /// <summary>
