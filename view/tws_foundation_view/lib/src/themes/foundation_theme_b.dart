@@ -4,7 +4,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 /// {abstract} class.
 ///
 /// Defines a base contract theme for any {TWS Foundation View} usage.
-abstract class FoundationThemeB extends ThemeB {
+abstract class FoundationThemeB extends ThemeDataB {
   /// Main application page theming properties.
   final SimpleTheming page;
 

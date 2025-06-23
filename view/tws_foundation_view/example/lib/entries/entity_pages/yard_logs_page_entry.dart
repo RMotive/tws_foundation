@@ -1,4 +1,4 @@
-import 'package:csm_view/csm_view.dart';
+import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';

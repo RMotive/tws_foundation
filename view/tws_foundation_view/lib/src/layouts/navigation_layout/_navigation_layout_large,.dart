@@ -4,14 +4,11 @@ part of 'navigation_layout.dart';
 ///
 /// Draws the [NavigationLayout] when the device is large.
 final class _NavigationLayoutLarge extends _NavigationLayoutB {
-  /// Application [ThemeI] collection.
-  final List<ThemeI> appThemes;
 
   const _NavigationLayoutLarge({
     super.rootRoute,
     required super.page,
     required super.user,
-    required this.appThemes,
     required super.pageSize,
     required super.routeData,
     required super.navigationEntries,
@@ -28,7 +25,6 @@ final class _NavigationLayoutLarge extends _NavigationLayoutB {
             children: <Widget>[
               _NavigationLayoutHeader(
                 user: user,
-                appThemes: appThemes,
                 rootRoute: rootRoute,
                 navReactor: navReactor,
               ),
@@ -38,7 +34,7 @@ final class _NavigationLayoutLarge extends _NavigationLayoutB {
                   builder: (BuildContext buildContext, _NavigationLayourNavigationReactor reactor) {
                     const double menuWidth = 250;
                     final double currMenuWidth = reactor._isOpen ? menuWidth : 0;
-                    final SimpleTheming pageTheme = Theming.get<FoundationThemeB>().page;
+                    final SimpleTheming pageTheme = Theming.get<FoundationThemeB>(context).page;
 
                     return Stack(
                       children: <Widget>[

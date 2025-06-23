@@ -45,38 +45,12 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
   void initState() {
     super.initState();
 
-    foundationTheming = Theming.get();
+    foundationTheming = Theming.get(context);
 
     foreColor = widget.fore ?? foundationTheming.page.accent;
     backColor = foundationTheming.entityTableTheming.drawerActionBackground;
-
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingEffectRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          foundationTheming = theme;
-
-          foreColor = widget.fore ?? foundationTheming.page.accent;
-          backColor = foundationTheming.entityTableTheming.drawerActionBackground;
-        });
-      },
-    );
   }
-
-  @override
-  void didUpdateWidget(covariant _EntityTableDrawerAction oldWidget) {
-    if (oldWidget.fore != widget.fore) {
-      foreColor = widget.fore ?? foundationTheming.page.accent;
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    Injector.getThemeManager().removeEffect(themingEffectRef);
-    super.dispose();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Tooltip(

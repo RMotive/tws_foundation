@@ -50,8 +50,7 @@ class TWSCascadeSection extends StatefulWidget {
 
 class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager =
-      Injector.getThemeManager();
+  late final ThemeManager themeManager = ThemeManager.of(context);
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -102,19 +101,6 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
     waiting = false;
     content = Placeholder();
     state = TWSFStateHolder();
-    colorStruct = themeManager.get().primControl;
-    themeManager.addEffect(ref, themeUpdateListener);
-  }
-
-  @override
-  void didUpdateWidget(TWSCascadeSection oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    themeManager.removeEffect(ref);
-    super.dispose();
   }
 
   @override

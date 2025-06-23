@@ -23,8 +23,6 @@ class _CategoryLayoutRibbonArticleButton extends StatefulWidget {
 ///
 /// Implements [State] handling for [_CategoryLayoutRibbonArticleButton].
 final class _CategoryLayoutRibbonArticleButtonState extends State<_CategoryLayoutRibbonArticleButton> {
-  /// {ref} Theme effect reference.
-  final UniqueKey themingRef = UniqueKey();
 
   /// [Widget] scoped theme properties.
   late StateTheming stateTheming;
@@ -37,21 +35,7 @@ final class _CategoryLayoutRibbonArticleButtonState extends State<_CategoryLayou
     super.initState();
 
     state = widget.isCurrent ? CSMStates.selected : CSMStates.none;
-    stateTheming = Theming.get<FoundationThemeB>().categoryLayoutRibbonButton;
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          stateTheming = theme.categoryLayoutRibbonButton;
-        });
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    Injector.getThemeManager().removeEffect(themingRef);
-    super.dispose();
+    stateTheming = Theming.get<FoundationThemeB>(context).categoryLayoutRibbonButton;
   }
 
   /// {event} Triggered when button is clicked.

@@ -23,7 +23,7 @@ final class BorderedBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SimpleTheming pageTheme = Theming.get<FoundationThemeB>().page;
+    final SimpleTheming pageTheme = Theming.get<FoundationThemeB>(context).page;
 
     return DecoratedBox(
       decoration: BoxDecoration(

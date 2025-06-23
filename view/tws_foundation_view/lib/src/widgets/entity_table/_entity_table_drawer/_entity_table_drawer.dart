@@ -59,15 +59,7 @@ final class _EntityTableDrawerState<TEntity extends EntityB<TEntity>> extends St
   void initState() {
     super.initState();
     composeAdaption();
-    errTheming = Theming.get<FoundationThemeB>().errorTheming;
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          errTheming = theme.errorTheming;
-        });
-      },
-    );
+    errTheming = Theming.get<FoundationThemeB>(context).errorTheming;
   }
 
   @override
@@ -77,13 +69,6 @@ final class _EntityTableDrawerState<TEntity extends EntityB<TEntity>> extends St
     }
 
     super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    widget.adapter.dispose();
-    Injector.getThemeManager().removeEffect(themingRef);
-    super.dispose();
   }
 
   @override

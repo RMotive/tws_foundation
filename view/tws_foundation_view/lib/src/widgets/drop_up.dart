@@ -97,15 +97,7 @@ final class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMix
       'The items list can\'t be empty',
     );
 
-    fountTheming = Theming.get();
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          fountTheming = theme;
-        });
-      },
-    );
+    fountTheming = Theming.get(context);
 
     _defineColors();
 
@@ -123,7 +115,6 @@ final class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMix
   @override
   void dispose() {
     dropUpAnimCtrl.dispose();
-    Injector.getThemeManager<FoundationThemeB>().removeEffect(themingRef);
     super.dispose();
   }
 

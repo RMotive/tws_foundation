@@ -40,6 +40,9 @@ final class YardLogsCategoryPage implements CategoryLayoutPageI {
 
   @override
   PageI composePage(BuildContext buildContext, RouteData routeData) => YardLogsPage();
+
+  @override
+  List<RouteB> composeRoutes() => <RouteB>[];
 }
 
 /// {page} class.

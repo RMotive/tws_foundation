@@ -68,62 +68,9 @@ final class _DialogState extends State<Dialog> {
   void initState() {
     ServicesBinding.instance.keyboard.addHandler(_escapeKeyHandler);
 
-    if (widget.theming != null) {
-      theming = widget.theming as SimpleTheming;
-    } else {
-      _composeTheming();
-    }
-
-    errTheming = Theming.get<FoundationThemeB>().errorTheming;
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      errThemingRef,
-      (FoundationThemeB theme) {
-        errTheming = theme.errorTheming;
-      },
-    );
+    errTheming = Theming.get<FoundationThemeB>(context).errorTheming;
+    
     super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant Dialog oldWidget) {
-    if (oldWidget.theming != widget.theming) {
-      if (widget.theming != null) {
-        theming = widget.theming as SimpleTheming;
-
-        if (oldWidget.theming == null) {
-          Injector.getThemeManager().removeEffect(themingRef);
-        }
-      } else {
-        _composeTheming();
-      }
-    }
-
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    ServicesBinding.instance.keyboard.removeHandler(_escapeKeyHandler);
-
-    Injector.getThemeManager().removeEffect(errThemingRef);
-    if (widget.theming != null) {
-      Injector.getThemeManager().removeEffect(themingRef);
-    }
-
-    super.dispose();
-  }
-
-  /// Composes the [theming] state initial value and subscribes to [ThemeManagerI] effect listener.
-  void _composeTheming() {
-    theming = Theming.get<FoundationThemeB>().page;
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          theming = theme.page;
-        });
-      },
-    );
   }
 
   /// Handles a callback for [ServicesBinding] to listen when {keyboard} keys-up on {esc} key button, to close the dialog.

@@ -149,7 +149,7 @@ final class _TextInputState extends State<TextInput> {
   late FocusNode focusNode = widget.focusNode ?? FocusNode();
 
   /// {dep} application theme reference.
-  late FoundationThemeB theming = Theming.get();
+  late FoundationThemeB theming = Theming.get(context);
 
   /// {state} whether the suffix is being shown.
   late bool showSuffix;
@@ -162,15 +162,6 @@ final class _TextInputState extends State<TextInput> {
     if (widget.focusEvents) setFocus();
 
     showSuffix = !widget.isOptional || widget.suffixLabel == null;
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          theming = theme;
-        });
-      },
-    );
-
     super.initState();
   }
 
@@ -196,8 +187,6 @@ final class _TextInputState extends State<TextInput> {
     focusNode.dispose();
     textInputCtrl.dispose();
     _deBouncer?.cancel();
-    Injector.getThemeManager().removeEffect(themingRef);
-
     super.dispose();
   }
 

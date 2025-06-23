@@ -28,6 +28,7 @@ final class CategoryLayoutNode extends RouteLayoutB {
            for (CategoryLayoutPageI page in pages)
              RouteNode(
                page.route,
+               routes: page.composeRoutes(),
                pageBuilder: page.composePage,
              ),
          ],
@@ -44,16 +45,14 @@ final class CategoryLayoutNode extends RouteLayoutB {
 ///
 final class CategoryLayout extends LayoutB {
   ///
-  final RouteData routeData;
-
-  ///
   final List<CategoryLayoutPageI> articles;
 
   /// Creates a new [CategoryLayout] instance.
   const CategoryLayout({
     required super.page,
+    required super.routeData,
+    
     required this.articles,
-    required this.routeData,
   }) : assert(articles.length > 0, 'Must be at least one article configured');
 
   @override
@@ -67,7 +66,12 @@ final class CategoryLayout extends LayoutB {
             currentRoute: routeData.route,
           ),
           Expanded(
-            child: page,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 12,
+              ),
+              child: page,
+            ),
           ),
         ],
       ),

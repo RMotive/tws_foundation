@@ -1,6 +1,8 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validations.Validators;
 
+using TWS_Business.Entities;
+
 namespace TWS_Business;
 
 /// <summary>
@@ -9,7 +11,7 @@ namespace TWS_Business;
 /// <typeparam name="TInternal"></typeparam>
 /// <typeparam name="TExternal"></typeparam>
 public abstract class CommonEntity<TInternal, TExternal>
-    : BEntity
+    : BEntity, ICommonEntity
     where TInternal : class, IEntity
     where TExternal : class, IEntity {
 

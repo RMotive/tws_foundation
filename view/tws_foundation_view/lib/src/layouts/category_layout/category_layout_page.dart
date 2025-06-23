@@ -1,3 +1,4 @@
+
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Route;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -20,6 +21,10 @@ abstract interface class CategoryLayoutPageI {
     required this.route,
     this.ribbonController,
   });
+
+  /// Composes the inner [CategoryLayout] entry nested [RouteB] implementations, used to subscribe dinamic routes subscription for this entry
+  /// [RouteNode] created providing routing access from inner [CategoryLayoutRibbonControllerI] interactions.
+  List<RouteB> composeRoutes();
 
   /// Composes customly a [Widget] to replace the default [CategoryLayout] page selection button icon decorator.
   ///
@@ -44,14 +49,21 @@ final class CategoryLayoutPage extends CategoryLayoutPageI {
   /// [foreColor] recommended current theme fore color.
   final Widget Function(Color? foreColor) iconBuilder;
 
+  /// Builds inner [CategoryLayoutPage] nested [RouteB] implementations to be accessable.
+  final List<RouteB> Function()? routesBuilder;
+
   /// Creates a new [CategoryLayoutPage] instance.
   const CategoryLayoutPage({
     required super.title,
+    this.routesBuilder,
     required super.route,
     super.ribbonController,
     required this.pageBuilder,
     required this.iconBuilder,
   });
+
+  @override
+  List<RouteB> composeRoutes() => routesBuilder?.call() ?? <RouteB>[];
 
   @override
   Widget? composeIcon(Color? recomdColor) => iconBuilder(recomdColor);

@@ -16,7 +16,7 @@ final class _EntityTableError extends StatelessWidget {
       builder: (_, BoxConstraints constrains) {
         constrains = constrains.boxed();
         final Size boxingSize = constrains.biggest;
-        final SimpleTheming errorTheming = Theming.get<FoundationThemeB>().errorTheming;
+        final SimpleTheming errorTheming = Theming.get<FoundationThemeB>(context).errorTheming;
 
         return Padding(
           padding: EdgeInsets.symmetric(

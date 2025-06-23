@@ -7,8 +7,7 @@ final class _AuthPageBusinessLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FoundationThemeB theme =
-        Injector.getThemeManager<FoundationThemeB>().get();
+    final FoundationThemeB theme = Theming.get(context);
 
     return Center(
       child: ConstrainedBox(

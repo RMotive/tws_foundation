@@ -14,7 +14,7 @@ final class _EntityTableHeader<TEntity> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
+    final ThemeManager themeManager = Injector.get();
 
     return LayoutBuilder(
       builder: (_, BoxConstraints boxConstraints) {
@@ -46,7 +46,7 @@ final class _EntityTableHeader<TEntity> extends StatelessWidget {
                       child: Text(
                         columns[cont].title,
                         style: TextStyle(
-                          color: themeManager.get().page.fore,
+                          color: themeManager.castData<FoundationThemeB>().page.fore,
                           fontWeight: FontWeight.w900,
                         ),
                       ),

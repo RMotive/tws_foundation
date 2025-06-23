@@ -125,7 +125,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
   final GlobalKey _fieldKey = GlobalKey();
 
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
+  late ThemeManager themeManager = ThemeManager.of(context);
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -325,12 +325,11 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
 
   @override
   void initState() {
-    primaryColorTheme = themeManager.get().primControl;
-    themeManager.addEffect(ref, themeUpdateListener);
+    primaryColorTheme = themeManager.castData<FoundationThemeB>().primControl;
     futureState = _TWSAutoCompleteFieldFutureState<T>();
     hasKeyValue = widget.hasKeyValue ?? (T? set) => true;
     scrollController = ScrollController();
-    pageColorTheme = themeManager.get().page;
+    pageColorTheme = themeManager.castData<FoundationThemeB>().page;
     ctrl = TextEditingController(
       text:
           widget.initialValue != null
@@ -366,7 +365,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     focus.dispose();
     scrollController.dispose();
     ctrl.dispose();
-    themeManager.removeEffect(ref);
     super.dispose();
   }
 

@@ -96,22 +96,8 @@ final class _PaginationState extends State<Pagination> {
   void initState() {
     options = widget.options;
 
-    pageTheming = Theming.get<FoundationThemeB>().page;
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          pageTheming = theme.page;
-        });
-      },
-    );
+    pageTheming = Theming.get<FoundationThemeB>(context).page;
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    Injector.getThemeManager().removeEffect(themingRef);
-    super.dispose();
   }
 
   @override

@@ -64,8 +64,7 @@ class _EntityCreationFormState<TModel>
   late _EntityCreationFormReactor<TModel> mainState;
 
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager =
-      Injector.getThemeManager();
+  late final ThemeManager themeManager = ThemeManager.of(context);
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -77,8 +76,7 @@ class _EntityCreationFormState<TModel>
   void initState() {
     super.initState();
     mainState = _EntityCreationFormReactor<TModel>(widget.factory);
-    pageColorTheme = themeManager.get().primControl;
-    themeManager.addEffect(ref, themeUpdateListener);
+    pageColorTheme = themeManager.castData<FoundationThemeB>().primControl;
     widget.controller?.addListener(submitRecords);
   }
 
@@ -86,12 +84,6 @@ class _EntityCreationFormState<TModel>
   void didUpdateWidget(covariant EntityCreationForm<TModel> oldWidget) {
     super.didUpdateWidget(oldWidget);
     widget.controller?.addListener(submitRecords);
-  }
-
-  @override
-  void dispose() {
-    themeManager.removeEffect(ref);
-    super.dispose();
   }
 
   void themeUpdateListener(FoundationThemeB theme) {

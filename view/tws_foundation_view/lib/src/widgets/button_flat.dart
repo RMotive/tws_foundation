@@ -49,8 +49,6 @@ class ButtonFlat extends StatefulWidget {
 ///
 /// Handles [State] for [ButtonFlat] {widget}.
 final class _ButtonFlatState extends State<ButtonFlat> {
-  /// {dep} theming manager dependency.
-  final ThemeManagerI<FoundationThemeB> themeManager = Injector.getThemeManager();
 
   /// {ref} Thememing effect reference.
   final UniqueKey themingRef = UniqueKey();
@@ -90,53 +88,11 @@ final class _ButtonFlatState extends State<ButtonFlat> {
       theming = theme.primControl;
     });
   }
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.theming != null) {
-      theming = widget.theming as SimpleTheming;
-    } else {
-      _composeTheming();
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant ButtonFlat oldWidget) {
-    if (oldWidget.theming != widget.theming) {
-      if (widget.theming != null) {
-        theming = widget.theming as SimpleTheming;
-
-        if (oldWidget.theming == null) {
-          Injector.getThemeManager().removeEffect(themingRef);
-        }
-      } else {
-        _composeTheming();
-      }
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
   @override
   void dispose() {
     if (widget.theming != null) {
-      themeManager.removeEffect(themingRef);
     }
     super.dispose();
-  }
-
-  /// Composes the [theming] state initial value and subscribes to [ThemeManagerI] effect listener.
-  void _composeTheming() {
-    theming = Theming.get<FoundationThemeB>().page;
-    themeManager.addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          theming = theme.page;
-        });
-      },
-    );
   }
 
   @override

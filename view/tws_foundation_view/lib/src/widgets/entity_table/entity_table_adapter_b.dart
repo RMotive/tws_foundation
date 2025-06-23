@@ -108,7 +108,9 @@ abstract class EntityTableAdapterB<TEntity extends EntityI<TEntity>> implements 
   }
 
   @override
-  void refresh() => _refreshNotifier.refresh();
+  void refresh() {
+    _refreshNotifier.refresh();
+  }
 
   @override
   FutureOr<String> composeAuth();

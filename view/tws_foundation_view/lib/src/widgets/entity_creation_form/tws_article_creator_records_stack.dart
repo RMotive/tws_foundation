@@ -39,10 +39,8 @@ class _RecordsStack<TModel> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final ThemeManagerI<FoundationThemeB> themeManager =
-        Injector.getThemeManager<FoundationThemeB>();
-    SimpleTheming dangerTheme = themeManager.get().errorTheming;
+  Widget build(BuildContext context) { 
+    SimpleTheming dangerTheme = Theming.get<FoundationThemeB>(context).errorTheming;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),

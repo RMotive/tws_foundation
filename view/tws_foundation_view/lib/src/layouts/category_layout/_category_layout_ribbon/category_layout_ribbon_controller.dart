@@ -31,6 +31,8 @@ final class CategoryLayoutRibbonController extends CategoryLayoutRibbonControlle
   /// Creates a new [CategoryLayoutRibbonController] instance.
   const CategoryLayoutRibbonController({
     super.onRefresh,
+    super.dataTransferController,
+    super.dataManagementController,
   });
 
   @override

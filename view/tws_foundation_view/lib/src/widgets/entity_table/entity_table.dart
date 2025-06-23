@@ -132,11 +132,13 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
   ///
   void refreshView() {
-    setState(() {
+    if (mounted) {
+      setState(() {
       selItem = null;
       drawerAnimationCtrl.reverse();
       asyncInvokation = _viewInvokation();
     });
+    }
   }
 
   /// {event} triggered when the [EntityTable] pagination options has changed.
@@ -193,6 +195,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
   @override
   Widget build(BuildContext context) {
+
     return LayoutBuilder(
       builder: (_, BoxConstraints boxConstraints) {
         boxConstraints = boxConstraints.boxed();

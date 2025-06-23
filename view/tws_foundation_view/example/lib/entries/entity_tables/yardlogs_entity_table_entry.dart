@@ -1,4 +1,4 @@
-import 'package:csm_view/csm_view.dart';
+import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ final class YardLogsEntityTableEntry extends PackageLandingEntryB<LandingThemeB>
        );
 
   @override
-  Widget composeEntry(BuildContext buildContext, Size windowSize, PackageLandingThemeB theme) {
+  Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return view.YardLogsEntityTable(
       adapter: view.YardLogsEntityTableAdapter(
         authBuilder: LandingUtils.authBuilder,

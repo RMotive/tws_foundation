@@ -82,10 +82,9 @@ class TwsSelectableList<T> extends StatefulWidget {
   State<TwsSelectableList<T>> createState() => _TwsSelectableListState<T>();
 }
 
-class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
+final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager =
-      Injector.getThemeManager();
+  late ThemeManager themeManager = ThemeManager.of(context);
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -128,12 +127,6 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   }
 
   @override
-  void dispose() {
-    themeManager.removeEffect(ref);
-    super.dispose();
-  }
-
-  @override
   void initState() {
     waitingState = TWSFStateHolder();
     waiting = false;
@@ -141,9 +134,6 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     headerState = _HeaderState();
     headerEffect = () {};
     waitingEffect = () {};
-    themeManager.addEffect(ref, themeUpdateListener);
-    primaryColorTheme = themeManager.get().primControl;
-    pageColorTheme = themeManager.get().page;
     tcolor = widget.textColor ?? pageColorTheme.fore;
     bcolor = widget.backgroundColor ?? pageColorTheme.back;
     super.initState();
@@ -164,8 +154,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
     tcolor =
         widget.enabled
             ? widget.textColor ?? pageColorTheme.fore
-            : widget.textColor?.withValues(alpha: 50) ??
-                pageColorTheme.fore.withAlpha(50);
+            : widget.textColor?.withValues(alpha: 50) ?? pageColorTheme.fore.withAlpha(50);
     return TWSSection(
       title: widget.title,
       content: AsyncWidget<List<ViewOutput<dynamic>>>(
@@ -224,9 +213,7 @@ class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                                   label: title,
                                   textColor: tcolor,
                                   onHoverColor: pageColorTheme.accent,
-                                  onHoverTextColor:
-                                      pageColorTheme.accentAlt ??
-                                      pageColorTheme.fore,
+                                  onHoverTextColor: pageColorTheme.accentAlt ?? pageColorTheme.fore,
                                   onTap: (bool selected) async {
                                     waiting = true;
                                     waitingEffect();

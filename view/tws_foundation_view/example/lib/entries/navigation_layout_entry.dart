@@ -1,4 +1,4 @@
-import 'package:csm_view/csm_view.dart';
+import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart' hide Route;
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
@@ -6,7 +6,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 ///
 final class NavigationLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
   ///
-  final List<ThemeI> appThemes;
+  final List<ThemeDataI> appThemes;
 
   /// Creates a new [NavigationLayoutEntry] instance.
   NavigationLayoutEntry({
@@ -20,14 +20,13 @@ final class NavigationLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
        );
 
   @override
-  Widget composeEntry(BuildContext buildContext, Size windowSize, PackageLandingThemeB theme) {
+  Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return view.NavigationLayout(
       user: view.NavigationLayoutHeaderUser(
         name: 'Package',
         email: 'package_landing@csm.com',
         lastName: 'Landing',
       ),
-      appThemes: appThemes,
       routeData: RouteData(
         route: Route(''),
         absolutePath: '',

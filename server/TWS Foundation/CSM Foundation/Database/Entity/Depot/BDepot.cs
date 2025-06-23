@@ -543,8 +543,6 @@ public abstract class BDepot<TDatabase, TEntity>
         _dbSet.Update(entity);
         await _db.SaveChangesAsync();
         _disposer?.Push(entity);
-
-        throw new Exception("System Forced Exception");
         
         return new UpdateOutput<TEntity> {
             Original = original,

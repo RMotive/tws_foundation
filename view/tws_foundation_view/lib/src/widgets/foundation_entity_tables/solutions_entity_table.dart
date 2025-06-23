@@ -140,7 +140,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
                               fontSize: 16,
                             ),
                           ),
-                          theming: Theming.get<FoundationThemeB>().errorTheming,
+                          theming: Theming.get<FoundationThemeB>(context).errorTheming,
                           onAccept: () {
                             router.pop();
                           },

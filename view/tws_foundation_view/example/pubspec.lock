@@ -79,10 +79,10 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "90d4dc06378080f2fdc1addab8213e834d1f7b4f"
+      resolved-ref: e44f2ad95cf957f050adc8fa187cc1ad5d3658b4
       url: "https://github.com/RMotive/csm_view"
     source: git
-    version: "6.1.0"
+    version: "7.0.0"
   device_info_plus:
     dependency: transitive
     description:
@@ -174,10 +174,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: f222e12c5360b0c90aae5d33e6b351a6789d4aa1c97b32691b4a30946fc91813
+      sha256: "02ff498f6279470ff7f60c998a69b872f26696ceec237c8402e63a2133868ddf"
       url: "https://pub.dev"
     source: hosted
-    version: "15.2.0"
+    version: "15.2.3"
   http:
     dependency: transitive
     description:
@@ -404,7 +404,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "development#widget_package"
-      resolved-ref: "6bcd3ad155ae2d00ced9a3377eafd394d5022e9c"
+      resolved-ref: e349b48ef0500e89df614ce4e80eead9883d1a7d
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

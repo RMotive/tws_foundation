@@ -68,8 +68,8 @@ class TwsListViewer<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
-    SimpleTheming pageColorTheme = themeManager.get().page;
+    final ThemeManager themeManager = ThemeManager.of(context);
+    SimpleTheming pageColorTheme = themeManager.castData<FoundationThemeB>().page;
     Color tColor = textColor ?? pageColorTheme.fore;
     Color bColor = backgroundColor ?? pageColorTheme.back;
     return SizedBox(

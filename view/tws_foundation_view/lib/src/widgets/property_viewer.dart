@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {widget} class.
 ///
@@ -20,8 +20,7 @@ final class PropertyViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<FoundationThemeB> themeManager = Injector.getThemeManager();
-    final SimpleTheming pageTheme = themeManager.get().page;
+    final SimpleTheming pageTheme = Theming.get<FoundationThemeB>(context).page;
 
     return Wrap(
       spacing: 8,

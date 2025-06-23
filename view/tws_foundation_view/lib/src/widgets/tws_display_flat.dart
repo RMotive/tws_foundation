@@ -38,9 +38,7 @@ class TWSDisplayFlat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManagerI<FoundationThemeB> themeManager =
-        Injector.getThemeManager();
-    final SimpleTheming colorStruct = themeManager.get().primControl;
+    final SimpleTheming colorStruct = Theming.get<FoundationThemeB>(context).primControl;
 
     Color baseColor = color ?? colorStruct.accent;
 
