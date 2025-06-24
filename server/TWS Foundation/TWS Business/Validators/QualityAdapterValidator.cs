@@ -65,7 +65,7 @@ public class QualityDriverAdapterAttribute
         Identification identification =
                  new Identification {
                      Name = entropy,
-                     Lastname = entropy,
+                     LastName = entropy,
                      Status = statusID,
                  };
 
@@ -140,7 +140,7 @@ public class QualityDriverAdapterAttribute
         Identification identification =
                 new Identification {
                     Name = entropy,
-                    Lastname = entropy,
+                    LastName = entropy,
                     Status = statusID,
                 };
 

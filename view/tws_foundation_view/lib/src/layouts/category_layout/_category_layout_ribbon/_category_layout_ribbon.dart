@@ -6,7 +6,7 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
   final Route currentRoute;
 
   /// Article entries.
-  final List<CategoryLayoutEntryI> articles;
+  final List<CategoryLayoutPageI> articles;
 
   /// Creates a new [_CategoryLayoutRibbon] instance.
   const _CategoryLayoutRibbon({
@@ -16,8 +16,8 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CategoryLayoutEntryI currentEntry = articles.firstWhere(
-      (CategoryLayoutEntryI article) => article.route == currentRoute,
+    final CategoryLayoutPageI currentEntry = articles.firstWhere(
+      (CategoryLayoutPageI article) => article.route == currentRoute,
     );
 
     final CategoryLayoutRibbonControllerI? ribbonController = currentEntry.ribbonController;
@@ -34,15 +34,70 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
                 flex: 2,
                 child: _CategoryLayoutRibbonSection(
                   children: <Widget>[
+                    
+                    // --> Refresh action button.
                     if (ribbonController?.onRefresh != null)
-                      _CategoryLayoutRibbonActionButton(
-                        options: CategoryLayoutRibbonActionOptions(
-                          title: '',
-                          description: '',
-                          onInvoke: () {},
-                          iconBuilder: (Color recommended) {},
-                        ),
-                      ),
+                      CategoryLayoutRibbonActionOptions(
+                        title: 'Refresh',
+                        description: 'Refreshes the current page',
+                        onInvoke: ribbonController!.onRefresh!,
+                        iconBuilder: (Color recommended) {
+                          return Icon(
+                            Icons.refresh_rounded,
+                            color: recommended,
+                          );
+                        },
+                      ).compose(context),
+
+                    // --> Data Management action group.
+                    if (ribbonController?.dataManagementController != null)
+                      CategoryLayoutRibbonGroupOptions(
+                        title: 'Data Management',
+                        description: 'Data handling related actions',
+                        actions: <CategoryLayoutRibbonActionOptionsI>[
+                          // --> Create action
+                          if (ribbonController?.dataManagementController?.onCreate != null)
+                            CategoryLayoutRibbonActionOptions(
+                              title: 'Create',
+                              description: 'Create new entities',
+                              onInvoke: ribbonController!.dataManagementController!.onCreate!,
+                              iconBuilder: (Color recommended) {
+                                return Icon(
+                                  Icons.add_box_outlined,
+                                  color: recommended,
+                                );
+                              },
+                            ),
+
+                          // --> Edit action
+                          if (ribbonController?.dataManagementController?.onEdit != null)
+                            CategoryLayoutRibbonActionOptions(
+                              title: 'Edit',
+                              description: 'Edit entities',
+                              onInvoke: ribbonController!.dataManagementController!.onEdit!,
+                              iconBuilder: (Color recommended) {
+                                return Icon(
+                                  Icons.edit_outlined,
+                                  color: recommended,
+                                );
+                              },
+                            ),
+
+                          // --> Remove action
+                          if (ribbonController?.dataManagementController?.onRemove != null)
+                            CategoryLayoutRibbonActionOptions(
+                              title: 'Remove',
+                              description: 'Remove entities',
+                              onInvoke: ribbonController!.dataManagementController!.onRemove!,
+                              iconBuilder: (Color recommended) {
+                                return Icon(
+                                  Icons.remove_circle_outline_rounded,
+                                  color: recommended,
+                                );
+                              },
+                            ),
+                        ],
+                      ).compose(context),
                   ],
                 ),
               ),
@@ -50,7 +105,7 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
             Expanded(
               child: _CategoryLayoutRibbonSection(
                 children: <Widget>[
-                  for (CategoryLayoutEntryI article in articles)
+                  for (CategoryLayoutPageI article in articles)
                     _CategoryLayoutRibbonArticleButton(
                       isCurrent: currentEntry == article,
                       articleEntry: article,

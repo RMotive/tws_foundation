@@ -6,7 +6,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace TWS_Business.Entities.Vehicules.Trucks;
 
 /// <summary>
-///     [Entity]
+///     {entity} class.
+///     
+///     Represents an external business truck usually from partners that needs to be loaded into own systems 
+///     for entry control or movement calulations.
 /// </summary>
 public class TruckExternal
     : CommonEntityEdge<Truck_Common> {
@@ -14,25 +17,25 @@ public class TruckExternal
     #region Properties
 
     /// <summary>
-    ///     External carrier identification.
+    ///     Carrier identification.
     /// </summary>
     [StringLength(100, MinimumLength = 1)]
     public string Carrier { get; set; } = string.Empty;
 
     /// <summary>
-    ///     External truck vehicule number identifier.
+    ///     Vehicule identifier number.
     /// </summary>
     [StringLength(17, MinimumLength = 1)]
     public string? VIN { get; set; }
 
     /// <summary>
-    ///     External truck usa plate.
+    ///     USA Plate.
     /// </summary>
     [StringLength(7, MinimumLength = 5)]
     public string? UsaPlate { get; set; }
 
     /// <summary>
-    ///     External truck mex plate.
+    ///     MX Plate.
     /// </summary>
     [StringLength(7, MinimumLength = 7)]
     public string? MxPlate { get; set; }

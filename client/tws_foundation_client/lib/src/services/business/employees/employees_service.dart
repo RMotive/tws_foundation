@@ -1,10 +1,42 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/employees/employees_service_b.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
+/// {interface} class.
 ///
-final class EmployeesService extends EmployeesServiceB {
+/// Defines a [ServiceI] contract for [Employee] operations.
+abstract interface class EmployeesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Employee> {
+  /// Creates a new [EmployeesServiceI] instance.
+  EmployeesServiceI(
+    super.host,
+    super.servicePath,
+  );
+}
+
+/// {abstract} class.
+///
+/// Implements base shared [EmployeesServiceI] behavior for all [Employee] based [ServiceI].
+abstract class EmployeesServiceB extends FoundationServiceB implements EmployeesServiceI {
+  /// Creates a new [EmployeesServiceB] instance.
   ///
+  ///
+  /// [host] server host address.
+  ///
+  /// [servicePath] service path address.
+  ///
+  /// [client] custom network [Client] to testing/quality purposes.
+  EmployeesServiceB(
+    super.host,
+    super.servicePath, {
+    super.client,
+    super.headers,
+  });
+}
+
+/// {service} class.
+/// 
+/// Implements a [ServiceI] for [Employee] based operations, providing final behavior operations.
+final class EmployeesService extends EmployeesServiceB {
+  /// Creates a new [EmployeesService] instance.
   EmployeesService(
     Uri host, {
     super.client,

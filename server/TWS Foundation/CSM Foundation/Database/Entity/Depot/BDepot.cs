@@ -39,17 +39,17 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <summary>
     /// 
     /// </summary>
-    protected readonly IDisposer? Disposer;
+    protected readonly IDisposer? _disposer;
 
     /// <summary>
     ///     Name to handle direct transactions (not-attached)
     /// </summary>
-    protected readonly TDatabase Database;
+    protected readonly TDatabase _db;
 
     /// <summary>
-    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TEntity"/> 
+    ///     DBSet handler into <see cref="_db"/> to handle fastlike transactions related to the <see cref="TEntity"/> 
     /// </summary>
-    protected readonly DbSet<TEntity> Set;
+    protected readonly DbSet<TEntity> _dbSet;
 
     /// <summary>
     ///     Generates a new instance of a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> base.
@@ -58,9 +58,9 @@ public abstract class BDepot<TDatabase, TEntity>
     ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TEntity"/> concept.
     /// </param>
     public BDepot(TDatabase Database, IDisposer? Disposer) {
-        this.Database = Database;
-        this.Disposer = Disposer;
-        Set = Database.Set<TEntity>();
+        this._db = Database;
+        this._disposer = Disposer;
+        _dbSet = Database.Set<TEntity>();
     }
 
     #region (Private / Protected) Functions / Methods
@@ -77,7 +77,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// </param>
     /// <returns></returns>
     protected IQueryable<TEntity> ProcessQuery<TParameters>(QueryInput<TEntity, TParameters> input, Func<IQueryable<TEntity>, IQueryable<TEntity>> process) {
-        IQueryable<TEntity> query = Set;
+        IQueryable<TEntity> query = _dbSet;
 
 
         if (input.PreProcessor != null) {
@@ -224,7 +224,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
         TEntity2? tmpDependency = dependencyEntity;
         tmpDependency = tmpDependency.Id > 0
-            ? Database.Set<TEntity2>().Where(dep => dep.Id == tmpDependency.Id).FirstOrDefault()
+            ? _db.Set<TEntity2>().Where(dep => dep.Id == tmpDependency.Id).FirstOrDefault()
             : throw new Exception($"Dependencies aren't allowed to be auto-created on main Entity creation, you need to create the Dependency first in its corresponding [Depot]");
 
         return tmpDependency is null
@@ -277,11 +277,11 @@ public abstract class BDepot<TDatabase, TEntity>
         entity.Timestamp = DateTime.UtcNow;
         entity.EvaluateWrite();
 
-        entity = DatabaseUtilities.SanitizeEntity(Database, entity);
-        await Set.AddAsync(entity);
+        entity = DatabaseUtilities.SanitizeEntity(_db, entity);
+        await _dbSet.AddAsync(entity);
 
-        Disposer?.Push(entity);
-        await Database.SaveChangesAsync();
+        _disposer?.Push(entity);
+        await _db.SaveChangesAsync();
 
         return entity;
     }
@@ -323,7 +323,7 @@ public abstract class BDepot<TDatabase, TEntity>
                 failures = [.. failures, fail];
             }
         }
-        Database.SaveChanges();
+        _db.SaveChanges();
         return new(attached, failures);
     }
 
@@ -342,7 +342,7 @@ public abstract class BDepot<TDatabase, TEntity>
     ///     Thrown when the <see cref="TEntity"/> couldn't be found.
     /// </exeption>
     public async Task<TEntity> Read(long id) {
-        TEntity? entity = await Set.Where(
+        TEntity? entity = await _dbSet.Where(
                 e => e.Id == id
             )
             .FirstOrDefaultAsync()
@@ -382,7 +382,7 @@ public abstract class BDepot<TDatabase, TEntity>
         IQueryable<TEntity> processedQuery = ProcessQuery(
                 input,
                 sourceQuery => {
-                    sourceQuery = Set.Where(parameters.Filter);
+                    sourceQuery = _dbSet.Where(parameters.Filter);
                     return sourceQuery;
                 }
             );
@@ -430,12 +430,12 @@ public abstract class BDepot<TDatabase, TEntity>
     /// <param name="original"> Lastest data set stored in db sorce. </param>
     /// <param name="overwritten"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
     void UpdateHelper(IEntity original, IEntity overwritten) {
-        EntityEntry previousEntry = Database.Entry(original);
+        EntityEntry previousEntry = _db.Entry(original);
         if (previousEntry.State == EntityState.Unchanged) {
             // Update the non-navigation properties.
             previousEntry.CurrentValues.SetValues(overwritten);
             foreach (NavigationEntry navigation in previousEntry.Navigations) {
-                object? newNavigationValue = Database.Entry(overwritten).Navigation(navigation.Metadata.Name).CurrentValue;
+                object? newNavigationValue = _db.Entry(overwritten).Navigation(navigation.Metadata.Name).CurrentValue;
                 // Validate if navigation is a collection.
                 if (navigation.CurrentValue is IEnumerable<object> previousCollection && newNavigationValue is IEnumerable<object> newCollection) {
                     List<object> previousList = [.. previousCollection];
@@ -467,7 +467,7 @@ public abstract class BDepot<TDatabase, TEntity>
                     // Create a new navigation overwritten.
                     // Also update the attached navigators.
                     //AttachDate(newNavigationValue);
-                    EntityEntry newNavigationEntry = Database.Entry(newNavigationValue);
+                    EntityEntry newNavigationEntry = _db.Entry(newNavigationValue);
                     newNavigationEntry.State = EntityState.Added;
                     navigation.CurrentValue = newNavigationValue;
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
@@ -498,49 +498,58 @@ public abstract class BDepot<TDatabase, TEntity>
     /// </exception>
     public async Task<UpdateOutput<TEntity>> Update(QueryInput<TEntity, UpdateInput<TEntity>> input) {
         UpdateInput<TEntity> parameters = input.Parameters;
-        IQueryable<TEntity> processedQuery = Set;
+        
+        IQueryable<TEntity> processedQuery = ProcessQuery(
+                input,
+                (sourceQuery) => sourceQuery
+            );
 
-        TEntity overwritten = parameters.Entity;
-        if (overwritten.Id == 0) {
+        TEntity entity = parameters.Entity;
+        
+        /// --> When the entity is not saved yet.
+        if (entity.Id == 0) {
             if (!parameters.Create) {
                 throw new XDepot<TEntity>(XDepotSituations.CreateDisabled);
             }
 
-            overwritten = await Create(overwritten);
+            entity = await Create(entity);
+            _disposer?.Push(entity);
 
-            Database.SaveChanges();
-            Disposer?.Push(overwritten);
             return new UpdateOutput<TEntity> {
                 Original = null,
-                Updated = overwritten,
+                Updated = entity,
             };
         }
 
+        ///
         TEntity? original = await processedQuery
-            .Where(r => r.Id == overwritten.Id)
+            .Where(obj => obj.Id == entity.Id)
             .AsNoTracking()
             .FirstOrDefaultAsync()
             ?? throw new XDepot<TEntity>(XDepotSituations.Unfound);
+
         if (original == null) {
             if (!parameters.Create)
-                throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {overwritten.Id}");
+                throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {entity.Id}");
+            
+            entity.Id = 0;
+            entity = await Create(entity);
+            _disposer?.Push(entity);
 
-            overwritten = await Create(overwritten);
-
-            Database.SaveChanges();
-            Disposer?.Push(overwritten);
             return new UpdateOutput<TEntity> {
                 Original = null,
-                Updated = overwritten,
+                Updated = entity,
             };
         }
 
-        UpdateHelper(original, overwritten);
-        Database.SaveChanges();
-        Disposer?.Push(overwritten);
+        entity = DatabaseUtilities.SanitizeEntity(_db, entity);
+        _dbSet.Update(entity);
+        await _db.SaveChangesAsync();
+        _disposer?.Push(entity);
+        
         return new UpdateOutput<TEntity> {
             Original = original,
-            Updated = overwritten,
+            Updated = entity,
         };
     }
 
@@ -561,15 +570,15 @@ public abstract class BDepot<TDatabase, TEntity>
     ///     <see cref="IDepot{TEntity}"/> based exception, more info see inner Situation.
     /// </exception>
     public async Task<TEntity> Delete(long id) {
-        TEntity entity = await Set
+        TEntity entity = await _dbSet
             .AsNoTracking()
             .FirstOrDefaultAsync(
                 e => e.Id == id
             )
             ?? throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {id}");
 
-        Set.Remove(entity);
-        Database.SaveChanges();
+        _dbSet.Remove(entity);
+        _db.SaveChanges();
         return entity;
     }
 
@@ -629,8 +638,8 @@ public abstract class BDepot<TDatabase, TEntity>
     }
 
     public async Task<TEntity> Delete(TEntity Entity) {
-        Set.Remove(Entity);
-        await Database.SaveChangesAsync();
+        _dbSet.Remove(Entity);
+        await _db.SaveChangesAsync();
         return Entity;
     }
 

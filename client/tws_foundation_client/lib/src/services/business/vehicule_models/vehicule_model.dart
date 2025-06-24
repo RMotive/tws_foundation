@@ -1,7 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/constants.dart';
-import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/entities/business/status.dart';
+
 
 /// [VehiculeModel] default builder.
 VehiculeModel vehiculemodelBuilder() => VehiculeModel();
@@ -14,9 +12,6 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   /// Model year.
   DateTime year = DateTime(0);
 
-  /// Entity [Status] information.
-  Status  status = Status();
-
   /// Generates a new [VehiculeModel] instance from mandatory values.
   VehiculeModel();
   
@@ -24,8 +19,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
         <String, Object?>{
-          kYear: year.toUtc().toString(),
-          EntitiesCommonProperties.kStatus: status.encode(),
+        kYear: year.toUtc().toString(),
       },
     );
   }
@@ -34,8 +28,6 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   void decode(DataMap encode) {
     super.decode(encode);
     year = encode.get(kYear);
-    status = Status();
-    status.decode(encode.get(EntitiesCommonProperties.kStatus));
   }
 
   @override
@@ -48,7 +40,6 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
       if (description!.trim().isEmpty) results.add(EntityInvalidation<VehiculeModel>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
     }
     
-    results.validateDependency(this, status);
 
     return results;
   }

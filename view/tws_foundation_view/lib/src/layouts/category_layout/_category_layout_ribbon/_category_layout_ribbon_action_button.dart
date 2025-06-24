@@ -20,43 +20,28 @@ final class _CategoryLayoutRibbonActionButton extends StatefulWidget {
 ///
 /// Implements [State] handling for [_CategoryLayoutRibbonArticleButton].
 final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayoutRibbonActionButton> {
-  /// {ref} Theme effect reference.
-  final UniqueKey themingRef = UniqueKey();
 
   /// [Widget] scoped theme properties.
   late StateTheming stateTheming;
 
   /// [Widget] current state.
-  late CSMStates state;
+  CSMStates state = CSMStates.none;
 
   /// Whether the current [Widget] is waiting to finish invokation.
   bool isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    stateTheming = Theming.get<FoundationThemeB>(context).categoryLayoutRibbonButton;
 
-    stateTheming = Theming.get<FoundationThemeB>().categoryLayoutRibbonButton;
-    Injector.getThemeManager<FoundationThemeB>().addEffect(
-      themingRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          stateTheming = theme.categoryLayoutRibbonButton;
-        });
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    Injector.getThemeManager().removeEffect(themingRef);
-    super.dispose();
+    super.didChangeDependencies();
   }
 
   /// {event} Triggered when the user mouse pointer clicks on the button.
   void onClick() async {
     setState(() {
       isLoading = true;
+      state = CSMStates.selected;
     });
 
     await widget.options.onInvoke();
@@ -80,6 +65,7 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
     return Tooltip(
       message: widget.options.description,
       child: PointerArea(
+        cursor: isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
         onClick: isLoading ? null : onClick,
         onHover: isLoading ? null : onHover,
         child: AspectRatio(
@@ -89,6 +75,7 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
             child: Padding(
               padding: const EdgeInsets.all(1.0),
               child: Visibility(
+                visible: !isLoading,
                 child: Column(
                   spacing: 1,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -112,8 +99,14 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
                     ),
                   ],
                 ),
-                replacement: CircularProgressIndicator(
-                  color: theming.foreground,
+                replacement: Transform.scale(
+                  scale: .5,
+                  child: CircularProgressIndicator(
+                    color: theming.foreground?.withValues(
+                      alpha: .7,
+                    ),
+                    strokeWidth: 3,
+                  ),
                 ),
               ),
             ),

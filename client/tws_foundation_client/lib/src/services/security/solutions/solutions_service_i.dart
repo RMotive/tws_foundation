@@ -5,17 +5,9 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [SolutionsServiceI].
 ///
 /// Defines base contract for [SolutionsServiceI] implementations that specifies the methods to have providing [Solution] based operations and management.
-abstract interface class SolutionsServiceI extends FoundationServiceB implements ServiceI {
+abstract interface class SolutionsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Solution> {
   /// Creates a new [SolutionsServiceI] instance.
   SolutionsServiceI(super.host, super.servicePath);
-
-  /// Generates a complex [View] for [Solution] set.
-  ///
-  ///
-  /// [options] how the method will build the [View] result, are instructions for the paging, ordering, etc.
-  ///
-  /// [auth] server authorization token.
-  FoundationFutureResolver<ViewOutput<Solution>> view(ViewInput<Solution> input, String auth);
 
   /// Creates a [Solution] collection.
   ///

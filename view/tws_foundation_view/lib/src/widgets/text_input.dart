@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tws_foundation_view/src/themes/foundation_theme_b.dart';
 
-/// TWS Business dedicated component
+/// {widget} class.
 ///
-/// This component builds a TWS Design opinioned component for a text input control.
-///
-/// TWS Theme Base, this component uses primaryControlColorStruct
+/// Draws a {csm} business designed input for text type values.
 final class TextInput extends StatefulWidget {
   /// Control title.
   final String? label;
@@ -62,7 +60,7 @@ final class TextInput extends StatefulWidget {
   /// Mandatory fix input text lenght.
   ///
   /// If the input lengh is not equal to [maxLenght] value, wil trigger a input text validation error.
-  final bool isStrictLength;
+  final bool isFixedLength;
 
   /// Trigger method on tap input text.
   final void Function()? onTap;
@@ -95,6 +93,7 @@ final class TextInput extends StatefulWidget {
   /// Text input auto fill platform hint.
   final Iterable<String> autofillHints;
 
+  /// Creates a new [TextInput] instance.
   const TextInput({
     super.key,
     this.label,
@@ -112,7 +111,7 @@ final class TextInput extends StatefulWidget {
     this.backgroundColor,
     this.focusEvents = false,
     this.autofocus = true,
-    this.isStrictLength = false,
+    this.isFixedLength = false,
     this.isOptional = false,
     this.showErrorColor = false,
     this.onTap,
@@ -124,103 +123,101 @@ final class TextInput extends StatefulWidget {
     this.formatter,
     this.keyboardType,
     this.autofillHints = const <String>[],
-  });
+  }) : assert(
+         isFixedLength ? maxLength != null : true,
+         'When using isFixedLength property a maxLength property must be set',
+       );
 
   @override
   State<TextInput> createState() => _TextInputState();
 }
 
-class _TextInputState extends State<TextInput> {
-  final GlobalKey _inputFieldKey = GlobalKey();
+/// {state} class.
+///
+/// Handles [State] fdor [TextInput] {widget}.
+final class _TextInputState extends State<TextInput> {
+  /// Border width decoration value.
+  static const double _borderWidth = 2;
 
-  /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager =
-      Injector.getThemeManager();
+  /// {ref} theming effect reference key.
+  final UniqueKey themingRef = UniqueKey();
 
-  /// Theme reference key.
-  final UniqueKey ref = UniqueKey();
+  /// Controller for inner [TextFormField] behavior.
+  late TextEditingController textInputCtrl = widget.controller ?? TextEditingController();
 
+  /// [Focus] identifier node for this [Widget] instance.
+  late FocusNode focusNode = widget.focusNode ?? FocusNode();
+
+  /// {dep} application theme reference.
+  late FoundationThemeB theming = Theming.get(context);
+
+  /// {state} whether the suffix is being shown.
+  late bool showSuffix;
+
+  /// {state} debounce timer object.
   Timer? _deBouncer;
-
-  final double borderWidth = 2;
-  late TextEditingController ctrl;
-  late final FocusNode fNode;
-  late SimpleTheming colorStruct;
-  late SimpleTheming disabledColorStruct;
-  late SimpleTheming errorColorStruct;
-  late SimpleTheming pageColorStruct;
 
   @override
   void initState() {
-    super.initState();
-    ctrl = widget.controller ?? TextEditingController();
-    fNode = widget.focusNode ?? FocusNode();
     if (widget.focusEvents) setFocus();
-    themeManager.addEffect(ref, themeUpdateListener);
-    initializeThemes();
+
+    showSuffix = !widget.isOptional || widget.suffixLabel == null;
+    super.initState();
   }
 
   @override
   void didUpdateWidget(covariant TextInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.controller != oldWidget.controller) {
-      ctrl = widget.controller ?? TextEditingController();
+    if (widget.isOptional != oldWidget.isOptional || widget.suffixLabel != oldWidget.suffixLabel) {
+      showSuffix = !widget.isOptional || widget.suffixLabel == null;
+    }
+
+    if (oldWidget.controller != widget.controller) {
+      textInputCtrl = widget.controller ?? TextEditingController();
+    }
+
+    if (widget.focusNode != oldWidget.focusNode) {
+      focusNode = widget.focusNode ?? FocusNode();
     }
   }
 
   @override
   void dispose() {
-    themeManager.removeEffect(ref);
-    if (widget.focusEvents) fNode.dispose();
+    focusNode.dispose();
+    textInputCtrl.dispose();
     _deBouncer?.cancel();
     super.dispose();
   }
 
   void setFocus() {
-    fNode.addListener(() {
-      if (fNode.hasFocus) {
-        _scrollToField();
-      }
-    });
+    focusNode.addListener(
+      () {
+        if (focusNode.hasFocus) {
+          _scrollToField();
+        }
+      },
+    );
   }
 
   // Center scroll to control field
   void _scrollToField() {
     Scrollable.ensureVisible(
-      _inputFieldKey.currentContext ?? context,
+      context,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       alignment: 0.2, // Aligment ratio
     );
   }
 
-  void initializeThemes() {
-    colorStruct = themeManager.get().primaryControlColor;
-    disabledColorStruct = themeManager.get().primaryDisabledControl;
-    errorColorStruct = themeManager.get().primaryCriticalControl;
-    pageColorStruct = themeManager.get().page;
-  }
-
-  void themeUpdateListener(FoundationThemeB theme) {
-    setState(() {
-      initializeThemes();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    bool showSuffix = !widget.isOptional || widget.suffixLabel == null;
-    bool limitWarning =
-        widget.maxLength != null && (ctrl.text.length + 5 > widget.maxLength!);
-    Color counterColor =
-        (!widget.isStrictLength && limitWarning)
-            ? Colors.yellow
-            : (!widget.isStrictLength && !limitWarning)
-            ? pageColorStruct.fore.withValues(alpha: .8)
-            : (ctrl.text.length < (widget.maxLength ?? 0))
-            ? errorColorStruct.fore
-            : Colors.green;
+    final SimpleTheming pageTheming = theming.primControl;
+    final SimpleTheming errTheming = theming.errorTheming;
+    final SimpleTheming succTheming = theming.succTheming;
+
+    Color counterColor = widget.isEnabled ? succTheming.accent : Colors.grey;
+
     return Material(
       color: Colors.transparent,
       child: SizedBox(
@@ -230,11 +227,12 @@ class _TextInputState extends State<TextInput> {
           autofocus: widget.autofocus,
           validator: widget.validator,
           obscureText: widget.isPrivate,
-          controller: ctrl,
-          focusNode: fNode,
+          controller: textInputCtrl,
+          focusNode: focusNode,
           cursorOpacityAnimates: true,
-          cursorWidth: 3,
-          cursorColor: colorStruct.fore,
+          cursorWidth: 2.2,
+          cursorErrorColor: errTheming.accent,
+          cursorColor: pageTheming.fore,
           enabled: widget.isEnabled,
           inputFormatters: widget.formatter,
           keyboardType: widget.keyboardType,
@@ -257,7 +255,9 @@ class _TextInputState extends State<TextInput> {
               widget.onChanged?.call(typedText);
             });
           },
-          style: TextStyle(color: colorStruct.fore.withValues(alpha: .8)),
+          style: TextStyle(
+            color: widget.isEnabled ? pageTheming.fore : Colors.grey,
+          ),
           decoration: InputDecoration(
             hintText: widget.hint,
             labelText: showSuffix ? widget.label : null,
@@ -274,47 +274,53 @@ class _TextInputState extends State<TextInput> {
                           widget.suffixLabel!,
                           style: TextStyle(
                             fontSize: 12,
-                            color: colorStruct.fore.withValues(alpha: .5),
+                            color: pageTheming.fore.withValues(alpha: .5),
                           ),
                         ),
                       ],
                     )
                     : null,
             counterStyle: TextStyle(color: counterColor),
-            labelStyle: TextStyle(color: colorStruct.fore),
-            errorStyle: TextStyle(color: errorColorStruct.fore),
-            hintStyle: TextStyle(color: colorStruct.fore.withValues(alpha: .7)),
+            labelStyle: TextStyle(color: pageTheming.fore),
+            errorStyle: TextStyle(color: errTheming.fore),
+            hintStyle: TextStyle(color: pageTheming.fore.withValues(alpha: .7)),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color:
                     widget.showErrorColor
-                        ? errorColorStruct.fore
-                        : colorStruct.accent.withValues(alpha: .6),
-                width: borderWidth,
+                        ? errTheming.fore
+                        : pageTheming.accent.withValues(
+                          alpha: .5,
+                        ),
+                width: _borderWidth,
               ),
             ),
             disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: disabledColorStruct.accent,
-                width: borderWidth,
+                color: pageTheming.fore.withValues(
+                  alpha: .4,
+                ),
+                width: _borderWidth,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: errorColorStruct.accent.withValues(alpha: .7),
-                width: borderWidth,
+                color: errTheming.accent.withValues(
+                  alpha: .7,
+                ),
+                width: _borderWidth,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: errorColorStruct.accent,
-                width: borderWidth,
+                color: errTheming.accent,
+                width: _borderWidth,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: colorStruct.accent,
-                width: borderWidth,
+                color: pageTheming.accent,
+                width: _borderWidth,
               ),
             ),
           ),

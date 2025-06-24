@@ -1,7 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/entities/business/status.dart';
 import 'package:tws_foundation_client/src/services/business/addresses/address.dart';
 
 /// [Location] default builder.
@@ -21,9 +19,6 @@ final class Location extends NamedEntityB<Location> {
   /// [Waypoint] navigation set.
   // Waypoint? waypointNavigation;
 
-  /// [Status] navigation set.
-  Status status = Status();
-
   /// Generates a new [Location] instance from mandatory values.
   Location();
   
@@ -31,7 +26,6 @@ final class Location extends NamedEntityB<Location> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
       <String, Object?>{
-        EntitiesCommonProperties.kStatus: status.encode(),
         kAddress: address.encode(),
       },
     );
@@ -40,10 +34,6 @@ final class Location extends NamedEntityB<Location> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
-    if(encode[EntitiesCommonProperties.kStatus] != null){
-      status = Status();
-      status.decode(encode.get(EntitiesCommonProperties.kStatus));
-    }  
 
     if(encode[kAddress] != null){
       address = Address();
@@ -61,7 +51,6 @@ final class Location extends NamedEntityB<Location> {
       if (description!.trim().isEmpty) results.add(EntityInvalidation<Location>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
     }
     
-    results.validateDependency(this, status);
     results.validateDependency(this, address);
 
     return results;

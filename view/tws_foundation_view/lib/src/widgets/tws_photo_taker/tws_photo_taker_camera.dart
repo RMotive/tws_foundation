@@ -18,7 +18,7 @@ final class _TWSPhotoTakerPhotoCamera extends StatefulWidget {
 
 class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
+  late ThemeManager themeManager = ThemeManager.of(context);
 
   late FoundationThemeB theme;
 
@@ -55,8 +55,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   @override
   void initState() {
     super.initState();
-    themeManager.addEffect(ref, themeUpdateListener);
-    theme = themeManager.get();
+    theme = themeManager.castData();
     _cameraDefinition = widget.camera;
     if (_cameraDefinition != null) {
       _cameraPlatform
@@ -91,7 +90,6 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
   ///
   @override
   void dispose() {
-    themeManager.removeEffect(ref);
     if (_camera != null) {
       _cameraPlatform.dispose(_camera!);
     }
@@ -133,7 +131,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                 child: IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: theme.primaryCriticalControl.fore,
+                    color: theme.errorTheming.fore,
                     size: 32,
                   ),
                   onPressed: () {
@@ -156,14 +154,14 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                         children: <Widget>[
                           ButtonFlat(
                             label: 'Guardar',
-                            onTap: () {
+                            onClick: () {
                               widget.onSave(_photo!);
                               Injector.get<Router>().pop();
                             },
                           ),
                           ButtonFlat(
                             label: 'Retomar',
-                            onTap: () {
+                            onClick: () {
                               setState(() {
                                 _photo = null;
                               });
@@ -179,7 +177,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                       child: IconButton(
                         enableFeedback: true,
                         color: theme.page.fore,
-                        disabledColor: theme.primaryDisabledControl.back,
+                        disabledColor: theme.primControl.back,
                         icon: const Icon(Icons.camera, size: 48),
                         onPressed: () {
                           if (_camera != null) {

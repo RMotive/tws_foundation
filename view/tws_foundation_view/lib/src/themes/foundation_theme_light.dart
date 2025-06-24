@@ -6,6 +6,9 @@ class FoundationThemeLight extends FoundationThemeB {
   const FoundationThemeLight()
     : super(
         'foundation-light-flat-theme',
+        entityTableTheming: const EntityTableTheming(
+          drawerActionBackground: FoundationColors.warmWhite,
+        ),
         businessLogo: FoundationAssets.fullLogoBlackWebp,
         iconBackground: FoundationColors.warmWhite,
         icon: const Icon(Icons.abc),
@@ -20,56 +23,35 @@ class FoundationThemeLight extends FoundationThemeB {
           accent: FoundationColors.oceanBlue,
           foreAlt: FoundationColors.warmWhite,
         ),
-        primaryControlColor: const SimpleTheming(
-          back: FoundationColors.oceanBlue,
+        errorTheming: const SimpleTheming(
+          back: FoundationColors.warmWhite,
+          fore: Color.fromARGB(255, 255, 21, 0),
+          accent: FoundationColors.deepWine,
+          foreAlt: FoundationColors.warmWhite,
+          accentAlt: FoundationColors.oceanBlue,
+        ),
+        warnTheming: const SimpleTheming(
+          back: FoundationColors.lightDark,
+          fore: Color.fromARGB(255, 255, 21, 0),
+          accent: Color.fromARGB(255, 245, 127, 23),
+          foreAlt: FoundationColors.warmWhite,
+          accentAlt: FoundationColors.oceanBlue,
+        ),
+        succTheming: const SimpleTheming(
+          back: FoundationColors.lightDark,
+          fore: Color.fromARGB(255, 0, 117, 4),
+          accent: Color.fromARGB(255, 0, 117, 4),
+        ),
+        primControl: const SimpleTheming(
+          back: FoundationColors.warmWhite,
           fore: FoundationColors.lightDark,
           accent: FoundationColors.oceanBlue,
           foreAlt: FoundationColors.warmWhite,
-        ),
-        primaryDisabledControl: const SimpleTheming(
-          back: FoundationColors.darkGrey,
-          fore: FoundationColors.darkGrey,
-          accent: FoundationColors.darkGrey,
-          foreAlt: FoundationColors.darkGrey,
-        ),
-        primaryCriticalControl: const SimpleTheming(
-          back: Colors.transparent,
-          fore: Color.fromARGB(255, 208, 136, 130),
-          accent: FoundationColors.smoothWine,
-          foreAlt: Color.fromARGB(255, 208, 136, 130),
         ),
         categoryLayoutRibbonButton: const StateTheming(
           main: ComplexTheming(
             background: FoundationColors.oceanBlue,
             foreground: FoundationColors.warmWhite,
-          ),
-          hoverStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
-          selectStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
-        ),
-        masterLayoutMenuButtonState: const StateTheming(
-          main: ComplexTheming(
-            background: Colors.transparent,
-            foreground: FoundationColors.warmWhite,
-            textStyle: TextStyle(fontSize: 14),
-          ),
-          hoverStruct: ComplexTheming(background: Colors.white10),
-          selectStruct: ComplexTheming(
-            background: Colors.white10,
-            foreground: FoundationColors.warmWhite,
-          ),
-        ),
-        primaryControlState: const StateTheming(
-          main: ComplexTheming(
-            background: FoundationColors.oceanBlue,
-            foreground: FoundationColors.warmWhite,
-          ),
-          hoverStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
-          selectStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
-        ),
-        criticalControlState: const StateTheming(
-          main: ComplexTheming(
-            background: FoundationColors.smoothWine,
-            foreground: FoundationColors.lightDark,
           ),
           hoverStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
           selectStruct: ComplexTheming(background: FoundationColors.oceanBlueH),

@@ -1,6 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 
-final class EmployeeDates extends NamedEntityB<EmployeeDates> {
+final class EmployeeDates extends EntityB<EmployeeDates> {
  
   /// [imms] property key.
   static const String kImss = "imss";

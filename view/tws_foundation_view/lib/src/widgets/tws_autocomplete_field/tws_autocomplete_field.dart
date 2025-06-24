@@ -125,7 +125,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
   final GlobalKey _fieldKey = GlobalKey();
 
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
+  late ThemeManager themeManager = ThemeManager.of(context);
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -187,9 +187,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     if (selectedOption != null) return true;
     return false;
   }
-
-  /// agent for future consume.
-  late AsyncWidgetController agent;
   // Method to perform a local or future search, based on the given parameters.
   // This method manage the item selected and the data displayed on the overlay list view.
   //
@@ -259,7 +256,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
             if (mounted) futureState.react();
           } else if (query.isNotEmpty) {
             futureState.preloadedItems = <T>[];
-            if (mounted) agent.refresh();
           }
         }
         if (notifyChanges && previousSelection != selectedOption) {
@@ -302,7 +298,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
 
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      primaryColorTheme = theme.primaryControlColor;
+      primaryColorTheme = theme.primControl;
     });
   }
 
@@ -329,12 +325,11 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
 
   @override
   void initState() {
-    primaryColorTheme = themeManager.get().primaryControlColor;
-    themeManager.addEffect(ref, themeUpdateListener);
+    primaryColorTheme = themeManager.castData<FoundationThemeB>().primControl;
     futureState = _TWSAutoCompleteFieldFutureState<T>();
     hasKeyValue = widget.hasKeyValue ?? (T? set) => true;
     scrollController = ScrollController();
-    pageColorTheme = themeManager.get().page;
+    pageColorTheme = themeManager.castData<FoundationThemeB>().page;
     ctrl = TextEditingController(
       text:
           widget.initialValue != null
@@ -345,7 +340,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     overlayController = OverlayPortalController();
     if (widget.initialValue != null) selectedOption = widget.initialValue;
     if (widget.adapter != null) {
-      agent = AsyncWidgetController();
       consume = () => widget.adapter!.consume(widget.quantityResults, 1, '');
     } else {
       rawOptionsList = widget.nativeList!;
@@ -371,7 +365,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
     focus.dispose();
     scrollController.dispose();
     ctrl.dispose();
-    themeManager.removeEffect(ref);
     super.dispose();
   }
 
@@ -465,7 +458,6 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>>
                           child:
                               widget.adapter != null
                                   ? _TWSAutocompleteFuture<T>(
-                                    agent: agent,
                                     controller: scrollController,
                                     tileHeigth: tileHeigth,
                                     displayLabel: widget.displayValue,

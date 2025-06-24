@@ -1,18 +1,16 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/business/addresses/addresses_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/carriers/carriers_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/employees/employees_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/load_type/load_type_service.dart';
-import 'package:tws_foundation_client/src/services/business/load_type/load_type_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/load_types/load_types_service.dart';
+import 'package:tws_foundation_client/src/services/business/load_types/load_types_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/locations/locations_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/manufacturers/manufacturer_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/manufacturers/manufacturers_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/sections/sections_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/situations/situations_service.dart';
 import 'package:tws_foundation_client/src/services/business/situations/situatutions_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/trailer_classes/trailer_classes_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/trailer_types/trailer_types_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/vehicule_models/vehicule_models_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/yardlogs/yardlogs_service_i.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -38,14 +36,14 @@ final class FoundationServer extends ServerB {
   /// [Employee] Entity service.
   late final EmployeesServiceI employeesService;
 
-  /// [Loadtype] Entity service.
-  late final LoadtypeServiceI loadtypeService;
+  /// [LoadType] Entity service.
+  late final LoadTypesServiceI loadtypeService;
 
   /// [Location] Entity service.
   late final LocationsServiceI locationsService;
 
   /// [Manufacturer] Entity service.
-  late final ManufacturerServiceI manufacturerService;
+  late final ManufacturersServiceI manufacturerService;
   
   /// [Section] Entity service.
   late final SectionsServiceI sectionsService;
@@ -78,9 +76,9 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<AddressServiceI>? addressesServiceBuilder,
     ServiceImplementationBuilder<CarriersServiceI>? carriersServiceBuilder,
     ServiceImplementationBuilder<EmployeesServiceI>? employeesServiceBuilder,
-    ServiceImplementationBuilder<LoadtypeServiceI>? loadtypesServiceBuilder,
+    ServiceImplementationBuilder<LoadTypesServiceI>? loadtypesServiceBuilder,
     ServiceImplementationBuilder<LocationsServiceI>? locationsServiceBuilder,
-    ServiceImplementationBuilder<ManufacturerServiceI>? manufacturersServiceBuilder,
+    ServiceImplementationBuilder<ManufacturersServiceI>? manufacturersServiceBuilder,
     ServiceImplementationBuilder<SectionsServiceI>? sectionsServiceBuilder,
     ServiceImplementationBuilder<SituationsServiceI>? situationsServiceBuilder,
     ServiceImplementationBuilder<TrailerClassesServiceI>? trailerClassesServiceBuilder,
@@ -105,7 +103,7 @@ final class FoundationServer extends ServerB {
     addressesService = addressesServiceBuilder?.call(serverHost, httpClient) ?? AddressesService(serverHost, client: httpClient);
     carriersService = carriersServiceBuilder?.call(serverHost, httpClient) ?? CarrieresService(serverHost, client: httpClient);
     employeesService = employeesServiceBuilder?.call(serverHost, httpClient) ?? EmployeesService(serverHost, client: httpClient);
-    loadtypeService = loadtypesServiceBuilder?.call(serverHost, httpClient) ?? LoadTypeService(serverHost, client: httpClient);
+    loadtypeService = loadtypesServiceBuilder?.call(serverHost, httpClient) ?? LoadTypesService(serverHost, client: httpClient);
     locationsService = locationsServiceBuilder?.call(serverHost, httpClient) ?? LocationsService(serverHost, client: httpClient);
     manufacturerService = manufacturersServiceBuilder?.call(serverHost, httpClient) ?? ManufacturerService(serverHost, client: httpClient);
     sectionsService = sectionsServiceBuilder?.call(serverHost, httpClient) ?? SectionsService(serverHost, client: httpClient);

@@ -103,13 +103,13 @@ class _TwsFilePickerState extends State<TwsFilePicker> {
                     : selectedPlatformFiles.isNotEmpty
                     ? selectedPlatformFiles.first.name
                     : "Select files",
-            onTap: () => pickFile(),
+            onClick: () => pickFile(),
           ),
         ),
         Expanded(
           child: ButtonFlat(
             label: "Cancel",
-            onTap: () => clearStorage(),
+            onClick: () => clearStorage(),
             disabled:
                 (selectedXfiles.isEmpty || selectedPlatformFiles.isEmpty) &&
                 !widget.cancelEnable,

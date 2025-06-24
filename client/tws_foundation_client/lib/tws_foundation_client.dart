@@ -18,18 +18,6 @@ export 'src/services/models/entity_operation_failure.dart';
 export 'src/models/frames/failure_frame.dart';
 export 'src/models/frames/success_frame.dart';
 
-// --> Exporting [src.entities.business]
-export 'src/entities/business/approach.dart';
-export 'src/entities/business/identification.dart';
-export 'src/entities/business/insurance.dart';
-export 'src/services/business/load_type/load_type.dart';
-export 'src/entities/business/plate.dart';
-export 'src/entities/business/status.dart';
-export 'src/entities/business/usdot.dart';
-
-// --> Exporting [src.entities.security]
-export 'src/entities/security/contact.dart';
-
 // --> Exporting [src.services.business]
 export 'src/services/business/addresses/address.dart';
 export 'src/services/business/addresses/addresses_service.dart';
@@ -42,11 +30,11 @@ export 'src/services/business/locations/location.dart';
 export 'src/services/business/locations/locations_service.dart';
 export 'src/services/business/manufacturers/manufacturer.dart';
 export 'src/services/business/manufacturers/manufacturer_service.dart';
-export 'src/services/business/sections/sections.dart';
+export 'src/services/business/sections/section.dart';
 export 'src/services/business/sections/sections_service.dart';
 export 'src/services/business/trailer_classes/trailer_class.dart';
 export 'src/services/business/trailer_classes/trailer_classes_service.dart';
-export 'src/services/business/trailer_types/trailer_types.dart';
+export 'src/services/business/trailer_types/trailer_type.dart';
 export 'src/services/business/trailer_types/trailer_types_service.dart';
 export 'src/services/business/trucks/truck.dart';
 export 'src/services/business/trucks/truck_common.dart';
@@ -54,10 +42,9 @@ export 'src/services/business/trucks/truck_external.dart';
 export 'src/services/business/trucks/truck_service.dart';
 export 'src/services/business/vehicule_models/vehicule_model.dart';
 export 'src/services/business/vehicule_models/vehicule_model_service.dart';
-export 'src/services/business/yardlogs/yard_log.dart';
-export 'src/services/business/yardlogs/yard_logs_service.dart';
 
 // --> Exporting [src.services]
+export 'src/services/view_service_i.dart';
 export 'src/services/foundation_service_b.dart';
 export 'src/services/foundation_response_resolver.dart';
 
@@ -76,11 +63,51 @@ export 'src/services/models/view_filters/view_filter_date.dart';
 export 'src/services/models/view_filters/view_filter_logical.dart';
 export 'src/services/models/view_filters/view_filter_property.dart';
 
+
+//! --> Business services
+
+// --> Exporting [src.services.business.load_types]
+export 'src/services/business/load_types/load_type.dart';
+
+// --> Exporting [src.services.business.statuses]
+export 'src/services/business/statuses/status.dart';
+
+// --> Exporting [src.services.business.situations]
+export 'src/services/business/situations/situation.dart';
+
+// --> Exporting [src.services.business.sct]
+export 'src/services/business/scts/sct.dart';
+
+// --> Exporting [src.services.business.maintenance]
+export 'src/services/business/maintenances/maintenance.dart';
+
+// --> Exporting [src.services.business.identifications]
+export 'src/services/business/identifications/identification.dart';
+
+// --> Exporting [src.services.business.plates]
+export 'src/services/business/plates/plate.dart';
+
+// --> Exporting [src.services.business.drivers]
+export 'src/services/business/drivers/driver.dart';
+export 'src/services/business/drivers/driver_common.dart';
+export 'src/services/business/drivers/driver_external.dart';
+
+// --> Exporting [src.services.business.trailers]
+export 'src/services/business/trailers/trailer.dart';
+export 'src/services/business/trailers/trailer_common.dart';
+export 'src/services/business/trailers/trailer_external.dart';
+
+// --> Exporing [src.services.business.yardlogs]
+export 'src/services/business/yardlogs/yard_log.dart';
+export 'src/services/business/yardlogs/yard_logs_service.dart';
+export 'src/services/business/yardlogs/yardlogs_service_i.dart';
+
+//! <-- Business services
+
+
 // --> Exporting [src.services.security.security]
 export 'src/services/security/security/security_service_i.dart';
 export 'src/services/security/security/security_service_b.dart';
-
-// --> Exporting [src.services.security.security.models]
 export 'src/services/security/security/models/session_data.dart';
 export 'src/services/security/security/models/authentication_input.dart';
 
@@ -88,3 +115,6 @@ export 'src/services/security/security/models/authentication_input.dart';
 export 'src/services/security/solutions/solution.dart';
 export 'src/services/security/solutions/solutions_service_i.dart';
 export 'src/services/security/solutions/solutions_service_b.dart';
+
+// --> Exporting [src.services.security.contacts]
+export 'src/services/security/contacts/contact.dart';

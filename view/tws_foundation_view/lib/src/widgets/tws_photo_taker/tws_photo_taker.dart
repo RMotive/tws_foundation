@@ -72,7 +72,7 @@ final class TWSPhotoTaker extends StatefulWidget {
 
 class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   /// Theme Manager injector.
-  final ThemeManagerI<FoundationThemeB> themeManager = Injector.get();
+  late ThemeManager themeManager = ThemeManager.of(context);
 
   late FoundationThemeB theme;
 
@@ -127,18 +127,11 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   @override
   void initState() {
     super.initState();
-    themeManager.addEffect(ref, themeUpdateListener);
-    theme = themeManager.get();
+    theme = Theming.get(context);
     if (widget.preLoadBase64 != null) {
       originalImg = base64.decode(widget.preLoadBase64!);
     }
     getCameras();
-  }
-
-  @override
-  void dispose() {
-    themeManager.removeEffect(ref);
-    super.dispose();
   }
 
   void themeUpdateListener(FoundationThemeB theme) {
@@ -197,7 +190,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
                   : _cameras.isNotEmpty
                   ? widget.label
                   : 'No hay cámaras disponibles',
-          onTap: _openCameraDialog,
+          onClick: _openCameraDialog,
         ),
         Row(
           spacing: 12,

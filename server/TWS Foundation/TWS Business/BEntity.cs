@@ -1,6 +1,8 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validations.Validators;
 
+using TWS_Business.Entities;
+
 namespace TWS_Business;
 
 /// <summary>

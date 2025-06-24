@@ -1,36 +1,41 @@
+import 'dart:async';
+
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart' hide Route, Router;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 part '_category_layout_ribbon/_category_layout_ribbon.dart';
-part '_category_layout_ribbon/_category_layout_ribbon_group.dart';
 part '_category_layout_ribbon/_category_layout_ribbon_section.dart';
 part '_category_layout_ribbon/_category_layout_ribbon_article_button.dart';
 part '_category_layout_ribbon/_category_layout_ribbon_action_button.dart';
 
 part '_category_layout_ribbon/category_layout_ribbon_node_i.dart';
 part '_category_layout_ribbon/category_layout_ribbon_action_options.dart';
+part '_category_layout_ribbon/_category_layout_ribbon_group_options.dart';
 
-///
+/// {layout route node} class.
+/// 
+/// Implements a [RouteLayoutB] storing default configuration for a correct {layout} type [RouteNode] usage at the [Router] tree.
 final class CategoryLayoutNode extends RouteLayoutB {
-  ///
-  final List<CategoryLayoutEntryI> articles;
+  /// Pages grouped at this category.
+  final List<CategoryLayoutPageI> pages;
 
-  /// Creates a new []
+  /// Creates a new [CategoryLayoutNode] instance.
   CategoryLayoutNode({
-    required this.articles,
+    required this.pages,
   }) : super(
          routes: <RouteB>[
-           for (CategoryLayoutEntryI article in articles)
+           for (CategoryLayoutPageI page in pages)
              RouteNode(
-               article.route,
-               pageBuilder: article.pageBuilder,
+               page.route,
+               routes: page.composeRoutes(),
+               pageBuilder: page.composePage,
              ),
          ],
          layoutBuilder: (BuildContext ctx, RouteData routeData, Widget page) {
            return CategoryLayout(
              page: page,
-             articles: articles,
+             articles: pages,
              routeData: routeData,
            );
          },
@@ -40,16 +45,14 @@ final class CategoryLayoutNode extends RouteLayoutB {
 ///
 final class CategoryLayout extends LayoutB {
   ///
-  final RouteData routeData;
-
-  ///
-  final List<CategoryLayoutEntryI> articles;
+  final List<CategoryLayoutPageI> articles;
 
   /// Creates a new [CategoryLayout] instance.
   const CategoryLayout({
     required super.page,
+    required super.routeData,
+    
     required this.articles,
-    required this.routeData,
   }) : assert(articles.length > 0, 'Must be at least one article configured');
 
   @override
@@ -63,7 +66,12 @@ final class CategoryLayout extends LayoutB {
             currentRoute: routeData.route,
           ),
           Expanded(
-            child: page,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 12,
+              ),
+              child: page,
+            ),
           ),
         ],
       ),

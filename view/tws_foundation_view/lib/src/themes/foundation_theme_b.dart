@@ -1,44 +1,49 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-/// [abstract] class definition.
+/// {abstract} class.
 ///
 /// Defines a base contract theme for any {TWS Foundation View} usage.
-abstract class FoundationThemeB extends ThemeB {
-  ///
-  final String businessLogo;
-
-  ///
+abstract class FoundationThemeB extends ThemeDataB {
+  /// Main application page theming properties.
   final SimpleTheming page;
 
-  ///
+  /// Business main logo asset access.
+  final String businessLogo;
+
+  /// Theming for {error} scenarios usually around red color.
+  final SimpleTheming errorTheming;
+
+  /// Theming for {warning} scenearios usually around yellow color.
+  final SimpleTheming warnTheming;
+
+  /// Theming for {success} scenarios usually around green color.
+  final SimpleTheming succTheming;
+
+  /// Theming for [NavigationLayout].
   final SimpleTheming navigationLayout;
+
+  /// Theming for {csm} main {widget}s that have state like hover, selected, etc.
+  final SimpleTheming primControl;
 
   /// Theming for [CategoryLayout] ribbon buttons.
   final StateTheming categoryLayoutRibbonButton;
 
-  ///
-  final SimpleTheming primaryControlColor;
-  final SimpleTheming primaryDisabledControl;
-  final SimpleTheming primaryCriticalControl;
-
-  final StateTheming masterLayoutMenuButtonState;
-  final StateTheming primaryControlState;
-  final StateTheming criticalControlState;
+  /// Stores the [EntityTable] default theming options.
+  final EntityTableTheming entityTableTheming;
 
   const FoundationThemeB(
     super.identifier, {
-    required this.businessLogo,
-    required this.categoryLayoutRibbonButton,
-    required this.page,
-    required this.navigationLayout,
-    required this.primaryControlState,
-    required this.primaryControlColor,
-    required this.criticalControlState,
-    required this.masterLayoutMenuButtonState,
-    required this.primaryCriticalControl,
-    required this.primaryDisabledControl,
     required super.icon,
     required super.iconBackground,
+    required this.page,
+    required this.businessLogo,
+    required this.errorTheming,
+    required this.warnTheming,
+    required this.succTheming,
+    required this.primControl,
+    required this.navigationLayout,
+    required this.categoryLayoutRibbonButton,
+    required this.entityTableTheming,
   });
 }

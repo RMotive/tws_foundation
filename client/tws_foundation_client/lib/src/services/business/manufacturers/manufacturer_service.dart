@@ -1,9 +1,9 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/manufacturers/manufacturer_service_b.dart';
+import 'package:tws_foundation_client/src/services/business/manufacturers/manufacturers_service_b.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-final class ManufacturerService extends ManufacturerServiceB {
+final class ManufacturerService extends ManufacturersServiceB {
   ///
   ManufacturerService(
     Uri host, {

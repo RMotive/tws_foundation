@@ -27,16 +27,16 @@ public class Driver_Common
     #region Relations
 
     /// <summary>
-    ///     <see cref="Entities.Situation"/> information.
-    /// </summary>
-    [Relation]
-    public Situation Situation { get; set; } = default!;
-
-    /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
     [Relation]
     public Status Status { get; set; } = default!;
+
+    /// <summary>
+    ///     <see cref="Entities.Situation"/> information.
+    /// </summary>
+    [Relation]
+    public Situation Situation { get; set; } = default!;
 
     #endregion
 
@@ -62,13 +62,14 @@ public class Driver_Common
             if (ident == null)
                 return null;
 
-            return $"{ident.Name} {ident.Lastname}";
+            return $"{ident.Name} {ident.LastName}";
         }
     }
 
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+
         etBuilder.ToTable("Drivers_Commons");
 
         etBuilder.Property(nameof(License)).HasMaxLength(12);
@@ -86,5 +87,8 @@ public class Driver_Common
                 Auto: true
             );
     }
+
+
+
 }
    

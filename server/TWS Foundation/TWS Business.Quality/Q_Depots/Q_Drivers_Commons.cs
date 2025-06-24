@@ -51,7 +51,7 @@ public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal
         Identification identification = Store(
                 new Identification {
                     Name = Entropy,
-                    Lastname = Entropy,
+                    LastName = Entropy,
                     Status = statusI,
                 }
              );
@@ -74,7 +74,7 @@ public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal
         Identification identification = Store(
                 new Identification {
                     Name = Entropy,
-                    Lastname = Entropy,
+                    LastName = Entropy,
                     Status = statusI,
                 }
              );

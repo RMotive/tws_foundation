@@ -16,7 +16,7 @@ public class Identification
     #region Properties
 
     /// <summary>
-    ///     Legal name. 
+    ///     Physical person name. 
     /// </summary>
     /// <remarks>
     ///     For more than one name split with double space.
@@ -25,16 +25,16 @@ public class Identification
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Legal first last name (father).
+    ///     Physical person name last name.
     /// </summary>
     /// <remarks>
     ///     For more than one name split with double space.
     /// </remarks>
     [StringLength(32, MinimumLength = 1)]
-    public string Lastname { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Birthday.
+    ///     Person birth day.
     /// </summary>
     public DateOnly? Birthday { get; set; }
 
@@ -54,7 +54,7 @@ public class Identification
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
-        etBuilder.Property(nameof(Lastname)).HasMaxLength(32).IsRequired();
+        etBuilder.Property(nameof(LastName)).HasMaxLength(32).IsRequired();
         etBuilder.Property(nameof(Name)).HasMaxLength(32).IsRequired();
 
         etBuilder.Link<Identification, Status>(

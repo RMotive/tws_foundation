@@ -80,7 +80,7 @@ class _TwsOptionsSelectorState<T> extends State<TwsOptionsSelector<T>> {
                                 ? widget.options[i].value == selected
                                 : (widget.options[i].value == selected) ||
                                     (!widget.enabled),
-                        onTap: () async {
+                        onClick: () async {
                           if (!widget.enabled) return;
                           setState(() {
                             selected = widget.options[i].value;

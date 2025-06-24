@@ -114,7 +114,7 @@ public class Q_YardLogs : BQ_CommonDependence<YardLog, YardLogsDepot> {
         Identification identification = Store(
                  new Identification {
                      Name = entropy,
-                     Lastname = entropy,
+                     LastName = entropy,
                      Status = status,
                  }
         );

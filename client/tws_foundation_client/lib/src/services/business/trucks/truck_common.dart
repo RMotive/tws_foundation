@@ -1,0 +1,147 @@
+import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+
+/// {entity} class.
+///
+/// Implements a [EntityB] that stores common information for [Truck] and [TruckExternal].
+/// Each [TruckCommon] instance can have [internal] and [external] at the same time can only have one of them.
+final class TruckCommon extends EntityB<TruckCommon> {
+  /// [TruckCommon.economic] property key for [DataMap].
+  static const String kEconomic = "economic";
+
+  /// [TruckCommon.location] property key for [DataMap].
+  static const String kLocation = "location";
+
+  /// [TruckCommon.internal] property key for [DataMap].
+  static const String kInternal = "internal";
+
+  /// [TruckCommon.external] property key for [DataMap].
+  static const String kExternal = "external";
+
+  //! --> Properties
+
+  /// Business economic identifier.
+  ///
+  /// Rules >
+  ///   1. 17 > length > 0
+  String economic = "";
+
+  //! <-- Properties
+
+  //! --> Relations
+
+  /// [Status] information.
+  Status status = Status();
+
+  /// [Situation] information.
+  Situation? situation;
+
+  /// [Location] information.
+  Location? location;
+
+  /// [Truck] (internal) information.
+  ///
+  /// Rules >
+  ///   1. If set [external] can't be set
+  Truck? internal;
+
+  /// [TruckExternal] information.
+  ///
+  /// Rules >
+  ///   1. If set [internal] can't be set
+  TruckExternal? external;
+
+  //! <-- Relations
+
+  //! --> Getters
+
+  /// Gets the display value for the current {truck} plates.
+  ///
+  /// Format: {USA Plate} / {MX Plate}
+  String? get plates {
+    if (internal == null && external == null) return null;
+
+    if (internal != null) {
+      List<Plate> plates = internal?.plates as List<Plate>;
+
+      Plate? usPlate;
+      Plate? mxPlate;
+
+      for (Plate plate in plates) {
+        if (plate.country == "MEX" && mxPlate == null) {
+          mxPlate = plate;
+        }
+
+        if (plate.country == "USA" && usPlate == null) {
+          usPlate = plate;
+        }
+
+        if (usPlate != null && mxPlate != null) {
+          break;
+        }
+      }
+
+      return '${usPlate?.identifier ?? '---'} ${mxPlate?.identifier ?? '---'}';
+    }
+
+    return '${external?.usaPlate ?? '---'} / ${external?.mxPlate ?? '---'}';
+  }
+
+  //! <-- Getters
+
+  /// Creates a [TruckCommon] object with default properties.
+  TruckCommon();
+
+  @override
+  void decode(DataMap encode) {
+    economic = encode.get(kEconomic);
+
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? Status();
+    situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation);
+    location = encode.getEntity(() => Location(), kLocation);
+    internal = encode.getEntity(() => Truck(), kInternal);
+    external = encode.getEntity(() => TruckExternal(), kExternal);
+
+    super.decode(encode);
+  }
+
+  @override
+  DataMap encode([DataMap? entityObject]) {
+    return super.encode(
+      <String, Object?>{
+        kEconomic: economic,
+        kLocation: location,
+        kInternal: internal,
+        kExternal: external,
+        FoundationCommonPropertyKeys.kStatus: status,
+        FoundationCommonPropertyKeys.kSituation: situation,
+      },
+    );
+  }
+
+  @override
+  List<EntityInvalidation<TruckCommon>> evaluate() {
+    final List<EntityInvalidation<TruckCommon>> invs = <EntityInvalidation<TruckCommon>>[];
+
+    if (economic.isEmpty || economic.length > 16) {
+      invs.add(
+        EntityInvalidation<TruckCommon>(
+          this,
+          PropertyInfo(kEconomic, String, economic),
+          'Wrong length ${economic.length}',
+          '17 > length > 0',
+        ),
+      );
+    }
+    if (internal != null && external != null) {
+      invs.add(EntityInvalidation<TruckCommon>(
+        this,
+        PropertyInfo(kExternal, TruckExternal, external),
+        'Unique violation',
+        'internal and external can\'t be set both',
+      ));
+    }
+
+    return invs;
+  }
+}

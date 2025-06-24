@@ -15,7 +15,6 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
   onFetch;
   final Color loadingColor;
   final Color hoverTextColor;
-  final AsyncWidgetController agent;
   final _TWSAutoCompleteFieldFutureState<T> state;
 
   const _TWSAutocompleteFuture({
@@ -28,7 +27,6 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
     required this.hoverTextColor,
     required this.onFetch,
     required this.tileHeigth,
-    required this.agent,
     required this.state,
     this.suffixLabel,
   });
@@ -44,8 +42,7 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AsyncWidget<List<ViewOutput<dynamic>>>(
-      future: consume,
-      agent: agent,
+      future: consume(),
       emptyCheck: (List<ViewOutput<dynamic>> data) {
         onFetch(data, state);
         int cont = 0;

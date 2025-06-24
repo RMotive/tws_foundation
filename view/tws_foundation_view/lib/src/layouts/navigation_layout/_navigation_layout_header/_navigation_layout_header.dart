@@ -7,9 +7,6 @@ final class _NavigationLayoutHeader extends StatelessWidget {
   /// Default root [Route], used to draw and handle a Home button that directs to this [Route].
   final Route? rootRoute;
 
-  /// Application [ThemeI] collection.
-  final List<ThemeI> appThemes;
-
   /// User information, used to draw an User Button to access information and options.
   final NavigationLayoutHeaderUserI? user;
 
@@ -20,13 +17,12 @@ final class _NavigationLayoutHeader extends StatelessWidget {
   const _NavigationLayoutHeader({
     this.user,
     this.rootRoute,
-    required this.appThemes,
     required this.navReactor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final SimpleTheming theme = Theming.get<FoundationThemeB>().navigationLayout;
+    final SimpleTheming theme = Theming.get<FoundationThemeB>(context).navigationLayout;
     final Router router = Injector.get();
 
     return ColoredBox(
@@ -68,16 +64,13 @@ final class _NavigationLayoutHeader extends StatelessWidget {
                         router.go(rootRoute!);
                       },
                     ),
-
-                  if (appThemes.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 6,
-                      ),
-                      child: ThemeSwitcher(
-                        applicationThemes: appThemes,
-                      ),
+                    
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 6,
                     ),
+                    child: ThemeSwitcher(),
+                  ),
 
                   if (user != null)
                     _NavigationHeaderUserButton(

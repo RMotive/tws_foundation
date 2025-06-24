@@ -1,8 +1,8 @@
-import 'package:csm_view/csm_view.dart';
+import 'package:csm_view/csm_view.dart' as view;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 ///
-abstract class LandingThemeB extends PackageLandingThemeB
+abstract class LandingThemeB extends view.LandingThemeB
     implements FoundationThemeB {
   ///
   LandingThemeB(

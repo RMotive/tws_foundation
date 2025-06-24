@@ -91,6 +91,7 @@ public class Truck
     public ICollection<Truck_History> History { get; set; } = [];
 
     #endregion
+
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Motor)).HasMaxLength(16);
         etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsRequired();

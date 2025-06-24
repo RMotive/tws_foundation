@@ -15,7 +15,10 @@ using TWS_Business.Entities.Vehicules.Trucks;
 namespace TWS_Business.Entities;
 
 /// <summary>
-///     []
+///     {entity} class.
+///     
+///     Implements a <see cref="INamedEntity"/> and <see cref="BEntity"/> to represent a {csm} business entity that stores
+///     information about a system status for an specific entity.
 /// </summary>
 public class Status
 : BEntity, INamedEntity {

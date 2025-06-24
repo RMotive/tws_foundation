@@ -30,7 +30,7 @@ final class _NavigationHeaderUserButtonState extends State<_NavigationHeaderUser
   final OverlayPortalController _overlayPortalCtrlr = OverlayPortalController();
 
   /// {dep} Reference to the application [ThemeManagerI].
-  final ThemeManagerI<FoundationThemeB> themeManager = Injector.getThemeManager();
+  late final ThemeManager themeManager = ThemeManager.of(context);
 
   /// {ref} Theming reference for effect subscription / disposition.
   final UniqueKey themeEffectRef = UniqueKey();
@@ -54,21 +54,7 @@ final class _NavigationHeaderUserButtonState extends State<_NavigationHeaderUser
   void initState() {
     super.initState();
 
-    navigationLayoutTheming = themeManager.get().navigationLayout;
-    themeManager.addEffect(
-      themeEffectRef,
-      (FoundationThemeB theme) {
-        setState(() {
-          navigationLayoutTheming = theme.navigationLayout;
-        });
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    themeManager.removeEffect(themeEffectRef);
-    super.dispose();
+    navigationLayoutTheming = themeManager.castData<FoundationThemeB>().navigationLayout; 
   }
 
   @override
