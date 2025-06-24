@@ -95,9 +95,13 @@ final class _PaginationState extends State<Pagination> {
   @override
   void initState() {
     options = widget.options;
-
-    pageTheming = Theming.get<FoundationThemeB>(context).page;
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    pageTheming = Theming.get<FoundationThemeB>(context).page;
+    super.didChangeDependencies();
   }
 
   @override

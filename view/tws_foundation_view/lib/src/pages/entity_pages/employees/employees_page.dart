@@ -10,6 +10,8 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 ///
 /// Implements a [CategoryLayoutPageI] defining default behavior for a [EmployeesPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
+/// 
+/// (@category Entity Pages)
 final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTableAdatper> {
   /// [EmployeesCategoryPage] inner creation {whisper} access.
   static const Route kCreateRoute = Route(
@@ -31,7 +33,6 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
 
   @override
   List<RouteB> composeRoutes() {
-    debugPrint('Composing Employees Category Page Routes ${kCreateRoute.hashCode}');
     return <RouteB>[
       RouteWhisper<Object>(
         kCreateRoute,

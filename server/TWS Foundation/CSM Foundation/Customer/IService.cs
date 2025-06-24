@@ -1,7 +1,4 @@
-﻿using System.Linq.Expressions;
-
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
@@ -14,7 +11,7 @@ public interface IService {
 
 }
 
-public interface IService<TEntity> 
+public interface IService<TEntity>
     : IService
     where TEntity : class, IEntity {
 

@@ -96,12 +96,15 @@ final class _DropUpState<T> extends State<DropUp<T>> with TickerProviderStateMix
       widget.items.isNotEmpty,
       'The items list can\'t be empty',
     );
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     fountTheming = Theming.get(context);
-
     _defineColors();
-
-    super.initState();
   }
 
   @override

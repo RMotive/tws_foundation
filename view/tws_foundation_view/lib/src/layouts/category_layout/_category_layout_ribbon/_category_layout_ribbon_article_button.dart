@@ -35,7 +35,12 @@ final class _CategoryLayoutRibbonArticleButtonState extends State<_CategoryLayou
     super.initState();
 
     state = widget.isCurrent ? CSMStates.selected : CSMStates.none;
+  }
+
+  @override
+  void didChangeDependencies() {
     stateTheming = Theming.get<FoundationThemeB>(context).categoryLayoutRibbonButton;
+    super.didChangeDependencies();
   }
 
   /// {event} Triggered when button is clicked.

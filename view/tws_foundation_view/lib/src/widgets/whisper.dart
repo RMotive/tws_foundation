@@ -35,13 +35,18 @@ final class Whisper extends StatefulWidget {
   State<Whisper> createState() => _WhisperState();
 }
 
-class _WhisperState extends State<Whisper> {
+/// {state} class.
+///
+/// Handles [State] for [Whisper].
+final class _WhisperState extends State<Whisper> {
   /// {state}
-  late FoundationThemeB foundationTheming = Theming.get(context);
+  late FoundationThemeB foundationTheming;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    foundationTheming = Theming.get(context);
   }
 
   @override
@@ -105,34 +110,39 @@ class _WhisperState extends State<Whisper> {
                     ),
 
                     // --> Whisper Footer
-                    if (widget.onClose != null || widget.onPerform != null)
-                      SizedBox(
-                        width: double.maxFinite,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 18,
-                          ),
-                          child: Row(
-                            spacing: 16,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              //* --> Close Action Button
-                              ButtonFlat(
-                                label: 'Close',
-                                width: _actionsWidth,
-                                theming: foundationTheming.errorTheming,
-                                onClick: () {
-                                  Injector.get<Router>().pop();
-                                  widget.onClose?.call();
-                                },
-                              ),
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 18,
+                        ),
+                        child: Row(
+                          spacing: 16,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            //* --> Close Action Button
+                            ButtonFlat(
+                              label: 'Close',
+                              width: _actionsWidth,
+                              theming: foundationTheming.errorTheming,
+                              onClick: () {
+                                Injector.get<Router>().pop();
+                                widget.onClose?.call();
+                              },
+                            ),
 
-                              //* --> Perform Action Button
-                            ],
-                          ),
+                            //* --> Perform Action Button
+                            if (widget.onPerform != null)
+                              ButtonFlat(
+                                label: 'Perform',
+                                width: _actionsWidth,
+                                onClick: widget.onPerform,
+                              ),
+                          ],
                         ),
                       ),
+                    ),
                   ],
                 ),
               ),

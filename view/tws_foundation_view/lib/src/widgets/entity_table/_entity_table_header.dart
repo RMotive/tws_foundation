@@ -14,7 +14,7 @@ final class _EntityTableHeader<TEntity> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeManager themeManager = Injector.get();
+    final ThemeManager themeManager = ThemeManager.of(context);
 
     return LayoutBuilder(
       builder: (_, BoxConstraints boxConstraints) {

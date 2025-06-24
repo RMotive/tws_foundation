@@ -11,7 +11,7 @@ typedef MStates = WidgetState;
 /// {widget} class.
 ///
 /// Draws a {csm} designed button flat handling interaction and component design.
-class ButtonFlat extends StatefulWidget {
+final class ButtonFlat extends StatefulWidget {
   /// Control width.
   final double? width;
 
@@ -49,15 +49,36 @@ class ButtonFlat extends StatefulWidget {
 ///
 /// Handles [State] for [ButtonFlat] {widget}.
 final class _ButtonFlatState extends State<ButtonFlat> {
-
-  /// {ref} Thememing effect reference.
-  final UniqueKey themingRef = UniqueKey();
-
   /// {state} [Widget] component theming options.
   late SimpleTheming theming;
 
   /// {state} Whether the component is loading data.
   bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    theming = widget.theming ?? Theming.get<FoundationThemeB>(context).primControl;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (widget.theming == null) {
+      theming = Theming.get<FoundationThemeB>(context).primControl;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant ButtonFlat oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.theming != oldWidget.theming) {
+      theming = widget.theming ?? Theming.get<FoundationThemeB>(context).primControl;
+    }
+  }
 
   Color bgStateColorize(StatesSet currentStates) {
     final Color hlightColor = theming.accent;
@@ -73,7 +94,7 @@ final class _ButtonFlatState extends State<ButtonFlat> {
   }
 
   Color olStateColorize(StatesSet currentStates) {
-    final Color hlightColor = theming.accentAlt ?? Colors.blue.shade900;
+    final Color hlightColor = theming.fore;
     if (widget.disabled) {
       return Colors.transparent;
     }
@@ -81,18 +102,6 @@ final class _ButtonFlatState extends State<ButtonFlat> {
       (StatesSet state) when state.contains(MStates.pressed) => hlightColor,
       _ => Colors.transparent,
     };
-  }
-
-  void themeUpdateListener(FoundationThemeB theme) {
-    setState(() {
-      theming = theme.primControl;
-    });
-  }
-  @override
-  void dispose() {
-    if (widget.theming != null) {
-    }
-    super.dispose();
   }
 
   @override

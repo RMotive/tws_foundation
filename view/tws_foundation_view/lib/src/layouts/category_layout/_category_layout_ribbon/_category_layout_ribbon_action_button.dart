@@ -31,10 +31,10 @@ final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayout
   bool isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-
+  void didChangeDependencies() {
     stateTheming = Theming.get<FoundationThemeB>(context).categoryLayoutRibbonButton;
+
+    super.didChangeDependencies();
   }
 
   /// {event} Triggered when the user mouse pointer clicks on the button.
