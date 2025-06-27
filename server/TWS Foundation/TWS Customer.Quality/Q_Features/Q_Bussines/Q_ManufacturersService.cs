@@ -1,50 +1,47 @@
-﻿using CSM_Foundation.Core.Utils;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
-using TWS_Business.Depots.Directories;
-using TWS_Business.Entities;
+using TWS_Business.Depots.Vehicles;
+using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Features.Business;
 
-
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
-
-public class Q_SectionsService
-    : BQ_ServicesCustomer<ISectionsService> {
+public class Q_ManufacturersService
+    : BQ_ServicesCustomer<IManufacturersService> {
 
     #region [BQ_Service] implementations
-    protected override ISectionsService ServiceFactory() {
+    protected override IManufacturersService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
 
-        ISectionsDepot SectionsDepot = new SectionsDepot(BussinesDatabase, Disposer);
+        IManufacturersDepot ManufacturersDepot = new ManufacturersDepot(BussinesDatabase, Disposer);
 
-        return new SectionsService(SectionsDepot);
+        return new ManufacturersService(ManufacturersDepot);
     }
     #endregion
 
     #region Private Methods/Functions
-   
-    Section EntityFactory() {
-        return new Section {
-            Name = Entropy,
-            Capacity = 10,
-            Ocupancy = 1,
-            Status = SampleStatus("sec"),
-            Yard = SampleLocation()
+    Manufacturer EntityFactory() {
+        return new Manufacturer {
+            Name = Entropy[..10],
         };
     }
-
-#endregion
+    #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
-        // Create a sample address to prevent empty view results.
-        SampleSection();
-        ViewOutput<Section> viewOutput = await _service.View(
-                new QueryInput<Section, ViewInput<Section>> {
+        // Create a sample to prevent empty view results.
+        SampleManufacturer();
+        ViewOutput<Manufacturer> viewOutput = await _service.View(
+                new QueryInput<Manufacturer, ViewInput<Manufacturer>> {
                     Parameters = new() {
                         Retroactive = false,
                         Range = 10,
@@ -63,7 +60,7 @@ public class Q_SectionsService
 
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
-        BatchOperationOutput<Section> batchOutput = await _service.Create([
+        BatchOperationOutput<Manufacturer> batchOutput = await _service.Create([
                 EntityFactory(),
                 EntityFactory(),
                 EntityFactory()
@@ -79,9 +76,9 @@ public class Q_SectionsService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Section changedEntity = SampleSection();
-        changedEntity.Name = "updated_name" + changedEntity.Name;
-        UpdateOutput<Section> updateOutput = await _service.Update(new UpdateInput<Section> {
+        Manufacturer changedEntity = SampleManufacturer();
+        changedEntity.Name = "updated_street" + changedEntity.Name;
+        UpdateOutput<Manufacturer> updateOutput = await _service.Update(new UpdateInput<Manufacturer> {
             Entity = changedEntity,
             Create = true,
         });
@@ -95,23 +92,22 @@ public class Q_SectionsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Section sample = SampleSection();
+        Manufacturer sample = SampleManufacturer();
 
-        Section deleted = await _service.Delete(sample.Id);
+        Manufacturer deleted = await _service.Delete(sample.Id);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Name, deleted.Name);
-        Assert.Equal(sample.Timestamp, deleted.Timestamp);
     }
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Section sample = SampleSection();
+        Manufacturer sample = SampleManufacturer();
 
-        BatchOperationOutput<Section> batchOutput = await _service.Delete([
-                SampleSection().Id,
-                SampleSection().Id,
-                SampleSection().Id
+        BatchOperationOutput<Manufacturer> batchOutput = await _service.Delete([
+                SampleManufacturer().Id,
+                SampleManufacturer().Id,
+                SampleManufacturer().Id
             ]);
 
         Assert.Multiple(
@@ -120,5 +116,6 @@ public class Q_SectionsService
            () => Assert.Empty(batchOutput.Failures)
         );
     }
+
 
 }

@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
-using System.IO;
 
-using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.IdentityModel.Tokens;
 
 using TWS_Business.Entities.Vehicules.Trailers;
 
@@ -23,7 +19,7 @@ public class LoadType
     [StringLength(100, MinimumLength = 1)]
     public string Name { get; set; } = default!;
 
-    [StringLength(maximumLength:200)]
+    [StringLength(maximumLength: 200)]
     public string? Description { get; set; }
 
     [StringLength(8, MinimumLength = 8)]
@@ -35,7 +31,7 @@ public class LoadType
     /// <summary>
     ///     <see cref="YardLog"/> dependants from this <see cref="LoadType"/>.
     /// </summary>
-    
+
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
     #endregion

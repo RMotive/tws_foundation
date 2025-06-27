@@ -1,6 +1,8 @@
 ﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -28,53 +30,41 @@ public class Q_EmployeesService
     #endregion
 
     #region Private Methods/Functions
-    Employee GenerateMock(string Entropy) {
+    Employee EntityFactory() {
         DateOnly date = new(2030, 11, 11);
-
-        Status status = Store(
-                new Status {
-                    Name = Entropy,
-                    Description = Entropy,
-                }
-            );
-        Status statusI = Store(
-                new Status {
-                    Name = "I" + Entropy,
-                    Description = Entropy,
-                }
-            );
 
         Identification identification = Store(
                  new Identification {
                      Name = Entropy,
                      LastName = Entropy,
-                     Status = statusI,
+                     Status = SampleStatus("ide"),
                  }
             );
 
         Employee_Dates employee_Dates = Store(
-        new Employee_Dates {
-            CNAP = date,
-            IMSS = date,
-            Hire = date,
-            Termination = date,
-        }
+                new Employee_Dates {
+                    CNAP = date,
+                    IMSS = date,
+                    Hire = date,
+                    Termination = date,
+                }
             );
 
         return new Employee {
             CURP = Entropy + Entropy[..2],
             RFC = Entropy[..13],
             NSS = Entropy[..11],
-            Status = status,
+            Status = SampleStatus("emp"),
             Identification = identification,
             Dates = employee_Dates,
         };
     }
     #endregion
 
-    [Fact(DisplayName = "[View]: Records view")]
+    [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
-        Store(GenerateMock(RandomUtils.String(16)));
+        // Create a sample to prevent empty view results.
+        SampleEmployee();
         ViewOutput<Employee> viewOutput = await _service.View(
                 new QueryInput<Employee, ViewInput<Employee>> {
                     Parameters = new() {
@@ -90,7 +80,66 @@ public class Q_EmployeesService
             () => Assert.True(viewOutput.Length > 0),
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
+        );
+    }
 
+    [Fact(DisplayName = "[Create]: Entities Creation")]
+    public async Task Create() {
+        BatchOperationOutput<Employee> batchOutput = await _service.Create([
+                EntityFactory(),
+                EntityFactory(),
+                EntityFactory()
+            ]);
+
+        Assert.Multiple(
+           () => Assert.False(batchOutput.Failed),
+           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Empty(batchOutput.Failures)
+        );
+
+    }
+
+    [Fact(DisplayName = "[Update]: Update an entity")]
+    public async Task Update() {
+        Employee changedEntity = SampleEmployee();
+        changedEntity.RFC = "updated_RFC" + Entropy[..2];
+        UpdateOutput<Employee> updateOutput = await _service.Update(new UpdateInput<Employee> {
+            Entity = changedEntity,
+            Create = true,
+        });
+
+        Assert.Multiple(
+            () => Assert.Equal(updateOutput.Original?.Id, updateOutput.Updated.Id),
+            () => Assert.NotEqual(updateOutput.Original?.RFC, updateOutput.Updated.RFC)
+        );
+
+    }
+
+    [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
+    public async Task Delete() {
+        Employee sample = SampleEmployee();
+
+        Employee deleted = await _service.Delete(sample.Id);
+
+        Assert.Equal(sample.Id, deleted.Id);
+        Assert.Equal(sample.RFC, deleted.RFC);
+        Assert.Equal(sample.NSS, deleted.NSS);
+    }
+
+    [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
+    public async Task DeleteCollection() {
+        Employee sample = SampleEmployee();
+
+        BatchOperationOutput<Employee> batchOutput = await _service.Delete([
+                SampleEmployee().Id,
+                SampleEmployee().Id,
+                SampleEmployee().Id
+            ]);
+
+        Assert.Multiple(
+           () => Assert.False(batchOutput.Failed),
+           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Empty(batchOutput.Failures)
         );
     }
 }

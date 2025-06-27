@@ -28,4 +28,5 @@ public class CarriersDepot
     ///     Data disposition handler to be used.
     /// </param>
     public CarriersDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
+
 }
