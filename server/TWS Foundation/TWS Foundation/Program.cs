@@ -25,6 +25,7 @@ using TWS_Business.Entities.Maintenances;
 using TWS_Business.Entities.Trailers;
 
 using TWS_Customer.Features.Business;
+using TWS_Customer.Features.Business.Vehicules;
 using TWS_Customer.Features.Security;
 using TWS_Customer.Managers.Session;
 

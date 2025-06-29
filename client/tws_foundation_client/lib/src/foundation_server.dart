@@ -2,7 +2,6 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/business/addresses/addresses_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/carriers/carriers_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/load_types/load_types_service.dart';
-import 'package:tws_foundation_client/src/services/business/load_types/load_types_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/locations/locations_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/manufacturers/manufacturers_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/sections/sections_service_i.dart';
@@ -112,6 +111,5 @@ final class FoundationServer extends ServerB {
     trailerTypesService = trailerTypesServiceBuilder?.call(serverHost, httpClient) ?? TrailerTypesService(serverHost, client: httpClient);
     vehiculeModelsService = vehiculemodelsServiceBuilder?.call(serverHost, httpClient) ?? VehiculeModelService(serverHost, client: httpClient);
     yardlogsService = yardlogsServiceBuilder?.call(serverHost, httpClient) ?? YardLogsService(serverHost, client: httpClient);
-
   }
 }
