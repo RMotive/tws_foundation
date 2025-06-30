@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Server.Exceptions;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -15,13 +14,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 using TWS_Customer.Features;
 using TWS_Customer.Features.Security;
+using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
 using SessionsBag = System.Collections.Concurrent.ConcurrentDictionary<System.Guid, (TWS_Customer.Services.Records.AuthInput Credentials, System.DateTime Expiration)>;
 using SessionScope = (TWS_Customer.Services.Records.AuthInput authInput, System.DateTime expiration);
 
-namespace TWS_Customer.Managers.Session;
+namespace TWS_Customer.Managers.Auth;
 
 /// <summary>
 ///     {interface} definition for a {Session} scope {Manager}, responsible to handle and manage storing and calculations about the
@@ -49,12 +49,6 @@ public interface IAuthManager {
 /// </summary>
 public sealed class AuthManager
     : IAuthManager {
-
-    /// <summary>
-    /// 
-    /// </summary>
-    const string AUTH_TOKEN_KEY = "CSMAuth";
-
 
     /// <summary>
     ///     Expiration time aggregation for token refreshing, this value is aggregated to the current expirations to get a final expiration timestamp.
@@ -201,7 +195,7 @@ public sealed class AuthManager
 
             return new SessionData {
                 Account = userAccount,
-                Expiration = DateTime.Now,
+                Expiration = DateTime.Now.Add(EXPIRE_THRESHOLD),
                 Token = Guid.NewGuid(),
                 Wildcard = userAccount.Wildcard,
                 Contact = sessionContact,

@@ -20,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart' hide NavigationLayoutEntry;
 
+const Console _console = Console('Foundation View');
+
 void main() {
   runApp(const MainApp());
 }
@@ -36,6 +38,7 @@ final class MainApp extends StatefulWidget {
 final class _MainAppState extends State<MainApp> {
   ///
   Future<void> initDependencies() async {
+    _console.message('Initializing dependencies');
     final FoundationServer foundationServer = FoundationServer(kReleaseMode);
 
     Injector.addSingleton<FoundationServer>(foundationServer);
@@ -52,6 +55,12 @@ final class _MainAppState extends State<MainApp> {
     sessionStorage.store(sessionData);
 
     Injector.addSingleton<SessionStorage>(sessionStorage);
+    _console.success(
+      'Dependencies initialized',
+      info: <String, Object?>{
+        'isAuth': sessionStorage.isAuth,
+      },
+    );
   }
 
   late Future<void> _initInv = initDependencies();

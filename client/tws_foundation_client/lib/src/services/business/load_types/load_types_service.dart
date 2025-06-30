@@ -29,7 +29,7 @@ final class LoadTypesService extends LoadTypesServiceB {
     super.client,
   }) : super(
           host,
-          'loadtype',
+          'loadtypes',
         );
 
   @override

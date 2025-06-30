@@ -2,6 +2,8 @@
 
 using CSM_Foundation.Core.Bases;
 
+using TWS_Customer.Managers.Auth;
+
 namespace TWS_Customer.Managers.Session;
 
 /// <summary>
