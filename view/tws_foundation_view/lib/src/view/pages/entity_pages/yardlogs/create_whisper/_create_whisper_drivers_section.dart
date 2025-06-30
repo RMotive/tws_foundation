@@ -24,7 +24,7 @@ final class _DriversSectionState extends State<_DriversSection> {
           vertical: 8,
           horizontal: 20,
         ),
-        child: EntityFinderSelector<DriverCommon, DriversSer>(
+        child: EntityFinderSelector<DriverCommon, DriversServiceI>(
           label: 'Select a Driver...',
         ),
       ),
