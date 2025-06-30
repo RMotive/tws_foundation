@@ -29,20 +29,22 @@ final class SessionStorage {
 
   /// Creates a new [SessionStorage] instance.
   SessionStorage() {
-    _console.message('Starting [SessionStorage]');
     WidgetsFlutterBinding.ensureInitialized();
-    initLocalStorage().then(
-      (void value) {
-        String? tokenValue = localStorage.getItem(_tokenKey);
-        String? expirationValue = localStorage.getItem(_expirationKey);
-        if (tokenValue == null || expirationValue == null) {
-          return;
-        }
+    _console.message('Starting [SessionStorage]');
+  }
 
-        _token = tokenValue;
-        _expiration = DateTime.parse(expirationValue).toLocal();
-      },
-    );
+  /// Initializes the storage data and its channel with platform storaging system.
+  Future<void> init() async {
+    await initLocalStorage();
+
+    String? tokenValue = localStorage.getItem(_tokenKey);
+    String? expirationValue = localStorage.getItem(_expirationKey);
+    if (tokenValue == null || expirationValue == null) {
+      return;
+    }
+
+    _token = tokenValue;
+    _expiration = DateTime.parse(expirationValue).toLocal();
   }
 
   /// Validates if the given [expiration] is into the time threshold and it's considered valid.

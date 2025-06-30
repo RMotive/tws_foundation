@@ -11,7 +11,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<YardLog> {
   /// Creates a new [YardLogsEntityTableAdapter] instance.
   YardLogsEntityTableAdapter({
-    required super.authBuilder,
+    super.authBuilder,
   });
 
   @override

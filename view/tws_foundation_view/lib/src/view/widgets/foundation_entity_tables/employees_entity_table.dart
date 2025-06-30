@@ -13,7 +13,7 @@ import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Employee> {
   /// Creates a new [EmployeesEntityTableAdatper] instance.
   EmployeesEntityTableAdatper({
-    required super.authBuilder,
+    super.authBuilder,
   });
 
   @override

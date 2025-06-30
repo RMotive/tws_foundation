@@ -7,7 +7,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 final class LandingUtils {
   ///
-  static FutureOr<String> authBuilder() async {
+  static FutureOr<SessionData> authBuilder() async {
     SecurityServiceI securityService = Injector.get();
 
     FoundationResponseResolver<SessionData> resResolver = await securityService.authenticate(
@@ -18,6 +18,6 @@ final class LandingUtils {
       () => SessionData(),
     );
 
-    return sessionData.token;
+    return sessionData;
   }
 }

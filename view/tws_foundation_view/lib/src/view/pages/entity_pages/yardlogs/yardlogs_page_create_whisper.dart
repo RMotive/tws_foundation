@@ -1,6 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/view/widgets/catalog_options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
@@ -45,7 +46,13 @@ final class YardLogsPageCreateWhisper extends PageB {
                 ),
 
                 /// --> Load Type Selection.
-                //TODO: add logic to get catalogues.
+                SectionWidget(
+                  title: 'Load Type',
+                  outterPadding: EdgeInsets.zero,
+                  child: CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
+                    entityBuilder: () => LoadType(),
+                  ),
+                ),
 
                 /// -->
                 SectionWidget(

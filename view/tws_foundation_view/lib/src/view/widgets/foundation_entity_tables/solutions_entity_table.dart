@@ -13,7 +13,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<Solution> {
   /// Creates a new [SolutionsEntityTableAdapter] instance.
   SolutionsEntityTableAdapter({
-    required super.authBuilder,
+    super.authBuilder,
   });
 
   @override
@@ -95,7 +95,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
               onAccept: () async {
                 SolutionsServiceI solutionsService = Injector.get();
 
-                String authToken = await authBuilder();
+                String authToken = await composeAuth();
 
                 FoundationResponseResolver<UpdateOutput<Solution>> resResolver = await solutionsService.update(
                   UpdateInput<Solution>(entity),

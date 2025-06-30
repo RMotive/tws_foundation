@@ -1,5 +1,4 @@
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
-import 'package:example/core/landing_utils.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -26,9 +25,7 @@ final class EmployeesPageEntry extends PackageLandingEntryB<LandingThemeB> {
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return EmployeesPage(
-      adapter: EmployeesEntityTableAdatper(
-        authBuilder: LandingUtils.authBuilder,
-      ),
+      adapter: EmployeesEntityTableAdatper(),
     );
   }
 }

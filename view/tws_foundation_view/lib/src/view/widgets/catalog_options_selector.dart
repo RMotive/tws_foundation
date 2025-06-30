@@ -68,9 +68,9 @@ final class _CatalogOptionsSelectorState<TEntity extends EntityI<TEntity>, TServ
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ViewOutput<TEntity>>(
+    return AsyncWidget<ViewOutput<TEntity>>(
       future: _viewInvok,
-      builder: (BuildContext context, AsyncSnapshot<ViewOutput<TEntity>> snapshot) {
+      successBuilder: (BuildContext ctx, ViewOutput<TEntity> data) {
         return SizedBox();
       },
     );

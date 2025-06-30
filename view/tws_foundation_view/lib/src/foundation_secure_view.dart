@@ -36,7 +36,6 @@ final class _FoundationSecureViewState extends State<FoundationSecureView> {
         solutionSign: widget.sign,
         routes: widget.routes,
       ),
-      afterViewInit: () {},
     );
   }
 }
