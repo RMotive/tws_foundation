@@ -2,8 +2,8 @@ import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
-import 'package:tws_foundation_view/src/view/widgets/twsf_loading_circule.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {widget} {business} class.

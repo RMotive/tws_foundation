@@ -4,8 +4,8 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
-import 'package:tws_foundation_view/src/view/widgets/twsf_loading_circule.dart';
 
 /// [TWSCascadeSection] Shows a custom main control widget with a colapsable content section.
 class TWSCascadeSection extends StatefulWidget {

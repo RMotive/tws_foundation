@@ -25,6 +25,7 @@ final class _DriversSectionState extends State<_DriversSection> {
           horizontal: 20,
         ),
         child: EntityFinderSelector<DriverCommon, DriversServiceI>(
+          entityBuilder: () => DriverCommon(),
           label: 'Select a Driver...',
         ),
       ),

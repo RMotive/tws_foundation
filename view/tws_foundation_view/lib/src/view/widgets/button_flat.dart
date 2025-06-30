@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
-import 'package:tws_foundation_view/src/view/widgets/twsf_loading_circule.dart';
+import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
 
 typedef StatesSet = Set<WidgetState>;
 typedef MStates = WidgetState;
