@@ -9,7 +9,16 @@ library;
 
 //* --> [Services.Business]
 
+
+/// [Services.Business.Vehicules.LoadTypes]
+export 'src/services/business/vehicules/load_types/load_type.dart';
 export 'src/services/business/vehicules/load_types/load_types_service.dart';
+
+/// [Services.Business.HumanResources.Drivers]
+export 'src/services/business/human_resources/drivers/driver.dart';
+export 'src/services/business/human_resources/drivers/driver_common.dart';
+export 'src/services/business/human_resources/drivers/driver_external.dart';
+export 'src/services/business/human_resources/drivers/drivers_service.dart';
 
 //* <-- [Services.Business]
 
@@ -78,9 +87,6 @@ export 'src/services/models/view_filters/view_filter_property.dart';
 
 //! --> Business services
 
-// --> Exporting [src.services.business.load_types]
-export 'src/services/business/vehicules/load_types/load_type.dart';
-
 // --> Exporting [src.services.business.statuses]
 export 'src/services/business/misc/statuses/status.dart';
 
@@ -98,11 +104,6 @@ export 'src/services/business/human_resources/identifications/identification.dar
 
 // --> Exporting [src.services.business.plates]
 export 'src/services/business/vehicules/plates/plate.dart';
-
-// --> Exporting [src.services.business.drivers]
-export 'src/services/business/human_resources/drivers/driver.dart';
-export 'src/services/business/human_resources/drivers/driver_common.dart';
-export 'src/services/business/human_resources/drivers/driver_external.dart';
 
 // --> Exporting [src.services.business.trailers]
 export 'src/services/business/vehicules/trailers/trailer.dart';
