@@ -66,7 +66,10 @@ final class SectionWidget extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  top: 20,
+                ),
                 child: Transform.translate(
                   offset: const Offset(
                     0,
@@ -91,8 +94,13 @@ final class SectionWidget extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: child,
+                padding: EdgeInsetsGeometry.only(
+                  top: 20,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: child,
+                ),
               ),
             ],
           ),

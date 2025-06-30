@@ -23,6 +23,7 @@ using TWS_Business.Entities;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
 using TWS_Business.Entities.Trailers;
+using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Features.Business;
 using TWS_Customer.Features.Business.Vehicules;
@@ -88,6 +89,7 @@ public partial class Program {
                                 new EntityConverter(
                                     [
                                         typeof(YardLog),
+                                        typeof(LoadType),
                                     ]
                                 )
                             );

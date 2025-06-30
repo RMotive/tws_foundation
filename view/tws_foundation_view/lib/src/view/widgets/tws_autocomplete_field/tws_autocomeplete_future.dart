@@ -1,4 +1,4 @@
-part of 'tws_autocomplete_field.dart';
+part of 'entity_finder_selector.dart';
 
 class _TWSAutocompleteFuture<T> extends StatelessWidget {
   final Future<List<ViewOutput<dynamic>>> Function() consume;

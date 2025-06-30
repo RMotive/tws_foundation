@@ -143,7 +143,7 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
                 print('effect...');
                 return Visibility(
                   visible: !waiting,
-                  replacement: TwsfLoadingCircle(
+                  replacement: LoadingWidget(
                     foreColor: colorStruct.accentAlt ?? colorStruct.accent,
                   ),
                   child: content,

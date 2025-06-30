@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using System.Text.Json.Serialization;
+
+using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validations.Validators;
 
 using TWS_Business.Entities;
@@ -44,6 +46,7 @@ public abstract class CommonEntityEdge<TCommonEntity>
 public abstract class BEntity
     : CSM_Foundation.Database.Bases.BEntity {
 
+    [JsonIgnore]
     public override Type Database { get; init; } = typeof(Database);
 }
 

@@ -2,10 +2,12 @@ import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/twsf_loading_circule.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {widget} {business} class.
-final class CatalogOptionsSelector<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+final class CatalogOptionsSelector<TEntity extends NamedEntityI<TEntity>, TService extends ViewServiceI<TEntity>>
     extends StatefulWidget {
   /// Entity builder for construction.
   final EntityBuilder<TEntity> entityBuilder;
@@ -13,10 +15,18 @@ final class CatalogOptionsSelector<TEntity extends EntityI<TEntity>, TService ex
   /// Overriden session auth builder for service call authentication, if not given, [SessionStorage] will be used
   final AuthBuilder? authBuilder;
 
+  /// Whether the options multiselection is enabled
+  final bool multiSelection;
+
+  /// {event} callback triggered when options selection has changed.
+  final void Function(List<TEntity> selection) onSelect;
+
   /// Creates a new [CatalogOptionsSelector] instance.
   const CatalogOptionsSelector({
     super.key,
     this.authBuilder,
+    this.multiSelection = false,
+    required this.onSelect,
     required this.entityBuilder,
   });
 
@@ -27,13 +37,16 @@ final class CatalogOptionsSelector<TEntity extends EntityI<TEntity>, TService ex
 /// {state} class.
 ///
 /// Handles [State] for [CatalogOptionsSelector].
-final class _CatalogOptionsSelectorState<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+final class _CatalogOptionsSelectorState<TEntity extends NamedEntityI<TEntity>, TService extends ViewServiceI<TEntity>>
     extends State<CatalogOptionsSelector<TEntity, TService>> {
   /// {dep} entity service instance dependency.
   final TService entityService = Injector.get();
 
   /// {state} current service invokation instance.
   late Future<ViewOutput<TEntity>> _viewInvok;
+
+  /// {state} current application theme data.
+  late FoundationThemeB fountTheming = Theming.get(context);
 
   @override
   void initState() {
@@ -42,7 +55,15 @@ final class _CatalogOptionsSelectorState<TEntity extends EntityI<TEntity>, TServ
     _viewInvok = viewInvokation();
   }
 
-  ///
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    fountTheming = Theming.get(context);
+  }
+
+  /// Generates a new [Future] instance to handle along state persistive data for the [ViewOutput] of the catalog options
+  /// gathering.
   Future<ViewOutput<TEntity>> viewInvokation() async {
     String auth;
 
@@ -54,10 +75,7 @@ final class _CatalogOptionsSelectorState<TEntity extends EntityI<TEntity>, TServ
     }
 
     FoundationResponseResolver<ViewOutput<TEntity>> futureResolver = await entityService.view(
-      ViewInput<TEntity>.b(
-        double.maxFinite.toInt(),
-        1,
-      ),
+      ViewInput<TEntity>.b(2000, 1),
       auth,
     );
 
@@ -70,8 +88,40 @@ final class _CatalogOptionsSelectorState<TEntity extends EntityI<TEntity>, TServ
   Widget build(BuildContext context) {
     return AsyncWidget<ViewOutput<TEntity>>(
       future: _viewInvok,
+      loadingBuilder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsetsGeometry.all(4),
+          child: Center(
+            child: LoadingWidget(
+              foreColor: fountTheming.page.fore,
+            ),
+          ),
+        );
+      },
       successBuilder: (BuildContext ctx, ViewOutput<TEntity> data) {
-        return SizedBox();
+        List<TEntity> options = data.entities;
+
+        if (options.isEmpty) {
+          return Center(
+            child: Text(
+              'No values to display',
+              style: TextStyle(
+                color: fountTheming.page.fore,
+              ),
+            ),
+          );
+        }
+
+        return OptionsSelector<TEntity>(
+          options: <OptionsSelectorOption<TEntity>>[
+            for (TEntity option in options)
+              OptionsSelectorOption<TEntity>(
+                title: option.name,
+                value: option,
+              ),
+          ],
+          onSelect: widget.onSelect,
+        );
       },
     );
   }

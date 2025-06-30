@@ -263,7 +263,7 @@ final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                       child: AbsorbPointer(
                         child: ColoredBox(
                           color: pageColorTheme.fore.withValues(alpha: 950),
-                          child: TwsfLoadingCircle(
+                          child: LoadingWidget(
                             fit: BoxFit.scaleDown,
                             foreColor: pageColorTheme.back,
                           ),

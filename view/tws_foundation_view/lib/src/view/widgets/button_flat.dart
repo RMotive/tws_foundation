@@ -130,7 +130,7 @@ final class _ButtonFlatState extends State<ButtonFlat> {
         child: Center(
           child: Visibility(
             visible: !isLoading,
-            replacement: TwsfLoadingCircle(
+            replacement: LoadingWidget(
               foreColor: theming.foreAlt ?? theming.fore,
             ),
             child: Text(

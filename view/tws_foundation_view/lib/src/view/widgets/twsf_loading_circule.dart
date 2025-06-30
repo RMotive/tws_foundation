@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// [TwsfLoadingCircle] Display a customized loading circle.
+/// {widget} class.
 ///
-/// Ideal for async callbacks implementations.
-class TwsfLoadingCircle extends StatelessWidget {
+/// Draws a designed loading progress indicator.
+class LoadingWidget extends StatelessWidget {
   /// Circule color.
   final Color foreColor;
 
@@ -12,10 +12,13 @@ class TwsfLoadingCircle extends StatelessWidget {
 
   /// Padding.
   final EdgeInsets padding;
-  const TwsfLoadingCircle({
+  const LoadingWidget({
     super.key,
     required this.foreColor,
-    this.padding = const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: 18,
+      vertical: 8,
+    ),
     this.fit = BoxFit.fitHeight,
   });
 
@@ -25,10 +28,23 @@ class TwsfLoadingCircle extends StatelessWidget {
       padding: padding,
       child: FittedBox(
         fit: fit,
-        child: CircularProgressIndicator(
-          strokeWidth: 3,
-          backgroundColor: Colors.transparent,
-          color: foreColor,
+        child: Column(
+          spacing: 8,
+          children: <Widget>[
+            CircularProgressIndicator(
+              strokeWidth: 3,
+              backgroundColor: Colors.transparent,
+              color: foreColor,
+            ),
+
+            Text(
+              'Loading...',
+              style: TextStyle(
+                fontSize: 10,
+                color: foreColor,
+              ),
+            ),
+          ],
         ),
       ),
     );

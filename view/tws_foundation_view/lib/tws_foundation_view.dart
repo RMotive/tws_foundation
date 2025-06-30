@@ -29,13 +29,13 @@ export 'src/core/themes/foundation_theme_light.dart';
 //! --> Entity Tables
 
 /// [Solutions Entity Table]
-export 'src/view/widgets/foundation_entity_tables/solutions_entity_table.dart';
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/solutions_entity_table.dart';
 
 /// [Yard Logs Entity Table]
-export 'src/view/widgets/foundation_entity_tables/yard_logs_entity_table.dart';
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/yard_logs_entity_table.dart';
 
 /// [Employees Entity Table]
-export 'src/view/widgets/foundation_entity_tables/employees_entity_table.dart';
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/employees_entity_table.dart';
 
 //! <-- Entity Tables
 
@@ -44,14 +44,14 @@ export 'src/view/widgets/foundation_entity_tables/employees_entity_table.dart';
 export 'src/view/widgets/dialog.dart';
 export 'src/view/widgets/text_input.dart';
 export 'src/view/widgets/button_flat.dart';
-export 'src/view/widgets/entity_table/entity_table.dart';
-export 'src/view/widgets/entity_table/entity_table_viewer.dart';
-export 'src/view/widgets/entity_table/entity_table_adapter_b.dart';
-export 'src/view/widgets/create_entity_form.dart/create_entity_form.dart';
-export 'src/view/widgets/create_entity_form.dart/create_entity_form_controller.dart';
-export 'src/view/widgets/create_entity_form.dart/create_entity_form_record.dart';
-export 'src/view/widgets/create_entity_form.dart/create_entity_form_record_reactor.dart';
-export 'src/view/widgets/create_entity_form.dart/create_entity_form_record_field.dart';
+export 'src/view/widgets/complex_widgets/entity_table/entity_table.dart';
+export 'src/view/widgets/complex_widgets/entity_table/entity_table_viewer.dart';
+export 'src/view/widgets/complex_widgets/entity_table/entity_table_adapter_b.dart';
+export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form.dart';
+export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_controller.dart';
+export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_record.dart';
+export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_record_reactor.dart';
+export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_record_field.dart';
  
 //! <-- [Widgets] 
 

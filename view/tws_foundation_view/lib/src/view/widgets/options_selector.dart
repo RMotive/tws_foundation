@@ -142,7 +142,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
       builder: (BuildContext layoutBuildContext, BoxConstraints boxConstraints) {
         boxConstraints = boxConstraints.boxed();
 
-        double boxSpacing = boxConstraints.maxWidth - widget.hSpacing;
+        double boxSpacing = (boxConstraints.maxWidth) - (widget.hSpacing * (widget.options.length - 1));
 
         double optionWidth = (boxSpacing / widget.options.length) - (_kItemsPadding * 2);
 
@@ -150,6 +150,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
           optionWidth = _minOptionWidth;
         }
 
+        
         return SizedBox(
           width: boxConstraints.maxWidth,
           child: Wrap(

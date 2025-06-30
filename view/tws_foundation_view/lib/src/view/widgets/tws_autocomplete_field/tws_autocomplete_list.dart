@@ -1,4 +1,4 @@
-part of 'tws_autocomplete_field.dart';
+part of 'entity_finder_selector.dart';
 
 class _TWSAutocompleteList<T> extends StatelessWidget {
   final ScrollController controller;
@@ -31,8 +31,7 @@ class _TWSAutocompleteList<T> extends StatelessWidget {
         final String label = displayLabel(currentItem);
         // Build the individual option component.
         return TwsListTile(
-          label:
-              '$label ${suffixLabel != null ? suffixLabel!(currentItem) : ""}',
+          label: '$label ${suffixLabel != null ? suffixLabel!(currentItem) : ""}',
           evaluateSelection: () => false,
           onHoverColor: theme.back,
           onHoverTextColor: theme.foreAlt ?? theme.fore,
