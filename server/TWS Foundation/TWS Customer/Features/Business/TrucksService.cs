@@ -15,14 +15,14 @@ public interface ITrucksCommonService
 /// <summary>
 ///     [Service] for <see cref="Address"/> based operations.
 /// </summary>
-public class TruckCommonsService
-    : BService<Truck_Common, ITrucksCommonsDepot>, ITrucksCommonService {
+public class TrucksService
+    : BService<Truck_Common, TrucksDepot>, ITrucksCommonService {
 
     /// <summary>
-    ///     Creates a new instance of <see cref="TruckCommonsService"/>.
+    ///     Creates a new instance of <see cref="TrucksService"/>.
     /// </summary>
     /// <param name="Depot">
     ///     <see cref="Truck_Common"/> based [Depot] handler to be used.
     /// </param>
-    public TruckCommonsService(ITrucksCommonsDepot Depot) : base(Depot) { }
+    public TrucksService(TrucksDepot Depot) : base(Depot) { }
 }

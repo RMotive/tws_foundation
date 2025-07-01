@@ -69,7 +69,7 @@ public class Q_SituationsService
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
 
@@ -95,7 +95,7 @@ public class Q_SituationsService
     public async Task Delete() {
         Situation sample = SampleSituation();
 
-        Situation deleted = await _service.Delete(sample.Id);
+        Situation deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Name, deleted.Name);
@@ -106,14 +106,14 @@ public class Q_SituationsService
         Situation sample = SampleSituation();
 
         BatchOperationOutput<Situation> batchOutput = await _service.Delete([
-                SampleSituation().Id,
-                SampleSituation().Id,
-                SampleSituation().Id
+                SampleSituation(),
+                SampleSituation(),
+                SampleSituation()
             ]);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
     }

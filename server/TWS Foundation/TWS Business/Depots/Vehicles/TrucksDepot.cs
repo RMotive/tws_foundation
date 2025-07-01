@@ -15,7 +15,7 @@ namespace TWS_Business.Depots.Vehicles;
 /// <remarks>
 ///     This is a shared depot to get <see cref="Truck"/> and <see cref="TruckExternal"/>.
 /// </remarks>
-public interface ITrucksCommonsDepot
+public interface ITrucksDepot
     : IDepot<Truck_Common> {
 
 }
@@ -23,10 +23,10 @@ public interface ITrucksCommonsDepot
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Truck"/> dataDatabases entity mirror.
 /// </summary>
-public class Trucks_CommonsDepot 
-    : BCommonDepot<Database, Truck, TruckExternal, Truck_Common>, ITrucksCommonsDepot {
+public class TrucksDepot 
+    : BCommonDepot<Database, Truck, TruckExternal, Truck_Common>, ITrucksDepot {
     /// <summary>
-    ///     Creates a new <see cref="Trucks_CommonsDepot"/> instance with custom handlers.
+    ///     Creates a new <see cref="TrucksDepot"/> instance with custom handlers.
     /// </summary>
     /// <param name="Database">
     ///     Database context handler.
@@ -34,17 +34,17 @@ public class Trucks_CommonsDepot
     /// <param name="Disposer">
     ///     Disposition manager handler.
     /// </param>
-    public Trucks_CommonsDepot(Database Database, IDisposer? Disposer)
+    public TrucksDepot(Database Database, IDisposer? Disposer)
         : base(Database, Disposer) {
     }
 
     /// <summary>
-    ///     Creates a new <see cref="Trucks_CommonsDepot"/> with default handlers.
+    ///     Creates a new <see cref="TrucksDepot"/> with default handlers.
     /// </summary>
     /// <remarks>
     ///     This constructor will generate a <see cref="BDepot{TDatabase, TEntity}"/> using the source database default constructor and no <see cref="IDisposer"/>.
     /// </remarks>
-    public Trucks_CommonsDepot()
+    public TrucksDepot()
         : base(new Database(), null) {
     }
 }

@@ -93,7 +93,7 @@ public class Q_EmployeesService
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
 
@@ -119,7 +119,7 @@ public class Q_EmployeesService
     public async Task Delete() {
         Employee sample = SampleEmployee();
 
-        Employee deleted = await _service.Delete(sample.Id);
+        Employee deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.RFC, deleted.RFC);
@@ -131,14 +131,14 @@ public class Q_EmployeesService
         Employee sample = SampleEmployee();
 
         BatchOperationOutput<Employee> batchOutput = await _service.Delete([
-                SampleEmployee().Id,
-                SampleEmployee().Id,
-                SampleEmployee().Id
+                SampleEmployee(),
+                SampleEmployee(),
+                SampleEmployee()
             ]);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
     }

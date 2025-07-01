@@ -63,7 +63,7 @@ public class Q_LoadTypesService
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
 
@@ -89,7 +89,7 @@ public class Q_LoadTypesService
     public async Task Delete() {
         LoadType sample = SampleLoadtype();
 
-        LoadType deleted = await _service.Delete(sample.Id);
+        LoadType deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Name, deleted.Name);
@@ -100,14 +100,14 @@ public class Q_LoadTypesService
         LoadType sample = SampleLoadtype();
 
         BatchOperationOutput<LoadType> batchOutput = await _service.Delete([
-                SampleLoadtype().Id,
-                SampleLoadtype().Id,
-                SampleLoadtype().Id
+                SampleLoadtype(),
+                SampleLoadtype(),
+                SampleLoadtype()
             ]);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
     }

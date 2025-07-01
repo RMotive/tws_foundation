@@ -643,5 +643,26 @@ public abstract class BDepot<TDatabase, TEntity>
         return Entity;
     }
 
+    public async Task<BatchOperationOutput<TEntity>> Delete(TEntity[] entities) {
+        List<TEntity> successes = [];
+        List<EntityOperationFailure<TEntity>> failures = [];
+        foreach (TEntity entity in entities) {
+
+            try {
+                TEntity success = await Delete(entity);
+                successes.Add(success);
+            } catch (Exception ex) {
+                failures.Add(
+                        new EntityOperationFailure<TEntity>(
+                                entity,
+                                ex
+                            )
+                    );
+            }
+        }
+
+        return new BatchOperationOutput<TEntity>([.. successes], [.. failures]);
+    }
+
     #endregion
 }

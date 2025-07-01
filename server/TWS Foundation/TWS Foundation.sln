@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWS Customer.Quality", "TWS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWS Business.Quality", "TWS Business.Quality\TWS Business.Quality.csproj", "{D7CA6CD6-7E40-45D8-962F-012505267B26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWS Foundation.Quality", "TWS Foundation.Quality\TWS Foundation.Quality.csproj", "{FF795986-A462-42FD-9433-6A47508A2332}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TWS Foundation.Quality", "TWS Foundation.Quality\TWS Foundation.Quality.csproj", "{D2306797-D506-4BD3-1AD1-C81AE5984F05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,10 +76,10 @@ Global
 		{D7CA6CD6-7E40-45D8-962F-012505267B26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7CA6CD6-7E40-45D8-962F-012505267B26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7CA6CD6-7E40-45D8-962F-012505267B26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF795986-A462-42FD-9433-6A47508A2332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF795986-A462-42FD-9433-6A47508A2332}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF795986-A462-42FD-9433-6A47508A2332}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF795986-A462-42FD-9433-6A47508A2332}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2306797-D506-4BD3-1AD1-C81AE5984F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2306797-D506-4BD3-1AD1-C81AE5984F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2306797-D506-4BD3-1AD1-C81AE5984F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2306797-D506-4BD3-1AD1-C81AE5984F05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -644,11 +644,14 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
 
         UpdateHelper(original, overwritten);
         Database.SaveChanges();
-        Disposer?.Push(overwritten);
         return new UpdateOutput<TCommon> {
             Original = original,
             Updated = overwritten,
         };
+    }
+
+    public Task<BatchOperationOutput<TCommon>> Delete(TCommon[] entities) {
+        throw new NotImplementedException();
     }
 
     #endregion

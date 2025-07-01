@@ -1,12 +1,12 @@
-﻿using TWS_Business.Depots.Vehicles;
-using TWS_Business.Entities;
+﻿using TWS_Business.Entities;
+using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Quality.Q_Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots;
 
-public class Q_Trailers_Commons : BQ_Common<Trailer_Common, Trailer, TrailerExternal, Trailers_CommonsDepot> {
+public class Q_Trailers_Commons : BQ_Common<Trailer_Common, Trailer, TrailerExternal, TrailersDepot> {
 
     protected override Trailer_Common EntityFactory(string Entropy) {
 

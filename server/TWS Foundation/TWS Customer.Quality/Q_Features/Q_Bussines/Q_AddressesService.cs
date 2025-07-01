@@ -71,7 +71,7 @@ public class Q_AddressesService
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
 
@@ -97,7 +97,7 @@ public class Q_AddressesService
     public async Task Delete() {
         Address sample = SampleAddress();
 
-        Address deleted = await _service.Delete(sample.Id);
+        Address deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Street, deleted.Street);
@@ -109,14 +109,14 @@ public class Q_AddressesService
         Address sample = SampleAddress();
 
         BatchOperationOutput<Address> batchOutput = await _service.Delete([
-                SampleAddress().Id,
-                SampleAddress().Id,
-                SampleAddress().Id
+                SampleAddress(),
+                SampleAddress(),
+                SampleAddress()
             ]);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
     }

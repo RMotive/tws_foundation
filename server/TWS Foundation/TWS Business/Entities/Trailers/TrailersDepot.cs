@@ -1,30 +1,49 @@
 ﻿using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 
-using TWS_Business.Entities.Vehicules;
+using TWS_Business.Depots.Bases;
 using TWS_Business.Entities.Vehicules.Trailers;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities.Trailers;
 
 
 /// <summary>
-///     [Interface] for <see cref="Trailer"/> based [Depot] implementations.
+///     [Depot] for <see cref="Trailer_Common"/> based [Depot] implementations. 
 /// </summary>
+/// <remarks>
+///     This is a shared depot to get <see cref="Trailer"/> and <see cref="TrailerExternal"/>.
+/// </remarks>
 public interface ITrailersDepot
-    : IDepot<Trailer> {
-}
+    : IDepot<Trailer_Common> {
 
+}
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Trailer"/> dataDatabases entity mirror.
 /// </summary>
-public class TrailersDepot : BDepot<Database, Trailer>, ITrailersDepot {
+public class TrailersDepot
+    : BCommonDepot<Database, Trailer, TrailerExternal, Trailer_Common>, ITrailersDepot {
     /// <summary>
-    ///     Generates a new depot handler for <see cref="Trailer"/>.
+    ///     Creates a new <see cref="TrailersDepot"/> instance with custom handlers.
     /// </summary>
-    public TrailersDepot(Database Databases, IDisposer? Disposer = null)
-       : base(Databases, Disposer) {
+    /// <param name="Database">
+    ///     Database context handler.
+    /// </param>
+    /// <param name="Disposer">
+    ///     Disposition manager handler.
+    /// </param>
+    public TrailersDepot(Database Database, IDisposer? Disposer)
+        : base(Database, Disposer) {
     }
-    public TrailersDepot() : base(new(), null) {
+
+    /// <summary>
+    ///     Creates a new <see cref="TrailersDepot"/> with default handlers.
+    /// </summary>
+    /// <remarks>
+    ///     This constructor will generate a <see cref="BDepot{TDatabase, TEntity}"/> using the source database default constructor and no <see cref="IDisposer"/>.
+    /// </remarks>
+    public TrailersDepot()
+        : base(new Database(), null) {
     }
 }

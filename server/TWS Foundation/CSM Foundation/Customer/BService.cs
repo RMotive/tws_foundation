@@ -1,7 +1,4 @@
-﻿
-using System.Linq.Expressions;
-
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
@@ -57,5 +54,13 @@ public class BService<TEntity, TDepot>
 
     public virtual Task<BatchOperationOutput<TEntity>> Delete(long[] ids) {
         return _depot.Delete(ids);
+    }
+
+    public virtual Task<TEntity> Delete(TEntity entity) {
+        return _depot.Delete(entity);
+    }
+
+    public virtual Task<BatchOperationOutput<TEntity>> Delete(TEntity[] entities) {
+        return _depot.Delete(entities);
     }
 }

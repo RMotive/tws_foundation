@@ -35,6 +35,29 @@ public interface IDepot_Delete<TEntity>
     /// </returns>
     public Task<BatchOperationOutput<TEntity>> Delete(long[] ids);
 
+
+    /// <summary>
+    ///     Deletes a <see cref="TEntity"/> record based on the provided <paramref name="entity"/>.
+    /// </summary>
+    /// <param name="entity">
+    ///     <see cref="IEntity"/> to match.
+    /// </param>
+    /// <returns>
+    ///     Deleted <see cref="TEntity"/> record.
+    /// </returns>
+    public Task<TEntity> Delete(TEntity entity);
+
+    /// <summary>
+    ///     Deletes a collection of <typeparamref name="TEntity"/> based on the given collection.
+    /// </summary>
+    /// <param name="entities">
+    ///     Collection of <see cref="IEntity"/> to be removed.
+    /// </param>
+    /// <returns>
+    ///     A batch operation result information object.
+    /// </returns>
+    public Task<BatchOperationOutput<TEntity>> Delete(TEntity[] entities);
+
     /// <summary>
     ///     Deletes one or more items based on the given <see cref="BatchOperationInput{TEntity}.Filter"/> and <see cref="BatchOperationInput{TEntity}.Behavior"/> combination, gathering all the <see cref="IEntity"/>s objects 
     ///     matching the filter but only removing based on the given <see cref="BatchOperationInput{TEntity}.Behavior"/>

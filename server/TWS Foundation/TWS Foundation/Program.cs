@@ -165,28 +165,28 @@ public partial class Program {
                 services.AddScoped<IPlatesDepot, PlatesDepot>();
                 services.AddScoped<ISCTsDepot, SCTDepot>();
                 services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
-                services.AddScoped<ITrucksCommonsDepot, Trucks_CommonsDepot>();
+                services.AddScoped<TrucksDepot, TrucksDepot>();
                 services.AddScoped<IVehiculesModelsDepot, VehiculeModelsDepot>();
                 services.AddScoped<IAddressesDepot, AddressesDepot>();
                 services.AddScoped<IApproachesDepot, ApproachesDepot>();
-                services.AddScoped<IDriversCommonsDepot, DriversCommonDepot>();
+                services.AddScoped<DriversDepot, DriversDepot>();
                 services.AddScoped<IApproachesDepot, ApproachesDepot>();
                 services.AddScoped<IEmployeesDepot, EmployeesDepot>();
                 services.AddScoped<ILocationsDepot, LocationsDepot>();
                 services.AddScoped<IInsuranceDepot, InsurancesDepot>();
                 services.AddScoped<IMaintenanceDepot, MaintenacesDepot>();
                 services.AddScoped<ITrailerClassesDepot, TrailerClassesDepot>();
-                services.AddScoped<ITrailersDepot, TrailersDepot>();
-                services.AddScoped<ITrailersExternal, TrailersExternalsDepot>();
+                services.AddScoped<TrailersDepot, TrailersDepot>();
                 services.AddScoped<ITrailerTypesDepot, TrailerTypesDepot>();
                 services.AddScoped<IWaypointsDepot, WaypointsDepot>();
 
                 // --> [Customer] services.
                 services.AddScoped<ISecurityService, SecurityService>();
                 services.AddScoped<ISolutionsService, SolutionsService>();
+                services.AddScoped<ISolutionsService, SolutionsService>();
                 services.AddScoped<IAddressesService, AddressesService>();
                 services.AddScoped<ICarriersService, CarriersService>();
-                services.AddScoped<IDriversService, DriversService>();
+                services.AddScoped<IDriversCommonService, DriversService>();
                 services.AddScoped<IEmployeesService, EmployeesService>();
                 services.AddScoped<ILocationsService, LocationsService>();
                 services.AddScoped<ISectionsService, SectionsService>();
@@ -199,6 +199,7 @@ public partial class Program {
                 services.AddScoped<IManufacturersService, ManufacturersService>();
                 services.AddScoped<ISituationsService, SituationsService>();
                 services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
+                services.AddScoped<ITrucksCommonService, TrucksService>();
             }
 
             WebApplication app = builder.Build();

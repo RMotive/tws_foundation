@@ -7,6 +7,7 @@ using CSM_Foundation.Database.Utilitites;
 using CSM_Security.Entities;
 
 using TWS_Business.Entities;
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trailers;
@@ -44,6 +45,116 @@ public abstract class BQ_ServicesCustomer<TService>
 
     #region Entities Factories
 
+
+    protected YardLog SampleYardlog() {
+        return Store(
+                 new YardLog {
+                     Entry = true,
+                     FromTo = Entropy,
+                     Evidence = [],
+                     Seal = Entropy[..10],
+                     LoadType = SampleLoadtype(),
+                     Guard = SampleEmployee(),
+                     Section = SampleSection(),
+                     Truck = SampleTruckCommon(true),
+                     Trailer = SampleTrailerCommon(true),
+                     Driver = SampleDriverCommon(true),
+                 }
+            );
+    }
+
+
+    protected Driver_Common SampleDriverCommon(bool internalValue) {
+        Driver_Common common = Store(
+                new Driver_Common {
+                    License = Entropy[..8],
+                    Status = SampleStatus("dcm"),
+                    Situation = SampleSituation(),
+                }
+            );
+        if (internalValue) {
+            Driver driver = SampleDriver(false);
+            driver.Common = common;
+            driver = Store(driver);
+            common.Internal = driver;
+        } else {
+            DriverExternal external = SampleDriverExternal(false);
+            external.Common = common;
+            external = Store(external);
+            common.External = external;
+        }
+        return common;
+    }
+
+    protected Identification SampleIdentification(string prefix) {
+        return Store(new Identification {
+            Name = prefix + Entropy[..10],
+            LastName = Entropy[..10],
+            Status = SampleStatus(prefix),
+        });
+    }
+
+    protected DriverExternal SampleDriverExternal(bool saveEntity = true) {
+        DriverExternal driverExternal = new() {
+            Identification = SampleIdentification("dve"),
+        };
+        if (saveEntity) return Store(driverExternal);
+        return driverExternal;
+    }
+
+    protected Driver SampleDriver(bool saveEntity = true) {
+        Driver driver = new() {
+            Fast = Entropy[..12],
+            Employee = SampleEmployee(),
+        };
+        if (saveEntity) return Store(driver);
+        return driver;
+    }
+
+    protected Trailer_Common SampleTrailerCommon(bool internalValue) {
+        Trailer_Common common = Store(
+                new Trailer_Common {
+                    Economic = Entropy[..16],
+                    Status = SampleStatus("tcm"),
+                    Situation = SampleSituation(),
+                }
+            );
+
+        if (internalValue) {
+            Trailer trailer = SampleTrailer(false);
+            trailer.Common = common;
+            trailer = Store(trailer);
+            common.Internal = trailer;
+        } else {
+            TrailerExternal external = SampleTrailerExternal(false);
+            external.Common = common;
+            external = Store(external);
+            common.External = external;
+        }
+        return common;
+    }
+
+    protected TrailerExternal SampleTrailerExternal(bool saveEntity = true) {
+        TrailerExternal trailerExternal = new() {
+            Carrier = Entropy[..10],
+        };
+        if (saveEntity) return Store(trailerExternal);
+        return trailerExternal;
+    }
+
+    protected Trailer SampleTrailer(bool saveEntity = true) {
+        Trailer trailer = new() {
+            Carrier = SampleCarrier(),
+            Plates = [
+                    SamplePlate("pl1"),
+                    SamplePlate("pl2")
+                ],
+        };
+
+        if (saveEntity) return Store(trailer);
+        return trailer;
+    }
+
     protected Truck_Common SampleTruckCommon(bool internalValue) { 
         Truck_Common common = Store(
                 new Truck_Common {
@@ -68,7 +179,7 @@ public abstract class BQ_ServicesCustomer<TService>
     }
 
     protected TruckExternal SampleTruckExternal(bool saveEntity = true) {
-        TruckExternal external = new TruckExternal {
+        TruckExternal external = new() {
             Carrier = Entropy[..10],
         };
         if (saveEntity) return Store(external);

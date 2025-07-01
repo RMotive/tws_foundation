@@ -73,7 +73,7 @@ public class Q_TrailerTypesService
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
 
@@ -99,7 +99,7 @@ public class Q_TrailerTypesService
     public async Task Delete() {
         Trailer_Type sample = SampleTrailerType();
 
-        Trailer_Type deleted = await _service.Delete(sample.Id);
+        Trailer_Type deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Size, deleted.Size);
@@ -110,14 +110,14 @@ public class Q_TrailerTypesService
         Trailer_Type sample = SampleTrailerType();
 
         BatchOperationOutput<Trailer_Type> batchOutput = await _service.Delete([
-                SampleTrailerType().Id,
-                SampleTrailerType().Id,
-                SampleTrailerType().Id
+                SampleTrailerType(),
+                SampleTrailerType(),
+                SampleTrailerType()
             ]);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
     }

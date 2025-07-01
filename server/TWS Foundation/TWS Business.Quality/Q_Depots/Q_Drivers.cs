@@ -6,7 +6,7 @@ using TWS_Business.Quality.Q_Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots;
 
-public class Q_Drivers_Commons : BQ_Common<Driver_Common, Driver, DriverExternal, Drivers_CommonsDepot> {
+public class Q_Drivers : BQ_Common<Driver_Common, Driver, DriverExternal, DriversDepot> {
 
 
 

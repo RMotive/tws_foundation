@@ -85,8 +85,7 @@ public abstract class BQ_Disposer
                 // Delete ICollection Entities before deleting the main entity.
                 foreach (var property in committedEntity.GetType().GetProperties()) {
                     if (typeof(IEnumerable<IEntity>).IsAssignableFrom(property.PropertyType)) {
-                        var collection = property.GetValue(committedEntity) as IEnumerable<IEntity>;
-                        if (collection != null) {
+                        if (property.GetValue(committedEntity) is IEnumerable<IEntity> collection) {
                             foreach (var item in collection) {
                                 EntityEntry subEntry = database.Entry(item);
                                 if (subEntry.GetDatabaseValues() is null) {

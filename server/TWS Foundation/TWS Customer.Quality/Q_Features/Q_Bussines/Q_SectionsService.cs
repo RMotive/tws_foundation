@@ -71,7 +71,7 @@ public class Q_SectionsService
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
 
@@ -97,7 +97,7 @@ public class Q_SectionsService
     public async Task Delete() {
         Section sample = SampleSection();
 
-        Section deleted = await _service.Delete(sample.Id);
+        Section deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Name, deleted.Name);
@@ -109,14 +109,14 @@ public class Q_SectionsService
         Section sample = SampleSection();
 
         BatchOperationOutput<Section> batchOutput = await _service.Delete([
-                SampleSection().Id,
-                SampleSection().Id,
-                SampleSection().Id
+                SampleSection(),
+                SampleSection(),
+                SampleSection()
             ]);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
-           () => Assert.True(batchOutput.Successes.Length == 3),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
            () => Assert.Empty(batchOutput.Failures)
         );
     }

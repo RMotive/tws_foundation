@@ -10,14 +10,12 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
-
-using TWS_Business;
 using TWS_Business.Depots.Bases;
-using TWS_Business.Quality.Q_Depots.Bases;
 
-namespace CSM_Foundation.Database.Quality;
+namespace TWS_Business.Quality.Q_Depots.Bases;
 
 public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot, TDatabase>
     : BQ_CommonDataHandler
@@ -72,7 +70,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
             Type propertyType = propertyInfo.PropertyType;
 
-            if (((propertyType != typeof(string)) && (propertyType != typeof(int))) || (propertyInfo.Name == nameof(IEntity.Discriminator))) {
+            if ((propertyType != typeof(string) && propertyType != typeof(int)) || propertyInfo.Name == nameof(IEntity.Discriminator)) {
                 continue;
             }
 

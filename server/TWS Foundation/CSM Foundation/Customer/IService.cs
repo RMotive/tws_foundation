@@ -66,4 +66,18 @@ public interface IService<TEntity>
     /// <param name="ids"></param>
     /// <returns></returns>
     Task<BatchOperationOutput<TEntity>> Delete(long[] ids);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<TEntity> Delete(TEntity entity);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ids"></param>
+    /// <returns></returns>
+    Task<BatchOperationOutput<TEntity>> Delete(TEntity[] entities);
 }
