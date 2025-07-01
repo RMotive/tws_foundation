@@ -1,4 +1,3 @@
-
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/business/carriers/carriers_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/misc/locations/locations_service_i.dart';
@@ -63,6 +62,9 @@ final class FoundationServer extends ServerB {
   /// [DriverCommon] Entity Service.
   late final DriversServiceI driversService;
 
+  /// [TruckCommon] Entity Service.
+  late final TrucksServiceI trucksService;
+
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
     bool isRelease, {
@@ -83,6 +85,7 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<VehiculeModelsServiceI>? vehiculemodelsServiceBuilder,
     ServiceImplementationBuilder<YardlogsServiceI>? yardlogsServiceBuilder,
     ServiceImplementationBuilder<DriversServiceI>? driversServiceBuilder,
+    ServiceImplementationBuilder<TrucksServiceI>? trucksServiceBuilder,
   }) : super(
             isRelease: isRelease,
             devHost ??
@@ -107,5 +110,6 @@ final class FoundationServer extends ServerB {
     vehiculeModelsService = vehiculemodelsServiceBuilder?.call(serverHost, httpClient) ?? VehiculeModelService(serverHost, client: httpClient);
     yardlogsService = yardlogsServiceBuilder?.call(serverHost, httpClient) ?? YardLogsService(serverHost, client: httpClient);
     driversService = driversServiceBuilder?.call(serverHost, httpClient) ?? DriversService(serverHost, client: httpClient);
+    trucksService = trucksServiceBuilder?.call(serverHost, httpClient) ?? TruckService(serverHost, client: httpClient);
   }
 }
