@@ -3,6 +3,8 @@
 		<EnvironmentVariables>
 			<Q_CSMS.Connection>C:\Users\SSF PC\Documents\Development\tws_foundation\server\TWS Foundation\CSM Security.Quality\CSMS.Connection\quality.connection.json</Q_CSMS.Connection>
 			<Q_TWSB.Connection>C:\Users\SSF PC\Documents\Development\tws_foundation\server\TWS Foundation\TWS Business.Quality\TWSB.Connection\quality.connection.json</Q_TWSB.Connection>
+			<Q.Identity>local_user</Q.Identity>
+			<Q.Password>local_user</Q.Password>
 		</EnvironmentVariables>
 	</RunConfiguration>
 </RunSettings>

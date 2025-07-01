@@ -13,7 +13,9 @@ namespace TWS_Business.Migrations
 {
     [DbContext(typeof(Database))]
     [Migration("20250701064944_control model update")]
+#pragma warning disable CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
     partial class controlmodelupdate
+#pragma warning restore CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -5,29 +5,29 @@ using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Mvc;
 
-using TWS_Business.Entities.Employees;
+using TWS_Business.Entities;
 
 using TWS_Customer.Features.Business;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business;
+namespace TWS_Foundation.Controllers.Business.Misc;
 
-[ApiController, Feature("Employees"), Route("[Controller]/[Action]")]
-public class EmployeesController
+[ApiController, Feature("Situations"), Route("[Controller]/[Action]")]
+public class SituationsController
     : ControllerBase {
 
-    readonly IEmployeesService Service;
+    readonly ISituationsService Service;
 
-    public EmployeesController(IEmployeesService Service) {
+    public SituationsController(ISituationsService Service) {
         this.Service = Service;
     }
 
     [HttpPost(), Action("View")]
-    public async Task<IActionResult> View(ViewInput<Employee> options) {
+    public async Task<IActionResult> View(ViewInput<Situation> options) {
         return Ok(
                 await Service.View(
-                        new QueryInput<Employee, ViewInput<Employee>> {
+                        new QueryInput<Situation, ViewInput<Situation>> {
                             Parameters = options
                         }
                     )

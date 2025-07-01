@@ -11,23 +11,23 @@ using TWS_Customer.Features.Business.Vehicules;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business;
+namespace TWS_Foundation.Controllers.Business.Vehicules;
 
-[ApiController, Feature("VehiculeModels"), Route("[Controller]/[Action]")]
-public class VehiculeModelsController
+[ApiController, Feature("Manufacturers"), Route("[Controller]/[Action]")]
+public class ManufacturersController
     : ControllerBase {
 
-    readonly IVehiculeModelsService Service;
+    readonly IManufacturersService Service;
 
-    public VehiculeModelsController(IVehiculeModelsService Service) {
+    public ManufacturersController(IManufacturersService Service) {
         this.Service = Service;
     }
 
     [HttpPost(), Action("View")]
-    public async Task<IActionResult> View(ViewInput<VehiculeModel> options) {
+    public async Task<IActionResult> View(ViewInput<Manufacturer> options) {
         return Ok(
                 await Service.View(
-                        new QueryInput<VehiculeModel, ViewInput<VehiculeModel>> {
+                        new QueryInput<Manufacturer, ViewInput<Manufacturer>> {
                             Parameters = options
                         }
                     )

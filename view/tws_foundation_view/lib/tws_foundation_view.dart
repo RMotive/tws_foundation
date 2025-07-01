@@ -26,6 +26,9 @@ export 'src/core/themes/foundation_theme_light.dart';
 
 //! --> [Widgets]
 
+export 'src/view/widgets/text_button.dart';
+export 'src/view/widgets/fold_panel_widget.dart';
+
 //! --> Entity Tables
 
 /// [Solutions Entity Table]

@@ -16,10 +16,14 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// Input label decorator.
   final String? label;
 
+  /// Whether the component is enabled.
+  final bool enabled;
+
   /// Creates a new [EntityFinderSelector] instance.
   const EntityFinderSelector({
     super.key,
     this.label,
+    this.enabled = true,
     required this.entityBuilder,
   });
 
@@ -50,6 +54,9 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   /// {state} current [Future] instance for the data gathering search invokation.
   late Future<ViewOutput<TEntity>> searchInvok;
 
+  /// {state} whether currently there's an error to display in the input [Widget].
+  String? error;
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +78,14 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
     super.didChangeDependencies();
 
     theme = Theming.get(context);
+  }
+
+  @override
+  void didUpdateWidget(covariant EntityFinderSelector<TEntity, TService> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.enabled != widget.enabled) {
+      error = null;
+    }
   }
 
   @override
@@ -102,7 +117,9 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
         link: link,
         child: TextInput(
           label: widget.label,
+          isEnabled: widget.enabled,
           focusNode: inputFocusNode,
+          errorText: error,
           autofocus: false,
           suffixIcon: Icon(
             Icons.arrow_drop_down,
@@ -134,9 +151,29 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                     child: AsyncWidget<ViewOutput<TEntity>>(
                       future: searchInvok,
                       successBuilder: (BuildContext ctx, ViewOutput<TEntity> data) {
-                        return Center(
-                          child: Text('There\'s data'),
-                        );
+                        Iterable<TEntity> entities = data.entities;
+
+                        if (entities.isEmpty) {
+                          WidgetsBinding.instance.addPostFrameCallback(
+                            (Duration timeStamp) {
+                              setState(() {
+                                error = 'No entities to select';
+                                overlayController.hide();
+                              });
+                            },
+                          );
+
+                          return Center(
+                            child: Text(
+                              'No values to display',
+                              style: TextStyle(
+                                color: theme.page.fore,
+                              ),
+                            ),
+                          );
+                        }
+
+                        return Column();
                       },
                     ),
                   ),

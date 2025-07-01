@@ -24,8 +24,8 @@ public abstract class BQ_FoundationServerController
     /// </summary>
     readonly AuthInput _qualityAuth;
 
-    public BQ_FoundationServerController(string service, WebApplicationFactory<Program> hostFactory)
-        : base(service, "TWSMF", hostFactory) {
+    public BQ_FoundationServerController(string controllerPath, WebApplicationFactory<Program> hostFactory)
+        : base(controllerPath, "TWSMF", hostFactory) {
 
         string? qualityIdentity = Environment.GetEnvironmentVariable("Q.Identity");
         string? qualityPassword = Environment.GetEnvironmentVariable("Q.Password");
@@ -60,8 +60,8 @@ public abstract class BQ_FoundationServerController<T>
     where T : IEntity {
 
 
-    protected BQ_FoundationServerController(string service, WebApplicationFactory<Program> hostFactory)
-        : base(service, hostFactory) {
+    protected BQ_FoundationServerController(string controllerPath, WebApplicationFactory<Program> hostFactory)
+        : base(controllerPath, hostFactory) {
     }
 
     /// <summary>

@@ -35,6 +35,7 @@ public static class ServerUtils {
 
         if (RunningQuality) {
             _Mode = ServerEnvironments.quality;
+            return _Mode;
         }
 
         if (System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToLower()?.Equals("development", StringComparison.InvariantCultureIgnoreCase) ?? false) {

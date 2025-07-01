@@ -11,23 +11,23 @@ using TWS_Customer.Features.Business;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business;
+namespace TWS_Foundation.Controllers.Business.Misc;
 
-[ApiController, Feature("Situations"), Route("[Controller]/[Action]")]
-public class SituationsController
+[ApiController, Feature("Addresses"), Route("[Controller]/[Action]")]
+public class AddressesController
     : ControllerBase {
 
-    readonly ISituationsService Service;
+    readonly IAddressesService Service;
 
-    public SituationsController(ISituationsService Service) {
+    public AddressesController(IAddressesService Service) {
         this.Service = Service;
     }
 
     [HttpPost(), Action("View")]
-    public async Task<IActionResult> View(ViewInput<Situation> options) {
+    public async Task<IActionResult> View(ViewInput<Address> options) {
         return Ok(
                 await Service.View(
-                        new QueryInput<Situation, ViewInput<Situation>> {
+                        new QueryInput<Address, ViewInput<Address>> {
                             Parameters = options
                         }
                     )

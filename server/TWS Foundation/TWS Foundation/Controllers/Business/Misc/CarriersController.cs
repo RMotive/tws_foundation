@@ -7,27 +7,27 @@ using Microsoft.AspNetCore.Mvc;
 
 using TWS_Business.Entities.Vehicules;
 
-using TWS_Customer.Features.Business.Vehicules;
+using TWS_Customer.Features.Business;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business;
+namespace TWS_Foundation.Controllers.Business.Misc;
 
-[ApiController, Feature("Manufacturers"), Route("[Controller]/[Action]")]
-public class ManufacturersController
+[ApiController, Feature("Carriers"), Route("[Controller]/[Action]")]
+public class CarriersController
     : ControllerBase {
 
-    readonly IManufacturersService Service;
+    readonly ICarriersService Service;
 
-    public ManufacturersController(IManufacturersService Service) {
+    public CarriersController(ICarriersService Service) {
         this.Service = Service;
     }
 
     [HttpPost(), Action("View")]
-    public async Task<IActionResult> View(ViewInput<Manufacturer> options) {
+    public async Task<IActionResult> View(ViewInput<Carrier> options) {
         return Ok(
                 await Service.View(
-                        new QueryInput<Manufacturer, ViewInput<Manufacturer>> {
+                        new QueryInput<Carrier, ViewInput<Carrier>> {
                             Parameters = options
                         }
                     )

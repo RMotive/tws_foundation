@@ -18,6 +18,9 @@ final class CatalogOptionsSelector<TEntity extends NamedEntityI<TEntity>, TServi
   /// Whether the options multiselection is enabled
   final bool multiSelection;
 
+  /// Component title.
+  final String title;
+
   /// {event} callback triggered when options selection has changed.
   final void Function(List<TEntity> selection) onSelect;
 
@@ -25,6 +28,7 @@ final class CatalogOptionsSelector<TEntity extends NamedEntityI<TEntity>, TServi
   const CatalogOptionsSelector({
     super.key,
     this.authBuilder,
+    required this.title,
     this.multiSelection = false,
     required this.onSelect,
     required this.entityBuilder,
@@ -113,6 +117,7 @@ final class _CatalogOptionsSelectorState<TEntity extends NamedEntityI<TEntity>, 
         }
 
         return OptionsSelector<TEntity>(
+          title: widget.title,
           options: <OptionsSelectorOption<TEntity>>[
             for (TEntity option in options)
               OptionsSelectorOption<TEntity>(

@@ -1,7 +1,6 @@
 ﻿using System.Text;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Customer.Quality;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -28,7 +27,7 @@ public class Q_SecurityService
 
         IAccountsDepot accountsDepot = new AccountsDepot(securityDatabase, Disposer);
 
-        return new SecurityService(accountsDepot, new Managers.Session.AuthManager(), new HttpContextAccessor());
+        return new SecurityService(accountsDepot, new Managers.Auth.AuthManager(), new HttpContextAccessor());
     }
 
     #endregion

@@ -11,7 +11,7 @@ using TWS_Customer.Features.Business.Vehicules;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business;
+namespace TWS_Foundation.Controllers.Business.Vehicules;
 
 [ApiController, Feature("TrailerTypes"), Route("[Controller]/[Action]")]
 public class TrailerTypesController

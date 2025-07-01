@@ -10,7 +10,7 @@ using TWS_Customer.Features.Business;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business;
+namespace TWS_Foundation.Controllers.Business.Gatekeeping;
 
 /// <summary>
 ///     [Controller] that represents [YardLogs] feature based operations.

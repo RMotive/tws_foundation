@@ -18,7 +18,7 @@ final class Whisper extends StatefulWidget {
   final String title;
 
   /// child content to display.
-  final Widget child;
+  final Widget Function(GlobalKey<FormState> formState) child;
 
   /// {event} Callback when {close} action is called.
   final VoidCallback? onClose;
@@ -43,19 +43,21 @@ final class Whisper extends StatefulWidget {
 ///
 /// Handles [State] for [Whisper].
 final class _WhisperState extends State<Whisper> {
+  final GlobalKey<FormState> formStateKey = GlobalKey<FormState>();
+
   /// {state}
-  late FoundationThemeB foundationTheming;
+  late FoundationThemeB theme;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    foundationTheming = Theming.get(context);
+    theme = Theming.get(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final SimpleTheming pageTheming = foundationTheming.page;
+    final SimpleTheming pageTheming = theme.page;
 
     return LayoutBuilder(
       builder: (_, BoxConstraints boxConstraints) {
@@ -110,7 +112,10 @@ final class _WhisperState extends State<Whisper> {
 
                     // --> Whisper Content
                     Expanded(
-                      child: widget.child,
+                      child: Form(
+                        key: formStateKey,
+                        child: widget.child(formStateKey),
+                      ),
                     ),
 
                     // --> Whisper Footer
@@ -129,7 +134,7 @@ final class _WhisperState extends State<Whisper> {
                             ButtonFlat(
                               label: 'Close',
                               width: _actionsWidth,
-                              theming: foundationTheming.errorTheming,
+                              theming: theme.errorTheming,
                               onClick: () {
                                 Injector.get<Router>().pop();
                                 widget.onClose?.call();
@@ -141,7 +146,11 @@ final class _WhisperState extends State<Whisper> {
                               ButtonFlat(
                                 label: 'Perform',
                                 width: _actionsWidth,
-                                onClick: widget.onPerform,
+                                onClick: () {
+                                  if (formStateKey.currentState!.validate()) {
+                                    widget.onPerform?.call();
+                                  }
+                                },
                               ),
                           ],
                         ),

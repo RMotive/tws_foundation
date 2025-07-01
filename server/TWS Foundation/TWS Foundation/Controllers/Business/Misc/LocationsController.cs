@@ -12,7 +12,7 @@ using TWS_Customer.Features.Business;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business;
+namespace TWS_Foundation.Controllers.Business.Misc;
 
 [ApiController, Feature("Locations"), Route("[Controller]/[Action]")]
 public class LocationsController
