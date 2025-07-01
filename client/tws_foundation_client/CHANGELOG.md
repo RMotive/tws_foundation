@@ -36,6 +36,11 @@
         
     5. Refactored Business services implementations.
 
+    6. Added unique reference value to the following entities:
+        - [Situation]
+        - [LoadType]
+        - [Status]
+        
 - Fixes:
 
 - Dependencies:

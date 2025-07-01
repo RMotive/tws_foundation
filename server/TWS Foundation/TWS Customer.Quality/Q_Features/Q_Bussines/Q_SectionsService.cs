@@ -15,10 +15,6 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_SectionsService
     : BQ_ServicesCustomer<ISectionsService> {
 
-    public Q_SectionsService() {
-
-    }
-
     #region [BQ_Service] implementations
     protected override ISectionsService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
@@ -30,55 +26,23 @@ public class Q_SectionsService
     #endregion
 
     #region Private Methods/Functions
-    Section GenerateMock(string Entropy) {
-        Status status = Store(
-                new Status {
-                    Name = Entropy,
-                    Description = Entropy,
-                }
-            );
-
-        Status status2 = Store(
-                new Status {
-                    Name = "a" + Entropy,
-                    Description = "a" + Entropy,
-                }
-            );
-
-        Address address = Store(
-                new Address {
-                    State = Entropy[..3],
-                    Street = Entropy,
-                    AltStreet = Entropy,
-                    City = Entropy,
-                    ZIP = Entropy[..5],
-                    Country = Entropy[..3],
-                    Subdivision = Entropy,
-                }
-            );
-
-        Location location = Store(
-                new Location {
-                    Name = Entropy,
-                    Description = Entropy,
-                    Status = status2,
-                    Address = address,
-                }
-            );
-
+   
+    Section EntityFactory() {
         return new Section {
             Name = Entropy,
             Capacity = 10,
             Ocupancy = 1,
-            Status = status,
-            Yard = location
+            Status = SampleStatus("sec"),
+            Yard = SampleLocation()
         };
     }
-    #endregion
 
-    [Fact(DisplayName = "[View]: Records view")]
+#endregion
+
+    [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
-        Store(GenerateMock(RandomUtils.String(16)));
+        // Create a sample address to prevent empty view results.
+        SampleSection();
         ViewOutput<Section> viewOutput = await _service.View(
                 new QueryInput<Section, ViewInput<Section>> {
                     Parameters = new() {
@@ -94,81 +58,67 @@ public class Q_SectionsService
             () => Assert.True(viewOutput.Length > 0),
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
-
         );
     }
 
-    [Fact(DisplayName = "[Create]: Generate new Records")]
+    [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
-        Section[] mocks = [
-            GenerateMock(RandomUtils.String(16)),
-            GenerateMock(RandomUtils.String(16)),
-            GenerateMock(RandomUtils.String(16))
-
-            ];
-        BatchOperationOutput<Section> viewOutput = await _service.Create(mocks);
+        BatchOperationOutput<Section> batchOutput = await _service.Create([
+                EntityFactory(),
+                EntityFactory(),
+                EntityFactory()
+            ]);
 
         Assert.Multiple(
-            () => Assert.False(viewOutput.Failed),
-            () => Assert.Equal(0, viewOutput.FailuresCount),
-            () => Assert.Equal(3, viewOutput.Successes.Length),
-            () => Assert.True(viewOutput.Successes.First().Id > 0)
+           () => Assert.False(batchOutput.Failed),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
+           () => Assert.Empty(batchOutput.Failures)
         );
+
     }
 
-    [Fact(DisplayName = "[Update]: Modify an existent record")]
+    [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        #region [Update] - Generate a new record.
-        string entropy = RandomUtils.String(16);
-        Section mock = GenerateMock(entropy);
-        UpdateOutput<Section> updateOutput = await _service.Update(
-                new UpdateInput<Section> {
-                    Create = true,
-                    Entity = mock,
-                }
-            );
-
-        mock = updateOutput.Updated;
+        Section changedEntity = SampleSection();
+        changedEntity.Name = "updated_name" + changedEntity.Name;
+        UpdateOutput<Section> updateOutput = await _service.Update(new UpdateInput<Section> {
+            Entity = changedEntity,
+            Create = true,
+        });
 
         Assert.Multiple(
-            () => Assert.NotNull(updateOutput.Updated),
-            () => Assert.True(updateOutput.Updated.Id > 0),
-            () => Assert.Equal(updateOutput.Updated.Name, entropy)
+            () => Assert.Equal(updateOutput.Original?.Id, updateOutput.Updated.Id),
+            () => Assert.NotEqual(updateOutput.Original?.Name, updateOutput.Updated.Name)
         );
-        #endregion
 
-        #region [Update] - Modify record.
-        string newEntropy = "UDT" + RandomUtils.String(13);
-        mock.Name = newEntropy;
-        mock.Status.Name = newEntropy;
-
-        updateOutput = await _service.Update(
-                new UpdateInput<Section> {
-                    Create = false,
-                    Entity = mock,
-                }
-            );
-
-        Assert.Multiple(
-            () => Assert.NotNull(updateOutput.Updated),
-            () => Assert.NotNull(updateOutput.Original),
-            () => Assert.True(updateOutput.Updated.Id > 0),
-            () => Assert.Equal(updateOutput.Updated.Name, newEntropy),
-            () => Assert.Equal(updateOutput.Original?.Name, entropy)
-
-        );
-        #endregion
     }
 
-    [Fact(DisplayName = "[Delete]: Delete existent records")]
+    [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        string entropy = RandomUtils.String(16);
-        Section mock = Store(GenerateMock(entropy));
-        Section viewOutput = await _service.Delete(mock.Id);
+        Section sample = SampleSection();
+
+        Section deleted = await _service.Delete(sample);
+
+        Assert.Equal(sample.Id, deleted.Id);
+        Assert.Equal(sample.Name, deleted.Name);
+        Assert.Equal(sample.Timestamp, deleted.Timestamp);
+    }
+
+    [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
+    public async Task DeleteCollection() {
+        Section sample = SampleSection();
+
+        BatchOperationOutput<Section> batchOutput = await _service.Delete([
+                SampleSection(),
+                SampleSection(),
+                SampleSection()
+            ]);
 
         Assert.Multiple(
-            () => Assert.True(viewOutput.Id > 0),
-            () => Assert.Equal(entropy, viewOutput.Name)
+           () => Assert.False(batchOutput.Failed),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
+           () => Assert.Empty(batchOutput.Failures)
         );
     }
+
 }

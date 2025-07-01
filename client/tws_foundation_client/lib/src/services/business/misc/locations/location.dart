@@ -2,6 +2,10 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/services/business/misc/addresses/address.dart';
 
+/// [Location] default builder.
+Location locationBuilder() => Location();
+
+/// Defines a business entity that stores an specific [Address] and [Waypoint] location data for items, vehicules or buildings entities.
 final class Location extends NamedEntityB<Location> {
   /// [address] Property key.
   static const String kAddress = "address";

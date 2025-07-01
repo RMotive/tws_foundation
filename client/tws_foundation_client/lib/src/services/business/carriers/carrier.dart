@@ -1,6 +1,10 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/business/misc/addresses/address.dart';
 
+/// [Carrier] default builder.
+Carrier carrierBuilder() => Carrier();
+
+/// Defines a business entity that stores information for a [Carrier] that operates in any [Solution] 
 final class Carrier extends NamedEntityB<Carrier> {
 
   /// [approach] property key.

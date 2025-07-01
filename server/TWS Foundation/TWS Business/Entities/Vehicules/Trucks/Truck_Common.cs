@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -25,22 +26,29 @@ public class Truck_Common
     #region Relations
 
     /// <summary>
+    ///     <see cref="Entities.Location"/> information.
+    /// </summary>
+    [Relation]
+    public Location? Location { get; set; }
+
+    /// <summary>
+    ///     <see cref="Entities.Situation"/> information.
+    /// </summary>
+    [Relation]
+    public Situation? Situation { get; set; }
+
+    /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
-    /// <summary>
-    ///     <see cref="Entities.Situation"/> information.
-    /// </summary>
-    public Situation? Situation { get; set; }
+    #endregion
 
-    /// <summary>
-    ///     <see cref="Entities.Location"/> information.
-    /// </summary>
-    public Location? Location { get; set; }
+    #region Dependants 
 
     #endregion
 

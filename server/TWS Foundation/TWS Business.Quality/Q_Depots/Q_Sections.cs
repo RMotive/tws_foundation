@@ -11,6 +11,7 @@ public class Q_Sections
                 new Status {
                     Name = Entropy,
                     Description = Entropy,
+                    Reference = Entropy[..8],
                 }
             );
 
@@ -18,6 +19,7 @@ public class Q_Sections
                 new Status {
                     Name = "a" + Entropy,
                     Description = "a" + Entropy,
+                    Reference = "a" + Entropy[..7],
                 }
             );
 

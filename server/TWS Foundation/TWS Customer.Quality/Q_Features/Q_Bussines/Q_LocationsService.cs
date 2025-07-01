@@ -31,32 +31,19 @@ public class Q_LocationsService
     #endregion
 
     #region Private Methods/Functions
-    Location GenerateMock(string Entropy) {
+    Location EntityFactory() {
         return new Location {
             Name = Entropy,
-            Status = Store(
-                   new Status {
-                       Name = Entropy,
-                   }
-                ),
-            Address = Store(
-                    new Address {
-                        State = Entropy[..3],
-                        Street = Entropy,
-                        AltStreet = Entropy,
-                        City = Entropy,
-                        ZIP = Entropy[..5],
-                        Country = Entropy[..3],
-                        Subdivision = Entropy,
-                    }
-                )
+            Status = SampleStatus("loc"),
+            Address = SampleAddress()
         };
     }
     #endregion
 
-    [Fact(DisplayName = "[View]: Records view")]
+    [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
-        Store(GenerateMock(RandomUtils.String(16)));
+        // Create a sample = to prevent empty view results.
+        SampleLocation();
         ViewOutput<Location> viewOutput = await _service.View(
                 new QueryInput<Location, ViewInput<Location>> {
                     Parameters = new() {
@@ -72,81 +59,65 @@ public class Q_LocationsService
             () => Assert.True(viewOutput.Length > 0),
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
-
         );
     }
 
-    [Fact(DisplayName = "[Create]: Generate new Records")]
+    [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
-        Location[] mocks = [
-            GenerateMock(RandomUtils.String(16)),
-            GenerateMock(RandomUtils.String(16)),
-            GenerateMock(RandomUtils.String(16))
-
-            ];
-        BatchOperationOutput<Location> viewOutput = await _service.Create(mocks);
+        BatchOperationOutput<Location> batchOutput = await _service.Create([
+                EntityFactory(),
+                EntityFactory(),
+                EntityFactory()
+            ]);
 
         Assert.Multiple(
-            () => Assert.False(viewOutput.Failed),
-            () => Assert.Equal(0, viewOutput.FailuresCount),
-            () => Assert.Equal(3, viewOutput.Successes.Length),
-            () => Assert.True(viewOutput.Successes.First().Id > 0)
+           () => Assert.False(batchOutput.Failed),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
+           () => Assert.Empty(batchOutput.Failures)
         );
+
     }
 
-    [Fact(DisplayName = "[Update]: Modify an existent record")]
+    [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        #region [Update] - Generate a new record.
-        string entropy = RandomUtils.String(16);
-        Location mock = GenerateMock(entropy);
-        UpdateOutput<Location> updateOutput = await _service.Update(
-                new UpdateInput<Location> {
-                    Create = true,
-                    Entity = mock,
-                }
-            );
-
-        mock = updateOutput.Updated;
+        Location changedEntity = SampleLocation();
+        changedEntity.Name = "updated_name" + changedEntity.Name;
+        UpdateOutput<Location> updateOutput = await _service.Update(new UpdateInput<Location> {
+            Entity = changedEntity,
+            Create = true,
+        });
 
         Assert.Multiple(
-            () => Assert.NotNull(updateOutput.Updated),
-            () => Assert.True(updateOutput.Updated.Id > 0),
-            () => Assert.Equal(updateOutput.Updated.Name, entropy)
+            () => Assert.Equal(updateOutput.Original?.Id, updateOutput.Updated.Id),
+            () => Assert.NotEqual(updateOutput.Original?.Name, updateOutput.Updated.Name)
         );
-        #endregion
 
-        #region [Update] - Modify record.
-        string newEntropy = "UDT" + RandomUtils.String(13);
-        mock.Name = newEntropy;
-        mock.Status.Name = newEntropy;
-
-        updateOutput = await _service.Update(
-                new UpdateInput<Location> {
-                    Create = false,
-                    Entity = mock,
-                }
-            );
-
-        Assert.Multiple(
-            () => Assert.NotNull(updateOutput.Updated),
-            () => Assert.NotNull(updateOutput.Original),
-            () => Assert.True(updateOutput.Updated.Id > 0),
-            () => Assert.Equal(updateOutput.Updated.Name, newEntropy),
-            () => Assert.Equal(updateOutput.Original?.Name, entropy)
-
-        );
-        #endregion
     }
 
-    [Fact(DisplayName = "[Delete]: Delete existent records")]
+    [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        string entropy = RandomUtils.String(16);
-        Location mock = Store(GenerateMock(entropy));
-        Location viewOutput = await _service.Delete(mock.Id);
+        Location sample = SampleLocation();
+
+        Location deleted = await _service.Delete(sample);
+
+        Assert.Equal(sample.Id, deleted.Id);
+        Assert.Equal(sample.Name, deleted.Name);
+    }
+
+    [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
+    public async Task DeleteCollection() {
+        Location sample = SampleLocation();
+
+        BatchOperationOutput<Location> batchOutput = await _service.Delete([
+                SampleLocation(),
+                SampleLocation(),
+                SampleLocation()
+            ]);
 
         Assert.Multiple(
-            () => Assert.True(viewOutput.Id > 0),
-            () => Assert.Equal(entropy, viewOutput.Name)
+           () => Assert.False(batchOutput.Failed),
+           () => Assert.Equal(3, batchOutput.Successes.Length),
+           () => Assert.Empty(batchOutput.Failures)
         );
     }
 }

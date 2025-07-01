@@ -1,5 +1,9 @@
 import 'package:csm_client/csm_client.dart';
 
+/// [Manufacturer] default builder.
+Manufacturer manufacturerBuilder() => Manufacturer();
+
+/// Defines a business entity that stores the [Manufacturer] data for [Trucks] entities.
 final class Manufacturer extends NamedEntityB<Manufacturer> {
   /// Generates a new [Manufacturer] instance from mandatory values.
   Manufacturer();

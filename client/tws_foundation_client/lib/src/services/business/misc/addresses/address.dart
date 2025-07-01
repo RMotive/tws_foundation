@@ -1,6 +1,10 @@
 
 import 'package:csm_client/csm_client.dart';
 
+/// [Address] default builder.
+Address addressBuilder() => Address();
+
+/// Defines a business entity that stores information about a location [Address] for buildings, employees, etc.
 final class Address extends EntityB<Address> {
 /// [country] property key.
   static const String kCountry = "country";

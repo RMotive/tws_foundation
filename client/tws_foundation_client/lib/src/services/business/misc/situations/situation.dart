@@ -1,6 +1,21 @@
 import 'package:csm_client/csm_client.dart';
 
+/// [Situation] default builder.
+Situation situationBuilder() => Situation();
+
+/// Defines a business entity that stores data for other business entities operating [Situation] status.
+/// Defines if and entity is on the way, stored, parked, out of service, etc.
 final class Situation extends NamedEntityB<Situation> {
+
+  /// [reference] property key.
+  static const String kReference = "reference";
+  
+  /// Unique identificator reference.
+  String reference = "";
+
+  /// [Status] navigation set.
+  Status status = Status();
+
   /// Generates a new [Situation] instance from mandatory values.
   Situation();
 

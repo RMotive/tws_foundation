@@ -2,6 +2,11 @@ import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/services/business/misc/locations/location.dart';
 
+/// [Section] default builder.
+Section sectionBuilder() => Section();
+
+/// Defines a business entity that stores a [Section] data in a yard [Location], 
+/// where [Trailer] and [Truck] entities are stored, arrived and depart as part of its operations.
 final class Section extends NamedEntityB<Section> {
   /// [yard] property key.
   static const String kYard = "yard";

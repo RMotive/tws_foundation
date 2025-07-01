@@ -9,10 +9,7 @@ using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Records;
-
-using TWS_Foundation.Middlewares.Frames;
 
 namespace TWS_Foundation.Quality;
 
@@ -20,7 +17,7 @@ namespace TWS_Foundation.Quality;
 /// 
 /// </summary>
 public abstract class BQ_FoundationServerController
-    : BQ_Controller<Program> {
+    : BQ_Controller<Program>  {
 
     /// <summary>
     ///     
@@ -47,7 +44,7 @@ public abstract class BQ_FoundationServerController
     protected override async Task<string> Authenticate() {
         (HttpStatusCode statusCode, ResponseSchema frameResult) = await XPost<ResponseSchema, AuthInput>("Security/Authenticate", _qualityAuth);
 
-        
+
 
         return "";
     }

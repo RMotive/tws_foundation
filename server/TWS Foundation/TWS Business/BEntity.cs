@@ -13,7 +13,7 @@ namespace TWS_Business;
 /// <typeparam name="TInternal"></typeparam>
 /// <typeparam name="TExternal"></typeparam>
 public abstract class CommonEntity<TInternal, TExternal>
-    : BEntity, ICommonEntity
+    : BEntity
     where TInternal : class, IEntity
     where TExternal : class, IEntity {
 

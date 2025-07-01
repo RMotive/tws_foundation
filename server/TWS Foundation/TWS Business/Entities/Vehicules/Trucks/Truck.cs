@@ -40,6 +40,7 @@ public class Truck
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Carrier Carrier { get; set; } = default!;
 
     /// <summary>
@@ -48,26 +49,31 @@ public class Truck
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public VehiculeModel Model { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Vehicules.SCT"/> information.
     /// </summary>
+    [Relation]
     public SCT? SCT { get; set; }
 
     /// <summary>
     ///     <see cref="Maintenances.Maintenance"/> information.
     /// </summary>
+    [Relation]
     public Maintenance? Maintenance { get; set; }
 
     /// <summary>
     ///     <see cref="Insurances.Insurance"/> information.
     /// </summary>
+    [Relation]
     public Insurance? Insurance { get; set; }
 
     /// <summary>
     ///     <see cref="Plate"/>s referencing this <see cref="Truck"/>.
     /// </summary>
+    [Relation]
     public ICollection<Plate> Plates { get; set; } = [];
 
     #endregion

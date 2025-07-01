@@ -10,24 +10,34 @@ public class Q_Carriers : BQ_Business<Carrier, CarriersDepot> {
 
         return new Carrier {
             Name = Entropy,
-            Status = new Status {
-                Name = Entropy,
-            },
-            Approach = new Approach {
-                EMail = Entropy,
-                Status = new Status {
-                    Name = "A" + Entropy,
+            Status = Store(
+                new Status {
+                    Name = Entropy,
+                    Reference = Entropy[..8]
                 }
-            },
-            Address = new Address {
-                State = Entropy[..3],
-                Street = Entropy,
-                AltStreet = Entropy,
-                City = Entropy,
-                ZIP = Entropy[..5],
-                Country = Entropy[..3],
-                Subdivision = Entropy,
-            }
+            ),
+            Approach = Store(
+                 new Approach {
+                     EMail = Entropy,
+                     Status = Store(
+                         new Status {
+                             Name = "A" + Entropy,
+                             Reference = "A" + Entropy[..7],
+                         }
+                     )
+                 }
+            ),
+            Address = Store(
+                 new Address {
+                     State = Entropy[..3],
+                     Street = Entropy,
+                     AltStreet = Entropy,
+                     City = Entropy,
+                     ZIP = Entropy[..5],
+                     Country = Entropy[..3],
+                     Subdivision = Entropy,
+                 }
+            )
         };
     }
 }

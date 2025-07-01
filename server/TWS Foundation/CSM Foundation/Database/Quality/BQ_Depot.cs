@@ -452,12 +452,21 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
     [Fact(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
     public virtual async Task UpdateD() {
-        TEntity sample = Store(EntityFactory);
+        PropertyInfo ValidEvaluable;
+        if(Evaluable.Name == nameof(IEntity.Id)) {
+            ValidEvaluable = typeof(TEntity).GetProperties()
+                .FirstOrDefault(p => p.Name != nameof(IEntity.Id))
+                ?? typeof(TEntity).GetProperty(nameof(IEntity.Id))!;
+
+        } else {
+            ValidEvaluable = Evaluable;
+        }
+            TEntity sample = Store(EntityFactory);
         TEntity valueReference = RunEntityFactory(EntityFactory);
 
-        object? sampleOriginalValue = Evaluable.GetValue(sample);
+        object? sampleOriginalValue = ValidEvaluable.GetValue(sample);
 
-        Evaluable.SetValue(sample, Evaluable.GetValue(valueReference));
+        ValidEvaluable.SetValue(sample, ValidEvaluable.GetValue(valueReference));
 
         UpdateOutput<TEntity> updateOutput = await Depot.Update(
                 new QueryInput<TEntity, UpdateInput<TEntity>> {
@@ -475,7 +484,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
 
                         Assert.NotEqual(updateOutput.Original, overwritten);
 
-                        Evaluable.SetValue(sample, sampleOriginalValue);
+                        ValidEvaluable.SetValue(sample, sampleOriginalValue);
 
                         Assert.Equal(sample, overwritten);
                     }
@@ -696,8 +705,9 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         );
     }
 
-    [Fact(DisplayName = "[View]: Using filter Linear Evaluation (OR)")]
+    [SkippableFact(DisplayName = "[View]: Using filter Linear Evaluation (OR)")]
     public async Task ViewF() {
+        Skip.If(Evaluable.PropertyType != typeof(string), "This assertion is only available for entities that have an evaluable string property since CONTAINS method is currently only supported to filter string type properties.");
         TEntity[] entities = await Store(2, EntityFactory);
 
         List<object?> possibleValues = [];

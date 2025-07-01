@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,7 +12,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 ///     [Entity] that stores common information along Trailers. (<see cref="Trailer"/> / <see cref="TrailerExternal"/>).
 /// </summary>
 public class Trailer_Common
-    : BEntity {
+    : CommonEntity<Trailer, TrailerExternal> {
 
     #region Properties
 
@@ -31,32 +32,26 @@ public class Trailer_Common
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     Desscriptive type.
-    /// </summary>
+    /// </summary>    
+    [Relation]
     public Trailer_Type? Type { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
-    /// </summary>
+    /// </summary>    
+    [Relation]
     public Situation? Situation { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Location"/> information.
-    /// </summary>
+    /// </summary>    
+    [Relation]
     public Location? Location { get; set; }
-
-    /// <summary>
-    ///     <see cref="Trailer"/> information.
-    /// </summary>
-    public Trailer? Internal { get; set; }
-
-    /// <summary>
-    ///     <see cref="TrailerExternal"/> information.
-    /// </summary>
-    public TrailerExternal? External { get; set; }
 
     #endregion
 

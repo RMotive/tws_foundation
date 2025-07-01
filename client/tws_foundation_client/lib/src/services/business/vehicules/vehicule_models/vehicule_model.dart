@@ -1,6 +1,9 @@
 import 'package:csm_client/csm_client.dart';
 
 
+/// [VehiculeModel] default builder.
+VehiculeModel vehiculemodelBuilder() => VehiculeModel();
+
 final class VehiculeModel extends NamedEntityB<VehiculeModel> {
 
   /// [year] property key.

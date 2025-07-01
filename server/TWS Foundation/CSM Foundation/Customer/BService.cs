@@ -55,4 +55,12 @@ public class BService<TEntity, TDepot>
     public virtual Task<BatchOperationOutput<TEntity>> Delete(long[] ids) {
         return _depot.Delete(ids);
     }
+
+    public virtual Task<TEntity> Delete(TEntity entity) {
+        return _depot.Delete(entity);
+    }
+
+    public virtual Task<BatchOperationOutput<TEntity>> Delete(TEntity[] entities) {
+        return _depot.Delete(entities);
+    }
 }

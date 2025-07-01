@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,16 +18,19 @@ public class Trailer
     /// <summary>
     ///     <see cref="Vehicules.SCT"/> information.
     /// </summary>
+    [Relation]
     public SCT? SCT { get; set; }
 
     /// <summary>
     ///     <see cref="VehiculeModel"/> information.
     /// </summary>
+    [Relation]
     public VehiculeModel? Model { get; set; }
 
     /// <summary>
     ///     <see cref="Maintenances.Maintenance"/> information.
     /// </summary>
+    [Relation]
     public Maintenance? Maintenance { get; set; }
 
     /// <summary>
@@ -35,11 +39,13 @@ public class Trailer
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [Relation]
     public Carrier Carrier { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Plate"/>s information. 
     /// </summary>
+    [Relation]
     public ICollection<Plate> Plates { get; set; } = [];
 
     #endregion
