@@ -77,10 +77,10 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Address.des(JObject json) {
   List&lt;Carrier&gt; carriers = &lt;Carrier&gt;[];
-  int id = json.get(SCK.kId);
+  int id = json.get(EntitiesCommonProperties.kId);
   String country = json.get(kCountry);
   String? state = json.getDefault(kState, null);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
   String? street = json.getDefault(kStreet, null);
   String? altStreet = json.getDefault(kAltStreet, null);
   String? city = json.getDefault(kCity, null);

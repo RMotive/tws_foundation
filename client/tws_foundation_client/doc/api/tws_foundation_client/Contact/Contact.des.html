@@ -76,12 +76,12 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Contact.des(JObject json) {
-  int id = json.get(SCK.kId);
+  int id = json.get(EntitiesCommonProperties.kId);
   String name = json.get(kName);
   String lastname = json.get(kLastName);
   String email = json.get(kEmail);
   String phone = json.get(kPhone);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
 
   return Contact(id, name, lastname, email, phone, timestamp: timestamp);
 }</code></pre>

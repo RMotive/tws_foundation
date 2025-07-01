@@ -1,0 +1,118 @@
+part of '../category_layout.dart';
+
+/// {widget} class.
+///
+/// Draws and manages an [CategoryLayout] action ribbon button.
+final class _CategoryLayoutRibbonActionButton extends StatefulWidget {
+  /// Action button options.
+  final CategoryLayoutRibbonActionOptionsI options;
+
+  /// Creates a new [_CategoryLayoutRibbonActionButton] instance.
+  const _CategoryLayoutRibbonActionButton({
+    required this.options,
+  });
+
+  @override
+  State<_CategoryLayoutRibbonActionButton> createState() => _CategoryLayoutRibbonActionButtonState();
+}
+
+/// {state} class.
+///
+/// Implements [State] handling for [_CategoryLayoutRibbonArticleButton].
+final class _CategoryLayoutRibbonActionButtonState extends State<_CategoryLayoutRibbonActionButton> {
+
+  /// [Widget] scoped theme properties.
+  late StateTheming stateTheming;
+
+  /// [Widget] current state.
+  CSMStates state = CSMStates.none;
+
+  /// Whether the current [Widget] is waiting to finish invokation.
+  bool isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    stateTheming = Theming.get<FoundationThemeB>(context).categoryLayoutRibbonButton;
+
+    super.didChangeDependencies();
+  }
+
+  /// {event} Triggered when the user mouse pointer clicks on the button.
+  void onClick() async {
+    setState(() {
+      isLoading = true;
+      state = CSMStates.selected;
+    });
+
+    await widget.options.onInvoke();
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  /// {event} Triggered when the user mouse pointer is in / out button pointer area.
+  void onHover(bool $in) {
+    setState(() {
+      state = $in ? CSMStates.hovered : CSMStates.none;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ComplexTheming theming = state.evaluateTheme(stateTheming);
+
+    return Tooltip(
+      message: widget.options.description,
+      child: PointerArea(
+        cursor: isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
+        onClick: isLoading ? null : onClick,
+        onHover: isLoading ? null : onHover,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: ColoredBox(
+            color: theming.background!,
+            child: Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: Visibility(
+                visible: !isLoading,
+                child: Column(
+                  spacing: 1,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    widget.options.iconBuilder(theming.foreground!),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                      ),
+                      child: Text(
+                        widget.options.title,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: theming.foreground,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                replacement: Transform.scale(
+                  scale: .5,
+                  child: CircularProgressIndicator(
+                    color: theming.foreground?.withValues(
+                      alpha: .7,
+                    ),
+                    strokeWidth: 3,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

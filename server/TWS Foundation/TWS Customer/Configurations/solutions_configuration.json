@@ -1,7 +1,17 @@
 [
   {
+    "Sign": "TWSMF",
+    "Enabled": true,
+    "Login": "TWSMF001"
+  },
+  {
     "Sign": "TWSMG",
-    "Enabled":  true,
+    "Enabled": true,
     "Login": "TWSMG001"
+  },
+  {
+    "Sisng": "TWSMA",
+    "Enabled": true,
+    "Login": "TWSMA001"
   }
 ]

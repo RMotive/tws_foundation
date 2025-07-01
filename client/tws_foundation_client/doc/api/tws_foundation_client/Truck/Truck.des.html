@@ -73,14 +73,14 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Truck.des(JObject json) {
-  int id = json.get(SCK.kId);
-  int status = json.get(SCK.kStatus);
+  int id = json.get(EntitiesCommonProperties.kId);
+  int status = json.get(EntitiesCommonProperties.kStatus);
   int model = json.get(kModel);
   int common = json.get(kCommon);
   int carrier = json.get(kCarrier);
   String vin = json.get(kVin);
   String? motor = json.getDefault(kMotor, null);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
   int? maintenance = json.getDefault(kMaintenance, null);
   int? insurance = json.getDefault(kInsurance, null);
   int? sct = json.getDefault(kSct, null);
@@ -96,8 +96,8 @@
   plates = rawPlateArray.map&lt;Plate&gt;(Plate.des).toList();
 
   &#47;&#47;Optional parameters validation.
-  if (json[SCK.kStatusNavigation] != null) {
-    JObject rawNavigation = json.getDefault(SCK.kStatusNavigation, &lt;String, dynamic&gt;{});
+  if (json[EntitiesCommonProperties.kStatusNavigation] != null) {
+    JObject rawNavigation = json.getDefault(EntitiesCommonProperties.kStatusNavigation, &lt;String, dynamic&gt;{});
     statusNavigation = Status.des(rawNavigation);
   }
 

@@ -84,14 +84,14 @@
 JObject encode() {
   String e = year.toString().substring(0, 10);
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
     kManufacturer: manufacturer,
-    SCK.kName: name,
+    EntitiesCommonProperties.kName: name,
     kYear: e,
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kmanufacturerNavigation: manufacturerNavigation?.encode(),
-    SCK.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
   };
 }</code></pre>
 </section>

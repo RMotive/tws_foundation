@@ -87,7 +87,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
-  if(name.trim().isEmpty || name.length &gt; 32) results.add(CSMSetValidationResult(SCK.kName, &quot;Max name length is 32 characters&quot;, &quot;strictLength(1,32)&quot;));
+  if(name.trim().isEmpty || name.length &gt; 32) results.add(CSMSetValidationResult(EntitiesCommonProperties.kName, &quot;Max name length is 32 characters&quot;, &quot;strictLength(1,32)&quot;));
 
   return results;
 }</code></pre>

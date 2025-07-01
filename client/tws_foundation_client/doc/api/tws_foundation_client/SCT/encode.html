@@ -83,13 +83,13 @@
   <pre class="language-dart"><code class="language-dart">@override
 JObject encode() {
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
     kType: type,
     kNumber: number,
     kConfiguration: configuration,
-    SCK.kTimestamp: timestamp.toIso8601String(),
-    SCK.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
   };
 }</code></pre>
 </section>

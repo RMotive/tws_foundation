@@ -1,18 +1,29 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 
-using TWS_Business.Sets;
+using TWS_Business.Entities;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Depots;
+
+/// <summary>
+///     [Interface] for <see cref="Approach"/> based [Depot] implementations.
+/// </summary>
+public interface IApproachesDepot
+    : IDepot<Approach> {
+}
+
 /// <summary>
 ///     Implements a <see cref="BMigrationDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Approach"/> dataDatabases entity mirror.
 /// </summary>
-public class ApproachesDepot : BDepot<TWSBusinessDatabase, Approach> {
+public class ApproachesDepot 
+    : BDepot<Database, Approach>, IApproachesDepot {
+
     /// <summary>
     ///     Generates a new depot handler for <see cref="Approach"/>.
     /// </summary>
-    public ApproachesDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
+    public ApproachesDepot(Database Databases, IDisposer? Disposer = null)
        : base(Databases, Disposer) {
     }
     public ApproachesDepot() : base(new(), null) {

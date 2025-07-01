@@ -1,0 +1,121 @@
+import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
+import 'package:tws_foundation_client/src/services/business/addresses/address.dart';
+import 'package:tws_foundation_client/src/services/business/employees/employee_dates.dart';
+import 'package:tws_foundation_client/src/services/business/identifications/identification.dart';
+
+/// {entity} class.
+///
+/// TODO: Define
+final class Employee extends EntityB<Employee> {
+  /// [curp] property key.
+  static const String kCurp = "curp";
+
+  /// [rfc] property key.
+  static const String kRfc = "rfc";
+
+  /// [nss] property key.
+  static const String kNss = "nss";
+
+  /// [identification] property key.
+  static const String kIdentification = "identification";
+
+  /// [Address] property key.
+  static const String kAddress = "address";
+
+  /// [Approach] property key.
+  static const String kApproach = "approach";
+
+  /// [Driver] property key.
+  static const String kDriver = "driver";
+
+  /// [Status] property key.
+  static const String kStatus = "status";
+
+  /// [nss] property key.
+  static const String kEmployeeDates = "dates";
+
+  //! --> Properties
+
+  /// 18 lenght CURP number.
+  String? curp;
+
+  /// 12 lenght RFC number.
+  String? rfc;
+
+  /// 11 lenght Mexican Social Asurance Number (NSS).
+  String? nss;
+
+  //! <-- Properties
+
+  //! --> Relations
+
+  /// [Address] information.
+  Address? address;
+
+  /// [EmployeeDates] information.
+  EmployeeDates dates = EmployeeDates();
+
+  /// [Identification] information.
+  Identification identification = Identification();
+
+  //! <-- Relations
+
+  //! --> Getters
+
+  String get fullName => '${identification.name} ${identification.lastName}';
+
+  //! <-- Getters
+
+  /// Generates a new [Employee] instance from mandatory values.
+  Employee();
+
+  @override
+  DataMap encode([DataMap? entityObject]) {
+    return super.encode(
+      <String, Object?>{
+        kCurp: curp,
+        kRfc: rfc,
+        kNss: nss,
+        kIdentification: identification.encode(),
+        kAddress: address?.encode(),
+        kEmployeeDates: dates.encode(),
+      },
+    );
+  }
+
+  @override
+  void decode(DataMap encode) {
+    super.decode(encode);
+    rfc = encode.get(kRfc, null);
+    nss = encode.get(kNss, null);
+    curp = encode.get(kCurp, null);
+
+    address = encode.getEntity(() => Address(), kAddress);
+    dates = encode.getEntity(() => EmployeeDates(), kEmployeeDates) ?? dates;
+    identification = encode.getEntity(() => Identification(), kIdentification) ?? identification;
+  }
+
+  @override
+  List<EntityInvalidation<Employee>> evaluate() {
+    List<EntityInvalidation<Employee>> results = <EntityInvalidation<Employee>>[];
+    if (id < BigInt.zero) results.add(EntityInvalidation<Employee>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+
+    if (curp != null) {
+      if (curp!.length != 18) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kCurp, String, curp), "CURP number must be 18 length", "strictLength(18)"));
+    }
+
+    if (rfc != null) {
+      if (rfc!.length != 12) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kRfc, String, rfc), "CURP number must be 18 length", "strictLength(12)"));
+    }
+
+    if (nss != null) {
+      if (nss!.length != 11) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kNss, String, nss), "The NSS number must be 11 character length", "structLength(11)"));
+    }
+
+    results.validateDependency(this, dates);
+    if (address != null) results.validateDependency(this, address!);
+
+    return results;
+  }
+}

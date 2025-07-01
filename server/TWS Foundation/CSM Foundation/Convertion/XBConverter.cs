@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Core.Bases;
+using CSM_Foundation.Core.Constants;
 
 namespace CSM_Foundation.Convertion;
 
@@ -16,23 +17,40 @@ public enum XBConverterSituations {
     ///     on the <see cref="IConverterVariation.Discriminator"/> value.
     /// </summary>
     NoVariation,
+
+    /// <summary>
+    ///     When the <see cref="BConverter{TBase}.Variations"/> validations found an invalid variation.
+    /// </summary>
+    InvalidVariations,
 }
 
 /// <summary>
-///     
+///     [Exception] for <see cref="BConverter{TBase}"/> operations.
 /// </summary>
 public class XBConverter
     : BException<XBConverterSituations> {
 
     /// <summary>
-    ///     
+    ///     Creates a new <see cref="XBConverter"/> instance.
     /// </summary>
-    /// <param name="Subject"></param>
-    /// <param name="Status"></param>
-    /// <param name="System"></param>
-    public XBConverter(XBConverterSituations Situation, string Discriminator = "")
-        : base("CSM Converter Exception", Situation) {
+    /// <param name="situation">
+    ///     Exception situation.
+    /// </param>
+    /// 
+    /// <param name="discriminator">
+    ///     Discriminator when the variation convertion fails.
+    /// </param>
+    public XBConverter(XBConverterSituations situation, Type[]? wrongVariations = null, string discriminator = "")
+        : base("CSM Converter Exception", situation) {
 
-        Factors.Add(nameof(Discriminator), Discriminator);
+        wrongVariations ??= [];
+        Factors = new Dictionary<string, dynamic> {
+            { nameof(discriminator), discriminator },
+            { nameof(wrongVariations), wrongVariations },
+        };
+    }
+
+    protected override Dictionary<XBConverterSituations, string> ResolveAdvise() {
+        return [];
     }
 }

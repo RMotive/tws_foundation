@@ -1,0 +1,41 @@
+name: tws_foundation_view
+description: "A new Flutter package project."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.7.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  camera_platform_interface: ^2.8.0
+  file_picker: ^10.1.9
+  camera_web: ^0.3.5
+
+  csm_view:
+    git:
+      url: https://github.com/RMotive/csm_view
+      ref: main
+  csm_client:
+    git:
+      url: https://github.com/RMotive/csm_client
+      ref: main
+  tws_foundation_client:
+    git:
+      url: https://github.com/RMotive/tws_foundation
+      path: client/tws_foundation_client
+      ref: development#widget_package
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+    
+  lints: ^6.0.0
+
+flutter:
+  assets:
+    - assets/business/
+    - assets/business/full_logo_white.webp

@@ -74,10 +74,10 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory Status.des(JObject json) {
   List&lt;Truck&gt; trucks = &lt;Truck&gt;[];
-  int id = json.get(SCK.kId);
-  String name = json.get(SCK.kName);
-  String? description = json.getDefault(SCK.kDescription, null);
-  DateTime timestamp = json.get(SCK.kTimestamp);
+  int id = json.get(EntitiesCommonProperties.kId);
+  String name = json.get(EntitiesCommonProperties.kName);
+  String? description = json.getDefault(EntitiesCommonProperties.kDescription, null);
+  DateTime timestamp = json.get(EntitiesCommonProperties.kTimestamp);
   List&lt;JObject&gt; rawTrucksArray = json.getList(kTrucks);
   trucks = rawTrucksArray
       .map&lt;Truck&gt;(

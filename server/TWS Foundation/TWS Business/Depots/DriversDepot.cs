@@ -1,20 +1,49 @@
-﻿using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Interfaces;
+﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Depot;
 
-using TWS_Business.Sets;
+using TWS_Business.Depots.Bases;
+using TWS_Business.Entities.Drivers;
 
 namespace TWS_Business.Depots;
+
+
 /// <summary>
-///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
-///     representing a depot to handle <see cref="Driver"/> dataDatabases entity mirror.
+///     [Depot] for <see cref="Driver_Common"/> based [Depot] implementations. 
 /// </summary>
-public class DriversDepot : BDepot<TWSBusinessDatabase, Driver> {
+/// <remarks>
+///     This is a shared depot to get <see cref="Driver"/> and <see cref="DriverExternal"/>.
+/// </remarks>
+public interface IDriversDepot
+    : IDepot<Driver_Common> {
+
+}
+
+/// <summary>
+///     [Depot] handler for <see cref="Driver_Common"/>
+/// </summary>
+public class DriversDepot
+    : BCommonDepot<Database, Driver, DriverExternal, Driver_Common>, IDriversDepot {
+
     /// <summary>
-    ///     Generates a new depot handler for <see cref="Driver"/>.
+    ///     Creates a new <see cref="DriversDepot"/> instance with custom handlers.
     /// </summary>
-    public DriversDepot(TWSBusinessDatabase Databases, IDisposer? Disposer = null)
-        : base(Databases, Disposer) {
+    /// <param name="Database">
+    ///     Database context handler.
+    /// </param>
+    /// <param name="Disposer">
+    ///     Disposition manager handler.
+    /// </param>
+    public DriversDepot(Database Database, IDisposer? Disposer)
+        : base(Database, Disposer) {
     }
-    public DriversDepot() : base(new(), null) {
+
+    /// <summary>
+    ///     Creates a new <see cref="DriversDepot"/> with default handlers.
+    /// </summary>
+    /// <remarks>
+    ///     This constructor will generate a <see cref="BDepot{TDatabase, TEntity}"/> using the source database default constructor and no <see cref="IDisposer"/>.
+    /// </remarks>
+    public DriversDepot()
+        : base(new Database(), null) {
     }
 }

@@ -24,9 +24,50 @@
 
     6. Added the [Delete(int Id)] overload method for [IDepot_Delete] interface as was present in the [BDepot] but not in an interface and logic wasn't able to call that method.
 
+    7. Added Bussines quality project.
+    
+    8. Added Bussines Depots quality test.
+    
+    9. Added Bussines Depots for the following entities:
+        - [Locations]
+        - [Addresses]
+        - [TrailerClasses]
+
+    10. Added the following bussines Services and Quality tests:
+        - [Addresses]
+        - [Employees]
+        - [Locations]
+        - [Sections]
+        - [TrailerClasses]
+        - [TrailerTypes]
+     
+    11. Added the following custom classes for Common Entities:
+        - [BCommonDepot]
+        - [BQ_Common]
+        - [BQ_CommonDataHandler]
+        - [BQ_CommonDepot]
+      
+    12. Changed [TWSScopeEntity] -> [CommonEntity] for main common entity.
+    13. Changed [TWSScopeEntity] -> [CommonEntityEdge] for dependent entities (Internal - External).
+    14. Added Theory depot tests for [InternalEdge] and [ExternalEdge] properties in [CommonEntity].
+    15. [BQ_Disposer] now is able to remove ICollection properties from entities.
+    16. Custom [BCommonDepot] for the correct DB handling of [CommonEntity]. 
+    17. Custom [BQ_CommonDepot] for [CommonEntity] Depots testing.
+    18. Custom [BQ_CommonDataHandler] for [CommonEntity] Data handling in tests.
+    19. Added [BQ_CommonAtribbute] for [Theory] tests from [BQ_CommoDepot].
+    21. Added [BQ_CommonDependence] for [CommonDependenceEntity] Depots testing.
+    20. Added [BQ_CommonDependenceDepot] for [CommonDependenceEntity] Depots testing.
+    21. Added Quality Adapters attribute for each current Common Entities in [TWS_Business].
+    22. Added tag attribute for common dependences in [Yardlog] entity.\
+
 - Fixes:
 
     1. Fixed a problem with [SessionManager], was trying to get an account with an incorrect include instruction using [Contact] instead of [ContactNavigation].
+    2. Fixed [BQ_Disposer] SQL exceptions removing nested entities.
+    3. Fixed [BDepot] [Create] not saving method for created records.
+    4. Fixed [BDepot] [Update] not saving changes for new records.
+    5. Fixed [BDepot] [Delete] not saving changes for deleted records.
+
 
 - Dependencies:
 

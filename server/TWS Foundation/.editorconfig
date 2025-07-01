@@ -114,7 +114,7 @@ csharp_prefer_braces = true:silent
 csharp_prefer_simple_using_statement = true:suggestion
 csharp_style_namespace_declarations = file_scoped:warning
 csharp_style_prefer_method_group_conversion = false:suggestion
-csharp_style_prefer_primary_constructors = false:error
+csharp_style_prefer_primary_constructors = false:warning
 csharp_style_prefer_top_level_statements = false:warning
 
 # Expression-level preferences
@@ -257,6 +257,7 @@ end_of_line = crlf
 dotnet_style_readonly_field = true:suggestion
 dotnet_style_predefined_type_for_locals_parameters_members = true:silent
 dotnet_style_predefined_type_for_member_access = true:silent
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
+dotnet_style_require_accessibility_modifiers = omit_if_default:silent
 dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 dotnet_style_allow_multiple_blank_lines_experimental = true:silent
+dotnet_code_quality_unused_parameters = all:silent

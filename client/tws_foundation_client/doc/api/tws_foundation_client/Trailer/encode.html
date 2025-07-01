@@ -86,17 +86,17 @@ JObject encode() {
   JObject? carrierNav = carrierNavigation?.encode();
   if(carrier != 0) carrierNav = null;
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
-    SCK.kStatus: status,
+    EntitiesCommonProperties.kId: id,
+    EntitiesCommonProperties.kStatus: status,
     kCommon: common,
     kCarrier: carrier,
     kModel: model,
     kMaintenance: maintenance,
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
     kCarrierNavigation: carrierNav,
     kVehiculeModelNavigation: vehiculeModelNavigation?.encode(),
     kTrailerCommonNavigation: trailerCommonNavigation?.encode(),
-    SCK.kStatusNavigation: statusNavigation?.encode(),
+    EntitiesCommonProperties.kStatusNavigation: statusNavigation?.encode(),
     kPlates: plates.map((Plate i) =&gt; i.encode()).toList(),
   };
 }</code></pre>

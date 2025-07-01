@@ -88,7 +88,7 @@
 List&lt;CSMSetValidationResult&gt; evaluate() {
   List&lt;CSMSetValidationResult&gt; results = &lt;CSMSetValidationResult&gt;[];
   if(license.length &lt; 8 || license.length &gt; 12) results.add(CSMSetValidationResult(kLicense, &quot;El numero de licencia debe tener un largo entre 8 y 12 caracteres.&quot;, &quot;strictLength(8,12)&quot;));
-  if(status &lt; 0) results.add(CSMSetValidationResult(SCK.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
+  if(status &lt; 0) results.add(CSMSetValidationResult(EntitiesCommonProperties.kStatus, &#39;Status pointer must be equal or greater than 0&#39;, &#39;pointerHandler()&#39;));
 
   return results;
 }</code></pre>

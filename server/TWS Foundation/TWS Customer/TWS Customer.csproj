@@ -10,23 +10,28 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <ProjectReference Include="..\CSM Security\CSM Security.csproj" />
     <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
-    <ProjectReference Include="..\TWS Security\TWS Security.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Configurations\" />
-    <Folder Include="Services\Common\DataManagement\Out\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.104.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.1" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.6" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Configurations\solutions_configuration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CSMS.Connection\development.connection.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CSMS.Connection\quality.connection.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

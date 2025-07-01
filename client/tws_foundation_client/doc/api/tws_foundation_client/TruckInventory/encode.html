@@ -86,7 +86,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 JObject encode() {
   return &lt;String, dynamic&gt;{
-    SCK.kId: id,
+    EntitiesCommonProperties.kId: id,
     kEntryDate: entryDate,
     kSection: section,
     kTruck: truck,
@@ -94,7 +94,7 @@ JObject encode() {
     kTruckNavigation: truckNavigation?.encode(),
     kTruckExternalNavigation: truckExternalNavigation?.encode(),
     kSectionNavigation: sectionNavigation?.encode(),
-    SCK.kTimestamp: timestamp.toIso8601String(),
+    EntitiesCommonProperties.kTimestamp: timestamp.toIso8601String(),
   };
 }</code></pre>
 </section>
