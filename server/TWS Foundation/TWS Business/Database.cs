@@ -30,6 +30,17 @@ public class DesignDatabaseFactory : IDesignTimeDbContextFactory<Database> {
 }
 
 /// <summary>
+///     [Interface] for [TWS Business] database implementations.
+/// </summary>
+public interface IDatabase {
+
+    /// <summary>
+    ///     [Employee] [Entity] database Entity.
+    /// </summary>
+    DbSet<Employee> Employees { get; set; }
+}
+
+/// <summary>
 ///     
 /// </summary>
 public class Database

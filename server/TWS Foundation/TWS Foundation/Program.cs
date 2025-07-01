@@ -128,8 +128,6 @@ public partial class Program {
             {
                 IServiceCollection services = builder.Services;
 
-
-
                 // --> Application
                 services.AddHttpContextAccessor();
                 services.AddSingleton<IAuthManager, AuthManager>();

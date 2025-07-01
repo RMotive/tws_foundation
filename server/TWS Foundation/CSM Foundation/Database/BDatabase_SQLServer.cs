@@ -229,20 +229,27 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     ///     Validates database connection health.
     /// </summary>
     public void ValidateConnection() {
-        Logger.Announce($"ORM Setting up *^____^*", new() {
-            {"Database", GetType()?.Namespace ?? "---" },
-            {"Base", nameof(BDatabase_SQLServer<TDatabases>) }
-        });
+        Logger.Announce(
+            $"Setting up ORM", 
+            new() {
+                { "Database", GetType()?.Namespace ?? "---" },
+                { "Base", nameof(BDatabase_SQLServer<TDatabases>) }
+            }
+        );
 
         if (Database.CanConnect()) {
-            Logger.Success($"[{GetType().Name}] Connection stable");
+            Logger.Success($"[{GetType().FullName}] ORM Set");
+
+            IEnumerable<string> pendingMigrations = Database.GetPendingMigrations();
+            if(pendingMigrations.Any()) {
+                throw new Exception($"ORM ({GetType().FullName}) has pending migrations ({pendingMigrations.Count()})");
+            }
             Evaluate();
         } else {
             try {
                 Database.OpenConnection();
             } catch (Exception ex) {
-
-                throw new Exception($"Invalid connection with Database ({GetType().Name}) | {ex.InnerException?.Message}");
+                throw new Exception($"Invalid connection with Database ({GetType().FullName}) | {ex.InnerException?.Message}");
             }
         }
     }
