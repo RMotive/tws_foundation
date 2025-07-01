@@ -28,6 +28,7 @@ dependencies:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
       ref: development#widget_package
+  localstorage: ^6.0.0
 
 dev_dependencies:
   flutter_test:

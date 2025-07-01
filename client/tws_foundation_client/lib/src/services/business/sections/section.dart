@@ -1,6 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/locations/location.dart';
+import 'package:tws_foundation_client/src/services/business/misc/locations/location.dart';
 
 /// [Section] default builder.
 Section sectionBuilder() => Section();

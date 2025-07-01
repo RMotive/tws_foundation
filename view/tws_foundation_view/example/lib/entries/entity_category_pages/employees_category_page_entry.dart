@@ -1,5 +1,4 @@
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
-import 'package:example/core/landing_utils.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart' hide Route;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -25,9 +24,7 @@ final class EmployeesCategoryPageEntry extends PackageLandingEntryB<LandingTheme
            );
          },
        ) {
-    categoryPage = EmployeesCategoryPage(
-      authBuilder: LandingUtils.authBuilder,
-    );
+    categoryPage = EmployeesCategoryPage();
   }
 
   @override

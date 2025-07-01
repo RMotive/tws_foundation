@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:csm_view/csm_view.dart';
+import 'package:flutter/material.dart' hide Route;
 
 /// {constant} class.
 ///
@@ -17,7 +18,50 @@ final class FoundationColors {
   static const Color smoothWine = Color(0xffca524a);
 }
 
+/// {constant} class.
 ///
+/// Stores {foundation} handled routes for {foundation view} configurations.
+final class FoundationRoutes {
+  /// (Login Page) Default [FoundationSecureView] route where the user must authenticate.
+  static const Route authRoute = Route(
+    '',
+    name: 'Login Page',
+  );
+
+  //! --> Employee Routes
+
+  /// (Employees Entity Page) route.
+  static const Route employeesPageRoute = Route(
+    'employees',
+    name: 'Employees Page',
+  );
+
+  /// (Employees Create Whisper) route.
+  static const Route employeesCreateWhisperRoute = Route(
+    'create-employees',
+    name: 'Employees Creation',
+  );
+
+  //! <-- Employee Routes
+
+  //! --> YardLogs Routes
+
+  /// (YardLogs Entity Page) route.
+  static const Route yardlogsPageRoute = Route(
+    'yardlogs',
+    name: 'YardLogs Page',
+  );
+
+  /// (YardLogs Create Whisper) route.
+  static const Route yardlogsCreateWhisperRoute = Route(
+    'create-yardlogs',
+    name: 'YardLogs Creation',
+  );
+
+  //! <--- YardLogs Routes
+}
+
+/// {constant} class.
 final class FoundationAssets {
   ///
   static const String _packagePath = 'packages/tws_foundation_view';
@@ -53,7 +97,7 @@ final class FoundationAssets {
   static const String wideLogoWhiteWebp = '$_businessPath/wide_logo_white.webp';
 }
 
-///
+/// {constant} class.
 final class FoundationMessages {
   ///
   static const String stateManagementError = 'Unexpected state management error, contact support.';

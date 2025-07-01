@@ -9,7 +9,7 @@ namespace CSM_Foundation.Core;
 public class XSystem
     : BException<XSystemReasons> {
     public XSystem(string serverMessage, Exception? exception)
-        : base("System exception thrown", 
+        : base($"System exception thrown {serverMessage}", 
             XSystemReasons.SYS, 
             HttpStatusCode.InternalServerError, 
             exception

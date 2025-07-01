@@ -1,16 +1,15 @@
+
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/addresses/addresses_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/carriers/carriers_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/load_types/load_types_service.dart';
-import 'package:tws_foundation_client/src/services/business/load_types/load_types_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/locations/locations_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/manufacturers/manufacturers_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/misc/addresses/addresses_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/misc/locations/locations_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/misc/situations/situations_service.dart';
+import 'package:tws_foundation_client/src/services/business/misc/situations/situatutions_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/sections/sections_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/situations/situations_service.dart';
-import 'package:tws_foundation_client/src/services/business/situations/situatutions_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/trailer_classes/trailer_classes_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/trailer_types/trailer_types_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/vehicule_models/vehicule_models_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/vehicules/manufacturers/manufacturers_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/vehicules/trailer_classes/trailer_classes_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/vehicules/trailer_types/trailer_types_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/vehicules/vehicule_models/vehicule_models_service_i.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -20,8 +19,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Defines the base behavior for a [FoundationServer] that handles the network address to communicate with a [FoundationServer] and its [ServiceI] implementations.
 final class FoundationServer extends ServerB {
-
-  /// 
+  ///
   late final SecurityServiceI securityService;
 
   ///
@@ -44,7 +42,7 @@ final class FoundationServer extends ServerB {
 
   /// [Manufacturer] Entity service.
   late final ManufacturersServiceI manufacturerService;
-  
+
   /// [Section] Entity service.
   late final SectionsServiceI sectionsService;
 
@@ -57,14 +55,14 @@ final class FoundationServer extends ServerB {
   /// [TrailerType] Entity service.
   late final TrailerTypesServiceI trailerTypesService;
 
-  // [Truck] Entity service.
-  // late final TrucksServiceI trucksService;
-
   /// [VehiculeModel] Entity service.
   late final VehiculeModelsServiceI vehiculeModelsService;
 
   /// [YardLog] Entity service.
   late final YardlogsServiceI yardlogsService;
+
+  /// [DriverCommon] Entity Service.
+  late final DriversServiceI driversService;
 
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
@@ -85,19 +83,16 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<TrailerTypesServiceI>? trailerTypesServiceBuilder,
     ServiceImplementationBuilder<VehiculeModelsServiceI>? vehiculemodelsServiceBuilder,
     ServiceImplementationBuilder<YardlogsServiceI>? yardlogsServiceBuilder,
-  })
-      : super(
-          isRelease: isRelease,
+    ServiceImplementationBuilder<DriversServiceI>? driversServiceBuilder,
+  }) : super(
+            isRelease: isRelease,
             devHost ??
                 Uri(
-            'localhost',
-            '',
-            port: 5195,
-          ),
-            prodHost: prodHost
-        ) {
-
-
+                  'localhost',
+                  '',
+                  port: 5195,
+                ),
+            prodHost: prodHost) {
     securityService = securityServiceBuilder?.call(serverHost, httpClient) ?? SecurityService(serverHost, client: httpClient);
     solutionsService = solutionsServiceBuilder?.call(serverHost, httpClient) ?? SolutionsService(serverHost, client: httpClient);
     addressesService = addressesServiceBuilder?.call(serverHost, httpClient) ?? AddressesService(serverHost, client: httpClient);
@@ -112,6 +107,6 @@ final class FoundationServer extends ServerB {
     trailerTypesService = trailerTypesServiceBuilder?.call(serverHost, httpClient) ?? TrailerTypesService(serverHost, client: httpClient);
     vehiculeModelsService = vehiculemodelsServiceBuilder?.call(serverHost, httpClient) ?? VehiculeModelService(serverHost, client: httpClient);
     yardlogsService = yardlogsServiceBuilder?.call(serverHost, httpClient) ?? YardLogsService(serverHost, client: httpClient);
-
+    driversService = driversServiceBuilder?.call(serverHost, httpClient) ?? DriversService(serverHost, client: httpClient);
   }
 }

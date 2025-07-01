@@ -6,6 +6,7 @@ using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Http;
 
+using TWS_Customer.Managers.Auth;
 using TWS_Customer.Managers.Configuration;
 using TWS_Customer.Managers.Session;
 using TWS_Customer.Services.Exceptions;

@@ -1,5 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/addresses/address.dart';
+import 'package:tws_foundation_client/src/services/business/misc/addresses/address.dart';
 
 /// [Carrier] default builder.
 Carrier carrierBuilder() => Carrier();
