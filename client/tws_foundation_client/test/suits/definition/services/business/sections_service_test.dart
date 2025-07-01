@@ -1,6 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/business/sections/sections_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/misc/sections/sections_service_i.dart';
 import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 

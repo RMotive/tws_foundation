@@ -9,6 +9,16 @@ library;
 
 //* --> [Services.Business]
 
+//* --> [Services.Business.Misc]
+
+/// [Services.Business.Misc.Status]
+export 'src/services/business/misc/statuses/status.dart';
+
+/// [Services.Business.Misc.Address]
+export 'src/services/business/misc/addresses/address.dart';
+export 'src/services/business/misc/addresses/addresses_service.dart';
+
+//* <-- [Services.Business.Misc]
 
 /// [Services.Business.Vehicules.LoadTypes]
 export 'src/services/business/vehicules/load_types/load_type.dart';
@@ -40,8 +50,6 @@ export 'src/models/frames/failure_frame.dart';
 export 'src/models/frames/success_frame.dart';
 
 // --> Exporting [src.services.business]
-export 'src/services/business/misc/addresses/address.dart';
-export 'src/services/business/misc/addresses/addresses_service.dart';
 export 'src/services/business/carriers/carrier.dart';
 export 'src/services/business/carriers/carrieres_service.dart';
 export 'src/services/business/human_resources/employees/employee.dart';
@@ -51,8 +59,8 @@ export 'src/services/business/misc/locations/location.dart';
 export 'src/services/business/misc/locations/locations_service.dart';
 export 'src/services/business/vehicules/manufacturers/manufacturer.dart';
 export 'src/services/business/vehicules/manufacturers/manufacturer_service.dart';
-export 'src/services/business/sections/section.dart';
-export 'src/services/business/sections/sections_service.dart';
+export 'src/services/business/misc/sections/section.dart';
+export 'src/services/business/misc/sections/sections_service.dart';
 export 'src/services/business/vehicules/trailer_classes/trailer_class.dart';
 export 'src/services/business/vehicules/trailer_classes/trailer_classes_service.dart';
 export 'src/services/business/vehicules/trailer_types/trailer_type.dart';
@@ -86,9 +94,6 @@ export 'src/services/models/view_filters/view_filter_property.dart';
 
 
 //! --> Business services
-
-// --> Exporting [src.services.business.statuses]
-export 'src/services/business/misc/statuses/status.dart';
 
 // --> Exporting [src.services.business.situations]
 export 'src/services/business/misc/situations/situation.dart';

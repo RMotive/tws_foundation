@@ -1,12 +1,11 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/business/employees/employees_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../../../../utils/test_utils.dart';
 
 void main() {
-  final ViewOutput<Employee> viewOutputMock = ViewOutput<Employee>(employeeBuilder);
+  final ViewOutput<Employee> viewOutputMock = ViewOutput<Employee>(employeeFactory);
 
   late EmployeesServiceI serviceMock;
 
@@ -35,7 +34,7 @@ void main() {
 
       final FoundationResponseResolver<ViewOutput<Employee>> resolver = await serviceMock.view(viewInput, '');
 
-      final ViewOutput<Employee> viewOutput = resolver.resolveDirect(() => viewOutputBuilder(employeeBuilder));
+      final ViewOutput<Employee> viewOutput = resolver.resolveDirect(() => viewOutputBuilder(employeeFactory));
 
       expect(viewOutputMock.page, viewOutput.page);
       expect(viewOutputMock.pages, viewOutput.pages);

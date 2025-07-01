@@ -1,15 +1,13 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/business/load_type/load_type_service.dart';
-import 'package:tws_foundation_client/src/services/business/load_type/load_type_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../../../../utils/test_utils.dart';
 
 void main() {
-  final ViewOutput<Loadtype> viewOutputMock = ViewOutput<Loadtype>(loadtypeBuilder);
+  final ViewOutput<LoadType> viewOutputMock = ViewOutput<LoadType>(loadtypeBuilder);
 
-  late LoadtypeServiceI serviceMock;
+  late LoadTypesServiceI serviceMock;
 
   setUp(
     () {
@@ -22,7 +20,7 @@ void main() {
         },
       );
 
-      serviceMock = LoadTypeService(
+      serviceMock = LoadTypesService(
         Uri('', ''),
         client: mockClient,
       );
@@ -32,11 +30,11 @@ void main() {
   test(
     '(def) [view]: correctly gets a {ViewOutput} generated.',
     () async {
-      final ViewInput<Loadtype> viewInput = ViewInput<Loadtype>.b(1, 10);
+      final ViewInput<LoadType> viewInput = ViewInput<LoadType>.b(1, 10);
 
-      final FoundationResponseResolver<ViewOutput<Loadtype>> resolver = await serviceMock.view(viewInput, '');
+      final FoundationResponseResolver<ViewOutput<LoadType>> resolver = await serviceMock.view(viewInput, '');
 
-      final ViewOutput<Loadtype> viewOutput = resolver.resolveDirect(() => viewOutputBuilder(loadtypeBuilder));
+      final ViewOutput<LoadType> viewOutput = resolver.resolveDirect(() => viewOutputBuilder(loadtypeBuilder));
 
       expect(viewOutputMock.page, viewOutput.page);
       expect(viewOutputMock.pages, viewOutput.pages);

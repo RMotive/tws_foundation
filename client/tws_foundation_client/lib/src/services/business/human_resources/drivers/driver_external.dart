@@ -3,7 +3,7 @@ import 'package:tws_foundation_client/src/services/business/human_resources/iden
 
 /// {entity} class.
 ///
-/// TODO: Define
+/// Represents an external driver, wich are commonly third party businesses with alliances.
 final class DriverExternal extends EntityB<DriverExternal> {
   /// [DriverExternal.identification] property key for [DataMap].
   static const String kIdentification = "identification";

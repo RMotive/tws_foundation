@@ -1,6 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/business/addresses/addresses_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../../../../utils/test_utils.dart';

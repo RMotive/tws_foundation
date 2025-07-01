@@ -112,8 +112,9 @@ final class Truck extends EntityB<Truck> {
     if (id < BigInt.zero) results.add(EntityInvalidation<Truck>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
     if (vin.trim().isEmpty || vin.length > 17) results.add(EntityInvalidation<Truck>(this, PropertyInfo(kVin, String, vin), 'VIN number must be not empty and max 17 length.', 'strictLength(1, 17)'));
     if (motor != null) {
-      if (motor!.length < 15 && motor!.length > 16)
+      if (motor!.length < 15 && motor!.length > 16) {
         results.add(EntityInvalidation<Truck>(this, PropertyInfo(kMotor, String, motor), 'Motor number must be between 15 and 16 length', 'strictLength(15,16)'));
+      }
     }
 
     results.validateDependency(this, carrier);

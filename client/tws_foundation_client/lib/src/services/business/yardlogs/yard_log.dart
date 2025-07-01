@@ -1,12 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/human_resources/drivers/driver_common.dart';
-import 'package:tws_foundation_client/src/services/business/human_resources/employees/employee.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/load_types/load_type.dart';
-import 'package:tws_foundation_client/src/services/business/sections/section.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/trailers/trailer_common.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/trucks/truck_common.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Entity] that represents a vehicules control entry for a yard logging system where
 /// guards write down an entry/exit journal of vehicles at business locations.

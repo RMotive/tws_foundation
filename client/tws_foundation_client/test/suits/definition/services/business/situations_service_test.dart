@@ -1,8 +1,7 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/business/situations/situation.dart';
-import 'package:tws_foundation_client/src/services/business/situations/situations_service.dart';
-import 'package:tws_foundation_client/src/services/business/situations/situatutions_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/misc/situations/situations_service.dart';
+import 'package:tws_foundation_client/src/services/business/misc/situations/situatutions_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../../../../utils/test_utils.dart';

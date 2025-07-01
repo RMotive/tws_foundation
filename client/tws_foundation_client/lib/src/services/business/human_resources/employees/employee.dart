@@ -1,12 +1,15 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/misc/addresses/address.dart';
 import 'package:tws_foundation_client/src/services/business/human_resources/employees/employee_dates.dart';
 import 'package:tws_foundation_client/src/services/business/human_resources/identifications/identification.dart';
+import 'package:tws_foundation_client/src/services/business/misc/addresses/address.dart';
+
+/// [Employee] factory method.
+Employee employeeFactory() => Employee();
 
 /// {entity} class.
 ///
-/// TODO: Define
+/// Represents a business physical human resource employee information.
 final class Employee extends EntityB<Employee> {
   /// [curp] property key.
   static const String kCurp = "curp";
