@@ -24,7 +24,7 @@ public class DriversController
         _service = service;
     }
 
-    [HttpPost(), Action("View")]
+    [HttpPost, Action("View")]
     public async Task<IActionResult> View(ViewInput<Driver_Common> options) {
         return Ok(
                 await _service.View(

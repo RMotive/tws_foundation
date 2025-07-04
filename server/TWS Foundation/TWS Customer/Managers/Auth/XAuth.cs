@@ -34,6 +34,11 @@ public enum XAuthReasons {
     ///     When the <see cref="IAuthManager.Auth(Services.Records.AuthInput)"/> requires the request context scope but is not being given.
     /// </summary>
     NO_REQ_CONTEXT,
+
+    /// <summary>
+    ///     When a being handled token is not found on internal references.
+    /// </summary>
+    UNK_TOKEN,
 }
 
 /// <summary>
@@ -61,6 +66,7 @@ public class XAuth
             { XAuthReasons.WRONG_PWD, $"Wrong password" },
             { XAuthReasons.DIS_SOLUTION, $"The solution is currently disabled" },
             { XAuthReasons.UNAUTHORIZED, $"Unathurozied feature access" },
+            { XAuthReasons.UNK_TOKEN, $"Unknown session" },
         };
     }
 }

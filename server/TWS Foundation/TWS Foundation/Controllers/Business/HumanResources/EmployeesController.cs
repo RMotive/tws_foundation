@@ -17,20 +17,23 @@ namespace TWS_Foundation.Controllers.Business.HumanResources;
 public class EmployeesController
     : ControllerBase {
 
-    readonly IEmployeesService Service;
+    readonly IEmployeesService _service;
 
     public EmployeesController(IEmployeesService Service) {
-        this.Service = Service;
+        this._service = Service;
     }
 
-    [HttpPost(), Action("View")]
+    [HttpPost, Action("View")]
     public async Task<IActionResult> View(ViewInput<Employee> options) {
         return Ok(
-                await Service.View(
+                await _service.View(
                         new QueryInput<Employee, ViewInput<Employee>> {
                             Parameters = options
                         }
                     )
             );
     }
+
+    [HttpGet, Action("Get")]
+    public async Task<IActionResult> Get() => Ok(await _service.Get());
 }

@@ -10,6 +10,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 part '_create_whisper_truck_section.dart';
 part '_create_whisper_driver_section.dart';
+part '_create_whisper_trailer_section.dart';
 
 /// {constant} default spacing between elements.
 const double _kDefSpacing = 10;
@@ -31,46 +32,69 @@ final class YardLogsPageCreateWhisper extends PageB {
           formDesigner: (CreateEntityFormRecordReactor<YardLog>? itemState) {
             YardLog entity = itemState!.entity;
 
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                spacing: 20,
-                children: <Widget>[
-                  /// --> YardLog Entry
-                  OptionsSelector<bool>(
-                    height: 100,
-                    fontSize: 30,
-                    title: 'Event',
-                    options: <OptionsSelectorOption<bool>>[
-                      OptionsSelectorOption<bool>(
-                        title: 'Entry',
-                        value: true,
-                      ),
-                      OptionsSelectorOption<bool>(
-                        title: 'Exit',
-                        value: false,
-                      ),
-                    ],
-                    onSelect: (List<bool> selected) => entity.entry = selected[0],
-                  ),
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  spacing: 20,
+                  children: <Widget>[
+                    /// --> YardLog Entry
+                    OptionsSelector<bool>(
+                      height: 100,
+                      fontSize: 30,
+                      title: 'Event',
+                      options: <OptionsSelectorOption<bool>>[
+                        OptionsSelectorOption<bool>(
+                          title: 'Entry',
+                          value: true,
+                        ),
+                        OptionsSelectorOption<bool>(
+                          title: 'Exit',
+                          value: false,
+                        ),
+                      ],
+                      onSelect: (List<bool> selected) => entity.entry = selected[0],
+                    ),
 
-                  /// --> Load Type Selection.
-                  CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
-                    title: 'Load Type',
-                    entityBuilder: () => LoadType(),
-                    onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
-                  ),
+                    /// --> Load Type Selection.
+                    CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
+                      title: 'Load Type',
+                      entityBuilder: () => LoadType(),
+                      onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
+                    ),
 
-                  /// --> Driver selection.
-                  _DriversSection(
-                    onSelection: (DriverCommon selDriver) => entity.driver = selDriver,
-                  ),
+                    /// --> Driver selection.
+                    _DriversSection(
+                      onSelection: (DriverCommon selDriver) => entity.driver = selDriver,
+                    ),
 
-                  /// --> Truck selection.
-                  _TruckSection(
-                    onSelection: (TruckCommon selTruck) => entity.truck = selTruck,
-                  ),
-                ],
+                    /// --> Truck selection.
+                    _TruckSection(
+                      onSelection: (TruckCommon selTruck) => entity.truck = selTruck,
+                    ),
+
+                    /// --> Trailer selection.
+                    _TrailerSection(
+                      onSelection: (TrailerCommon selTrailer) => entity.trailer = selTrailer,
+                    ),
+
+                    /// --> Guard
+                    Builder(
+                      builder: (BuildContext context) {
+                        SessionStorage sessionStorage = Injector.get();
+
+                        return TextInput(
+                          isEnabled: false,
+                          controller: TextEditingController.fromValue(
+                            TextEditingValue(
+                              text: sessionStorage.get(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           },

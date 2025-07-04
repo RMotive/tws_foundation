@@ -27,7 +27,7 @@ dependencies:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: development#widget_package
+      ref: 71-feature-yardlogs
   localstorage: ^6.0.0
 
 dev_dependencies:

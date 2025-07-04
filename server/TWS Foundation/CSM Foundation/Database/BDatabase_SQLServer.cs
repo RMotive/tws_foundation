@@ -290,10 +290,12 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
         }
     }
 
+    protected virtual void DefineSet(BEntity Entity, EntityTypeBuilder mBuilder) { }
+
+    protected virtual void DefineSource(ModelBuilder mBuilder) { }
 
     #region EF Native Methods
 
-    protected virtual void EvaluateCustom(BEntity Entity, EntityTypeBuilder mBuilder) { }
 
     /// <summary>
     ///     This is overriden from <see cref="BDatabase_SQLServer{TDatabases}"/> to Configure an SQL Server Connection using
@@ -319,6 +321,8 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     protected override void OnModelCreating(ModelBuilder mBuilder) {
+
+        DefineSource(mBuilder);
 
         IEnumerable<IMutableEntityType> entityTypes = mBuilder.Model.GetEntityTypes();
         foreach (IMutableEntityType entityType in entityTypes) {
@@ -354,7 +358,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                         etBuilder.Property(descriptionProperty.Name).HasMaxLength(200);
                     }
 
-                    EvaluateCustom(set, etBuilder);
+                    DefineSet(set, etBuilder);
 
                     etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime2(7)").HasDefaultValueSql("GETUTCDATE()");
 

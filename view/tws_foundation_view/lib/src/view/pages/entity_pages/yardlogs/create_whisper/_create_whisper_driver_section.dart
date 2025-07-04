@@ -37,13 +37,6 @@ final class _DriversSectionState extends State<_DriversSection> {
   /// {state} whether the section is handling a [DriverExternal] creation.
   DriverCommon? externalDriver;
 
-  @override
-  void initState() {
-    super.initState();
-
-    initExternalDriverEntity();
-  }
-
   /// Initializes the necessary data and entities to handle [DriverExternal] creation.
   void initExternalDriverEntity() {
     externalDriver = DriverCommon();

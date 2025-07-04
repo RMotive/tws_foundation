@@ -1,5 +1,8 @@
 part of 'yardlogs_page_create_whisper.dart';
 
+/// {constant} default plate related max length.
+const int _kPlateMaxLength = 12;
+
 /// {widget} {private} class.
 ///
 /// Draws and handles the [TruckCommon] selection section for [YardLogsPageCreateWhisper].
@@ -47,7 +50,7 @@ final class _TruckSectionState extends State<_TruckSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             /// --> Truck selection.
-            EntityFinderSelector<TruckCommon, Trucks>(
+            EntityFinderSelector<TruckCommon, TrucksServiceI>(
               entityBuilder: () => TruckCommon(),
               label: 'Select a Truck...',
               enabled: externalTruck == null,
@@ -78,47 +81,59 @@ final class _TruckSectionState extends State<_TruckSection> {
 
                   return _SpacedWrap(
                     children: <Widget>[
-                      /// --> License
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: _kMinInputWidth,
-                        ),
-                        child: TextInput(
-                          maxLength: 12,
-                          label: 'License',
-                          deBounce: _kDefaultInputDebounce,
-                          isFixedLength: true,
-                          onChanged: (String text) {
-                            if (externalTruck == null) return;
-                          },
-                        ),
-                      ),
-
-                      /// --> Name & LastName
+                      /// --> PLates
                       _SpacedWrap(
                         children: <Widget>[
-                          /// --> Name
+                          /// --> MEX Plate
                           TextInput(
-                            label: 'Name',
+                            label: 'MEX Plate',
                             width: inputWidth,
-                            maxLength: _kNamingMaxLength,
+                            maxLength: _kPlateMaxLength,
                             deBounce: _kDefaultInputDebounce,
                             onChanged: (String text) {
                               if (externalTruck == null) return;
+
+                              externalTruck!.external!.mxPlate = text;
                             },
                           ),
 
-                          /// --> Last Name
+                          /// --> USA Plate
                           TextInput(
                             width: inputWidth,
-                            label: 'Last Name',
-                            maxLength: _kNamingMaxLength,
+                            label: 'USA Plate',
+                            maxLength: _kPlateMaxLength,
                             deBounce: _kDefaultInputDebounce,
                             onChanged: (String text) {
                               if (externalTruck == null) return;
+
+                              externalTruck!.external!.usaPlate = text;
                             },
                           ),
                         ],
+                      ),
+
+                      /// --> Economic Number
+                      TextInput(
+                        maxLength: 16,
+                        label: 'Economic Number',
+                        deBounce: _kDefaultInputDebounce,
+                        onChanged: (String text) {
+                          if (externalTruck == null) return;
+
+                          externalTruck!.economic = text;
+                        },
+                      ),
+
+                      /// --> Carrier
+                      TextInput(
+                        maxLength: 100,
+                        label: 'Carrier',
+                        deBounce: _kDefaultInputDebounce,
+                        onChanged: (String text) {
+                          if (externalTruck == null) return;
+
+                          externalTruck!.external!.carrier = text;
+                        },
                       ),
                     ],
                   );

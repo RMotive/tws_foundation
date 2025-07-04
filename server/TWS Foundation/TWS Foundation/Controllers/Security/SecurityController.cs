@@ -16,26 +16,18 @@ public class SecurityController
     /// <summary>
     ///     Main feature (<see cref="ISecurityService"/>) service.
     /// </summary>
-    readonly ISecurityService Service;
+    readonly ISecurityService service;
 
     /// <summary>
     ///     Creates a new <see cref="SecurityController"/> instance.
     /// </summary>
-    /// <param name="Service">
+    /// <param name="service">
     ///     [Required dependency] that holds main feature business operations.
     /// </param>
-    public SecurityController(ISecurityService Service) {
-        this.Service = Service;
+    public SecurityController(ISecurityService service) {
+        this.service = service;
     }
 
-    /// <summary>
-    ///     
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost()]
-    public async Task<IActionResult> Authenticate([FromBody] AuthInput input) {
-        SessionData output = await Service.Authenticate(input);
-        return Ok(output);
-    }
+    [HttpPost]
+    public async Task<IActionResult> Authenticate([FromBody] AuthInput input) => Ok(await service.Authenticate(input));
 }

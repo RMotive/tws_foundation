@@ -16,7 +16,7 @@ final class FoundationResponseResolver<T extends DecodableI> extends ResponseRes
   /// [objectBuilder] building callback for the [T] object creation in order to call [DecodableI.decode] method from [DecodableI] interface.
   T resolveDirect(T Function() objectBuilder) {
     T? result;
-    controller.resolve(
+    responseController.resolve(
       (DataMap data) {
         final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
         successFrame.decode(data);
@@ -62,7 +62,7 @@ final class FoundationResponseResolver<T extends DecodableI> extends ResponseRes
     required void Function() onConnectionFailure,
     void Function()? onFinally,
   }) {
-    controller.resolve(
+    responseController.resolve(
       (DataMap data) {
         final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
         successFrame.decode(data);

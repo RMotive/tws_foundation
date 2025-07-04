@@ -70,10 +70,10 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "302d5d938f5bbacaf5df1426ea6df79f69f66c33"
+      resolved-ref: "7d4dcf91a82697d493c15106a4e2838825442804"
       url: "https://github.com/RMotive/csm_client"
     source: git
-    version: "8.0.2"
+    version: "8.1.0"
   csm_view:
     dependency: "direct main"
     description:
@@ -403,8 +403,8 @@ packages:
     dependency: "direct main"
     description:
       path: "client/tws_foundation_client"
-      ref: "development#widget_package"
-      resolved-ref: "6eb5b23d5dbbc0e6d7a2e155ca5e25ec9df82162"
+      ref: "71-feature-yardlogs"
+      resolved-ref: "30cf990fccedbc66b6a8b0e0d7024be6459826af"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

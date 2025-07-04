@@ -35,13 +35,27 @@ namespace TWS_Customer.Managers.Auth;
 public interface IAuthManager {
 
     /// <summary>
-    ///     
+    ///     Authenticates an user from the given <paramref name="authInput"/> information.
     /// </summary>
-    /// <param name="authInput"></param>
-    /// <param name="feature"></param>
-    /// <param name="action"></param>
-    /// <returns></returns>
+    /// <param name="authInput">
+    ///     Input parameters.
+    /// </param>
+    /// <returns>
+    ///     The correct authenticated <see cref="SessionData"/> information.
+    /// </returns>
     public Task<SessionData> Auth(AuthInput authInput);
+
+    /// <summary>
+    ///     Gets the <see cref="SessionData"/> information from the given <paramref name="token"/>. 
+    /// </summary>
+    /// <param name="token">
+    ///     Token to identify the session.
+    /// </param>
+    /// <returns>
+    ///     The found <see cref="SessionData"/> information.
+    /// </returns>
+    /// <exception cref="XAuthReasons.UNK_TOKEN"></exception>
+    public Task<SessionData> Get();
 }
 
 /// <summary>
@@ -67,28 +81,68 @@ public sealed class AuthManager
 
 
     /// <summary>
-    ///     Tries to get a <see cref="SessionData"/> stored in the context based on the given <paramref name="Token"/>
+    ///     {dep} Allows to access and handle transaction contexts.
     /// </summary>
-    /// <param name="Token">
-    ///     Token to identify the session context.
-    /// </param>
-    /// <param name="Accounts">
-    ///     Depot dependency to track and get most recent needed data.
-    /// </param>
-    /// <param name="Refresh">
-    ///     Indicates if the session was found, refresh its expiration time.
-    /// </param>
-    /// <returns>
-    ///     <see langword="null"/>: The session wasn't found.
-    ///     <para> <see cref="SessionData"/>: when it got found. </para>
-    /// </returns>
-    /// <remarks>
-    ///     <paramref name="Refresh"/> by default is false indicating that the expiration won't be refreshed.
-    /// </remarks>
-    /// <exception cref="XSetOperation{TSet}"></exception>
-    public async Task<SessionData?> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
+    readonly IHttpContextAccessor _contextAccessor;
+
+    /// <summary>
+    ///     Creaes a new <see cref="AuthManager"/> instance.
+    /// </summary>
+    public AuthManager(
+            IHttpContextAccessor contextAccesor
+        ) { 
+        _contextAccessor = contextAccesor;
+    }
+
+    public async Task<SessionData> Auth(AuthInput authInput) {
+        HttpContext? reqContext = (authInput.RequestContextAccessor?.HttpContext)
+            ?? throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
+
+
+        IServiceProvider serviceProvider = reqContext.RequestServices;
+        IAccountsService accountsService = serviceProvider.GetRequiredService<IAccountsService>();
+
+        try {
+            Account userAccount = await accountsService.Get(authInput.Identity);
+
+            if (!authInput.Password.SequenceEqual(userAccount.Password))
+                throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
+
+            Contact sessionContact = userAccount.Contact;
+            sessionContact.Account = null;
+
+            return new SessionData {
+                Account = userAccount,
+                Expiration = DateTime.Now.Add(EXPIRE_THRESHOLD),
+                Token = Guid.NewGuid(),
+                Wildcard = userAccount.Wildcard,
+                Contact = sessionContact,
+            };
+        } catch (XRead<Account> readException) when (readException.Reason == XReadReasons.UNFOUND) {
+            throw new XAuth(XAuthReasons.UNFOUND_USR);
+        }
+    }
+
+
+    public async Task<SessionData> Get() {
+        HttpContext tracContext = _contextAccessor.HttpContext
+            ?? throw new XAuth(XAuthReasons.UNK_TOKEN);
+
+        IHeaderDictionary reqHeaders = tracContext.Request.Headers;
+
+
+
+        return new SessionData {
+            Contact = new Contact { },
+            Expiration = DateTime.Now,
+            Token = Guid.NewGuid(),
+            Wildcard = false,
+        };
+    }
+
+    public async Task<SessionData> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
         if (!_sessionsBag.TryGetValue(Token, out SessionScope Session)) {
-            return null;
+            throw new XAuth(XAuthReasons.UNK_TOKEN);
         }
 
         SessionScope safeSession = Session;
@@ -125,35 +179,6 @@ public sealed class AuthManager
         };
     }
 
-    /// <summary>
-    ///     Tries to get a <see cref="SessionData"/> stored in the context based on the given <paramref name="Token"/>
-    /// </summary>
-    /// <param name="Token">
-    ///     Token to identify the session context.
-    /// </param>
-    /// <param name="Account">
-    ///     The most recent <see cref="Account"/> object for the Session.
-    /// </param>
-    /// <param name="Permits">
-    ///     The most recents <see cref="Permit[]"/> object for the Session.
-    /// </param>
-    /// <param name="Refresh">
-    ///     Indicates if the session was found, refresh its expiration time.
-    /// </param>
-    /// <returns>
-    ///     <see langword="null"/>: The session wasn't found.
-    ///     <para> <see cref="SessionData"/>: when it got found. </para>
-    /// </returns>
-    /// <remarks>
-    ///     <paramref name="Refresh"/> by default is false indicating that the expiration won't be refreshed.
-    ///     <para> <b>
-    ///         This method override allows the invoker to pass directly the <paramref name="Account"/> and <paramref name="Permits"/> directly
-    ///         with no needed the method does with the <see cref="AccountsDepot"/> dependency. This removes the need of an async call.
-    ///         
-    ///         JUST BE SURE YOU'RE PASSING THE MOST RECENT GOT OBJECTS.
-    ///     </b> </para>
-    /// </remarks>
-    /// <exception cref="XSetOperation{TSet}"></exception>
     public SessionData? Get(Guid Token, Account Account, Permit[] Permits, bool Refresh = false) {
         if (!_sessionsBag.TryGetValue(Token, out SessionScope Session)) {
             return null;
@@ -172,42 +197,6 @@ public sealed class AuthManager
             Contact = Account.Contact,
         };
     }
-
-    #region Public Methods / Functions
-
-
-    public async Task<SessionData> Auth(AuthInput authInput) {
-        HttpContext? reqContext = (authInput.RequestContextAccessor?.HttpContext)
-            ?? throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
-
-
-        IServiceProvider serviceProvider = reqContext.RequestServices;
-        IAccountsService accountsService = serviceProvider.GetRequiredService<IAccountsService>();
-
-        try {
-            Account userAccount = await accountsService.Get(authInput.Identity);
-
-            if (!authInput.Password.SequenceEqual(userAccount.Password))
-                throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
-
-            Contact sessionContact = userAccount.Contact;
-            sessionContact.Account = null;
-
-            return new SessionData {
-                Account = userAccount,
-                Expiration = DateTime.Now.Add(EXPIRE_THRESHOLD),
-                Token = Guid.NewGuid(),
-                Wildcard = userAccount.Wildcard,
-                Contact = sessionContact,
-            };
-        } catch (XRead<Account> readException) when (readException.Reason == XReadReasons.UNFOUND) {
-            throw new XAuth(XAuthReasons.UNFOUND_USR);
-        }
-    }
-
-    #endregion
-
-    #region Private Methods / Functions
 
     /// <summary>
     ///     Internaly generates and stores into the current manager sessions the given <see cref="AuthInput"/> information.
@@ -248,6 +237,4 @@ public sealed class AuthManager
             ? safeUpdate
             : throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
     }
-
-    #endregion
 }
