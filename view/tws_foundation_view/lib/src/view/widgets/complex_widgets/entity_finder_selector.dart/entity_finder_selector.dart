@@ -97,11 +97,11 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
 
   ///
   Future<ViewOutput<TEntity>> viewInvokation() async {
-    SessionStorage sessionStorage = Injector.get();
+    SessionStorageI sessionStorage = Injector.get();
 
     FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
       ViewInput<TEntity>.b(2000, 1),
-      sessionStorage.get(),
+      sessionStorage.token,
     );
 
     return resolver.resolveDirect(

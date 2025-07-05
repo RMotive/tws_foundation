@@ -1,21 +1,14 @@
 ﻿using System.Collections.Concurrent;
-using System.Linq.Expressions;
 
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
-
-using CSM_Security.Depots;
 using CSM_Security.Entities;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 
 using TWS_Customer.Features;
 using TWS_Customer.Features.Security;
 using TWS_Customer.Managers.Session;
-using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
 using SessionsBag = System.Collections.Concurrent.ConcurrentDictionary<System.Guid, (TWS_Customer.Services.Records.AuthInput Credentials, System.DateTime Expiration)>;
@@ -46,15 +39,11 @@ public interface IAuthManager {
     public Task<SessionData> Auth(AuthInput authInput);
 
     /// <summary>
-    ///     Gets the <see cref="SessionData"/> information from the given <paramref name="token"/>. 
+    ///     Gets the <see cref="SessionData"/> from the transaction user. 
     /// </summary>
-    /// <param name="token">
-    ///     Token to identify the session.
-    /// </param>
     /// <returns>
     ///     The found <see cref="SessionData"/> information.
     /// </returns>
-    /// <exception cref="XAuthReasons.UNK_TOKEN"></exception>
     public Task<SessionData> Get();
 }
 
@@ -90,22 +79,79 @@ public sealed class AuthManager
     /// </summary>
     public AuthManager(
             IHttpContextAccessor contextAccesor
-        ) { 
+        ) {
         _contextAccessor = contextAccesor;
     }
 
-    public async Task<SessionData> Auth(AuthInput authInput) {
-        HttpContext? reqContext = (authInput.RequestContextAccessor?.HttpContext)
-            ?? throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
+    /// <summary>
+    ///     Gets the current transaction context data.
+    /// </summary>
+    HttpContext Transaction {
+        get {
+            return _contextAccessor.HttpContext ?? throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
+        }
+    }
 
+    /// <summary>
+    ///     Gets the current transaction context auth header value.
+    /// </summary>
+    string TransactionAuth {
+        get {
 
-        IServiceProvider serviceProvider = reqContext.RequestServices;
+            IHeaderDictionary reqHeaders = Transaction.Request.Headers;
+
+            StringValues authHeader = reqHeaders.Authorization;
+
+            return authHeader.ToString();
+        }
+    }
+
+    /// <summary>
+    ///     Gets the current transaction context auth token being used.
+    /// </summary>
+    string TransactionAuthToken {
+        get {
+            return TransactionAuth.Split('@')[0].Replace($"CSMAuth ", "");
+        }
+    }
+
+    public async Task<SessionData> Auth(AuthInput input) {
+
+        SessionData sessionData = await GenSession(input);
+        StoreSession(input, sessionData);
+
+        return sessionData;
+    }
+
+    public async Task<SessionData> Get() {
+        string token = TransactionAuthToken;
+
+        Guid sessionToken = Guid.Parse(token);
+
+        if (!_sessionsBag.TryGetValue(sessionToken, out SessionScope sessionScope)) {
+            throw new XAuth(XAuthReasons.UNK_TOKEN);
+        }
+
+        return await GenSession(sessionScope.authInput);
+    }
+
+    /// <summary>
+    ///     Generates the <see cref="SessionData"/> from the given <paramref name="input"/>, checking if the account identity and password
+    ///     matches solution stored ones.
+    /// </summary>
+    /// <returns>
+    ///     Session related information.
+    /// </returns>
+    async Task<SessionData> GenSession(AuthInput input) {
+        HttpContext transaction = Transaction;
+
+        IServiceProvider serviceProvider = transaction.RequestServices;
         IAccountsService accountsService = serviceProvider.GetRequiredService<IAccountsService>();
 
         try {
-            Account userAccount = await accountsService.Get(authInput.Identity);
+            Account userAccount = await accountsService.Get(input.Identity);
 
-            if (!authInput.Password.SequenceEqual(userAccount.Password))
+            if (!input.Password.SequenceEqual(userAccount.Password))
                 throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
 
             Contact sessionContact = userAccount.Contact;
@@ -123,81 +169,6 @@ public sealed class AuthManager
         }
     }
 
-
-    public async Task<SessionData> Get() {
-        HttpContext tracContext = _contextAccessor.HttpContext
-            ?? throw new XAuth(XAuthReasons.UNK_TOKEN);
-
-        IHeaderDictionary reqHeaders = tracContext.Request.Headers;
-
-
-
-        return new SessionData {
-            Contact = new Contact { },
-            Expiration = DateTime.Now,
-            Token = Guid.NewGuid(),
-            Wildcard = false,
-        };
-    }
-
-    public async Task<SessionData> Get(Guid Token, IAccountsDepot Accounts, bool Refresh = false) {
-        if (!_sessionsBag.TryGetValue(Token, out SessionScope Session)) {
-            throw new XAuth(XAuthReasons.UNK_TOKEN);
-        }
-
-        SessionScope safeSession = Session;
-        if (Refresh) {
-            safeSession = RefreshToken(Token, Session);
-        }
-
-        AuthInput safeCredentials = safeSession.authInput;
-        BatchOperationOutput<Account> readAccountOut = await Accounts.Read(
-                new QueryInput<Account, FilterQueryInput<Account>> {
-                    Parameters = new FilterQueryInput<Account> {
-                        Behavior = FilteringBehaviors.First,
-                        Filter = i => i.User == safeCredentials.Identity,
-                    },
-                    PostProcessor = (query) => {
-                        return query.Include((Expression<Func<Account, Contact?>>)(i => i.Contact));
-                    },
-                }
-            );
-
-        if (readAccountOut.Failed) {
-            throw new XSetOperation<Account>(readAccountOut.Failures);
-        }
-
-        Account account = readAccountOut.Successes[0];
-        Permit[] permits = await Accounts.GetPermits(account.Id);
-
-        return new SessionData {
-            Token = Token,
-            Wildcard = account.Wildcard,
-            Expiration = safeSession.expiration,
-            Account = account,
-            Contact = account.Contact,
-        };
-    }
-
-    public SessionData? Get(Guid Token, Account Account, Permit[] Permits, bool Refresh = false) {
-        if (!_sessionsBag.TryGetValue(Token, out SessionScope Session)) {
-            return null;
-        }
-
-        SessionScope safeSession = Session;
-        if (Refresh) {
-            safeSession = RefreshToken(Token, Session);
-        }
-
-        return new SessionData {
-            Token = Token,
-            Wildcard = Account.Wildcard,
-            Expiration = safeSession.expiration,
-            Account = Account,
-            Contact = Account.Contact,
-        };
-    }
-
     /// <summary>
     ///     Internaly generates and stores into the current manager sessions the given <see cref="AuthInput"/> information.
     /// </summary>
@@ -207,34 +178,17 @@ public sealed class AuthManager
     /// <exception cref="XAuth">
     ///     For more details check innser <see cref="XAuthReasons"/>.
     /// </exception>
-    void GenSession(AuthInput authInput) {
-        Guid token = Guid.NewGuid();
+    void StoreSession(AuthInput input, SessionData sessionData) {
         SessionScope sessionScope = (
-                authInput,
-                DateTime.UtcNow.Add(EXPIRE_THRESHOLD)
+                input,
+                sessionData.Expiration
             );
 
-        if (_sessionsBag.TryAdd(token, sessionScope)) {
-            _tokensBag.Add(token);
+        if (_sessionsBag.TryAdd(sessionData.Token, sessionScope)) {
+            _tokensBag.Add(sessionData.Token);
             return;
         }
 
         throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="Token"></param>
-    /// <param name="Session"></param>
-    /// <returns></returns>
-    /// <exception cref="XAuth"></exception>
-    /// <exception cref="XAuthReasons.UNSAFE_UPDATE"></exception>
-    SessionScope RefreshToken(Guid Token, SessionScope Session) {
-        (AuthInput Credentials, DateTime Expiration) safeUpdate = (Session.authInput, DateTime.UtcNow.Add(EXPIRE_THRESHOLD));
-
-        return _sessionsBag.TryUpdate(Token, safeUpdate, Session)
-            ? safeUpdate
-            : throw new XAuth(XAuthReasons.NO_REQ_CONTEXT);
     }
 }

@@ -57,10 +57,11 @@ final class _MainAppState extends State<MainApp> {
     sessionStorage.store(sessionData);
 
     Injector.addSingleton<SessionStorage>(sessionStorage);
+    Injector.addSingleton<SessionStorageI>(sessionStorage);
     _console.success(
       'Dependencies initialized',
       info: <String, Object?>{
-        'isAuth': sessionStorage.isAuth,
+        'isAuth': sessionStorage,
       },
     );
   }

@@ -4,37 +4,76 @@ import 'package:localstorage/localstorage.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-/// {Storage} implementation.
-///
-/// Implementaion for an {Storage} manager with {Session} context, it handles operations related with the [ServerSession] application context management.
-final class SessionStorage {
+/// Represents a view solution session persistance and management storage object, provides several
+/// operations to handle, communicate and interact with user authentication information contexts.
+abstract interface class SessionStorageI {
+  /// Gets the current server session token validated and safe.
+  String get token;
+
+  /// Initializes the storage data and its channel with platform storaging system.
+  Future<void> init();
+
+  /// Stores the given [sessionData] into the current [SessionStorage] handling context and preservers it for future requests.
+  void store(SessionData sessionData);
+
+  /// Clears all the preserve session from the storage.
+  void clear();
+
+  /// Creates a new [SessionStorageI] instance.
+  const SessionStorageI();
+}
+
+/// Storage implementation that provides authentication and solution authentication user context information operations.
+final class SessionStorage implements SessionStorageI {
+  /// Console handler object for logging prints.
+  static const Console _console = Console('session_storage');
+
   /// Token value storage access key.
   static const String _tokenKey = 'twsg_session_token';
 
   /// Expiration value storage access key.
   static const String _expirationKey = 'twsg_session_expiration';
 
-  /// Console handler object for logging prints.
-  static const Console _console = Console('session_storage');
-
+  /// {int} [_token] stored expiration time mark.
   DateTime? _expiration;
-  DateTime? get expiration => _expiration;
 
-  /// Stores the current server session token.
+  /// {int} server session token identifier.
   String? _token;
-  String? get sessionToken => _token;
 
-  /// Whether the application context has an active session.
-  bool get isAuth => _validateExpiration(_expiration);
+  /// {int} whether logging is enabled.
+  final bool _logsOn;
 
   /// Creates a new [SessionStorage] instance.
-  SessionStorage() {
+  SessionStorage([this._logsOn = false]) {
     WidgetsFlutterBinding.ensureInitialized();
-    _console.message('Starting [SessionStorage]');
   }
 
-  /// Initializes the storage data and its channel with platform storaging system.
+  //! --> Public Members
+
+  /// Gets the [rawToken] stored expiration time mark.
+  DateTime? get expiration => _expiration;
+
+  /// Gets the current session token value.
+  String? get rawToken => _token;
+
+  /// Whether the current user session stills active.
+  bool get isActive => _validateExpiration(_expiration);
+
+  @override
+  String get token {
+    if (_token == null || !isActive) {
+      final Router router = Injector.get();
+
+      router.go(FoundationRoutes.authRoute);
+      throw 'Invalid token or has expired, removing session and redirecting to authenticate';
+    }
+
+    return _token!;
+  }
+
+  @override
   Future<void> init() async {
+    if (_logsOn) _console.message('Initializing [SessionStorage @($hashCode)]');
     await initLocalStorage();
 
     String? tokenValue = localStorage.getItem(_tokenKey);
@@ -45,19 +84,19 @@ final class SessionStorage {
 
     _token = tokenValue;
     _expiration = DateTime.parse(expirationValue).toLocal();
+
+    if (_logsOn) {
+      _console.success(
+        '[SessionStorage @($hashCode)] ready.',
+        info: <String, dynamic>{
+          '_token': _token,
+          '_expiration': _expiration,
+        },
+      );
+    }
   }
 
-  /// Validates if the given [expiration] is into the time threshold and it's considered valid.
-  static bool _validateExpiration(DateTime? expiration) {
-    if (expiration == null) return false;
-
-    DateTime now = DateTime.now();
-    DateTime expLocal = expiration.toLocal();
-
-    return now.isBefore(expLocal);
-  }
-
-  /// Stores the given [sessionData] into the current [SessionStorage] handling context and preservers it for future requests.
+  @override
   void store(SessionData sessionData) {
     _token = sessionData.token;
     _expiration = sessionData.expiration;
@@ -70,23 +109,23 @@ final class SessionStorage {
     localStorage.setItem(_expirationKey, _expiration!.toIso8601String());
   }
 
-  /// Gets the current user server session authentication token.
-  String get() {
-    if (_token == null || !isAuth) {
-      final Router router = Injector.get();
-
-      router.go(FoundationRoutes.authRoute);
-      throw 'Invalid token or has expired, removing session and redirecting to authenticate';
-    }
-
-    return _token!;
-  }
-
-  /// Clears all the preserve session from the storage.
+  @override
   void clear() {
     localStorage.removeItem(_tokenKey);
     localStorage.removeItem(_expirationKey);
     _token = null;
     _expiration = null;
+  }
+
+  //! <-- Public Members
+
+  /// Validates if the given [expiration] is into the time threshold and it's considered valid.
+  static bool _validateExpiration(DateTime? expiration) {
+    if (expiration == null) return false;
+
+    DateTime now = DateTime.now();
+    DateTime expLocal = expiration.toLocal();
+
+    return now.isBefore(expLocal);
   }
 }

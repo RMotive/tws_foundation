@@ -23,9 +23,9 @@ public interface IEmployeesService
     ///     Gets the <see cref="Employee"/> data for the current session account.
     /// </summary>
     /// <returns>
-    ///     Found <see cref="Employee"/> data.
+    ///     User employee data.
     /// </returns>
-    public Task<Employee> Get();
+    public Task<Employee?> Get();
 }
 
 /// <summary>
@@ -51,7 +51,7 @@ public class EmployeesService
         _authManager = authManager;
     }
 
-    public async Task<Employee> Get() {
+    public async Task<Employee?> Get() {
 
         SessionData sessionData = await _authManager.Get();
 
@@ -66,9 +66,8 @@ public class EmployeesService
                 }
             );
 
-        if(employeesReadOutput.Failed) {
-            throw new Exception();
-        }
+        if(employeesReadOutput.SuccessesCount <= 0) 
+            return null;
 
 
         return employeesReadOutput.Successes[0];

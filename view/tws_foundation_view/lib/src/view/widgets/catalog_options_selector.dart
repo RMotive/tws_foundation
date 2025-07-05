@@ -75,7 +75,7 @@ final class _CatalogOptionsSelectorState<TEntity extends NamedEntityI<TEntity>, 
       auth = await widget.authBuilder!();
     } else {
       SessionStorage sessionStorage = Injector.get();
-      auth = sessionStorage.get();
+      auth = sessionStorage.token;
     }
 
     FoundationResponseResolver<ViewOutput<TEntity>> futureResolver = await entityService.view(

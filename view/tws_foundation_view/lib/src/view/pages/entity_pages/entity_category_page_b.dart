@@ -25,7 +25,7 @@ abstract class EntityCategoryPageB<TAdapter extends EntityTableAdapterI> impleme
     if (_authBuilder != null) return _authBuilder;
 
     SessionStorage sessionStore = Injector.get();
-    return () => sessionStore.get();
+    return () => sessionStore.token;
   }
 
   /// Allows to override default [EntityCategoryPageB] route configuration to provide a custom [Route] instance.

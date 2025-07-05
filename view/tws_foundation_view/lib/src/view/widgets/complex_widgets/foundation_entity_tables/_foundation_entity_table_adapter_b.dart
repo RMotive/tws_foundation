@@ -21,6 +21,6 @@ abstract class FoundationEntityTableAdapterB<TEntity extends EntityI<TEntity>> e
   FutureOr<String> composeAuth() {
     if (authBuilder != null) return authBuilder!();
 
-    return Injector.get<SessionStorage>().get();
+    return Injector.get<SessionStorageI>().token;
   }
 }

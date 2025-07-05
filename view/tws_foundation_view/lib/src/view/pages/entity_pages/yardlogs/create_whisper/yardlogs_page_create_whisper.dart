@@ -20,84 +20,86 @@ final class YardLogsPageCreateWhisper extends PageB {
   /// Creates a new [YardLogsPageCreateWhisper] instance.
   const YardLogsPageCreateWhisper();
 
+  Future<Employee> _getUserEmployee() async {
+    SessionStorageI sessionStorage = Injector.get();
+    EmployeesServiceI employeesService = Injector.get();
+
+    String token = sessionStorage.token;
+
+    FoundationResponseResolver<Employee> responseResolver = await employeesService.getUserEmployee(token);
+
+    return responseResolver.resolveDirect(
+      () => Employee(),
+    );
+  }
+
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
     return Whisper(
       title: 'Create YardLog(s)',
       onPerform: () {},
       child: (GlobalKey<FormState> formState) {
-        return CreateEntityForm<YardLog>(
-          entityFactory: () => YardLog(),
-          isMultiple: false,
-          formDesigner: (CreateEntityFormRecordReactor<YardLog>? itemState) {
-            YardLog entity = itemState!.entity;
+        return AsyncWidget<Employee>(
+          future: _getUserEmployee(),
+          successBuilder: (BuildContext buildContext, Employee data) {
+            return CreateEntityForm<YardLog>(
+              entityFactory: () => YardLog(),
+              isMultiple: false,
+              formDesigner: (CreateEntityFormRecordReactor<YardLog>? itemState) {
+                YardLog entity = itemState!.entity;
 
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  spacing: 20,
-                  children: <Widget>[
-                    /// --> YardLog Entry
-                    OptionsSelector<bool>(
-                      height: 100,
-                      fontSize: 30,
-                      title: 'Event',
-                      options: <OptionsSelectorOption<bool>>[
-                        OptionsSelectorOption<bool>(
-                          title: 'Entry',
-                          value: true,
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      spacing: 20,
+                      children: <Widget>[
+                        /// --> YardLog Entry
+                        OptionsSelector<bool>(
+                          height: 100,
+                          fontSize: 30,
+                          title: 'Event',
+                          options: <OptionsSelectorOption<bool>>[
+                            OptionsSelectorOption<bool>(
+                              title: 'Entry',
+                              value: true,
+                            ),
+                            OptionsSelectorOption<bool>(
+                              title: 'Exit',
+                              value: false,
+                            ),
+                          ],
+                          onSelect: (List<bool> selected) => entity.entry = selected[0],
                         ),
-                        OptionsSelectorOption<bool>(
-                          title: 'Exit',
-                          value: false,
+
+                        /// --> Load Type Selection.
+                        CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
+                          title: 'Load Type',
+                          entityBuilder: () => LoadType(),
+                          onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
+                        ),
+
+                        /// --> Driver selection.
+                        _DriversSection(
+                          onSelection: (DriverCommon selDriver) => entity.driver = selDriver,
+                        ),
+
+                        /// --> Truck selection.
+                        _TruckSection(
+                          onSelection: (TruckCommon selTruck) => entity.truck = selTruck,
+                        ),
+
+                        /// --> Trailer selection.
+                        _TrailerSection(
+                          onSelection: (TrailerCommon selTrailer) => entity.trailer = selTrailer,
                         ),
                       ],
-                      onSelect: (List<bool> selected) => entity.entry = selected[0],
                     ),
-
-                    /// --> Load Type Selection.
-                    CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
-                      title: 'Load Type',
-                      entityBuilder: () => LoadType(),
-                      onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
-                    ),
-
-                    /// --> Driver selection.
-                    _DriversSection(
-                      onSelection: (DriverCommon selDriver) => entity.driver = selDriver,
-                    ),
-
-                    /// --> Truck selection.
-                    _TruckSection(
-                      onSelection: (TruckCommon selTruck) => entity.truck = selTruck,
-                    ),
-
-                    /// --> Trailer selection.
-                    _TrailerSection(
-                      onSelection: (TrailerCommon selTrailer) => entity.trailer = selTrailer,
-                    ),
-
-                    /// --> Guard
-                    Builder(
-                      builder: (BuildContext context) {
-                        SessionStorage sessionStorage = Injector.get();
-
-                        return TextInput(
-                          isEnabled: false,
-                          controller: TextEditingController.fromValue(
-                            TextEditingValue(
-                              text: sessionStorage.get(),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
-          },
+          }
         );
       },
     );

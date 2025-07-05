@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Defines final behavior for a [FoundationResponseResolver] wich handles [ServiceI] requests implementations from a [FoundationServer] and [FoundationServiceB], resolving
 /// as a {Foundation} package scope the [ServerI] implementation responses as needed.
-final class FoundationResponseResolver<T extends DecodableI> extends ResponseResolverB<T> {
+final class FoundationResponseResolver<T extends DecodableI?> extends ResponseResolverB<T> {
   /// Creates a new [FoundationResponseResolver] instance.
   const FoundationResponseResolver(super.controller);
 

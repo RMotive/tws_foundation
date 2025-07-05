@@ -8,7 +8,7 @@ typedef MResolver<TEstela extends EncodableI> = ResponseResolverB<TEstela>;
 ///
 ///
 /// [T] type of the result data object of the resolved success data.
-typedef FoundationFutureResolver<T extends DecodableI> = Future<FoundationResponseResolver<T>>;
+typedef FoundationFutureResolver<T extends DecodableI?> = Future<FoundationResponseResolver<T>>;
 
 ///
 ///

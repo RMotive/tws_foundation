@@ -35,7 +35,7 @@ abstract interface class EmployeesServiceI extends FoundationServiceB implements
   ///
   ///
   /// [authToken] authentication session token.
-  FoundationFutureResolver<Employee> getUserEmployee(String authToken);
+  FoundationFutureResolver<Employee?> getUserEmployee(String authToken);
 }
 
 /// {service} class.
@@ -63,8 +63,8 @@ final class EmployeesService extends EmployeesServiceB {
   }
 
   @override
-  FoundationFutureResolver<Employee> getUserEmployee(String authToken) async {
-    return FoundationResponseResolver<Employee>(
+  FoundationFutureResolver<Employee?> getUserEmployee(String authToken) async {
+    return FoundationResponseResolver<Employee?>(
       await getSecure(
         'get',
         authToken,
