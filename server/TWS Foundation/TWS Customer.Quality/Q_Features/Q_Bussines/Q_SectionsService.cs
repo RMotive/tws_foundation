@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -15,34 +14,20 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_SectionsService
     : BQ_ServicesCustomer<ISectionsService> {
 
+    private SectionsDepot? _depot;
+
     #region [BQ_Service] implementations
     protected override ISectionsService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
-        ISectionsDepot SectionsDepot = new SectionsDepot(BussinesDatabase, Disposer);
-
-        return new SectionsService(SectionsDepot);
+        _depot = new SectionsDepot(BussinesDatabase, Disposer);
+        return new SectionsService(_depot, BussinesDatabase);
     }
     #endregion
-
-    #region Private Methods/Functions
-   
-    Section EntityFactory() {
-        return new Section {
-            Name = Entropy,
-            Capacity = 10,
-            Ocupancy = 1,
-            Status = SampleStatus("sec"),
-            Yard = SampleLocation()
-        };
-    }
-
-#endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample address to prevent empty view results.
-        SampleSection();
+        await _depot!.Store(SampleSection(), true);
         ViewOutput<Section> viewOutput = await _service.View(
                 new QueryInput<Section, ViewInput<Section>> {
                     Parameters = new() {
@@ -64,9 +49,9 @@ public class Q_SectionsService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Section> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleSection(),
+                SampleSection(),
+                SampleSection(),
             ]);
 
         Assert.Multiple(
@@ -79,7 +64,7 @@ public class Q_SectionsService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Section changedEntity = SampleSection();
+        Section changedEntity = await _depot!.Store(SampleSection(), true);
         changedEntity.Name = "updated_name" + changedEntity.Name;
         UpdateOutput<Section> updateOutput = await _service.Update(new UpdateInput<Section> {
             Entity = changedEntity,
@@ -95,8 +80,7 @@ public class Q_SectionsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Section sample = SampleSection();
-
+        Section sample = await _depot!.Store(SampleSection(), true);
         Section deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
@@ -106,13 +90,13 @@ public class Q_SectionsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Section sample = SampleSection();
+        Section[] sample = [
+                await _depot!.Store(SampleSection(), true),
+                await _depot!.Store(SampleSection(), true), 
+                await _depot!.Store(SampleSection(), true)
+            ];
 
-        BatchOperationOutput<Section> batchOutput = await _service.Delete([
-                SampleSection(),
-                SampleSection(),
-                SampleSection()
-            ]);
+        BatchOperationOutput<Section> batchOutput = await _service.Delete(sample);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

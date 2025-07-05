@@ -3,6 +3,7 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
+using TWS_Business.Depots;
 using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 
@@ -12,35 +13,22 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_TrailersService
     : BQ_ServicesCustomer<ITrailersService> {
 
+    private TrailersDepot? _depot;
+
     #region [BQ_Service] implementations
     protected override ITrailersService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
-        TrailersDepot TruckCommonsDepot = new TrailersDepot(BussinesDatabase, Disposer);
-
-        return new TrailersService(TruckCommonsDepot);
+        _depot = new TrailersDepot(BussinesDatabase, Disposer);
+        return new TrailersService(_depot, BussinesDatabase);
     }
     #endregion
 
     public static readonly TheoryData<bool> testingValues = [true, false];
 
-    #region Private Methods/Functions
-    Trailer_Common EntityFactory(bool internalValue) {
-        Trailer_Common common = new() {
-            Economic = Entropy[..16],
-            Status = SampleStatus("tcm"),
-            Situation = SampleSituation(),
-            Internal = internalValue ? SampleTrailer(false) : null,
-            External = internalValue ? null : SampleTrailerExternal(false),
-        };
-        return common;
-    }
-    #endregion
-
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        SampleTruckCommon(true);
+        await _depot!.Store(SampleTrailerCommon(true), true);
         ViewOutput<Trailer_Common> viewOutput = await _service.View(
                 new QueryInput<Trailer_Common, ViewInput<Trailer_Common>> {
                     Parameters = new() {
@@ -63,9 +51,9 @@ public class Q_TrailersService
     [MemberData(nameof(testingValues))]
     public async Task Create(bool internalValue) {
         BatchOperationOutput<Trailer_Common> batchOutput = await _service.Create([
-                EntityFactory(internalValue),
-                EntityFactory(internalValue),
-                EntityFactory(internalValue)
+                SampleTrailerCommon(internalValue),
+                SampleTrailerCommon(internalValue),
+                SampleTrailerCommon(internalValue)
             ]);
 
         Assert.Multiple(
@@ -79,7 +67,7 @@ public class Q_TrailersService
     [Theory(DisplayName = "[Update]: Update an entity")]
     [MemberData(nameof(testingValues))]
     public async Task Update(bool internalValue) {
-        Trailer_Common changedEntity = SampleTrailerCommon(internalValue);
+        Trailer_Common changedEntity = await _depot!.Store(SampleTrailerCommon(internalValue), true);
         changedEntity.Economic = "eco_" + changedEntity.Economic;
         UpdateOutput<Trailer_Common> updateOutput = await _service.Update(new UpdateInput<Trailer_Common> {
             Entity = changedEntity,

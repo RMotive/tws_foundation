@@ -28,17 +28,17 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// <summary>
     /// 
     /// </summary>
-    protected readonly IDisposer? Disposer;
+    protected readonly IDisposer? _disposer;
 
     /// <summary>
     ///     Name to handle direct transactions (not-attached)
     /// </summary>
-    protected readonly TDatabase Database;
+    protected readonly TDatabase _db;
 
     /// <summary>
-    ///     DBSet handler into <see cref="Database"/> to handle fastlike transactions related to the <see cref="TCommon"/> 
+    ///     DBSet handler into <see cref="_db"/> to handle fastlike transactions related to the <see cref="TCommon"/> 
     /// </summary>
-    protected readonly DbSet<TCommon> Set;
+    protected readonly DbSet<TCommon> _dbSet;
 
     /// <summary>
     ///     Generates a new instance of a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/> base.
@@ -47,9 +47,9 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TCommon"/> concept.
     /// </param>
     public BCommonDepot(TDatabase Database, IDisposer? Disposer) {
-        this.Database = Database;
-        this.Disposer = Disposer;
-        Set = Database.Set<TCommon>();
+        this._db = Database;
+        this._disposer = Disposer;
+        _dbSet = Database.Set<TCommon>();
     }
 
     #region (Private / Protected) Functions / Methods
@@ -66,7 +66,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// </param>
     /// <returns></returns>
     protected IQueryable<TCommon> ProcessQuery<TParameters>(QueryInput<TCommon, TParameters> input, Func<IQueryable<TCommon>, IQueryable<TCommon>> process) {
-        IQueryable<TCommon> query = Set;
+        IQueryable<TCommon> query = _dbSet;
 
 
         if (input.PreProcessor != null) {
@@ -213,13 +213,77 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
 
         TCommon2? tmpDependency = dependencyEntity;
         tmpDependency = tmpDependency.Id > 0
-            ? Database.Set<TCommon2>().Where(dep => dep.Id == tmpDependency.Id).FirstOrDefault()
+            ? _db.Set<TCommon2>().Where(dep => dep.Id == tmpDependency.Id).FirstOrDefault()
             : throw new Exception($"Dependencies aren't allowed to be auto-created on main Entity creation, you need to create the Dependency first in its corresponding [Depot]");
 
         return tmpDependency is null
             ? throw new Exception($"[{GetType().Name}] entity requires [{typeof(TCommon2)}] dependency")
             : tmpDependency;
     }
+
+    /// <summary>
+    /// Stores the specified common entity and its nested entities in the database.
+    /// </summary>
+    /// <remarks>This method processes the specified entity and its nested entities, adding them to the
+    /// database. The method ensures that nested entities are stored in the correct order to maintain referential integrity.</remarks>
+    /// <param name="common">The root entity to be stored. Nested entities within this entity will also be processed and stored.</param>
+    /// <param name="save">A boolean value indicating whether to immediately save changes to the database. <see langword="true"/> to save
+    /// changes after storing the entities; otherwise, <see langword="false"/>.</param>
+    /// <returns>The root entity that was processed and stored.</returns>
+    public async Task<TCommon> Store(TCommon common, bool save = false) {
+        bool rootchecked = false;
+        HashSet<IEntity> entitiesToAdd = [];
+
+        StoreNestedEntities(common, common, entitiesToAdd, rootchecked);
+
+        foreach (IEntity entity in entitiesToAdd.Reverse()) {
+            if (entity.Id == 0) {
+                _db.Add(entity);
+                _disposer?.Push(entity);
+            }
+        }
+
+        if (save) await _db.SaveChangesAsync();
+
+        return common;
+    }
+
+    /// <summary>
+    /// Recurses through the nested entities of a common entity and stores them in a hash set to avoid duplicates.
+    /// </summary>
+    /// <param name="commonRoot"></param>
+    /// <param name="entity">Current entity to process and store.</param>
+    /// <param name="entitiesHash">List of stored entities. The content is verified to avoid duplications. </param>
+    /// <param name="rootChecked">Flag for first recursive run.</param>
+    void StoreNestedEntities(TCommon commonRoot, IEntity entity, HashSet<IEntity> entitiesHash, bool rootChecked) {
+
+        if (entity == null || entitiesHash.Contains(entity)) return;
+
+        if (!rootChecked) {
+            rootChecked = true;
+            if (commonRoot.Internal != null) StoreNestedEntities(commonRoot, commonRoot.Internal, entitiesHash, rootChecked);
+            if (commonRoot.External != null) StoreNestedEntities(commonRoot, commonRoot.External, entitiesHash, rootChecked);
+            entitiesHash.Add(commonRoot);
+
+        } else {
+            entitiesHash.Add(entity);
+        }
+
+        Type type = entity.GetType();
+        foreach (PropertyInfo prop in type.GetProperties()) {
+            var value = prop.GetValue(entity);
+
+            if (value is IEntity nestedEntity) {
+                StoreNestedEntities(commonRoot, nestedEntity, entitiesHash, rootChecked);
+            } else if (value is IEnumerable<IEntity> collection) {
+                foreach (var item in collection) {
+                    StoreNestedEntities(commonRoot, item, entitiesHash, rootChecked);
+                }
+            }
+        }
+
+    }
+
 
     #endregion
 
@@ -235,37 +299,37 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         entity.Internal = null;
         entity.External = null;
 
-        entity = DatabaseUtilities.SanitizeEntity(Database, entity);
+        entity = DatabaseUtilities.SanitizeEntity(_db, entity);
 
-        await Set.AddAsync(entity);
-        Disposer?.Push(entity);
+        await _dbSet.AddAsync(entity);
+        _disposer?.Push(entity);
 
         if (internalRelation != null) {
             internalRelation.EvaluateWrite();
 
-            internalRelation = DatabaseUtilities.SanitizeEntity(Database, internalRelation);
+            internalRelation = DatabaseUtilities.SanitizeEntity(_db, internalRelation);
             internalRelation.Common = entity;
             internalRelation.Timestamp = DateTime.UtcNow;
 
-            await Database.Set<TInternal>().AddAsync(internalRelation);
-            Disposer?.Push(internalRelation);
+            await _db.Set<TInternal>().AddAsync(internalRelation);
+            _disposer?.Push(internalRelation);
 
             entity.Internal = internalRelation;
 
         } else {
             externalRelation!.EvaluateWrite();
 
-            externalRelation = DatabaseUtilities.SanitizeEntity(Database, externalRelation);
+            externalRelation = DatabaseUtilities.SanitizeEntity(_db, externalRelation);
             externalRelation.Timestamp = DateTime.UtcNow;
             externalRelation.Common = entity;
 
-            await Database.Set<TExternal>().AddAsync(externalRelation);
+            await _db.Set<TExternal>().AddAsync(externalRelation);
 
             entity.External = externalRelation;
-            Disposer?.Push(externalRelation);
+            _disposer?.Push(externalRelation);
         }
 
-        await Database.SaveChangesAsync();
+        await _db.SaveChangesAsync();
 
         return entity;
     }
@@ -306,7 +370,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 failures = [.. failures, fail];
             }
         }
-        Database.SaveChanges();
+        _db.SaveChanges();
         return new(attached, failures);
     }
 
@@ -327,27 +391,27 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     ///     <see cref="IDepot{TCommon}"/> based exception, more info see inner Situation.
     /// </exception>
     public async Task<TCommon> Delete(long id) {
-        TCommon entity = await Set
+        TCommon entity = await _dbSet
             .AsNoTracking()
             .FirstOrDefaultAsync(
                 e => e.Id == id
             )
             ?? throw new XDepot<TCommon>(XDepotSituations.Unfound, $"{typeof(TCommon).Name}.Id = {id}");
 
-        Set.Remove(entity);
-        Database.SaveChanges();
+        _dbSet.Remove(entity);
+        _db.SaveChanges();
         return entity;
     }
 
     public async Task<TCommon> Delete(TCommon Entity) {
         if (Entity.Internal != null) {
-            Database.Set<TInternal>().Remove(Entity.Internal!);
+            _db.Set<TInternal>().Remove(Entity.Internal!);
         } else {
-            Database.Set<TExternal>().Remove(Entity.External!);
+            _db.Set<TExternal>().Remove(Entity.External!);
         }
 
-        Set.Remove(Entity);
-        await Database.SaveChangesAsync();
+        _dbSet.Remove(Entity);
+        await _db.SaveChangesAsync();
         return Entity;
     }
 
@@ -449,7 +513,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     ///     Thrown when the <see cref="TCommon"/> couldn't be found.
     /// </exeption>
     public async Task<TCommon> Read(long id) {
-        TCommon? entity = await Set.Where(
+        TCommon? entity = await _dbSet.Where(
                 e => e.Id == id
             )
             .FirstOrDefaultAsync()
@@ -489,7 +553,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         IQueryable<TCommon> processedQuery = ProcessQuery(
                 input,
                 sourceQuery => {
-                    sourceQuery = Set.Where(parameters.Filter);
+                    sourceQuery = _dbSet.Where(parameters.Filter);
                     return sourceQuery;
                 }
             );
@@ -537,12 +601,12 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// <param name="original"> Lastest data set stored in db sorce. </param>
     /// <param name="overwritten"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
     void UpdateHelper(IEntity original, IEntity overwritten) {
-        EntityEntry previousEntry = Database.Entry(original);
+        EntityEntry previousEntry = _db.Entry(original);
         if (previousEntry.State == EntityState.Unchanged) {
             // Update the non-navigation properties.
             previousEntry.CurrentValues.SetValues(overwritten);
             foreach (NavigationEntry navigation in previousEntry.Navigations) {
-                object? newNavigationValue = Database.Entry(overwritten).Navigation(navigation.Metadata.Name).CurrentValue;
+                object? newNavigationValue = _db.Entry(overwritten).Navigation(navigation.Metadata.Name).CurrentValue;
                 // Validate if navigation is a collection.
                 if (navigation.CurrentValue is IEnumerable<object> previousCollection && newNavigationValue is IEnumerable<object> newCollection) {
                     List<object> previousList = [.. previousCollection];
@@ -574,7 +638,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                     // Create a new navigation overwritten.
                     // Also update the attached navigators.
                     //AttachDate(newNavigationValue);
-                    EntityEntry newNavigationEntry = Database.Entry(newNavigationValue);
+                    EntityEntry newNavigationEntry = _db.Entry(newNavigationValue);
                     newNavigationEntry.State = EntityState.Added;
                     navigation.CurrentValue = newNavigationValue;
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
@@ -605,7 +669,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// </exception>
     public async Task<UpdateOutput<TCommon>> Update(QueryInput<TCommon, UpdateInput<TCommon>> input) {
         UpdateInput<TCommon> parameters = input.Parameters;
-        IQueryable<TCommon> processedQuery = Set;
+        IQueryable<TCommon> processedQuery = _dbSet;
 
         TCommon overwritten = parameters.Entity;
         if (overwritten.Id == 0) {
@@ -615,8 +679,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
 
             overwritten = await Create(overwritten);
 
-            Database.SaveChanges();
-            Disposer?.Push(overwritten);
+            _db.SaveChanges();
+            _disposer?.Push(overwritten);
             return new UpdateOutput<TCommon> {
                 Original = null,
                 Updated = overwritten,
@@ -634,8 +698,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
 
             overwritten = await Create(overwritten);
 
-            Database.SaveChanges();
-            Disposer?.Push(overwritten);
+            _db.SaveChanges();
+            _disposer?.Push(overwritten);
             return new UpdateOutput<TCommon> {
                 Original = null,
                 Updated = overwritten,
@@ -643,7 +707,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         }
 
         UpdateHelper(original, overwritten);
-        Database.SaveChanges();
+        _db.SaveChanges();
         return new UpdateOutput<TCommon> {
             Original = original,
             Updated = overwritten,

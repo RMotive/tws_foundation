@@ -9,6 +9,7 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
+using TWS_Business.Depots;
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
 
@@ -18,29 +19,20 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_SituationsService
     : BQ_ServicesCustomer<ISituationsService> {
 
+    private SituationsDepot? _depot;
+
     #region [BQ_Service] implementations
     protected override ISituationsService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
-        ISituationsDepot SituationDepot = new SituationsDepot(BussinesDatabase, Disposer);
-
-        return new SituationsService(SituationDepot);
-    }
-    #endregion
-
-    #region Private Methods/Functions
-    Situation EntityFactory() {
-        return new Situation {
-            Name = Entropy[..10],
-            Reference = Entropy[..8],
-        };
+        _depot = new SituationsDepot(BussinesDatabase, Disposer);
+        return new SituationsService(_depot, BussinesDatabase);
     }
     #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        SampleSituation();
+        await _depot!.Store(SampleSituation(), true);
         ViewOutput<Situation> viewOutput = await _service.View(
                 new QueryInput<Situation, ViewInput<Situation>> {
                     Parameters = new() {
@@ -62,9 +54,9 @@ public class Q_SituationsService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Situation> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleSituation(),
+                SampleSituation(),
+                SampleSituation()
             ]);
 
         Assert.Multiple(
@@ -77,7 +69,7 @@ public class Q_SituationsService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Situation changedEntity = SampleSituation();
+        Situation changedEntity = await _depot!.Store(SampleSituation(), true);
         changedEntity.Name = "updated_name" + changedEntity.Name;
         UpdateOutput<Situation> updateOutput = await _service.Update(new UpdateInput<Situation> {
             Entity = changedEntity,
@@ -93,8 +85,7 @@ public class Q_SituationsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Situation sample = SampleSituation();
-
+        Situation sample = await _depot!.Store(SampleSituation(), true);
         Situation deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
@@ -103,13 +94,13 @@ public class Q_SituationsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Situation sample = SampleSituation();
+        Situation[] sample = [
+                await _depot!.Store(SampleSituation(), true),
+                await _depot!.Store(SampleSituation(), true),
+                await _depot!.Store(SampleSituation(), true),
+            ];
 
-        BatchOperationOutput<Situation> batchOutput = await _service.Delete([
-                SampleSituation(),
-                SampleSituation(),
-                SampleSituation()
-            ]);
+        BatchOperationOutput<Situation> batchOutput = await _service.Delete(sample);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

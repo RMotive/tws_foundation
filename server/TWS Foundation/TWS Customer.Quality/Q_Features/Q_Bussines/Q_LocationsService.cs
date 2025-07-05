@@ -16,34 +16,20 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_LocationsService
     : BQ_ServicesCustomer<ILocationsService> {
 
-    public Q_LocationsService() {
-
-    }
+    private LocationsDepot? _depot;
 
     #region [BQ_Service] implementations
     protected override ILocationsService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
-        ILocationsDepot LocationsDepot = new LocationsDepot(BussinesDatabase, Disposer);
-
-        return new LocationsService(LocationsDepot);
-    }
-    #endregion
-
-    #region Private Methods/Functions
-    Location EntityFactory() {
-        return new Location {
-            Name = Entropy,
-            Status = SampleStatus("loc"),
-            Address = SampleAddress()
-        };
+        _depot = new LocationsDepot(BussinesDatabase, Disposer);
+        return new LocationsService(_depot, BussinesDatabase);
     }
     #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample = to prevent empty view results.
-        SampleLocation();
+        await _depot!.Store(SampleLocation(), true);
         ViewOutput<Location> viewOutput = await _service.View(
                 new QueryInput<Location, ViewInput<Location>> {
                     Parameters = new() {
@@ -65,9 +51,9 @@ public class Q_LocationsService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Location> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleLocation(),
+                SampleLocation(),
+                SampleLocation()
             ]);
 
         Assert.Multiple(
@@ -80,7 +66,7 @@ public class Q_LocationsService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Location changedEntity = SampleLocation();
+        Location changedEntity = await _depot!.Store(SampleLocation(), true);
         changedEntity.Name = "updated_name" + changedEntity.Name;
         UpdateOutput<Location> updateOutput = await _service.Update(new UpdateInput<Location> {
             Entity = changedEntity,
@@ -96,8 +82,7 @@ public class Q_LocationsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Location sample = SampleLocation();
-
+        Location sample = await _depot!.Store(SampleLocation(), true);
         Location deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
@@ -106,13 +91,12 @@ public class Q_LocationsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Location sample = SampleLocation();
-
-        BatchOperationOutput<Location> batchOutput = await _service.Delete([
-                SampleLocation(),
-                SampleLocation(),
-                SampleLocation()
-            ]);
+        Location[] samples = [
+            await _depot!.Store(SampleLocation(), true),
+            await _depot!.Store(SampleLocation(), true),
+            await _depot!.Store(SampleLocation(), true)
+        ];
+        BatchOperationOutput<Location> batchOutput = await _service.Delete(samples);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

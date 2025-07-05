@@ -65,6 +65,57 @@ public abstract class BDepot<TDatabase, TEntity>
 
     #region (Private / Protected) Functions / Methods
 
+
+    /// <summary>
+    /// Stores the specified entity and its nested entities in the database.
+    /// </summary>
+    /// <remarks>This method processes the specified entity and its nested entities, adding them to the
+    /// database. The method ensures that nested entities are stored in the correct order to maintain referential integrity.</remarks>
+    /// <param name="common">The root entity to be stored. Nested entities within this entity will also be processed and stored.</param>
+    /// <param name="save">A boolean value indicating whether to immediately save changes to the database. <see langword="true"/> to save
+    /// changes after storing the entities; otherwise, <see langword="false"/>.</param>
+    public async Task<TEntity> Store(TEntity root, bool save = false) {
+        HashSet<IEntity> entitiesToAdd = [];
+
+        StoreNestedEntities(root, entitiesToAdd);
+
+        foreach (IEntity entity in entitiesToAdd.Reverse()) {
+            if (entity.Id == 0) {
+                _db.Add(entity);
+                _disposer?.Push(entity);
+            }
+        }
+
+        if (save) await _db.SaveChangesAsync();
+
+        return root;
+    }
+
+    /// <summary>
+    /// Recurses through the nested entities of a common entity and stores them in a hash set to avoid duplicates.
+    /// </summary>
+    /// <param name="entity">Current entity to process and store.</param>
+    /// <param name="entitiesHash">List of stored entities. The content is verified to avoid duplications. </param>
+    void StoreNestedEntities(IEntity entity, HashSet<IEntity> entitiesHash) {
+
+        if (entity == null || entitiesHash.Contains(entity)) return;
+        entitiesHash.Add(entity);
+
+        Type type = entity.GetType();
+        foreach (PropertyInfo prop in type.GetProperties()) {
+            var value = prop.GetValue(entity);
+
+            if (value is IEntity nestedEntity) {
+                StoreNestedEntities(nestedEntity, entitiesHash);
+            } else if (value is IEnumerable<IEntity> collection) {
+                foreach (var item in collection) {
+                    StoreNestedEntities(item, entitiesHash);
+                }
+            }
+        }
+
+    }
+
     /// <summary>
     ///     Processes the source enitty query over the complex pre processors validation and applying the custom querying process from each
     ///     method implementation, after that returns the fully processed query.
@@ -498,14 +549,14 @@ public abstract class BDepot<TDatabase, TEntity>
     /// </exception>
     public async Task<UpdateOutput<TEntity>> Update(QueryInput<TEntity, UpdateInput<TEntity>> input) {
         UpdateInput<TEntity> parameters = input.Parameters;
-        
+
         IQueryable<TEntity> processedQuery = ProcessQuery(
                 input,
                 (sourceQuery) => sourceQuery
             );
 
         TEntity entity = parameters.Entity;
-        
+
         /// --> When the entity is not saved yet.
         if (entity.Id == 0) {
             if (!parameters.Create) {
@@ -531,7 +582,7 @@ public abstract class BDepot<TDatabase, TEntity>
         if (original == null) {
             if (!parameters.Create)
                 throw new XDepot<TEntity>(XDepotSituations.Unfound, $"{typeof(TEntity).Name}.Id = {entity.Id}");
-            
+
             entity.Id = 0;
             entity = await Create(entity);
             _disposer?.Push(entity);
@@ -546,7 +597,7 @@ public abstract class BDepot<TDatabase, TEntity>
         _dbSet.Update(entity);
         await _db.SaveChangesAsync();
         _disposer?.Push(entity);
-        
+
         return new UpdateOutput<TEntity> {
             Original = original,
             Updated = entity,

@@ -1,45 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
+using TWS_Business.Depots;
 using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities.Vehicules;
 
-using TWS_Customer.Features.Business;
+using TWS_Customer.Features.Business.Vehicules;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_ManufacturersService
     : BQ_ServicesCustomer<IManufacturersService> {
 
+    private ManufacturersDepot? _depot;
+
     #region [BQ_Service] implementations
     protected override IManufacturersService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
-        IManufacturersDepot ManufacturersDepot = new ManufacturersDepot(BussinesDatabase, Disposer);
-
-        return new ManufacturersService(ManufacturersDepot);
-    }
-    #endregion
-
-    #region Private Methods/Functions
-    Manufacturer EntityFactory() {
-        return new Manufacturer {
-            Name = Entropy[..10],
-        };
+        _depot = new ManufacturersDepot(BussinesDatabase, Disposer);
+        return new ManufacturersService(_depot, BussinesDatabase);
     }
     #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        SampleManufacturer();
+        await _depot!.Store(SampleManufacturer(), true);
         ViewOutput<Manufacturer> viewOutput = await _service.View(
                 new QueryInput<Manufacturer, ViewInput<Manufacturer>> {
                     Parameters = new() {
@@ -61,9 +48,9 @@ public class Q_ManufacturersService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Manufacturer> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleManufacturer(),
+                SampleManufacturer(),
+                SampleManufacturer()
             ]);
 
         Assert.Multiple(
@@ -76,7 +63,7 @@ public class Q_ManufacturersService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Manufacturer changedEntity = SampleManufacturer();
+        Manufacturer changedEntity = await _depot!.Store(SampleManufacturer(), true);
         changedEntity.Name = "updated_street" + changedEntity.Name;
         UpdateOutput<Manufacturer> updateOutput = await _service.Update(new UpdateInput<Manufacturer> {
             Entity = changedEntity,
@@ -92,8 +79,7 @@ public class Q_ManufacturersService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Manufacturer sample = SampleManufacturer();
-
+        Manufacturer sample = await _depot!.Store(SampleManufacturer(), true);
         Manufacturer deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
@@ -102,13 +88,13 @@ public class Q_ManufacturersService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Manufacturer sample = SampleManufacturer();
-
-        BatchOperationOutput<Manufacturer> batchOutput = await _service.Delete([
-                SampleManufacturer(),
-                SampleManufacturer(),
-                SampleManufacturer()
-            ]);
+        Manufacturer[] sample = [
+                await _depot!.Store(SampleManufacturer(), true),
+                await _depot!.Store(SampleManufacturer(), true),
+                await _depot!.Store(SampleManufacturer(), true)
+            ];
+            
+        BatchOperationOutput<Manufacturer> batchOutput = await _service.Delete(sample);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

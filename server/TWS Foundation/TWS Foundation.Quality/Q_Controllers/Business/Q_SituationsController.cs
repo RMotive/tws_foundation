@@ -3,8 +3,6 @@
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Server.Scheming;
 
-using CSM_Security.Entities;
-
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
@@ -21,8 +19,8 @@ public class Q_SitutationsController
     /// </summary>
     /// <param name="service"></param>
     /// <param name="hostFactory"></param>
-    public Q_SitutationsController(string service, WebApplicationFactory<Program> hostFactory)
-        : base(service, hostFactory) {
+    public Q_SitutationsController(WebApplicationFactory<Program> hostFactory)
+        : base("/Situations", hostFactory) {
     }
 
     protected override Situation EntityFactory(string RandomSeed) {
@@ -32,20 +30,20 @@ public class Q_SitutationsController
         };
     }
 
-    //[Fact]
-    //public async Task View() {
-    //    (HttpStatusCode Status, ResponseSchema Response) = await Post("View", new ViewInput<Situation> {
-    //        Page = 1,
-    //        Range = 10,
-    //        Retroactive = false,
-    //    }, true);
+    [Fact]
+    public async Task View() {
+        (HttpStatusCode Status, ResponseSchema Response) = await Post("View", new ViewInput<Situation> {
+            Page = 1,
+            Range = 10,
+            Retroactive = false,
+        }, true);
 
-    //    Assert.Equal(HttpStatusCode.OK, Status);
+        Assert.Equal(HttpStatusCode.OK, Status);
 
-    //    ViewOutput<Situation> Estela = Framing<SuccessFrame<ViewOutput<Situation>>>(Response).Content;
-    //    Assert.True(Estela.Entities.Length > 0);
-    //    Assert.Equal(1, Estela.Page);
-    //    Assert.True(Estela.Pages > 0);
-    //}
+        ViewOutput<Situation> Estela = Framing<SuccessFrame<ViewOutput<Situation>>>(Response).Content;
+        Assert.True(Estela.Entities.Length > 0);
+        Assert.Equal(1, Estela.Page);
+        Assert.True(Estela.Pages > 0);
+    }
 
 }

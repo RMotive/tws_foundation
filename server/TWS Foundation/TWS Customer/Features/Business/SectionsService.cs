@@ -1,7 +1,11 @@
 ﻿using CSM_Foundation.Customer;
+using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Output;
 
+using TWS_Business;
 using TWS_Business.Depots.Directories;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;
 
@@ -16,7 +20,9 @@ public interface ISectionsService
 ///     [Service] for <see cref="Section"/> based operations.
 /// </summary>
 public class SectionsService
-    : BService<Section, ISectionsDepot>, ISectionsService {
+    : BService<Section, SectionsDepot>, ISectionsService {
+
+    private readonly Database _db;
 
     /// <summary>
     ///     Creates a new instance of <see cref="SectionsService"/>.
@@ -24,5 +30,32 @@ public class SectionsService
     /// <param name="Depot">
     ///     <see cref="Section"/> based [Depot] handler to be used.
     /// </param>
-    public SectionsService(ISectionsDepot Depot) : base(Depot) { }
+    public SectionsService(SectionsDepot Depot, Database Database) : base(Depot) { 
+        this._db = Database;
+    }
+
+    public async override Task<BatchOperationOutput<Section>> Create(Section[] Entities, bool Sync = false) {
+        Section[] successes = [];
+        EntityOperationFailure<Section>[] failures = [];
+
+        foreach (Section entity in Entities) {
+            try {
+                Section attachedEntity = await _depot.Store(entity);
+                successes = [.. successes, attachedEntity];
+            } catch (Exception excep) {
+                if (Sync) {
+                    throw;
+                }
+
+                EntityOperationFailure<Section> fail = new(entity, excep);
+                failures = [.. failures, fail];
+            }
+        }
+
+        _db.SaveChanges();
+
+        BatchOperationOutput<Section> output = new(successes, failures);
+
+        return output;
+    }
 }

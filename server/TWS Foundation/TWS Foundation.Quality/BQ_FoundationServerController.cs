@@ -60,8 +60,8 @@ public abstract class BQ_FoundationServerController<T>
     where T : IEntity {
 
 
-    protected BQ_FoundationServerController(string service, WebApplicationFactory<Program> hostFactory)
-        : base(service, hostFactory) {
+    protected BQ_FoundationServerController(string contollerPath, WebApplicationFactory<Program> hostFactory)
+        : base(contollerPath, hostFactory) {
     }
 
     /// <summary>

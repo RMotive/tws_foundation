@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <None Update="TWSB.Connection\development.connection.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TWSB.Connection\quality.connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TWSB.Connection\development_connection.json">
@@ -30,7 +33,7 @@
     <None Update="TWSB.Connection\production_connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TWSB.Connection\development.connection.json">
+    <None Update="TWSB.Connection\quality.connection.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="TWSB.Connection\quality_connection.json">

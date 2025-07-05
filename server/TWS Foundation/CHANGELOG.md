@@ -58,7 +58,8 @@
     21. Added [BQ_CommonDependence] for [CommonDependenceEntity] Depots testing.
     20. Added [BQ_CommonDependenceDepot] for [CommonDependenceEntity] Depots testing.
     21. Added Quality Adapters attribute for each current Common Entities in [TWS_Business].
-    22. Added tag attribute for common dependences in [Yardlog] entity.\
+    22. Added tag attribute for common dependences in [Yardlog] entity.
+    23. Added [Store] method on [BDepot] and [BCommonDepot].
 
 - Fixes:
 
