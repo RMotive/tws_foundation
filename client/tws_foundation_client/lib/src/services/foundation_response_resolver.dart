@@ -33,7 +33,7 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
       },
     );
 
-    if (result == null) {
+    if (result == null && (null is! T)) {
       throw TracedException('Unable to resolve response controller', StackTrace.current);
     }
 

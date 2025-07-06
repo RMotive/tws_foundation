@@ -20,13 +20,13 @@ final class YardLogsPageCreateWhisper extends PageB {
   /// Creates a new [YardLogsPageCreateWhisper] instance.
   const YardLogsPageCreateWhisper();
 
-  Future<Employee> _getUserEmployee() async {
+  Future<Employee?> _getUserEmployee() async {
     SessionStorageI sessionStorage = Injector.get();
     EmployeesServiceI employeesService = Injector.get();
 
     String token = sessionStorage.token;
 
-    FoundationResponseResolver<Employee> responseResolver = await employeesService.getUserEmployee(token);
+    FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
 
     return responseResolver.resolveDirect(
       () => Employee(),
@@ -39,9 +39,16 @@ final class YardLogsPageCreateWhisper extends PageB {
       title: 'Create YardLog(s)',
       onPerform: () {},
       child: (GlobalKey<FormState> formState) {
-        return AsyncWidget<Employee>(
+        return AsyncWidget<Employee?>(
           future: _getUserEmployee(),
-          successBuilder: (BuildContext buildContext, Employee data) {
+          errorBuilder: (BuildContext ctx, Object? error, Employee? data) {
+            return Text(error.toString());
+          },
+          successBuilder: (BuildContext buildContext, Employee? data) {
+            if (data == null) {
+              return Text('No employee found for current User');
+            }
+
             return CreateEntityForm<YardLog>(
               entityFactory: () => YardLog(),
               isMultiple: false,
@@ -99,7 +106,7 @@ final class YardLogsPageCreateWhisper extends PageB {
                 );
               },
             );
-          }
+          },
         );
       },
     );
