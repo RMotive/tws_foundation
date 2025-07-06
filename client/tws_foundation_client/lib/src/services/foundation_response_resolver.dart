@@ -37,7 +37,7 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
       throw TracedException('Unable to resolve response controller', StackTrace.current);
     }
 
-    return result!;
+    return result as T;
   }
 
   /// Resolves the [ResponseController] with the given callback handlers.

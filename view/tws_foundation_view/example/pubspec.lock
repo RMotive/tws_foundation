@@ -404,7 +404,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "71-feature-yardlogs"
-      resolved-ref: accc2c3fbb49df19eca5db7ed9e619e0d23e38a3
+      resolved-ref: "419f4c5bf0f4e2a854173a017c354330dcf5a027"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"
