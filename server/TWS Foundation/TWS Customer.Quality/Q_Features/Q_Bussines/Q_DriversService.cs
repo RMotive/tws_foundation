@@ -10,12 +10,12 @@ using TWS_Customer.Features.Business;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_DriversService
-    : BQ_ServicesCustomer<IDriversCommonService> {
+    : BQ_ServicesCustomer<IDriversService> {
 
     private DriversDepot? _depot;
 
     #region [BQ_Service] implementations
-    protected override IDriversCommonService ServiceFactory() {
+    protected override IDriversService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
         _depot = new DriversDepot(BussinesDatabase, Disposer);
         return new DriversService(_depot, BussinesDatabase);

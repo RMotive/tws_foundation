@@ -12,7 +12,7 @@ namespace TWS_Customer.Features.Business;
 /// <summary>
 ///     [Interface] for <see cref="Driver_Common"/> based [Service] implementations.
 /// </summary>
-public interface IDriversCommonService
+public interface IDriversService
     : IService<Driver_Common> {
 }
 
@@ -21,7 +21,7 @@ public interface IDriversCommonService
 ///     [Service] for <see cref="Address"/> based operations.
 /// </summary>
 public class DriversService
-    : BService<Driver_Common, DriversDepot>, IDriversCommonService {
+    : BService<Driver_Common, DriversDepot>, IDriversService {
 
     private readonly Database _db;
 
