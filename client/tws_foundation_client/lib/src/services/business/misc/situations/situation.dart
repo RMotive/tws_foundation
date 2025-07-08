@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Situation] default builder.
@@ -7,9 +8,6 @@ Situation situationBuilder() => Situation();
 /// Defines a business entity that stores data for other business entities operating [Situation] status.
 /// Defines if and entity is on the way, stored, parked, out of service, etc.
 final class Situation extends NamedEntityB<Situation> {
-
-  /// [reference] property key.
-  static const String kReference = "reference";
   
   /// Unique identificator reference.
   String reference = "";
@@ -23,20 +21,27 @@ final class Situation extends NamedEntityB<Situation> {
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
-      <String, Object?>{},
+      <String, Object?>{
+        FoundationCommonPropertyKeys.kReference: reference,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
+      },
     );
   }
 
   @override
   void decode(DataMap encode) {
-    encode.entries;
     super.decode(encode);
+    reference = encode.get(FoundationCommonPropertyKeys.kReference);
+
+    DataMap dmStatus = encode.get(FoundationCommonPropertyKeys.kStatus);
+    status.decode(dmStatus);
   }
 
   @override
   List<EntityInvalidation<Situation>> evaluate() {
     List<EntityInvalidation<Situation>> results = <EntityInvalidation<Situation>>[];
     if (id < BigInt.zero) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    if (reference.length != 8) results.add(EntityInvalidation<Situation>(this, PropertyInfo(FoundationCommonPropertyKeys.kReference, String, reference), 'References characters lengh must be 8', 'strictLenght(8)'));
     if (name.trim().isEmpty || name.length > 100) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 100 max length", "structLength(100)"));
     if (description != null) {
       if (description!.length > 200) {
@@ -44,6 +49,8 @@ final class Situation extends NamedEntityB<Situation> {
       }
       if (description!.trim().isEmpty) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
     }
+
+    results.validateDependency(this, status);
     return results;
   }
 }

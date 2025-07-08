@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
@@ -60,11 +61,10 @@ final class DriverCommon extends EntityB<DriverCommon> {
   void decode(DataMap encode) {
     license = encode.get(kLicense);
 
-    DataMap dmStatus = encode.get(FoundationCommonPropertyKeys.kStatus);
-    status.decode(dmStatus);
-
-    DataMap dmSituation = encode.get(FoundationCommonPropertyKeys.kSituation);
-    situation.decode(dmSituation);
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
+    situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation) ?? situation;
+    internal = encode.getEntity(() => Driver(), FoundationCommonPropertyKeys.kInternal);
+    external = encode.getEntity(() => DriverExternal(), FoundationCommonPropertyKeys.kExternal);
 
     super.decode(encode);
   }
@@ -84,6 +84,17 @@ final class DriverCommon extends EntityB<DriverCommon> {
   List<EntityInvalidation<DriverCommon>> evaluate() {
     final List<EntityInvalidation<DriverCommon>> invalidations = <EntityInvalidation<DriverCommon>>[];
 
+    if (id < BigInt.zero) {
+      invalidations.add(
+        EntityInvalidation<DriverCommon>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
+
     if (license.length > 12 || license.length < 8) {
       invalidations.add(
         EntityInvalidation<DriverCommon>(
@@ -94,6 +105,12 @@ final class DriverCommon extends EntityB<DriverCommon> {
         ),
       );
     }
+
+    invalidations.validateDependency(this, status);
+    invalidations.validateDependency(this, situation);
+    
+    if (internal != null) invalidations.validateDependency(this, internal!);   
+    if (external != null) invalidations.validateDependency(this, external!);
 
     return invalidations;
   }

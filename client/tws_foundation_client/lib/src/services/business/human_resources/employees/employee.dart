@@ -1,8 +1,10 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
+import 'package:tws_foundation_client/src/services/business/human_resources/approaches/approach.dart';
 import 'package:tws_foundation_client/src/services/business/human_resources/employees/employee_dates.dart';
 import 'package:tws_foundation_client/src/services/business/human_resources/identifications/identification.dart';
 import 'package:tws_foundation_client/src/services/business/misc/addresses/address.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Employee] factory method.
 Employee employeeFactory() => Employee();
@@ -11,31 +13,28 @@ Employee employeeFactory() => Employee();
 ///
 /// Represents a business physical human resource employee information.
 final class Employee extends EntityB<Employee> {
-  /// [curp] property key.
+  /// [Employee.curp] property key.
   static const String kCurp = "curp";
 
-  /// [rfc] property key.
+  /// [Employee.rfc] property key.
   static const String kRfc = "rfc";
 
-  /// [nss] property key.
+  /// [Employee.nss] property key.
   static const String kNss = "nss";
 
-  /// [identification] property key.
+  /// [Employee.identification] property key.
   static const String kIdentification = "identification";
 
-  /// [Address] property key.
+  /// [Employee.address] property key.
   static const String kAddress = "address";
 
-  /// [Approach] property key.
+  /// [Employee.approach] property key.
   static const String kApproach = "approach";
 
-  /// [Driver] property key.
-  static const String kDriver = "driver";
-
-  /// [Status] property key.
+  /// [Employee.status] property key.
   static const String kStatus = "status";
 
-  /// [nss] property key.
+  /// [Employee.nss] property key.
   static const String kEmployeeDates = "dates";
 
   //! --> Properties
@@ -53,15 +52,20 @@ final class Employee extends EntityB<Employee> {
 
   //! --> Relations
 
-  /// [Address] information.
-  Address? address;
-
   /// [EmployeeDates] information.
   EmployeeDates dates = EmployeeDates();
 
   /// [Identification] information.
   Identification identification = Identification();
 
+  /// [Status] information.
+  Status status = Status();
+
+  /// [Address] information.
+  Address? address;
+
+  /// [approach] information.
+  Approach? approach = Approach();
   //! <-- Relations
 
   //! --> Getters
@@ -83,6 +87,7 @@ final class Employee extends EntityB<Employee> {
         kIdentification: identification.encode(),
         kAddress: address?.encode(),
         kEmployeeDates: dates.encode(),
+        kApproach: approach?.encode(),
       },
     );
   }
@@ -94,31 +99,71 @@ final class Employee extends EntityB<Employee> {
     nss = encode.get(kNss, null);
     curp = encode.get(kCurp, null);
 
-    address = encode.getEntity(() => Address(), kAddress);
     dates = encode.getEntity(() => EmployeeDates(), kEmployeeDates) ?? dates;
     identification = encode.getEntity(() => Identification(), kIdentification) ?? identification;
+    address = encode.getEntity(() => Address(), kAddress);
+    approach = encode.getEntity(() => Approach(), kApproach);
   }
 
   @override
   List<EntityInvalidation<Employee>> evaluate() {
-    List<EntityInvalidation<Employee>> results = <EntityInvalidation<Employee>>[];
-    if (id < BigInt.zero) results.add(EntityInvalidation<Employee>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    List<EntityInvalidation<Employee>> invalidations = <EntityInvalidation<Employee>>[];
+
+    if (id < BigInt.zero) {
+      invalidations.add(
+        EntityInvalidation<Employee>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
 
     if (curp != null) {
-      if (curp!.length != 18) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kCurp, String, curp), "CURP number must be 18 length", "strictLength(18)"));
+      if (curp!.length != 18) {
+        invalidations.add(
+          EntityInvalidation<Employee>(
+            this,
+            PropertyInfo(kCurp, String, curp),
+            "CURP number must be 18 length",
+            "strictLength(18)",
+          ),
+        );
+      }
     }
 
     if (rfc != null) {
-      if (rfc!.length != 12) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kRfc, String, rfc), "CURP number must be 18 length", "strictLength(12)"));
+      if (rfc!.length != 12) {
+        invalidations.add(
+          EntityInvalidation<Employee>(
+            this,
+            PropertyInfo(kRfc, String, rfc),
+            "CURP number must be 18 length",
+            "strictLength(12)",
+          ),
+        );
+      }
     }
 
     if (nss != null) {
-      if (nss!.length != 11) results.add(EntityInvalidation<Employee>(this, PropertyInfo(kNss, String, nss), "The NSS number must be 11 character length", "structLength(11)"));
+      if (nss!.length != 11) {
+        invalidations.add(
+          EntityInvalidation<Employee>(
+            this,
+            PropertyInfo(kNss, String, nss),
+            "The NSS number must be 11 character length",
+            "structLength(11)",
+          ),
+        );
+      }
     }
 
-    results.validateDependency(this, dates);
-    if (address != null) results.validateDependency(this, address!);
+    invalidations.validateDependency(this, dates);
+    invalidations.validateDependency(this, identification);
+    if (address != null) invalidations.validateDependency(this, address!);
+    if (approach != null) invalidations.validateDependency(this, approach!);
 
-    return results;
+    return invalidations;
   }
 }

@@ -17,4 +17,14 @@ final class FoundationCommonPropertyKeys {
 
   /// sct property key for [DataMap].
   static const String kSCT = "sct"; 
+
+  /// internal edge property key for [DataMap].
+  static const String kInternal = "internal"; 
+
+  /// external edge property key for [DataMap].
+  static const String kExternal = "external"; 
+
+  static const String kReference = "reference"; 
+
+
 }

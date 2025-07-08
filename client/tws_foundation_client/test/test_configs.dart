@@ -6,7 +6,7 @@ final class TestConfigs {
   ///
   static final AuthenticationInput localUser = AuthenticationInput.a(
     'TWSMF',
-    'local_user',
-    'local_user'.bytes,
+    'qly_runner',
+    'qlyrunner\$2024'.bytes,
   );  
 }
