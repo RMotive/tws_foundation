@@ -6,34 +6,31 @@ using TWS_Business.Quality.Q_Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots;
 
-public class Q_Drivers : BQ_Common<Driver_Common, Driver, DriverExternal, DriversDepot> {
+public class Q_Drivers :
+    BQ_CommonDepot<Driver_Common, Driver, DriverExternal, DriversDepot> {
 
-
-
-    protected override Driver_Common EntityFactory(string Entropy) {
-
+    protected override Driver_Common EntityFactory(string entropy) {
         Situation situation = Store(
                 new Situation {
-                    Name = Entropy,
-                    Description = Entropy,
-                    Reference = Entropy[..8],
+                    Name = entropy,
+                    Description = entropy,
+                    Reference = entropy[..8],
                 }
             );
 
         Status status = Store(
                 new Status {
-                    Name = Entropy,
-                    Description = Entropy,
-                    Reference = Entropy[..8],
+                    Name = entropy,
+                    Description = entropy,
+                    Reference = entropy[..8],
                 }
             );
 
         Driver_Common common = new Driver_Common {
-            License = Entropy[..12],
+            License = entropy[..12],
             Situation = situation,
             Status = status,
         };
-
 
         return common;
     }
