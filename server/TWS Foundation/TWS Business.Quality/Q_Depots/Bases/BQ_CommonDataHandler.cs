@@ -168,8 +168,7 @@ public class BQ_CommonDataHandler
         where TInternalEdge : CommonEntityEdge<TCommon>
         where TExternalEdge : CommonEntityEdge<TCommon> {
 
-        List<TCommon> entities = [];
-
+        TCommon[] entities = [];
         using DbContext database = GetDatabase(new TCommon().Database);
         for (int i = 0; i < Quantity; i++) {
 
@@ -181,7 +180,7 @@ public class BQ_CommonDataHandler
             entity.External = null;
 
             entity = DatabaseUtilities.SanitizeEntity(database, entity);
-            entities.Add(entity);
+            database.Set<TCommon>().Add(entity); 
             Disposer.Push(entity);
 
             if (internalRelation != null) {
@@ -207,11 +206,11 @@ public class BQ_CommonDataHandler
 
             entity.External = externalRelation;
             Disposer.Push(externalRelation);
+            entities = [..entities, entity];
         }
 
-        await database.Set<TCommon>().AddRangeAsync(entities);
         await database.SaveChangesAsync();
-        return [.. entities];
+        return entities;
     }
 
     #endregion

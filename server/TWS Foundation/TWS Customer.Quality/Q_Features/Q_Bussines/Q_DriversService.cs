@@ -3,6 +3,8 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
+using Microsoft.EntityFrameworkCore;
+
 using TWS_Business.Depots;
 using TWS_Business.Entities.Drivers;
 
@@ -35,6 +37,12 @@ public class Q_DriversService
                         Retroactive = false,
                         Range = 10,
                         Page = 1,
+                    },
+                    PostProcessor = (IQueryable<Driver_Common> view) => {
+
+                        return view
+                        .Include(dc => dc.Internal)
+                        .Include(dc => dc.External);
                     }
                 }
             );

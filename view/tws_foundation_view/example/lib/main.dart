@@ -6,8 +6,10 @@ import 'package:example/entries/auth_page_entry.dart';
 import 'package:example/entries/category_layout_entry.dart';
 import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
+import 'package:example/entries/entity_pages/drivers_page_entry.dart';
 import 'package:example/entries/entity_pages/employees_page_entry.dart';
 import 'package:example/entries/entity_pages/yard_logs_page_entry.dart';
+import 'package:example/entries/entity_tables/drivers_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/employees_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/solutions_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/yardlogs_entity_table_entry.dart';
@@ -117,20 +119,20 @@ final class _MainAppState extends State<MainApp> {
               //! --> Entity Pages
               YardLogsPageEntry(),
               EmployeesPageEntry(),
-
+              DriversPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
               EmployeesCategoryPageEntry(),
               YardLogsCategoryPageEntry(),
-
+              
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
               YardLogsEntityTableEntry(),
               SolutionsEntityTableEntry(),
               EmployeesEntityTableEntry(),
-
+              DriversEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

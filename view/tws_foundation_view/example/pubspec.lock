@@ -403,8 +403,8 @@ packages:
     dependency: "direct main"
     description:
       path: "client/tws_foundation_client"
-      ref: "development#widget_package"
-      resolved-ref: "6eb5b23d5dbbc0e6d7a2e155ca5e25ec9df82162"
+      ref: development
+      resolved-ref: db927a318938a1f04be742a566135198da1468bb
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

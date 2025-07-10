@@ -86,6 +86,21 @@ public class Driver_Common
                 Required: true,
                 Auto: true
             );
+
+        etBuilder.Link<Driver_Common, Driver>(
+                nameof(Internal),
+                nameof(Internal.Common),
+                Auto: true,
+                Index: true
+            );
+
+        etBuilder.Link<Driver_Common, DriverExternal>(
+                nameof(External),
+                nameof(External.Common),
+                Auto: true,
+                Index: true
+            );
+
     }
 
 

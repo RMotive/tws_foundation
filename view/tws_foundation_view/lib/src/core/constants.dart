@@ -58,6 +58,11 @@ final class FoundationRoutes {
     name: 'YardLogs Creation',
   );
 
+  static const Route driversPageRoute = Route(
+    'drivers',
+    name: 'Drivers Page',
+  );
+
   //! <--- YardLogs Routes
 }
 
