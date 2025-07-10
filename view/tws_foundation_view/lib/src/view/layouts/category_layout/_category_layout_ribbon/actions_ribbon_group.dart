@@ -1,17 +1,22 @@
-part of '../category_layout.dart';
+import 'package:flutter/material.dart';
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-///
-final class _CategoryLayoutRibbonSection extends StatelessWidget {
-  /// Section children [Widget] collection at the inner [Row], it is [ScrollView].
-  final List<Widget> children;
+/// Represents a group of action buttons to be composed along [CategoryLayoutPageI] actions ribbon.
+final class ActionsRibbonGroup implements ActionsRibbonNodeI {
+  /// Group title.
+  final String title;
 
-  /// Creates a new [_CategoryLayoutRibbonSection] instance.
-  const _CategoryLayoutRibbonSection({
-    this.children = const <Widget>[],
+  /// Group actions.
+  final List<ActionsRibbonActionI> actions;
+
+  /// Creates a new [ActionsRibbonGroup] instance.
+  const ActionsRibbonGroup({
+    required this.title,
+    required this.actions,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget compose() {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         Size sectionSize = constraints.biggest;
@@ -33,7 +38,9 @@ final class _CategoryLayoutRibbonSection extends StatelessWidget {
                 padding: const EdgeInsets.all(6.0),
                 child: Row(
                   spacing: 4,
-                  children: children,
+                  children: <Widget>[
+                    for (ActionsRibbonActionI action in actions) action.compose(),
+                  ],
                 ),
               ),
             ),

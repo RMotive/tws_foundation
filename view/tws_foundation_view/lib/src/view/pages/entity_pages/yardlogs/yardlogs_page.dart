@@ -1,5 +1,5 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Route, Router, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/create_whisper/create_yardlogs_whisper.dart';
@@ -38,17 +38,12 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
   }
 
   @override
-  CategoryLayoutRibbonControllerI composeRibbonController(YardLogsEntityTableAdapter adapter) {
-    return CategoryLayoutRibbonController(
-      onRefresh: adapter.refresh,
-      dataManagementController: CategoryLayoutRibbonDataManagementGroupController(
-        onCreate: () {
-          Router router = Injector.get();
-
-          router.go(FoundationRoutes.yardlogsCreateWhisperRoute);
-        },
+  List<ActionsRibbonNodeI> composeRibbonController(YardLogsEntityTableAdapter adapter) {
+    return <ActionsRibbonNodeI>[
+      ActionsRisbbonRefresh(
+        onPerform: adapter.refresh,
       ),
-    );
+    ];
   }
 
   @override

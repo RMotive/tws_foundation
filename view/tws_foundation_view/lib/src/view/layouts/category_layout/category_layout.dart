@@ -1,21 +1,13 @@
-import 'dart:async';
 
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart' hide Route, Router;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 part '_category_layout_ribbon/_category_layout_ribbon.dart';
-part '_category_layout_ribbon/_category_layout_ribbon_section.dart';
-part '_category_layout_ribbon/_category_layout_ribbon_article_button.dart';
-part '_category_layout_ribbon/_category_layout_ribbon_action_button.dart';
 
-part '_category_layout_ribbon/category_layout_ribbon_node_i.dart';
-part '_category_layout_ribbon/category_layout_ribbon_action_options.dart';
-part '_category_layout_ribbon/_category_layout_ribbon_group_options.dart';
 
-/// {layout route node} class.
-/// 
-/// Implements a [RouteLayoutB] storing default configuration for a correct {layout} type [RouteNode] usage at the [Router] tree.
+/// Handles the convertion of a [CategoryLayoutNode] to its [RouteNode] representation for a [RouteLayoutI], generating correctly the
+/// [LayoutI], and inner [RouteNodeI]s composition.
 final class CategoryLayoutNode extends RouteLayoutB {
   /// Pages grouped at this category.
   final List<CategoryLayoutPageI> pages;
@@ -35,25 +27,25 @@ final class CategoryLayoutNode extends RouteLayoutB {
          layoutBuilder: (BuildContext ctx, RouteData routeData, Widget page) {
            return CategoryLayout(
              page: page,
-             articles: pages,
+             pages: pages,
              routeData: routeData,
            );
          },
        );
 }
 
-///
+/// Draws [LayoutI] implementation for a {Category} concept wich holds and routes along several {EntityPages} / {Pages} with their own
+/// actions and behaviors, draws an actions ribbon handled layout and inner paging routing behaviors.
 final class CategoryLayout extends LayoutB {
-  ///
-  final List<CategoryLayoutPageI> articles;
+  /// Category pages.
+  final List<CategoryLayoutPageI> pages;
 
   /// Creates a new [CategoryLayout] instance.
   const CategoryLayout({
     required super.page,
     required super.routeData,
-    
-    required this.articles,
-  }) : assert(articles.length > 0, 'Must be at least one article configured');
+    required this.pages,
+  }) : assert(pages.length > 0, 'Must be at least one article configured');
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
@@ -62,7 +54,7 @@ final class CategoryLayout extends LayoutB {
       child: Column(
         children: <Widget>[
           _CategoryLayoutRibbon(
-            articles: articles,
+            pages: pages,
             currentRoute: routeData.route,
           ),
           Expanded(

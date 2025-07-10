@@ -34,9 +34,23 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
     return AsyncWidget<Employee?>(
       future: _getUserEmployeeInstance,
       successBuilder: (BuildContext buildContext, Employee? data) {
+        if (data == null) {
+          return Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 20,
+              ),
+              child: ErrorMessageWidget(
+                message: 'You need to be an Employee to create YardLog(s)',
+              ),
+            ),
+          );
+        }
+
         return CreateEntityForm<YardLog>(
-          entityFactory: () => YardLog(),
           isMultiple: false,
+          entityFactory: () => YardLog(),
           formDesigner: (CreateEntityFormRecordReactor<YardLog>? itemState) {
             YardLog entity = itemState!.entity;
 

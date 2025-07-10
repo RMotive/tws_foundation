@@ -71,16 +71,12 @@ final class MessageWidget extends StatelessWidget {
         height: height,
         child: Padding(
           padding: padding,
-          child: SingleChildScrollView(
-            child: Center(
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: themeData.fore,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: themeData.fore,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

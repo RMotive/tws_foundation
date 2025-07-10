@@ -40,7 +40,7 @@ final class YardLogsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB
     );
 
     return CategoryLayout(
-      articles: <CategoryLayoutPageI>[
+      pages: <CategoryLayoutPageI>[
         categoryPage,
       ],
       routeData: routeData,

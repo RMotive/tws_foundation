@@ -26,16 +26,12 @@ final class CategoryLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
     final Route entryRoute = Route('landing_page');
 
     return view.CategoryLayout(
-      articles: <view.CategoryLayoutPageI>[
+      pages: <view.CategoryLayoutPageI>[
         view.CategoryLayoutPage(
           route: entryRoute,
           title: 'Landing Overview',
           pageBuilder: (BuildContext ctx, RouteData routeData) => _EntryPage(),
-          ribbonController: view.CategoryLayoutRibbonController(
-            onRefresh: () async {
-              await Future<void>.delayed(3.seconds);
-            },
-          ),
+          actions: <view.ActionsRibbonNodeI>[],
           iconBuilder: (Color? foreColor) {
             return Icon(
               Icons.ac_unit_sharp,
