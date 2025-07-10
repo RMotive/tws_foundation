@@ -8,20 +8,17 @@ import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_table/entity_table_adapter_b.dart';
+import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/pagination.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_display_flat.dart';
-
-part 'entity_table_theming.dart';
-
-part 'entity_table_column_options.dart';
 
 part '_entity_table_content.dart';
+part '_entity_table_drawer/_entity_table_drawer.dart';
+part '_entity_table_drawer/_entity_table_drawer_action.dart';
 part '_entity_table_error.dart';
 part '_entity_table_header.dart';
 part '_entity_table_loader.dart';
-
-part '_entity_table_drawer/_entity_table_drawer.dart';
-part '_entity_table_drawer/_entity_table_drawer_action.dart';
+part 'entity_table_column_options.dart';
+part 'entity_table_theming.dart';
 
 /// Default column width.
 const double _kColumnWidth = 200;

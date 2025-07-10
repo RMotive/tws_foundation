@@ -137,7 +137,10 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
           children: <Widget>[
             Visibility(
               visible: errorMsg.isNotEmpty,
-              child: TWSDisplayFlat(width: _maxInputsWidth - 25, maxHeight: 100, display: errorMsg),
+              child: MessageWidget(
+                width: _maxInputsWidth - 25,
+                text: errorMsg,
+              ),
             ),
             TextInput(
               label: 'Identity',

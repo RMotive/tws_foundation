@@ -168,7 +168,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
       builder: (FormFieldState<List<TValue>> fieldState) {
         return SectionWidget(
           title: '${widget.optional ? '' : '*'}${widget.title}',
-          borderColor: fieldState.hasError ? theme.errorTheming.accent : null,
+          borderColor: fieldState.hasError ? theme.error.accent : null,
           outterPadding: EdgeInsets.zero,
           child: Padding(
             padding: EdgeInsetsGeometry.only(
@@ -186,7 +186,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
                     fieldState.errorText ?? '---',
                     style: TextStyle(
                       fontSize: 14,
-                      color: theme.errorTheming.fore,
+                      color: theme.error.fore,
                       fontStyle: FontStyle.italic,
                     ),
                   ),

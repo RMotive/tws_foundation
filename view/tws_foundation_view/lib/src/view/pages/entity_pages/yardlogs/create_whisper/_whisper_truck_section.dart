@@ -1,11 +1,11 @@
-part of 'yardlogs_page_create_whisper.dart';
+part of 'create_yardlogs_whisper.dart';
 
 /// {constant} default plate related max length.
 const int _kPlateMaxLength = 12;
 
 /// {widget} {private} class.
 ///
-/// Draws and handles the [TruckCommon] selection section for [YardLogsPageCreateWhisper].
+/// Draws and handles the [TruckCommon] selection section for [CreateYardLogsWhisper].
 final class _TruckSection extends StatefulWidget {
   /// {event} callback called when a [TruckCommon] is selected.
   ///

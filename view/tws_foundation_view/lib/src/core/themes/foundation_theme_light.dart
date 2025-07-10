@@ -6,7 +6,7 @@ class FoundationThemeLight extends FoundationThemeB {
   const FoundationThemeLight()
     : super(
         'foundation-light-flat-theme',
-        entityTableTheming: const EntityTableTheming(
+        entityTable: const EntityTableTheming(
           drawerActionBackground: FoundationColors.warmWhite,
         ),
         businessLogo: FoundationAssets.fullLogoBlackWebp,
@@ -23,26 +23,26 @@ class FoundationThemeLight extends FoundationThemeB {
           accent: FoundationColors.oceanBlue,
           foreAlt: FoundationColors.warmWhite,
         ),
-        errorTheming: const SimpleTheming(
+        error: const SimpleTheming(
           back: FoundationColors.warmWhite,
           fore: Color.fromARGB(255, 255, 21, 0),
           accent: FoundationColors.deepWine,
           foreAlt: FoundationColors.warmWhite,
           accentAlt: FoundationColors.oceanBlue,
         ),
-        warnTheming: const SimpleTheming(
+        warning: const SimpleTheming(
           back: FoundationColors.lightDark,
           fore: Color.fromARGB(255, 255, 21, 0),
           accent: Color.fromARGB(255, 245, 127, 23),
           foreAlt: FoundationColors.warmWhite,
           accentAlt: FoundationColors.oceanBlue,
         ),
-        succTheming: const SimpleTheming(
+        success: const SimpleTheming(
           back: FoundationColors.lightDark,
           fore: Color.fromARGB(255, 0, 117, 4),
           accent: Color.fromARGB(255, 0, 117, 4),
         ),
-        primControl: const SimpleTheming(
+        control: const SimpleTheming(
           back: FoundationColors.warmWhite,
           fore: FoundationColors.lightDark,
           accent: FoundationColors.oceanBlue,

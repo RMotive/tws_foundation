@@ -1,4 +1,4 @@
-part of 'yardlogs_page_create_whisper.dart';
+part of 'create_yardlogs_whisper.dart';
 
 /// {constant} default naming related max length.
 const int _kNamingMaxLength = 100;
@@ -13,7 +13,7 @@ const Duration _kDefaultInputDebounce = Duration(
 
 /// {widget} {private} class.
 ///
-/// Draws and handles the [DriverCommon] selection section for [YardLogsPageCreateWhisper].
+/// Draws and handles the [DriverCommon] selection section for [CreateYardLogsWhisper].
 final class _DriversSection extends StatefulWidget {
   /// {event} called when a driver is selected.
   ///

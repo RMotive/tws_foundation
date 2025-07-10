@@ -30,7 +30,7 @@ final class CreateEntityFormRecord extends StatelessWidget {
   Widget build(BuildContext context) {
     FoundationThemeB fountTheme = Theming.get(context);
     final SimpleTheming pageTheme = fountTheme.page;
-    final SimpleTheming dangerTheme = fountTheme.errorTheming;
+    final SimpleTheming dangerTheme = fountTheme.error;
 
     return DecoratedBox(
       position: DecorationPosition.foreground,

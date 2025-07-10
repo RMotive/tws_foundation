@@ -6,8 +6,8 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/tws_view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/text_input.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_display_flat.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_list_tile.dart';
 
 part 'tws_autocomeplete_future.dart';
@@ -294,7 +294,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>> with 
 
   void themeUpdateListener(FoundationThemeB theme) {
     setState(() {
-      primaryColorTheme = theme.primControl;
+      primaryColorTheme = theme.control;
     });
   }
 
@@ -321,7 +321,7 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>> with 
 
   @override
   void initState() {
-    primaryColorTheme = themeManager.castData<FoundationThemeB>().primControl;
+    primaryColorTheme = themeManager.castData<FoundationThemeB>().control;
     futureState = _TWSAutoCompleteFieldFutureState<T>();
     hasKeyValue = widget.hasKeyValue ?? (T? set) => true;
     scrollController = ScrollController();

@@ -79,7 +79,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "37812a8760059ad518053cd12bfc0256a23a862c"
+      resolved-ref: e566bc7e839070faf76f7a4763e6c963ba538d13
       url: "https://github.com/RMotive/csm_view"
     source: git
     version: "7.0.0"
@@ -404,7 +404,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "71-feature-yardlogs"
-      resolved-ref: "25ba82541e9f36c0a8b48ee7466b82990208820f"
+      resolved-ref: "6fc214305f4f227746a24abc4791c013cbaf4d87"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

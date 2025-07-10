@@ -1,49 +1,57 @@
 import 'package:csm_view/csm_view.dart';
+import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-/// {abstract} class.
-///
-/// Defines a base contract theme for any {TWS Foundation View} usage.
+/// Defines the theme data base contract for {Foundation View} solution.
 abstract class FoundationThemeB extends ThemeDataB {
-  /// Main application page theming properties.
-  final SimpleTheming page;
+  //! --> [Asset]s access.
 
   /// Business main logo asset access.
   final String businessLogo;
 
-  /// Theming for {error} scenarios usually around red color.
-  final SimpleTheming errorTheming;
+  //! <-- [Asset]s access
 
-  /// Theming for {warning} scenearios usually around yellow color.
-  final SimpleTheming warnTheming;
+  //! --> [Scoped] theme data
 
-  /// Theming for {success} scenarios usually around green color.
-  final SimpleTheming succTheming;
+  /// [EntityTable] theme data.
+  final EntityTableTheming entityTable;
 
-  /// Theming for [NavigationLayout].
+  /// [NavigationLayout] theme data.
   final SimpleTheming navigationLayout;
 
-  /// Theming for {csm} main {widget}s that have state like hover, selected, etc.
-  final SimpleTheming primControl;
-
-  /// Theming for [CategoryLayout] ribbon buttons.
+  /// [CategoryLayout] ribbon buttons theme data.
   final StateTheming categoryLayoutRibbonButton;
 
-  /// Stores the [EntityTable] default theming options.
-  final EntityTableTheming entityTableTheming;
+  //! <-- [Scoped] theme data
 
+  /// Main appliation pages theme data.
+  final SimpleTheming page;
+
+  /// {error} scenarios theme data.
+  final SimpleTheming error;
+
+  /// {warning} scenarios theme data.
+  final SimpleTheming warning;
+
+  /// {success} scenarios theme data.
+  final SimpleTheming success;
+
+  /// Main {controls} [Widget]s theme data.
+  final SimpleTheming control;
+
+  /// Creates a new [FoundationThemeB] instance.
   const FoundationThemeB(
     super.identifier, {
     required super.icon,
     required super.iconBackground,
-    required this.page,
     required this.businessLogo,
-    required this.errorTheming,
-    required this.warnTheming,
-    required this.succTheming,
-    required this.primControl,
+    required this.page,
+    required this.error,
+    required this.warning,
+    required this.success,
+    required this.control,
     required this.navigationLayout,
     required this.categoryLayoutRibbonButton,
-    required this.entityTableTheming,
+    required this.entityTable,
   });
 }

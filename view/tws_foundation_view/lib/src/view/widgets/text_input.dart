@@ -221,9 +221,9 @@ final class _TextInputState extends State<TextInput> {
 
   @override
   Widget build(BuildContext context) {
-    final SimpleTheming pageTheming = theming.primControl;
-    final SimpleTheming errTheming = theming.errorTheming;
-    final SimpleTheming succTheming = theming.succTheming;
+    final SimpleTheming pageTheming = theming.control;
+    final SimpleTheming errTheming = theming.error;
+    final SimpleTheming succTheming = theming.success;
 
     Color counterColor = widget.isEnabled ? succTheming.accent : Colors.grey;
 

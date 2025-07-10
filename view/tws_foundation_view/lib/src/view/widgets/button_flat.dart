@@ -69,7 +69,7 @@ final class _ButtonFlatState extends State<ButtonFlat> {
     super.didChangeDependencies();
 
     if (widget.theming == null) {
-      theming = Theming.get<FoundationThemeB>(context).primControl;
+      theming = Theming.get<FoundationThemeB>(context).control;
     }
   }
 
@@ -78,7 +78,7 @@ final class _ButtonFlatState extends State<ButtonFlat> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.theming != oldWidget.theming) {
-      theming = widget.theming ?? Theming.get<FoundationThemeB>(context).primControl;
+      theming = widget.theming ?? Theming.get<FoundationThemeB>(context).control;
     }
   }
 

@@ -68,7 +68,7 @@ final class _DialogState extends State<Dialog> {
   void initState() {
     ServicesBinding.instance.keyboard.addHandler(_escapeKeyHandler);
 
-    errTheming = Theming.get<FoundationThemeB>(context).errorTheming;
+    errTheming = Theming.get<FoundationThemeB>(context).error;
 
     super.initState();
   }

@@ -134,7 +134,7 @@ final class _WhisperState extends State<Whisper> {
                             ButtonFlat(
                               label: 'Close',
                               width: _actionsWidth,
-                              theming: theme.errorTheming,
+                              theming: theme.error,
                               onClick: () {
                                 Injector.get<Router>().pop();
                                 widget.onClose?.call();

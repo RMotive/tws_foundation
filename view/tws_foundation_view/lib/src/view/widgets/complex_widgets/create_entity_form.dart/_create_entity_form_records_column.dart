@@ -47,7 +47,7 @@ final class _CreateEntityFormRecordsColumnState<TEntity extends EntityI<TEntity>
 
   @override
   Widget build(BuildContext context) {
-    SimpleTheming dangerTheme = theming.errorTheming;
+    SimpleTheming dangerTheme = theming.error;
 
     return Padding(
       padding: const EdgeInsets.symmetric(

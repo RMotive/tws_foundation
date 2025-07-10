@@ -1,8 +1,8 @@
-part of 'yardlogs_page_create_whisper.dart';
+part of 'create_yardlogs_whisper.dart';
 
 /// {widget} {private} class.
 ///
-/// Draws and handles the [TrailerCommon] selection section for [YardLogsPageCreateWhisper].
+/// Draws and handles the [TrailerCommon] selection section for [CreateYardLogsWhisper].
 final class _TrailerSection extends StatefulWidget {
   /// {event} called when a trailer is selected.
   ///

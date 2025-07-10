@@ -2,7 +2,7 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Route, Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/create_whisper/yardlogs_page_create_whisper.dart';
+import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/create_whisper/create_yardlogs_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
@@ -25,7 +25,7 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
       RouteWhisper<Object>(
         FoundationRoutes.yardlogsCreateWhisperRoute,
         whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext ctx, RouteData routeData) => YardLogsPageCreateWhisper(),
+        pageBuilder: (BuildContext ctx, RouteData routeData) => CreateYardLogsWhisper(),
       ),
     ];
   }
