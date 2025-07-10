@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
+import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
+import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Represents the actions ribbon action properties contract, that represents an actions ribbon action button to
@@ -23,12 +25,10 @@ abstract interface class ActionsRibbonActionI implements ActionsRibbonNodeI {
   ///
   ///
   /// [foreColor] current theme data recommended fore color.
-  FutureOr<Icon> composeIcon(Color foreColor);
+  Icon composeIcon(Color foreColor);
 
   /// Validates if can be executed, if not will be displayed as disabled but when user clicks on it will display [messageBus] information.
-  ///
-  /// [messageBus] a [String] collection reference to push context information for the engine to display when the action can't be executed and why not.
-  FutureOr<bool>? canExecute(List<String> messageBus);
+  FutureOr<List<UserFeedback>>? canExecute();
 
   /// Performs the [ActionsRibbonActionI] implementation functionality when the button [canExecute].
   FutureOr<void> perform();
@@ -51,7 +51,7 @@ abstract class ActionsRibbonActionB implements ActionsRibbonActionI {
   });
 
   @override
-  FutureOr<Icon> composeIcon(Color foreColor) {
+  Icon composeIcon(Color foreColor) {
     return Icon(
       Icons.check_box_outline_blank_outlined,
       color: foreColor,
@@ -59,7 +59,7 @@ abstract class ActionsRibbonActionB implements ActionsRibbonActionI {
   }
 
   @override
-  FutureOr<bool>? canExecute(List<String> messageBus) => null;
+  FutureOr<List<UserFeedback>>? canExecute() => null;
 
   @override
   Widget compose() {
@@ -78,14 +78,14 @@ final class ActionsRibbonAction extends ActionsRibbonActionB {
   ///
   ///
   /// [foreColor] engine handled recommended icon color.
-  final FutureOr<Icon> Function(Color foreColor)? iconBuilder;
+  final Icon Function(Color foreColor)? iconBuilder;
 
   /// Callback function triggered on action context building that determines if the
   /// action can be executed if {false} will disable it.
   ///
   ///
   /// [messageBus] collection [String] reference to store all user feedback messages about why the action can't be executed.
-  final FutureOr<bool> Function(List<String> messageBus)? onCanExecute;
+  final FutureOr<List<UserFeedback>> Function()? onCanExecute;
 
   /// Creates a new [ActionsRibbonActionI] instance.
   const ActionsRibbonAction({
@@ -99,7 +99,7 @@ final class ActionsRibbonAction extends ActionsRibbonActionB {
   FutureOr<void> perform() => onPerform;
 
   @override
-  FutureOr<Icon> composeIcon(Color foreColor) {
+  Icon composeIcon(Color foreColor) {
     if (iconBuilder == null) {
       return super.composeIcon(foreColor);
     }
@@ -108,15 +108,10 @@ final class ActionsRibbonAction extends ActionsRibbonActionB {
   }
 
   @override
-  FutureOr<bool>? canExecute(List<String> messageBus) {
+  FutureOr<List<UserFeedback>>? canExecute() {
     if (onCanExecute == null) return null;
 
-    return onCanExecute?.call(messageBus);
-  }
-
-  @override
-  Widget compose() {
-    return SizedBox();
+    return onCanExecute?.call();
   }
 }
 
@@ -138,39 +133,40 @@ final class _ActionButton extends StatefulWidget {
 ///
 /// Implements [State] handling for [_CategoryLayoutRibbonArticleButton].
 final class _ActionButtonState extends State<_ActionButton> {
-  /// {state} current icon builder.
-  late FutureOr<Icon> iconBuilder;
-
-  /// [Widget] scoped theme data.
-  late StateTheming stateTheming = Theming.get<FoundationThemeB>(context).categoryLayoutRibbonButton;
-
-  /// [Widget] current [state] theme data.
-  late ComplexTheming themeData;
+  /// {state} application theme data.
+  late FoundationThemeB themeData = Theming.get<FoundationThemeB>(context);
 
   /// [Widget] current state.
   CSMStates state = CSMStates.none;
 
-  /// Whether the current [Widget] is waiting to finish invokation.
+  /// {state} whether the current [Widget] is waiting to finish invokation.
   bool isLoading = false;
+
+  /// {state} whether the current [evaluateExecution] result says if the button can be executed or not.
+  bool canExecute = true;
 
   @override
   void initState() {
     super.initState();
-    evaluateThemeData();
+
+    evaluateExecution();
   }
 
   @override
   void didChangeDependencies() {
-    stateTheming = Theming.get<FoundationThemeB>(context).categoryLayoutRibbonButton;
+    themeData = Theming.get<FoundationThemeB>(context);
     super.didChangeDependencies();
   }
 
   /// {event} Triggered when the user mouse pointer clicks on the button.
   void onClick() async {
+    if ((await evaluateExecution()).isNotEmpty) {
+      return;
+    }
+
     setState(() {
       isLoading = true;
       state = CSMStates.selected;
-      evaluateThemeData();
     });
 
     await widget.actionData.perform();
@@ -184,73 +180,95 @@ final class _ActionButtonState extends State<_ActionButton> {
   void onHover(bool $in) {
     setState(() {
       state = $in ? CSMStates.hovered : CSMStates.none;
-      evaluateThemeData();
     });
   }
 
-  void evaluateThemeData() {
+  /// Evaluates if the current [_ActionButton] can be executed by the user.
+  Future<List<UserFeedback>> evaluateExecution() async {
     setState(() {
-      themeData = state.evaluateTheme(stateTheming);
-      iconBuilder = widget.actionData.composeIcon(themeData.foreground!);
+      isLoading = true;
     });
+    FutureOr<List<UserFeedback>>? invokation = widget.actionData.canExecute();
+
+    if (invokation == null) {
+      setState(() {
+        isLoading = false;
+      });
+      return <UserFeedback>[];
+    }
+
+    List<UserFeedback> canExecuteResult = await invokation;
+    if (canExecuteResult.isEmpty) {
+      setState(() {
+        isLoading = false;
+      });
+      return <UserFeedback>[];
+    }
+
+    setState(() {
+      canExecute = false;
+      isLoading = false;
+    });
+
+    return canExecuteResult;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: widget.actionData.description ?? '',
-      child: PointerArea(
-        cursor: isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
-        onClick: isLoading ? null : onClick,
-        onHover: isLoading ? null : onHover,
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: ColoredBox(
-            color: themeData.background!,
-            child: Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Visibility(
-                visible: !isLoading,
-                child: Column(
-                  spacing: 1,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    /// --> Action Button Icon
-                    AsyncWidget<Icon>(
-                      future: iconBuilder,
-                      successBuilder: (BuildContext ctx, Icon data) {
-                        return data;
-                      },
-                    ),
+    ComplexTheming stateTheme = state.evaluateTheme(themeData.categoryLayoutRibbonButton);
 
-                    /// --> Action Button title
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 5,
-                      ),
-                      child: Text(
-                        widget.actionData.title,
-                        softWrap: true,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: themeData.foreground,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+    Color back = canExecute ? stateTheme.background! : themeData.disabled.back;
+    if (!canExecute && state == CSMStates.hovered) {
+      back = back.withValues(
+        alpha: .7,
+      );
+    }
+
+    Color fore = canExecute ? stateTheme.foreground! : themeData.disabled.fore;
+
+    return PointerArea(
+      cursor: isLoading ? MouseCursor.defer : SystemMouseCursors.click,
+      onClick: isLoading ? null : onClick,
+      onHover: isLoading ? null : onHover,
+      child: ColoredBox(
+        color: back,
+        child: SizedBox.fromSize(
+          size: Size.square(75),
+          child: Visibility(
+            visible: !isLoading,
+            replacement: LoadingWidget(
+              fit: BoxFit.fitHeight,
+              foreColor: stateTheme.foreground!,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 8,
+              ),
+              child: Column(
+                spacing: 8,
+                children: <Widget>[
+                  /// ---> Icon Builder
+                  IconTheme(
+                    data: IconThemeData(
+                      size: 28,
                     ),
-                  ],
-                ),
-                replacement: Transform.scale(
-                  scale: .5,
-                  child: CircularProgressIndicator(
-                    color: themeData.foreground?.withValues(
-                      alpha: .7,
-                    ),
-                    strokeWidth: 3,
+                    child: widget.actionData.composeIcon(fore),
                   ),
-                ),
+
+                  /// --> Action title.
+                  Text(
+                    widget.actionData.title,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: fore,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

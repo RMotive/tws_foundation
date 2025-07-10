@@ -48,6 +48,11 @@ class FoundationThemeLight extends FoundationThemeB {
           accent: FoundationColors.oceanBlue,
           foreAlt: FoundationColors.warmWhite,
         ),
+        disabled: const SimpleTheming(
+          back: FoundationColors.ligthGrey,
+          fore: FoundationColors.warmWhite,
+          accent: FoundationColors.oceanBlue,
+        ),
         categoryLayoutRibbonButton: const StateTheming(
           main: ComplexTheming(
             background: FoundationColors.oceanBlue,

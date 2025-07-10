@@ -26,7 +26,6 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
     return Visibility(
       visible: actions.isNotEmpty,
       child: SizedBox(
-        height: 75,
         width: double.maxFinite,
         child: Row(
           spacing: 8,
@@ -68,6 +67,7 @@ final class _CategoryLayoutRibbonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        constraints = constraints.boxed();
         Size sectionSize = constraints.biggest;
 
         return DecoratedBox(
@@ -79,8 +79,8 @@ final class _CategoryLayoutRibbonWidget extends StatelessWidget {
               ),
             ),
           ),
-          child: SizedBox.fromSize(
-            size: sectionSize,
+          child: SizedBox(
+            width: sectionSize.width,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(

@@ -29,7 +29,11 @@ final class LandingThemeLight extends PackageLandingThemeLight
   SimpleTheming get control => _foundation.control;
 
   @override
+  SimpleTheming get disabled => _foundation.disabled;
+
+  @override
   SimpleTheming get navigationLayout => _foundation.navigationLayout;
+
   @override
   EntityTableTheming get entityTable => _foundation.entityTable;
 

@@ -31,6 +31,9 @@ final class LandingThemeDark extends PackageLandingThemeDark
 
   @override
   SimpleTheming get control => _foundation.control;
+  
+  @override
+  SimpleTheming get disabled => _foundation.disabled;
 
   @override
   EntityTableTheming get entityTable => _foundation.entityTable;

@@ -36,6 +36,9 @@ abstract class FoundationThemeB extends ThemeDataB {
   /// {success} scenarios theme data.
   final SimpleTheming success;
 
+  /// {disabled} scenarios theme data
+  final SimpleTheming disabled;
+
   /// Main {controls} [Widget]s theme data.
   final SimpleTheming control;
 
@@ -50,6 +53,7 @@ abstract class FoundationThemeB extends ThemeDataB {
     required this.warning,
     required this.success,
     required this.control,
+    required this.disabled,
     required this.navigationLayout,
     required this.categoryLayoutRibbonButton,
     required this.entityTable,

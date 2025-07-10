@@ -22,6 +22,10 @@ final class UserFeedback {
   /// Feedback object type.
   UserFeedbackType type = UserFeedbackType.message;
 
+  final String message;
+
   /// Creates a new [UserFeedback] instance.
-  UserFeedback();
+  UserFeedback({
+    required this.message,
+  });
 }

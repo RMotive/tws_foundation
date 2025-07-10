@@ -35,6 +35,11 @@ class FoundationThemeDark extends FoundationThemeB {
           fore: Colors.green,
           accent: Colors.green,
         ),
+        disabled: const SimpleTheming(
+          back: FoundationColors.darkGrey,
+          fore: FoundationColors.warmWhite,
+          accent: FoundationColors.oceanBlue,
+        ),
         control: const SimpleTheming(
           back: FoundationColors.lightDark,
           fore: FoundationColors.warmWhite,
