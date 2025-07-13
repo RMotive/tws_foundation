@@ -4,6 +4,7 @@ import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
 import 'package:example/entries/auth_page_entry.dart';
 import 'package:example/entries/category_layout_entry.dart';
+import 'package:example/entries/entity_category_pages/drivers_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
 import 'package:example/entries/entity_pages/drivers_page_entry.dart';
@@ -125,7 +126,7 @@ final class _MainAppState extends State<MainApp> {
               //! --> Entity Category Pages
               EmployeesCategoryPageEntry(),
               YardLogsCategoryPageEntry(),
-              
+              DriversCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables

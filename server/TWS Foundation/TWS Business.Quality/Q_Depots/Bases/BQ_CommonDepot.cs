@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
@@ -13,7 +14,12 @@ using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
+
+using Microsoft.EntityFrameworkCore;
+
 using TWS_Business.Depots.Bases;
+
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TWS_Business.Quality.Q_Depots.Bases;
 
@@ -407,7 +413,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                                 Filters = [..filters],
                             },
                         ],
-                    }
+                    },
                 }
             );
         Assert.All(
@@ -660,6 +666,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                     Parameters = new UpdateInput<TCommon> {
                         Entity = sample,
                     },
+                    
                 }
                     );
                 }

@@ -82,11 +82,16 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
 
     return EntityTableViewer(
       children: <Widget>[
-        ...edgeColumns,
         PropertyViewer(
           label: 'License',
           value: entity.license,
         ),
+        PropertyViewer(
+          label: 'Ownership',
+          value: entity.internal != null ? "Own" : 'External',
+        ),
+        ...edgeColumns,
+        
       ],
     );
   }
@@ -114,28 +119,48 @@ final class DriversEntityTable extends FoundationEntityTableB<DriversEntityTable
           factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.name
         ),
 
+        /// --> License
+        EntityTableColumnOptions<DriverCommon>(
+          title: 'License',
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.license
+        ),
+
+        /// --> Onwership
+        EntityTableColumnOptions<DriverCommon>(
+          title: 'Ownership',
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal != null ? "Own" : 'External',
+        ),
+
+        /// --> Onwership
+        EntityTableColumnOptions<DriverCommon>(
+          title: 'Driver Type',
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.driverType ?? '---',
+        ),
+
         /// --> CURP
         EntityTableColumnOptions<DriverCommon>(
           title: 'CURP',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.curp ?? 'NA',
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.curp ?? '---',
         ),
 
         /// --> RFC
         EntityTableColumnOptions<DriverCommon>(
           title: 'RFC',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.rfc ?? 'NA',
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.rfc ?? '---',
         ),
 
         /// --> NSS
         EntityTableColumnOptions<DriverCommon>(
           title: 'NSS',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.nss ?? 'NA',
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.nss ?? '---',
         ),
 
         /// --> Hiring Date
         EntityTableColumnOptions<DriverCommon>(
           title: 'Hiring Date',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.dates.hire?.toIso8601String() ?? 'NA' ,
+          factory:
+              (DriverCommon entity, int index, BuildContext buildContext) =>
+                  entity.internal?.employee.dates.hire?.toIso8601String() ?? '---',
         ),
       ],
     );
