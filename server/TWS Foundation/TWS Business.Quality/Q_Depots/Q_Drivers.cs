@@ -26,7 +26,7 @@ public class Q_Drivers :
                 }
             );
 
-        Driver_Common common = new Driver_Common {
+        Driver_Common common = new() {
             License = entropy[..12],
             Situation = situation,
             Status = status,

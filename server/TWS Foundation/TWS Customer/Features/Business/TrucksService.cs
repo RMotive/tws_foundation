@@ -32,7 +32,7 @@ public class TrucksService
     ///     <see cref="Truck_Common"/> based [Depot] handler to be used.
     /// </param>
     public TrucksService(TrucksDepot Depot, Database Database) : base(Depot) {
-        this._db = Database;
+        _db = Database;
     }
     public async override Task<BatchOperationOutput<Truck_Common>> Create(Truck_Common[] Entities, bool Sync = false) {
         Truck_Common[] successes = [];

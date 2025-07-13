@@ -255,7 +255,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// <param name="entity">Current entity to process and store.</param>
     /// <param name="entitiesHash">List of stored entities. The content is verified to avoid duplications. </param>
     /// <param name="rootChecked">Flag for first recursive run.</param>
-    void StoreNestedEntities(TCommon commonRoot, IEntity entity, HashSet<IEntity> entitiesHash, bool rootChecked) {
+    static void StoreNestedEntities(TCommon commonRoot, IEntity entity, HashSet<IEntity> entitiesHash, bool rootChecked) {
 
         if (entity == null || entitiesHash.Contains(entity)) return;
 

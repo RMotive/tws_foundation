@@ -3,6 +3,10 @@
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Validations.Validators;
 
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using TWS_Business.Entities.Drivers;
+
 namespace TWS_Business;
 
 /// <summary>
@@ -20,6 +24,36 @@ public abstract class CommonEntity<TInternal, TExternal>
 
     [Relation, ExclusiveValidator]
     public TExternal? External { get; set; }
+
+
+    protected abstract void CommonDesignEntity(EntityTypeBuilder etBuilder);
+    
+
+
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        CommonDesignEntity(etBuilder);
+
+        etBuilder
+            .HasOne(typeof(TExternal), nameof(External))
+            .WithOne("Common")
+            .HasForeignKey(typeof(TExternal), "CommonShadow");
+
+
+        etBuilder
+            .HasOne(typeof(TInternal), nameof(Internal))
+            .WithOne("Common")
+            .HasForeignKey(typeof(TInternal), "CommonShadow");
+
+
+        etBuilder
+            .Navigation(nameof(External))
+            .AutoInclude();
+
+        etBuilder
+            .Navigation(nameof(Internal))
+            .AutoInclude();
+    }
+
 }
 
 

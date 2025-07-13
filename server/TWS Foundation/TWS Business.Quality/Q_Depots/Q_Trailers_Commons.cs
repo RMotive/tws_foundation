@@ -19,7 +19,7 @@ public class Q_Trailers_Commons : BQ_CommonDepot<Trailer_Common, Trailer, Traile
                }
            );
 
-        Trailer_Common common = new Trailer_Common {
+        Trailer_Common common = new() {
             Economic = Entropy,
             Status = statusTRL,
         };
@@ -29,7 +29,7 @@ public class Q_Trailers_Commons : BQ_CommonDepot<Trailer_Common, Trailer, Traile
 
     protected override TrailerExternal ExternalFactory(string Entropy) {
 
-        TrailerExternal trailerExternal = new TrailerExternal {
+        TrailerExternal trailerExternal = new() {
             Carrier = Entropy,
             MxPlate = Entropy[..7],
         };
@@ -70,7 +70,7 @@ public class Q_Trailers_Commons : BQ_CommonDepot<Trailer_Common, Trailer, Traile
                }
           );
 
-        Trailer trailer = new Trailer {
+        Trailer trailer = new() {
             Carrier = carrier,
             Plates = [
                    Store(

@@ -89,7 +89,7 @@ public class Trailer_Common
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void CommonDesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Trailers_Commons");
 
         etBuilder.Property(nameof(Economic)).HasMaxLength(16).IsRequired();

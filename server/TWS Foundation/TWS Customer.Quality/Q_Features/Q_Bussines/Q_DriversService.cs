@@ -38,7 +38,7 @@ public class Q_DriversService
                         Range = 10,
                         Page = 1,
                     },
-                    PostProcessor = (IQueryable<Driver_Common> view) => {
+                    PostProcessor = view => {
 
                         return view
                         .Include(dc => dc.Internal)

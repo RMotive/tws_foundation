@@ -32,7 +32,7 @@ public class EmployeesService
     ///     <see cref="Employee"/> based [Depot] handler to be used.
     /// </param>
     public EmployeesService(EmployeesDepot Depot, Database database) : base(Depot) { 
-        this._db = database;
+        _db = database;
     }
 
     public async override Task<BatchOperationOutput<Employee>> Create(Employee[] Entities, bool Sync = false) {

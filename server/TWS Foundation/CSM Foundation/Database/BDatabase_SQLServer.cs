@@ -73,17 +73,17 @@ public static class EntityTypeBuilderExtension {
     /// </summary>
     /// <typeparam name="SourceT"></typeparam>
     /// <typeparam name="TargetT"></typeparam>
-    /// <param name="Builder"></param>
+    /// <param name="etBuilder"></param>
     /// <param name="SourceReference"></param>
     /// <param name="Required"></param>
     /// <param name="Auto"></param>
     /// <param name="Deletion"></param>
-    public static void Link<SourceT, TargetT>(this EntityTypeBuilder Builder, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.Restrict)
+    public static void Link<SourceT, TargetT>(this EntityTypeBuilder etBuilder, string SourceReference, string? TargetReference = null, bool Required = false, bool Auto = false, bool Index = false, DeleteBehavior Deletion = DeleteBehavior.Restrict)
         where SourceT : class, IEntity
         where TargetT : class, IEntity {
 
         Link(
-                Builder,
+                etBuilder,
                 (typeof(SourceT), typeof(TargetT)),
                 SourceReference: SourceReference,
                 TargetReference: TargetReference,

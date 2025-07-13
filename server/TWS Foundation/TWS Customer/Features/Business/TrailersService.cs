@@ -31,7 +31,7 @@ public class TrailersService
     ///     <see cref="Truck_Common"/> based [Depot] handler to be used.
     /// </param>
     public TrailersService(TrailersDepot Depot, Database Database) : base(Depot) { 
-        this._db = Database;
+        _db = Database;
     }
 
     public async override Task<BatchOperationOutput<Trailer_Common>> Create(Trailer_Common[] Entities, bool Sync = false) {
