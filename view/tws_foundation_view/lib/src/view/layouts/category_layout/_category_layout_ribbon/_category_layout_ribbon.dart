@@ -9,10 +9,14 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
   /// Category pages.
   final List<CategoryLayoutPageI> pages;
 
+  /// [Key] reference for [_CategoryLayoutMessenger] to get its [State] and handle outside calls.
+  final GlobalKey<CategoryLayoutMessengerState> messengerRef;
+
   /// Creates a new [_CategoryLayoutRibbon] instance.
   const _CategoryLayoutRibbon({
     required this.pages,
     required this.currentRoute,
+    required this.messengerRef,
   });
 
   @override
@@ -36,7 +40,7 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
                 flex: 2,
                 child: _CategoryLayoutRibbonWidget(
                   children: <Widget>[
-                    for (ActionsRibbonNodeI action in actions) action.compose(),
+                    for (ActionsRibbonNodeI action in actions) action.compose(messengerRef),
                   ],
                 ),
               ),

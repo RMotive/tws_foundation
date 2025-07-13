@@ -1,10 +1,11 @@
-
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart' hide Route, Router;
+import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
+import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
+part '_category_layout_messenger.dart';
 part '_category_layout_ribbon/_category_layout_ribbon.dart';
-
 
 /// Handles the convertion of a [CategoryLayoutNode] to its [RouteNode] representation for a [RouteLayoutI], generating correctly the
 /// [LayoutI], and inner [RouteNodeI]s composition.
@@ -49,20 +50,36 @@ final class CategoryLayout extends LayoutB {
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+    final GlobalKey<CategoryLayoutMessengerState> messengerRef = GlobalKey();
+
     return Padding(
       padding: EdgeInsetsGeometry.all(8),
       child: Column(
         children: <Widget>[
+          /// --> Action/Navigation Ribbons
           _CategoryLayoutRibbon(
             pages: pages,
+            messengerRef: messengerRef,
             currentRoute: routeData.route,
           ),
+
+          /// --> Content Box (message system/page content)
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 12,
-              ),
-              child: page,
+            child: Stack(
+              children: <Widget>[
+                /// Page Content
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 12,
+                  ),
+                  child: page,
+                ),
+
+                /// Messaging system.
+                _CategoryLayoutMessenger(
+                  key: messengerRef,
+                ),
+              ],
             ),
           ),
         ],

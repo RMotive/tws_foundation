@@ -12,6 +12,9 @@ final class BorderedBox extends StatelessWidget {
   /// Border color, if not given will be used [FoundationThemeB.page] {fore} theming options.
   final Color? color;
 
+  /// Border width size.
+  final double borderWidth;
+
   /// Content [child] padding.
   final EdgeInsets padding;
 
@@ -19,6 +22,7 @@ final class BorderedBox extends StatelessWidget {
   const BorderedBox({
     super.key,
     this.color,
+    this.borderWidth = .75,
     this.padding = const EdgeInsets.only(
       top: 8,
     ),
@@ -34,7 +38,7 @@ final class BorderedBox extends StatelessWidget {
         border: Border.fromBorderSide(
           BorderSide(
             color: borderColor,
-            width: .75,
+            width: borderWidth,
           ),
         ),
       ),

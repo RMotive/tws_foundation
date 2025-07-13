@@ -16,7 +16,7 @@ final class ActionsRibbonGroup implements ActionsRibbonNodeI {
   });
 
   @override
-  Widget compose() {
+  Widget compose(GlobalKey<CategoryLayoutMessengerState> messengerRef) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         Size sectionSize = constraints.biggest;
@@ -39,7 +39,7 @@ final class ActionsRibbonGroup implements ActionsRibbonNodeI {
                 child: Row(
                   spacing: 4,
                   children: <Widget>[
-                    for (ActionsRibbonActionI action in actions) action.compose(),
+                    for (ActionsRibbonActionI action in actions) action.compose(messengerRef),
                   ],
                 ),
               ),

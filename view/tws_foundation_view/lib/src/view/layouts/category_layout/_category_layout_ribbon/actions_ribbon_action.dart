@@ -62,9 +62,10 @@ abstract class ActionsRibbonActionB implements ActionsRibbonActionI {
   FutureOr<List<UserFeedback>>? canExecute() => null;
 
   @override
-  Widget compose() {
+  Widget compose(GlobalKey<CategoryLayoutMessengerState> messengerRef) {
     return _ActionButton(
       actionData: this,
+      messengerRef: messengerRef,
     );
   }
 }
@@ -120,9 +121,13 @@ final class _ActionButton extends StatefulWidget {
   /// Action data.
   final ActionsRibbonActionI actionData;
 
+  /// [CategoryLayout] user feedback messenger state reference.
+  final GlobalKey<CategoryLayoutMessengerState> messengerRef;
+
   /// Creates a new [_ActionButton] instance.
   const _ActionButton({
     required this.actionData,
+    required this.messengerRef,
   });
 
   @override
@@ -160,7 +165,13 @@ final class _ActionButtonState extends State<_ActionButton> {
 
   /// {event} Triggered when the user mouse pointer clicks on the button.
   void onClick() async {
-    if ((await evaluateExecution()).isNotEmpty) {
+    List<UserFeedback> evaluateExecutionResult = await evaluateExecution();
+
+    if (evaluateExecutionResult.isNotEmpty) {
+      CategoryLayoutMessengerState? messengerState = widget.messengerRef.currentState;
+      if (messengerState != null && messengerState.mounted) {
+        messengerState.pushMessages(evaluateExecutionResult);
+      }
       return;
     }
 
