@@ -13,7 +13,7 @@ namespace TWS_Business.Quality.Q_Depots.Bases;
 /// <typeparam name="TDepot">
 ///     Type of the depot based on test.    
 /// </typeparam>
-public abstract class BQ_Common<TCommon, TInternalEdge, TExternalEdge, TDepot>
+public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot>
     : BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot, Database>
     where TCommon : CommonEntity<TInternalEdge, TExternalEdge>, new()
     where TInternalEdge : CommonEntityEdge<TCommon>
@@ -30,5 +30,5 @@ public abstract class BQ_Common<TCommon, TInternalEdge, TExternalEdge, TDepot>
     ///     Collateral used databases factories to be used.
     /// </param>'
 
-    protected BQ_Common(DatabaseFactory? Database = null, params DatabaseFactory[] Factories) : base("TWSB", Database, Factories) { }
+    protected BQ_CommonDepot(DatabaseFactory? Database = null, params DatabaseFactory[] Factories) : base("TWSB", Database, Factories) { }
 }

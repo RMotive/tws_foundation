@@ -6,7 +6,7 @@ using TWS_Business.Quality.Q_Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots;
 
-public class Q_Trailers_Commons : BQ_Common<Trailer_Common, Trailer, TrailerExternal, TrailersDepot> {
+public class Q_Trailers_Commons : BQ_CommonDepot<Trailer_Common, Trailer, TrailerExternal, TrailersDepot> {
 
     protected override Trailer_Common EntityFactory(string Entropy) {
 
