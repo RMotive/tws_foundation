@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Defines final behavior for a [FoundationResponseResolver] wich handles [ServiceI] requests implementations from a [FoundationServer] and [FoundationServiceB], resolving
 /// as a {Foundation} package scope the [ServerI] implementation responses as needed.
-final class FoundationResponseResolver<T extends DecodableI> extends ResponseResolverB<T> {
+final class FoundationResponseResolver<T extends DecodableI?> extends ResponseResolverB<T> {
   /// Creates a new [FoundationResponseResolver] instance.
   const FoundationResponseResolver(super.controller);
 
@@ -16,7 +16,7 @@ final class FoundationResponseResolver<T extends DecodableI> extends ResponseRes
   /// [objectBuilder] building callback for the [T] object creation in order to call [DecodableI.decode] method from [DecodableI] interface.
   T resolveDirect(T Function() objectBuilder) {
     T? result;
-    controller.resolve(
+    responseController.resolve(
       (DataMap data) {
         final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
         successFrame.decode(data);
@@ -33,11 +33,11 @@ final class FoundationResponseResolver<T extends DecodableI> extends ResponseRes
       },
     );
 
-    if (result == null) {
+    if (result == null && (null is! T)) {
       throw TracedException('Unable to resolve response controller', StackTrace.current);
     }
 
-    return result!;
+    return result as T;
   }
 
   /// Resolves the [ResponseController] with the given callback handlers.
@@ -62,7 +62,7 @@ final class FoundationResponseResolver<T extends DecodableI> extends ResponseRes
     required void Function() onConnectionFailure,
     void Function()? onFinally,
   }) {
-    controller.resolve(
+    responseController.resolve(
       (DataMap data) {
         final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
         successFrame.decode(data);

@@ -131,7 +131,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                 child: IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: theme.errorTheming.fore,
+                    color: theme.error.fore,
                     size: 32,
                   ),
                   onPressed: () {
@@ -177,7 +177,7 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
                       child: IconButton(
                         enableFeedback: true,
                         color: theme.page.fore,
-                        disabledColor: theme.primControl.back,
+                        disabledColor: theme.control.back,
                         icon: const Icon(Icons.camera, size: 48),
                         onPressed: () {
                           if (_camera != null) {

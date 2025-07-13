@@ -139,8 +139,7 @@ final class _TextInputState extends State<TextInput> {
   /// Border width decoration value.
   static const double _borderWidth = 2;
 
-  /// {ref} theming effect reference key.
-  final UniqueKey themingRef = UniqueKey();
+  final GlobalKey<FormFieldState<String>> textFieldFormState = GlobalKey<FormFieldState<String>>();
 
   /// Controller for inner [TextFormField] behavior.
   late TextEditingController textInputCtrl = widget.controller ?? TextEditingController();
@@ -156,6 +155,12 @@ final class _TextInputState extends State<TextInput> {
 
   /// {state} debounce timer object.
   Timer? _deBouncer;
+
+  /// {state} whether there's an error validation text for current input value.
+  late String? errorText = widget.errorText;
+
+  /// {state} whether the value has changed since validation.
+  bool changeSinceValidation = false;
 
   @override
   void initState() {
@@ -179,6 +184,10 @@ final class _TextInputState extends State<TextInput> {
 
     if (widget.focusNode != oldWidget.focusNode) {
       focusNode = widget.focusNode ?? FocusNode();
+    }
+
+    if (widget.errorText != oldWidget.errorText) {
+      errorText = widget.errorText;
     }
   }
 
@@ -212,9 +221,9 @@ final class _TextInputState extends State<TextInput> {
 
   @override
   Widget build(BuildContext context) {
-    final SimpleTheming pageTheming = theming.primControl;
-    final SimpleTheming errTheming = theming.errorTheming;
-    final SimpleTheming succTheming = theming.succTheming;
+    final SimpleTheming pageTheming = theming.control;
+    final SimpleTheming errTheming = theming.error;
+    final SimpleTheming succTheming = theming.success;
 
     Color counterColor = widget.isEnabled ? succTheming.accent : Colors.grey;
 
@@ -224,8 +233,17 @@ final class _TextInputState extends State<TextInput> {
         height: widget.height,
         width: widget.width,
         child: TextFormField(
+          key: textFieldFormState,
           autofocus: widget.autofocus,
-          validator: widget.validator,
+          validator: (String? value) {
+            if (widget.isFixedLength && (value?.length ?? 0) < (widget.maxLength ?? 0) && !changeSinceValidation) {
+              errorText = 'Length must be strictly (${widget.maxLength})';
+              return errorText;
+            }
+
+            return widget.validator?.call(value);
+          },
+          forceErrorText: null,
           obscureText: widget.isPrivate,
           controller: textInputCtrl,
           focusNode: focusNode,
@@ -242,6 +260,16 @@ final class _TextInputState extends State<TextInput> {
           maxLines: widget.maxLines,
           autofillHints: widget.autofillHints,
           onChanged: (String typedText) {
+            setState(() {
+              errorText = null;
+
+              if (textFieldFormState.currentState!.hasError) {
+                changeSinceValidation = true;
+                textFieldFormState.currentState!.validate();
+                changeSinceValidation = false;
+              }
+            });
+
             if (widget.deBounce == null) {
               widget.onChanged?.call(typedText);
               return;
@@ -261,7 +289,7 @@ final class _TextInputState extends State<TextInput> {
           decoration: InputDecoration(
             hintText: widget.hint,
             labelText: showSuffix ? widget.label : null,
-            errorText: widget.errorText,
+            errorText: errorText,
             isDense: true,
             suffixIcon: widget.suffixIcon,
             label:

@@ -16,7 +16,7 @@ final class _EntityTableError extends StatelessWidget {
       builder: (_, BoxConstraints constrains) {
         constrains = constrains.boxed();
         final Size boxingSize = constrains.biggest;
-        final SimpleTheming errorTheming = Theming.get<FoundationThemeB>(context).errorTheming;
+        final SimpleTheming errorTheming = Theming.get<FoundationThemeB>(context).error;
 
         return Padding(
           padding: EdgeInsets.symmetric(
@@ -31,11 +31,10 @@ final class _EntityTableError extends StatelessWidget {
                 Icons.signal_wifi_connected_no_internet_4_rounded,
                 color: errorTheming.accent,
               ),
-              TWSDisplayFlat(
+              MessageWidget(
                 width: _displayWidth,
-                display: 'Connection error',
-                color: errorTheming.accent,
-                foreColor: errorTheming.fore,
+                text: 'Connection error',
+                themeData: errorTheming,
               ),
             ],
           ),

@@ -48,7 +48,7 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
     foundationTheming = Theming.get(context);
 
     foreColor = widget.fore ?? foundationTheming.page.accent;
-    backColor = foundationTheming.entityTableTheming.drawerActionBackground;
+    backColor = foundationTheming.entityTable.drawerActionBackground;
   }
   
   @override
@@ -59,7 +59,7 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
         cursor: SystemMouseCursors.click,
         onHover: (bool $in) {
           setState(() {
-            backColor = foundationTheming.entityTableTheming.drawerActionBackground;
+            backColor = foundationTheming.entityTable.drawerActionBackground;
             if ($in) {
               backColor = backColor.withValues(
                 alpha: .85,

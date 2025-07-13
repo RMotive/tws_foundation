@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -8,7 +6,6 @@ import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
-
 
 part '_create_whisper_drivers_section.dart';
 part '_create_whisper_drivers_externals_section.dart';
@@ -122,7 +119,7 @@ final class DriversPageCreateWhisper extends PageB {
         },
         formDesigner: (CreateEntityFormRecordReactor<DriverCommon>? itemState) {
           final bool formDisabled = !(itemState == null);
-          if(formDisabled && itemState!.entity.internal == null && itemState.entity.external == null) {
+          if(formDisabled && itemState.entity.internal == null && itemState.entity.external == null) {
             itemState.entity.internal = Driver();
           }
           return Padding(

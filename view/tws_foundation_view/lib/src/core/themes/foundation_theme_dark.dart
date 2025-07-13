@@ -16,31 +16,36 @@ class FoundationThemeDark extends FoundationThemeB {
           foreAlt: FoundationColors.warmWhite,
           accentAlt: FoundationColors.warmWhite,
         ),
-        errorTheming: const SimpleTheming(
+        error: const SimpleTheming(
           back: FoundationColors.lightDark,
           fore: Color.fromARGB(255, 255, 21, 0),
           accent: FoundationColors.deepWine,
           foreAlt: FoundationColors.warmWhite,
           accentAlt: FoundationColors.oceanBlue,
         ),
-        warnTheming: const SimpleTheming(
+        warning: const SimpleTheming(
           back: FoundationColors.lightDark,
           fore: Color.fromARGB(255, 255, 21, 0),
           accent: Color.fromARGB(255, 245, 127, 23),
           foreAlt: FoundationColors.warmWhite,
           accentAlt: FoundationColors.oceanBlue,
         ),
-        succTheming: const SimpleTheming(
+        success: const SimpleTheming(
           back: FoundationColors.lightDark,
           fore: Colors.green,
           accent: Colors.green,
         ),
-        primControl: const SimpleTheming(
+        disabled: const SimpleTheming(
+          back: FoundationColors.darkGrey,
+          fore: FoundationColors.warmWhite,
+          accent: FoundationColors.oceanBlue,
+        ),
+        control: const SimpleTheming(
           back: FoundationColors.lightDark,
           fore: FoundationColors.warmWhite,
           accent: FoundationColors.oceanBlue,
         ),
-        entityTableTheming: const EntityTableTheming(
+        entityTable: const EntityTableTheming(
           drawerActionBackground: FoundationColors.warmWhite,
         ),
         navigationLayout: const SimpleTheming(

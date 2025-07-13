@@ -26,7 +26,7 @@ final class YardLogsPageEntry extends PackageLandingEntryB<LandingThemeB> {
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return YardLogsPage(
       adapter: YardLogsEntityTableAdapter(
-        authBuilder: () => Injector.get<SessionStorage>().get(),
+        authBuilder: () => Injector.get<SessionStorageI>().token,
       ),
     );
   }

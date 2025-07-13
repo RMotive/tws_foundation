@@ -1,12 +1,14 @@
 ﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
-using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
+
+using TWS_Customer.Managers.Auth;
+using TWS_Customer.Managers.Session;
 
 namespace TWS_Customer.Features.Business;
 
@@ -15,6 +17,15 @@ namespace TWS_Customer.Features.Business;
 /// </summary>
 public interface IEmployeesService
     : IService<Employee> {
+
+
+    /// <summary>
+    ///     Gets the <see cref="Employee"/> data for the current session account.
+    /// </summary>
+    /// <returns>
+    ///     User employee data.
+    /// </returns>
+    public Task<Employee?> Get();
 }
 
 /// <summary>
@@ -23,40 +34,42 @@ public interface IEmployeesService
 public class EmployeesService
     : BService<Employee, EmployeesDepot>, IEmployeesService {
 
-    private readonly Database _db;
+
+    readonly IAuthManager _authManager;
 
     /// <summary>
     ///     Creates a new instance of <see cref="EmployeesService"/>.
     /// </summary>
-    /// <param name="Depot">
+    /// <param name="depot">
     ///     <see cref="Employee"/> based [Depot] handler to be used.
     /// </param>
-    public EmployeesService(EmployeesDepot Depot, Database database) : base(Depot) { 
-        _db = database;
+    public EmployeesService(
+        EmployeesDepot depot,
+        IAuthManager authManager
+    ) : base(depot) {
+
+        _authManager = authManager;
     }
 
-    public async override Task<BatchOperationOutput<Employee>> Create(Employee[] Entities, bool Sync = false) {
-        Employee[] successes = [];
-        EntityOperationFailure<Employee>[] failures = [];
+    public async Task<Employee?> Get() {
 
-        foreach (Employee entity in Entities) {
-            try {
-                Employee attachedEntity = await _depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
+        SessionData sessionData = await _authManager.Get();
+
+        long accountId = sessionData.Account.Id;
+
+        BatchOperationOutput<Employee> employeesReadOutput = await _depot.Read(
+                new QueryInput<Employee, FilterQueryInput<Employee>> {
+                    Parameters = new FilterQueryInput<Employee> {
+                        Behavior = FilteringBehaviors.First,
+                        Filter = (employee) => employee.AccountShadow == accountId
+                    }
                 }
+            );
 
-                EntityOperationFailure<Employee> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
+        if (employeesReadOutput.SuccessesCount <= 0)
+            return null;
 
-        _db.SaveChanges();
 
-        BatchOperationOutput<Employee> output = new(successes, failures);
-
-        return output;
+        return employeesReadOutput.Successes[0];
     }
 }

@@ -14,6 +14,19 @@ abstract class FoundationServiceB extends ServiceB {
     super.headers,
   });
 
+  ///
+  Future<ResponseControllerI> getSecure<T extends EncodableI>(
+    String endpoint,
+    String authToken, {
+    Headers? headers,
+  }) {
+    return get(
+      endpoint,
+      auth: '$authToken@${ContextConstants.sign}',
+      headers: headers,
+    );
+  }
+
   /// Post network call to connected server overriding [ServiceI] built-in [post] behavior overriding
   /// the [authToken] token sent, sending it as a compatible custom {TWS} servers auth tokens format.
   ///
@@ -23,20 +36,20 @@ abstract class FoundationServiceB extends ServiceB {
   /// [T] type of the request body.
   ///
   ///
-  /// [action] endpoint request last segment.
+  /// [endpoint] endpoint request last segment.
   ///
   /// [requestBody] data object to send at the [ServerI] to handle the request.
   ///
   /// [authToken] custom {TWS} authorization token when [ServerI] controller requires it.
   ///
   /// [headers] request scope [Headers] object.
-  Future<ResponseController> postSecure<T extends EncodableI>(
-    String action,
+  Future<ResponseControllerI> postSecure<T extends EncodableI>(
+    String endpoint,
     T requestBody, {
     String? authToken,
     Map<String, dynamic>? headers,
   }) {
-    return post(action, requestBody, auth: '$authToken@${ContextConstants.sign}');
+    return post(endpoint, requestBody, auth: '$authToken@${ContextConstants.sign}');
   }
 
   /// Post network call to connected server overriding [ServiceI] built-in [post] behavior overriding
@@ -55,12 +68,12 @@ abstract class FoundationServiceB extends ServiceB {
   /// [authToken] custom {TWS} authorization token when [ServerI] controller requires it.
   ///
   /// [headers] request scope [Headers] object.
-  Future<ResponseController> postListSecure<T extends EncodableI>(
-    String act,
+  Future<ResponseControllerI> postListSecure<T extends EncodableI>(
+    String endpoint,
     List<T> request, {
     String? authToken,
     Map<String, dynamic>? headers,
   }) {
-    return postList(act, request, auth: '$authToken@${ContextConstants.sign}');
+    return postList(endpoint, request, auth: '$authToken@${ContextConstants.sign}');
   }
 }

@@ -1,8 +1,9 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
+
+using Microsoft.AspNetCore.Http;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -10,6 +11,7 @@ using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Features.Business;
+using TWS_Customer.Managers.Auth;
 
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
@@ -21,9 +23,17 @@ public class Q_EmployeesService
 
     #region [BQ_Service] implementations
     protected override IEmployeesService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-        _depot = new EmployeesDepot(BussinesDatabase, Disposer);
-        return new EmployeesService(_depot, BussinesDatabase);
+        TWS_Business.Database businessDatabase = BusinessDatabaseFactory();
+
+        IAuthManager authManager = new AuthManager(
+                new HttpContextAccessor {
+                    HttpContext = new DefaultHttpContext()
+                }
+            );
+
+        IEmployeesDepot employeesDepot = new EmployeesDepot(businessDatabase, Disposer);
+
+        return new EmployeesService(employeesDepot, authManager);
     }
     #endregion
 

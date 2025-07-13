@@ -1,121 +1,103 @@
 part of '../category_layout.dart';
 
-///
+/// Draws the [CategoryLayout] actions ribbons wich are two, one for the current resolved {Page} actions and another one ribbon
+/// for inner [CategoryLayout.pages] navigation.
 final class _CategoryLayoutRibbon extends StatelessWidget {
   /// Based on [LayoutB] route data calculation stores the current [Route] information
   final Route currentRoute;
 
-  /// Article entries.
-  final List<CategoryLayoutPageI> articles;
+  /// Category pages.
+  final List<CategoryLayoutPageI> pages;
+
+  /// [Key] reference for [_CategoryLayoutMessenger] to get its [State] and handle outside calls.
+  final GlobalKey<CategoryLayoutMessengerState> messengerRef;
 
   /// Creates a new [_CategoryLayoutRibbon] instance.
   const _CategoryLayoutRibbon({
-    required this.articles,
+    required this.pages,
     required this.currentRoute,
+    required this.messengerRef,
   });
 
   @override
   Widget build(BuildContext context) {
-    final CategoryLayoutPageI currentEntry = articles.firstWhere(
+    final CategoryLayoutPageI currentEntry = pages.firstWhere(
       (CategoryLayoutPageI article) => article.route == currentRoute,
     );
 
-    final CategoryLayoutRibbonControllerI? ribbonController = currentEntry.ribbonController;
+    List<ActionsRibbonNodeI> actions = currentEntry.actions ?? <ActionsRibbonNodeI>[];
 
     return Visibility(
+      visible: actions.isNotEmpty,
       child: SizedBox(
-        height: 75,
         width: double.maxFinite,
         child: Row(
           spacing: 8,
           children: <Widget>[
-            if (ribbonController?.validate() ?? false)
+            /// --> {Page} actions.
+            if (actions.isNotEmpty)
               Expanded(
                 flex: 2,
-                child: _CategoryLayoutRibbonSection(
+                child: _CategoryLayoutRibbonWidget(
                   children: <Widget>[
-                    
-                    // --> Refresh action button.
-                    if (ribbonController?.onRefresh != null)
-                      CategoryLayoutRibbonActionOptions(
-                        title: 'Refresh',
-                        description: 'Refreshes the current page',
-                        onInvoke: ribbonController!.onRefresh!,
-                        iconBuilder: (Color recommended) {
-                          return Icon(
-                            Icons.refresh_rounded,
-                            color: recommended,
-                          );
-                        },
-                      ).compose(context),
-
-                    // --> Data Management action group.
-                    if (ribbonController?.dataManagementController != null)
-                      CategoryLayoutRibbonGroupOptions(
-                        title: 'Data Management',
-                        description: 'Data handling related actions',
-                        actions: <CategoryLayoutRibbonActionOptionsI>[
-                          // --> Create action
-                          if (ribbonController?.dataManagementController?.onCreate != null)
-                            CategoryLayoutRibbonActionOptions(
-                              title: 'Create',
-                              description: 'Create new entities',
-                              onInvoke: ribbonController!.dataManagementController!.onCreate!,
-                              iconBuilder: (Color recommended) {
-                                return Icon(
-                                  Icons.add_box_outlined,
-                                  color: recommended,
-                                );
-                              },
-                            ),
-
-                          // --> Edit action
-                          if (ribbonController?.dataManagementController?.onEdit != null)
-                            CategoryLayoutRibbonActionOptions(
-                              title: 'Edit',
-                              description: 'Edit entities',
-                              onInvoke: ribbonController!.dataManagementController!.onEdit!,
-                              iconBuilder: (Color recommended) {
-                                return Icon(
-                                  Icons.edit_outlined,
-                                  color: recommended,
-                                );
-                              },
-                            ),
-
-                          // --> Remove action
-                          if (ribbonController?.dataManagementController?.onRemove != null)
-                            CategoryLayoutRibbonActionOptions(
-                              title: 'Remove',
-                              description: 'Remove entities',
-                              onInvoke: ribbonController!.dataManagementController!.onRemove!,
-                              iconBuilder: (Color recommended) {
-                                return Icon(
-                                  Icons.remove_circle_outline_rounded,
-                                  color: recommended,
-                                );
-                              },
-                            ),
-                        ],
-                      ).compose(context),
+                    for (ActionsRibbonNodeI action in actions) action.compose(messengerRef),
                   ],
                 ),
               ),
 
+            /// --> Category pages navigation.
             Expanded(
-              child: _CategoryLayoutRibbonSection(
-                children: <Widget>[
-                  for (CategoryLayoutPageI article in articles)
-                    _CategoryLayoutRibbonArticleButton(
-                      isCurrent: currentEntry == article,
-                      articleEntry: article,
-                    ),
-                ],
+              child: _CategoryLayoutRibbonWidget(
+                children: <Widget>[],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+///
+final class _CategoryLayoutRibbonWidget extends StatelessWidget {
+  /// Inner [Row.children] content.
+  final List<Widget> children;
+
+  const _CategoryLayoutRibbonWidget({
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        constraints = constraints.boxed();
+        Size sectionSize = constraints.biggest;
+
+        return DecoratedBox(
+          decoration: const BoxDecoration(
+            border: Border.fromBorderSide(
+              BorderSide(
+                width: 1,
+                color: Colors.blueGrey,
+              ),
+            ),
+          ),
+          child: SizedBox(
+            width: sectionSize.width,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  spacing: 4,
+                  children: children,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -15,7 +15,7 @@ abstract class EntityCategoryPageB<TAdapter extends EntityTableAdapterI> impleme
   final Route route;
 
   @override
-  late final CategoryLayoutRibbonControllerI? ribbonController;
+  late final List<ActionsRibbonNodeI>? actions;
 
   /// Authentication token builder since {foundation} package doesn't have access to application context session control.
   final AuthBuilder? _authBuilder;
@@ -25,7 +25,7 @@ abstract class EntityCategoryPageB<TAdapter extends EntityTableAdapterI> impleme
     if (_authBuilder != null) return _authBuilder;
 
     SessionStorage sessionStore = Injector.get();
-    return () => sessionStore.get();
+    return () => sessionStore.token;
   }
 
   /// Allows to override default [EntityCategoryPageB] route configuration to provide a custom [Route] instance.
@@ -43,14 +43,14 @@ abstract class EntityCategoryPageB<TAdapter extends EntityTableAdapterI> impleme
   }) : _authBuilder = authBuilder,
        route = cusRoute ?? route {
     adapter = composeAdapter();
-    ribbonController = composeRibbonController(adapter);
+    actions = composeRibbonController(adapter);
   }
 
   /// Composes the required [TAdapter] instance to use at the inner [EntityTable] at the entity page.
   TAdapter composeAdapter();
 
   /// Composes the required {controller} for the inner [CategoryLayout] ribbon actions controlling.
-  CategoryLayoutRibbonControllerI composeRibbonController(TAdapter adapter);
+  List<ActionsRibbonNodeI> composeRibbonController(TAdapter adapter);
 
   @override
   List<RouteB> composeRoutes() => <RouteB>[];

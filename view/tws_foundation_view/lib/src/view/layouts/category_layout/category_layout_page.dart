@@ -12,14 +12,14 @@ abstract interface class CategoryLayoutPageI {
   /// Page target [Route] object instance.
   final Route route;
 
-  /// Action ribbon controller.
-  final CategoryLayoutRibbonControllerI? ribbonController;
+  /// Category page action ribbon configuration.
+  final List<ActionsRibbonNodeI>? actions;
 
   /// Creates a new [CategoryLayoutPageI] instance.
   const CategoryLayoutPageI({
     required this.title,
     required this.route,
-    this.ribbonController,
+    this.actions,
   });
 
   /// Composes the inner [CategoryLayout] entry nested [RouteB] implementations, used to subscribe dinamic routes subscription for this entry
@@ -57,7 +57,7 @@ final class CategoryLayoutPage extends CategoryLayoutPageI {
     required super.title,
     this.routesBuilder,
     required super.route,
-    super.ribbonController,
+    super.actions,
     required this.pageBuilder,
     required this.iconBuilder,
   });

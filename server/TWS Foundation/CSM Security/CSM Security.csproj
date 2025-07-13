@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="CSMS.Connection\development.connection.json">
+    <EmbeddedResource Include="CSMS.Connection\quality.connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="CSMS.Connection\quality.connection.json">
+    <EmbeddedResource Include="CSMS.Connection\development.connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

@@ -6,7 +6,7 @@ import 'package:csm_client/csm_client.dart';
 /// [T] type of the response body data object.
 ///
 /// Defines a data constract for a frame that represents a [ServerI] implementation successfuly response with interest data.
-final class SuccessFrame<T extends DecodableI> implements DecodableI {
+final class SuccessFrame<T extends DecodableI?> implements DecodableI {
   /// Unique operation identifier.
   String id = '';
 
@@ -23,13 +23,25 @@ final class SuccessFrame<T extends DecodableI> implements DecodableI {
 
   /// Creates a new [SuccessFrame] instance with directly [content] given.
   SuccessFrame.a(this._estelaBuilder, this.content);
-  
+
   @override
   void decode(DataMap encode) {
     id = encode.get('id');
 
-    final DataMap estelaData = encode.get('content');
+    if (null is! T) {
+      final DataMap estelaData = encode.get('content');
+      content = _estelaBuilder();
+      content!.decode(estelaData);
+      return;
+    }
+
+    final DataMap? estelaData = encode.get('content');
+    if (estelaData == null) {
+      content = null as T;
+      return;
+    }
+
     content = _estelaBuilder();
-    content.decode(estelaData);
+    content!.decode(estelaData);
   }
 }

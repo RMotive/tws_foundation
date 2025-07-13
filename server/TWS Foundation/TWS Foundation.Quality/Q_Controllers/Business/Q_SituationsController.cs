@@ -17,7 +17,7 @@ public class Q_SitutationsController
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="service"></param>
+    /// <param name="controllerPath"></param>
     /// <param name="hostFactory"></param>
     public Q_SitutationsController(WebApplicationFactory<Program> hostFactory)
         : base("/Situations", hostFactory) {
@@ -46,4 +46,9 @@ public class Q_SitutationsController
         Assert.True(Estela.Pages > 0);
     }
 
+        ViewOutput<Situation> Estela = Framing<SuccessFrame<ViewOutput<Situation>>>(Response).Content;
+        Assert.True(Estela.Entities.Length > 0);
+        Assert.Equal(1, Estela.Page);
+        Assert.True(Estela.Pages > 0);
+    }
 }

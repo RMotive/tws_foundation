@@ -73,8 +73,15 @@ public class FramingMiddleware
                 } else if (response.StatusCode != 200) {
 
                     switch (response.StatusCode) {
-                        case 204:
-                            encodedContent = "{}";
+                        case 204: {
+                                SuccessFrame<Dictionary<string, object?>?> frame = new SuccessFrame<Dictionary<string, object?>?> {
+                                    Id = Tracer,
+                                    Content = null,
+                                };
+
+                                response.StatusCode = (int)HttpStatusCode.OK;
+                                encodedContent = JsonSerializer.Serialize(frame);
+                            }
                             break;
                         case 405: {
                                 ExceptionInfo publish = new XSystem("Unsuported HTTP method", null)

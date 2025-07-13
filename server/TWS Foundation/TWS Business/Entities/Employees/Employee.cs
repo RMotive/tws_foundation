@@ -1,8 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 
+using CSM_Security.Entities;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Drivers;
@@ -34,6 +39,12 @@ public class Employee
     /// </summary>
     [StringLength(11, MinimumLength = 11)]
     public string? NSS { get; set; } = null!;
+
+    /// <summary>
+    ///     Shadow property pointing Account column since EF doesn't support cross-database references. With this manually populate <see cref="Account"/> 
+    ///     object querying [CSM Security] database.
+    /// </summary>
+    public long? AccountShadow { get; set; }
 
     #endregion
 
@@ -83,6 +94,12 @@ public class Employee
     /// </summary>
     [Relation]
     public Driver? Driver { get; set; }
+    
+    /// <summary>
+    ///     <see cref="CSM_Security.Entities.Account"/> information.
+    /// </summary>
+    [NotMapped]
+    public Account? Account { get; set; }
 
     #endregion
 
@@ -90,6 +107,10 @@ public class Employee
         etBuilder.Property(nameof(CURP)).HasMaxLength(18);
         etBuilder.Property(nameof(RFC)).HasMaxLength(13);
         etBuilder.Property(nameof(NSS)).HasMaxLength(11);
+
+        etBuilder.Property(nameof(AccountShadow)).HasColumnName("Account");
+
+        etBuilder.HasIndex(nameof(AccountShadow)).IsUnique();
 
         etBuilder.Link<Employee, Identification>(
                 nameof(Identification),

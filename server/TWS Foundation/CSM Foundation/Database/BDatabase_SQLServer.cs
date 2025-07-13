@@ -229,20 +229,27 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     ///     Validates database connection health.
     /// </summary>
     public void ValidateConnection() {
-        Logger.Announce($"ORM Setting up *^____^*", new() {
-            {"Database", GetType()?.Namespace ?? "---" },
-            {"Base", nameof(BDatabase_SQLServer<TDatabases>) }
-        });
+        Logger.Announce(
+            $"Setting up ORM", 
+            new() {
+                { "Database", GetType()?.Namespace ?? "---" },
+                { "Base", nameof(BDatabase_SQLServer<TDatabases>) }
+            }
+        );
 
         if (Database.CanConnect()) {
-            Logger.Success($"[{GetType().Name}] Connection stable");
+            Logger.Success($"[{GetType().FullName}] ORM Set");
+
+            IEnumerable<string> pendingMigrations = Database.GetPendingMigrations();
+            if(pendingMigrations.Any()) {
+                throw new Exception($"ORM ({GetType().FullName}) has pending migrations ({pendingMigrations.Count()})");
+            }
             Evaluate();
         } else {
             try {
                 Database.OpenConnection();
             } catch (Exception ex) {
-
-                throw new Exception($"Invalid connection with Database ({GetType().Name}) | {ex.InnerException?.Message}");
+                throw new Exception($"Invalid connection with Database ({GetType().FullName}) | {ex.InnerException?.Message}");
             }
         }
     }
@@ -283,10 +290,12 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
         }
     }
 
+    protected virtual void DefineSet(BEntity Entity, EntityTypeBuilder mBuilder) { }
+
+    protected virtual void DefineSource(ModelBuilder mBuilder) { }
 
     #region EF Native Methods
 
-    protected virtual void EvaluateCustom(BEntity Entity, EntityTypeBuilder mBuilder) { }
 
     /// <summary>
     ///     This is overriden from <see cref="BDatabase_SQLServer{TDatabases}"/> to Configure an SQL Server Connection using
@@ -312,6 +321,8 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     }
 
     protected override void OnModelCreating(ModelBuilder mBuilder) {
+
+        DefineSource(mBuilder);
 
         IEnumerable<IMutableEntityType> entityTypes = mBuilder.Model.GetEntityTypes();
         foreach (IMutableEntityType entityType in entityTypes) {
@@ -347,7 +358,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                         etBuilder.Property(descriptionProperty.Name).HasMaxLength(200);
                     }
 
-                    EvaluateCustom(set, etBuilder);
+                    DefineSet(set, etBuilder);
 
                     etBuilder.Property(nameof(IEntity.Timestamp)).HasColumnType("datetime2(7)").HasDefaultValueSql("GETUTCDATE()");
 
