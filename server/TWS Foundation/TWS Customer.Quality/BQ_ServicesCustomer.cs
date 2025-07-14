@@ -6,8 +6,6 @@ using CSM_Foundation.Database.Utilitites;
 
 using CSM_Security.Entities;
 
-using Microsoft.EntityFrameworkCore.Diagnostics;
-
 using TWS_Business.Entities;
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
@@ -74,7 +72,7 @@ public abstract class BQ_ServicesCustomer<TService>
             Internal = internalValue ? SampleDriver() : null,
             External = internalValue ? null : SampleDriverExternal(),
         };
-    
+
         return common;
     }
 
@@ -138,10 +136,10 @@ public abstract class BQ_ServicesCustomer<TService>
             Economic = Entropy[..12],
             Status = SampleStatus("tcm"),
             Situation = SampleSituation(),
-            Internal = internalValue? SampleTruck() : null,
+            Internal = internalValue ? SampleTruck() : null,
             External = internalValue ? null : SampleTruckExternal()
         };
-   
+
         return common;
     }
 
@@ -207,7 +205,7 @@ public abstract class BQ_ServicesCustomer<TService>
     }
 
     protected Carrier SampleCarrier() {
-        Approach approach = new () {
+        Approach approach = new() {
             EMail = $" email_{Entropy}",
             Status = SampleStatus("apc")
         };

@@ -40,9 +40,7 @@ public class Q_DriversService
                     },
                     PostProcessor = view => {
 
-                        return view
-                        .Include(dc => dc.Internal)
-                        .Include(dc => dc.External);
+                        return view;
                     }
                 }
             );

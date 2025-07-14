@@ -192,6 +192,7 @@ public class BQ_CommonDataHandler
 
                 entity.Internal = internalRelation;
                 Disposer.Push(internalRelation);
+                entities = [.. entities, entity];
 
                 continue;
             }

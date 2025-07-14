@@ -42,20 +42,6 @@ final class DriversCategoryPage extends EntityCategoryPageB<DriversEntityTableAd
   }
 
   @override
-  CategoryLayoutRibbonControllerI composeRibbonController(DriversEntityTableAdatper adapter) {
-    return CategoryLayoutRibbonController(
-      onRefresh: adapter.refresh,
-      dataManagementController: CategoryLayoutRibbonDataManagementGroupController(
-        onCreate: () {
-          Router router = Injector.get<Router>();
-
-          router.go(FoundationRoutes.driversCreateWhisperRoute);
-        },
-      ),
-    );
-  }
-
-  @override
   Widget? composeIcon(Color? recomdColor) {
     return Icon(
       Icons.departure_board,
@@ -68,6 +54,11 @@ final class DriversCategoryPage extends EntityCategoryPageB<DriversEntityTableAd
     return DriversPage(
       adapter: adapter,
     );
+  }
+  
+  @override
+  List<ActionsRibbonNodeI> composeRibbonController(DriversEntityTableAdatper adapter) {
+    return <ActionsRibbonNodeI>[];
   }
 }
 

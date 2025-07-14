@@ -1,6 +1,6 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/tws_foundation_view.dart';
+import 'package:tws_foundation_view/tws_foundation_view.dart' hide TextButton;
 
 /// [Datepicker] shows a datepicker dialog for date and time selection.
 class Datepicker extends StatefulWidget {
@@ -74,9 +74,9 @@ class _DatepickerState extends State<Datepicker> {
 
   void initializeThemes() {
     FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
-    colorStruct = theme.primControl;
-    disabledColorStruct = theme.warnTheming;
-    errorColorStruct = theme.errorTheming;
+    colorStruct = theme.control;
+    disabledColorStruct = theme.warning;
+    errorColorStruct = theme.error;
     pageColorStruct = theme.page;
   }
 

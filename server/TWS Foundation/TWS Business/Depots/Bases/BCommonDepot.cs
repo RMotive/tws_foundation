@@ -483,7 +483,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                     processedQuery = OrderQuery(query, parameters.Orderings);
                     processedQuery = FilterQuery(processedQuery, parameters.Filters);
 
-                    return processedQuery;
+                    return processedQuery.AsTracking();
                 }
             );
 

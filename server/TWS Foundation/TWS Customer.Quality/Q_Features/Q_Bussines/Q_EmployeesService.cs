@@ -6,9 +6,7 @@ using CSM_Foundation.Database.Entity.Models.Output;
 using Microsoft.AspNetCore.Http;
 
 using TWS_Business.Depots;
-using TWS_Business.Entities;
 using TWS_Business.Entities.Employees;
-using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Features.Business;
 using TWS_Customer.Managers.Auth;
@@ -31,7 +29,7 @@ public class Q_EmployeesService
                 }
             );
 
-        IEmployeesDepot employeesDepot = new EmployeesDepot(businessDatabase, Disposer);
+        EmployeesDepot employeesDepot = new EmployeesDepot(businessDatabase, Disposer);
 
         return new EmployeesService(employeesDepot, authManager);
     }
@@ -40,7 +38,7 @@ public class Q_EmployeesService
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        await _depot!.Store(SampleEmployee(), true) ;
+        await _depot!.Store(SampleEmployee(), true);
         ViewOutput<Employee> viewOutput = await _service.View(
                 new QueryInput<Employee, ViewInput<Employee>> {
                     Parameters = new() {
