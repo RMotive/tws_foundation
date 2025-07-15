@@ -7,12 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="CSMS.Connection\quality.connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+  <ItemGroup>    
     <EmbeddedResource Include="CSMS.Connection\development.connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -29,20 +26,4 @@
   <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="CSMS.Connection\development.connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="CSMS.Connection\development_connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="CSMS.Connection\production_connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="CSMS.Connection\quality_connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

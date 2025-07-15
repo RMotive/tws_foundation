@@ -9,12 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TWSB.Connection\quality.connection.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="TWSB.Connection\quality.connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -37,10 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
     <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Q_Depots\Q_Validators\" />
   </ItemGroup>
 
 </Project>

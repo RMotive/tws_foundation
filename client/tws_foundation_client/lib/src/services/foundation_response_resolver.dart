@@ -17,6 +17,7 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
   T resolveDirect(T Function() objectBuilder) {
     T? result;
     responseController.resolve(
+    responseController.resolve(
       (DataMap data) {
         final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
         successFrame.decode(data);
@@ -26,7 +27,9 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
       (DataMap data, int statusCode) {
         final FailureFrame failureFrame = FailureFrame();
         failureFrame.decode(data);
-        throw TracedException('FailureException: server act resulted in failure $statusCode with (${failureFrame.content.system})', StackTrace.current);
+        throw TracedException(
+            'FailureException: server act resulted in failure $statusCode with (${failureFrame.content.system})',
+            StackTrace.current);
       },
       (TracedException exception) {
         throw exception;
@@ -62,6 +65,7 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
     required void Function() onConnectionFailure,
     void Function()? onFinally,
   }) {
+    responseController.resolve(
     responseController.resolve(
       (DataMap data) {
         final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
