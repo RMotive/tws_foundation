@@ -9,6 +9,7 @@ using CSM_Security.Entities;
 using Microsoft.AspNetCore.Http;
 
 using TWS_Customer.Features.Security;
+using TWS_Customer.Managers.Auth;
 using TWS_Customer.Services.Records;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Security;
@@ -28,7 +29,7 @@ public class Q_SecurityService
 
         IAccountsDepot accountsDepot = new AccountsDepot(securityDatabase, Disposer);
 
-        return new SecurityService(accountsDepot, new Managers.Session.AuthManager(), new HttpContextAccessor());
+        return new SecurityService(accountsDepot, new AuthManager(), new HttpContextAccessor());
     }
 
     #endregion

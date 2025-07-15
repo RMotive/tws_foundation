@@ -30,13 +30,14 @@ abstract class FoundationServiceB extends ServiceB {
   /// [authToken] custom {TWS} authorization token when [ServerI] controller requires it.
   ///
   /// [headers] request scope [Headers] object.
-  Future<ResponseController> postSecure<T extends EncodableI>(
+  Future<ResponseControllerI> postSecure<T extends EncodableI>(
     String action,
     T requestBody, {
     String? authToken,
     Map<String, dynamic>? headers,
   }) {
-    return post(action, requestBody, auth: '$authToken@${ContextConstants.sign}');
+    return post(action, requestBody,
+        auth: '$authToken@${ContextConstants.sign}');
   }
 
   /// Post network call to connected server overriding [ServiceI] built-in [post] behavior overriding
@@ -55,7 +56,7 @@ abstract class FoundationServiceB extends ServiceB {
   /// [authToken] custom {TWS} authorization token when [ServerI] controller requires it.
   ///
   /// [headers] request scope [Headers] object.
-  Future<ResponseController> postListSecure<T extends EncodableI>(
+  Future<ResponseControllerI> postListSecure<T extends EncodableI>(
     String act,
     List<T> request, {
     String? authToken,

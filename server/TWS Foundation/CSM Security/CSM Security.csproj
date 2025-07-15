@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CSMS.Connection\quality.connection.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="CSMS.Connection\development.connection.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
