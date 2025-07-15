@@ -1,7 +1,6 @@
 ﻿using System.Text;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Customer.Quality;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -9,6 +8,7 @@ using CSM_Security.Entities;
 using Microsoft.AspNetCore.Http;
 
 using TWS_Customer.Features.Security;
+using TWS_Customer.Managers.Auth;
 using TWS_Customer.Managers.Auth;
 using TWS_Customer.Services.Records;
 
@@ -28,8 +28,13 @@ public class Q_SecurityService
         CSM_Security.Database securityDatabase = SecurityDatabaseFactory();
 
         IAccountsDepot accountsDepot = new AccountsDepot(securityDatabase, Disposer);
+        IAuthManager authManager = new AuthManager(
+                new HttpContextAccessor {
+                    HttpContext = new DefaultHttpContext(),
+                }
+            );
 
-        return new SecurityService(accountsDepot, new AuthManager(), new HttpContextAccessor());
+        return new SecurityService(accountsDepot, authManager, new HttpContextAccessor());
     }
 
     #endregion

@@ -4,8 +4,11 @@ using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 
+using CSM_Security.Entities;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities;
@@ -27,6 +30,17 @@ public class DesignDatabaseFactory : IDesignTimeDbContextFactory<Database> {
     public Database CreateDbContext(string[] args) {
         return new Database();
     }
+}
+
+/// <summary>
+///     [Interface] for [TWS Business] database implementations.
+/// </summary>
+public interface IDatabase {
+
+    /// <summary>
+    ///     [Employee] [Entity] database Entity.
+    /// </summary>
+    DbSet<Employee> Employees { get; set; }
 }
 
 /// <summary>
@@ -69,7 +83,7 @@ public class Database
         : base(SIGN) {
     }
 
-    protected override void EvaluateCustom(CSM_Foundation.Database.Bases.BEntity entity, EntityTypeBuilder mBuilder) {
+    protected override void DefineSet(CSM_Foundation.Database.Bases.BEntity entity, EntityTypeBuilder mBuilder) {
         Type entityType = entity.GetType();
 
         bool HasCommonDefinition() {

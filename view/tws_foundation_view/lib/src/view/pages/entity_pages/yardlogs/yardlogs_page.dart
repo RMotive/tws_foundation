@@ -1,8 +1,9 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Route, Router, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/create_whisper/yardlogs_page_create_whisper.dart';
+import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/create_whisper/create_yardlogs_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
@@ -25,7 +26,7 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
       RouteWhisper<Object>(
         FoundationRoutes.yardlogsCreateWhisperRoute,
         whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext ctx, RouteData routeData) => YardLogsPageCreateWhisper(),
+        pageBuilder: (BuildContext ctx, RouteData routeData) => CreateYardLogsWhisper(),
       ),
     ];
   }
@@ -38,17 +39,43 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
   }
 
   @override
-  CategoryLayoutRibbonControllerI composeRibbonController(YardLogsEntityTableAdapter adapter) {
-    return CategoryLayoutRibbonController(
-      onRefresh: adapter.refresh,
-      dataManagementController: CategoryLayoutRibbonDataManagementGroupController(
-        onCreate: () {
-          Router router = Injector.get();
+  List<ActionsRibbonNodeI> composeRibbonController(YardLogsEntityTableAdapter adapter) {
+    return <ActionsRibbonNodeI>[
+      ActionsRisbbonRefresh(
+        onRefresh: adapter.refresh,
+      ),
 
-          router.go(FoundationRoutes.yardlogsCreateWhisperRoute);
+      ActionsRisbbonCreate(
+        onCanExecute: () async {
+          final List<UserFeedback> feedback = <UserFeedback>[];
+
+          SessionStorageI sessionStorage = Injector.get();
+          EmployeesServiceI employeesService = Injector.get();
+
+          String token = sessionStorage.token;
+
+          FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
+
+          Employee? userEmployee = responseResolver.resolveDirect(
+            () => Employee(),
+          );
+
+          if (userEmployee == null) {
+            feedback.add(
+              UserFeedback(
+                type: UserFeedbackType.error,
+                message: 'You need an Employee assigned to create a Yard Log.',
+              ),
+            );
+          }
+
+          return feedback;
+        },
+        onCreate: () {
+          Injector.get<Router>().go(FoundationRoutes.yardlogsPageRoute);
         },
       ),
-    );
+    ];
   }
 
   @override

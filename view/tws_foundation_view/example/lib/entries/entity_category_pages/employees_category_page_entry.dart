@@ -40,7 +40,7 @@ final class EmployeesCategoryPageEntry extends PackageLandingEntryB<LandingTheme
     );
 
     return CategoryLayout(
-      articles: <CategoryLayoutPageI>[
+      pages: <CategoryLayoutPageI>[
         categoryPage,
       ],
       routeData: routeData,

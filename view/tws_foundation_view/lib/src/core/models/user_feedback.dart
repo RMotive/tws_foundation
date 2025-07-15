@@ -20,8 +20,13 @@ enum UserFeedbackType {
 /// Data model class that stores an user feedback information object result from a server operation.
 final class UserFeedback {
   /// Feedback object type.
-  UserFeedbackType type = UserFeedbackType.message;
+  final UserFeedbackType type;
+
+  final String message;
 
   /// Creates a new [UserFeedback] instance.
-  UserFeedback();
+  UserFeedback({
+    this.type = UserFeedbackType.message,
+    required this.message,
+  });
 }

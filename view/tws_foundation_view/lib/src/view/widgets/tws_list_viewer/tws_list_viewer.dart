@@ -1,10 +1,9 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_display_flat.dart';
 
 part 'tws_list_viewer_body.dart';
 

@@ -69,7 +69,7 @@ public interface IEntity
 /// <summary>
 ///     [Interface] for [Entity] objects that have [Name].
 /// </summary>
-public interface INamedEntity {
+public interface INamedEntity : IEntity {
 
     /// <summary>
     ///     [Entity] name.
@@ -84,6 +84,18 @@ public interface INamedEntity {
     ///     [Entity] description.
     /// </summary>
     string? Description { get; set; }
+}
+
+/// <summary>
+///     Represents a business entity with a unique reference.
+/// </summary>
+public interface IReferencedEntity : IEntity {
+
+    /// <summary>
+    ///     Unique entity reference.
+    /// </summary>
+    [StringLength(8, MinimumLength = 8)]
+    public string Reference { get; set; }
 }
 
 /// <summary>

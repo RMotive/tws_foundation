@@ -42,17 +42,8 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
   }
 
   @override
-  CategoryLayoutRibbonControllerI composeRibbonController(EmployeesEntityTableAdatper adapter) {
-    return CategoryLayoutRibbonController(
-      onRefresh: adapter.refresh,
-      dataManagementController: CategoryLayoutRibbonDataManagementGroupController(
-        onCreate: () {
-          Router router = Injector.get<Router>();
-
-          router.go(FoundationRoutes.employeesCreateWhisperRoute);
-        },
-      ),
-    );
+  List<ActionsRibbonNodeI> composeRibbonController(EmployeesEntityTableAdatper adapter) {
+    return <ActionsRibbonNodeI>[];
   }
 
   @override

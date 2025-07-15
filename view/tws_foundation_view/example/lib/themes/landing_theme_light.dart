@@ -17,21 +17,25 @@ final class LandingThemeLight extends PackageLandingThemeLight
   String get businessLogo => _foundation.businessLogo;
 
   @override
-  SimpleTheming get errorTheming => _foundation.errorTheming;
+  SimpleTheming get error => _foundation.error;
 
   @override
-  SimpleTheming get warnTheming => _foundation.warnTheming;
+  SimpleTheming get warning => _foundation.warning;
 
   @override
-  SimpleTheming get succTheming => _foundation.succTheming;
+  SimpleTheming get success => _foundation.success;
 
   @override
-  SimpleTheming get primControl => _foundation.primControl;
+  SimpleTheming get control => _foundation.control;
+
+  @override
+  SimpleTheming get disabled => _foundation.disabled;
 
   @override
   SimpleTheming get navigationLayout => _foundation.navigationLayout;
+
   @override
-  EntityTableTheming get entityTableTheming => _foundation.entityTableTheming;
+  EntityTableTheming get entityTable => _foundation.entityTable;
 
   @override
   StateTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;

@@ -14,6 +14,8 @@ using CSM_Foundation.Server.Converters.JSON;
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
+using Microsoft.AspNetCore.Mvc.Formatters;
+
 using TWS_Business.Depots;
 using TWS_Business.Depots.Directories;
 using TWS_Business.Depots.Indicators;
@@ -73,7 +75,11 @@ public partial class Program {
             // Add services and overriding options to the container.
 
             builder.Logging.ClearProviders();
-            builder.Services.AddControllers()
+            builder.Services.AddControllers(
+                    (options) => {
+                        options.OutputFormatters.RemoveType<HttpNoContentOutputFormatter>();
+                    }
+                )
                 .AddJsonOptions(
                     (options) => {
                         options.JsonSerializerOptions.IncludeFields = true;
@@ -127,8 +133,6 @@ public partial class Program {
             // --> Adding customer services
             {
                 IServiceCollection services = builder.Services;
-
-
 
                 // --> Application
                 services.AddHttpContextAccessor();

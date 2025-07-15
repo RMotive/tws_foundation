@@ -20,15 +20,29 @@ export 'src/services/business/misc/addresses/addresses_service.dart';
 
 //* <-- [Services.Business.Misc]
 
+//* --> [Services.Business.Vehicules]
+
 /// [Services.Business.Vehicules.LoadTypes]
 export 'src/services/business/vehicules/load_types/load_type.dart';
 export 'src/services/business/vehicules/load_types/load_types_service.dart';
+
+/// [Services.Business.Vehicules.Trucks]
+export 'src/services/business/vehicules/trucks/truck.dart';
+export 'src/services/business/vehicules/trucks/truck_common.dart';
+export 'src/services/business/vehicules/trucks/truck_external.dart';
+export 'src/services/business/vehicules/trucks/truck_service.dart';
+
+//* <-- [Services.Business.Vehicules]
+
+//* --> [Services.Business.HumanResources]
 
 /// [Services.Business.HumanResources.Drivers]
 export 'src/services/business/human_resources/drivers/driver.dart';
 export 'src/services/business/human_resources/drivers/driver_common.dart';
 export 'src/services/business/human_resources/drivers/driver_external.dart';
 export 'src/services/business/human_resources/drivers/drivers_service.dart';
+
+//* <-- [Services.Business.HumanResources]
 
 //* <-- [Services.Business]
 
@@ -65,10 +79,6 @@ export 'src/services/business/vehicules/trailer_classes/trailer_class.dart';
 export 'src/services/business/vehicules/trailer_classes/trailer_classes_service.dart';
 export 'src/services/business/vehicules/trailer_types/trailer_type.dart';
 export 'src/services/business/vehicules/trailer_types/trailer_types_service.dart';
-export 'src/services/business/vehicules/trucks/truck.dart';
-export 'src/services/business/vehicules/trucks/truck_common.dart';
-export 'src/services/business/vehicules/trucks/truck_external.dart';
-export 'src/services/business/vehicules/trucks/truck_service.dart';
 export 'src/services/business/vehicules/vehicule_models/vehicule_model.dart';
 export 'src/services/business/vehicules/vehicule_models/vehicule_model_service.dart';
 

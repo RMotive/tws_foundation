@@ -68,8 +68,8 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
       ) {
         return Padding(
           padding: const EdgeInsets.all(10),
-          child: TWSDisplayFlat(
-            display: error == null ? 'No hay resultados' : "Problema al cargar",
+          child: MessageWidget(
+            text: error == null ? 'No hay resultados' : "Problema al cargar",
           ),
         );
       },

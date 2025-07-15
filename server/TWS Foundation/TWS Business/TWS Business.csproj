@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="TWSB.Connection\development.connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -24,24 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="TWSB.Connection\development.connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TWSB.Connection\development_connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TWSB.Connection\production_connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TWSB.Connection\development.connection.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TWSB.Connection\quality_connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\CSM Security\CSM Security.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
+import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {constant} defines the minimum width for the each options.
-const double _minOptionWidth = 125;
+const double _minOptionWidth = 75;
 
 /// {constant} stores the default spacing between items at the options selector inner [Wrap].
 const double _kDefItemSpacing = 10;
@@ -68,12 +69,20 @@ final class OptionsSelector<TValue> extends StatefulWidget {
   /// Label text size.
   final double fontSize;
 
+  /// Selector title.
+  final String title;
+
+  /// Whether the selection is optional, when it is and no selection, the [onSelect] callback will send and empty [List]<[TValue]>.
+  final bool optional;
+
   /// Creates a new [OptionsSelector] instance.
   const OptionsSelector({
     super.key,
     this.height,
     this.fontSize = 16,
     this.preSelected,
+    required this.title,
+    this.optional = false,
     this.isEnabled = true,
     this.multiSelection = false,
     this.hSpacing = _kDefItemSpacing,
@@ -96,6 +105,9 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
   /// {state} current selected options.
   late List<TValue> selection = widget.preSelected ?? <TValue>[];
 
+  /// {state} current application theme data.
+  late FoundationThemeB theme = Theming.get(context);
+
   @override
   void didUpdateWidget(covariant OptionsSelector<TValue> oldWidget) {
     if (oldWidget.preSelected != widget.preSelected) {
@@ -103,6 +115,13 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
     }
 
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    theme = Theming.get(context);
   }
 
   /// {event} triggered when the option items selection changes.
@@ -138,43 +157,87 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext layoutBuildContext, BoxConstraints boxConstraints) {
-        boxConstraints = boxConstraints.boxed();
-
-        double boxSpacing = (boxConstraints.maxWidth) - (widget.hSpacing * (widget.options.length - 1));
-
-        double optionWidth = (boxSpacing / widget.options.length) - (_kItemsPadding * 2);
-
-        if (optionWidth < _minOptionWidth) {
-          optionWidth = _minOptionWidth;
+    return FormField<List<TValue>>(
+      initialValue: selection,
+      validator: (List<TValue>? value) {
+        if ((value == null || value.isEmpty) && !widget.optional) {
+          return 'Must select an option';
         }
+        return null;
+      },
+      builder: (FormFieldState<List<TValue>> fieldState) {
+        return SectionWidget(
+          title: '${widget.optional ? '' : '*'}${widget.title}',
+          borderColor: fieldState.hasError ? theme.error.accent : null,
+          outterPadding: EdgeInsets.zero,
+          child: Padding(
+            padding: EdgeInsetsGeometry.only(
+              left: 8,
+              right: 8,
+              bottom: 8,
+            ),
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                /// --> Error message
+                if (fieldState.hasError)
+                  Text(
+                    fieldState.errorText ?? '---',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: theme.error.fore,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
 
-        
-        return SizedBox(
-          width: boxConstraints.maxWidth,
-          child: Wrap(
-            spacing: widget.hSpacing,
-            runSpacing: _kDefItemSpacing,
-            runAlignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: <Builder>[
-              for (int i = 0; i < widget.options.length; i++)
-                Builder(
-                  builder: (BuildContext context) {
-                    OptionsSelectorOption<TValue> option = widget.options[i];
+                /// --> Options box
+                LayoutBuilder(
+                  builder: (BuildContext layoutBuildContext, BoxConstraints boxConstraints) {
+                    boxConstraints = boxConstraints.boxed();
 
-                    return _OptionsSelectorItem(
-                      width: optionWidth,
-                      label: option.title,
-                      height: widget.height,
-                      fontSize: widget.fontSize,
-                      onSelect: () => onSelectionChange(option.value),
-                      selected: selection.contains(option.value),
+                    double boxSpacing = (boxConstraints.maxWidth) - (widget.hSpacing * (widget.options.length - 1));
+
+                    double optionWidth = (boxSpacing / widget.options.length) - (_kItemsPadding * 2);
+
+                    if (optionWidth < _minOptionWidth) {
+                      optionWidth = _minOptionWidth;
+                    }
+
+                    return SizedBox(
+                      width: boxConstraints.maxWidth,
+                      child: Wrap(
+                        spacing: widget.hSpacing,
+                        runSpacing: _kDefItemSpacing,
+                        runAlignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: <Builder>[
+                          for (int i = 0; i < widget.options.length; i++)
+                            Builder(
+                              builder: (BuildContext context) {
+                                OptionsSelectorOption<TValue> option = widget.options[i];
+
+                                return _OptionsSelectorItem(
+                                  width: optionWidth,
+                                  label: option.title,
+                                  height: widget.height,
+                                  fontSize: widget.fontSize,
+                                  onSelect: () {
+                                    fieldState.reset();
+                                    onSelectionChange(option.value);
+                                    fieldState.didChange(selection);
+                                  },
+                                  selected: selection.contains(option.value),
+                                );
+                              },
+                            ),
+                        ],
+                      ),
                     );
                   },
                 ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -226,13 +289,13 @@ final class _OptionsSelectorItemState extends State<_OptionsSelectorItem> {
   bool hovered = false;
 
   /// {state} current theme data.
-  late FoundationThemeB fountTheming = Theming.get<FoundationThemeB>(context);
+  late FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    fountTheming = Theming.get<FoundationThemeB>(context);
+    theme = Theming.get<FoundationThemeB>(context);
   }
 
   @override
@@ -248,14 +311,14 @@ final class _OptionsSelectorItemState extends State<_OptionsSelectorItem> {
       child: ColoredBox(
         color:
             widget.selected
-                ? fountTheming.page.accent
+                ? theme.page.accent
                 : hovered
-                ? fountTheming.page.accent.withValues(
+                ? theme.page.accent.withValues(
                   alpha: .3,
                 )
-                : fountTheming.page.back,
+                : theme.page.back,
         child: BorderedBox(
-          color: fountTheming.page.accent,
+          color: theme.page.accent,
           padding: EdgeInsets.all(_kItemsPadding),
           child: SizedBox(
             width: widget.width,
@@ -267,7 +330,7 @@ final class _OptionsSelectorItemState extends State<_OptionsSelectorItem> {
                 style: TextStyle(
                   fontSize: widget.fontSize,
                   fontWeight: FontWeight.w500,
-                  color: widget.selected ? fountTheming.page.foreAlt : fountTheming.page.fore,
+                  color: widget.selected ? theme.page.foreAlt : theme.page.fore,
                 ),
               ),
             ),

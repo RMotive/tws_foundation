@@ -102,7 +102,7 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends Sta
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    theming = Theming.get<FoundationThemeB>(context).primControl;
+    theming = Theming.get<FoundationThemeB>(context).control;
   }
 
   @override

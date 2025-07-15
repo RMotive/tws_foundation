@@ -305,6 +305,10 @@ namespace TWS_Business.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AccountShadow")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Account");
+
                     b.Property<long?>("AddressShadow")
                         .HasColumnType("bigint")
                         .HasColumnName("Address");
@@ -343,6 +347,10 @@ namespace TWS_Business.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountShadow")
+                        .IsUnique()
+                        .HasFilter("[Account] IS NOT NULL");
 
                     b.HasIndex("AddressShadow");
 
@@ -951,9 +959,6 @@ namespace TWS_Business.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("Reference")
                         .IsUnique();
