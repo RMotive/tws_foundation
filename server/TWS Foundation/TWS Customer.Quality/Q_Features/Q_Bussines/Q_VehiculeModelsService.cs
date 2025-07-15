@@ -7,6 +7,7 @@ using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Features.Business;
+using TWS_Customer.Features.Business.Vehicules;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_VehiculeModelsService

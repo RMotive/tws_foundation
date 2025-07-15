@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="CSMS.Connection\quality.connection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
