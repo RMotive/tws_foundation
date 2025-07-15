@@ -63,6 +63,7 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
           if (userEmployee == null) {
             feedback.add(
               UserFeedback(
+                type: UserFeedbackType.error,
                 message: 'You need an Employee assigned to create a Yard Log.',
               ),
             );

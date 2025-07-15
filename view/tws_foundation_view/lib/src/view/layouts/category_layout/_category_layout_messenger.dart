@@ -121,15 +121,20 @@ final class _MessageChipState extends State<_MessageChip> {
         onClick: onDismiss,
         child: BorderedBox(
           color: accentColor,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 14,
+          child: ColoredBox(
+            color: accentColor.withValues(
+              alpha: .8,
             ),
-            child: Text(
-              widget.messageData.message,
-              style: TextStyle(
-                fontSize: 17,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 14,
+              ),
+              child: Text(
+                widget.messageData.message,
+                style: TextStyle(
+                  fontSize: 17,
+                ),
               ),
             ),
           ),

@@ -49,12 +49,6 @@ final class Dialog extends StatefulWidget {
 ///
 /// Handles [State] for [Dialog] {widget}.
 final class _DialogState extends State<Dialog> {
-  /// {ref} theming effect reference.
-  final UniqueKey themingRef = UniqueKey();
-
-  /// {ref} {error} theming effect reference.
-  final UniqueKey errThemingRef = UniqueKey();
-
   /// {state} [Widget] control error theming options.
   late SimpleTheming errTheming;
 
@@ -68,9 +62,15 @@ final class _DialogState extends State<Dialog> {
   void initState() {
     ServicesBinding.instance.keyboard.addHandler(_escapeKeyHandler);
 
-    errTheming = Theming.get<FoundationThemeB>(context).error;
-
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    errTheming = Theming.get<FoundationThemeB>(context).error;
+    theming = Theming.get<FoundationThemeB>(context).control;
   }
 
   /// Handles a callback for [ServicesBinding] to listen when {keyboard} keys-up on {esc} key button, to close the dialog.
