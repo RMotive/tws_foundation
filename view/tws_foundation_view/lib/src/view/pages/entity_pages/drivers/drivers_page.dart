@@ -58,7 +58,16 @@ final class DriversCategoryPage extends EntityCategoryPageB<DriversEntityTableAd
   
   @override
   List<ActionsRibbonNodeI> composeRibbonController(DriversEntityTableAdatper adapter) {
-    return <ActionsRibbonNodeI>[];
+    return <ActionsRibbonNodeI>[
+      ActionsRisbbonRefresh(
+        onRefresh: adapter.refresh,
+      ),
+      ActionsRisbbonCreate(
+        onCreate: () {
+          Injector.get<Router>().go(FoundationRoutes.driversCreateWhisperRoute);
+        },
+      ),
+    ];
   }
 }
 
