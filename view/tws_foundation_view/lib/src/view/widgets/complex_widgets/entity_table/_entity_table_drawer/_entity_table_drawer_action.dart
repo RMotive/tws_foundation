@@ -28,12 +28,11 @@ final class _EntityTableDrawerAction extends StatefulWidget {
   State<_EntityTableDrawerAction> createState() => _EntityTableDrawerActionState();
 }
 
-class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
-  /// {ref} to bind current [State] controlling theming effecting.
-  final UniqueKey themingEffectRef = UniqueKey();
-
+/// Handles [State] for [_EntityTableDrawer].
+final class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
+  
   /// {state} [FoundationThemeB.page] theming reference.
-  late FoundationThemeB foundationTheming;
+  late FoundationThemeB foundationTheming = Theming.get(context);
 
   /// {state} current calcualted button fore color.
   late Color foreColor;
@@ -44,13 +43,17 @@ class _EntityTableDrawerActionState extends State<_EntityTableDrawerAction> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     foundationTheming = Theming.get(context);
-
     foreColor = widget.fore ?? foundationTheming.page.accent;
     backColor = foundationTheming.entityTable.drawerActionBackground;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Tooltip(
