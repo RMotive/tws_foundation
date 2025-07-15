@@ -403,8 +403,8 @@ packages:
     dependency: "direct main"
     description:
       path: "client/tws_foundation_client"
-      ref: "71-feature-yardlogs"
-      resolved-ref: "6fc214305f4f227746a24abc4791c013cbaf4d87"
+      ref: "66-feature-drivers"
+      resolved-ref: "6cb541b145bada57eb1e2dc19bd9d5efde039366"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

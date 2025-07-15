@@ -45,10 +45,4 @@ public class Q_SitutationsController
         Assert.Equal(1, Estela.Page);
         Assert.True(Estela.Pages > 0);
     }
-
-        ViewOutput<Situation> Estela = Framing<SuccessFrame<ViewOutput<Situation>>>(Response).Content;
-        Assert.True(Estela.Entities.Length > 0);
-        Assert.Equal(1, Estela.Page);
-        Assert.True(Estela.Pages > 0);
-    }
 }

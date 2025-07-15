@@ -1,5 +1,4 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Situation] default builder.
@@ -12,9 +11,6 @@ final class Situation extends NamedEntityB<Situation> {
   /// Unique identificator reference.
   String reference = "";
 
-  /// [Status] navigation set.
-  Status status = Status();
-
   /// Generates a new [Situation] instance from mandatory values.
   Situation();
 
@@ -23,7 +19,6 @@ final class Situation extends NamedEntityB<Situation> {
     return super.encode(
       <String, Object?>{
         FoundationCommonPropertyKeys.kReference: reference,
-        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -32,9 +27,6 @@ final class Situation extends NamedEntityB<Situation> {
   void decode(DataMap encode) {
     super.decode(encode);
     reference = encode.get(FoundationCommonPropertyKeys.kReference);
-
-    DataMap dmStatus = encode.get(FoundationCommonPropertyKeys.kStatus);
-    status.decode(dmStatus);
   }
 
   @override
@@ -49,8 +41,6 @@ final class Situation extends NamedEntityB<Situation> {
       }
       if (description!.trim().isEmpty) results.add(EntityInvalidation<Situation>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
     }
-
-    results.validateDependency(this, status);
     return results;
   }
 }
