@@ -188,6 +188,25 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends Sta
                     width: sizeFactor.width,
                     recordReactors: recordReactors,
                     recordDesigner: widget.recordDesigner!,
+                    onAdd: () {
+                      setState(() {
+                        CreateEntityFormRecordReactor<TEntity> record = CreateEntityFormRecordReactor<TEntity>(
+                          widget.entityFactory(),
+                        );
+                        currRecordReactor = record;
+                        recordReactors.add(record);
+                      });
+                    },
+                    onRemove: () {
+                      setState(() {
+                        recordReactors.remove(currRecordReactor);
+                      });
+                    },
+                    onSelect:(CreateEntityFormRecordReactor<TEntity> selected) {
+                      setState(() {
+                        currRecordReactor = selected;
+                      });
+                    },
                   ),
                 ),
             ],
