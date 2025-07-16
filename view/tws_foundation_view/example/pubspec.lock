@@ -404,7 +404,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: development
-      resolved-ref: f5952a4421c7de5ee2ee7517452bd4f3d22b2c99
+      resolved-ref: "95814882c97ac45c4ae7d24025c94223aab42eb6"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"
