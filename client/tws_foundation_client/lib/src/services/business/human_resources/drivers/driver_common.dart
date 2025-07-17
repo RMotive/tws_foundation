@@ -5,7 +5,8 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {entity} class.
 ///
 /// Represents a common entity model for [Driver] and [DriverExternal].
-final class DriverCommon extends EntityB<DriverCommon> {
+final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExternal>
+    implements EncodableI, EntityI<DriverCommon> {
   /// [DriverCommon.license] property key access for [DataMap].
   static const String kLicense = "license";
 
@@ -26,12 +27,6 @@ final class DriverCommon extends EntityB<DriverCommon> {
 
   /// [Situation] information.
   Situation situation = Situation();
-
-  /// [Driver] information.
-  Driver? internal;
-
-  /// [DriverExternal] information.
-  DriverExternal? external;
 
   //! <-- Relations
 
@@ -60,11 +55,8 @@ final class DriverCommon extends EntityB<DriverCommon> {
   @override
   void decode(DataMap encode) {
     license = encode.get(kLicense);
-
     status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
     situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation) ?? situation;
-    internal = encode.getEntity(() => Driver(), FoundationCommonPropertyKeys.kInternal);
-    external = encode.getEntity(() => DriverExternal(), FoundationCommonPropertyKeys.kExternal);
 
     super.decode(encode);
   }
@@ -76,8 +68,7 @@ final class DriverCommon extends EntityB<DriverCommon> {
         kLicense: license,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
         FoundationCommonPropertyKeys.kSituation: situation.encode(),
-        FoundationCommonPropertyKeys.kInternal: internal?.encode(),
-        FoundationCommonPropertyKeys.kExternal: external?.encode(),
+
       },
     );
   }
@@ -115,5 +106,15 @@ final class DriverCommon extends EntityB<DriverCommon> {
     if (external != null) invalidations.validateDependency(this, external!);
 
     return invalidations;
+  }
+  
+  @override
+  DriverExternal externalFactory() {
+    return DriverExternal();
+  }
+  
+  @override
+  Driver internalFactory() {
+    return Driver();
   }
 }
