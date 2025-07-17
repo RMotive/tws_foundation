@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
-/// Represents an external driver, wich are commonly third party businesses with alliances.
+/// This class represents the contact information in the human resources domain.
 final class Approach extends EntityB<Approach> {
   /// [Approach.email] property key for [DataMap].
   static const String kEmail = "email";
@@ -23,35 +23,34 @@ final class Approach extends EntityB<Approach> {
   /// Email address for the contact/approach.
   String? email;
 
-  /// enterprise phone number.
+  /// Enterprise phone number.
   String? enterprise;
 
-  /// personal phone number.
+  /// Personal phone number.
   String? personal;
 
   /// Alternative contact method.
   String? alternative;
 
-
   //! <-- Properties
 
   //! --> Relations
 
-  /// [Status] information.
+  /// [Status] Data.
   Status status = Status();
 
   //! <-- Relations
 
-  /// Creates a new [Approach] instance.
+  /// Creates a new instance.
   Approach();
 
   @override
   void decode(DataMap encode) {
     status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
-    email = encode.get(kEmail, null);
-    enterprise = encode.get(kEnterprise, null);
-    personal = encode.get(kPersonal, null);
-    alternative = encode.get(kAlternative, null);
+    email = encode.get(kEmail);
+    enterprise = encode.get(kEnterprise);
+    personal = encode.get(kPersonal);
+    alternative = encode.get(kAlternative);
     super.decode(encode);
   }
 
@@ -59,6 +58,10 @@ final class Approach extends EntityB<Approach> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
       <String, Object?>{
+        kEmail: email,
+        kEnterprise: enterprise,
+        kPersonal: personal,
+        kAlternative: alternative,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
