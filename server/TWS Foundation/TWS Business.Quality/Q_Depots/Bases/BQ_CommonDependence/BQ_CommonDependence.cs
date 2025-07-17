@@ -3,6 +3,8 @@ using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Quality.Q_Depots.Bases;
 
 /// <summary>

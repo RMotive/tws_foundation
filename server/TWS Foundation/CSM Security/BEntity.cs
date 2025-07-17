@@ -9,8 +9,9 @@ namespace CSM_Security;
 ///     Usage must be exclusively for [CSM Security] entities.
 /// </remarks>
 public abstract class BEntity
-    : CSM_Foundation.Database.Bases.BEntity {
+    : CSM_Foundation.Database.BEntity {
 
     [JsonIgnore]
     public override Type Database { get; init; } = typeof(Database);
 }
+

@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
 
 using TWS_Business.Depots.Bases;
@@ -17,8 +17,8 @@ namespace TWS_Business.Depots.Vehicles;
 /// </remarks>
 public interface ITrucksDepot
     : IDepot<Truck_Common> {
-
 }
+
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Truck"/> dataDatabases entity mirror.

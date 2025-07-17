@@ -1,9 +1,8 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
 
 using TWS_Business.Depots.Bases;
 using TWS_Business.Entities.Vehicules.Trailers;
-using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities.Trailers;
 

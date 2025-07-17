@@ -2,8 +2,8 @@
 
 using CSM_Foundation.Core.Constants;
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database;
 
 namespace TWS_Customer.Services.Exceptions;
 public class XSetOperation<TSet>

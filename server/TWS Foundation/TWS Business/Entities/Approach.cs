@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +9,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Vehicules;
 
+using BEntity = TWS_Business.Bases.BEntity;
+
 namespace TWS_Business.Entities;
 
 /// <summary>
 ///     [Entity] Stores contact information for business purposes.
 /// </summary>
 public class Approach
-    : BEntity, IHistorical<Approach_History> {
+    : BEntity {
 
     #region Properties
 

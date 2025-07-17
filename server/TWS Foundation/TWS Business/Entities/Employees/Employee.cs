@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using CSM_Security.Entities;
@@ -11,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Drivers;
+
+using BEntity = TWS_Business.Bases.BEntity;
 
 namespace TWS_Business.Entities.Employees;
 
@@ -94,7 +95,7 @@ public class Employee
     /// </summary>
     [Relation]
     public Driver? Driver { get; set; }
-    
+
     /// <summary>
     ///     <see cref="CSM_Security.Entities.Account"/> information.
     /// </summary>

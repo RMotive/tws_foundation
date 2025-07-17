@@ -1,17 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
 using TWS_Business.Quality.Q_Depots.Q_Validators;
+
+using BEntity = TWS_Business.Bases.BEntity;
 
 namespace TWS_Business.Entities;
 

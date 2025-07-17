@@ -1,4 +1,6 @@
-﻿using TWS_Business.Entities;
+﻿using CSM_Foundation.Database.Entity.Bases;
+
+using TWS_Business.Entities;
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Vehicules;
@@ -16,9 +18,9 @@ namespace TWS_Business.Quality.Q_Depots.Q_Validators;
 [AttributeUsage(AttributeTargets.Property)]
 public abstract class BAdapterAttribute<TCommon, TInternal, TExternal>
     : Attribute
-    where TCommon : CommonEntity<TInternal, TExternal>
-    where TInternal : CommonEntityEdge<TCommon>
-    where TExternal : CommonEntityEdge<TCommon> {
+    where TCommon : ICommonEntity<TInternal, TExternal>
+    where TInternal : ICommonScopeEntity
+    where TExternal : ICommonScopeEntity {
 
     public abstract TCommon CreateInternal(string entropy);
 
@@ -319,7 +321,7 @@ public class QualityTrailerAdapterAttribute
 
                };
 
-        
+
         TrailerExternal trailerExternal =
                 new TrailerExternal {
                     Carrier = entropy,

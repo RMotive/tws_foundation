@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TWSB.Connection\development.connection.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="TWSB.Connection\development.connection.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

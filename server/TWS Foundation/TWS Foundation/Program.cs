@@ -3,7 +3,8 @@ using System.Text.Json.Serialization;
 
 using CSM_Foundation.Core;
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;

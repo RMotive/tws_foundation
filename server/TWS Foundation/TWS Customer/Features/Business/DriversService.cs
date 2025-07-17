@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
 
@@ -31,7 +30,7 @@ public class DriversService
     /// <param name="Depot">
     ///     <see cref="Driver_Common"/> based [Depot] handler to be used.
     /// </param>
-    public DriversService(DriversDepot Depot, Database Database) : base(Depot) { 
+    public DriversService(DriversDepot Depot, Database Database) : base(Depot) {
         this._db = Database;
     }
 

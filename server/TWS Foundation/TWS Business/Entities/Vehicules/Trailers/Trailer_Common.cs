@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 ///     [Entity] that stores common information along Trailers. (<see cref="Trailer"/> / <see cref="TrailerExternal"/>).
 /// </summary>
 public class Trailer_Common
-    : CommonEntity<Trailer, TrailerExternal> {
+    : Bases.BCommonEntity<Trailer, TrailerExternal> {
 
     #region Properties
 
@@ -89,7 +89,7 @@ public class Trailer_Common
 
     #endregion
 
-    protected override void CommonDesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Trailers_Commons");
 
         etBuilder.Property(nameof(Economic)).HasMaxLength(16).IsRequired();

@@ -3,7 +3,8 @@ using TWS_Business.Entities;
 
 namespace TWS_Business.Quality.Q_Depots;
 
-public class Q_Locations : BQ_Business<Location, LocationsDepot> {
+public class Q_Locations
+    : BQ_Business<Location, LocationsDepot> {
 
     protected override Location EntityFactory(string Entropy) {
 

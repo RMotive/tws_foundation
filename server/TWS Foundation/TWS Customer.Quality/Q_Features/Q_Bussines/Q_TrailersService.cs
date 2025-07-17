@@ -25,10 +25,25 @@ public class Q_TrailersService
 
     public static readonly TheoryData<bool> testingValues = [true, false];
 
-    [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
-    public async Task View() {
+    #region Private Methods/Functions
+    Trailer_Common EntityFactory(bool internalValue) {
+        Trailer_Common common = new() {
+            Economic = Entropy[..16],
+            Status = SampleStatus("tcm"),
+            Situation = SampleSituation(),
+            Internal = internalValue ? null : null,
+            External = internalValue ? null : null,
+        };
+        return common;
+    }
+    #endregion
+
+    [Theory(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
+    [MemberData(nameof(testingValues))]
+    public async Task View(bool internalValue) {
         // Create a sample to prevent empty view results.
-        await _depot!.Store(SampleTrailerCommon(true), true);
+        SampleTrailerCommon(internalValue);
+
         ViewOutput<Trailer_Common> viewOutput = await _service.View(
                 new QueryInput<Trailer_Common, ViewInput<Trailer_Common>> {
                     Parameters = new() {
@@ -40,8 +55,8 @@ public class Q_TrailersService
             );
 
         Assert.Multiple(
-            () => Assert.True(viewOutput.Pages > 0),
-            () => Assert.True(viewOutput.Length > 0),
+            () => Assert.True(viewOutput.Pages > 0, "There must be more than 0 View Pages"),
+            () => Assert.True(viewOutput.Length > 0, "View Entities result can't be empty"),
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
         );
@@ -79,6 +94,4 @@ public class Q_TrailersService
         );
 
     }
-
-
 }

@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 

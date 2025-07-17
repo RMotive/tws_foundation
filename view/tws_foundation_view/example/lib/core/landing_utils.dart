@@ -11,7 +11,7 @@ final class LandingUtils {
     SecurityServiceI securityService = Injector.get();
 
     FoundationResponseResolver<SessionData> resResolver = await securityService.authenticate(
-      AuthenticationInput.a('TWSFV', 'qly_runner', 'qlyrunner\$2024'.bytes),
+      AuthenticationInput.a('TWSMF', 'local_user', 'local_user'.bytes),
     );
 
     SessionData sessionData = resResolver.resolveDirect(

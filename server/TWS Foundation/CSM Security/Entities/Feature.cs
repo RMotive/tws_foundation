@@ -9,12 +9,9 @@ namespace CSM_Security.Entities;
 ///     only for authorization purposes.
 /// </summary>
 public class Feature
-    : BEntity, INamedEntity {
+    : BNamedEntity {
 
     #region Properties
-
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
 
     /// <summary>
     ///     Wheter it's enabled.

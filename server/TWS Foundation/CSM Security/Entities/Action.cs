@@ -8,11 +8,9 @@ namespace CSM_Security.Entities;
 ///     [Entity] that represents the information for certain actions/operations to be performed to the Solutions.
 /// </summary>
 public class Action
-    : BEntity, INamedEntity {
+    : BNamedEntity {
 
     #region Properties
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
 
     /// <summary>
     ///     Wheter the <see cref="Action"/> is enabled.

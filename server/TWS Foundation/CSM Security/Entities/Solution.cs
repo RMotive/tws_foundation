@@ -9,12 +9,9 @@ namespace CSM_Security.Entities;
 ///     [Entity] that stores information for business environment solution.
 /// </summary>
 public class Solution
-    : BEntity, INamedEntity {
+    : BNamedEntity {
 
     #region Properties
-
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
 
     /// <summary>
     ///     Solution unique sign to reference easyly the solution along operations.

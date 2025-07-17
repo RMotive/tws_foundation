@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Text.Json;
 
 using CSM_Foundation.Core;
-using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Server;

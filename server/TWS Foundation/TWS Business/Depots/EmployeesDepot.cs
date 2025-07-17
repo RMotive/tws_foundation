@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
 
 using TWS_Business.Entities.Employees;
@@ -10,7 +10,6 @@ namespace TWS_Business.Depots;
 /// </summary>
 public interface IEmployeesDepot
     : IDepot<Employee> {
-
 }
 
 /// <summary>

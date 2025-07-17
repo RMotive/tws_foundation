@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 
 using CSM_Foundation.Core.Extensions;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database;
 using CSM_Foundation.Logging;
 
 using Microsoft.EntityFrameworkCore;

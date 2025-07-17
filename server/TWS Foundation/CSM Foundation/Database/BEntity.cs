@@ -1,31 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 using CSM_Foundation.Convertion;
+using CSM_Foundation.Core.Bases;
+using CSM_Foundation.Database.Validations;
 
-namespace CSM_Foundation.Database.Entity;
+namespace CSM_Foundation.Database;
 
 /// <summary>
-///     Interface to determine the required behavior for a [Database] Entity, this concept (Entity) referrs to a
-///     table in the [Database] storage system specifying the base properties and methods that the implementation
-///     must have.
+///     Represents a tenant business live stored entity model, that usually are objects wich data are grouped by bound that 
+///     instrinsictly defines their own.
 /// </summary>
 public interface IEntity
     : IConverterVariation {
 
     /// <summary>
-    ///     Stores the <see cref="Type"/> for the database owning from this <see cref="IEntity"/> implementation.
+    ///     Type of the <see cref="IDatabase"/> implementation that stores this <see cref="IEntity"/> implementation.
     /// </summary>
-    [JsonIgnore]
+    [JsonIgnore, NotMapped]
     Type Database { get; init; }
 
     /// <summary>
-    ///     Base unique [Database] property to identify the record easily.
+    ///     Unique data storages direct pointer identifier.
     /// </summary>
     long Id { get; set; }
 
     /// <summary>
-    ///     The exact moment where the record was created and stored in the storage system. 
+    ///     Time mark for the last time this <see cref="IEntity"/> got created and stored into data storage sources.
     /// </summary>
     DateTime Timestamp { get; set; }
 
@@ -67,46 +69,65 @@ public interface IEntity
 }
 
 /// <summary>
-///     [Interface] for [Entity] objects that have [Name].
+///     Represents a tenant business live stored entity model, that usually are objects wich data are grouped by bound that 
+///     instrinsictly defines their own.
+///     
+///     <para>
+///         This abtract base provides { CSM } built-in behaviors for a very low level <see cref="IEntity"/> implementation
+///     </para>
 /// </summary>
-public interface INamedEntity : IEntity {
+public abstract partial class BEntity
+    : BObject<IEntity>, IEntity {
+
+    #region Server Side Properties
+
+    [NotMapped, JsonPropertyOrder(0)]
+    public string Discriminator { get; init; }
+
+    [NotMapped, JsonIgnore]
+    public abstract Type Database { get; init; }
+
+    #endregion
+
+
+    public long Id { get; set; }
+
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    ///     [Entity] name.
+    ///     Creates a new instance.
     /// </summary>
-    /// <remarks>
-    ///     This property must be unique along entities and have length constraint ( >= 1 && <= 100)
-    /// </remarks>
-    [StringLength(100, MinimumLength = 1)]
-    string Name { get; set; }
+    public BEntity() {
+        Discriminator = $"{GetType().GUID}";
+    }
 
-    /// <summary>
-    ///     [Entity] description.
-    /// </summary>
-    string? Description { get; set; }
-}
+    protected void Evaluate() {
 
-/// <summary>
-///     Represents a business entity with a unique reference.
-/// </summary>
-public interface IReferencedEntity : IEntity {
+        foreach (PropertyInfo property in GetType().GetProperties()) {
 
-    /// <summary>
-    ///     Unique entity reference.
-    /// </summary>
-    [StringLength(8, MinimumLength = 8)]
-    public string Reference { get; set; }
-}
+            IEnumerable<BValidator> attributes = property.GetCustomAttributes<BValidator>();
+            if (!attributes.Any())
+                return;
 
-/// <summary>
-///     [Converter] concept implementation for complex data structures that are derived from <see cref="IEntity"/>, this converter manager must
-///     be injected into the [JsonSerializerOptions] from you server implementation.
-/// </summary>
-public class EntityConverter
-    : BConverter<IEntity> {
+            foreach (BValidator validator in attributes) {
+                try {
+                    validator.Evaluate(this);
+                } catch {
 
-    public EntityConverter(Type[] variations) 
-        : base(variations) {
+                }
+            }
+        }
+    }
 
+    public void EvaluateRead() {
+        Evaluate();
+    }
+
+    public void EvaluateWrite() {
+        Evaluate();
+    }
+
+    public Exception[] EvaluateDefinition() {
+        return [];
     }
 }

@@ -11,7 +11,7 @@ using TWS_Foundation.Middlewares.Frames;
 
 namespace TWS_Foundation.Quality.Q_Controllers.Business;
 public class Q_DriversController
-    : BQ_FoundationServerController<Driver_Common> {
+    : BQ_Controller<Driver_Common> {
 
     /// <summary>
     /// 

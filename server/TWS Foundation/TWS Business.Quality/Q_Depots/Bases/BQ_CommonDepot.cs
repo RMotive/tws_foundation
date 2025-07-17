@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 
-using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
@@ -15,19 +14,15 @@ using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 
-using Microsoft.EntityFrameworkCore;
-
 using TWS_Business.Depots.Bases;
-
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TWS_Business.Quality.Q_Depots.Bases;
 
 public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot, TDatabase>
     : BQ_CommonDataHandler
-    where TCommon : CommonEntity<TInternalEdge, TExternalEdge>, new()
-    where TInternalEdge : CommonEntityEdge<TCommon>
-    where TExternalEdge : CommonEntityEdge<TCommon>
+    where TCommon : class, ICommonEntity<TInternalEdge, TExternalEdge>, new()
+    where TInternalEdge : class, ICommonScopeEntity<TCommon>
+    where TExternalEdge : class, ICommonScopeEntity<TCommon>
     where TDepot : BCommonDepot<TDatabase, TInternalEdge, TExternalEdge, TCommon>
     where TDatabase : BDatabase_SQLServer<TDatabase> {
 
@@ -664,7 +659,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                     Parameters = new UpdateInput<TCommon> {
                         Entity = sample,
                     },
-                    
+
                 }
                     );
                 }

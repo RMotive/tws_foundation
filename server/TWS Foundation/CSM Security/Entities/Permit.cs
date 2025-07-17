@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ namespace CSM_Security.Entities;
 ///     [Entity] that stores and handles specific Feature / Solution / Action authorization for Accounts.
 /// </summary>
 public class Permit
-    : BEntity {
+    : BNamedEntity {
 
     #region Properties
 

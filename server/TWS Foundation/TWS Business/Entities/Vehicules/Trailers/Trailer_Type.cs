@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using BEntity = TWS_Business.Bases.BEntity;
 
 namespace TWS_Business.Entities.Vehicules.Trailers;
 

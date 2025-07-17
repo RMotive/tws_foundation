@@ -2,7 +2,7 @@
 using CSM_Foundation.Server.Exceptions;
 
 using Microsoft.Extensions.Primitives;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database;
 
 namespace TWS_Foundation.Middlewares;
 

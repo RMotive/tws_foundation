@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
 
@@ -14,7 +15,7 @@ namespace TWS_Business.Entities.Vehicules.Trucks;
 ///     [Entity] that represents a physical <see cref="Truck"/> for business operations.
 /// </summary>
 public class Truck
-    : CommonEntityEdge<Truck_Common>, IHistorical<Truck_History> {
+    : BCommonScopeEntity<Truck_Common> {
 
     #region Properties
 
@@ -92,7 +93,7 @@ public class Truck
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Motor)).HasMaxLength(16);
         etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsRequired();
 

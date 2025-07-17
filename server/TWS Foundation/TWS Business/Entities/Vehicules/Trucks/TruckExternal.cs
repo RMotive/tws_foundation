@@ -3,6 +3,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Entities.Vehicules.Trucks;
 
 /// <summary>
@@ -12,7 +14,7 @@ namespace TWS_Business.Entities.Vehicules.Trucks;
 ///     for entry control or movement calulations.
 /// </summary>
 public class TruckExternal
-    : CommonEntityEdge<Truck_Common> {
+    : BCommonScopeEntity<Truck_Common> {
 
     #region Properties
 
@@ -42,7 +44,7 @@ public class TruckExternal
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Trucks_Externals");
 
         etBuilder.Property(nameof(Carrier)).HasMaxLength(100).IsRequired();

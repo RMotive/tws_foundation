@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
 
+using BEntity = TWS_Business.Bases.BEntity;
+
 namespace TWS_Business.Entities.Vehicules;
 
 /// <summary>
 ///     [Entity] that stores information about legal vehicule plates in own posession.
 /// </summary>
 public class Plate
-    : BEntity, IHistorical<Plate_History> {
+    : BEntity {
 
     #region Properties
 

@@ -11,26 +11,34 @@ using TWS_Foundation.Middlewares.Frames;
 
 namespace TWS_Foundation.Quality.Q_Controllers.Business;
 
+/// <summary>
+///     Represents a testing suit class for { Situations } feature server controller.
+///     
+///     <para>
+///         Situations are representations of entities specific event states for business data management purposes. 
+///     </para>
+/// </summary>
 public class Q_SitutationsController
-    : BQ_FoundationServerController<Situation> {
+    : BQ_Controller<Situation> {
 
     /// <summary>
-    /// 
+    ///     Creates a new instance.
     /// </summary>
-    /// <param name="controllerPath"></param>
-    /// <param name="hostFactory"></param>
+    /// <param name="hostFactory">
+    ///     Fixture proxy application factory dependency.
+    /// </param>
     public Q_SitutationsController(WebApplicationFactory<Program> hostFactory)
         : base("/Situations", hostFactory) {
     }
 
-    protected override Situation EntityFactory(string RandomSeed) {
+    protected override Situation EntityFactory(string entropyValue) {
         return new Situation() {
-            Name = RandomSeed,
-            Description = RandomSeed,
+            Name = entropyValue,
+            Description = entropyValue,
         };
     }
 
-    [Fact]
+    [Fact(DisplayName = $"[View]: Requests a simple 1 page, 10 range View.")]
     public async Task View() {
         (HttpStatusCode Status, ResponseSchema Response) = await Post("View", new ViewInput<Situation> {
             Page = 1,

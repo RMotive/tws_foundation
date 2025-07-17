@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CSM_Foundation.Database.Entity;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Vehicules.Trailers;
+
+using BNamedReferencedEntity = TWS_Business.Bases.BNamedReferencedEntity;
 
 namespace TWS_Business.Entities.Vehicules;
 
@@ -13,20 +11,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [etBuilder] that stores information about a specific type of load for <see cref="Trailer"/> loading information.
 /// </summary>
 public class LoadType
-    : BEntity, IReferencedEntity {
-
-    #region Properties
-
-    [StringLength(100, MinimumLength = 1)]
-    public string Name { get; set; } = default!;
-
-    [StringLength(maximumLength: 200)]
-    public string? Description { get; set; }
-
-    [StringLength(8, MinimumLength = 8)]
-    public string Reference { get; set; } = default!;
-
-    #endregion
+    : BNamedReferencedEntity {
 
     #region Dependants
 
@@ -44,7 +29,7 @@ public class LoadType
             .HasMaxLength(8)
             .IsRequired()
             .IsFixedLength();
-        
+
         etBuilder
             .HasIndex(nameof(Reference))
             .IsUnique();

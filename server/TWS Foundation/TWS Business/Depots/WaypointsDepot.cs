@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity;
 using TWS_Business.Entities;
+using CSM_Foundation.Database;
 
 namespace TWS_Business.Depots;
 

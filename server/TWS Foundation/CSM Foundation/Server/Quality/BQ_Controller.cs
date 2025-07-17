@@ -12,18 +12,14 @@ namespace CSM_Foundation.Server.Quality;
 
 
 /// <summary>
-///     <see langword="abstract"/> class for <see cref="BQ_Controller{T}"/>.
-///     
-///     <para> 
-///         Defines base behavior and contract for <see cref="BQ_Controller{T}"/> implementations that defines classes for quality/testing purposes, handle members for a better <see cref="ControllerBase"/> implementation testing.
-///     </para>
+///     Represents a base testing suit for server controller, providing base behavior to handle network requests and quality of responses.
 /// </summary>
-/// <typeparam name="T">
-///     Entry class that starts your server project usually known as Program.
+/// <typeparam name="TProgram">
+///     Type of the application entry class.
 /// </typeparam>
-public abstract class BQ_Controller<T>
-    : IClassFixture<WebApplicationFactory<T>>
-    where T : class {
+public abstract class BQ_Controller<TProgram>
+    : IClassFixture<WebApplicationFactory<TProgram>>
+    where TProgram : class {
 
     /// <summary>
     ///     Internal JSON serializer options.
@@ -34,26 +30,26 @@ public abstract class BQ_Controller<T>
     ///     Server communication client internal manager object.
     /// </summary>
     readonly QM_ServerHost _serverHost;
-    
+
     /// <summary>
     ///     Service path to be qualified.
     /// </summary>
-    readonly string _controllerPath;
+    protected readonly string controllerPath;
 
     /// <summary>
-    ///     Creates a new <see cref="BQ_Controller{T}"/> instance.
+    ///     Creates a new instance.
     /// </summary>
     /// <param name="controllerPath">
-    ///     Relate path to the controller(service) used for simplified paths building at requests time.
+    ///     Controller's path.
     /// </param>
     /// <param name="solutionSign">
-    ///     Internal {CSM} management solution sign identifier, used to identify {Solution} information, metadata, security params, etc.
+    ///     Internal { CSM } management solution sign identifier, used to identify { Solution } information, metadata, security params, etc.
     /// </param>
     /// <param name="applicationFactory">
-    ///     Built-in <see cref="IClassFixture{TFixture}"/> application building for server simulation.
+    ///     Fixture proxy application factory dependency.
     /// </param>
-    protected BQ_Controller(string controllerPath, string solutionSign, WebApplicationFactory<T> applicationFactory) {
-        _controllerPath = controllerPath;
+    protected BQ_Controller(string controllerPath, string solutionSign, WebApplicationFactory<TProgram> applicationFactory) {
+        this.controllerPath = controllerPath;
 
         _serverHost = new(solutionSign, applicationFactory.CreateClient());
 
@@ -143,7 +139,7 @@ public abstract class BQ_Controller<T>
             _serverHost.Authenticate(authToken);
         }
         if (!unrelative) {
-            endpoint = $"{_controllerPath}/{endpoint}";
+            endpoint = $"{controllerPath}/{endpoint}";
         }
 
         _serverHost.Disposition(disposition);

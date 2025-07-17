@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
@@ -16,14 +16,16 @@ using CSM_Foundation.Database.Utilitites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Depots.Bases;
 
 public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     : IDepot<TCommon>
     where TDatabase : BDatabase_SQLServer<TDatabase>
-    where TCommon : CommonEntity<TInternal, TExternal>, new()
-    where TInternal : CommonEntityEdge<TCommon>
-    where TExternal : CommonEntityEdge<TCommon> {
+    where TCommon : class, ICommonEntity<TInternal, TExternal>, new()
+    where TInternal : class, ICommonScopeEntity<TCommon>
+    where TExternal : class, ICommonScopeEntity<TCommon> {
 
     /// <summary>
     /// 
@@ -296,8 +298,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         TInternal? internalRelation = entity.Internal;
         TExternal? externalRelation = entity.External;
 
-        entity.Internal = null;
-        entity.External = null;
+        entity.Internal = default;
+        entity.External = default;
 
         entity = DatabaseUtilities.SanitizeEntity(_db, entity);
 
@@ -661,7 +663,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// </param>
     /// <returns></returns>
     /// <remarks>
-    ///     Always the record to be overriden will be defined by the <see cref="IEntity.Id"/> property, if isn't given, will try with <see cref="INamedEntity.Name"/> property in case the
+    ///     Always the record to be overriden will be defined by the <see cref="IEntity.Id"/> property, if isn't given, will try with <see cref="BNamedEntity.Name"/> property in case the
     ///     [Entity] implementation does have it, otherwise will finally create a new record with the given values.
     /// </remarks>
     /// <exception cref="XDepot{TCommon}">

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,22 +7,15 @@ using TWS_Business.Entities.USDOTs;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
 
+using BNamedEntity = TWS_Business.Bases.BNamedEntity;
+
 namespace TWS_Business.Entities.Vehicules;
 
 /// <summary>
 ///     [Entity] that stores information about a carrying company.
 /// </summary>
 public class Carrier
-    : BEntity, INamedEntity, IHistorical<Carrier_History> {
-
-    #region Properties
-    [StringLength(100)]
-    public string Name { get; set; } = string.Empty;
-
-    [StringLength(maximumLength: 200)]
-    public string? Description { get; set; }
-
-    #endregion
+    : BNamedEntity {
 
     #region Relations
 

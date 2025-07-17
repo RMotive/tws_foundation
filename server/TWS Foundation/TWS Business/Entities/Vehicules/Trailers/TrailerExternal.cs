@@ -3,13 +3,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Entities.Vehicules.Trailers;
 
 /// <summary>
 ///     [Entity] that stores information about not business managed trailers, are external trailers with minimal control.
 /// </summary>
 public class TrailerExternal
-    : CommonEntityEdge<Trailer_Common> {
+    : BCommonScopeEntity<Trailer_Common> {
 
     #region Properties
 
@@ -33,7 +35,7 @@ public class TrailerExternal
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Trailers_Externals");
 
         etBuilder.Property(nameof(Carrier)).HasMaxLength(100).IsRequired();
