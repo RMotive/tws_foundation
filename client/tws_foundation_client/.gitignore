@@ -9,7 +9,7 @@
 pubspec.lock
 
 # Avoid commiting test scoped configurations (usually holding sensitive data)
-test_configs.dart*
+test/test_configs.dart*
 
 # Avoid commiting doc gen files.
 doc/

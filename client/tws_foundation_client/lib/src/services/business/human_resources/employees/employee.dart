@@ -28,10 +28,7 @@ final class Employee extends EntityB<Employee> {
   /// [Employee.approach] property key.
   static const String kApproach = "approach";
 
-  /// [Employee.status] property key.
-  static const String kStatus = "status";
-
-  /// [Employee.nss] property key.
+  /// [Employee.dates] property key.
   static const String kEmployeeDates = "dates";
 
   //! --> Properties

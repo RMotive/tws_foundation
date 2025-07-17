@@ -5,8 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {entity} class.
 ///
 /// Represents a common entity model for [Driver] and [DriverExternal].
-final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExternal>
-    implements EncodableI, EntityI<DriverCommon> {
+final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExternal> {
   /// [DriverCommon.license] property key access for [DataMap].
   static const String kLicense = "license";
 
