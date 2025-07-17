@@ -72,7 +72,7 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
           return feedback;
         },
         onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.yardlogsPageRoute);
+          Injector.get<Router>().go(FoundationRoutes.yardlogsCreateWhisperRoute);
         },
       ),
     ];
