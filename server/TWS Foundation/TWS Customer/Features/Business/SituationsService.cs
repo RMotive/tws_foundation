@@ -1,7 +1,11 @@
 ﻿using CSM_Foundation.Customer;
+using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Output;
 
+using TWS_Business;
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;
 
@@ -16,7 +20,9 @@ public interface ISituationsService
 ///     [Service] for <see cref="Situation"/> based operations.
 /// </summary>
 public class SituationsService
-    : BService<Situation, ISituationsDepot>, ISituationsService {
+    : BService<Situation, SituationsDepot>, ISituationsService {
+
+    private readonly Database _db;
 
     /// <summary>
     ///     Creates a new instance of <see cref="SituationsService"/>.
@@ -24,5 +30,32 @@ public class SituationsService
     /// <param name="Depot">
     ///     <see cref="Situation"/> based [Depot] handler to be used.
     /// </param>
-    public SituationsService(ISituationsDepot Depot) : base(Depot) { }
+    public SituationsService(SituationsDepot Depot, Database Database) : base(Depot) {
+        this._db = Database;
+    }
+
+    public async override Task<BatchOperationOutput<Situation>> Create(Situation[] Entities, bool Sync = false) {
+        Situation[] successes = [];
+        EntityOperationFailure<Situation>[] failures = [];
+
+        foreach (Situation entity in Entities) {
+            try {
+                Situation attachedEntity = await _depot.Store(entity);
+                successes = [.. successes, attachedEntity];
+            } catch (Exception excep) {
+                if (Sync) {
+                    throw;
+                }
+
+                EntityOperationFailure<Situation> fail = new(entity, excep);
+                failures = [.. failures, fail];
+            }
+        }
+
+        _db.SaveChanges();
+
+        BatchOperationOutput<Situation> output = new(successes, failures);
+
+        return output;
+    }
 }

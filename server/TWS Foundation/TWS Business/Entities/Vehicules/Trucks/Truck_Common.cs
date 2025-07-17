@@ -76,7 +76,7 @@ public class Truck_Common
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void CommonDesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Economic)).HasMaxLength(16).IsRequired();
 
         etBuilder.Link<Truck_Common, Location>(

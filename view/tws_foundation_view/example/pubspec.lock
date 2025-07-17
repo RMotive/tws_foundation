@@ -403,8 +403,8 @@ packages:
     dependency: "direct main"
     description:
       path: "client/tws_foundation_client"
-      ref: development
-      resolved-ref: f5952a4421c7de5ee2ee7517452bd4f3d22b2c99
+      ref: "66-feature-drivers"
+      resolved-ref: e0c7605aaa06003a428c9c9f1c513b7f3222efef
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

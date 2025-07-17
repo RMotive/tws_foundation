@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
@@ -68,7 +69,7 @@ final class Driver extends EntityB<Driver> {
 
   /// TODO: Define.
   ///
-  /// Length must be 12.
+  /// Length must be 1 to 12 characters.
   String? driverType;
 
   /// Driver's license expiration date.
@@ -147,6 +148,118 @@ final class Driver extends EntityB<Driver> {
 
   @override
   List<EntityInvalidation<Driver>> evaluate() {
-    return <EntityInvalidation<Driver>>[];
+    List<EntityInvalidation<Driver>> invalidations = <EntityInvalidation<Driver>>[];
+    if (id < BigInt.zero) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
+
+    if ((fast!.trim().isEmpty || fast!.length != 24)) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kFast, String, fast),
+          'Lenght must be 24 characters',
+          'strictLength(24)',
+        ),
+      );
+    }
+
+    if ((twic!.trim().isEmpty || twic!.length != 12)) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kTwic, String, twic),
+          'Lenght must be 12 characters',
+          'strictLength(12)',
+        ),
+      );
+    }
+
+    if ((visa!.trim().isEmpty || visa!.length != 24)) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kVisa, String, visa),
+          'Lenght must be 24 characters',
+          'strictLength(24)',
+        ),
+      );
+    }
+
+    if ((anam!.trim().isEmpty || anam!.length != 24)) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kAnam, String, anam),
+          'Lenght must be 24 characters',
+          'strictLength(24)',
+        ),
+      );
+    }
+
+    if ((driverType!.trim().isEmpty || driverType!.length != 12)) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kDriverType, String, driverType),
+          'Lenght must be 12 characters',
+          'strictLength(12)',
+        ),
+      );
+    }
+    if(twicExpiration != null && twic == null) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kTwicExpiration, DateTime, twicExpiration),
+          'Twic expiration date cannot be set if TWIC is not set',
+          'fieldConflict()',
+        ),
+      );
+    }
+
+    if(visaExpiration != null && visa == null) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kVisaExpiration, DateTime, visaExpiration),
+          'Visa expiration date cannot be set if VISA is not set',
+          'fieldConflict()',
+        ),
+      );
+    }
+
+    if(fastExpiration != null && fast == null) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kFastExpiration, DateTime, fastExpiration),
+          'Fast expiration date cannot be set if FAST is not set',
+          'fieldConflict()',
+        ),
+      );
+    }
+
+    if(anamExpiration != null && anam == null) {
+      invalidations.add(
+        EntityInvalidation<Driver>(
+          this,
+          PropertyInfo(kAnamExpiration, DateTime, anamExpiration),
+          'Anam expiration date cannot be set if ANAM is not set',
+          'fieldConflict()',
+        ),
+      );
+    }
+
+    invalidations.validateDependency(this, employee);
+
+   return invalidations;
   }
 }

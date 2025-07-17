@@ -3,8 +3,6 @@
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Server.Scheming;
 
-using CSM_Security.Entities;
-
 using Microsoft.AspNetCore.Mvc.Testing;
 
 using TWS_Business.Entities;
@@ -30,7 +28,7 @@ public class Q_SitutationsController
     ///     Fixture proxy application factory dependency.
     /// </param>
     public Q_SitutationsController(WebApplicationFactory<Program> hostFactory)
-        : base("Situations", hostFactory) {
+        : base("/Situations", hostFactory) {
     }
 
     protected override Situation EntityFactory(string entropyValue) {

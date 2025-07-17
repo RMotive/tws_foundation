@@ -132,6 +132,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
       if (selection.isEmpty) {
         setState(() {
           selection.add(selValue);
+          widget.onSelect(selection);
         });
         return;
       }
@@ -142,6 +143,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
 
       setState(() {
         selection = <TValue>[selValue];
+        widget.onSelect(selection);
       });
       return;
     }
@@ -152,6 +154,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
       } else {
         selection.add(selValue);
       }
+      widget.onSelect(selection);
     });
   }
 

@@ -6,7 +6,7 @@ using TWS_Business.Quality.Q_Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots;
 
-public class Q_Trailers_Commons : BQ_Common<Trailer_Common, Trailer, TrailerExternal, TrailersDepot> {
+public class Q_Trailers_Commons : BQ_CommonDepot<Trailer_Common, Trailer, TrailerExternal, TrailersDepot> {
 
     protected override Trailer_Common EntityFactory(string Entropy) {
 
@@ -19,7 +19,7 @@ public class Q_Trailers_Commons : BQ_Common<Trailer_Common, Trailer, TrailerExte
                }
            );
 
-        Trailer_Common common = new Trailer_Common {
+        Trailer_Common common = new() {
             Economic = Entropy,
             Status = statusTRL,
         };
@@ -29,7 +29,7 @@ public class Q_Trailers_Commons : BQ_Common<Trailer_Common, Trailer, TrailerExte
 
     protected override TrailerExternal ExternalFactory(string Entropy) {
 
-        TrailerExternal trailerExternal = new TrailerExternal {
+        TrailerExternal trailerExternal = new() {
             Carrier = Entropy,
             MxPlate = Entropy[..7],
         };
@@ -70,7 +70,7 @@ public class Q_Trailers_Commons : BQ_Common<Trailer_Common, Trailer, TrailerExte
                }
           );
 
-        Trailer trailer = new Trailer {
+        Trailer trailer = new() {
             Carrier = carrier,
             Plates = [
                    Store(

@@ -13,11 +13,23 @@ final class _CreateEntityFormRecordsColumn<TEntity extends EntityI<TEntity>> ext
   /// State values for added items.
   final List<CreateEntityFormRecordReactor<TEntity>> recordReactors;
 
+  /// Callback to add a new item.
+  final void Function() onAdd;
+
+  /// Callback to remove the current item.
+  final void Function() onRemove;
+
+  /// Callback to select the current item.
+  final void Function(CreateEntityFormRecordReactor<TEntity> selected) onSelect;
+
   /// Creates a new [_CreateEntityFormRecordsColumn] instance.
   const _CreateEntityFormRecordsColumn({
     required this.width,
     required this.recordReactors,
     required this.recordDesigner,
+    required this.onAdd,
+    required this.onRemove,
+    required this.onSelect,
   });
 
   @override
@@ -75,7 +87,10 @@ final class _CreateEntityFormRecordsColumnState<TEntity extends EntityI<TEntity>
                 ),
                 // --> Add item action
                 PointerArea(
-                  onClick: () {},
+                  onClick:() {
+                    currRecordIdx = recordReactors.length;
+                    widget.onAdd();
+                  },
                   cursor: SystemMouseCursors.click,
                   child: Icon(
                     Icons.add_circle,
@@ -85,7 +100,7 @@ final class _CreateEntityFormRecordsColumnState<TEntity extends EntityI<TEntity>
                 ),
                 // --> Remove selection
                 PointerArea(
-                  onClick: () {},
+                  onClick: widget.onRemove,
                   cursor: SystemMouseCursors.click,
                   child: Icon(
                     Icons.remove_circle,
@@ -122,10 +137,12 @@ final class _CreateEntityFormRecordsColumnState<TEntity extends EntityI<TEntity>
                     controller: ctrl,
                     itemBuilder: (BuildContext buildContext, int index) {
                       final bool currentActive = currRecordIdx == index;
-
                       return PointerArea(
                         cursor: currentActive ? MouseCursor.defer : SystemMouseCursors.click,
-                        onClick: () {},
+                        onClick: () {
+                          currRecordIdx = index;
+                          widget.onSelect(recordReactors[index]);                          
+                        },
                         child: ReactiveWidget<CreateEntityFormRecordReactor<TEntity>>(
                           reactor: recordReactors[index],
                           builder: (BuildContext ctx, CreateEntityFormRecordReactor<TEntity> recordReactor) {

@@ -1,6 +1,10 @@
 ﻿using CSM_Foundation.Customer;
+using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Output;
 
+using TWS_Business;
 using TWS_Business.Depots.Vehicles;
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;
@@ -16,7 +20,9 @@ public interface ICarriersService
 ///     [Service] for <see cref="Carrier"/> based operations.
 /// </summary>
 public class CarriersService
-    : BService<Carrier, ICarriersDepot>, ICarriersService {
+    : BService<Carrier, CarriersDepot>, ICarriersService {
+
+    private readonly Database _db;
 
     /// <summary>
     ///     Creates a new instance of <see cref="CarriersService"/>.
@@ -24,5 +30,32 @@ public class CarriersService
     /// <param name="Depot">
     ///     <see cref="Carrier"/> based [Depot] handler to be used.
     /// </param>
-    public CarriersService(ICarriersDepot Depot) : base(Depot) { }
+    public CarriersService(CarriersDepot Depot, Database database) : base(Depot) {
+        this._db = database;
+    }
+
+    public async override Task<BatchOperationOutput<Carrier>> Create(Carrier[] Entities, bool Sync = false) {
+        Carrier[] successes = [];
+        EntityOperationFailure<Carrier>[] failures = [];
+
+        foreach (Carrier entity in Entities) {
+            try {
+                Carrier attachedEntity = await _depot.Store(entity);
+                successes = [.. successes, attachedEntity];
+            } catch (Exception excep) {
+                if (Sync) {
+                    throw;
+                }
+
+                EntityOperationFailure<Carrier> fail = new(entity, excep);
+                failures = [.. failures, fail];
+            }
+        }
+
+        _db.SaveChanges();
+
+        BatchOperationOutput<Carrier> output = new(successes, failures);
+
+        return output;
+    }
 }

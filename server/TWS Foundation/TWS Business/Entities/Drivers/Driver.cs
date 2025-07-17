@@ -44,7 +44,7 @@ public class Driver
     /// <summary>
     ///     Driver type name.
     /// </summary>
-    [StringLength(12, MinimumLength = 12)]
+    [StringLength(12, MinimumLength = 1)]
     public string? DriverType { get; set; }
 
     /// <summary>

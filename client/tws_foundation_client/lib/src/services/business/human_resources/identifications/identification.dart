@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
@@ -60,6 +61,12 @@ final class Identification extends EntityB<Identification> {
 
   @override
   List<EntityInvalidation<Identification>> evaluate() {
-    return <EntityInvalidation<Identification>>[];
+    List<EntityInvalidation<Identification>> results = <EntityInvalidation<Identification>>[];
+    if (id < BigInt.zero) results.add(EntityInvalidation<Identification>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    if (name.trim().isEmpty || name.length > 32) results.add(EntityInvalidation<Identification>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 32 max length", "structLength(32)"));
+    if (lastName.trim().isEmpty || name.length > 32) results.add(EntityInvalidation<Identification>(this, PropertyInfo(kLastName, String, lastName), "Name must be 32 max length", "structLength(32)"));
+    results.validateDependency(this, status);
+
+    return results;
   }
 }

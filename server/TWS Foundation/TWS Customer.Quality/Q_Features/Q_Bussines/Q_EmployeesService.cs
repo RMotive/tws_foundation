@@ -6,7 +6,6 @@ using CSM_Foundation.Database.Entity.Models.Output;
 using Microsoft.AspNetCore.Http;
 
 using TWS_Business.Depots;
-using TWS_Business.Entities;
 using TWS_Business.Entities.Employees;
 
 using TWS_Customer.Features.Business;
@@ -17,9 +16,8 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_EmployeesService
     : BQ_ServicesCustomer<IEmployeesService> {
-    public Q_EmployeesService() {
 
-    }
+    private EmployeesDepot? _depot;
 
     #region [BQ_Service] implementations
     protected override IEmployeesService ServiceFactory() {
@@ -31,48 +29,16 @@ public class Q_EmployeesService
                 }
             );
 
-        IEmployeesDepot employeesDepot = new EmployeesDepot(businessDatabase, Disposer);
+       _depot = new EmployeesDepot(businessDatabase, Disposer);
 
-        return new EmployeesService(employeesDepot, authManager);
-    }
-    #endregion
-
-    #region Private Methods/Functions
-    Employee EntityFactory() {
-        DateOnly date = new(2030, 11, 11);
-
-        Identification identification = Store(
-                 new Identification {
-                     Name = Entropy,
-                     LastName = Entropy,
-                     Status = SampleStatus("ide"),
-                 }
-            );
-
-        Employee_Dates employee_Dates = Store(
-                new Employee_Dates {
-                    CNAP = date,
-                    IMSS = date,
-                    Hire = date,
-                    Termination = date,
-                }
-            );
-
-        return new Employee {
-            CURP = Entropy + Entropy[..2],
-            RFC = Entropy[..13],
-            NSS = Entropy[..11],
-            Status = SampleStatus("emp"),
-            Identification = identification,
-            Dates = employee_Dates,
-        };
+        return new EmployeesService(_depot, authManager, businessDatabase);
     }
     #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        SampleEmployee();
+        await _depot!.Store(SampleEmployee(), true);
         ViewOutput<Employee> viewOutput = await _service.View(
                 new QueryInput<Employee, ViewInput<Employee>> {
                     Parameters = new() {
@@ -94,9 +60,9 @@ public class Q_EmployeesService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Employee> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleEmployee(),
+                SampleEmployee(),
+                SampleEmployee()
             ]);
 
         Assert.Multiple(
@@ -109,7 +75,7 @@ public class Q_EmployeesService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Employee changedEntity = SampleEmployee();
+        Employee changedEntity = await _depot!.Store(SampleEmployee(), true);
         changedEntity.RFC = "updated_RFC" + Entropy[..2];
         UpdateOutput<Employee> updateOutput = await _service.Update(new UpdateInput<Employee> {
             Entity = changedEntity,
@@ -125,8 +91,7 @@ public class Q_EmployeesService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Employee sample = SampleEmployee();
-
+        Employee sample = await _depot!.Store(SampleEmployee(), true);
         Employee deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
@@ -136,13 +101,13 @@ public class Q_EmployeesService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Employee sample = SampleEmployee();
+        Employee[] samples = [
+           await _depot!.Store(SampleEmployee(), true),
+            await _depot!.Store(SampleEmployee(), true),
+            await _depot!.Store(SampleEmployee(), true)
+           ];
 
-        BatchOperationOutput<Employee> batchOutput = await _service.Delete([
-                SampleEmployee(),
-                SampleEmployee(),
-                SampleEmployee()
-            ]);
+        BatchOperationOutput<Employee> batchOutput = await _service.Delete(samples);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

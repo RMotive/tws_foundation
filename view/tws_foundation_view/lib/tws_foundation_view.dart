@@ -57,6 +57,10 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/yard_logs_enti
 /// [Employees Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/employees_entity_table.dart';
 
+/// [Drivers Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/drivers_entity_table.dart';
+
+
 //! <-- Entity Tables
 
 
@@ -87,6 +91,9 @@ export 'src/view/pages/entity_pages/yardlogs/yardlogs_page.dart';
 
 /// [Employees Page]
 export 'src/view/pages/entity_pages/employees/employees_page.dart';
+
+/// [Drivers Page]
+export 'src/view/pages/entity_pages/drivers/drivers_page.dart';
 
 //! <-- Entity Pages
 

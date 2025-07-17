@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
@@ -113,13 +114,13 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     private TCommon WrappedFactory(string entropy, bool isInternal) {
         TCommon common = EntityFactory(entropy);
-        if(isInternal) {
+        if (isInternal) {
             common.Internal = InternalFactory(entropy);
         } else {
             common.External = ExternalFactory(entropy);
         }
 
-         return common;
+        return common;
     }
 
     /// <summary>
@@ -128,13 +129,13 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     /// <param name="SampleEntities"></param>
     protected async Task CommitSampleEntities(ICollection<TCommon> SampleEntities) {
         await Database.SaveChangesAsync();
-        foreach(TCommon common in SampleEntities.Reverse()) {
+        foreach (TCommon common in SampleEntities.Reverse()) {
             TInternalEdge? internalRelation = common.Internal;
             TExternalEdge? externalRelation = common.External;
 
             common.Internal = null;
             common.External = null;
-            
+
             Disposer.Push(common);
 
             if (internalRelation != null) {
@@ -143,7 +144,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
             }
 
             Disposer.Push(externalRelation!);
-           
+
         }
     }
 
@@ -222,7 +223,6 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     }
 
     #endregion
-
 
     #region Q_Base View
 
@@ -407,7 +407,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                                 Filters = [..filters],
                             },
                         ],
-                    }
+                    },
                 }
             );
         Assert.All(
@@ -511,11 +511,11 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
         BatchOperationOutput<TCommon> readEntites = await Depot.Read(
                new QueryInput<TCommon, FilterQueryInput<TCommon>>() {
-                     Parameters = new FilterQueryInput<TCommon> {
-                         Behavior = FilteringBehaviors.Last,
-                         Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
-                     }
-                 }
+                   Parameters = new FilterQueryInput<TCommon> {
+                       Behavior = FilteringBehaviors.Last,
+                       Filter = (entity) => entity.Id == samplePivot.Id || entity.Id == samples[0].Id
+                   }
+               }
             );
 
         Assert.Multiple(
@@ -601,7 +601,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     [Theory(DisplayName = "[Create]: Multiple records created")]
     [CommonFactData]
     public async Task CreateB(bool DefaultEdge) {
-        TCommon[] samples = Sampling(3, DefaultEdge);        
+        TCommon[] samples = Sampling(3, DefaultEdge);
 
         BatchOperationOutput<TCommon> qOut = await Depot.Create(samples);
         await CommitSampleEntities(samples);
@@ -616,7 +616,6 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     }
 
     #endregion
-
 
     #region Q_Base Update
 
@@ -660,6 +659,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                     Parameters = new UpdateInput<TCommon> {
                         Entity = sample,
                     },
+                    
                 }
                     );
                 }
@@ -724,7 +724,6 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     #endregion
 
-
     #region Q_Base Delete
 
     [Fact(DisplayName = $"[Delete Entity]: Using Id throws Unfound situation exception")]
@@ -754,5 +753,4 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
 
     #endregion
-
 }
