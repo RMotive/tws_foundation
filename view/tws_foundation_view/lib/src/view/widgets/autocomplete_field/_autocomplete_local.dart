@@ -1,4 +1,4 @@
-part of 'entity_finder_selector.dart';
+part of 'autocomplete_field.dart';
 
 class _TWSAutocompleteNative<T> extends StatelessWidget {
   final ScrollController controller;

@@ -7,8 +7,8 @@ import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 
-/// [TWSCascadeSection] Shows a custom main control widget with a colapsable content section.
-class TWSCascadeSection extends StatefulWidget {
+/// [CascadeSection] Shows a custom main control widget with a colapsable content section.
+class CascadeSection extends StatefulWidget {
   /// Section title.
   final String title;
 
@@ -33,27 +33,22 @@ class TWSCascadeSection extends StatefulWidget {
   /// Prevents the content to be rebuilded on press the cascade button.
   final bool preserveContent;
 
-  const TWSCascadeSection({
+  const CascadeSection({
     super.key,
     required this.title,
     required this.mainControl,
     required this.loadOnPress,
     this.tooltip,
     this.preserveContent = true,
-    this.padding = const EdgeInsets.symmetric(vertical: 10),
+    this.padding = const EdgeInsets.all(10),
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
   });
 
   @override
-  State<TWSCascadeSection> createState() => _TWSCascadeSectionState();
+  State<CascadeSection> createState() => _CascadeSectionState();
 }
 
-class _TWSCascadeSectionState extends State<TWSCascadeSection> {
-  /// Theme Manager injector.
-  late final ThemeManager themeManager = ThemeManager.of(context);
-
-  /// Theme reference key.
-  final UniqueKey ref = UniqueKey();
+class _CascadeSectionState extends State<CascadeSection> {
 
   /// Color pallet for the component.
   late SimpleTheming colorStruct;
@@ -71,10 +66,9 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   /// Widget cascade content;
   late Widget content;
 
-  void themeUpdateListener(FoundationThemeB theme) {
-    setState(() {
-      colorStruct = theme.control;
-    });
+  void initializeThemes() {
+    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    colorStruct = theme.control;
   }
 
   void showCascade() async {
@@ -94,6 +88,14 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
     waiting = false;
     state.react();
   }
+  
+  @override
+  void didChangeDependencies() {
+    initializeThemes();
+    super.didChangeDependencies();
+  }
+
+
 
   @override
   void initState() {
@@ -106,52 +108,54 @@ class _TWSCascadeSectionState extends State<TWSCascadeSection> {
   @override
   Widget build(BuildContext context) {
     return SectionWidget(
-      outterPadding: widget.padding,
       title: widget.title,
-      child: Column(
-        spacing: 10,
-        children: <Widget>[
-          Row(
-            spacing: 10,
-            mainAxisAlignment: widget.mainAxisAlignment,
-            children: <Widget>[
-              widget.mainControl,
-              IconButton(
-                hoverColor: colorStruct.fore,
-                isSelected: show,
-                selectedIcon: const Icon(Icons.remove),
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                    colorStruct.accentAlt ?? colorStruct.accent,
+      child: Padding(
+        padding: widget.padding,
+        child: Column(
+          spacing: 10,
+          children: <Widget>[
+            Row(
+              spacing: 10,
+              mainAxisAlignment: widget.mainAxisAlignment,
+              children: <Widget>[
+                widget.mainControl,
+                IconButton(
+                  hoverColor: colorStruct.fore,
+                  isSelected: show,
+                  selectedIcon: const Icon(Icons.remove),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(
+                      colorStruct.accentAlt ?? colorStruct.accent,
+                    ),
                   ),
+                  padding: EdgeInsets.zero,
+                  tooltip: widget.tooltip,
+                  color: Colors.white,
+                  iconSize: 32,
+                  onPressed: showCascade,
+                  icon: const Icon(Icons.add),
                 ),
-                padding: EdgeInsets.zero,
-                tooltip: widget.tooltip,
-                color: Colors.white,
-                iconSize: 32,
-                onPressed: showCascade,
-                icon: const Icon(Icons.add),
-              ),
-            ],
-          ),
-          Visibility(
-            visible: show,
-            child: ReactiveWidget<TWSFStateHolder>(
-              reactor: state,
-              builder: (BuildContext ctx, TWSFStateHolder state) {
-                stateEffect = state.react();
-                print('effect...');
-                return Visibility(
-                  visible: !waiting,
-                  replacement: LoadingWidget(
-                    foreColor: colorStruct.accentAlt ?? colorStruct.accent,
-                  ),
-                  child: content,
-                );
-              },
+              ],
             ),
-          ),
-        ],
+            Visibility(
+              visible: show,
+              child: ReactiveWidget<TWSFStateHolder>(
+                reactor: state,
+                builder: (BuildContext ctx, TWSFStateHolder state) {
+                  stateEffect = state.react();
+                  print('effect...');
+                  return Visibility(
+                    visible: !waiting,
+                    replacement: LoadingWidget(
+                      foreColor: colorStruct.accentAlt ?? colorStruct.accent,
+                    ),
+                    child: content,
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

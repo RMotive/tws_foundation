@@ -29,9 +29,9 @@ public class Q_EmployeesService
                 }
             );
 
-        EmployeesDepot employeesDepot = new EmployeesDepot(businessDatabase, Disposer);
+       _depot = new EmployeesDepot(businessDatabase, Disposer);
 
-        return new EmployeesService(employeesDepot, authManager);
+        return new EmployeesService(_depot, authManager, businessDatabase);
     }
     #endregion
 

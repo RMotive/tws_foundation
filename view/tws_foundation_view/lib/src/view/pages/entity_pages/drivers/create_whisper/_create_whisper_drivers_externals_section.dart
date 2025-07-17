@@ -3,11 +3,11 @@ part of 'drivers_page_create_whisper.dart';
 class _CreateWhisperDriversExternalsSection extends StatelessWidget {
   final CreateEntityFormRecordReactor<DriverCommon>? itemState;
 
-  final bool isEnabled;
+  final bool isDisabled;
 
   const _CreateWhisperDriversExternalsSection({
     required this.itemState,
-    required this.isEnabled,
+    required this.isDisabled,
   });
 
   @override
@@ -19,7 +19,7 @@ class _CreateWhisperDriversExternalsSection extends StatelessWidget {
         /// --> Driver License
         TextInput(
           label: 'Name',
-          isEnabled: isEnabled,
+          isEnabled: isDisabled,
           controller: TextEditingController(
             text: itemState?.entity.external?.identification.name,
           ),

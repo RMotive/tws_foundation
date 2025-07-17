@@ -23,7 +23,7 @@ class Datepicker extends StatefulWidget {
   /// Optional Text controller.
   final TextEditingController? controller;
   /// Defines if the user can interact with the widget.
-  final bool isEnabled;
+  final bool isDisabled;
   /// show the prefix icon or not.
   final bool enablePrefix;
   /// Callback that return the selected options in the datepicker dialog.
@@ -45,7 +45,7 @@ class Datepicker extends StatefulWidget {
     this.hintText,
     this.focusNode,
     this.enablePrefix = true,
-    this.isEnabled = true,
+    this.isDisabled = true,
     this.controller,
     this.onChanged,
     this.validator,
@@ -65,8 +65,6 @@ class _DatepickerState extends State<Datepicker> {
   late TextEditingController ctrl;
   late final FocusNode fNode;
 
-  /// Theme reference key.
-  final UniqueKey ref = UniqueKey();
   late SimpleTheming colorStruct;
   late SimpleTheming disabledColorStruct;
   late SimpleTheming errorColorStruct;
@@ -101,6 +99,7 @@ class _DatepickerState extends State<Datepicker> {
 
     ctrl.addListener(() => setState(() {}));
   }
+  
   @override
   void didChangeDependencies() {
     initializeThemes();
@@ -125,7 +124,7 @@ class _DatepickerState extends State<Datepicker> {
             validator: widget.validator,
             controller: ctrl,
             focusNode: fNode,
-            enabled: widget.isEnabled,
+            enabled: widget.isDisabled,
             cursorOpacityAnimates: true,
             cursorWidth: 3,
             cursorColor: colorStruct.fore,

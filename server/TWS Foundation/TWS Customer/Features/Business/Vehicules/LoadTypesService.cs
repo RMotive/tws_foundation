@@ -3,7 +3,6 @@ using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business;
-using TWS_Business.Depots;
 using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Vehicules;
@@ -31,8 +30,8 @@ public class LoadTypesService
     /// <param name="Depot">
     ///     <see cref=""/> based [Depot] handler to be used.
     /// </param>
-    public LoadTypesService(LoadTypesDepot Depot, Database Database) : base(Depot) { 
-        this._db= Database;
+    public LoadTypesService(LoadTypesDepot Depot, Database Database) : base(Depot) {
+        this._db = Database;
     }
 
     public async override Task<BatchOperationOutput<LoadType>> Create(LoadType[] Entities, bool Sync = false) {

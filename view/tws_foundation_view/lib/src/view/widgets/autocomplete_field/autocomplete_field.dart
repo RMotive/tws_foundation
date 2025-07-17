@@ -4,29 +4,29 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
-import 'package:tws_foundation_view/src/core/models/interfaces/tws_view_consume_adapter.dart';
+import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/text_input.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_list_tile.dart';
 
-part 'tws_autocomeplete_future.dart';
-part 'tws_autocomplete_list.dart';
-part 'tws_autocomplete_local.dart';
-part 'tws_autocomplete_not_found.dart';
+part '_autocomplete_future.dart';
+part '_autocomplete_list.dart';
+part '_autocomplete_local.dart';
+part '_autocomplete_not_found.dart';
 
 /// State for future consume.
 final class _TWSAutoCompleteFieldFutureState<T> extends ReactorB {
   List<T> preloadedItems = <T>[];
 }
 
-/// [TWSAutoCompleteField] Custom component for TWS enviroment.
+/// [AutoCompleteField] Custom component for TWS enviroment.
 /// This component stores a list of posibles options to select for the user.
 /// Performs a options filter based on user input text.
 /// The Data is fetched throw Future async methods or non-async methods.
 /// check properties descriptions. Not set both.
 /// T generic must be an Object type for Future-async collections.
-final class TWSAutoCompleteField<T> extends StatefulWidget {
+final class AutoCompleteField<T> extends StatefulWidget {
   /// Field width.
   final double width;
 
@@ -56,7 +56,7 @@ final class TWSAutoCompleteField<T> extends StatefulWidget {
   final FocusNode? focus;
 
   /// Variable that stores a [TWSFutureAutocompleteAdapter] class to consume the data (Only for async data).
-  final TWSViewConsumeAdapter? adapter;
+  final ViewConsumeAdapter? adapter;
 
   /// List for process non-async data.
   final List<T>? nativeList;
@@ -86,7 +86,7 @@ final class TWSAutoCompleteField<T> extends StatefulWidget {
   /// This property has a default method initialitation that always return TRUE.
   final bool Function(T?)? hasKeyValue;
 
-  const TWSAutoCompleteField({
+  const AutoCompleteField({
     super.key,
     required this.onChanged,
     required this.displayValue,
@@ -116,17 +116,11 @@ final class TWSAutoCompleteField<T> extends StatefulWidget {
        );
 
   @override
-  State<TWSAutoCompleteField<T>> createState() => _TWSAutoCompleteFieldState<T>();
+  State<AutoCompleteField<T>> createState() => _AutoCompleteFieldState<T>();
 }
 
-class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>> with SingleTickerProviderStateMixin {
+class _AutoCompleteFieldState<T> extends State<AutoCompleteField<T>> with SingleTickerProviderStateMixin {
   final GlobalKey _fieldKey = GlobalKey();
-
-  /// Theme Manager injector.
-  late ThemeManager themeManager = ThemeManager.of(context);
-
-  /// Theme reference key.
-  final UniqueKey ref = UniqueKey();
 
   /// Future consume state.
   late _TWSAutoCompleteFieldFutureState<T> futureState;
@@ -292,10 +286,10 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>> with 
     }
   }
 
-  void themeUpdateListener(FoundationThemeB theme) {
-    setState(() {
-      primaryColorTheme = theme.control;
-    });
+  void initializeThemes() {
+    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    primaryColorTheme = theme.control;
+    pageColorTheme = theme.page;
   }
 
   /// Method that manage the focus events to show or hide the overlay
@@ -320,12 +314,16 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>> with 
   }
 
   @override
+  void didChangeDependencies() {
+    initializeThemes();
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
-    primaryColorTheme = themeManager.castData<FoundationThemeB>().control;
     futureState = _TWSAutoCompleteFieldFutureState<T>();
     hasKeyValue = widget.hasKeyValue ?? (T? set) => true;
     scrollController = ScrollController();
-    pageColorTheme = themeManager.castData<FoundationThemeB>().page;
     ctrl = TextEditingController(
       text: widget.initialValue != null ? widget.displayValue(widget.initialValue) : null,
     );
@@ -342,14 +340,17 @@ class _TWSAutoCompleteFieldState<T> extends State<TWSAutoCompleteField<T>> with 
   }
 
   @override
-  void didUpdateWidget(covariant TWSAutoCompleteField<T> oldWidget) {
+  void didUpdateWidget(covariant AutoCompleteField<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     //Set a new local list if changes.
     if (widget.nativeList != null && (widget.nativeList != oldWidget.nativeList)) {
       rawOptionsList = widget.nativeList!;
       suggestionsList = rawOptionsList;
     }
-    setSelection(false);
+    //Set the selection if changes.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setSelection(true);
+    });
   }
 
   @override

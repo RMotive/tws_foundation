@@ -1,7 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/models/interfaces/tws_view_consume_adapter.dart';
+import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
@@ -12,7 +12,7 @@ import 'package:tws_foundation_view/src/view/widgets/tws_list_tile.dart';
 /// Header state class.
 final class _HeaderState extends ReactorB {}
 
-/// [TwsSelectableList] Display a list of selectable items getted from a [TWSViewConsumeAdapter] class.
+/// [TwsSelectableList] Display a list of selectable items getted from a [ViewConsumeAdapter] class.
 class TwsSelectableList<T> extends StatefulWidget {
   /// Section title.
   final String title;
@@ -42,7 +42,7 @@ class TwsSelectableList<T> extends StatefulWidget {
   final String emptyContentMessage;
 
   /// Async data consume adapter.
-  final TWSViewConsumeAdapter adapter;
+  final ViewConsumeAdapter adapter;
 
   /// Preselected list values. This list is compared with consume list result and the coincidenses are marked has selected.
   final List<T>? initialValues;
