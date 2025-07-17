@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/services/business/human_resources/identifications/identification.dart';
 
 /// {entity} class.
@@ -36,6 +37,10 @@ final class DriverExternal extends EntityB<DriverExternal> {
 
   @override
   List<EntityInvalidation<DriverExternal>> evaluate() {
-    return <EntityInvalidation<DriverExternal>>[];
+    List<EntityInvalidation<DriverExternal>> results = <EntityInvalidation<DriverExternal>>[];
+    if (id < BigInt.zero) results.add(EntityInvalidation<DriverExternal>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
+    results.validateDependency(this, identification);
+
+    return results;
   }
 }

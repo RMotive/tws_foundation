@@ -1,10 +1,11 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 /// Represents a common entity model for [Driver] and [DriverExternal].
-final class DriverCommon extends EntityB<DriverCommon> {
+final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExternal> {
   /// [DriverCommon.license] property key access for [DataMap].
   static const String kLicense = "license";
 
@@ -25,12 +26,6 @@ final class DriverCommon extends EntityB<DriverCommon> {
 
   /// [Situation] information.
   Situation situation = Situation();
-
-  /// [Driver] information.
-  Driver? internal;
-
-  /// [DriverExternal] information.
-  DriverExternal? external;
 
   //! <-- Relations
 
@@ -59,12 +54,8 @@ final class DriverCommon extends EntityB<DriverCommon> {
   @override
   void decode(DataMap encode) {
     license = encode.get(kLicense);
-
-    DataMap dmStatus = encode.get(FoundationCommonPropertyKeys.kStatus);
-    status.decode(dmStatus);
-
-    DataMap dmSituation = encode.get(FoundationCommonPropertyKeys.kSituation);
-    situation.decode(dmSituation);
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
+    situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation) ?? situation;
 
     super.decode(encode);
   }
@@ -76,6 +67,7 @@ final class DriverCommon extends EntityB<DriverCommon> {
         kLicense: license,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
         FoundationCommonPropertyKeys.kSituation: situation.encode(),
+
       },
     );
   }
@@ -83,6 +75,17 @@ final class DriverCommon extends EntityB<DriverCommon> {
   @override
   List<EntityInvalidation<DriverCommon>> evaluate() {
     final List<EntityInvalidation<DriverCommon>> invalidations = <EntityInvalidation<DriverCommon>>[];
+
+    if (id < BigInt.zero) {
+      invalidations.add(
+        EntityInvalidation<DriverCommon>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
 
     if (license.length > 12 || license.length < 8) {
       invalidations.add(
@@ -95,6 +98,22 @@ final class DriverCommon extends EntityB<DriverCommon> {
       );
     }
 
+    invalidations.validateDependency(this, status);
+    invalidations.validateDependency(this, situation);
+    
+    if (internal != null) invalidations.validateDependency(this, internal!);   
+    if (external != null) invalidations.validateDependency(this, external!);
+
     return invalidations;
+  }
+  
+  @override
+  DriverExternal externalFactory() {
+    return DriverExternal();
+  }
+  
+  @override
+  Driver internalFactory() {
+    return Driver();
   }
 }

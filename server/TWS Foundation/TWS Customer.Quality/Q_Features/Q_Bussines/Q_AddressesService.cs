@@ -14,35 +14,23 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_AddressesService
     : BQ_ServicesCustomer<IAddressesService> {
 
+    private AddressesDepot? _depot;
+
     #region [BQ_Service] implementations
     protected override IAddressesService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
+        _depot = new AddressesDepot(BussinesDatabase, Disposer);
         IAddressesDepot AddressesDepot = new AddressesDepot(BussinesDatabase, Disposer);
-
         return new AddressesService(AddressesDepot);
     }
     #endregion
 
 
-    #region Private Methods/Functions
-    Address EntityFactory() {
-        return new Address {
-            State = Entropy[..3],
-            Street = Entropy,
-            AltStreet = Entropy,
-            City = Entropy,
-            ZIP = Entropy[..5],
-            Country = Entropy[..3],
-            Subdivision = Entropy,
-        };
-    }
-    #endregion
-
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample address to prevent empty view results.
-        SampleAddress();
+        Address address = await _depot!.Store(SampleAddress(), true);
+
         ViewOutput<Address> viewOutput = await _service.View(
                 new QueryInput<Address, ViewInput<Address>> {
                     Parameters = new() {
@@ -64,9 +52,9 @@ public class Q_AddressesService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Address> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleAddress(),
+                SampleAddress(),
+                SampleAddress()
             ]);
 
         Assert.Multiple(
@@ -79,7 +67,7 @@ public class Q_AddressesService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Address changedEntity = SampleAddress();
+        Address changedEntity = await _depot!.Store(SampleAddress(), true);
         changedEntity.Street = "updated_street" + changedEntity.Street;
         UpdateOutput<Address> updateOutput = await _service.Update(new UpdateInput<Address> {
             Entity = changedEntity,
@@ -95,7 +83,7 @@ public class Q_AddressesService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Address sample = SampleAddress();
+        Address sample = await _depot!.Store(SampleAddress(), true);
 
         Address deleted = await _service.Delete(sample);
 
@@ -106,13 +94,13 @@ public class Q_AddressesService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Address sample = SampleAddress();
+        Address[] samples = [
+            await _depot!.Store(SampleAddress(), true),
+            await _depot!.Store(SampleAddress(), true),
+            await _depot!.Store(SampleAddress(), true)
+            ];
 
-        BatchOperationOutput<Address> batchOutput = await _service.Delete([
-                SampleAddress(),
-                SampleAddress(),
-                SampleAddress()
-            ]);
+        BatchOperationOutput<Address> batchOutput = await _service.Delete(samples);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

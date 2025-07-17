@@ -68,7 +68,7 @@ public class Driver_Common
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void CommonDesignEntity(EntityTypeBuilder etBuilder) {
 
         etBuilder.ToTable("Drivers_Commons");
 
@@ -87,8 +87,4 @@ public class Driver_Common
                 Auto: true
             );
     }
-
-
-
 }
-   

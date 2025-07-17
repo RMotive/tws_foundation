@@ -1,5 +1,6 @@
 ﻿using CSM_Foundation.Customer;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
@@ -10,6 +11,8 @@ using TWS_Business.Entities.Employees;
 using TWS_Customer.Managers.Auth;
 using TWS_Customer.Managers.Session;
 
+using Database = TWS_Business.Database;
+
 namespace TWS_Customer.Features.Business;
 
 /// <summary>
@@ -18,7 +21,7 @@ namespace TWS_Customer.Features.Business;
 public interface IEmployeesService
     : IService<Employee> {
 
-    
+
     /// <summary>
     ///     Gets the <see cref="Employee"/> data for the current session account.
     /// </summary>
@@ -32,10 +35,12 @@ public interface IEmployeesService
 ///     [Service] for <see cref="Location"/> based operations.
 /// </summary>
 public class EmployeesService
-    : BService<Employee, IEmployeesDepot>, IEmployeesService {
+    : BService<Employee, EmployeesDepot>, IEmployeesService {
 
 
     readonly IAuthManager _authManager;
+
+    private readonly Database _db;
 
     /// <summary>
     ///     Creates a new instance of <see cref="EmployeesService"/>.
@@ -44,11 +49,12 @@ public class EmployeesService
     ///     <see cref="Employee"/> based [Depot] handler to be used.
     /// </param>
     public EmployeesService(
-        IEmployeesDepot depot,
-        IAuthManager authManager
-    )  : base(depot) { 
-        
+        EmployeesDepot depot,
+        IAuthManager authManager,
+        Database database
+    ) : base(depot) {
         _authManager = authManager;
+        _db = database;
     }
 
     public async Task<Employee?> Get() {
@@ -66,10 +72,35 @@ public class EmployeesService
                 }
             );
 
-        if(employeesReadOutput.SuccessesCount <= 0) 
+        if (employeesReadOutput.SuccessesCount <= 0)
             return null;
 
 
         return employeesReadOutput.Successes[0];
     }
+    public async override Task<BatchOperationOutput<Employee>> Create(Employee[] Entities, bool Sync = false) {
+        Employee[] successes = [];
+        EntityOperationFailure<Employee>[] failures = [];
+
+        foreach (Employee entity in Entities) {
+            try {
+                Employee attachedEntity = await _depot.Store(entity);
+                successes = [.. successes, attachedEntity];
+            } catch (Exception excep) {
+                if (Sync) {
+                    throw;
+                }
+
+                EntityOperationFailure<Employee> fail = new(entity, excep);
+                failures = [.. failures, fail];
+            }
+        }
+
+        _db.SaveChanges();
+
+        BatchOperationOutput<Employee> output = new(successes, failures);
+
+        return output;
+    }
+
 }

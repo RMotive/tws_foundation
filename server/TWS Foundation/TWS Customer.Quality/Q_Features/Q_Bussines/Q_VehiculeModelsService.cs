@@ -12,31 +12,20 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_VehiculeModelsService
     : BQ_ServicesCustomer<IVehiculeModelsService> {
 
+    private VehiculeModelsDepot? _depot;
+
     #region [BQ_Service] implementations
     protected override IVehiculeModelsService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
-        IVehiculesModelsDepot VehiculeModelsDepot = new VehiculeModelsDepot(BussinesDatabase, Disposer);
-
-        return new VehiculeModelsService(VehiculeModelsDepot);
-    }
-    #endregion
-
-    #region Private Methods/Functions
-    VehiculeModel EntityFactory() {
-        return new VehiculeModel {
-            Name = Entropy[..10],
-            Year = DateOnly.FromDateTime(DateTime.Now),
-            Status = SampleStatus("vmo"),
-            Manufacturer = SampleManufacturer(),
-        };
+        _depot = new VehiculeModelsDepot(BussinesDatabase, Disposer);
+        return new VehiculeModelsService(_depot, BussinesDatabase);
     }
     #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        SampleVehiculeModel();
+        await _depot!.Store(SampleVehiculeModel(), true);
         ViewOutput<VehiculeModel> viewOutput = await _service.View(
                 new QueryInput<VehiculeModel, ViewInput<VehiculeModel>> {
                     Parameters = new() {
@@ -58,9 +47,9 @@ public class Q_VehiculeModelsService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<VehiculeModel> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleVehiculeModel(),
+                SampleVehiculeModel(),
+                SampleVehiculeModel()
             ]);
 
         Assert.Multiple(
@@ -73,7 +62,7 @@ public class Q_VehiculeModelsService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        VehiculeModel changedEntity = SampleVehiculeModel();
+        VehiculeModel changedEntity = await _depot!.Store(SampleVehiculeModel(), true);
         changedEntity.Name = "updated_name" + changedEntity.Name;
         UpdateOutput<VehiculeModel> updateOutput = await _service.Update(new UpdateInput<VehiculeModel> {
             Entity = changedEntity,
@@ -89,8 +78,7 @@ public class Q_VehiculeModelsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        VehiculeModel sample = SampleVehiculeModel();
-
+        VehiculeModel sample = await _depot!.Store(SampleVehiculeModel(), true);
         VehiculeModel deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
@@ -99,13 +87,13 @@ public class Q_VehiculeModelsService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        VehiculeModel sample = SampleVehiculeModel();
+        VehiculeModel[] samples = [
+            await _depot!.Store(SampleVehiculeModel(), true),
+            await _depot!.Store(SampleVehiculeModel(), true),
+            await _depot!.Store(SampleVehiculeModel(), true)
+        ];
 
-        BatchOperationOutput<VehiculeModel> batchOutput = await _service.Delete([
-                SampleVehiculeModel(),
-                SampleVehiculeModel(),
-                SampleVehiculeModel()
-            ]);
+        BatchOperationOutput<VehiculeModel> batchOutput = await _service.Delete(samples);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

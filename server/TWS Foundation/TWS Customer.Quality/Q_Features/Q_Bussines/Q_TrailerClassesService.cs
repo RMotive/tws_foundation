@@ -3,6 +3,7 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
+using TWS_Business.Depots;
 using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 
@@ -14,28 +15,20 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_TrailerClassesService
     : BQ_ServicesCustomer<ITrailerClassesService> {
 
+    private TrailerClassesDepot? _depot;
+
     #region [BQ_Service] implementations
     protected override ITrailerClassesService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-
-        ITrailerClassesDepot TrailerClassesDepot = new TrailerClassesDepot(BussinesDatabase, Disposer);
-
-        return new TrailerClassesService(TrailerClassesDepot);
-    }
-    #endregion
-
-    #region Private Methods/Functions
-    Trailer_Class EntityFactory() {
-        return new Trailer_Class {
-            Name = Entropy[..10],
-        };
+        _depot = new TrailerClassesDepot(BussinesDatabase, Disposer);
+        return new TrailerClassesService(_depot, BussinesDatabase);
     }
     #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        SampleTrailerClass();
+        await _depot!.Store(SampleTrailerClass(), true);
         ViewOutput<Trailer_Class> viewOutput = await _service.View(
                 new QueryInput<Trailer_Class, ViewInput<Trailer_Class>> {
                     Parameters = new() {
@@ -57,9 +50,9 @@ public class Q_TrailerClassesService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Trailer_Class> batchOutput = await _service.Create([
-                EntityFactory(),
-                EntityFactory(),
-                EntityFactory()
+                SampleTrailerClass(),
+                SampleTrailerClass(),
+                SampleTrailerClass()
             ]);
 
         Assert.Multiple(
@@ -72,7 +65,7 @@ public class Q_TrailerClassesService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Trailer_Class changedEntity = SampleTrailerClass();
+        Trailer_Class changedEntity = await _depot!.Store(SampleTrailerClass(), true);
         changedEntity.Name = "updated_name" + changedEntity.Name;
         UpdateOutput<Trailer_Class> updateOutput = await _service.Update(new UpdateInput<Trailer_Class> {
             Entity = changedEntity,
@@ -88,8 +81,7 @@ public class Q_TrailerClassesService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Trailer_Class sample = SampleTrailerClass();
-
+        Trailer_Class sample = await _depot!.Store(SampleTrailerClass(), true);
         Trailer_Class deleted = await _service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
@@ -98,13 +90,13 @@ public class Q_TrailerClassesService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
-        Trailer_Class sample = SampleTrailerClass();
+        Trailer_Class[] samples = [
+                await _depot!.Store(SampleTrailerClass(), true),
+                await _depot!.Store(SampleTrailerClass(), true),
+                await _depot!.Store(SampleTrailerClass(), true)
+            ];
 
-        BatchOperationOutput<Trailer_Class> batchOutput = await _service.Delete([
-                SampleTrailerClass(),
-                SampleTrailerClass(),
-                SampleTrailerClass()
-            ]);
+        BatchOperationOutput<Trailer_Class> batchOutput = await _service.Delete(samples);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
