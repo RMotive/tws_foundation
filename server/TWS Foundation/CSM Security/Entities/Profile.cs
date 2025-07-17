@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,14 +8,7 @@ namespace CSM_Security.Entities;
 ///     [Entity] that stores a relation between a collection of <see cref="Permit"/> with an <see cref="Account"/>
 /// </summary>
 public class Profile
-    : BEntity, BNamedEntity {
-
-    #region Properties
-
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
-
-    #endregion
+    : BNamedEntity {
 
     #region Relations
 

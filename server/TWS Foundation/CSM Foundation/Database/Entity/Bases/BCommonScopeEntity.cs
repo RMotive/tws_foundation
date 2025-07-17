@@ -1,4 +1,8 @@
-﻿namespace CSM_Foundation.Database.Entity.Bases;
+﻿using System.Reflection;
+
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace CSM_Foundation.Database.Entity.Bases;
 
 /// <summary>
 ///     Represents a <see cref="ICommonEntity"/> scope referring it as a possible <see cref="ICommonEntity{TInternal, TExternal}.Internal"/>
@@ -42,4 +46,29 @@ public abstract class BCommonScopeEntity<TCommonEntity>
     where TCommonEntity : ICommonEntity {
 
     public TCommonEntity Common { get; set; } = default!;
+
+
+    protected virtual void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) { }
+
+    protected internal override void DesignEntity(EntityTypeBuilder etBuilder) {
+        PropertyInfo[] commonEntityProperties = typeof(TCommonEntity).GetProperties();
+
+        foreach (PropertyInfo commonEntityProperty in commonEntityProperties) {
+
+            if (commonEntityProperty.PropertyType != GetType()) {
+                continue;
+            }
+
+            etBuilder.Link(
+                Relation: (GetType(), typeof(TCommonEntity)),
+                SourceReference: nameof(Common),
+                TargetReference: commonEntityProperty.Name,
+                Required: true,
+                Index: true,
+                Auto: true
+            );
+        }
+
+        DesignCommonScopeEntity(etBuilder);
+    }
 }

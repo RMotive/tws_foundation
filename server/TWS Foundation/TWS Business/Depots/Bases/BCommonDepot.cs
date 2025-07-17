@@ -16,14 +16,16 @@ using CSM_Foundation.Database.Utilitites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Depots.Bases;
 
 public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     : IDepot<TCommon>
     where TDatabase : BDatabase_SQLServer<TDatabase>
-    where TCommon : CommonEntity<TInternal, TExternal>, new()
-    where TInternal : CommonEntityEdge<TCommon>
-    where TExternal : CommonEntityEdge<TCommon> {
+    where TCommon : class, ICommonEntity<TInternal, TExternal>, new()
+    where TInternal : class, ICommonScopeEntity<TCommon>
+    where TExternal : class, ICommonScopeEntity<TCommon> {
 
     /// <summary>
     /// 
@@ -296,8 +298,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         TInternal? internalRelation = entity.Internal;
         TExternal? externalRelation = entity.External;
 
-        entity.Internal = null;
-        entity.External = null;
+        entity.Internal = default;
+        entity.External = default;
 
         entity = DatabaseUtilities.SanitizeEntity(_db, entity);
 

@@ -23,4 +23,8 @@ public class Q_TrailersController
     public Q_TrailersController(WebApplicationFactory<Program> hostFactory) 
         : base("Trailers", hostFactory) {
     }
+
+    protected override Trailer_Common EntityFactory(string entropyValue) {
+        throw new NotImplementedException();
+    }
 }

@@ -2,6 +2,7 @@
 using System.Reflection;
 
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
@@ -12,10 +13,9 @@ using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 
-using TWS_Business;
 using TWS_Business.Quality.Q_Depots.Q_Validators;
 
-using BEntity = TWS_Business.BEntity;
+using BEntity = TWS_Business.Bases.BEntity;
 
 namespace CSM_Foundation.Database.Quality;
 
@@ -144,7 +144,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
             .GetProperties()
             .Where(pi =>
                 pi.GetCustomAttribute<RelationAttribute>() != null &&
-                IsDerivedFromGenericBase(pi.PropertyType, typeof(CommonEntity<,>))
+                IsDerivedFromGenericBase(pi.PropertyType, typeof(ICommonEntity))
             ).ToList();
 
         if (!commonDependencies.Any()) throw new InvalidOperationException($"No common dependencies found in {typeof(TEntity).Name}. Ensure properties are marked with RelationAttribute and inherit from CommonEntity<,>.");

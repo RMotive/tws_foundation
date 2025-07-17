@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity.Bases;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
+
+using BNamedEntity = TWS_Business.Bases.BNamedEntity;
 
 namespace TWS_Business.Entities;
 
@@ -21,14 +21,9 @@ namespace TWS_Business.Entities;
 ///     information about a system status for an specific entity.
 /// </summary>
 public class Status
-: BEntity, BNamedEntity {
+    : BNamedEntity {
 
     #region Properites
-    [StringLength(100, MinimumLength = 1)]
-    public string Name { get; set; } = default!;
-
-    [StringLength(200, MinimumLength = 1)]
-    public string? Description { get; set; }
 
     [StringLength(8, MinimumLength = 8)]
     public string Reference { get; set; } = default!;

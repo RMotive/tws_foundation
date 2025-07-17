@@ -5,13 +5,15 @@ using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Entities.Vehicules.Trucks;
 
 /// <summary>
 ///     [Entity] that stores shared information along trucks. (<see cref="Truck"/> / <see cref="TruckExternal"/>).
 /// </summary>
 public class Truck_Common
-    : CommonEntity<Truck, TruckExternal> {
+    : BCommonEntity<Truck, TruckExternal> {
 
     #region Properties
 
@@ -76,7 +78,7 @@ public class Truck_Common
 
     #endregion
 
-    protected override void CommonDesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Economic)).HasMaxLength(16).IsRequired();
 
         etBuilder.Link<Truck_Common, Location>(

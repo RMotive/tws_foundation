@@ -1,6 +1,7 @@
-﻿using CSM_Foundation.Database.Quality.Disposing;
-using CSM_Foundation.Database.Quality;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Quality;
+using CSM_Foundation.Database.Quality.Disposing;
 
 namespace TWS_Business.Quality.Q_Depots;
 
@@ -15,7 +16,7 @@ namespace TWS_Business.Quality.Q_Depots;
 /// </typeparam>
 public abstract class BQ_Business<TEntity, TDepot>
     : BQ_Depot<TEntity, TDepot, Database>
-    where TEntity : BEntity, new()
+    where TEntity : class, IEntity, new()
     where TDepot : class, IDepot<TEntity> {
 
     /// <summary>

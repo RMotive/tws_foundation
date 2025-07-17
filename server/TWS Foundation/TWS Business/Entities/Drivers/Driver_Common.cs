@@ -6,13 +6,15 @@ using CSM_Foundation.Database.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Entities.Drivers;
 
 /// <summary>
 ///     [Entity] that represent common information for [Drivers] (<see cref="Driver"/> / <see cref="DriverExternal"/>).
 /// </summary>
 public class Driver_Common
-    : CommonEntity<Driver, DriverExternal> {
+    : BCommonEntity<Driver, DriverExternal> {
 
     #region Properties
 
@@ -68,7 +70,7 @@ public class Driver_Common
 
     #endregion
 
-    protected override void CommonDesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonEntity(EntityTypeBuilder etBuilder) {
 
         etBuilder.ToTable("Drivers_Commons");
 

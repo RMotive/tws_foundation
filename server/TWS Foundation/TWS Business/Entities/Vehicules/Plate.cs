@@ -2,12 +2,13 @@
 
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
+
+using BEntity = TWS_Business.Bases.BEntity;
 
 namespace TWS_Business.Entities.Vehicules;
 
@@ -15,7 +16,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about legal vehicule plates in own posession.
 /// </summary>
 public class Plate
-    : BEntity, IHistorical<Plate_History> {
+    : BEntity {
 
     #region Properties
 

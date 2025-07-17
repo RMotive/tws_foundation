@@ -31,8 +31,8 @@ public class Q_TrailersService
             Economic = Entropy[..16],
             Status = SampleStatus("tcm"),
             Situation = SampleSituation(),
-            Internal = internalValue ? SampleTrailer(false) : null,
-            External = internalValue ? null : SampleTrailerExternal(false),
+            Internal = internalValue ? null : null,
+            External = internalValue ? null : null,
         };
         return common;
     }

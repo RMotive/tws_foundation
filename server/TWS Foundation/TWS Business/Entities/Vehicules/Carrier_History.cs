@@ -3,6 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.USDOTs;
 
 namespace TWS_Business.Entities.Vehicules;
@@ -11,7 +12,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [History] entity for <see cref="Carrier"/>.
 /// </summary>
 public class Carrier_History
-    : TWSHistory<Carrier> {
+    : BHistory<Carrier> {
 
     #region Properties
     public string Name { get; set; } = string.Empty;

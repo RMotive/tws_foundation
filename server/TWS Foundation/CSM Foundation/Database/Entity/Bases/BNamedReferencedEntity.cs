@@ -6,8 +6,8 @@ namespace CSM_Foundation.Database.Entity.Bases;
 ///     Represents an <see cref="IEntity"/> with <see cref="BNamedEntity.Name"/> and <see cref="BNamedEntity.Description"/> properties
 ///     that can help to identify a <see cref="IEntity"/> based on <see cref="BNamedEntity.Name"/> property as this defines them as unique.
 /// </summary>
-public interface INamedEntity
-    : IEntity {
+public interface INamedReferencedEntity
+    : IEntity, IReferencedEntity {
 
     /// <summary>
     ///     Entity instance name.
@@ -28,10 +28,12 @@ public interface INamedEntity
 ///     Represents an <see cref="IEntity"/> with <see cref="Name"/> and <see cref="Description"/> properties
 ///     that can help to identify a <see cref="IEntity"/> based on <see cref="Name"/> property as this defines them as unique.
 /// </summary>
-public abstract class BNamedEntity
-    : BEntity, INamedEntity {
+public abstract class BNamedReferencedEntity
+    : BEntity, INamedReferencedEntity {
 
     public string Name { get; set; } = string.Empty;
+
+    public string Reference { get; set;} = string.Empty;
 
     public string? Description { get; set; }
 }

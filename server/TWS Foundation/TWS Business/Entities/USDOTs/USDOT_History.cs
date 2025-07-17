@@ -5,6 +5,7 @@ using CSM_Foundation.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Entities.USDOTs;
@@ -13,7 +14,7 @@ namespace TWS_Business.Entities.USDOTs;
 ///     [Entity] TODO: Define purpose
 /// </summary>
 public class USDOT_History
-    : TWSHistory<USDOT> {
+    : BHistory<USDOT> {
 
     #region Properties
 

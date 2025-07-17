@@ -3,8 +3,6 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
-using Microsoft.EntityFrameworkCore;
-
 using TWS_Business.Depots;
 using TWS_Business.Entities.Drivers;
 

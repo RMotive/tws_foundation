@@ -4,13 +4,15 @@ using CSM_Foundation.Database;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Entities.Vehicules;
 
 /// <summary>
 ///     [History Entity] for <see cref="Plate"/>
 /// </summary>
 public class Plate_History
-    : TWSHistory<Plate> {
+    : BHistory<Plate> {
 
     #region Properties
 

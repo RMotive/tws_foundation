@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Vehicules;
 
+using BEntity = TWS_Business.Bases.BEntity;
+
 namespace TWS_Business.Entities.USDOTs;
 
 public class USDOT

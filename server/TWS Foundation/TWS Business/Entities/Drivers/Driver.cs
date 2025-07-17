@@ -5,6 +5,7 @@ using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Employees;
 
 namespace TWS_Business.Entities.Drivers;
@@ -13,7 +14,7 @@ namespace TWS_Business.Entities.Drivers;
 ///     [Entity] that represents an internal business driver (Tuck operator).
 /// </summary>
 public class Driver
-    : CommonEntityEdge<Driver_Common> {
+    : BCommonScopeEntity<Driver_Common> {
 
     #region Properties
 
@@ -94,7 +95,7 @@ public class Driver
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(DriverType)).HasMaxLength(12);
         etBuilder.Property(nameof(TWIC)).HasMaxLength(12);
         etBuilder.Property(nameof(VISA)).HasMaxLength(12);

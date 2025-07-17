@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-using CSM_Foundation.Database.Entity.Bases;
+using BNamedEntity = TWS_Business.Bases.BNamedEntity;
 
 namespace TWS_Business.Entities.Vehicules.Trailers;
 
@@ -10,16 +9,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 /// </summary>
 [Table("Trailer_Classes")]
 public class Trailer_Class
-    : BEntity, BNamedEntity {
-
-    #region Properties
-    [StringLength(100)]
-    public string Name { get; set; } = default!;
-
-    [StringLength(maximumLength: 200)]
-    public string? Description { get; set; }
-
-    #endregion
+    : BNamedEntity {
 
     #region Dependants
 

@@ -17,8 +17,8 @@ namespace TWS_Business.Depots.Vehicles;
 /// </remarks>
 public interface ITrucksDepot
     : IDepot<Truck_Common> {
-
 }
+
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
 ///     representing a depot to handle <see cref="Truck"/> dataDatabases entity mirror.

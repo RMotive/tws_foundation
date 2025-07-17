@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
+
 namespace TWS_Business.Entities.Employees;
 
 /// <summary>

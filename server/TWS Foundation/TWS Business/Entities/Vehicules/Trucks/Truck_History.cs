@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
 
@@ -9,7 +10,7 @@ namespace TWS_Business.Entities.Vehicules.Trucks;
 ///     [History Entity] for <see cref="Truck"/> Entity.
 /// </summary>
 public class Truck_History
-    : TWSHistory<Truck> {
+    : BHistory<Truck> {
 
     #region Properties
 

@@ -3,6 +3,7 @@ using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Maintenances;
 
 namespace TWS_Business.Entities.Vehicules.Trailers;
@@ -11,7 +12,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 ///     [Entity] for <see cref="Trailer"/> business operations.
 /// </summary>
 public class Trailer
-    : CommonEntityEdge<Trailer_Common> {
+    : BCommonScopeEntity<Trailer_Common> {
 
     #region Relations
 
@@ -59,7 +60,7 @@ public class Trailer
 
     #endregion
 
-    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Link<Trailer, Carrier>(
                 nameof(Carrier),
                 Required: true,

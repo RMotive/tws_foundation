@@ -7,9 +7,6 @@ using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 
-using TWS_Business;
-using TWS_Business.Depots.Bases;
-
 using TWS_Customer.Services.Records;
 
 namespace TWS_Foundation.Quality;
@@ -112,16 +109,4 @@ public abstract class BQ_Controller<TEntity>
 
         return mocks;
     }
-}
-
-
-/// <summary>
-///     Represents a quality { CargoFleet } controller, used for testing purposes over server controllers.
-/// </summary>
-/// <typeparam name="TBridgeEntity">
-///     Type of the <see cref="IBrid"/>
-/// </typeparam>
-public abstract class BQ_BridgeController<TBridgeEntity>
-    where TBridgeEntity :  {
-
 }

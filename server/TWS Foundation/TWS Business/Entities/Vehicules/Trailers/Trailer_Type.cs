@@ -6,6 +6,8 @@ using CSM_Foundation.Database.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using BEntity = TWS_Business.Bases.BEntity;
+
 namespace TWS_Business.Entities.Vehicules.Trailers;
 
 /// <summary>

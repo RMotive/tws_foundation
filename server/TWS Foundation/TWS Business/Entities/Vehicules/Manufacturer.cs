@@ -1,9 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CSM_Foundation.Database.Entity.Bases;
-
-using TWS_Business.Entities.Vehicules.Trailers;
+﻿using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
+
+using BNamedEntity = TWS_Business.Bases.BNamedEntity;
 
 namespace TWS_Business.Entities.Vehicules;
 
@@ -11,17 +9,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about certain manufacturers for <see cref="Trailer"/> and <see cref="Truck"/> data proccesses.
 /// </summary>
 public class Manufacturer
-    : BEntity, BNamedEntity {
-
-    #region Properties
-
-    [StringLength(100, MinimumLength = 1)]
-    public string Name { get; set; } = default!;
-
-    [StringLength(maximumLength: 200)]
-    public string? Description { get; set; }
-
-    #endregion
+    : BNamedEntity {
 
     #region Dependants
 

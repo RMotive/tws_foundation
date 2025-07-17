@@ -6,12 +6,18 @@ using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using BEntity = TWS_Business.Bases.BEntity;
+
 namespace TWS_Business.Entities;
 /// <summary>
 ///     Represents a precise physic location based on coordinates parameters, to locate concrete locations or items.
 /// </summary>
-public class Waypoint : BEntity {
+public class Waypoint
+    : BEntity {
+
+
     #region Properties
+
     /// <summary>
     ///     Longitude coordinate.
     /// </summary>
@@ -55,9 +61,9 @@ public class Waypoint : BEntity {
     #endregion 
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
-        etBuilder.Property(nameof(Longitude)).HasPrecision(9,6).IsRequired();
-        etBuilder.Property(nameof(Latitude)).HasPrecision(9,6).IsRequired();
-        etBuilder.Property(nameof(Altitude)).HasPrecision(9,6);
+        etBuilder.Property(nameof(Longitude)).HasPrecision(9, 6).IsRequired();
+        etBuilder.Property(nameof(Latitude)).HasPrecision(9, 6).IsRequired();
+        etBuilder.Property(nameof(Altitude)).HasPrecision(9, 6);
 
         etBuilder.Link<Waypoint, Location>(
                 nameof(Location),

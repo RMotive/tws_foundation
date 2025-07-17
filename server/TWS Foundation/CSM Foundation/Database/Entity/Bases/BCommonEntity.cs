@@ -1,4 +1,6 @@
-﻿namespace CSM_Foundation.Database.Entity.Bases;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace CSM_Foundation.Database.Entity.Bases;
 
 /// <summary>
 ///     Represents an <see cref="IEntity"/> that holds a scope between internal ( tenant business entities data ) and external ( tenant partners entities data ).
@@ -30,6 +32,8 @@ public interface ICommonEntity<TInternal, TExternal>
     ///     <typeparamref name="TExternal"/> data.
     /// </summary>
     public TExternal? External { get; set; }
+
+
 }
 
 /// <summary>
@@ -49,4 +53,31 @@ public abstract class BCommonEntity<TInternal, TExternal>
     public TInternal? Internal { get; set; }
 
     public TExternal? External { get; set; }
+
+    protected internal override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder
+            .HasOne(typeof(TExternal), nameof(External))
+            .WithOne("Common")
+            .HasForeignKey(typeof(TExternal), "CommonShadow");
+
+
+        etBuilder
+            .HasOne(typeof(TInternal), nameof(Internal))
+            .WithOne("Common")
+            .HasForeignKey(typeof(TInternal), "CommonShadow");
+
+
+        etBuilder
+            .Navigation(nameof(External))
+            .AutoInclude();
+
+        etBuilder
+            .Navigation(nameof(Internal))
+            .AutoInclude();
+
+        DesignCommonEntity(etBuilder);
+    }
+
+    protected abstract void DesignCommonEntity(EntityTypeBuilder etBuilder);
+
 }

@@ -30,7 +30,7 @@ namespace CSM_Foundation.Database.Quality;
 /// </typeparam>
 public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     : BQ_DataHandler
-    where TEntity : BEntity, new()
+    where TEntity : class, IEntity, new()
     where TDepot : IDepot<TEntity>
     where TDatabase : BDatabase_SQLServer<TDatabase> {
 
@@ -451,7 +451,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
     [Fact(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
     public virtual async Task UpdateD() {
         PropertyInfo ValidEvaluable;
-        if(Evaluable.Name == nameof(IEntity.Id)) {
+        if (Evaluable.Name == nameof(IEntity.Id)) {
             ValidEvaluable = typeof(TEntity).GetProperties()
                 .FirstOrDefault(p => p.Name != nameof(IEntity.Id))
                 ?? typeof(TEntity).GetProperty(nameof(IEntity.Id))!;
@@ -459,7 +459,7 @@ public abstract class BQ_Depot<TEntity, TDepot, TDatabase>
         } else {
             ValidEvaluable = Evaluable;
         }
-            TEntity sample = Store(EntityFactory);
+        TEntity sample = Store(EntityFactory);
         TEntity valueReference = RunEntityFactory(EntityFactory);
 
         object? sampleOriginalValue = ValidEvaluable.GetValue(sample);

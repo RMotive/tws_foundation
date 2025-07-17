@@ -5,6 +5,10 @@ using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
+
+using BEntity = TWS_Business.Bases.BEntity;
+
 namespace TWS_Business.Entities;
 
 /// <summary>

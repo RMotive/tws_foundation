@@ -1,5 +1,4 @@
 ﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,12 +9,9 @@ namespace CSM_Security.Entities;
 ///     [Entity] that stores information for business environment solution.
 /// </summary>
 public class Solution
-    : BEntity, BNamedEntity {
+    : BNamedEntity {
 
     #region Properties
-
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
 
     /// <summary>
     ///     Solution unique sign to reference easyly the solution along operations.

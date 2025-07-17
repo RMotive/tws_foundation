@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CSM_Security;
+namespace TWS_Business.Bases;
 
 /// <summary>
-///     [Abstract] for [CSM Security] database entities implementations.
+///     Represents a { TWS Business } entity implementation. 
 /// </summary>
 /// <remarks>
-///     Usage must be exclusively for [CSM Security] entities.
+///     Usage must be exclusively for { TWS Business } entities.
 /// </remarks>
 public abstract class BEntity
     : CSM_Foundation.Database.BEntity {

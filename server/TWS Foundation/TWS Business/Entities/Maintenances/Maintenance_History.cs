@@ -3,6 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities.Maintenances;
@@ -11,7 +12,7 @@ namespace TWS_Business.Entities.Maintenances;
 ///     [History Entity] for <see cref="Maintenance"/>
 /// </summary>
 public class Maintenance_History
-    : TWSHistory<Maintenance> {
+    : BHistory<Maintenance> {
 
     #region Properties
 

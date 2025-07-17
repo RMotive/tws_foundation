@@ -96,7 +96,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// </summary>
     /// <param name="entity">Current entity to process and store.</param>
     /// <param name="entitiesHash">List of stored entities. The content is verified to avoid duplications. </param>
-    void StoreNestedEntities(IEntity entity, HashSet<IEntity> entitiesHash) {
+    static void StoreNestedEntities(IEntity entity, HashSet<IEntity> entitiesHash) {
 
         if (entity == null || entitiesHash.Contains(entity)) return;
         entitiesHash.Add(entity);

@@ -1,5 +1,6 @@
 ﻿using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
@@ -116,9 +117,9 @@ public class BQ_CommonDataHandler
     ///     The stored and updated [Entity] object. 
     /// </returns>
     protected async Task<TCommon> Store<TCommon, TInternalEdge, TExternalEdge>(EntityFactory<TCommon> EntityFactory)
-        where TCommon : CommonEntity<TInternalEdge, TExternalEdge>, new()
-        where TInternalEdge : CommonEntityEdge<TCommon>
-        where TExternalEdge : CommonEntityEdge<TCommon> {
+        where TCommon : class, ICommonEntity<TInternalEdge, TExternalEdge>, new()
+        where TInternalEdge : class, ICommonScopeEntity<TCommon>
+        where TExternalEdge : class, ICommonScopeEntity<TCommon> {
 
         using DbContext database = GetDatabase(new TCommon().Database);
         TCommon toStore = RunEntityFactory(EntityFactory);
@@ -126,8 +127,8 @@ public class BQ_CommonDataHandler
         TInternalEdge? internalRelation = toStore.Internal;
         TExternalEdge? externalRelation = toStore.External;
 
-        toStore.Internal = null;
-        toStore.External = null;
+        toStore.Internal = default;
+        toStore.External = default;
 
         toStore = DatabaseUtilities.SanitizeEntity(database, toStore);
 
@@ -164,9 +165,9 @@ public class BQ_CommonDataHandler
 
 
     protected async Task<TCommon[]> Store<TCommon, TInternalEdge, TExternalEdge>(int Quantity, EntityFactory<TCommon> EntityFactory)
-        where TCommon : CommonEntity<TInternalEdge, TExternalEdge>, new()
-        where TInternalEdge : CommonEntityEdge<TCommon>
-        where TExternalEdge : CommonEntityEdge<TCommon> {
+        where TCommon : class, ICommonEntity<TInternalEdge, TExternalEdge>, new()
+        where TInternalEdge : class, ICommonScopeEntity<TCommon>
+        where TExternalEdge : class, ICommonScopeEntity<TCommon> {
 
         TCommon[] entities = [];
         using DbContext database = GetDatabase(new TCommon().Database);
@@ -180,7 +181,7 @@ public class BQ_CommonDataHandler
             entity.External = null;
 
             entity = DatabaseUtilities.SanitizeEntity(database, entity);
-            database.Set<TCommon>().Add(entity); 
+            database.Set<TCommon>().Add(entity);
             Disposer.Push(entity);
 
             if (internalRelation != null) {
@@ -207,7 +208,7 @@ public class BQ_CommonDataHandler
 
             entity.External = externalRelation;
             Disposer.Push(externalRelation);
-            entities = [..entities, entity];
+            entities = [.. entities, entity];
         }
 
         await database.SaveChangesAsync();

@@ -5,6 +5,7 @@ using CSM_Foundation.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Business.Entities;
@@ -13,7 +14,7 @@ namespace TWS_Business.Entities;
 ///     [History etBuilder] for <see cref="Approach"/> entity.
 /// </summary>
 public class Approach_History
-    : TWSHistory<Approach> {
+    : BHistory<Approach> {
 
     #region Properties
 

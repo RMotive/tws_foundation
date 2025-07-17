@@ -4,6 +4,7 @@ using CSM_Foundation.Database;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities.Insurances;
@@ -12,7 +13,7 @@ namespace TWS_Business.Entities.Insurances;
 ///     [History Entity] for <see cref="Insurance"/>
 /// </summary>
 public class Insurance_History
-    : TWSHistory<Insurance> {
+    : BHistory<Insurance> {
 
     #region Properties
 

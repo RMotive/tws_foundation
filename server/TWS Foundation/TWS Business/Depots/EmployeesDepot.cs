@@ -10,7 +10,6 @@ namespace TWS_Business.Depots;
 /// </summary>
 public interface IEmployeesDepot
     : IDepot<Employee> {
-
 }
 
 /// <summary>
