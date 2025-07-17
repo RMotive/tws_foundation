@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,11 +17,11 @@ namespace TWS_Business.Entities;
 /// <summary>
 ///     {entity} class.
 ///     
-///     Implements a <see cref="INamedEntity"/> and <see cref="BEntity"/> to represent a {csm} business entity that stores
+///     Implements a <see cref="BNamedEntity"/> and <see cref="BEntity"/> to represent a {csm} business entity that stores
 ///     information about a system status for an specific entity.
 /// </summary>
 public class Status
-: BEntity, INamedEntity {
+: BEntity, BNamedEntity {
 
     #region Properites
     [StringLength(100, MinimumLength = 1)]

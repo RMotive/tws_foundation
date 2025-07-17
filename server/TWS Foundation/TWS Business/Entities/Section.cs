@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +12,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores information about a physical vehicules storage section.
 /// </summary>
 public class Section
-    : BEntity, INamedEntity {
+    : BEntity, BNamedEntity {
 
     #region Properties
     [StringLength(100, MinimumLength = 1)]

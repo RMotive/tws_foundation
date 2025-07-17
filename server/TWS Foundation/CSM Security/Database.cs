@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Logging;

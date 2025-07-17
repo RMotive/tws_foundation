@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,7 +9,7 @@ namespace CSM_Security.Entities;
 ///     [Entity] that represents the information for certain actions/operations to be performed to the Solutions.
 /// </summary>
 public class Action
-    : BEntity, INamedEntity {
+    : BEntity, BNamedEntity {
 
     #region Properties
     public string Name { get; set; } = string.Empty;

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Concurrent;
 
-using CSM_Foundation.Database.Entity;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

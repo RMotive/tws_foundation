@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;

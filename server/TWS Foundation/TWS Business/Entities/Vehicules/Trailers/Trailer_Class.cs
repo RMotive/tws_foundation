@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 namespace TWS_Business.Entities.Vehicules.Trailers;
 
@@ -10,7 +10,7 @@ namespace TWS_Business.Entities.Vehicules.Trailers;
 /// </summary>
 [Table("Trailer_Classes")]
 public class Trailer_Class
-    : BEntity, INamedEntity {
+    : BEntity, BNamedEntity {
 
     #region Properties
     [StringLength(100)]

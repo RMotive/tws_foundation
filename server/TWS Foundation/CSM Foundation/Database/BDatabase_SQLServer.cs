@@ -2,7 +2,7 @@
 using System.Reflection;
 
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Models;
 using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Logging;
@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CSM_Foundation.Database.Bases;
+namespace CSM_Foundation.Database;
 
 /// <summary>
 /// 
@@ -82,8 +82,7 @@ public static class EntityTypeBuilderExtension {
         where SourceT : class, IEntity
         where TargetT : class, IEntity {
 
-        Link(
-                Builder,
+        Builder.Link(
                 (typeof(SourceT), typeof(TargetT)),
                 SourceReference: SourceReference,
                 TargetReference: TargetReference,
@@ -222,7 +221,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             sets.Add((BEntity)Activator.CreateInstance(generic)!);
         }
 
-        return [..sets];
+        return [.. sets];
     }
 
     /// <summary>
@@ -230,7 +229,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
     /// </summary>
     public void ValidateConnection() {
         Logger.Announce(
-            $"Setting up ORM", 
+            $"Setting up ORM",
             new() {
                 { "Database", GetType()?.Namespace ?? "---" },
                 { "Base", nameof(BDatabase_SQLServer<TDatabases>) }
@@ -241,7 +240,7 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
             Logger.Success($"[{GetType().FullName}] ORM Set");
 
             IEnumerable<string> pendingMigrations = Database.GetPendingMigrations();
-            if(pendingMigrations.Any()) {
+            if (pendingMigrations.Any()) {
                 throw new Exception($"ORM ({GetType().FullName}) has pending migrations ({pendingMigrations.Count()})");
             }
             Evaluate();
@@ -348,9 +347,9 @@ public abstract partial class BDatabase_SQLServer<TDatabases>
                     etBuilder.HasKey(nameof(IEntity.Id));
                     etBuilder.Property<long>(nameof(IEntity.Id)).IsRequired();
 
-                    if (set is INamedEntity) {
-                        PropertyInfo nameProperty = set.GetProperty(nameof(INamedEntity.Name));
-                        PropertyInfo descriptionProperty = set.GetProperty(nameof(INamedEntity.Description));
+                    if (set is BNamedEntity) {
+                        PropertyInfo nameProperty = set.GetProperty(nameof(BNamedEntity.Name));
+                        PropertyInfo descriptionProperty = set.GetProperty(nameof(BNamedEntity.Description));
 
                         etBuilder.HasIndex(nameProperty.Name).IsUnique();
                         etBuilder.Property(nameProperty.Name).HasMaxLength(100).IsRequired();

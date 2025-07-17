@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,7 +10,7 @@ namespace CSM_Security.Entities;
 ///     only for authorization purposes.
 /// </summary>
 public class Feature
-    : BEntity, INamedEntity {
+    : BEntity, BNamedEntity {
 
     #region Properties
 

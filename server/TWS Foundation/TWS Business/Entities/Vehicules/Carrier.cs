@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Bases;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,7 +16,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about a carrying company.
 /// </summary>
 public class Carrier
-    : BEntity, INamedEntity, IHistorical<Carrier_History> {
+    : BEntity, BNamedEntity, IHistorical<Carrier_History> {
 
     #region Properties
     [StringLength(100)]

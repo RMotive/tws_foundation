@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Database.Bases;
 using CSM_Foundation.Database.Entity;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;

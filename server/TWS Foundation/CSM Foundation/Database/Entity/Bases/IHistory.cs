@@ -1,4 +1,4 @@
-﻿namespace CSM_Foundation.Database.Entity;
+﻿namespace CSM_Foundation.Database.Entity.Bases;
 
 /// <summary>
 ///     [Interface] for History entities implementations.

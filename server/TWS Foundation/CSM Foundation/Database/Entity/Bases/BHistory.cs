@@ -1,6 +1,6 @@
 ﻿using CSM_Foundation.Database.Bases;
 
-namespace CSM_Foundation.Database.Entity;
+namespace CSM_Foundation.Database.Entity.Bases;
 
 /// <summary>
 ///     [Abstract] class for [History] [Entity] implementation.

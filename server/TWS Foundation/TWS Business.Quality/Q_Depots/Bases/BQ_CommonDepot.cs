@@ -1,8 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Database.Bases;
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
@@ -13,6 +12,7 @@ using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Quality;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
+
 using TWS_Business.Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots.Bases;

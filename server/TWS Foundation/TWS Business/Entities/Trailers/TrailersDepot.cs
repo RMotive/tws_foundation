@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
 
 using TWS_Business.Depots.Bases;

@@ -1,5 +1,6 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,7 +14,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about a vehicule model with its descriptive name and year of manufacturing.
 /// </summary>
 public class VehiculeModel
-    : BEntity, INamedEntity {
+    : BEntity, BNamedEntity {
 
     #region Properties
 

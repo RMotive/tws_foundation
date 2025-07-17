@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
-
-namespace CSM_Foundation.Database.Quality.Disposing;
+﻿namespace CSM_Foundation.Database.Quality.Disposing;
 
 /// <summary>
 ///     [Interface] for [Quality] purposes [Disposer] implementations.

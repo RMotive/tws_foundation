@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

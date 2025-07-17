@@ -8,7 +8,7 @@ namespace TWS_Foundation.Quality.Q_Controllers.Security;
 /// 
 /// </summary>
 public class Q_SolutionsController
-    : BQ_FoundationServerController<Solution> {
+    : BQ_Controller<Solution> {
 
     /// <summary>
     /// 

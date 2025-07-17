@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Entities.Vehicules.Trucks;
@@ -11,7 +11,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [Entity] that stores information about certain manufacturers for <see cref="Trailer"/> and <see cref="Truck"/> data proccesses.
 /// </summary>
 public class Manufacturer
-    : BEntity, INamedEntity {
+    : BEntity, BNamedEntity {
 
     #region Properties
 

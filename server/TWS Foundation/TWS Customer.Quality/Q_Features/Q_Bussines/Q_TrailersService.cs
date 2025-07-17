@@ -37,10 +37,12 @@ public class Q_TrailersService
     }
     #endregion
 
-    [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
-    public async Task View() {
+    [Theory(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
+    [MemberData(nameof(testingValues))]
+    public async Task View(bool internalValue) {
         // Create a sample to prevent empty view results.
-        SampleTruckCommon(true);
+        SampleTrailerCommon(internalValue);
+
         ViewOutput<Trailer_Common> viewOutput = await _service.View(
                 new QueryInput<Trailer_Common, ViewInput<Trailer_Common>> {
                     Parameters = new() {
@@ -52,8 +54,8 @@ public class Q_TrailersService
             );
 
         Assert.Multiple(
-            () => Assert.True(viewOutput.Pages > 0),
-            () => Assert.True(viewOutput.Length > 0),
+            () => Assert.True(viewOutput.Pages > 0, "There must be more than 0 View Pages"),
+            () => Assert.True(viewOutput.Length > 0, "View Entities result can't be empty"),
             () => Assert.Equal(1, viewOutput.Page),
             () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
         );
@@ -91,6 +93,4 @@ public class Q_TrailersService
         );
 
     }
-
-
 }

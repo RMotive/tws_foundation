@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database.Entity;
+using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,7 +13,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [etBuilder] that stores information about a specific type of load for <see cref="Trailer"/> loading information.
 /// </summary>
 public class LoadType
-    : BEntity, IReferencedEntity {
+    : BEntity, BReferencedEntity {
 
     #region Properties
 

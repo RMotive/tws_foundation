@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database.Bases;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
@@ -7,7 +7,15 @@ using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Customer;
 
-public class BService<TEntity, TDepot>
+
+
+/// <summary>
+///     Repreents a tenant business service, a service provides communication along business logic operations and
+///     data storaging executing complex business logic to handle tenant business data.
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
+/// <typeparam name="TDepot"></typeparam>
+public abstract class BService<TEntity, TDepot>
     : IService<TEntity>
     where TEntity : BEntity
     where TDepot : IDepot<TEntity> {

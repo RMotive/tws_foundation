@@ -17,18 +17,21 @@ namespace TWS_Foundation.Controllers.Business.Vehicules;
 public class TrailerClassesController
     : ControllerBase {
 
-    readonly ITrailerClassesService Service;
+    /// <summary>
+    ///     Feature service dependency.
+    /// </summary>
+    readonly ITrailerClassesService _service;
 
-    public TrailerClassesController(ITrailerClassesService Service) {
-        this.Service = Service;
+    public TrailerClassesController(ITrailerClassesService service) {
+        _service = service;
     }
 
-    [HttpPost(), Action("View")]
-    public async Task<IActionResult> View(ViewInput<Trailer_Class> options) {
+    [HttpPost, Action("View")]
+    public async Task<IActionResult> View(ViewInput<Trailer_Class> input) {
         return Ok(
-                await Service.View(
+                await _service.View(
                         new QueryInput<Trailer_Class, ViewInput<Trailer_Class>> {
-                            Parameters = options
+                            Parameters = input
                         }
                     )
             );

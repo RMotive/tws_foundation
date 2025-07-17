@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Validations;
+﻿using CSM_Foundation.Database.Validations;
 
 namespace CSM_Foundation.Database.Quality;
 public record Q_EntityEvaluation<TEntity>
