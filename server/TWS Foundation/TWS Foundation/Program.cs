@@ -191,7 +191,6 @@ public partial class Program {
                 // --> [Customer] services.
                 services.AddScoped<ISecurityService, SecurityService>();
                 services.AddScoped<ISolutionsService, SolutionsService>();
-                services.AddScoped<ISolutionsService, SolutionsService>();
                 services.AddScoped<IAddressesService, AddressesService>();
                 services.AddScoped<ICarriersService, CarriersService>();
                 services.AddScoped<IDriversService, DriversService>();

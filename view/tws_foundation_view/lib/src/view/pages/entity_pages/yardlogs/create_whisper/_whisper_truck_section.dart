@@ -54,6 +54,9 @@ final class _TruckSectionState extends State<_TruckSection> {
               entityBuilder: () => TruckCommon(),
               label: 'Select a Truck...',
               enabled: externalTruck == null,
+              labelBuilder: (TruckCommon truck) {
+                return truck.economic;
+              },
             ),
 
             /// --> External Truck Creation.

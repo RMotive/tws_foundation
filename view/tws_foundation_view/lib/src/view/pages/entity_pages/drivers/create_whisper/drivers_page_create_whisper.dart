@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
-import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/cascade_section.dart';
+import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';

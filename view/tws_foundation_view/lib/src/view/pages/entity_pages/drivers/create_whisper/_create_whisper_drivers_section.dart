@@ -40,29 +40,20 @@ class _CreateWhisperDriversSection extends StatelessWidget {
             return CascadeSection(
               title: 'Driver Data', 
               mainControl: Expanded(
-                child: AutoCompleteField<Employee>(
-                  adapter: const _EmployeesViewAdapter(),
-                  label: 'Select Employee',
-                  isOptional: true,
-                  isEnabled: isEnabled,
+                child: EntityFinderSelector<Employee, EmployeesServiceI>(
+                  entityBuilder: () => Employee(),
+                  label: 'Assing an employee...',
+                  enabled:true,
                   initialValue: itemState?.entity.internal?.employee,
-                  hasKeyValue: (Employee? item) {
-                      if(item?.id != null) return item!.id > BigInt.zero;
-                      return false;
-                    },
-                  displayValue:(Employee? employee) {
-                    return employee?.fullName ?? 'invalid employee';
+                  labelBuilder: (Employee employee) {
+                    return employee.fullName;
                   },
-                  onChanged:(Employee? selection) {
-                    if(selection == null) {
-                      itemState?.entity.internal?.employee = Employee();
-                    } else {
-                      itemState?.entity.internal?.employee = selection;
-                    }
+                  onSelected: (Employee? employee) {
+                    itemState?.entity.internal?.employee = employee ?? Employee();
                     itemState?.react();
                   },
                 ),
-              ), 
+              ),
               loadOnPress:(bool isShowing) {
                 return Container();
               },
