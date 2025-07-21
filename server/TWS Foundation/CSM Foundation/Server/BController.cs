@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Customer;
+﻿using CSM_Foundation.Product;
 
 using Microsoft.AspNetCore.Mvc;
 

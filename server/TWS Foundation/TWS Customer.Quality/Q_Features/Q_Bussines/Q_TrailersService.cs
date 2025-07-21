@@ -3,7 +3,6 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
-using TWS_Business.Depots;
 using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 
@@ -13,30 +12,18 @@ namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_TrailersService
     : BQ_ServicesCustomer<ITrailersService> {
 
-    private TrailersDepot? _depot;
-
     #region [BQ_Service] implementations
+
     protected override ITrailersService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-        _depot = new TrailersDepot(BussinesDatabase, Disposer);
-        return new TrailersService(_depot, BussinesDatabase);
+
+        TrailersDepot trailersDepot = new TrailersDepot(BussinesDatabase, Disposer);
+        return new TrailersService(trailersDepot, BussinesDatabase);
     }
+
     #endregion
 
     public static readonly TheoryData<bool> testingValues = [true, false];
-
-    #region Private Methods/Functions
-    Trailer_Common EntityFactory(bool internalValue) {
-        Trailer_Common common = new() {
-            Economic = Entropy[..16],
-            Status = SampleStatus("tcm"),
-            Situation = SampleSituation(),
-            Internal = internalValue ? null : null,
-            External = internalValue ? null : null,
-        };
-        return common;
-    }
-    #endregion
 
     [Theory(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     [MemberData(nameof(testingValues))]
@@ -44,7 +31,7 @@ public class Q_TrailersService
         // Create a sample to prevent empty view results.
         SampleTrailerCommon(internalValue);
 
-        ViewOutput<Trailer_Common> viewOutput = await _service.View(
+        ViewOutput<Trailer_Common> viewOutput = await service.View(
                 new QueryInput<Trailer_Common, ViewInput<Trailer_Common>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -65,7 +52,7 @@ public class Q_TrailersService
     [Theory(DisplayName = "[Create]: Entities Creation")]
     [MemberData(nameof(testingValues))]
     public async Task Create(bool internalValue) {
-        BatchOperationOutput<Trailer_Common> batchOutput = await _service.Create([
+        BatchOperationOutput<Trailer_Common> batchOutput = await service.Create([
                 SampleTrailerCommon(internalValue),
                 SampleTrailerCommon(internalValue),
                 SampleTrailerCommon(internalValue)
@@ -84,7 +71,7 @@ public class Q_TrailersService
     public async Task Update(bool internalValue) {
         Trailer_Common changedEntity = await _depot!.Store(SampleTrailerCommon(internalValue), true);
         changedEntity.Economic = "eco_" + changedEntity.Economic;
-        UpdateOutput<Trailer_Common> updateOutput = await _service.Update(new UpdateInput<Trailer_Common> {
+        UpdateOutput<Trailer_Common> updateOutput = await service.Update(new UpdateInput<Trailer_Common> {
             Entity = changedEntity,
         });
 

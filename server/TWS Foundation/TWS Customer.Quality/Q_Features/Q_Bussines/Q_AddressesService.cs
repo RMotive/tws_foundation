@@ -31,7 +31,7 @@ public class Q_AddressesService
         // Create a sample address to prevent empty view results.
         Address address = await _depot!.Store(SampleAddress(), true);
 
-        ViewOutput<Address> viewOutput = await _service.View(
+        ViewOutput<Address> viewOutput = await service.View(
                 new QueryInput<Address, ViewInput<Address>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -51,7 +51,7 @@ public class Q_AddressesService
 
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
-        BatchOperationOutput<Address> batchOutput = await _service.Create([
+        BatchOperationOutput<Address> batchOutput = await service.Create([
                 SampleAddress(),
                 SampleAddress(),
                 SampleAddress()
@@ -69,7 +69,7 @@ public class Q_AddressesService
     public async Task Update() {
         Address changedEntity = await _depot!.Store(SampleAddress(), true);
         changedEntity.Street = "updated_street" + changedEntity.Street;
-        UpdateOutput<Address> updateOutput = await _service.Update(new UpdateInput<Address> {
+        UpdateOutput<Address> updateOutput = await service.Update(new UpdateInput<Address> {
             Entity = changedEntity,
             Create = true,
         });
@@ -85,7 +85,7 @@ public class Q_AddressesService
     public async Task Delete() {
         Address sample = await _depot!.Store(SampleAddress(), true);
 
-        Address deleted = await _service.Delete(sample);
+        Address deleted = await service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Street, deleted.Street);
@@ -100,7 +100,7 @@ public class Q_AddressesService
             await _depot!.Store(SampleAddress(), true)
             ];
 
-        BatchOperationOutput<Address> batchOutput = await _service.Delete(samples);
+        BatchOperationOutput<Address> batchOutput = await service.Delete(samples);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

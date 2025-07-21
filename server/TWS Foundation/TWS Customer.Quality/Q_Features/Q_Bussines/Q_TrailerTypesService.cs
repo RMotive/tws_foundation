@@ -28,7 +28,7 @@ public class Q_TrailerTypesService
     public async Task View() {
         // Create a sample to prevent empty view results.
         await _depot!.Store(SampleTrailerType(), true);
-        ViewOutput<Trailer_Type> viewOutput = await _service.View(
+        ViewOutput<Trailer_Type> viewOutput = await service.View(
                 new QueryInput<Trailer_Type, ViewInput<Trailer_Type>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -48,7 +48,7 @@ public class Q_TrailerTypesService
 
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
-        BatchOperationOutput<Trailer_Type> batchOutput = await _service.Create([
+        BatchOperationOutput<Trailer_Type> batchOutput = await service.Create([
                 SampleTrailerType(),
                 SampleTrailerType(),
                 SampleTrailerType()
@@ -66,7 +66,7 @@ public class Q_TrailerTypesService
     public async Task Update() {
         Trailer_Type changedEntity = await _depot!.Store(SampleTrailerType(), true);
         changedEntity.Size = "upd_size" + changedEntity.Size;
-        UpdateOutput<Trailer_Type> updateOutput = await _service.Update(new UpdateInput<Trailer_Type> {
+        UpdateOutput<Trailer_Type> updateOutput = await service.Update(new UpdateInput<Trailer_Type> {
             Entity = changedEntity,
             Create = true,
         });
@@ -81,7 +81,7 @@ public class Q_TrailerTypesService
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
         Trailer_Type sample = await _depot!.Store(SampleTrailerType(), true);
-        Trailer_Type deleted = await _service.Delete(sample);
+        Trailer_Type deleted = await service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Size, deleted.Size);
@@ -95,7 +95,7 @@ public class Q_TrailerTypesService
                 await _depot!.Store(SampleTrailerType(), true)
             ];
 
-        BatchOperationOutput<Trailer_Type> batchOutput = await _service.Delete(sample);
+        BatchOperationOutput<Trailer_Type> batchOutput = await service.Delete(sample);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),

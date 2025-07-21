@@ -3,6 +3,7 @@ using System.Text;
 
 using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -109,4 +110,31 @@ public abstract class BQ_Controller<TEntity>
 
         return mocks;
     }
+}
+
+/// <summary>
+///     Represents a quality { CargoFleet } controller, used for testing purposes over server controller.
+/// </summary>
+/// <typeparam name="TCommonEntity">
+///     Type of the <see cref="ICommonEntity"/> implementation the controller's service is based on.
+/// </typeparam>
+public abstract class BQ_Controller_CommonEntity<TCommonEntity>
+    : BQ_Controller
+    where TCommonEntity : ICommonEntity {
+
+    /// <summary>
+    ///     Creates a new instance.
+    /// </summary>
+    /// <param name="controllerPath">
+    ///     Controller path.
+    /// </param>
+    /// <param name="hostFactory">
+    ///     Fixture proxy application factory dependency.
+    /// </param>
+    protected BQ_Controller_CommonEntity(string controllerPath, WebApplicationFactory<Program> hostFactory)
+        : base(controllerPath, hostFactory) {
+    }
+
+
+
 }

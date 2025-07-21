@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Q_Middlewares\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
     <ProjectReference Include="..\TWS Foundation\TWS Foundation.csproj" />
   </ItemGroup>

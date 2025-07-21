@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Product;
 
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;

@@ -31,7 +31,7 @@ public class Q_TrucksService
     public async Task View() {
         // Create a sample to prevent empty view results.
         await  _depot!.Store(SampleTruckCommon(true), true);
-        ViewOutput<Truck_Common> viewOutput = await _service.View(
+        ViewOutput<Truck_Common> viewOutput = await service.View(
                 new QueryInput<Truck_Common, ViewInput<Truck_Common>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -52,7 +52,7 @@ public class Q_TrucksService
     [Theory(DisplayName = "[Create]: Entities Creation")]
     [MemberData(nameof(testingValues))]
     public async Task Create(bool internalValue) {
-        BatchOperationOutput<Truck_Common> batchOutput = await _service.Create([
+        BatchOperationOutput<Truck_Common> batchOutput = await service.Create([
                 SampleTruckCommon(internalValue),
                 SampleTruckCommon(internalValue),
                 SampleTruckCommon(internalValue)
@@ -71,7 +71,7 @@ public class Q_TrucksService
     public async Task Update(bool internalValue) {
         Truck_Common changedEntity = await _depot!.Store(SampleTruckCommon(internalValue), true);
         changedEntity.Economic = "eco_" + changedEntity.Economic;
-        UpdateOutput<Truck_Common> updateOutput = await _service.Update(new UpdateInput<Truck_Common> {
+        UpdateOutput<Truck_Common> updateOutput = await service.Update(new UpdateInput<Truck_Common> {
             Entity = changedEntity,
         });
 

@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Entities.Trailers;
@@ -39,7 +39,7 @@ public class TrailerTypesService
 
         foreach (Trailer_Type entity in Entities) {
             try {
-                Trailer_Type attachedEntity = await _depot.Store(entity);
+                Trailer_Type attachedEntity = await depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {
                 if (Sync) {

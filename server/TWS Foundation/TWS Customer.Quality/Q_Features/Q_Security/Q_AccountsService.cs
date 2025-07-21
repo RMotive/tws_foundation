@@ -1,4 +1,6 @@
-﻿using CSM_Security.Depots;
+﻿using CSM_Foundation.Product;
+
+using CSM_Security.Depots;
 using CSM_Security.Entities;
 
 using TWS_Customer.Features;
@@ -10,7 +12,7 @@ namespace TWS_Customer.Quality.Q_Features.Q_Security;
 ///     
 /// </summary>
 public class Q_AccountsService
-    : BQ_ServicesCustomer<IAccountsService> {
+    : BQ_Service<IAccountsService, Account> {
 
     /// <summary>
     ///     
@@ -29,7 +31,7 @@ public class Q_AccountsService
     public async Task Get() {
 
         XRead<Account> exception = await Assert.ThrowsAsync<XRead<Account>>(
-                async () => await _service.Get(Guid.NewGuid().ToString())
+                async () => await service.Get(Guid.NewGuid().ToString())
             );
 
         Assert.Equal(XReadReasons.UNFOUND, exception.Reason);
@@ -39,7 +41,7 @@ public class Q_AccountsService
     public async Task GetA() {
         Account accountSample = SampleAccount();
 
-        Account fetchdAccount = await _service.Get(accountSample.User);
+        Account fetchdAccount = await service.Get(accountSample.User);
 
         Assert.Equal(accountSample.Id, fetchdAccount.Id);
     }
@@ -73,7 +75,7 @@ public class Q_AccountsService
                     ]
             );
 
-        Permit[] effectivePermits = await _service.GetPermits(accountSample.Id);
+        Permit[] effectivePermits = await service.GetPermits(accountSample.Id);
 
         Assert.NotEmpty(effectivePermits);
         Assert.Equal(2, effectivePermits.Length);

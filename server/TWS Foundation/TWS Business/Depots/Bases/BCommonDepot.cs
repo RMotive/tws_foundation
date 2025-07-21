@@ -49,8 +49,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TCommon"/> concept.
     /// </param>
     public BCommonDepot(TDatabase Database, IDisposer? Disposer) {
-        this._db = Database;
-        this._disposer = Disposer;
+        _db = Database;
+        _disposer = Disposer;
         _dbSet = Database.Set<TCommon>();
     }
 

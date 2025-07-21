@@ -1,7 +1,7 @@
-﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Product;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -54,7 +54,7 @@ public class AccountsService
     }
 
     public async Task<Account> Get(string user) {
-        BatchOperationOutput<Account> queryOutput = await _depot.Read(
+        BatchOperationOutput<Account> queryOutput = await depot.Read(
                 new QueryInput<Account, FilterQueryInput<Account>> {
                     Parameters = new FilterQueryInput<Account> {
                         Behavior = FilteringBehaviors.First,
@@ -73,6 +73,6 @@ public class AccountsService
     }
 
     public Task<Permit[]> GetPermits(long id) {
-        return _depot.GetPermits(id);
+        return depot.GetPermits(id);
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using CSM_Foundation.Customer;
+﻿using CSM_Foundation.Product;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;

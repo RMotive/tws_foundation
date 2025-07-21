@@ -29,7 +29,7 @@ public class Q_DriversService
         // Create a sample to prevent empty view results.
         await _depot!.Store(SampleDriverCommon(true), true);
 
-        ViewOutput<Driver_Common> viewOutput = await _service.View(
+        ViewOutput<Driver_Common> viewOutput = await service.View(
                 new QueryInput<Driver_Common, ViewInput<Driver_Common>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -54,7 +54,7 @@ public class Q_DriversService
     [Theory(DisplayName = "[Create]: Entities Creation")]
     [MemberData(nameof(testingValues))]
     public async Task Create(bool internalValue) {
-        BatchOperationOutput<Driver_Common> batchOutput = await _service.Create([
+        BatchOperationOutput<Driver_Common> batchOutput = await service.Create([
                 SampleDriverCommon(internalValue),
                 SampleDriverCommon(internalValue),
                 SampleDriverCommon(internalValue)
@@ -74,7 +74,7 @@ public class Q_DriversService
         Driver_Common changedEntity = await _depot!.Store(SampleDriverCommon(internalValue), true);
 
         changedEntity.License = "lic_" + changedEntity.License;
-        UpdateOutput<Driver_Common> updateOutput = await _service.Update(new UpdateInput<Driver_Common> {
+        UpdateOutput<Driver_Common> updateOutput = await service.Update(new UpdateInput<Driver_Common> {
             Entity = changedEntity,
         });
 

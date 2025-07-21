@@ -1,8 +1,8 @@
-﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Product;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;
@@ -63,7 +63,7 @@ public class EmployeesService
 
         long accountId = sessionData.Account.Id;
 
-        BatchOperationOutput<Employee> employeesReadOutput = await _depot.Read(
+        BatchOperationOutput<Employee> employeesReadOutput = await depot.Read(
                 new QueryInput<Employee, FilterQueryInput<Employee>> {
                     Parameters = new FilterQueryInput<Employee> {
                         Behavior = FilteringBehaviors.First,
@@ -84,7 +84,7 @@ public class EmployeesService
 
         foreach (Employee entity in Entities) {
             try {
-                Employee attachedEntity = await _depot.Store(entity);
+                Employee attachedEntity = await depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {
                 if (Sync) {

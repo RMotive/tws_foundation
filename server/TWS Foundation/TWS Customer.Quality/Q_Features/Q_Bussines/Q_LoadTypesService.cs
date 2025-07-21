@@ -27,7 +27,7 @@ public class Q_LoadTypesService
     public async Task View() {
         // Create a sample to prevent empty view results.
         await _depot!.Store(SampleLoadtype(), true);
-        ViewOutput<LoadType> viewOutput = await _service.View(
+        ViewOutput<LoadType> viewOutput = await service.View(
                 new QueryInput<LoadType, ViewInput<LoadType>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -48,7 +48,7 @@ public class Q_LoadTypesService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
 
-        BatchOperationOutput<LoadType> batchOutput = await _service.Create([
+        BatchOperationOutput<LoadType> batchOutput = await service.Create([
                 SampleLoadtype(),
                 SampleLoadtype(),
                 SampleLoadtype(),
@@ -66,7 +66,7 @@ public class Q_LoadTypesService
     public async Task Update() {
         LoadType changedEntity = await _depot!.Store(SampleLoadtype(), true);
         changedEntity.Name = "updated_name" + changedEntity.Name;
-        UpdateOutput<LoadType> updateOutput = await _service.Update(new UpdateInput<LoadType> {
+        UpdateOutput<LoadType> updateOutput = await service.Update(new UpdateInput<LoadType> {
             Entity = changedEntity,
             Create = true,
         });
@@ -81,7 +81,7 @@ public class Q_LoadTypesService
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
         LoadType sample = await _depot!.Store(SampleLoadtype(), true);
-        LoadType deleted = await _service.Delete(sample);
+        LoadType deleted = await service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Name, deleted.Name);
@@ -91,7 +91,7 @@ public class Q_LoadTypesService
     public async Task DeleteCollection() {
         LoadType sample = await _depot!.Store(SampleLoadtype(), true);
 
-        BatchOperationOutput<LoadType> batchOutput = await _service.Delete([
+        BatchOperationOutput<LoadType> batchOutput = await service.Delete([
                 SampleLoadtype(),
                 SampleLoadtype(),
                 SampleLoadtype()

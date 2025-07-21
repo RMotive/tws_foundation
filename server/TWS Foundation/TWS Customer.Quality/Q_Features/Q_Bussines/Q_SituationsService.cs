@@ -33,7 +33,7 @@ public class Q_SituationsService
     public async Task View() {
         // Create a sample to prevent empty view results.
         await _depot!.Store(SampleSituation(), true);
-        ViewOutput<Situation> viewOutput = await _service.View(
+        ViewOutput<Situation> viewOutput = await service.View(
                 new QueryInput<Situation, ViewInput<Situation>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -53,7 +53,7 @@ public class Q_SituationsService
 
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
-        BatchOperationOutput<Situation> batchOutput = await _service.Create([
+        BatchOperationOutput<Situation> batchOutput = await service.Create([
                 SampleSituation(),
                 SampleSituation(),
                 SampleSituation()
@@ -71,7 +71,7 @@ public class Q_SituationsService
     public async Task Update() {
         Situation changedEntity = await _depot!.Store(SampleSituation(), true);
         changedEntity.Name = "updated_name" + changedEntity.Name;
-        UpdateOutput<Situation> updateOutput = await _service.Update(new UpdateInput<Situation> {
+        UpdateOutput<Situation> updateOutput = await service.Update(new UpdateInput<Situation> {
             Entity = changedEntity,
             Create = true,
         });
@@ -86,7 +86,7 @@ public class Q_SituationsService
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
         Situation sample = await _depot!.Store(SampleSituation(), true);
-        Situation deleted = await _service.Delete(sample);
+        Situation deleted = await service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Name, deleted.Name);
@@ -100,7 +100,7 @@ public class Q_SituationsService
                 await _depot!.Store(SampleSituation(), true),
             ];
 
-        BatchOperationOutput<Situation> batchOutput = await _service.Delete(sample);
+        BatchOperationOutput<Situation> batchOutput = await service.Delete(sample);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
