@@ -49,7 +49,7 @@ final class _TrailerSectionState extends State<_TrailerSection> {
             /// --> Driver selection.
             EntityFinderSelector<DriverCommon, DriversServiceI>(
               entityBuilder: () => DriverCommon(),
-              labelBuilder: (DriverCommon driver) {
+              textBuilder: (DriverCommon driver) {
                 return driver.name ?? "Invalid Driver";
               },
               label: 'Select a Trailer...',

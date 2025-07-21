@@ -20,8 +20,8 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// Whether the component is enabled.
   final bool enabled;
 
-  /// label builder for the [TEntity] items list.
-  final String Function(TEntity) labelBuilder;
+  /// Build a custom label text for the [TEntity] items list.
+  final String Function(TEntity) textBuilder;
 
   /// Pre-selected value for the widget.
   final TEntity? initialValue;
@@ -37,7 +37,7 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
     this.initialValue,
     this.onSelected,
     required this.entityBuilder,
-    required this.labelBuilder,
+    required this.textBuilder,
   });
 
   @override
@@ -81,40 +81,89 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   /// {state} current selection of the [TEntity] item.
   TEntity? currentSelection;
 
+  /// {state} behavior scroll controller.
+  final ScrollController scrollController = ScrollController();
 
-  void setCurrentSelection(TEntity? selection) {
-    
+  /// Stores the max [TEntity] view pages available.
+  late int viewPagesAvailable;
+
+  /// Current view page reached by lazzy loading.
+  int currentViewPage = 1;
+
+  /// List that contains all the entities loaded in selectable list.
+  List<TEntity> entitiesList = <TEntity>[];
+
+  /// View loading status for lazzy list behavior.
+  bool lazzyLoading = false;
+
+  /// Trigger the view service method for lazzy loadings.
+  void loadLazzyEntities() {
+    if(!lazzyLoading){
+      setState(() {
+        lazzyLoading = true;
+        searchInvok = viewInvokation();
+      });
+    }
+  }
+
+  /// Manage the service view data consume to populate the list content.
+  Future<ViewOutput<TEntity>> viewInvokation() async {
+    SessionStorageI sessionStorage = Injector.get();
+
+    FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
+      ViewInput<TEntity>.b(10, currentViewPage),
+      sessionStorage.token,
+    );
+
+    ViewOutput<TEntity> result =  resolver.resolveDirect(
+      () => ViewOutput<TEntity>(widget.entityBuilder),
+    );
+
+    viewPagesAvailable = result.pages;
+    entitiesList.addAll(result.entities);
+    currentViewPage++;
+    result.entities = entitiesList;
+    return result;
   }
 
   @override
   void initState() {
     super.initState();
     currentSelection = widget.initialValue;
-    // Check for a valid id, if the id is not set, then the item is behing created on the fly, and not is valid as initial value.
+    // Initialize method to Check for a valid id in [widget.initialvalue] property, 
+    // if the id is not set, then the item is behing created on the fly, and not is valid as initial value.
     hasKeyValue = (TEntity? set) {
       if(set == null) return true;
       return set.id > BigInt.zero;
     };
+
     inputcontroller =
         widget.initialValue != null
-            ? TextEditingController(text: widget.labelBuilder(currentSelection!).trim())
+            ? TextEditingController(text: widget.textBuilder(currentSelection!).trim())
             : TextEditingController();
+
     inputFocusNode.addListener(
       () {
         if (inputFocusNode.hasFocus) {
-          searchInvok = viewInvokation();
+          if(entitiesList.isEmpty) searchInvok = viewInvokation();
           overlayController.show();
         } else {
           overlayController.hide();
         }
       },
     );
+
+    scrollController.addListener((){
+      if (scrollController.position.pixels > scrollController.position.maxScrollExtent - 35) {
+        loadLazzyEntities();
+      }
+    });
+
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     theme = Theming.get(context);
   }
 
@@ -130,7 +179,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
         (_) {
           if (widget.initialValue != null && hasKeyValue(widget.initialValue)) {
             currentSelection = widget.initialValue;
-            inputcontroller.text = widget.labelBuilder(currentSelection!);
+            inputcontroller.text = widget.textBuilder(currentSelection!);
           } else {
             currentSelection = null;
             inputcontroller.clear();
@@ -144,21 +193,8 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   void dispose() {
     inputFocusNode.dispose();
     inputcontroller.dispose();
+    scrollController.dispose();
     super.dispose();
-  }
-
-  ///
-  Future<ViewOutput<TEntity>> viewInvokation() async {
-    SessionStorageI sessionStorage = Injector.get();
-
-    FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
-      ViewInput<TEntity>.b(2000, 1),
-      sessionStorage.token,
-    );
-
-    return resolver.resolveDirect(
-      () => ViewOutput<TEntity>(widget.entityBuilder),
-    );
   }
 
   @override
@@ -208,7 +244,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
 
                         if (entities.isEmpty) {
                           WidgetsBinding.instance.addPostFrameCallback(
-                            (Duration timeStamp) {
+                            (_) {
                               setState(() {
                                 error = 'No entities to select';
                                 overlayController.hide();
@@ -225,30 +261,42 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                             ),
                           );
                         }
+                        /// ---> Move scroll to new content on lazzy loads.
+                        if (lazzyLoading) {
+                          lazzyLoading = false;
+                          WidgetsBinding.instance.addPostFrameCallback(
+                            (_) => scrollController.jumpTo(scrollController.position.maxScrollExtent - 200),
+                          );
+                        }
 
                         return TextFieldTapRegion(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: <TwsListTile>[
-                                for(int i = 0; i < data.entities.length; i++)
-                                  TwsListTile(
-                                    width: double.maxFinite,
-                                    textColor: theme.page.fore,
-                                    label: widget.labelBuilder(data.entities.elementAt(i)),
-                                    onTap: (bool selected) {
-                                      if (selected) {
-                                        inputFocusNode.unfocus();
-                                        overlayController.hide();
-                                        currentSelection = data.entities.elementAt(i);
-                                        inputcontroller.text = widget.labelBuilder(currentSelection!);
-                                        widget.onSelected?.call(currentSelection);
-                                        print('selected');
-                                      }
-                                    },
-                                    enabled: widget.enabled,
-                                  ),
-                              ],
-                            ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemExtent: 35,
+                            controller: scrollController,
+                            itemCount: data.entities.length,
+                            itemBuilder: (_, int index) {
+                              final TEntity entity = data.entities.elementAt(index);
+                              final String label = widget.textBuilder(entity);
+                              // Build the individual option component.
+                              return TwsListTile(
+                                label: label,
+                                width: double.maxFinite,
+                                textColor: theme.page.fore,
+                                onHoverColor: theme.page.accent,
+                                enabled: widget.enabled,
+                                onTap: (bool selected) {
+                                  if (selected) {
+                                    inputFocusNode.unfocus();
+                                    overlayController.hide();
+                                    currentSelection = entity;
+                                    inputcontroller.text = widget.textBuilder(entity);
+                                    widget.onSelected?.call(currentSelection);
+                                    print('selected');
+                                  }
+                                },
+                              );
+                            },
                           ),
                         );
                       },

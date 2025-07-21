@@ -45,7 +45,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                   label: 'Assing an employee...',
                   enabled:true,
                   initialValue: itemState?.entity.internal?.employee,
-                  labelBuilder: (Employee employee) {
+                  textBuilder: (Employee employee) {
                     return employee.fullName;
                   },
                   onSelected: (Employee? employee) {

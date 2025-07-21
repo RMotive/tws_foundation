@@ -60,7 +60,7 @@ final class _DriversSectionState extends State<_DriversSection> {
             /// --> Driver selection.
             EntityFinderSelector<DriverCommon, DriversServiceI>(
               entityBuilder: () => DriverCommon(),
-              labelBuilder: (DriverCommon driver) {
+              textBuilder: (DriverCommon driver) {
                 return driver.name ?? "Invalid Driver";
               },
               label: 'Select a Driver...',
