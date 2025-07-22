@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
-import 'package:tws_foundation_view/src/view/widgets/cascade_section.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
@@ -200,46 +197,52 @@ final class DriversPageCreateWhisper extends PageB {
                         },
                       ),
                     ),
-                    
-                    /// --> Driver License fields.
+                    TextInput(
+                      width: double.maxFinite,
+                      label: 'License',
+                      isEnabled: formDisabled,
+                      maxLength: 12,
+                      controller: TextEditingController(
+                        text: itemState?.entity.license,
+                      ),
+                      onChanged: (String text) {
+                        DriverCommon common = itemState!.entity;
+                        common.license = text;
+                        itemState.react();
+                      },
+                    ),
                     Row(
-                      spacing: 12,
+                      spacing: 10,
                       children: <Expanded>[
                         Expanded(
-                          child: TextInput(
-                            label: 'License',
-                            isEnabled: formDisabled,
-                            maxLength: 12,
-                            controller: TextEditingController(
-                              text: itemState?.entity.license,
-                            ),
-                            onChanged: (String text) {
-                              DriverCommon common = itemState!.entity;
-                              common.license = text;
-                              itemState.react();
+                          child: EntityFinderSelector<Situation, EmployeesServiceI>(
+                            entityBuilder: () => Situation(),
+                            label: 'Assing a situation...',
+                            enabled:true,
+                            initialValue: itemState?.entity.situation,
+                            textBuilder: (Situation situation) {
+                              return situation.name;
                             },
-                          ),
+                            onSelected: (Situation? situation) {
+                              itemState?.entity.situation = situation ?? Situation();
+                              itemState?.react();
+                            },
+                          ), 
                         ),
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Datepicker(
-                              label: 'License Expiration',
-                              isDisabled: formDisabled,
-                              controller: TextEditingController(text: itemState?.entity.internal?.licenseExpiration?.dateOnlyString),
-                              firstDate: DateTime(1999), 
-                              lastDate: DateTime(DateTime.now().year),
-                              onChanged: (String? date) {
-                                Driver driver = itemState!.entity.internal!;
-                                if (date == null) {
-                                  driver.licenseExpiration = null;
-                                  return;
-                                }
-                                driver.licenseExpiration = DateTime.tryParse(date);
-                                itemState.react();
-                              },
-                            ),
-                          ),
+                          child: EntityFinderSelector<Status, EmployeesServiceI>(
+                            entityBuilder: () => Status(),
+                            label: 'Assing an status...',
+                            enabled:true,
+                            initialValue: itemState?.entity.status,
+                            textBuilder: (Status status) {
+                              return status.name;
+                            },
+                            onSelected: (Status? status) {
+                              itemState?.entity.status = status ?? Status();
+                              itemState?.react();
+                            },
+                          ), 
                         ),
                       ],
                     ),

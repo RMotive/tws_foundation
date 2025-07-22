@@ -4,10 +4,12 @@ import 'package:tws_foundation_client/src/services/business/misc/locations/locat
 import 'package:tws_foundation_client/src/services/business/misc/sections/sections_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/misc/situations/situations_service.dart';
 import 'package:tws_foundation_client/src/services/business/misc/situations/situatutions_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/misc/statuses/status_service.dart';
 import 'package:tws_foundation_client/src/services/business/vehicules/manufacturers/manufacturers_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/vehicules/trailer_classes/trailer_classes_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/vehicules/trailer_types/trailer_types_service_i.dart';
 import 'package:tws_foundation_client/src/services/business/vehicules/vehicule_models/vehicule_models_service_i.dart';
+import 'package:tws_foundation_client/src/services/security/account/account_service.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -65,6 +67,12 @@ final class FoundationServer extends ServerB {
   /// [TruckCommon] Entity Service.
   late final TrucksServiceI trucksService;
 
+  /// [Status] Entity Service.
+  late final StatusServiceI statusService;
+
+  /// [Account] Entity Service.
+  late final AccountServiceI accountService;
+
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
     bool isRelease, {
@@ -86,6 +94,8 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<YardlogsServiceI>? yardlogsServiceBuilder,
     ServiceImplementationBuilder<DriversServiceI>? driversServiceBuilder,
     ServiceImplementationBuilder<TrucksServiceI>? trucksServiceBuilder,
+    ServiceImplementationBuilder<StatusServiceI>? statusServiceBuilder,
+    ServiceImplementationBuilder<AccountServiceI>? accountServiceBuilder,
   }) : super(
             isRelease: isRelease,
             devHost ??
@@ -111,5 +121,7 @@ final class FoundationServer extends ServerB {
     yardlogsService = yardlogsServiceBuilder?.call(serverHost, httpClient) ?? YardLogsService(serverHost, client: httpClient);
     driversService = driversServiceBuilder?.call(serverHost, httpClient) ?? DriversService(serverHost, client: httpClient);
     trucksService = trucksServiceBuilder?.call(serverHost, httpClient) ?? TruckService(serverHost, client: httpClient);
+    statusService = statusServiceBuilder?.call(serverHost, httpClient) ?? StatusService(serverHost, client: httpClient);
+    accountService = accountServiceBuilder?.call(serverHost, httpClient) ?? AccountService(serverHost, client: httpClient);
   }
 }

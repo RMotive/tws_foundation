@@ -18,46 +18,73 @@ class _CreateWhisperDriversSection extends StatelessWidget {
 
     return Column(
       spacing: 12,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        TextInput(
-          width: double.maxFinite,
-          label: 'Driver type',
-          isEnabled: isEnabled,
-          maxLength: 12,
-          controller: TextEditingController(
-            text: itemState?.entity.internal?.driverType,
-          ),
-          onChanged: (String text) {
-            Driver driver = itemState!.entity.internal!;
-            driver.driverType = text;
-            itemState?.react();
-          },
-        ),
-
-        ReactiveWidget<_EmployeeCreationState>(
-          reactor: _employeeState,
-          builder: (BuildContext ctx, _EmployeeCreationState reactor) {
-            return CascadeSection(
-              title: 'Driver Data', 
-              mainControl: Expanded(
-                child: EntityFinderSelector<Employee, EmployeesServiceI>(
-                  entityBuilder: () => Employee(),
-                  label: 'Assing an employee...',
-                  enabled:true,
-                  initialValue: itemState?.entity.internal?.employee,
-                  textBuilder: (Employee employee) {
-                    return employee.fullName;
-                  },
-                  onSelected: (Employee? employee) {
-                    itemState?.entity.internal?.employee = employee ?? Employee();
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Datepicker(
+                  label: 'License Expiration',
+                  isDisabled: isEnabled,
+                  controller: TextEditingController(text: itemState?.entity.internal?.licenseExpiration?.dateOnlyString),
+                  firstDate: DateTime(1999), 
+                  lastDate: DateTime(DateTime.now().year),
+                  onChanged: (String? date) {
+                    Driver driver = itemState!.entity.internal!;
+                    if (date == null) {
+                      driver.licenseExpiration = null;
+                      return;
+                    }
+                    driver.licenseExpiration = DateTime.tryParse(date);
                     itemState?.react();
                   },
                 ),
               ),
-              loadOnPress:(bool isShowing) {
-                return Container();
-              },
-            );
+            ),
+            Expanded(
+              child: TextInput(
+                width: double.maxFinite,
+                label: 'Driver type',
+                isEnabled: isEnabled,
+                maxLength: 12,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.driverType,
+                ),
+                onChanged: (String text) {
+                  Driver driver = itemState!.entity.internal!;
+                  driver.driverType = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+          ],
+        ),
+        
+        EntityFinderSelector<Employee, EmployeesServiceI>(
+          entityBuilder: () => Employee(),
+          label: 'Assing an employee...',
+          enabled:true,
+          initialValue: itemState?.entity.internal?.employee,
+          textBuilder: (Employee employee) {
+            return employee.fullName;
+          },
+          onSelected: (Employee? employee) {
+            itemState?.entity.internal?.employee = employee ?? Employee();
+            itemState?.react();
+          },
+        ),
+
+        FoldPanelWidget(
+          title: "Show crate Employee",
+          child: Container(),
+        ),
+        ReactiveWidget<_EmployeeCreationState>(
+          reactor: _employeeState,
+          builder: (BuildContext ctx, _EmployeeCreationState reactor) {
+            return Container();
           },
         ),
         /// --> Driver VISA fields.

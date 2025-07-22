@@ -191,8 +191,8 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
 
   @override
   void dispose() {
-    inputFocusNode.dispose();
-    inputcontroller.dispose();
+    // Dispose defined controllers.
+    // [TextInput] widget dispose the Input and Focus controllers.
     scrollController.dispose();
     super.dispose();
   }
