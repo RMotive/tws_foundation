@@ -78,7 +78,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                       onSelect: (List<bool> selected) => entity.entry = selected[0],
                     ),
 
-                    /// --> Load Type Selection.
+                    // --> Load Type Selection.
                     CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
                       title: 'Load Type',
                       entityBuilder: () => LoadType(),

@@ -78,7 +78,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
         ),
 
         FoldPanelWidget(
-          title: "Show crate Employee",
+          title: "Create Employee",
           child: Container(),
         ),
         ReactiveWidget<_EmployeeCreationState>(

@@ -5,6 +5,7 @@ import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adap
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
+import 'package:tws_foundation_view/src/view/widgets/tws_section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -215,7 +216,7 @@ final class DriversPageCreateWhisper extends PageB {
                       spacing: 10,
                       children: <Expanded>[
                         Expanded(
-                          child: EntityFinderSelector<Situation, Situation>(
+                          child: EntityFinderSelector<Situation, SituationsServiceI>(
                             entityBuilder: () => Situation(),
                             label: 'Assing a situation...',
                             enabled:true,
@@ -230,7 +231,7 @@ final class DriversPageCreateWhisper extends PageB {
                           ), 
                         ),
                         Expanded(
-                          child: EntityFinderSelector<Status, EmployeesServiceI>(
+                          child: EntityFinderSelector<Status, StatusesServiceI>(
                             entityBuilder: () => Status(),
                             label: 'Assing an status...',
                             enabled:true,
@@ -245,6 +246,9 @@ final class DriversPageCreateWhisper extends PageB {
                           ), 
                         ),
                       ],
+                    ),
+                    TWSSectionDivider(
+                      text: 'Driver Information',
                     ),
                     // --> Driver edge Section
                     ReactiveWidget<_DriverSectionState>(
