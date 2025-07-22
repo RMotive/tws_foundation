@@ -4,9 +4,9 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} class.
 ///
 /// Defines a [ServiceI] contract for [Status] operations.
-abstract interface class StatusServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Status> {
-  /// Creates a new [StatusServiceI] instance.
-  StatusServiceI(
+abstract interface class StatusesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Status> {
+  /// Creates a new [StatusesServiceI] instance.
+  StatusesServiceI(
     super.host,
     super.servicePath,
   );
@@ -14,9 +14,9 @@ abstract interface class StatusServiceI extends FoundationServiceB implements Se
 
 /// {abstract} class.
 ///
-/// Implements base shared [StatusServiceB] behavior for all [Status] based [ServiceI].
-abstract class StatusServiceB extends FoundationServiceB implements StatusServiceI {
-  /// Creates a new [StatusServiceB] instance.
+/// Implements base shared [StatusesServiceB] behavior for all [Status] based [ServiceI].
+abstract class StatusesServiceB extends FoundationServiceB implements StatusesServiceI {
+  /// Creates a new [StatusesServiceB] instance.
   ///
   ///
   /// [host] server host address.
@@ -24,7 +24,7 @@ abstract class StatusServiceB extends FoundationServiceB implements StatusServic
   /// [servicePath] service path address.
   ///
   /// [client] custom network [Client] to testing/quality purposes.
-  StatusServiceB(
+  StatusesServiceB(
     super.host,
     super.servicePath, {
     super.client,
@@ -35,9 +35,9 @@ abstract class StatusServiceB extends FoundationServiceB implements StatusServic
 /// {service} class.
 ///
 /// Implements a [ServiceI] for [Status] based operations, providing final behavior operations.
-final class StatusService extends StatusServiceB {
-  /// Creates a new [StatusService] instance.
-  StatusService(
+final class StatusesService extends StatusesServiceB {
+  /// Creates a new [StatusesService] instance.
+  StatusesService(
     Uri host, {
     super.client,
   }) : super(

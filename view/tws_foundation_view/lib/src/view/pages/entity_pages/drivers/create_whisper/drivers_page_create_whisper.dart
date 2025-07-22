@@ -215,7 +215,7 @@ final class DriversPageCreateWhisper extends PageB {
                       spacing: 10,
                       children: <Expanded>[
                         Expanded(
-                          child: EntityFinderSelector<Situation, EmployeesServiceI>(
+                          child: EntityFinderSelector<Situation, Situation>(
                             entityBuilder: () => Situation(),
                             label: 'Assing a situation...',
                             enabled:true,

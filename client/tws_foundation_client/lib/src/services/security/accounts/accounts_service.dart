@@ -1,5 +1,5 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/security/account/account.dart';
+import 'package:tws_foundation_client/src/services/security/accounts/account.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.

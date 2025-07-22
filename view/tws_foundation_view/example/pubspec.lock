@@ -70,10 +70,10 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "2393f373954d0ebcd4632ff64927783a391841f3"
+      resolved-ref: "14455a879398ca799a7e31e01486d99f4c4b2a31"
       url: "https://github.com/RMotive/csm_client"
     source: git
-    version: "8.1.0"
+    version: "8.2.0"
   csm_view:
     dependency: "direct main"
     description:
@@ -404,7 +404,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "66-feature-drivers"
-      resolved-ref: e0c7605aaa06003a428c9c9f1c513b7f3222efef
+      resolved-ref: "9fff7eca2f429d43544d75b8d7ee9f0d7c1510a3"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"
