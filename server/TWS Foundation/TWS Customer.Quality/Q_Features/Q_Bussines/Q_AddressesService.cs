@@ -3,6 +3,8 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
+using CSM_Security.Quality.Utils;
+
 using TWS_Business.Depots;
 using TWS_Business.Entities;
 
@@ -12,18 +14,21 @@ using TWS_Customer.Features.Business;
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_AddressesService
-    : BQ_ServicesCustomer<IAddressesService> {
+    : BQ_Service<IAddressesService, Address> {
 
     private AddressesDepot? _depot;
 
-    #region [BQ_Service] implementations
+
+    protected override Address DraftEntity(string entropy) {
+        throw new NotImplementedException();
+    }
+
     protected override IAddressesService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
+        TWS_Business.Database BussinesDatabase = BuildBusinessDb();
         _depot = new AddressesDepot(BussinesDatabase, Disposer);
         IAddressesDepot AddressesDepot = new AddressesDepot(BussinesDatabase, Disposer);
         return new AddressesService(AddressesDepot);
     }
-    #endregion
 
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
@@ -52,7 +57,7 @@ public class Q_AddressesService
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
         BatchOperationOutput<Address> batchOutput = await service.Create([
-                SampleAddress(),
+                DraftUtils.Add(),
                 SampleAddress(),
                 SampleAddress()
             ]);

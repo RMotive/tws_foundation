@@ -1,7 +1,4 @@
-﻿using System.Text;
-
-using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Product;
 
@@ -18,10 +15,14 @@ namespace TWS_Customer.Quality;
 
 
 /// <summary>
-/// 
+///     Represents a quality testing class for a { CSM CargoFleet } product service.
 /// </summary>
-/// <typeparam name="TService"></typeparam>
-/// <typeparam name="TEntity"></typeparam>
+/// <typeparam name="TService">
+///     Type of the service to be tested.
+/// </typeparam>
+/// <typeparam name="TEntity">
+///     Type of the entity the service to be tested is based on.
+/// </typeparam>
 public abstract class BQ_Service<TService, TEntity>
     : CSM_Foundation.Product.BQ_Service<TService, TEntity>
     where TService : IService<TEntity>
@@ -29,9 +30,16 @@ public abstract class BQ_Service<TService, TEntity>
 
 
     /// <summary>
-    ///     Gets a new generated [16] chars length string.
+    ///     Creates a new instance.
     /// </summary>
-    protected string Entropy => RandomUtils.String(16);
+    public BQ_Service()
+        : base(
+                [
+                    BuildBusinessDb,
+                    BuildSecurityDb,
+                ]
+            ) {
+    }
 
 
     /// <summary>
@@ -40,7 +48,7 @@ public abstract class BQ_Service<TService, TEntity>
     /// <returns>
     ///     A new <see cref="CSM_Security.Database"/> instance.
     /// </returns>
-    protected static CSM_Security.Database SecurityDatabaseFactory()
+    protected static CSM_Security.Database BuildSecurityDb()
     => DatabaseUtilities.Q_Construct<CSM_Security.Database>(CSM_Security.Database.SIGN);
 
     /// <summary>
@@ -49,7 +57,7 @@ public abstract class BQ_Service<TService, TEntity>
     /// <returns>
     ///     A new <see cref="TWS_Business.Database"/> instance.
     /// </returns>
-    protected static TWS_Business.Database BusinessDatabaseFactory()
+    protected static TWS_Business.Database BuildBusinessDb()
     => DatabaseUtilities.Q_Construct<TWS_Business.Database>(TWS_Business.Database.SIGN);
 
 
@@ -68,17 +76,17 @@ public abstract class BQ_Service<TService, TEntity>
     protected YardLog SampleYardlog() {
         return Store(
             new YardLog {
-                    Entry = true,
-                    FromTo = Entropy,
-                    Evidence = [],
-                    Seal = Entropy[..10],
-                    LoadType = SampleLoadtype(),
-                    Guard = SampleEmployee(),
-                    Section = SampleSection(),
-                    Truck = SampleTruckCommon(true),
-                    Trailer = SampleTrailerCommon(true),
-                    Driver = SampleDriverCommon(),
-                }
+                Entry = true,
+                FromTo = Entropy,
+                Evidence = [],
+                Seal = Entropy[..10],
+                LoadType = SampleLoadtype(),
+                Guard = SampleEmployee(),
+                Section = SampleSection(),
+                Truck = SampleTruckCommon(true),
+                Trailer = SampleTrailerCommon(true),
+                Driver = SampleDriverCommon(),
+            }
             );
     }
 
@@ -334,41 +342,7 @@ public abstract class BQ_Service<TService, TEntity>
         };
     }
 
-    /// <summary>
-    ///     
-    /// </summary>
-    /// <returns></returns>
-    protected Contact SampleContact() {
-        return Store(
-                new Contact {
-                    Name = $"{Entropy}_name",
-                    Lastname = $"{Entropy}_lastname",
-                    Phone = Entropy[..10],
-                    EMail = $"{Entropy}@csm.com"
-                }
-            );
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="contact"></param>
-    /// <returns></returns>
-    protected Account SampleAccount(Contact? contact = null, Permit[]? permits = null, Profile[]? profiles = null) {
-        Contact contactSample = contact ?? SampleContact();
-        Permit[] permitSamples = permits ?? [];
-        Profile[] profilesSamples = profiles ?? [];
-
-        return Store(
-                new Account {
-                    User = $"{Entropy}_usr",
-                    Password = Encoding.UTF8.GetBytes($"{Entropy}_pwd"),
-                    Contact = contactSample,
-                    Permits = permitSamples,
-                    Profiles = profilesSamples,
-                }
-            );
-    }
 
     /// <summary>
     /// 

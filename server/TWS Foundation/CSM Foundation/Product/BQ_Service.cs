@@ -70,7 +70,7 @@ public abstract class BQ_Service<TService, TEntity>
 
 
     /// <summary>
-    ///     Creates a new <typeparamref name="TEntity"/> sample instance. 
+    ///     Creates a new <typeparamref name="TEntity"/> draft instance. 
     /// </summary>
     /// <returns>
     ///     A new <typeparamref name="TEntity"/> data.
@@ -78,13 +78,13 @@ public abstract class BQ_Service<TService, TEntity>
     /// <remarks>
     ///     This data is not saved in live data stores is only sample data.
     /// </remarks>
-    protected abstract TEntity SampleEntity(string entropy);
+    protected abstract TEntity DraftEntity(string entropy);
 
 
 
     [Fact(DisplayName = "[Create]: Creates a single entity")]
     public async Task Create() {
-        TEntity sampleEntity = RunEntityFactory(SampleEntity);
+        TEntity sampleEntity = RunEntityFactory(DraftEntity);
 
         TEntity createdEntity = await service.Create(sampleEntity);
 

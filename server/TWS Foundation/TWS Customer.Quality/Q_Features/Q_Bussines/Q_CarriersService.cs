@@ -12,17 +12,13 @@ using TWS_Customer.Features.Business;
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_CarriersService
-    : BQ_ServicesCustomer<ICarriersService> {
+    : BQ_Service<ICarriersService, Carrier> {
 
-    private CarriersDepot? _depot;
 
-    #region [BQ_Service] implementations
-    protected override ICarriersService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-        _depot = new CarriersDepot(BussinesDatabase, Disposer);
-        return new CarriersService(_depot, BussinesDatabase);
+    protected override Carrier DraftEntity(string entropy) {
+        throw new NotImplementedException();
     }
-    #endregion
+
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {

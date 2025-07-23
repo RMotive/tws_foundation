@@ -15,7 +15,7 @@ public interface IAccountsService
     : IService<Account> {
 
     /// <summary>
-    ///     Gets the <see cref="Account"/> data from the given <paramref name="user"/>.
+    ///     Reads the <see cref="Account"/> data from the given <paramref name="user"/>.
     /// </summary>
     /// <param name="user">
     ///     Account's user identifier.
@@ -26,7 +26,7 @@ public interface IAccountsService
     Task<Account> Get(string user);
 
     /// <summary>
-    ///     Gets the effective <see cref="Permit"/> collection the given <see cref="Account"/>'s <paramref name="id"/> have access to.
+    ///     Reads the effective <see cref="Permit"/> collection the given <see cref="Account"/>'s <paramref name="id"/> have access to.
     /// </summary>
     /// <param name="user">
     ///     Account's user identifier.

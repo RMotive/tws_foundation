@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <ProjectReference Include="..\CSM Security.Quality\CSM Security.Quality.csproj" />
     <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
   </ItemGroup>
 

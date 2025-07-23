@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Security.Abstractions;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities;

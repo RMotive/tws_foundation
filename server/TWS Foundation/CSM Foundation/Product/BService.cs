@@ -7,6 +7,7 @@ using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Product;
 
+
 /// <summary>
 ///     Represents a product service, providing specific business logic depending on the product context
 ///     and requirements.

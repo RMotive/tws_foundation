@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CSM_Security;
+namespace CSM_Security.Abstractions;
 
 /// <summary>
 ///     [Abstract] for [CSM Security] database entities implementations.

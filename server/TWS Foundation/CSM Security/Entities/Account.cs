@@ -4,6 +4,8 @@ using CSM_Foundation.Database.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using BEntity = CSM_Security.Abstractions.BEntity;
+
 namespace CSM_Security.Entities;
 
 public class Account
