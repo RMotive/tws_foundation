@@ -38,3 +38,9 @@ extension EntityOperationFailureCollection<T extends EntityI<T>> on List<EntityO
     ).toList();
   }
 }
+
+/// Cleaning extension for string properties.
+extension StringSanitizer on String? {
+  String? get cleaned => (this != null && this!.trim().isEmpty) ? null : this;
+}
+

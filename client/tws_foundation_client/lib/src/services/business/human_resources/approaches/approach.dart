@@ -55,22 +55,10 @@ final class Approach extends EntityB<Approach> {
     String? alternative,
   }){
 
-    if(email != null) this.email = email;
-
-    if(enterprise != null && enterprise.trim().isEmpty){
-      this.enterprise = null;
-      enterprise = null;
-    }
-
-    if(personal != null && personal.trim().isEmpty){
-      this.personal = null;
-      personal = null;
-    }
-
-    if(alternative != null && alternative.trim().isEmpty){
-      this.alternative = null;
-      alternative = null;
-    }
+    this.email = email.cleaned ?? this.email;
+    this.enterprise = enterprise.cleaned ?? this.enterprise;
+    this.personal = personal.cleaned ?? this.personal;
+    this.alternative = alternative.cleaned ?? this.personal;
 
     if (this.email.trim().isEmpty &&
         this.enterprise == null &&
@@ -80,10 +68,10 @@ final class Approach extends EntityB<Approach> {
     }
 
     return Approach.a(
-      email ?? this.email, 
-      enterprise ?? this.enterprise, 
-      personal ?? this.personal, 
-      alternative ?? this.alternative, 
+      this.email,
+      this.enterprise,
+      this.personal,
+      this.alternative,
       status,
     );
   }

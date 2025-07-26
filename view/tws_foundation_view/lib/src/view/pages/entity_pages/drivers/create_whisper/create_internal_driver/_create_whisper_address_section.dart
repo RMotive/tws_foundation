@@ -39,7 +39,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 label: 'Country',
                 onChanged: (String? text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.address?.country = text ?? "";
+                  employee.address = employee.address?.sanitize(country: text);
                   itemState?.react();
                 },
               ),
@@ -54,7 +54,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 isOptional: true,
                 onChanged: (String? text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.address?.state = text;
+                  employee.address = employee.address?.sanitize(state: text);
                   itemState?.react();
                 },
               ),
@@ -73,11 +73,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
           ),
           onChanged: (String text) {
             Employee employee = itemState!.entity.internal!.employee;
-            if(text.trim().isEmpty){
-              employee.address?.city = null;
-              return;
-            }
-            employee.address?.city = text;
+            employee.address = employee.address?.sanitize(city: text);
             itemState?.react();
           },
         ),
@@ -96,11 +92,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.address?.street = null;
-                    return;
-                  }
-                  employee.address?.state = text;
+                  employee.address = employee.address?.sanitize(state: text);
                   itemState?.react();
                 },
               ),
@@ -116,11 +108,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.address?.altStreet = null;
-                    return;
-                  }
-                  employee.address?.altStreet = text;
+                  employee.address = employee.address?.sanitize(altStreet: text);
                   itemState?.react();
                 },
               ),
@@ -142,11 +130,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.address?.zip = null;
-                    return;
-                  }
-                  employee.address?.zip = text;
+                  employee.address = employee.address?.sanitize(zip: text);
                   itemState?.react();
                 },
               ),
@@ -162,11 +146,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.address?.subdivision = null;
-                    return;
-                  }
-                  employee.address?.subdivision = text;
+                  employee.address = employee.address?.sanitize(subdivision: text);
                   itemState?.react();
                 },
               ),

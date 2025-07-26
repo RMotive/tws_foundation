@@ -1,5 +1,6 @@
 
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Address] default builder.
 Address addressBuilder() => Address();
@@ -67,58 +68,34 @@ final class Address extends EntityB<Address> {
     String? zip,
     String? subdivision,
   }){
+    this.country = country.cleaned ?? this.country;
+    this.state = state.cleaned ?? this.state;
+    this.street = street.cleaned ?? this.street;
+    this.altStreet = altStreet.cleaned ?? this.altStreet;
+    this.city = city.cleaned ?? this.city;
+    this.zip = zip.cleaned ?? this.zip;
+    this.subdivision = subdivision.cleaned ?? this.subdivision;
 
-    if(country != null) this.country = country;
-
-    if(state != null && state.trim().isEmpty){
-      this.state = null;
-      state = null;
+    if (this.country.trim().isEmpty &&
+        this.state == null &&
+        this.street == null &&
+        this.altStreet == null &&
+        this.city == null &&
+        this.zip == null &&
+        this.subdivision == null) {
+      return null;
     }
-
-    if(street != null && street.trim().isEmpty){
-      this.street = null;
-      street = null;
-    }
-
-    if(altStreet != null && altStreet.trim().isEmpty){
-      this.altStreet = null;
-      altStreet = null;
-    }
-
-    if(city != null && city.trim().isEmpty){
-      this.city = null;
-      city = null;
-    }
-
-    if(zip != null && zip.trim().isEmpty){
-      this.zip = null;
-      zip = null;
-    }
-
-    if(subdivision != null && subdivision.trim().isEmpty){
-      this.subdivision = null;
-      subdivision = null;
-    }
-
-    if(this.country.trim().isEmpty &&
-      state == null &&
-      street == null &&
-      altStreet == null &&
-      city == null &&
-      zip == null &&
-      subdivision == null) {
-        return null;
-      }
 
     return Address.a(
-      country ?? this.country, 
-      state ?? this.state, 
-      street ?? this.street, 
-      altStreet ?? this.altStreet, 
-      city ?? this.city, 
-      zip ?? this.zip, 
-      subdivision ?? this.subdivision, 
+      this.country,
+      this.state,
+      this.street,
+      this.altStreet,
+      this.city,
+      this.zip,
+      this.subdivision,
     );
+
   }
 
   @override

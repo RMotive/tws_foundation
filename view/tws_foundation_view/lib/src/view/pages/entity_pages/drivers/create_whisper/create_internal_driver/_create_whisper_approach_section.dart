@@ -36,7 +36,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.approach?.email = text;
+                  employee.approach = employee.approach?.sanitize(email: text);
                   itemState?.react();
                 },
               ),
@@ -52,11 +52,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.approach?.enterprise = null;
-                    return;
-                  }
-                  employee.approach?.enterprise = text;
+                  employee.approach = employee.approach?.sanitize(enterprise: text);
                   itemState?.react();
                 },
               ),
@@ -78,11 +74,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.approach?.personal = null;
-                    return;
-                  }
-                  employee.approach?.personal = text;
+                  employee.approach = employee.approach?.sanitize(personal: text); 
                   itemState?.react();
                 },
               ),
@@ -98,11 +90,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.approach?.alternative = null;
-                    return;
-                  }
-                  employee.approach?.alternative = text;
+                  employee.approach = employee.approach?.sanitize(alternative: text);
                   itemState?.react();
                 },
               ),

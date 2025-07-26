@@ -132,6 +132,9 @@ export 'src/services/business/yardlogs/yard_log.dart';
 export 'src/services/business/yardlogs/yard_logs_service.dart';
 export 'src/services/business/yardlogs/yardlogs_service_i.dart';
 
+// --> Exporting [src.services.business.approaches]
+export 'src/services/business/human_resources/approaches/approach.dart';
+
 //! <-- Business services
 
 
