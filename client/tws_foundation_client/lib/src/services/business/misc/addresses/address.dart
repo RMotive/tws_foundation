@@ -53,7 +53,74 @@ final class Address extends EntityB<Address> {
 
   /// Generates a new [Address] instance from mandatory values.
   Address();
+
+  /// Creates a new [Address] with specific values.
+  Address.a(this.country, this.state, this.street, this.altStreet, this.city, this.zip, this.subdivision);     
   
+  /// Validate nulleable inputs to avoid [Address] entities with empty values.
+  Address? sanitize({
+    String? country,
+    String? state,
+    String? street,
+    String? altStreet,
+    String? city,
+    String? zip,
+    String? subdivision,
+  }){
+
+    if(country != null) this.country = country;
+
+    if(state != null && state.trim().isEmpty){
+      this.state = null;
+      state = null;
+    }
+
+    if(street != null && street.trim().isEmpty){
+      this.street = null;
+      street = null;
+    }
+
+    if(altStreet != null && altStreet.trim().isEmpty){
+      this.altStreet = null;
+      altStreet = null;
+    }
+
+    if(city != null && city.trim().isEmpty){
+      this.city = null;
+      city = null;
+    }
+
+    if(zip != null && zip.trim().isEmpty){
+      this.zip = null;
+      zip = null;
+    }
+
+    if(subdivision != null && subdivision.trim().isEmpty){
+      this.subdivision = null;
+      subdivision = null;
+    }
+
+    if(this.country.trim().isEmpty &&
+      state == null &&
+      street == null &&
+      altStreet == null &&
+      city == null &&
+      zip == null &&
+      subdivision == null) {
+        return null;
+      }
+
+    return Address.a(
+      country ?? this.country, 
+      state ?? this.state, 
+      street ?? this.street, 
+      altStreet ?? this.altStreet, 
+      city ?? this.city, 
+      zip ?? this.zip, 
+      subdivision ?? this.subdivision, 
+    );
+  }
+
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
@@ -96,13 +163,4 @@ final class Address extends EntityB<Address> {
     if (subdivision != null && subdivision!.trim().isEmpty || subdivision!.length > 30) results.add(EntityInvalidation<Address>(this, PropertyInfo(kSubdivision, String, subdivision), "Subdivision/Colonia must be 30 max length or be empty",  "strictLength(0, 30)"));
     return results;
   }
-
-  bool get sanited =>
-      country.trim().isEmpty &&
-      state == null &&
-      street == null &&
-      altStreet == null &&
-      city == null &&
-      zip == null &&
-      subdivision == null;
 }

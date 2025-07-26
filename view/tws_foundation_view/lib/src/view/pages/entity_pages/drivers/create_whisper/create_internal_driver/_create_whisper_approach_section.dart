@@ -36,10 +36,6 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  if(text.trim().isEmpty){
-                    employee.approach?.email = null;
-                    return;
-                  }
                   employee.approach?.email = text;
                   itemState?.react();
                 },

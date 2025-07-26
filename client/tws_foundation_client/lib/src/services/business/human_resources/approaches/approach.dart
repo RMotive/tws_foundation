@@ -44,6 +44,51 @@ final class Approach extends EntityB<Approach> {
   /// Creates a new [Approach] instance.
   Approach();
 
+  /// Creates a new [Approach] with specific values.
+  Approach.a(this.email, this.personal, this.enterprise, this.alternative, this.status);
+
+   /// Validate nulleable inputs to avoid [Approach] entities with empty values.
+  Approach? sanitize({
+    String? email,
+    String? enterprise,
+    String? personal,
+    String? alternative,
+  }){
+
+    if(email != null) this.email = email;
+
+    if(enterprise != null && enterprise.trim().isEmpty){
+      this.enterprise = null;
+      enterprise = null;
+    }
+
+    if(personal != null && personal.trim().isEmpty){
+      this.personal = null;
+      personal = null;
+    }
+
+    if(alternative != null && alternative.trim().isEmpty){
+      this.alternative = null;
+      alternative = null;
+    }
+
+    if (this.email.trim().isEmpty &&
+        this.enterprise == null &&
+        this.personal == null &&
+        this.alternative == null) {
+      return null;
+    }
+
+    return Approach.a(
+      email ?? this.email, 
+      enterprise ?? this.enterprise, 
+      personal ?? this.personal, 
+      alternative ?? this.alternative, 
+      status,
+    );
+  }
+  
+
   @override
   void decode(DataMap encode) {
     status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
@@ -127,12 +172,5 @@ final class Approach extends EntityB<Approach> {
 
     return invalidations;
   }
-
-  /// Validate nulleable inputs to avoid [Approach] entities with empty values.
-  bool get sanitized =>
-      email.trim().isEmpty &&
-      enterprise == null &&
-      personal == null &&
-      alternative == null;
       
 }
