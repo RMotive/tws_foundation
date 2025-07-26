@@ -41,6 +41,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 },
               ),
             ),
+            
             Expanded(
               child: TextInput(
                 label: 'Enterprise phone',

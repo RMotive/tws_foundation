@@ -41,6 +41,16 @@ extension EntityOperationFailureCollection<T extends EntityI<T>> on List<EntityO
 
 /// Cleaning extension for string properties.
 extension StringSanitizer on String? {
-  String? get cleaned => (this != null && this!.trim().isEmpty) ? null : this;
+  /// Flag to define if current string need to be sanitized.
+  bool get dirtyString => (this != null && this!.trim().isEmpty);
+
+  /// Check if the current string is not empty. 
+  /// Return null string when the content is invalid.
+  String? get cleaned => dirtyString ? null : this;
+
+  /// Try to sanitize the current string.
+  /// If sanitized is not needed, then try to return the current string or [fallback] property if is valid.
+  String? sanitizeOrFallback(String? fallback) =>
+      dirtyString ? null : this ?? fallback;
 }
 

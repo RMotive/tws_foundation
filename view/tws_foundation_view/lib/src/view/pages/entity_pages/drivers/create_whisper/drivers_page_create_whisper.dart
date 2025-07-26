@@ -77,7 +77,7 @@ final class DriversPageCreateWhisper extends PageB {
                   /// --> Driver name
                   CreateEntityFormRecordField(
                     label: '*Name',
-                    value: entity.internal?.employee.identification.name?? "---",
+                    value: entity.internal?.employee.identification.name ?? "---",
                   ),
 
                   /// --> Driver lastname
@@ -164,7 +164,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.twic != null)
                   CreateEntityFormRecordField(
                     label: 'TWIC',
-                    value: entity.internal!.twic!.trim().isEmpty? entity.internal!.twic : '---',
+                    value: entity.internal!.twic.cleaned ?? '---',
                   ),
 
                   /// --> Driver TWIC expiration date

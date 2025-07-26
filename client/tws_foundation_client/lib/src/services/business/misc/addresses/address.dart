@@ -68,13 +68,13 @@ final class Address extends EntityB<Address> {
     String? zip,
     String? subdivision,
   }){
-    this.country = country.cleaned ?? this.country;
-    this.state = state.cleaned ?? this.state;
-    this.street = street.cleaned ?? this.street;
-    this.altStreet = altStreet.cleaned ?? this.altStreet;
-    this.city = city.cleaned ?? this.city;
-    this.zip = zip.cleaned ?? this.zip;
-    this.subdivision = subdivision.cleaned ?? this.subdivision;
+    this.country = country.sanitizeOrFallback(this.country) ?? "";
+    this.state = state.sanitizeOrFallback(this.state);
+    this.street = street.sanitizeOrFallback(this.street);
+    this.altStreet = altStreet.sanitizeOrFallback(this.altStreet);
+    this.city = city.sanitizeOrFallback(this.city);
+    this.zip = zip.sanitizeOrFallback(this.zip);
+    this.subdivision = subdivision.sanitizeOrFallback(this.subdivision);
 
     if (this.country.trim().isEmpty &&
         this.state == null &&

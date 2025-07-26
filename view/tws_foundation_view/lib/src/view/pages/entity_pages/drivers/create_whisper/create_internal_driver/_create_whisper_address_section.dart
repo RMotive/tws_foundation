@@ -16,7 +16,6 @@ class _CreateWhisperAddressSection extends StatelessWidget {
     const List<String> statesUSA = FoundationCollections.kUStateCodes;
     const List<String> statesMX = FoundationCollections.kMXStateCodes;
 
-
     return Column(
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,

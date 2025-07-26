@@ -55,10 +55,10 @@ final class Approach extends EntityB<Approach> {
     String? alternative,
   }){
 
-    this.email = email.cleaned ?? this.email;
-    this.enterprise = enterprise.cleaned ?? this.enterprise;
-    this.personal = personal.cleaned ?? this.personal;
-    this.alternative = alternative.cleaned ?? this.personal;
+    this.email = email.sanitizeOrFallback(this.email) ?? "";
+    this.enterprise = enterprise.sanitizeOrFallback(this.enterprise);
+    this.personal = personal.sanitizeOrFallback(this.personal);
+    this.alternative = alternative.sanitizeOrFallback(this.alternative);
 
     if (this.email.trim().isEmpty &&
         this.enterprise == null &&
