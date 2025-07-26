@@ -59,7 +59,7 @@ final class Employee extends EntityB<Employee> {
   Address? address;
 
   /// [approach] information.
-  Approach? approach = Approach();
+  Approach? approach;
   //! <-- Relations
 
   //! --> Getters

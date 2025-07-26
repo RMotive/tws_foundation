@@ -1,4 +1,4 @@
-part of 'drivers_page_create_whisper.dart';
+part of '../drivers_page_create_whisper.dart';
 
 class _EmployeeCreationState extends ReactorB { }
 final _EmployeeCreationState _employeeState = _EmployeeCreationState();
@@ -20,6 +20,35 @@ class _CreateWhisperDriversSection extends StatelessWidget {
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        // --> Employee Information
+        EntityFinderSelector<Employee, EmployeesServiceI>(
+          entityBuilder: () => Employee(),
+          label: '*Assing an employee...',
+          enabled:true,
+          initialValue: itemState?.entity.internal?.employee,
+          textBuilder: (Employee employee) {
+            return employee.fullName;
+          },
+          onSelected: (Employee? employee) {
+            itemState?.entity.internal?.employee = employee ?? Employee();
+            itemState?.react();
+          },
+        ),
+
+        FoldPanelWidget(
+          title: "Create Employee",
+          child: _CreateWhisperEmployeeSection(
+            itemState: itemState,
+            isEnabled: isEnabled,
+          ),
+        ),
+        ReactiveWidget<_EmployeeCreationState>(
+          reactor: _employeeState,
+          builder: (BuildContext ctx, _EmployeeCreationState reactor) {
+            return Container();
+          },
+        ),
+
         Row(
           spacing: 10,
           children: <Widget>[
@@ -63,30 +92,6 @@ class _CreateWhisperDriversSection extends StatelessWidget {
           ],
         ),
         
-        EntityFinderSelector<Employee, EmployeesServiceI>(
-          entityBuilder: () => Employee(),
-          label: 'Assing an employee...',
-          enabled:true,
-          initialValue: itemState?.entity.internal?.employee,
-          textBuilder: (Employee employee) {
-            return employee.fullName;
-          },
-          onSelected: (Employee? employee) {
-            itemState?.entity.internal?.employee = employee ?? Employee();
-            itemState?.react();
-          },
-        ),
-
-        FoldPanelWidget(
-          title: "Create Employee",
-          child: Container(),
-        ),
-        ReactiveWidget<_EmployeeCreationState>(
-          reactor: _employeeState,
-          builder: (BuildContext ctx, _EmployeeCreationState reactor) {
-            return Container();
-          },
-        ),
         /// --> Driver VISA fields.
         Row(
           spacing: 12,
@@ -96,7 +101,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 label: 'Visa',
                 isEnabled: isEnabled,
                 maxLength: 12,
-                isFixedLength: true,
+                isOptional: true,
                 controller: TextEditingController(
                   text: itemState?.entity.internal?.visa,
                 ),
@@ -140,7 +145,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 label: 'Fast',
                 isEnabled: isEnabled,
                 maxLength: 12,
-                isFixedLength: true,
+                isOptional: true,
                 controller: TextEditingController(
                   text: itemState?.entity.internal?.fast,
                 ),
@@ -183,58 +188,13 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 label: 'ANAM',
                 isEnabled: isEnabled,
                 maxLength: 24,
-                isFixedLength: true,
+                isOptional: true,
                 controller: TextEditingController(
                   text: itemState?.entity.internal?.anam,
                 ),
                 onChanged: (String text) {
                   Driver driver = itemState!.entity.internal!;
                   driver.anam = text;
-                  itemState?.react();
-                },
-              ),
-            ),
-
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Datepicker(
-                  label: 'ANAM Expiration',
-                  isDisabled: isEnabled,
-                  controller: TextEditingController(text: itemState?.entity.internal?.anamExpiration?.dateOnlyString),
-                  firstDate: DateTime(1999), 
-                  lastDate: DateTime(DateTime.now().year),
-                  onChanged: (String? date) {
-                    Driver driver = itemState!.entity.internal!;
-                    if (date == null) {
-                      driver.anamExpiration = null;
-                      return;
-                    }
-                    driver.anamExpiration = DateTime.tryParse(date);
-                    itemState?.react();
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        /// --> Driver ANAM fields
-        Row(
-          spacing: 12,
-          children: <Widget>[
-            Expanded(
-              child: TextInput(
-                label: 'ANAM',
-                isEnabled: isEnabled,
-                maxLength: 12,
-                isFixedLength: true,
-                controller: TextEditingController(
-                  text: itemState?.entity.internal?.anam,
-                ),
-                onChanged: (String text) {
-                  Driver driver = itemState!.entity.internal!;
-                  driver.fast = text;
                   itemState?.react();
                 },
               ),
@@ -273,7 +233,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 label: 'Twic',
                 isEnabled: isEnabled,
                 maxLength: 12,
-                isFixedLength: true,
+                isOptional: true,
                 controller: TextEditingController(
                   text: itemState?.entity.internal?.twic,
                 ),

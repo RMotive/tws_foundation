@@ -97,4 +97,12 @@ final class Address extends EntityB<Address> {
     return results;
   }
 
+  bool get sanited =>
+      country.trim().isEmpty &&
+      state == null &&
+      street == null &&
+      altStreet == null &&
+      city == null &&
+      zip == null &&
+      subdivision == null;
 }

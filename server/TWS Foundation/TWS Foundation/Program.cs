@@ -167,7 +167,7 @@ public partial class Program {
                 services.AddScoped<IFeaturesDepot, FeaturesDepot>();
                 services.AddScoped<SectionsDepot>();
                 services.AddScoped<SituationsDepot>();
-                services.AddScoped<IStatusesDepot, StatusesDepot>();
+                services.AddScoped<StatusesDepot>();
                 services.AddScoped<IYardLogsDepot, YardLogsDepot>();
                 services.AddScoped<CarriersDepot>();
                 services.AddScoped<LoadTypesDepot>();
@@ -209,6 +209,7 @@ public partial class Program {
                 services.AddScoped<ISituationsService, SituationsService>();
                 services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
                 services.AddScoped<ITrucksCommonService, TrucksService>();
+                services.AddScoped<IStatusesService, StatusesService>();
             }
 
             WebApplication app = builder.Build();

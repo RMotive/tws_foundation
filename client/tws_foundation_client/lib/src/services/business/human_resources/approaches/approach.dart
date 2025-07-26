@@ -21,7 +21,7 @@ final class Approach extends EntityB<Approach> {
   //! --> Properties
   
   /// Email address for the contact/approach.
-  String? email;
+  String email = "";
 
   /// Enterprise phone number.
   String? enterprise;
@@ -41,7 +41,7 @@ final class Approach extends EntityB<Approach> {
 
   //! <-- Relations
 
-  /// Creates a new instance.
+  /// Creates a new [Approach] instance.
   Approach();
 
   @override
@@ -81,12 +81,12 @@ final class Approach extends EntityB<Approach> {
       );
     }
 
-    if (email != null && email!.length > 64) {
+    if (email.trim().isEmpty || email.length > 64) {
       invalidations.add(
         EntityInvalidation<Approach>(
           this,
           PropertyInfo(kEmail, String, email),
-          'Email length cannot exceed 64 characters',
+          'Email length cannot exceed 64 characters or be empty',
           'StrictLength()',
         ),
       );
@@ -127,4 +127,12 @@ final class Approach extends EntityB<Approach> {
 
     return invalidations;
   }
+
+  /// Validate nulleable inputs to avoid [Approach] entities with empty values.
+  bool get sanitized =>
+      email.trim().isEmpty &&
+      enterprise == null &&
+      personal == null &&
+      alternative == null;
+      
 }

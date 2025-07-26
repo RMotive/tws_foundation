@@ -9,6 +9,11 @@
     6. Added [TWSFStateHolder] class for simple states initializations.
     7. [TWSCascadeSection] Now the cascade content is builded on demand, optimizing build time if the content is not visible.
 
+    N. Added the following pages and creation [Whisper]'s:
+        * [Employees]
+        * [Drivers]
+        * [Yardlogs]
+
     N. Added FutureOr callbacks on the following widgets:
         * [TWSButtonFlat]
         * [TWSCascadeSection]

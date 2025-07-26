@@ -79,11 +79,11 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                     ),
 
                     // --> Load Type Selection.
-                    CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
-                      title: 'Load Type',
-                      entityBuilder: () => LoadType(),
-                      onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
-                    ),
+                    // CatalogOptionsSelector<LoadType, LoadTypesServiceI>(
+                    //   title: 'Load Type',
+                    //   entityBuilder: () => LoadType(),
+                    //   onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
+                    // ),
 
                     /// --> Driver selection.
                     _DriversSection(
