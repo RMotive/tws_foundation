@@ -69,8 +69,8 @@ final class Approach extends EntityB<Approach> {
 
     return Approach.a(
       this.email,
-      this.enterprise,
       this.personal,
+      this.enterprise,
       this.alternative,
       status,
     );

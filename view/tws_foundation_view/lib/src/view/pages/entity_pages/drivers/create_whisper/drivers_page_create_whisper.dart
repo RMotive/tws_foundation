@@ -108,7 +108,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.driverType != null)
                   CreateEntityFormRecordField(
                     label: 'Type',
-                    value: entity.internal!.driverType!.trim().isEmpty? "---" : entity.internal!.driverType,
+                    value: entity.internal!.driverType.cleaned ?? '---',
                   ),
 
                   /// --> License expiration date
@@ -122,7 +122,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.visa != null)
                   CreateEntityFormRecordField(
                     label: 'VISA',
-                    value: entity.internal!.visa!.trim().isEmpty? "---" : entity.internal!.visa,
+                    value: entity.internal!.visa ?? '---',
                   ),
 
                   /// --> Driver VISA expiration date
@@ -136,7 +136,7 @@ final class DriversPageCreateWhisper extends PageB {
                    if(entity.internal?.fast != null)
                   CreateEntityFormRecordField(
                     label: 'FAST',
-                    value: entity.internal!.fast!.trim().isEmpty? "---" : entity.internal?.fast,
+                    value: entity.internal!.fast ?? '---',
                   ),
 
                   /// --> Driver FAST expiration date
@@ -150,7 +150,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.anam != null)
                   CreateEntityFormRecordField(
                     label: 'ANAM',
-                    value: entity.internal!.anam!.trim().isEmpty? "---" : entity.internal!.anam,
+                    value: entity.internal!.anam.cleaned ?? '---',
                   ),
 
                   /// --> Driver ANAM expiration date
@@ -178,77 +178,77 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.employee.approach?.email != null)
                   CreateEntityFormRecordField(
                     label: '*Email',
-                    value: entity.internal!.employee.approach!.email!.trim().isEmpty? '---': entity.internal!.employee.approach!.email!,
+                    value: entity.internal!.employee.approach!.email.cleaned ?? '---',
                   ),
 
                   /// --> Driver enterprise phone number
                   if(entity.internal?.employee.approach?.enterprise != null)
                   CreateEntityFormRecordField(
                     label: 'Enterprise phone',
-                    value: entity.internal!.employee.approach!.enterprise!.trim().isEmpty? '---' : entity.internal!.employee.approach!.enterprise,
+                    value: entity.internal!.employee.approach!.enterprise.cleaned ?? '---',
                   ),
 
                   /// --> Driver personal phone number
                   if(entity.internal?.employee.approach?.personal != null)
                   CreateEntityFormRecordField(
                     label: 'Personal number',
-                    value: entity.internal!.employee.approach!.personal!.trim().isEmpty? '---' : entity.internal!.employee.approach!.personal,
+                    value: entity.internal!.employee.approach!.personal.cleaned ?? '---',
                   ),
 
                   /// --> Driver alternative contact.
                   if(entity.internal?.employee.approach?.alternative != null)
                   CreateEntityFormRecordField(
                     label: 'Alternative contact',
-                    value: entity.internal!.employee.approach!.alternative!.trim().isEmpty? '---' : entity.internal!.employee.approach!.alternative,
+                    value: entity.internal!.employee.approach!.alternative.cleaned ?? '---',
                   ),
 
                   /// --> Driver address.
                   if(entity.internal?.employee.address?.country != null)
                   CreateEntityFormRecordField(
                     label: '*Country',
-                    value: entity.internal!.employee.address!.country.trim().isEmpty? '---' :  entity.internal!.employee.address!.country,
+                    value: entity.internal!.employee.address!.country.cleaned ?? '---',
                   ),
 
                   /// --> State address.
                   if(entity.internal?.employee.address?.state != null)
                   CreateEntityFormRecordField(
                     label: 'State',
-                    value: entity.internal!.employee.address!.state!.trim().isEmpty? '---' :  entity.internal!.employee.address!.state,
+                    value: entity.internal!.employee.address!.state.cleaned ?? '---', 
                   ),
 
                   /// --> Street address.
                   if(entity.internal?.employee.address?.street != null)
                   CreateEntityFormRecordField(
                     label: 'Street',
-                    value: entity.internal!.employee.address!.state!.trim().isEmpty? '---' :  entity.internal!.employee.address!.state,
+                    value: entity.internal!.employee.address!.street.cleaned ?? '---',
                   ),
 
                   /// --> Alternative Street.
                   if(entity.internal?.employee.address?.altStreet != null)
                   CreateEntityFormRecordField(
                     label: 'Alt. Street',
-                    value: entity.internal!.employee.address!.altStreet!.trim().isEmpty? '---' :  entity.internal!.employee.address!.altStreet,
+                    value: entity.internal!.employee.address!.altStreet ?? '---',
                   ),
 
                   /// --> Driver City.
                   if(entity.internal?.employee.address?.city != null)
                   CreateEntityFormRecordField(
                     label: 'City',
-                    value: entity.internal!.employee.address!.city!.trim().isEmpty? '---' :  entity.internal!.employee.address!.city,
+                    value: entity.internal!.employee.address!.city.cleaned ?? '---',
                   ),
 
                   /// --> ZIP.
                   if(entity.internal?.employee.address?.zip != null)
                   CreateEntityFormRecordField(
                     label: 'ZIP',
-                    value: entity.internal!.employee.address!.zip!.trim().isEmpty? '---' :  entity.internal!.employee.address!.zip,
+                    value: entity.internal!.employee.address!.zip.cleaned ?? '---',
                   ),
 
                   /// --> Subdivision.
                   if(entity.internal?.employee.address?.subdivision != null)
                   CreateEntityFormRecordField(
                     label: 'Subdivision',
-                    value: entity.internal!.employee.address!.subdivision!.trim().isEmpty? '---' :  entity.internal!.employee.address!.subdivision,
+                    value: entity.internal!.employee.address!.subdivision ?? '---',
                   ),
                 ],
               );

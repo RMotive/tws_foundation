@@ -36,7 +36,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.approach = employee.approach?.sanitize(email: text);
+                  employee.approach = employee.approach?.sanitize(email: text) ?? Approach().sanitize(email: text);
                   itemState?.react();
                 },
               ),
@@ -52,7 +52,8 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.approach = employee.approach?.sanitize(enterprise: text);
+                  employee.approach =
+                      employee.approach?.sanitize(enterprise: text) ?? Approach().sanitize(enterprise: text);
                   itemState?.react();
                 },
               ),
@@ -74,7 +75,8 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.approach = employee.approach?.sanitize(personal: text); 
+                  employee.approach =
+                      employee.approach?.sanitize(personal: text) ?? Approach().sanitize(personal: text); 
                   itemState?.react();
                 },
               ),
@@ -90,7 +92,8 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.approach = employee.approach?.sanitize(alternative: text);
+                  employee.approach =
+                      employee.approach?.sanitize(alternative: text) ?? Approach().sanitize(alternative: text);
                   itemState?.react();
                 },
               ),
