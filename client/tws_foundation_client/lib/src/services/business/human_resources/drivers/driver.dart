@@ -145,7 +145,7 @@ final class Driver extends EntityB<Driver> {
         kFastExpiration: fastExpiration?.toIso8601String(),
         kAnamExpiration: anamExpiration?.toIso8601String(),
         kEmployee: employee.encode(),
-        'common': common,
+        'common': common.encode(),
       },
     );
   }
