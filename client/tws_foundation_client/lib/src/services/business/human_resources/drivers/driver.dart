@@ -127,6 +127,9 @@ final class Driver extends EntityB<Driver> {
 
   @override
   DataMap encode([DataMap? entityObject]) {
+    Status status = Status();
+    status.reference = 'referdef';
+    DriverCommon common = DriverCommon.a("licenseDef", status);
     return super.encode(
       <String, Object?>{
         kFast: fast,
@@ -142,7 +145,7 @@ final class Driver extends EntityB<Driver> {
         kFastExpiration: fastExpiration?.toIso8601String(),
         kAnamExpiration: anamExpiration?.toIso8601String(),
         kEmployee: employee.encode(),
-        'common': DriverCommon().encode(),
+        'common': common,
       },
     );
   }
