@@ -44,7 +44,7 @@ final class Identification extends EntityB<Identification> {
     name = encode.get(EntityKeys.name);
     lastName = encode.get(kLastName);
     birthDay = encode.get(kBirthday);
-
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
     super.decode(encode);
   }
 
@@ -55,6 +55,7 @@ final class Identification extends EntityB<Identification> {
         EntityKeys.name: name,
         kLastName: lastName,
         kBirthday: birthDay?.toIso8601String(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }

@@ -29,6 +29,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
               child: TextInput(
                 label: 'Email',
                 isEnabled: isEnabled,
+                deBounce: Duration(milliseconds: 300),
                 maxLength: 64,
                 isOptional: true,
                 controller: TextEditingController(
@@ -41,10 +42,11 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 },
               ),
             ),
-            
+
             Expanded(
               child: TextInput(
                 label: 'Enterprise phone',
+                deBounce: Duration(milliseconds: 300),
                 isEnabled: isEnabled,
                 maxLength: 13,
                 isOptional: true,
@@ -70,6 +72,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
                 label: 'Personal phone',
                 isEnabled: isEnabled,
                 maxLength: 13,
+                deBounce: Duration(milliseconds: 300),
                 isOptional: true,
                 controller: TextEditingController(
                   text: itemState?.entity.internal?.employee.approach?.personal,
@@ -86,6 +89,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
               child: TextInput(
                 label: 'Alternative contact',
                 isEnabled: isEnabled,
+                deBounce: Duration(milliseconds: 300),
                 maxLength: 30,
                 isOptional: true,
                 controller: TextEditingController(

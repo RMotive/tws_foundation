@@ -86,6 +86,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                 },
               ),
             ),
+            
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20),
@@ -112,6 +113,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
             ),
           ],
         ),
+
         Row(
           spacing: 10,
           children: <Widget>[
@@ -150,18 +152,22 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
         ),
 
         /// --> Driver Contact Information.
-        _CreateWhisperApproachSection(
-          itemState: itemState,
-          isEnabled: isEnabled,
+        FoldPanelWidget(
+          title: ' Add Contact information',
+          child: _CreateWhisperApproachSection(
+            itemState: itemState,
+            isEnabled: isEnabled,
+          ),
         ),
 
         /// --> Driver Address Information.
-        _CreateWhisperAddressSection(
-          itemState: itemState,
-          isEnabled: isEnabled,
+        FoldPanelWidget(
+          title: 'Add Address information',
+          child: _CreateWhisperAddressSection(
+            itemState: itemState,
+            isEnabled: isEnabled,
+          ),
         ),
-        
-        
       ],
     );
   }

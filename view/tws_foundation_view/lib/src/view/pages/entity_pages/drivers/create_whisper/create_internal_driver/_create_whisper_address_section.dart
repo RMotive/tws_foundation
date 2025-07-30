@@ -38,7 +38,8 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 label: 'Country',
                 onChanged: (String? text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.address = employee.address?.sanitize(country: text) ?? Address().sanitize(country: text);
+                  employee.address =
+                      employee.address?.sanitize(country: text ?? "") ?? Address().sanitize(country: text);
                   itemState?.react();
                 },
               ),
@@ -53,7 +54,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 isOptional: true,
                 onChanged: (String? text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.address = employee.address?.sanitize(state: text) ?? Address().sanitize(state: text);
+                  employee.address = employee.address?.sanitize(state: text ?? "") ?? Address().sanitize(state: text);
                   itemState?.react();
                 },
               ),
@@ -63,6 +64,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
 
         TextInput(
           width: double.maxFinite,
+          deBounce: Duration(milliseconds: 300),
           label: 'City',
           isEnabled: isEnabled,
           maxLength: 30,
@@ -83,6 +85,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
             Expanded(
               child: TextInput(
                 label: 'Street',
+                deBounce: Duration(milliseconds: 300),
                 isEnabled: isEnabled,
                 maxLength: 100,
                 isOptional: true,
@@ -99,6 +102,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
             Expanded(
               child: TextInput(
                 label: 'Alternative Street',
+                deBounce: Duration(milliseconds: 300),
                 isEnabled: isEnabled,
                 maxLength: 100,
                 isOptional: true,
@@ -121,6 +125,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
             Expanded(
               child: TextInput(
                 label: 'ZIP',
+                deBounce: Duration(milliseconds: 300),
                 isEnabled: isEnabled,
                 maxLength: 5,
                 isOptional: true,
@@ -137,6 +142,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
             Expanded(
               child: TextInput(
                 label: 'Subdivision/Colonia',
+                deBounce: Duration(milliseconds: 300),
                 isEnabled: isEnabled,
                 maxLength: 13,
                 isOptional: true,

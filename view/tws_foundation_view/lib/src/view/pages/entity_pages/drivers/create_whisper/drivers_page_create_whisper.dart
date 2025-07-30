@@ -358,7 +358,7 @@ final class DriversPageCreateWhisper extends PageB {
                             enabled:true,
                             initialValue: itemState?.entity.situation,
                             textBuilder: (Situation situation) {
-                              return situation.name;
+                              return situation.name.cleaned ?? '---';
                             },
                             onSelected: (Situation? situation) {
                               itemState?.entity.situation = situation ?? Situation();

@@ -67,7 +67,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
         kLicense: license,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
         FoundationCommonPropertyKeys.kSituation: situation.encode(),
-
+        'common': DriverCommon().encode(),
       },
     );
   }
