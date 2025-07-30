@@ -40,7 +40,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
 
         PropertyViewer(
           label: 'Timestamp',
-          value: entity.timestamp.fullDateString,
+          value: entity.timestamp.fullDate,
         ),
       ],
     );
@@ -188,7 +188,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
             /// --> Timestamp Property Input
             PropertyViewer(
               label: 'Timestamp',
-              value: entity.timestamp.fullDateString,
+              value: entity.timestamp.fullDate,
             ),
           ],
         );

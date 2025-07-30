@@ -115,7 +115,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.licenseExpiration != null)
                   CreateEntityFormRecordField(
                     label: 'License Expiration',
-                    value: entity.internal?.licenseExpiration?.dateOnlyString ?? '---',
+                    value: entity.internal?.licenseExpiration?.dateOnly ?? '---',
                   ),
 
                   /// --> Driver VISA number
@@ -129,7 +129,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.visaExpiration != null)
                   CreateEntityFormRecordField(
                     label: 'VISA Expiration',
-                    value: entity.internal?.visaExpiration?.dateOnlyString ?? '---',
+                    value: entity.internal?.visaExpiration?.dateOnly ?? '---',
                   ),
 
                   /// --> Driver FAST number
@@ -143,7 +143,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.fastExpiration != null)
                   CreateEntityFormRecordField(
                     label: 'FAST Expiration',
-                    value: entity.internal?.fastExpiration?.dateOnlyString ?? '---',
+                    value: entity.internal?.fastExpiration?.dateOnly ?? '---',
                   ),
 
                   /// --> Driver ANAM number
@@ -157,7 +157,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.anamExpiration != null)
                   CreateEntityFormRecordField(
                     label: 'ANAM Expiration',
-                    value: entity.internal?.anamExpiration?.dateOnlyString ?? '---',
+                    value: entity.internal?.anamExpiration?.dateOnly ?? '---',
                   ),
 
                   /// --> Driver TWIC number
@@ -171,7 +171,7 @@ final class DriversPageCreateWhisper extends PageB {
                   if(entity.internal?.twicExpiration != null)
                   CreateEntityFormRecordField(
                     label: 'TWIC Expiration',
-                    value: entity.internal?.twicExpiration?.dateOnlyString ?? '---',
+                    value: entity.internal?.twicExpiration?.dateOnly ?? '---',
                   ),
 
                   /// --> Driver Email
@@ -284,7 +284,7 @@ final class DriversPageCreateWhisper extends PageB {
                 /// --> Driver Birthday
                 CreateEntityFormRecordField(
                   label: 'Birthday',
-                  value: entity.external?.identification.birthDay?.dateOnlyString ?? "---",
+                  value: entity.external?.identification.birthDay?.dateOnly ?? "---",
                 ),
 
               ],

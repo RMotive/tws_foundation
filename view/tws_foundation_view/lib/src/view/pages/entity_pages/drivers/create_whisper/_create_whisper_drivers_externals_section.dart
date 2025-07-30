@@ -57,7 +57,7 @@ class _CreateWhisperDriversExternalsSection extends StatelessWidget {
           width: double.maxFinite,
           label: 'Birthday',
           isDisabled: isDisabled,
-          controller: TextEditingController(text: itemState?.entity.external?.identification.birthDay?.dateOnlyString),
+          controller: TextEditingController(text: itemState?.entity.external?.identification.birthDay?.dateOnly),
           firstDate: DateTime(1950), 
           lastDate: DateTime(DateTime.now().year),
           onChanged: (String? date) {

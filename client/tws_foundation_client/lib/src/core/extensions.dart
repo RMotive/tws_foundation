@@ -54,3 +54,9 @@ extension StringSanitizer on String? {
       dirtyString ? null : this ?? fallback;
 }
 
+/// Date formating extension for string properties.
+extension StringDateFormating on DateTime {
+  /// Get the ISO 8601 string with date only string.
+  String get dateOnly => toIso8601String().split('T').first;
+}
+

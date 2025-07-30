@@ -45,8 +45,8 @@ final class Maintenance extends EntityB<Maintenance> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
       <String, Object>{
-        kAnual: anual.toIso8601String(),
-        kTrimestral: anual.toIso8601String(),
+        kAnual: anual.dateOnly,
+        kTrimestral: anual.dateOnly,
         FoundationCommonPropertyKeys.kStatus: status,
       },
     );

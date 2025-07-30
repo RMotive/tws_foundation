@@ -174,7 +174,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             label: "Birthday",
             suffixLabel: ' opt.',
             controller: TextEditingController(
-              text: entity.internal?.employee.identification.birthDay?.dateOnlyString ?? entity.external?.identification.birthDay?.dateOnlyString,
+              text: entity.internal?.employee.identification.birthDay?.dateOnly ?? entity.external?.identification.birthDay?.dateOnly,
             ),
             onChanged: (String text) {
               if(entity.internal != null){
@@ -290,7 +290,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "License expiration",
               suffixLabel: ' opt.',
               controller: TextEditingController(
-                text: entity.internal?.licenseExpiration?.dateOnlyString,
+                text: entity.internal?.licenseExpiration?.dateOnly,
               ),
               onChanged: (String text) {
                 entity.internal?.licenseExpiration = DateTime.tryParse(text) ?? DateTime(0);
@@ -303,7 +303,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "Drugal reg. date",
               suffixLabel: ' opt.',
               controller: TextEditingController(
-                text: entity.internal?.drugAlcRegistrationDate?.dateOnlyString,
+                text: entity.internal?.drugAlcRegistrationDate?.dateOnly,
               ),
               onChanged: (String text) {
                 entity.internal?.drugAlcRegistrationDate = DateTime.tryParse(text) ?? DateTime(0);
@@ -316,7 +316,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "Pull notice reg. date",
               suffixLabel: ' opt.',
               controller: TextEditingController(
-                text: entity.internal?.pullNoticeRegistrationDate?.dateOnlyString,
+                text: entity.internal?.pullNoticeRegistrationDate?.dateOnly,
               ),
               onChanged: (String text) {
                 entity.internal?.pullNoticeRegistrationDate = DateTime.tryParse(text) ?? DateTime(0);
@@ -340,7 +340,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "TWIC expiration",
               suffixLabel: ' opt.',
               controller: TextEditingController(
-                text: entity.internal?.twicExpiration?.dateOnlyString,
+                text: entity.internal?.twicExpiration?.dateOnly,
               ),
               onChanged: (String text) {
                 entity.internal?.twicExpiration = DateTime.tryParse(text) ?? DateTime(0);
@@ -364,7 +364,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "VISA expiration",
               suffixLabel: ' opt.',
               controller: TextEditingController(
-                text: entity.internal?.visaExpiration?.dateOnlyString,
+                text: entity.internal?.visaExpiration?.dateOnly,
               ),
               onChanged: (String text) {
                 entity.internal?.visaExpiration = DateTime.tryParse(text) ?? DateTime(0);
@@ -388,7 +388,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "FAST expiration",
               suffixLabel: ' opt.',
               controller: TextEditingController(
-                text: entity.internal?.fastExpiration?.dateOnlyString,
+                text: entity.internal?.fastExpiration?.dateOnly,
               ),
               onChanged: (String text) {
                 entity.internal?.fastExpiration = DateTime.tryParse(text) ?? DateTime(0);
@@ -413,7 +413,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "ANAM expiration",
               suffixLabel: ' opt.',
               controller: TextEditingController(
-                text: entity.internal?.anamExpiration?.dateOnlyString,
+                text: entity.internal?.anamExpiration?.dateOnly,
               ),
               onChanged: (String text) {
                 entity.internal?.anamExpiration = DateTime.tryParse(text) ?? DateTime(0);
@@ -695,7 +695,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.external?.identification.birthDay?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.external?.identification.birthDay?.dateOnly ?? "---"}'),
               ),
             ),
           ],
@@ -834,7 +834,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.licenseExpiration?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.licenseExpiration?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -850,7 +850,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.drugAlcRegistrationDate?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.drugAlcRegistrationDate?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -866,7 +866,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.pullNoticeRegistrationDate?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.pullNoticeRegistrationDate?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -898,7 +898,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.twicExpiration?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.twicExpiration?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -930,7 +930,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.visaExpiration?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.visaExpiration?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -962,7 +962,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.fastExpiration?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.fastExpiration?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -994,7 +994,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.anamExpiration?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.anamExpiration?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -1042,7 +1042,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
-                child: Text('\n${entity.internal?.employee.identification.birthDay?.dateOnlyString ?? "---"}'),
+                child: Text('\n${entity.internal?.employee.identification.birthDay?.dateOnly ?? "---"}'),
               ),
             ),
             const TextSpan(

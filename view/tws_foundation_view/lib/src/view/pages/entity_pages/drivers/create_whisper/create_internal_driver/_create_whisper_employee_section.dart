@@ -95,7 +95,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                   label: 'Birthday',
                   isDisabled: isEnabled,
                   controller: TextEditingController(
-                    text: itemState?.entity.internal?.employee.identification.birthDay?.dateOnlyString,
+                    text: itemState?.entity.internal?.employee.identification.birthDay?.dateOnly,
                   ),
                   firstDate: DateTime(1950), 
                   lastDate: DateTime(DateTime.now().year),

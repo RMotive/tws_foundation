@@ -58,7 +58,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 child: Datepicker(
                   label: 'License Expiration',
                   isDisabled: isEnabled,
-                  controller: TextEditingController(text: itemState?.entity.internal?.licenseExpiration?.dateOnlyString),
+                  controller: TextEditingController(text: itemState?.entity.internal?.licenseExpiration?.dateOnly),
                   firstDate: DateTime(1999), 
                   lastDate: DateTime(DateTime.now().year),
                   onChanged: (String? date) {
@@ -118,7 +118,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 child: Datepicker(
                   label: 'VISA Expiration',
                   isDisabled: isEnabled,
-                  controller: TextEditingController(text: itemState?.entity.internal?.visaExpiration?.dateOnlyString),
+                  controller: TextEditingController(text: itemState?.entity.internal?.visaExpiration?.dateOnly),
                   firstDate: DateTime(1999), 
                   lastDate: DateTime(DateTime.now().year),
                   onChanged: (String? date) {
@@ -162,7 +162,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 child: Datepicker(
                   label: 'FAST Expiration',
                   isDisabled: isEnabled,
-                  controller: TextEditingController(text: itemState?.entity.internal?.fastExpiration?.dateOnlyString),
+                  controller: TextEditingController(text: itemState?.entity.internal?.fastExpiration?.dateOnly),
                   firstDate: DateTime(1999), 
                   lastDate: DateTime(DateTime.now().year),
                   onChanged: (String? date) {
@@ -206,7 +206,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 child: Datepicker(
                   label: 'ANAM Expiration',
                   isDisabled: isEnabled,
-                  controller: TextEditingController(text: itemState?.entity.internal?.anamExpiration?.dateOnlyString),
+                  controller: TextEditingController(text: itemState?.entity.internal?.anamExpiration?.dateOnly),
                   firstDate: DateTime(1999), 
                   lastDate: DateTime(DateTime.now().year),
                   onChanged: (String? date) {
@@ -250,7 +250,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
                 child: Datepicker(
                   label: 'Twic Expiration',
                   isDisabled: isEnabled,
-                  controller: TextEditingController(text: itemState?.entity.internal?.twicExpiration?.dateOnlyString),
+                  controller: TextEditingController(text: itemState?.entity.internal?.twicExpiration?.dateOnly),
                   firstDate: DateTime(1999), 
                   lastDate: DateTime(DateTime.now().year),
                   onChanged: (String? date) {
