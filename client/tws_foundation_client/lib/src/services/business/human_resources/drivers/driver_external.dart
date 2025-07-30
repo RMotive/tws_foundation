@@ -32,6 +32,7 @@ final class DriverExternal extends EntityB<DriverExternal> {
     return super.encode(
       <String, Object?>{
         kIdentification: identification.encode(),
+        'common': DriverCommon(),
       },
     );
   }
