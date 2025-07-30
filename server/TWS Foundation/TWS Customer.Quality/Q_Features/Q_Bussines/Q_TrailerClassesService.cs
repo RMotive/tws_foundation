@@ -1,107 +1,16 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
-
-using TWS_Business.Depots;
-using TWS_Business.Entities.Trailers;
-using TWS_Business.Entities.Vehicules.Trailers;
+﻿using TWS_Business.Entities.Vehicules.Trailers;
 
 using TWS_Customer.Features.Business.Vehicules;
-
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 
 public class Q_TrailerClassesService
-    : BQ_ServicesCustomer<ITrailerClassesService> {
+    : BQ_Service<ITrailerClassesService, Trailer_Class> {
 
-    private TrailerClassesDepot? _depot;
-
-    #region [BQ_Service] implementations
+    protected override Trailer_Class DraftEntity(string entropy) {
+        throw new NotImplementedException();
+    }
     protected override ITrailerClassesService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-        _depot = new TrailerClassesDepot(BussinesDatabase, Disposer);
-        return new TrailerClassesService(_depot, BussinesDatabase);
-    }
-    #endregion
-
-    [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
-    public async Task View() {
-        // Create a sample to prevent empty view results.
-        await _depot!.Store(SampleTrailerClass(), true);
-        ViewOutput<Trailer_Class> viewOutput = await service.View(
-                new QueryInput<Trailer_Class, ViewInput<Trailer_Class>> {
-                    Parameters = new() {
-                        Retroactive = false,
-                        Range = 10,
-                        Page = 1,
-                    }
-                }
-            );
-
-        Assert.Multiple(
-            () => Assert.True(viewOutput.Pages > 0),
-            () => Assert.True(viewOutput.Length > 0),
-            () => Assert.Equal(1, viewOutput.Page),
-            () => Assert.Equal(viewOutput.Length, viewOutput.Entities.Length)
-        );
-    }
-
-    [Fact(DisplayName = "[Create]: Entities Creation")]
-    public async Task Create() {
-        BatchOperationOutput<Trailer_Class> batchOutput = await service.Create([
-                SampleTrailerClass(),
-                SampleTrailerClass(),
-                SampleTrailerClass()
-            ]);
-
-        Assert.Multiple(
-           () => Assert.False(batchOutput.Failed),
-           () => Assert.Equal(3, batchOutput.Successes.Length),
-           () => Assert.Empty(batchOutput.Failures)
-        );
-
-    }
-
-    [Fact(DisplayName = "[Update]: Update an entity")]
-    public async Task Update() {
-        Trailer_Class changedEntity = await _depot!.Store(SampleTrailerClass(), true);
-        changedEntity.Name = "updated_name" + changedEntity.Name;
-        UpdateOutput<Trailer_Class> updateOutput = await service.Update(new UpdateInput<Trailer_Class> {
-            Entity = changedEntity,
-            Create = true,
-        });
-
-        Assert.Multiple(
-            () => Assert.Equal(updateOutput.Original?.Id, updateOutput.Updated.Id),
-            () => Assert.NotEqual(updateOutput.Original?.Name, updateOutput.Updated.Name)
-        );
-
-    }
-
-    [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
-    public async Task Delete() {
-        Trailer_Class sample = await _depot!.Store(SampleTrailerClass(), true);
-        Trailer_Class deleted = await service.Delete(sample);
-
-        Assert.Equal(sample.Id, deleted.Id);
-        Assert.Equal(sample.Name, deleted.Name);
-    }
-
-    [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
-    public async Task DeleteCollection() {
-        Trailer_Class[] samples = [
-                await _depot!.Store(SampleTrailerClass(), true),
-                await _depot!.Store(SampleTrailerClass(), true),
-                await _depot!.Store(SampleTrailerClass(), true)
-            ];
-
-        BatchOperationOutput<Trailer_Class> batchOutput = await service.Delete(samples);
-
-        Assert.Multiple(
-           () => Assert.False(batchOutput.Failed),
-           () => Assert.Equal(3, batchOutput.Successes.Length),
-           () => Assert.Empty(batchOutput.Failures)
-        );
+        throw new NotImplementedException();
     }
 }

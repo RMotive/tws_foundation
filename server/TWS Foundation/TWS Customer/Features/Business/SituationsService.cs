@@ -2,10 +2,8 @@
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Product;
 
-using TWS_Business;
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;
 
@@ -22,17 +20,13 @@ public interface ISituationsService
 public class SituationsService
     : BService<Situation, SituationsDepot>, ISituationsService {
 
-    private readonly Database _db;
-
     /// <summary>
     ///     Creates a new instance of <see cref="SituationsService"/>.
     /// </summary>
     /// <param name="Depot">
     ///     <see cref="Situation"/> based [Depot] handler to be used.
     /// </param>
-    public SituationsService(SituationsDepot Depot, Database Database) : base(Depot) {
-        this._db = Database;
-    }
+    public SituationsService(SituationsDepot Depot) : base(Depot) { }
 
     public async override Task<BatchOperationOutput<Situation>> Create(Situation[] Entities, bool Sync = false) {
         Situation[] successes = [];
@@ -51,8 +45,6 @@ public class SituationsService
                 failures = [.. failures, fail];
             }
         }
-
-        _db.SaveChanges();
 
         BatchOperationOutput<Situation> output = new(successes, failures);
 
