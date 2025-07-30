@@ -3,6 +3,8 @@
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
+using CSM_Security.Abstractions;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

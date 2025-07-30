@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Customer;
+﻿using CSM_Foundation.Product;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities;

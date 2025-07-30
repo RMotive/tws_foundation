@@ -109,6 +109,8 @@ public abstract class BQ_Controller<TProgram>
             ?? throw new Exception("Unable to deserealize object");
     }
 
+
+
     #region Protected Methods 
 
     protected TFrame Framing<TFrame>(ResponseSchema Generic) {

@@ -1,20 +1,13 @@
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Models.Output;
-
-using CSM_Security.Depots;
-using CSM_Security.Entities;
-
-using Microsoft.AspNetCore.Http;
+using CSM_Foundation.Product;
 
 using TWS_Customer.Managers.Auth;
-using TWS_Customer.Managers.Configuration;
 using TWS_Customer.Managers.Session;
-using TWS_Customer.Services.Exceptions;
 using TWS_Customer.Services.Records;
 
 namespace TWS_Customer.Features.Security;
 
-public interface ISecurityService {
+public interface ISecurityService
+    : IService {
 
     /// <summary>
     ///     Authenticates a given credentials subscribing the session into the current <see cref="AuthManager"/> context.
@@ -35,35 +28,18 @@ public class SecurityService
     : ISecurityService {
 
     /// <summary>
-    ///     Current running environment configurations.
-    /// </summary>
-    readonly ConfigurationManager Configurations = ConfigurationManager.Manager;
-
-    /// <summary>
     ///     Manager for session handling and context.
     /// </summary>
-    readonly IAuthManager authManager;
-
-    /// <summary>
-    ///     [Depot] handler for <see cref="Account"/> entity.
-    /// </summary>
-    readonly IAccountsDepot AccountsDepot;
-
-    readonly IHttpContextAccessor _contextAccesor;
+    readonly IAuthManager _authManager;
 
     public SecurityService(
-            IAccountsDepot accounts, 
-            IAuthManager sessionManager, 
-            IHttpContextAccessor contextAccesor
+            IAuthManager sessionManager
         ) {
-        AccountsDepot = accounts;
-        authManager = sessionManager;
-        _contextAccesor = contextAccesor;
+        _authManager = sessionManager;
     }
 
     public async Task<SessionData> Authenticate(AuthInput input) {
-        input.RequestContextAccessor = _contextAccesor;
-        return await authManager.Auth(input);
+        return await _authManager.Auth(input);
     }
 
 }

@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Depots.Vehicles;
@@ -39,7 +39,7 @@ public class VehiculeModelsService
 
         foreach (VehiculeModel entity in Entities) {
             try {
-                VehiculeModel attachedEntity = await _depot.Store(entity);
+                VehiculeModel attachedEntity = await depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {
                 if (Sync) {

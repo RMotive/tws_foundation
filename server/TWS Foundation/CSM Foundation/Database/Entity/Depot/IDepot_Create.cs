@@ -1,10 +1,11 @@
 ﻿using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Database.Entity.Depot;
+
+
 /// <summary>
-///     Describes the behavior for a <see cref="IDepot_Create{TMigrationSet}"/>,
-///     this means is able to handle a <see cref="TEntity"/> live migration entity mirror between
-///     standard creation transactions.
+///     Represents a creating logic interface for a product service. A product service usually works as
+///     an operation scoped to the product business needs.
 /// </summary>
 /// <typeparam name="TEntity">
 ///     [Entity] type of the [Depot] implementation.

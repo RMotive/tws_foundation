@@ -1,7 +1,7 @@
-﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Product;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -15,7 +15,7 @@ public interface IAccountsService
     : IService<Account> {
 
     /// <summary>
-    ///     Gets the <see cref="Account"/> data from the given <paramref name="user"/>.
+    ///     Reads the <see cref="Account"/> data from the given <paramref name="user"/>.
     /// </summary>
     /// <param name="user">
     ///     Account's user identifier.
@@ -26,7 +26,7 @@ public interface IAccountsService
     Task<Account> Get(string user);
 
     /// <summary>
-    ///     Gets the effective <see cref="Permit"/> collection the given <see cref="Account"/>'s <paramref name="id"/> have access to.
+    ///     Reads the effective <see cref="Permit"/> collection the given <see cref="Account"/>'s <paramref name="id"/> have access to.
     /// </summary>
     /// <param name="user">
     ///     Account's user identifier.
@@ -54,7 +54,7 @@ public class AccountsService
     }
 
     public async Task<Account> Get(string user) {
-        BatchOperationOutput<Account> queryOutput = await _depot.Read(
+        BatchOperationOutput<Account> queryOutput = await depot.Read(
                 new QueryInput<Account, FilterQueryInput<Account>> {
                     Parameters = new FilterQueryInput<Account> {
                         Behavior = FilteringBehaviors.First,
@@ -73,6 +73,6 @@ public class AccountsService
     }
 
     public Task<Permit[]> GetPermits(long id) {
-        return _depot.GetPermits(id);
+        return depot.GetPermits(id);
     }
 }
