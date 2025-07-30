@@ -1,35 +1,29 @@
-﻿namespace TWS_Customer.Quality.Q_Features.Q_Security;
+﻿using CSM_Security;
+
+using Microsoft.AspNetCore.Http;
+
+using TWS_Customer.Features.Security;
+using TWS_Customer.Managers.Auth;
+
+namespace TWS_Customer.Quality.Q_Features.Q_Security;
 
 /// <summary>
 ///     
 /// </summary>
-public class Q_SecurityService {
+public class Q_SecurityService
+    : BQ_Service<ISecurityService> {
 
-    //AuthInput GenerateAccount(bool isWildcard = false) {
-    //    string entropy = RandomUtils.String(16);
+    protected override ISecurityService ServiceFactory() {
+        Database securityDb = BuildSecurityDb();
 
-    //    Contact contactEntity = Store(
-    //            new Contact {
-    //                Name = entropy,
-    //                Lastname = entropy,
-    //                Phone = entropy[..14],
-    //                EMail = entropy
-    //            }
-    //        );
+        IHttpContextAccessor contextAccesor = new HttpContextAccessor();
 
-    //    Account accountEntity = Store(
-    //            new Account {
-    //                User = entropy,
-    //                Wildcard = isWildcard,
-    //                Password = Encoding.UTF8.GetBytes(entropy),
-    //                Contact = contactEntity
-    //            }
-    //        );
+        return new SecurityService(
+                new AuthManager(
+                        contextAccesor
+                    )
+            );
+    }
 
-    //    return new AuthInput {
-    //        Identity = accountEntity.User,
-    //        Password = accountEntity.Password,
-    //        Sign = "TWSF"
-    //    };
 
 }
