@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Customer;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
 
@@ -57,6 +58,17 @@ public class DriversService
         BatchOperationOutput<Driver_Common> output = new(successes, failures);
 
         return output;
+    }
+
+    public async override Task<UpdateOutput<Driver_Common>> Update(UpdateInput<Driver_Common> input) {
+        if(input.Entity.Internal != null) {
+            input.Entity.Internal.Common = input.Entity;
+        } else {
+            input.Entity.External!.Common = input.Entity;
+        }
+        return await _depot.Update(
+            GetOperationInput(input)
+        );
     }
 
 
