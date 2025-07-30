@@ -15,7 +15,6 @@ final class Identification extends EntityB<Identification> {
   //! --> Properties
 
   /// Physical person name.
-  ///
   /// For more than one name split with space.
   String name = "";
 
@@ -54,7 +53,7 @@ final class Identification extends EntityB<Identification> {
       <String, Object?>{
         EntityKeys.name: name,
         kLastName: lastName,
-        kBirthday: birthDay?.toIso8601String(),
+        kBirthday: birthDay?.dateOnlyIso,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );

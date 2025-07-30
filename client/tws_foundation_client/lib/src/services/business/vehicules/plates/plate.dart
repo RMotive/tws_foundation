@@ -60,7 +60,7 @@ final class Plate extends EntityB<Plate> {
         kIdentifier: identifier,
         kCountry: country,
         kState: state,
-        kExpiration: expiration?.dateOnly,
+        kExpiration: expiration?.dateOnlyIso,
         FoundationCommonPropertyKeys.kStatus: status,
       },
     );
