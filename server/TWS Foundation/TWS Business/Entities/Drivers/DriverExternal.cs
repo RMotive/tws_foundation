@@ -29,7 +29,6 @@ public partial class DriverExternal
 
     protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Drivers_Externals");
-
         etBuilder.Link<DriverExternal, Identification>(
                 nameof(Identification),
                 TargetReference: "",

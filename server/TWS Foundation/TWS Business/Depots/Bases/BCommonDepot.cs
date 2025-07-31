@@ -13,6 +13,8 @@ using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Utilitites;
 
+using CSM_Security;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -671,9 +673,15 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// </exception>
     public async Task<UpdateOutput<TCommon>> Update(QueryInput<TCommon, UpdateInput<TCommon>> input) {
         UpdateInput<TCommon> parameters = input.Parameters;
-        IQueryable<TCommon> processedQuery = _dbSet;
 
         TCommon overwritten = parameters.Entity;
+
+        IQueryable<TCommon> processedQuery = ProcessQuery(
+                input,
+                (sourceQuery) => sourceQuery
+            );
+
+        /// --> When the entity is not saved yet.
         if (overwritten.Id == 0) {
             if (!parameters.Create) {
                 throw new XDepot<TCommon>(XDepotSituations.CreateDisabled);
@@ -707,9 +715,10 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 Updated = overwritten,
             };
         }
-
+        _db.Attach(original);
         UpdateHelper(original, overwritten);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
+
         return new UpdateOutput<TCommon> {
             Original = original,
             Updated = overwritten,
