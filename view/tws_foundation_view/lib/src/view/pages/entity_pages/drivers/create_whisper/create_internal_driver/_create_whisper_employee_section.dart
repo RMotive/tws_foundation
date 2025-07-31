@@ -77,7 +77,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                 isEnabled: isEnabled,
                 maxLength: 18,
                 controller: TextEditingController(
-                  text: itemState?.entity.internal?.driverType,
+                  text: itemState?.entity.internal?.employee.curp,
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;

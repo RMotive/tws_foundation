@@ -12,9 +12,9 @@ import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-
 /// Address state class.
 class _AddresState extends ReactorB {}
+
 _AddresState _addresState = _AddresState();
 // ignore: unused_element
 void Function() _addressEffect = () {};
@@ -32,7 +32,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
   Widget composeViewer(BuildContext buildContext, DriverCommon entity) {
     List<Widget> edgeColumns = <Widget>[];
 
-    if(entity.internal != null){
+    if (entity.internal != null) {
       edgeColumns = <Widget>[
         PropertyViewer(
           label: 'Name',
@@ -74,11 +74,10 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           label: 'CURP',
           value: entity.internal?.employee.curp,
         ),
-       
       ];
     }
 
-    if(entity.external != null){
+    if (entity.external != null) {
       edgeColumns = <Widget>[
         PropertyViewer(
           label: 'Name',
@@ -88,7 +87,6 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           label: 'Last name',
           value: entity.external?.identification.lastName,
         ),
-        
       ];
     }
 
@@ -103,7 +101,6 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.internal != null ? "Own" : 'External',
         ),
         ...edgeColumns,
-        
       ],
     );
   }
@@ -119,21 +116,22 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           useRootNavigator: true,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            if(entity.internal != null) return _buildInternalDialog(entity, router, context);
+            if (entity.internal != null) return _buildInternalDialog(entity, router, context);
             return _buildExternalDialog(entity, router, context);
           },
         );
       },
       formBuilder: (BuildContext buildContext, DriverCommon entity) {
-        if(entity.internal != null) return _editorInternalFormBuilder(entity);
+        if (entity.internal != null) return _editorInternalFormBuilder(entity);
         return _editorExternalFormBuilder(entity);
       },
     );
   }
-  Widget _identificationSection(DriverCommon entity){
+
+  Widget _identificationSection(DriverCommon entity) {
     return SectionWidget(
       outterPadding: const EdgeInsets.symmetric(vertical: 10),
-      title: 'Identity', 
+      title: 'Identity',
       child: Column(
         spacing: 10,
         children: <Widget>[
@@ -145,9 +143,9 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               text: entity.internal?.employee.identification.name ?? entity.external?.identification.name,
             ),
             onChanged: (String text) {
-              if(entity.internal != null){
+              if (entity.internal != null) {
                 entity.internal?.employee.identification.name = text;
-              } else{
+              } else {
                 entity.external?.identification.name = text;
               }
             },
@@ -160,7 +158,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               text: entity.internal?.employee.identification.lastName ?? entity.external?.identification.lastName,
             ),
             onChanged: (String text) {
-              if(entity.internal != null){
+              if (entity.internal != null) {
                 entity.internal?.employee.identification.lastName = text;
               } else {
                 entity.external?.identification.lastName = text;
@@ -174,10 +172,12 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             label: "Birthday",
             suffixLabel: ' opt.',
             controller: TextEditingController(
-              text: entity.internal?.employee.identification.birthDay?.dateOnly ?? entity.external?.identification.birthDay?.dateOnly,
+              text:
+                  entity.internal?.employee.identification.birthDay?.dateOnly ??
+                  entity.external?.identification.birthDay?.dateOnly,
             ),
             onChanged: (String text) {
-              if(entity.internal != null){
+              if (entity.internal != null) {
                 entity.internal?.employee.identification.birthDay = DateTime.tryParse(text) ?? DateTime(0);
               } else {
                 entity.external?.identification.birthDay = DateTime.tryParse(text) ?? DateTime(0);
@@ -188,12 +188,13 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
       ),
     );
   }
-  Widget _editorExternalFormBuilder(DriverCommon entity){
+
+  Widget _editorExternalFormBuilder(DriverCommon entity) {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         spacing: 10,
-        children:<Widget>[
+        children: <Widget>[
           TextInput(
             label: "License",
             hint: "Enter a License number",
@@ -214,7 +215,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             },
             onSelected: (Situation? selectedItem) {
               entity.situation = selectedItem ?? Situation();
-            }, 
+            },
           ),
           EntityFinderSelector<Status, StatusesServiceI>(
             label: "Status",
@@ -225,7 +226,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             },
             onSelected: (Status? selectedItem) {
               entity.status = selectedItem ?? Status();
-            }, 
+            },
           ),
           _identificationSection(entity),
         ],
@@ -233,7 +234,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
     );
   }
 
-  Widget _editorInternalFormBuilder(DriverCommon entity){
+  Widget _editorInternalFormBuilder(DriverCommon entity) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -270,7 +271,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               },
               onSelected: (Situation? selectedItem) {
                 entity.situation = selectedItem ?? Situation();
-              }, 
+              },
             ),
             EntityFinderSelector<Status, StatusesServiceI>(
               label: "Status",
@@ -281,7 +282,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               },
               onSelected: (Status? selectedItem) {
                 entity.status = selectedItem ?? Status();
-              }, 
+              },
             ),
             Datepicker(
               width: double.maxFinite,
@@ -330,7 +331,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               isFixedLength: true,
               controller: TextEditingController(text: entity.internal?.twic),
               onChanged: (String text) {
-               entity.internal?.twic = text;
+                entity.internal?.twic = text;
               },
             ),
             Datepicker(
@@ -392,7 +393,6 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               ),
               onChanged: (String text) {
                 entity.internal?.fastExpiration = DateTime.tryParse(text) ?? DateTime(0);
-                
               },
             ),
             TextInput(
@@ -420,42 +420,42 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               },
             ),
             _identificationSection(entity),
-            if(entity.internal?.employee.approach != null) 
-            SectionWidget(
-              outterPadding: const EdgeInsets.symmetric(vertical: 10),
-              title: 'Conctact', 
-              child: _approachSection(entity),
-            ),
-
-            if(entity.internal?.employee.approach == null) 
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: FoldPanelWidget(
-                title: "Add Contact Information",
-                child:  _approachSection(entity),
+            if (entity.internal?.employee.approach != null)
+              SectionWidget(
+                outterPadding: const EdgeInsets.symmetric(vertical: 10),
+                title: 'Conctact',
+                child: _approachSection(entity),
               ),
-            ),
 
-            if(entity.internal?.employee.address != null)
-            SectionWidget(
-              outterPadding: const EdgeInsets.symmetric(vertical: 10),
-              title: 'Address', 
-              child: _addressSection(entity),
-            ),
+            if (entity.internal?.employee.approach == null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: FoldPanelWidget(
+                  title: "Add Contact Information",
+                  child: _approachSection(entity),
+                ),
+              ),
+
+            if (entity.internal?.employee.address != null)
+              SectionWidget(
+                outterPadding: const EdgeInsets.symmetric(vertical: 10),
+                title: 'Address',
+                child: _addressSection(entity),
+              ),
 
             /// build a creation form.
-            if(entity.internal?.employee.address == null) 
-            FoldPanelWidget(
-              title: "Address", 
-              child: _addressSection(entity),
-            ),
+            if (entity.internal?.employee.address == null)
+              FoldPanelWidget(
+                title: "Address",
+                child: _addressSection(entity),
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _addressSection(DriverCommon entity){
+  Widget _addressSection(DriverCommon entity) {
     List<String> countryOptions = FoundationCollections.kCountryList;
     List<String> usaStateOptions = FoundationCollections.kUStateCodes;
     List<String> mxStateOptions = FoundationCollections.kMXStateCodes;
@@ -468,20 +468,29 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           label: 'Country',
           isOptional: true,
           nativeList: FoundationCollections.kCountryList,
-          initialValue: entity.internal?.employee.address?.country == "" ? null :  entity.internal?.employee.address?.country,
-          displayValue:(String? item) => item ?? "Not valid data",
+          initialValue:
+              entity.internal?.employee.address?.country == "" ? null : entity.internal?.employee.address?.country,
+          displayValue: (String? item) => item ?? "Not valid data",
           onChanged: (String? text) {
-            entity.internal?.employee.address = entity.internal?.employee.address?.sanitize(country: text ?? '', state: '',) ?? Address().sanitize(country: text,);
+            entity.internal?.employee.address =
+                entity.internal?.employee.address?.sanitize(
+                  country: text ?? '',
+                  state: '',
+                ) ??
+                Address().sanitize(
+                  country: text,
+                );
             _addresState.react();
           },
         ),
         ReactiveWidget<_AddresState>(
-          reactor: _addresState, 
+          reactor: _addresState,
           builder: (BuildContext ctx, _AddresState state) {
             String? currentCountry = entity.internal?.employee.address?.country;
-            final String country = entity.internal?.employee.address?.country == countryOptions[0]
-                ? countryOptions[0]
-                : entity.internal?.employee.address?.country == countryOptions[1]
+            final String country =
+                entity.internal?.employee.address?.country == countryOptions[0]
+                    ? countryOptions[0]
+                    : entity.internal?.employee.address?.country == countryOptions[1]
                     ? countryOptions[1]
                     : "";
             _addressEffect = state.react;
@@ -491,16 +500,19 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               suffixLabel: ' opt.',
               isOptional: true,
               isEnabled: currentCountry == countryOptions[0] || currentCountry == countryOptions[1],
-              nativeList: country == countryOptions[0]? usaStateOptions : mxStateOptions,
-              initialValue: entity.internal?.employee.address?.state == "" ? null : entity.internal?.employee.address?.state,
-              displayValue:(String? item) => item ?? "Not valid data",
+              nativeList: country == countryOptions[0] ? usaStateOptions : mxStateOptions,
+              initialValue:
+                  entity.internal?.employee.address?.state == "" ? null : entity.internal?.employee.address?.state,
+              displayValue: (String? item) => item ?? "Not valid data",
               onChanged: (String? text) {
-                entity.internal?.employee.address = entity.internal?.employee.address?.sanitize(state: text ?? '') ?? Address().sanitize(state: text ?? '');
+                entity.internal?.employee.address =
+                    entity.internal?.employee.address?.sanitize(state: text ?? '') ??
+                    Address().sanitize(state: text ?? '');
               },
             );
           },
         ),
-        
+
         TextInput(
           label: "Street",
           hint: "Enter an street",
@@ -510,7 +522,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.street,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address = entity.internal?.employee.address?.sanitize(state: text) ?? Address().sanitize(state: text);
+            entity.internal?.employee.address =
+                entity.internal?.employee.address?.sanitize(state: text) ?? Address().sanitize(state: text);
           },
         ),
         TextInput(
@@ -522,7 +535,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.altStreet,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address = entity.internal?.employee.address?.sanitize(altStreet: text) ?? Address().sanitize(altStreet: text);
+            entity.internal?.employee.address =
+                entity.internal?.employee.address?.sanitize(altStreet: text) ?? Address().sanitize(altStreet: text);
           },
         ),
         TextInput(
@@ -534,7 +548,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.city,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address = entity.internal?.employee.address?.sanitize(city: text) ?? Address().sanitize(city: text);
+            entity.internal?.employee.address =
+                entity.internal?.employee.address?.sanitize(city: text) ?? Address().sanitize(city: text);
           },
         ),
         TextInput(
@@ -546,7 +561,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.city,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address = entity.internal?.employee.address?.sanitize(zip: text) ?? Address().sanitize(zip: text);
+            entity.internal?.employee.address =
+                entity.internal?.employee.address?.sanitize(zip: text) ?? Address().sanitize(zip: text);
           },
         ),
         TextInput(
@@ -558,14 +574,15 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.city,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address = entity.internal?.employee.address?.sanitize(subdivision: text) ?? Address().sanitize(subdivision: text);
+            entity.internal?.employee.address =
+                entity.internal?.employee.address?.sanitize(subdivision: text) ?? Address().sanitize(subdivision: text);
           },
         ),
       ],
     );
   }
 
-  Widget _approachSection(DriverCommon entity){
+  Widget _approachSection(DriverCommon entity) {
     return Column(
       spacing: 10,
       children: <Widget>[
@@ -577,7 +594,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.email,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.approach?.sanitize(email: text) ?? Approach().sanitize(email: text);
+            entity.internal?.employee.approach =
+                entity.internal?.employee.approach?.sanitize(email: text) ?? Approach().sanitize(email: text);
           },
         ),
         TextInput(
@@ -589,8 +607,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.enterprise,
           ),
           onChanged: (String text) {
-              entity.internal?.employee.approach?.sanitize(enterprise: text) ??
-                  Approach().sanitize(enterprise: text);
+            entity.internal?.employee.approach =
+                entity.internal?.employee.approach?.sanitize(enterprise: text) ?? Approach().sanitize(enterprise: text);
           },
         ),
         TextInput(
@@ -602,8 +620,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.personal,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.approach?.sanitize(personal: text) ??
-                  Approach().sanitize(personal: text);
+            entity.internal?.employee.approach =
+                entity.internal?.employee.approach?.sanitize(personal: text) ?? Approach().sanitize(personal: text);
           },
         ),
         TextInput(
@@ -615,15 +633,16 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.alternative,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.approach?.sanitize(alternative: text) ??
-                  Approach().sanitize(alternative: text);
-            },
+            entity.internal?.employee.approach =
+                entity.internal?.employee.approach?.sanitize(alternative: text) ??
+                Approach().sanitize(alternative: text);
+          },
         ),
       ],
     );
   }
 
-  Dialog _buildExternalDialog(DriverCommon entity, Router router, BuildContext context){
+  Dialog _buildExternalDialog(DriverCommon entity, Router router, BuildContext context) {
     return Dialog(
       acceptLabel: 'Update',
       title: 'Confirm Driver external Update',
@@ -631,7 +650,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         TextSpan(
           text: 'Are you sure you want to update an external driver?',
           children: <InlineSpan>[
-          const TextSpan(
+            const TextSpan(
               text: '\n',
             ),
             const TextSpan(
@@ -758,7 +777,6 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         );
       },
     );
-
   }
 
   Dialog _buildInternalDialog(DriverCommon entity, Router router, BuildContext context) {
@@ -770,7 +788,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         TextSpan(
           text: 'Are you sure you want to update a driver?',
           children: <InlineSpan>[
-          const TextSpan(
+            const TextSpan(
               text: '\n',
             ),
             const TextSpan(
@@ -1295,7 +1313,6 @@ final class DriversEntityTable extends FoundationEntityTableB<DriversEntityTable
 
   @override
   Widget build(BuildContext context) {
-
     return EntityTable<DriverCommon, DriversServiceI>(
       entityFactory: () => DriverCommon(),
       adapter: adapter,
@@ -1303,19 +1320,21 @@ final class DriversEntityTable extends FoundationEntityTableB<DriversEntityTable
         /// --> Name
         EntityTableColumnOptions<DriverCommon>(
           title: 'Name',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.name
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.name,
         ),
 
         /// --> License
         EntityTableColumnOptions<DriverCommon>(
           title: 'License',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.license
+          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.license,
         ),
 
         /// --> Onwership
         EntityTableColumnOptions<DriverCommon>(
           title: 'Ownership',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal != null ? "Own" : 'External',
+          factory:
+              (DriverCommon entity, int index, BuildContext buildContext) =>
+                  entity.internal != null ? "Own" : 'External',
         ),
 
         /// --> Onwership
@@ -1327,19 +1346,22 @@ final class DriversEntityTable extends FoundationEntityTableB<DriversEntityTable
         /// --> CURP
         EntityTableColumnOptions<DriverCommon>(
           title: 'CURP',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.curp ?? '---',
+          factory:
+              (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.curp ?? '---',
         ),
 
         /// --> RFC
         EntityTableColumnOptions<DriverCommon>(
           title: 'RFC',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.rfc ?? '---',
+          factory:
+              (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.rfc ?? '---',
         ),
 
         /// --> NSS
         EntityTableColumnOptions<DriverCommon>(
           title: 'NSS',
-          factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.nss ?? '---',
+          factory:
+              (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.nss ?? '---',
         ),
 
         /// --> Hiring Date
