@@ -255,7 +255,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               label: "Driver type",
               hint: "Enter the driver type",
               suffixLabel: ' opt.',
-              maxLength: 16,
+              maxLength: 12,
               controller: TextEditingController(text: entity.internal?.driverType),
               onChanged: (String text) {
                 entity.internal?.driverType = text;

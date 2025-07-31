@@ -82,6 +82,7 @@ final class Employee extends EntityB<Employee> {
         kAddress: address?.encode(),
         kEmployeeDates: dates.encode(),
         kApproach: approach?.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -97,6 +98,7 @@ final class Employee extends EntityB<Employee> {
     identification = encode.getEntity(() => Identification(), kIdentification) ?? identification;
     address = encode.getEntity(() => Address(), kAddress);
     approach = encode.getEntity(() => Approach(), kApproach);
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status; 
   }
 
   @override
