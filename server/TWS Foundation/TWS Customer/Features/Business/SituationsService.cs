@@ -5,7 +5,6 @@ using CSM_Foundation.Database.Entity.Models.Output;
 using TWS_Business;
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;
 
@@ -13,14 +12,14 @@ namespace TWS_Customer.Features.Business;
 ///     [Interface] for <see cref="Situation"/> based [Service] implementations.
 /// </summary>
 public interface ISituationsService
-    : IService<Situation> {
+    : IReferenceService<Situation> {
 }
 
 /// <summary>
 ///     [Service] for <see cref="Situation"/> based operations.
 /// </summary>
 public class SituationsService
-    : BService<Situation, SituationsDepot>, ISituationsService {
+    : BReferenceService<Situation, SituationsDepot>, ISituationsService {
 
     private readonly Database _db;
 

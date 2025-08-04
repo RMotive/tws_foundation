@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Bases;
@@ -21,14 +19,7 @@ namespace TWS_Business.Entities;
 ///     information about a system status for an specific entity.
 /// </summary>
 public class Status
-    : BNamedEntity {
-
-    #region Properites
-
-    [StringLength(8, MinimumLength = 8)]
-    public string Reference { get; set; } = default!;
-
-    #endregion
+    : BNamedReferencedEntity {
 
     #region Dependants
 

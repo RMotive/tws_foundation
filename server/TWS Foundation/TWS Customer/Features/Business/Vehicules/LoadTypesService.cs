@@ -13,14 +13,14 @@ namespace TWS_Customer.Features.Business.Vehicules;
 ///     [Interface] for <see cref="LoadType"/> based [Service] implementations.
 /// </summary>
 public interface ILoadTypesService
-    : IService<LoadType> {
+    : IReferenceService<LoadType> {
 }
 
 /// <summary>
 ///     [Service] for <see cref="Address"/> based operations.
 /// </summary>
 public class LoadTypesService
-    : BService<LoadType, LoadTypesDepot>, ILoadTypesService {
+    : BReferenceService<LoadType, LoadTypesDepot>, ILoadTypesService {
 
     private readonly Database _db;
 

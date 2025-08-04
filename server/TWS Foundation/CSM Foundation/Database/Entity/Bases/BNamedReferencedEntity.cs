@@ -33,6 +33,7 @@ public abstract class BNamedReferencedEntity
 
     public string Name { get; set; } = string.Empty;
 
+    [StringLength(8, MinimumLength = 8)]
     public string Reference { get; set;} = string.Empty;
 
     public string? Description { get; set; }

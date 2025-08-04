@@ -101,5 +101,18 @@ public class Q_StatusesService
            () => Assert.Empty(batchOutput.Failures)
         );
     }
+
+    [Fact(DisplayName = "[Read]: Read a record filtering by reference property.")]
+    public async Task Read() {
+        // Create a sample to prevent empty read results.
+        Status status = await _depot!.Store(SampleStatus("tst"), true);
+        BatchOperationOutput<Status> batchResult = await _service.Read(status.Reference);
+
+        Assert.Multiple(
+            () => Assert.True(batchResult.SuccessesCount > 0),
+            () => Assert.Equal(0, batchResult.FailuresCount),
+            () => Assert.Single(batchResult.Successes)
+        );
+    }
 }
 

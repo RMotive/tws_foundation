@@ -60,6 +60,7 @@
     21. Added Quality Adapters attribute for each current Common Entities in [TWS_Business].
     22. Added tag attribute for common dependences in [Yardlog] entity.
     23. Added [Store] method on [BDepot] and [BCommonDepot].
+    24. Added [BReferenceService] and [IReferenceService] for read referenced entities.
 
 - Fixes:
 

@@ -13,15 +13,14 @@ namespace TWS_Customer.Features.Business;
 ///     [Interface] for <see cref="Status"/> based [Service] implementations.
 /// </summary>
 public interface IStatusesService
-    : IService<Status> {
+    : IReferenceService<Status> {
 }
-
 
 /// <summary>
 ///     [Service] for <see cref="Status"/> based operations.
 /// </summary>
 public class StatusesService
-    : BService<Status, StatusesDepot>, IStatusesService {
+    : BReferenceService<Status, StatusesDepot>, IStatusesService {
 
     private readonly Database _db;
 

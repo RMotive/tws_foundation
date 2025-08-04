@@ -31,4 +31,9 @@ public class LoadTypesController
                 }
             )
         );
+
+    [HttpPost, Action("Read")]
+    public async Task<IActionResult> View(string reference) => Ok(
+           await service.Read(reference)
+       );
 }

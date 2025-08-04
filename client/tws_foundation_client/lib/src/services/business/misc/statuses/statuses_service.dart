@@ -1,10 +1,12 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
+import 'package:tws_foundation_client/src/services/read_reference_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
 ///
 /// Defines a [ServiceI] contract for [Status] operations.
-abstract interface class StatusesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Status> {
+abstract interface class StatusesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Status>, ReadReferenceServiceI<Status> {
   /// Creates a new [StatusesServiceI] instance.
   StatusesServiceI(
     super.host,
@@ -52,6 +54,16 @@ final class StatusesService extends StatusesServiceB {
         'view',
         input,
         authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<BatchOperationOutput<Status>> read(String reference, String auth) async {
+    return FoundationResponseResolver<BatchOperationOutput<Status>>(
+      await get(
+        'read?reference=$reference',
+        auth: auth,
       ),
     );
   }
