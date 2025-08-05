@@ -12,24 +12,11 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    itemState!.entity.internal!.employee.status = _defaultStatus;
     return Column(
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        EntityFinderSelector<Status, StatusesServiceI>(
-          entityBuilder: () => Status(),
-          label: '*Assing an status...',
-          enabled:true,
-          initialValue: itemState?.entity.internal?.employee.status,
-          textBuilder: (Status status) {
-            return status.name;
-          },
-          onSelected: (Status? status) {
-            itemState?.entity.internal?.employee.status = status ?? Status();
-            itemState?.react();
-          },
-        ),
-
         /// --> Employee Identification Information.
         Row(
           spacing: 10,

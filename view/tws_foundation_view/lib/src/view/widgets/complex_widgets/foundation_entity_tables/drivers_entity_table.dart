@@ -282,6 +282,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               },
               onSelected: (Status? selectedItem) {
                 entity.status = selectedItem ?? Status();
+                entity.internal?.employee.status = selectedItem ?? Status();
+                entity.internal?.employee.approach?.status = selectedItem ?? Status();
               },
             ),
             Datepicker(
@@ -596,6 +598,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           onChanged: (String text) {
             entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(email: text) ?? Approach().sanitize(email: text);
+            entity.internal?.employee.approach?.status = entity.status;
           },
         ),
         TextInput(
@@ -609,6 +612,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           onChanged: (String text) {
             entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(enterprise: text) ?? Approach().sanitize(enterprise: text);
+            entity.internal?.employee.approach?.status = entity.status;
           },
         ),
         TextInput(
@@ -622,6 +626,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           onChanged: (String text) {
             entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(personal: text) ?? Approach().sanitize(personal: text);
+            entity.internal?.employee.approach?.status = entity.status;
           },
         ),
         TextInput(
@@ -636,6 +641,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(alternative: text) ??
                 Approach().sanitize(alternative: text);
+            entity.internal?.employee.approach?.status = entity.status;
           },
         ),
       ],

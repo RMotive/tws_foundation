@@ -40,6 +40,8 @@
         - [Situation]
         - [LoadType]
         - [Status]
+
+    7. Added [ReadReferenceServiceB] & [ReadReferenceServiceI] for read referenced entities.
         
 - Fixes:
 

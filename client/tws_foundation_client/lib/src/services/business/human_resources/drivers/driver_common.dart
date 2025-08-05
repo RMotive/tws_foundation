@@ -51,7 +51,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   /// Creates a new [DriverCommon] instance.
   DriverCommon();
 
-  DriverCommon.a(this.license, this.status);
+  DriverCommon.a(this.license, this.status, this.situation);
 
   @override
   void decode(DataMap encode) {

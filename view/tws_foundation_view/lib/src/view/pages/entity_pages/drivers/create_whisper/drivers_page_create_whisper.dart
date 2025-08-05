@@ -26,6 +26,8 @@ final class _DriverSectionState extends ReactorB {}
 final _DriverSectionState _driverSectionState = _DriverSectionState();
 void Function() _driverSectionStateReact = (){};
 
+Status _defaultStatus = Status();
+
 /// {whisper} class.
 final class DriversPageCreateWhisper extends PageB {
   /// Creates a new [DriversPageCreateWhisper] instance.
@@ -377,6 +379,10 @@ final class DriversPageCreateWhisper extends PageB {
                             },
                             onSelected: (Status? status) {
                               itemState?.entity.status = status ?? Status();
+                              // Setting default status values
+                              _defaultStatus = status ?? Status();
+                              itemState?.entity.internal?.employee.status = status ?? Status();
+                              itemState?.entity.internal?.employee.approach?.status = status ?? Status();
                               itemState?.react();
                             },
                           ), 

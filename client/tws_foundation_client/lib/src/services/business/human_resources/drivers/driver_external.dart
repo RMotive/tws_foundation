@@ -29,8 +29,11 @@ final class DriverExternal extends EntityB<DriverExternal> {
   @override
   DataMap encode([DataMap? entityObject]) {
     Status status = Status();
+    Situation situation = Situation();
     status.reference = 'referdef';
-    DriverCommon common = DriverCommon.a("licenseDef", status);
+    situation.reference = 'referdef';
+    
+    DriverCommon common = DriverCommon.a("licenseDef", status, situation);
     return super.encode(
       <String, Object?>{
         kIdentification: identification.encode(),

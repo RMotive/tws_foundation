@@ -12,12 +12,11 @@ class _CreateWhisperApproachSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    itemState!.entity.internal!.employee.approach?.status = _defaultStatus;
     return Column(
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-
         TWSSectionDivider(
           text: "Contact Information",
         ),
