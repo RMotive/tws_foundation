@@ -17,7 +17,7 @@ class _CreateWhisperApproachSection extends StatelessWidget {
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        TWSSectionDivider(
+        SectionDivider(
           text: "Contact Information",
         ),
 

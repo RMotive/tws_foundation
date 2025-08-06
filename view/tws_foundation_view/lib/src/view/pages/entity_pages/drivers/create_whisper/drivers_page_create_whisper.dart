@@ -8,18 +8,17 @@ import 'package:tws_foundation_view/src/data/const/static_collections.dart';
 import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-part 'create_internal_driver/_create_whisper_drivers_section.dart';
-part 'create_internal_driver/_create_whisper_employee_section.dart';
+part '_adapters.dart';
+part '_create_whisper_drivers_externals_section.dart';
 part 'create_internal_driver/_create_whisper_address_section.dart';
 part 'create_internal_driver/_create_whisper_approach_section.dart';
-
-part '_create_whisper_drivers_externals_section.dart';
-part '_adapters.dart';
+part 'create_internal_driver/_create_whisper_drivers_section.dart';
+part 'create_internal_driver/_create_whisper_employee_section.dart';
 
 /// Driver section state class.
 final class _DriverSectionState extends ReactorB {}
@@ -174,6 +173,48 @@ final class DriversPageCreateWhisper extends PageB {
                   CreateEntityFormRecordField(
                     label: 'TWIC Expiration',
                     value: entity.internal?.twicExpiration?.dateOnly ?? '---',
+                  ),
+
+                  /// --> Driver pull notice registration date
+                  if (entity.internal?.pullNoticeRegistrationDate != null)
+                  CreateEntityFormRecordField(
+                    label: 'Pull notice reg.',
+                    value: entity.internal?.pullNoticeRegistrationDate?.dateOnly ?? '---',
+                  ),
+
+                  /// --> Driver pull notice registration date
+                  if (entity.internal?.drugAlcRegistrationDate != null)
+                  CreateEntityFormRecordField(
+                    label: 'Drug. Alc. reg.',
+                    value: entity.internal?.drugAlcRegistrationDate?.dateOnly ?? '---',
+                  ),
+
+                  /// --> Driver CNAP date
+                  if (entity.internal?.employee.dates.cnap != null)
+                  CreateEntityFormRecordField(
+                    label: 'CNAP dates',
+                    value: entity.internal?.employee.dates.cnap?.dateOnly ?? '---',
+                  ),
+
+                  /// --> Driver hire date
+                  if (entity.internal?.employee.dates.hire != null)
+                  CreateEntityFormRecordField(
+                    label: 'Hire date',
+                    value: entity.internal?.employee.dates.hire?.dateOnly ?? '---',
+                  ),
+
+                  /// --> Driver imss date
+                  if (entity.internal?.employee.dates.imss != null)
+                  CreateEntityFormRecordField(
+                    label: 'imss reg. date',
+                    value: entity.internal?.employee.dates.imss?.dateOnly ?? '---',
+                  ),
+
+                  /// --> Driver imss date
+                  if (entity.internal?.employee.dates.termination != null)
+                  CreateEntityFormRecordField(
+                    label: 'termination date',
+                    value: entity.internal?.employee.dates.termination?.dateOnly ?? '---',
                   ),
 
                   /// --> Driver Email
@@ -389,7 +430,7 @@ final class DriversPageCreateWhisper extends PageB {
                         ),
                       ],
                     ),
-                    TWSSectionDivider(
+                    const SectionDivider(
                       text: 'Driver Information',
                     ),
                     // --> Driver edge Section

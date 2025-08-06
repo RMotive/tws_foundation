@@ -42,6 +42,7 @@ class _CreateWhisperDriversSection extends StatelessWidget {
             isEnabled: isEnabled,
           ),
         ),
+
         ReactiveWidget<_EmployeeCreationState>(
           reactor: _employeeState,
           builder: (BuildContext ctx, _EmployeeCreationState reactor) {
@@ -267,8 +268,6 @@ class _CreateWhisperDriversSection extends StatelessWidget {
             ),
           ],
         ),
-        
-        
       ],
     );
   }

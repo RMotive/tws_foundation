@@ -7,7 +7,7 @@ Address addressBuilder() => Address();
 
 /// Defines a business entity that stores information about a location [Address] for buildings, employees, etc.
 final class Address extends EntityB<Address> {
-/// [country] property key.
+  /// [country] property key.
   static const String kCountry = "country";
 
   /// [state] property key.
@@ -54,9 +54,6 @@ final class Address extends EntityB<Address> {
 
   /// Generates a new [Address] instance from mandatory values.
   Address();
-
-  /// Creates a new [Address] with specific values.
-  Address.a(this.country, this.state, this.street, this.altStreet, this.city, this.zip, this.subdivision);     
   
   /// Validate nulleable inputs to avoid [Address] entities with empty values.
   Address? sanitize({
@@ -86,16 +83,7 @@ final class Address extends EntityB<Address> {
       return null;
     }
 
-    return Address.a(
-      this.country,
-      this.state,
-      this.street,
-      this.altStreet,
-      this.city,
-      this.zip,
-      this.subdivision,
-    );
-
+    return this;
   }
 
   @override

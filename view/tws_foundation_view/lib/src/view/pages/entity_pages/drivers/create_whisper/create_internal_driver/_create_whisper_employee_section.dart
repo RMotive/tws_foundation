@@ -15,7 +15,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
     itemState!.entity.internal!.employee.status = _defaultStatus;
     return Column(
       spacing: 12,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         /// --> Employee Identification Information.
         Row(
@@ -35,7 +35,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                 },
               ),
             ),
-            
+
             Expanded(
               child: TextInput(
                 label: '*Lastname',
@@ -50,7 +50,6 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                 },
               ),
             ),
-
           ],
         ),
 
@@ -73,7 +72,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                 },
               ),
             ),
-            
+
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20),
@@ -84,7 +83,7 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                   controller: TextEditingController(
                     text: itemState?.entity.internal?.employee.identification.birthDay?.dateOnly,
                   ),
-                  firstDate: DateTime(1950), 
+                  firstDate: DateTime(1950),
                   lastDate: DateTime(DateTime.now().year),
                   onChanged: (String? date) {
                     Employee employee = itemState!.entity.internal!.employee;
@@ -131,6 +130,102 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
                   employee.rfc = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+          ],
+        ),
+
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            Expanded(
+              child: Datepicker(
+                width: double.maxFinite,
+                label: 'Cnap date',
+                isDisabled: isEnabled,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.employee.dates.cnap?.dateOnly,
+                ),
+                firstDate: DateTime(1950),
+                lastDate: DateTime(DateTime.now().year),
+                onChanged: (String? date) {
+                  Employee employee = itemState!.entity.internal!.employee;
+                  if (date == null) {
+                    employee.dates.cnap = null;
+                    return;
+                  }
+                  employee.dates.cnap = DateTime.tryParse(date);
+                  itemState?.react();
+                },
+              ),
+            ),
+            Expanded(
+              child: Datepicker(
+                width: double.maxFinite,
+                label: 'Hire date',
+                isDisabled: isEnabled,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.employee.dates.hire?.dateOnly,
+                ),
+                firstDate: DateTime(1950),
+                lastDate: DateTime(DateTime.now().year),
+                onChanged: (String? date) {
+                  Employee employee = itemState!.entity.internal!.employee;
+                  if (date == null) {
+                    employee.dates.hire = null;
+                    return;
+                  }
+                  employee.dates.hire = DateTime.tryParse(date);
+                  itemState?.react();
+                },
+              ),
+            ),
+          ],
+        ),
+
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            Expanded(
+              child: Datepicker(
+                width: double.maxFinite,
+                label: 'imss registration date',
+                isDisabled: isEnabled,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.employee.dates.imss?.dateOnly,
+                ),
+                firstDate: DateTime(1950),
+                lastDate: DateTime(DateTime.now().year),
+                onChanged: (String? date) {
+                  Employee employee = itemState!.entity.internal!.employee;
+                  if (date == null) {
+                    employee.dates.imss = null;
+                    return;
+                  }
+                  employee.dates.imss = DateTime.tryParse(date);
+                  itemState?.react();
+                },
+              ),
+            ),
+            Expanded(
+              child: Datepicker(
+                width: double.maxFinite,
+                label: 'Termination date',
+                isDisabled: isEnabled,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.employee.dates.termination?.dateOnly,
+                ),
+                firstDate: DateTime(1950),
+                lastDate: DateTime(DateTime.now().year),
+                onChanged: (String? date) {
+                  Employee employee = itemState!.entity.internal!.employee;
+                  if (date == null) {
+                    employee.dates.termination = null;
+                    return;
+                  }
+                  employee.dates.termination = DateTime.tryParse(date);
                   itemState?.react();
                 },
               ),

@@ -1,8 +1,14 @@
 part of '../drivers_page_create_whisper.dart';
 
+/// Address state class.
+class _AddresState extends ReactorB {}
+
+_AddresState _addresState = _AddresState();
+// ignore: unused_element
+void Function() _addressEffect = () {};
+
 class _CreateWhisperAddressSection extends StatelessWidget {
   final CreateEntityFormRecordReactor<DriverCommon>? itemState;
-
   final bool isEnabled;
 
   const _CreateWhisperAddressSection({
@@ -22,7 +28,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
       children: <Widget>[
 
         /// --> Driver Address Information.
-        TWSSectionDivider(
+        SectionDivider(
           text: "Address Information",
         ),
 
@@ -41,23 +47,29 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                   employee.address =
                       employee.address?.sanitize(country: text ?? "") ?? Address().sanitize(country: text);
                   itemState?.react();
+                  _addresState.react();
                 },
               ),
             ),
-            Expanded(
-              child: AutoCompleteField<String>(
-                isEnabled: isEnabled,
-                nativeList: statesUSA,
-                initialValue: itemState?.entity.internal?.employee.address?.state == "" ? null :  itemState?.entity.internal?.employee.address?.state,
-                displayValue:(String? item) => item ?? "Not valid data",
-                label: 'State',
-                isOptional: true,
-                onChanged: (String? text) {
-                  Employee employee = itemState!.entity.internal!.employee;
-                  employee.address = employee.address?.sanitize(state: text ?? "") ?? Address().sanitize(state: text);
-                  itemState?.react();
-                },
-              ),
+             ReactiveWidget<_AddresState>(
+              reactor: _addresState,
+              builder: (BuildContext ctx, _AddresState state) {
+                final String? currentCountry = itemState?.entity.internal?.employee.address?.country;
+                _addressEffect = state.react;
+                return AutoCompleteField<String>(
+                  isEnabled: currentCountry != null,
+                  nativeList: currentCountry == countries[0] ? statesUSA : statesMX,
+                  initialValue: itemState?.entity.internal?.employee.address?.state == "" ? null :  itemState?.entity.internal?.employee.address?.state,
+                  displayValue:(String? item) => item ?? "Not valid data",
+                  label: '${currentCountry ?? ''} State',
+                  isOptional: true,
+                  onChanged: (String? text) {
+                    Employee employee = itemState!.entity.internal!.employee;
+                    employee.address = employee.address?.sanitize(state: text ?? "") ?? Address().sanitize(state: text);
+                    itemState?.react();
+                  },
+                );
+              },
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot;
@@ -67,7 +68,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     ///     Method scope query process.
     /// </param>
     /// <returns></returns>
-    protected IQueryable<TCommon> ProcessQuery<TParameters>(QueryInput<TCommon, TParameters> input, Func<IQueryable<TCommon>, IQueryable<TCommon>> process) {
+    public IQueryable<TCommon> ProcessQuery<TParameters>(QueryInput<TCommon, TParameters> input, Func<IQueryable<TCommon>, IQueryable<TCommon>> process) {
         IQueryable<TCommon> query = _dbSet;
 
 
@@ -148,7 +149,6 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         int paginationStart = range * (page - 1);
         int paginationEnd = page == pages ? remainder == 0 ? range : remainder : range;
         query = query
-            .AsNoTracking()
             .Skip(paginationStart)
             .Take(paginationEnd);
 
@@ -485,7 +485,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                     processedQuery = OrderQuery(query, parameters.Orderings);
                     processedQuery = FilterQuery(processedQuery, parameters.Filters);
 
-                    return processedQuery.AsTracking();
+                    return processedQuery;
                 }
             );
 
@@ -603,7 +603,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// <param name="old"> Lastest data set stored in db sorce. </param>
     /// <param name="overwritten"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
     void UpdateHelper(IEntity old, IEntity overwritten, HashSet<IEntity>? visited) {
-        visited ??= new HashSet<IEntity>();
+        visited ??= [];
 
         // Prevent iterate on duplicated entities.
         if (visited.Contains(old))
@@ -694,32 +694,18 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 (sourceQuery) => sourceQuery
             );
 
-        /// --> When the entity is not saved yet.
-        if (overwritten.Id == 0) {
-            if (!parameters.Create) {
-                throw new XDepot<TCommon>(XDepotSituations.CreateDisabled);
-            }
-
-            overwritten = await Create(overwritten);
-
-            _db.SaveChanges();
-            _disposer?.Push(overwritten);
-            return new UpdateOutput<TCommon> {
-                Original = null,
-                Updated = overwritten,
-            };
-        }
 
         TCommon? original = await processedQuery
             .Where(r => r.Id == overwritten.Id)
             .FirstOrDefaultAsync()
             ?? throw new XDepot<TCommon>(XDepotSituations.Unfound);
+
+        /// --> When the entity is not saved yet.
         if (original == null) {
             if (!parameters.Create)
                 throw new XDepot<TCommon>(XDepotSituations.Unfound, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
 
             overwritten = await Create(overwritten);
-
             _db.SaveChanges();
             _disposer?.Push(overwritten);
             return new UpdateOutput<TCommon> {
@@ -728,12 +714,14 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
             };
         }
 
+        TCommon oldCopy = original.DeepCopy();
+
         UpdateHelper(original, overwritten, null);
         await _db.SaveChangesAsync();
 
         return new UpdateOutput<TCommon> {
-            Original = original,
-            Updated = overwritten,
+            Original = oldCopy,
+            Updated = original,
         };
     }
 

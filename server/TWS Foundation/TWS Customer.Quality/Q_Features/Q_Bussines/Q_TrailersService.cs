@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -83,9 +84,10 @@ public class Q_TrailersService
     [MemberData(nameof(testingValues))]
     public async Task Update(bool internalValue) {
         Trailer_Common changedEntity = await _depot!.Store(SampleTrailerCommon(internalValue), true);
-        changedEntity.Economic = "eco_" + changedEntity.Economic;
+        Trailer_Common copy = changedEntity.DeepCopy();
+        copy.Economic = "eco_" + changedEntity.Economic;
         UpdateOutput<Trailer_Common> updateOutput = await _service.Update(new UpdateInput<Trailer_Common> {
-            Entity = changedEntity,
+            Entity = copy,
         });
 
         Assert.Multiple(

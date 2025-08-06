@@ -44,9 +44,6 @@ final class Approach extends EntityB<Approach> {
   /// Creates a new [Approach] instance.
   Approach();
 
-  /// Creates a new [Approach] with specific values.
-  Approach.a(this.email, this.personal, this.enterprise, this.alternative, this.status);
-
    /// Validate nulleable inputs to avoid [Approach] entities with empty values.
   Approach? sanitize({
     String? email,
@@ -67,13 +64,7 @@ final class Approach extends EntityB<Approach> {
       return null;
     }
 
-    return Approach.a(
-      this.email,
-      this.personal,
-      this.enterprise,
-      this.alternative,
-      status,
-    );
+    return this;
   }
   
 

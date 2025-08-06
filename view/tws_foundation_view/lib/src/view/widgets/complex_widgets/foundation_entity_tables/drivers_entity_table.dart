@@ -8,14 +8,14 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_find
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
-import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
+import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Address state class.
 class _AddresState extends ReactorB {}
 
-_AddresState _addresState = _AddresState();
+_AddresState _addressState = _AddresState();
 // ignore: unused_element
 void Function() _addressEffect = () {};
 
@@ -34,6 +34,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
 
     if (entity.internal != null) {
       edgeColumns = <Widget>[
+        const SectionDivider(text: 'Employee Identity'),
         PropertyViewer(
           label: 'Name',
           value: entity.internal?.employee.identification.name,
@@ -43,16 +44,17 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.internal?.employee.identification.lastName,
         ),
         PropertyViewer(
+          label: 'Birthday',
+          value: entity.internal?.employee.identification.birthDay?.dateOnly,
+        ),
+        const SectionDivider(text: 'Driver Information'),
+        PropertyViewer(
           label: 'License Expiration',
-          value: entity.internal?.licenseExpiration?.toIso8601String(),
+          value: entity.internal?.licenseExpiration?.dateOnly,
         ),
         PropertyViewer(
           label: 'Driver Type',
           value: entity.internal?.driverType,
-        ),
-        PropertyViewer(
-          label: 'CURP',
-          value: entity.internal?.employee.curp,
         ),
         PropertyViewer(
           label: 'Visa',
@@ -71,14 +73,106 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.internal?.fast,
         ),
         PropertyViewer(
+          label: 'Drug. Alc. date',
+          value: entity.internal?.drugAlcRegistrationDate?.dateOnly,
+        ),
+        PropertyViewer(
+          label: 'Pull notice date',
+          value: entity.internal?.pullNoticeRegistrationDate?.dateOnly,
+        ),
+        const SectionDivider(text: 'Employee documents'),
+        PropertyViewer(
           label: 'CURP',
           value: entity.internal?.employee.curp,
+        ),
+        PropertyViewer(
+          label: 'RFC',
+          value: entity.internal?.employee.rfc,
+        ),
+        PropertyViewer(
+          label: 'NSS',
+          value: entity.internal?.employee.nss,
+        ),
+        PropertyViewer(
+          label: 'Imss registration',
+          value: entity.internal?.employee.dates.imss?.dateOnly,
+        ),
+        PropertyViewer(
+          label: 'Hire date',
+          value: entity.internal?.employee.dates.hire?.dateOnly,
+        ),
+        PropertyViewer(
+          label: 'Termination date',
+          value: entity.internal?.employee.dates.termination?.dateOnly,
+        ),
+        PropertyViewer(
+          label: 'Cnap date',
+          value: entity.internal?.employee.dates.cnap?.dateOnly,
+        ),
+
+        if(entity.internal?.employee.approach != null)
+        Column(
+          spacing: 10,
+          children: <Widget>[
+            const SectionDivider(
+              text: 'Contact',
+            ),
+            PropertyViewer(
+              label: 'Email',
+              value: entity.internal?.employee.approach?.email,
+            ),
+            PropertyViewer(
+              label: 'Personal phone',
+              value: entity.internal?.employee.approach?.personal,
+            ),
+            PropertyViewer(
+              label: 'Enterprise phone',
+              value: entity.internal?.employee.approach?.enterprise,
+            ),
+            PropertyViewer(
+              label: 'Alternative contact',
+              value: entity.internal?.employee.approach?.alternative,
+            ),
+          ],
+        ),
+        
+        if(entity.internal?.employee.address != null)
+        Column(
+          spacing: 10,
+          children: <Widget>[
+            const SectionDivider(
+              text: 'Address',
+            ),
+            PropertyViewer(
+              label: 'Country',
+              value: entity.internal?.employee.address?.country,
+            ),
+            PropertyViewer(
+              label: 'City',
+              value: entity.internal?.employee.address?.city,
+            ),
+            PropertyViewer(
+              label: 'Street',
+              value: entity.internal?.employee.address?.street,
+            ),
+            PropertyViewer(
+              label: 'Zip',
+              value: entity.internal?.employee.address?.zip,
+            ),
+            PropertyViewer(
+              label: 'Subdivision/Colonia',
+              value: entity.internal?.employee.address?.subdivision,
+            ),
+          ],
         ),
       ];
     }
 
     if (entity.external != null) {
       edgeColumns = <Widget>[
+        const SectionDivider(
+          text: 'Employee identity',
+        ),
         PropertyViewer(
           label: 'Name',
           value: entity.external?.identification.name,
@@ -90,18 +184,35 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
       ];
     }
 
-    return EntityTableViewer(
-      children: <Widget>[
-        PropertyViewer(
-          label: 'License',
-          value: entity.license,
-        ),
-        PropertyViewer(
-          label: 'Ownership',
-          value: entity.internal != null ? "Own" : 'External',
-        ),
-        ...edgeColumns,
-      ],
+    return SingleChildScrollView(
+      child: EntityTableViewer(
+        children: <Widget>[
+          const SectionDivider(
+            text: 'Common information',
+          ),
+          PropertyViewer(
+            label: 'Timestamp',
+            value: entity.timestamp.toString(),
+          ),
+          PropertyViewer(
+            label: 'License',
+            value: entity.license,
+          ),
+          PropertyViewer(
+            label: 'Ownership',
+            value: entity.internal != null ? "Own" : 'External',
+          ),
+          PropertyViewer(
+            label: 'Situation',
+            value: entity.situation.name,
+          ),
+          PropertyViewer(
+            label: 'Status',
+            value: entity.status.name,
+          ),
+          ...edgeColumns,
+        ],
+      ),
     );
   }
 
@@ -122,75 +233,130 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         );
       },
       formBuilder: (BuildContext buildContext, DriverCommon entity) {
-        if (entity.internal != null) return _editorInternalFormBuilder(entity);
-        return _editorExternalFormBuilder(entity);
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Column(
+            spacing: 10,
+            children: <Widget>[
+              TextInput(
+                label: "TimeStamp",
+                controller: TextEditingController(
+                  text: entity.timestamp.toString()
+                ),
+                isEnabled: false,
+              ),
+          
+              entity.internal != null? _editorInternalFormBuilder(entity) : _editorExternalFormBuilder(entity)
+            ],
+          ),
+        );
       },
     );
   }
 
   Widget _identificationSection(DriverCommon entity) {
-    return SectionWidget(
-      outterPadding: const EdgeInsets.symmetric(vertical: 10),
-      title: 'Identity',
-      child: Column(
-        spacing: 10,
-        children: <Widget>[
-          TextInput(
-            label: "Name",
-            hint: "Enter a name",
-            maxLength: 32,
-            controller: TextEditingController(
-              text: entity.internal?.employee.identification.name ?? entity.external?.identification.name,
-            ),
-            onChanged: (String text) {
-              if (entity.internal != null) {
-                entity.internal?.employee.identification.name = text;
-              } else {
-                entity.external?.identification.name = text;
-              }
-            },
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        SectionDivider(text: 'Identity'),
+        TextInput(
+          label: "Name",
+          hint: "Enter a name",
+          maxLength: 32,
+          controller: TextEditingController(
+            text: entity.internal?.employee.identification.name ?? entity.external?.identification.name,
           ),
-          TextInput(
-            label: "Lastname",
-            hint: "enter a lastname",
-            maxLength: 32,
-            controller: TextEditingController(
-              text: entity.internal?.employee.identification.lastName ?? entity.external?.identification.lastName,
-            ),
-            onChanged: (String text) {
-              if (entity.internal != null) {
-                entity.internal?.employee.identification.lastName = text;
-              } else {
-                entity.external?.identification.lastName = text;
-              }
-            },
+          onChanged: (String text) {
+            if (entity.internal != null) {
+              entity.internal?.employee.identification.name = text;
+            } else {
+              entity.external?.identification.name = text;
+            }
+          },
+        ),
+        TextInput(
+          label: "Lastname",
+          hint: "enter a lastname",
+          maxLength: 32,
+          controller: TextEditingController(
+            text: entity.internal?.employee.identification.lastName ?? entity.external?.identification.lastName,
           ),
-          Datepicker(
-            width: double.maxFinite,
-            firstDate: DateTime(1940),
-            lastDate: DateTime(2040),
-            label: "Birthday",
-            suffixLabel: ' opt.',
-            controller: TextEditingController(
-              text:
-                  entity.internal?.employee.identification.birthDay?.dateOnly ??
-                  entity.external?.identification.birthDay?.dateOnly,
-            ),
-            onChanged: (String text) {
-              if (entity.internal != null) {
-                entity.internal?.employee.identification.birthDay = DateTime.tryParse(text) ?? DateTime(0);
-              } else {
-                entity.external?.identification.birthDay = DateTime.tryParse(text) ?? DateTime(0);
-              }
-            },
+          onChanged: (String text) {
+            if (entity.internal != null) {
+              entity.internal?.employee.identification.lastName = text;
+            } else {
+              entity.external?.identification.lastName = text;
+            }
+          },
+        ),
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1940),
+          lastDate: DateTime(2040),
+          label: "Birthday",
+          suffixLabel: ' opt.',
+          controller: TextEditingController(
+            text:
+                entity.internal?.employee.identification.birthDay?.dateOnly ??
+                entity.external?.identification.birthDay?.dateOnly,
           ),
-        ],
-      ),
+          onChanged: (String text) {
+            if (entity.internal != null) {
+              entity.internal?.employee.identification.birthDay = DateTime.tryParse(text) ?? DateTime(0);
+            } else {
+              entity.external?.identification.birthDay = DateTime.tryParse(text) ?? DateTime(0);
+            }
+          },
+        ),
+      ],
     );
   }
 
   Widget _editorExternalFormBuilder(DriverCommon entity) {
-    return SingleChildScrollView(
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        TextInput(
+          label: "License",
+          hint: "Enter a License number",
+          maxLength: 12,
+          controller: TextEditingController(
+            text: entity.license,
+          ),
+          onChanged: (String text) {
+            entity.license = text;
+          },
+        ),
+        EntityFinderSelector<Situation, SituationsServiceI>(
+          label: "Situation",
+          initialValue: entity.situation,
+          entityBuilder: () => Situation(),
+          textBuilder: (Situation entity) {
+            return entity.name.cleaned ?? "---";
+          },
+          onSelected: (Situation? selectedItem) {
+            entity.situation = selectedItem ?? Situation();
+          },
+        ),
+        EntityFinderSelector<Status, StatusesServiceI>(
+          label: "Status",
+          initialValue: entity.status,
+          entityBuilder: () => Status(),
+          textBuilder: (Status entity) {
+            return entity.name.cleaned ?? "---";
+          },
+          onSelected: (Status? selectedItem) {
+            entity.status = selectedItem ?? Status();
+          },
+        ),
+        _identificationSection(entity),
+      ],
+    );
+  }
+
+  Widget _editorInternalFormBuilder(DriverCommon entity) {
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         spacing: 10,
@@ -204,6 +370,16 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             ),
             onChanged: (String text) {
               entity.license = text;
+            },
+          ),
+          TextInput(
+            label: "Driver type",
+            hint: "Enter the driver type",
+            suffixLabel: ' opt.',
+            maxLength: 12,
+            controller: TextEditingController(text: entity.internal?.driverType),
+            onChanged: (String text) {
+              entity.internal?.driverType = text;
             },
           ),
           EntityFinderSelector<Situation, SituationsServiceI>(
@@ -226,234 +402,286 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             },
             onSelected: (Status? selectedItem) {
               entity.status = selectedItem ?? Status();
+              entity.internal?.employee.status = selectedItem ?? Status();
+              entity.internal?.employee.approach?.status = selectedItem ?? Status();
             },
           ),
-          _identificationSection(entity),
+          Datepicker(
+            width: double.maxFinite,
+            firstDate: DateTime(1999),
+            lastDate: DateTime(2040),
+            label: "License expiration",
+            suffixLabel: ' opt.',
+            controller: TextEditingController(
+              text: entity.internal?.licenseExpiration?.dateOnly,
+            ),
+            onChanged: (String text) {
+              entity.internal?.licenseExpiration = DateTime.tryParse(text) ?? DateTime(0);
+            },
+          ),
+          Datepicker(
+            width: double.maxFinite,
+            firstDate: DateTime(1999),
+            lastDate: DateTime(2040),
+            label: "Drugal reg. date",
+            suffixLabel: ' opt.',
+            controller: TextEditingController(
+              text: entity.internal?.drugAlcRegistrationDate?.dateOnly,
+            ),
+            onChanged: (String text) {
+              entity.internal?.drugAlcRegistrationDate = DateTime.tryParse(text) ?? DateTime(0);
+            },
+          ),
+          Datepicker(
+            width: double.maxFinite,
+            firstDate: DateTime(1999),
+            lastDate: DateTime(2040),
+            label: "Pull notice reg. date",
+            suffixLabel: ' opt.',
+            controller: TextEditingController(
+              text: entity.internal?.pullNoticeRegistrationDate?.dateOnly,
+            ),
+            onChanged: (String text) {
+              entity.internal?.pullNoticeRegistrationDate = DateTime.tryParse(text) ?? DateTime(0);
+            },
+          ),
+          TextInput(
+            label: "TWIC number",
+            hint: "Enter the TWIC number",
+            suffixLabel: ' opt.',
+            maxLength: 12,
+            isFixedLength: true,
+            controller: TextEditingController(text: entity.internal?.twic),
+            onChanged: (String text) {
+              entity.internal?.twic = text;
+            },
+          ),
+          Datepicker(
+            width: double.maxFinite,
+            firstDate: DateTime(1999),
+            lastDate: DateTime(2040),
+            label: "TWIC expiration",
+            suffixLabel: ' opt.',
+            controller: TextEditingController(
+              text: entity.internal?.twicExpiration?.dateOnly,
+            ),
+            onChanged: (String text) {
+              entity.internal?.twicExpiration = DateTime.tryParse(text) ?? DateTime(0);
+            },
+          ),
+          TextInput(
+            label: "VISA number",
+            hint: "Enter the VISA number",
+            suffixLabel: ' opt.',
+            maxLength: 12,
+            isFixedLength: true,
+            controller: TextEditingController(text: entity.internal?.visa),
+            onChanged: (String text) {
+              entity.internal?.visa = text;
+            },
+          ),
+          Datepicker(
+            width: double.maxFinite,
+            firstDate: DateTime(1999),
+            lastDate: DateTime(2040),
+            label: "VISA expiration",
+            suffixLabel: ' opt.',
+            controller: TextEditingController(
+              text: entity.internal?.visaExpiration?.dateOnly,
+            ),
+            onChanged: (String text) {
+              entity.internal?.visaExpiration = DateTime.tryParse(text) ?? DateTime(0);
+            },
+          ),
+          TextInput(
+            label: "FAST number",
+            hint: "Enter the FAST number",
+            suffixLabel: ' opt.',
+            maxLength: 14,
+            isFixedLength: true,
+            controller: TextEditingController(text: entity.internal?.fast),
+            onChanged: (String text) {
+              entity.internal?.fast = text;
+            },
+          ),
+          Datepicker(
+            width: double.maxFinite,
+            firstDate: DateTime(1999),
+            lastDate: DateTime(2040),
+            label: "FAST expiration",
+            suffixLabel: ' opt.',
+            controller: TextEditingController(
+              text: entity.internal?.fastExpiration?.dateOnly,
+            ),
+            onChanged: (String text) {
+              entity.internal?.fastExpiration = DateTime.tryParse(text) ?? DateTime(0);
+            },
+          ),
+          TextInput(
+            label: "ANAM number",
+            hint: "Enter the ANAM number",
+            suffixLabel: ' opt.',
+            maxLength: 24,
+            isFixedLength: true,
+            controller: TextEditingController(text: entity.internal?.anam),
+            onChanged: (String text) {
+              entity.internal?.anam = text;
+            },
+          ),
+          Datepicker(
+            width: double.maxFinite,
+            firstDate: DateTime(1999),
+            lastDate: DateTime(2040),
+            label: "ANAM expiration",
+            suffixLabel: ' opt.',
+            controller: TextEditingController(
+              text: entity.internal?.anamExpiration?.dateOnly,
+            ),
+            onChanged: (String text) {
+              entity.internal?.anamExpiration = DateTime.tryParse(text);
+            },
+          ),
+          _employeeSection(entity),
         ],
       ),
     );
   }
 
-  Widget _editorInternalFormBuilder(DriverCommon entity) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Column(
-          spacing: 10,
-          children: <Widget>[
-            TextInput(
-              label: "License",
-              hint: "Enter a License number",
-              maxLength: 12,
-              controller: TextEditingController(
-                text: entity.license,
-              ),
-              onChanged: (String text) {
-                entity.license = text;
-              },
-            ),
-            TextInput(
-              label: "Driver type",
-              hint: "Enter the driver type",
-              suffixLabel: ' opt.',
-              maxLength: 12,
-              controller: TextEditingController(text: entity.internal?.driverType),
-              onChanged: (String text) {
-                entity.internal?.driverType = text;
-              },
-            ),
-            EntityFinderSelector<Situation, SituationsServiceI>(
-              label: "Situation",
-              initialValue: entity.situation,
-              entityBuilder: () => Situation(),
-              textBuilder: (Situation entity) {
-                return entity.name.cleaned ?? "---";
-              },
-              onSelected: (Situation? selectedItem) {
-                entity.situation = selectedItem ?? Situation();
-              },
-            ),
-            EntityFinderSelector<Status, StatusesServiceI>(
-              label: "Status",
-              initialValue: entity.status,
-              entityBuilder: () => Status(),
-              textBuilder: (Status entity) {
-                return entity.name.cleaned ?? "---";
-              },
-              onSelected: (Status? selectedItem) {
-                entity.status = selectedItem ?? Status();
-                entity.internal?.employee.status = selectedItem ?? Status();
-                entity.internal?.employee.approach?.status = selectedItem ?? Status();
-              },
-            ),
-            Datepicker(
-              width: double.maxFinite,
-              firstDate: DateTime(1999),
-              lastDate: DateTime(2040),
-              label: "License expiration",
-              suffixLabel: ' opt.',
-              controller: TextEditingController(
-                text: entity.internal?.licenseExpiration?.dateOnly,
-              ),
-              onChanged: (String text) {
-                entity.internal?.licenseExpiration = DateTime.tryParse(text) ?? DateTime(0);
-              },
-            ),
-            Datepicker(
-              width: double.maxFinite,
-              firstDate: DateTime(1999),
-              lastDate: DateTime(2040),
-              label: "Drugal reg. date",
-              suffixLabel: ' opt.',
-              controller: TextEditingController(
-                text: entity.internal?.drugAlcRegistrationDate?.dateOnly,
-              ),
-              onChanged: (String text) {
-                entity.internal?.drugAlcRegistrationDate = DateTime.tryParse(text) ?? DateTime(0);
-              },
-            ),
-            Datepicker(
-              width: double.maxFinite,
-              firstDate: DateTime(1999),
-              lastDate: DateTime(2040),
-              label: "Pull notice reg. date",
-              suffixLabel: ' opt.',
-              controller: TextEditingController(
-                text: entity.internal?.pullNoticeRegistrationDate?.dateOnly,
-              ),
-              onChanged: (String text) {
-                entity.internal?.pullNoticeRegistrationDate = DateTime.tryParse(text) ?? DateTime(0);
-              },
-            ),
-            TextInput(
-              label: "TWIC number",
-              hint: "Enter the TWIC number",
-              suffixLabel: ' opt.',
-              maxLength: 12,
-              isFixedLength: true,
-              controller: TextEditingController(text: entity.internal?.twic),
-              onChanged: (String text) {
-                entity.internal?.twic = text;
-              },
-            ),
-            Datepicker(
-              width: double.maxFinite,
-              firstDate: DateTime(1999),
-              lastDate: DateTime(2040),
-              label: "TWIC expiration",
-              suffixLabel: ' opt.',
-              controller: TextEditingController(
-                text: entity.internal?.twicExpiration?.dateOnly,
-              ),
-              onChanged: (String text) {
-                entity.internal?.twicExpiration = DateTime.tryParse(text) ?? DateTime(0);
-              },
-            ),
-            TextInput(
-              label: "VISA number",
-              hint: "Enter the VISA number",
-              suffixLabel: ' opt.',
-              maxLength: 12,
-              isFixedLength: true,
-              controller: TextEditingController(text: entity.internal?.visa),
-              onChanged: (String text) {
-                entity.internal?.visa = text;
-              },
-            ),
-            Datepicker(
-              width: double.maxFinite,
-              firstDate: DateTime(1999),
-              lastDate: DateTime(2040),
-              label: "VISA expiration",
-              suffixLabel: ' opt.',
-              controller: TextEditingController(
-                text: entity.internal?.visaExpiration?.dateOnly,
-              ),
-              onChanged: (String text) {
-                entity.internal?.visaExpiration = DateTime.tryParse(text) ?? DateTime(0);
-              },
-            ),
-            TextInput(
-              label: "FAST number",
-              hint: "Enter the FAST number",
-              suffixLabel: ' opt.',
-              maxLength: 14,
-              isFixedLength: true,
-              controller: TextEditingController(text: entity.internal?.fast),
-              onChanged: (String text) {
-                entity.internal?.fast = text;
-              },
-            ),
-            Datepicker(
-              width: double.maxFinite,
-              firstDate: DateTime(1999),
-              lastDate: DateTime(2040),
-              label: "FAST expiration",
-              suffixLabel: ' opt.',
-              controller: TextEditingController(
-                text: entity.internal?.fastExpiration?.dateOnly,
-              ),
-              onChanged: (String text) {
-                entity.internal?.fastExpiration = DateTime.tryParse(text) ?? DateTime(0);
-              },
-            ),
-            TextInput(
-              label: "ANAM number",
-              hint: "Enter the ANAM number",
-              suffixLabel: ' opt.',
-              maxLength: 24,
-              isFixedLength: true,
-              controller: TextEditingController(text: entity.internal?.anam),
-              onChanged: (String text) {
-                entity.internal?.anam = text;
-              },
-            ),
-            Datepicker(
-              width: double.maxFinite,
-              firstDate: DateTime(1999),
-              lastDate: DateTime(2040),
-              label: "ANAM expiration",
-              suffixLabel: ' opt.',
-              controller: TextEditingController(
-                text: entity.internal?.anamExpiration?.dateOnly,
-              ),
-              onChanged: (String text) {
-                entity.internal?.anamExpiration = DateTime.tryParse(text) ?? DateTime(0);
-              },
-            ),
-            _identificationSection(entity),
-            if (entity.internal?.employee.approach != null)
-              SectionWidget(
-                outterPadding: const EdgeInsets.symmetric(vertical: 10),
-                title: 'Conctact',
-                child: _approachSection(entity),
-              ),
+  Widget _employeeSection(DriverCommon entity) {
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        SectionDivider(text: 'Employee'),
 
-            if (entity.internal?.employee.approach == null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: FoldPanelWidget(
-                  title: "Add Contact Information",
-                  child: _approachSection(entity),
-                ),
-              ),
-
-            if (entity.internal?.employee.address != null)
-              SectionWidget(
-                outterPadding: const EdgeInsets.symmetric(vertical: 10),
-                title: 'Address',
-                child: _addressSection(entity),
-              ),
-
-            /// build a creation form.
-            if (entity.internal?.employee.address == null)
-              FoldPanelWidget(
-                title: "Address",
-                child: _addressSection(entity),
-              ),
-          ],
+        TextInput(
+          label: "CURP",
+          hint: "Enter a CURP number",
+          suffixLabel: ' opt.',
+          maxLength: 18,
+          isFixedLength: true,
+          controller: TextEditingController(
+            text: entity.internal?.employee.curp,
+          ),
+          onChanged: (String text) {
+            entity.internal?.employee.curp = text.cleaned;
+          },
         ),
-      ),
+        TextInput(
+          label: "RFC",
+          hint: "Enter an RFC number",
+          suffixLabel: ' opt.',
+          maxLength: 13,
+          isFixedLength: true,
+          controller: TextEditingController(
+            text: entity.internal?.employee.rfc,
+          ),
+          onChanged: (String text) {
+            entity.internal?.employee.rfc = text.cleaned;
+          },
+        ),
+        TextInput(
+          label: "NSS",
+          hint: "Enter an NSS number",
+          suffixLabel: ' opt.',
+          maxLength: 11,
+          isFixedLength: true,
+          controller: TextEditingController(
+            text: entity.internal?.employee.nss,
+          ),
+          onChanged: (String text) {
+            entity.internal?.employee.nss = text.cleaned;
+          },
+        ),
+
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1999),
+          lastDate: DateTime(2040),
+          label: "IMMS registration date",
+          suffixLabel: ' opt.',
+          controller: TextEditingController(
+            text: entity.internal?.employee.dates.imss?.dateOnly,
+          ),
+          onChanged: (String text) {
+            entity.internal?.employee.dates.imss = DateTime.tryParse(text);
+          },
+        ),
+
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1999),
+          lastDate: DateTime(2040),
+          label: "Hire date",
+          suffixLabel: ' opt.',
+          controller: TextEditingController(
+            text: entity.internal?.employee.dates.hire?.dateOnly,
+          ),
+          onChanged: (String text) {
+            entity.internal?.employee.dates.hire = DateTime.tryParse(text);
+          },
+        ),
+
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1999),
+          lastDate: DateTime(2040),
+          label: "Termination date",
+          suffixLabel: ' opt.',
+          controller: TextEditingController(
+            text: entity.internal?.employee.dates.termination?.dateOnly,
+          ),
+          onChanged: (String text) {
+            entity.internal?.employee.dates.termination = DateTime.tryParse(text);
+          },
+        ),
+
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1999),
+          lastDate: DateTime(2040),
+          label: "CNAP date",
+          suffixLabel: ' opt.',
+          controller: TextEditingController(
+            text: entity.internal?.employee.dates.cnap?.dateOnly,
+          ),
+          onChanged: (String text) {
+            entity.internal?.employee.dates.cnap = DateTime.tryParse(text);
+          },
+        ),
+
+        _identificationSection(entity),
+
+        if (entity.internal?.employee.approach != null)
+          Column(
+            spacing: 10,
+            children: <Widget>[
+              SectionDivider(text: 'Contact'),
+              _approachSection(entity),
+            ],
+          ),
+
+        if (entity.internal?.employee.approach == null)
+          FoldPanelWidget(
+            title: "Contact Information",
+            child: _approachSection(entity),
+          ),
+
+        if (entity.internal?.employee.address != null)
+          Column(
+            spacing: 10,
+            children: <Widget>[
+              SectionDivider(text: 'Address'),
+              _addressSection(entity),
+            ],
+          ),
+
+        /// build a creation form.
+        if (entity.internal?.employee.address == null)
+          FoldPanelWidget(
+            title: "Address",
+            child: _addressSection(entity),
+          ),
+      ],
     );
   }
 
@@ -482,27 +710,21 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 Address().sanitize(
                   country: text,
                 );
-            _addresState.react();
+            _addressState.react();
           },
         ),
         ReactiveWidget<_AddresState>(
-          reactor: _addresState,
+          reactor: _addressState,
           builder: (BuildContext ctx, _AddresState state) {
             String? currentCountry = entity.internal?.employee.address?.country;
-            final String country =
-                entity.internal?.employee.address?.country == countryOptions[0]
-                    ? countryOptions[0]
-                    : entity.internal?.employee.address?.country == countryOptions[1]
-                    ? countryOptions[1]
-                    : "";
             _addressEffect = state.react;
             return AutoCompleteField<String>(
               width: double.maxFinite,
-              label: '$country State',
+              label: '${currentCountry ?? ''} State',
               suffixLabel: ' opt.',
               isOptional: true,
-              isEnabled: currentCountry == countryOptions[0] || currentCountry == countryOptions[1],
-              nativeList: country == countryOptions[0] ? usaStateOptions : mxStateOptions,
+              isEnabled: currentCountry != null,
+              nativeList: currentCountry == countryOptions[0] ? usaStateOptions : mxStateOptions,
               initialValue:
                   entity.internal?.employee.address?.state == "" ? null : entity.internal?.employee.address?.state,
               displayValue: (String? item) => item ?? "Not valid data",
@@ -814,22 +1036,6 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               ),
             ),
             const TextSpan(
-              text: '\n\u2022 Driver type:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.driverType ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
               text: '\n\u2022 Situation:',
               style: TextStyle(
                 fontWeight: FontWeight.w800,
@@ -843,6 +1049,86 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                   horizontal: 20,
                 ),
                 child: Text('\n${entity.situation.name}'),
+              ),
+            ),
+            const TextSpan(
+              text: '\n\u2022 Status:',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            WidgetSpan(
+              baseline: TextBaseline.alphabetic,
+              alignment: PlaceholderAlignment.bottom,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text('\n${entity.status.name}'),
+              ),
+            ),
+             const TextSpan(
+              text: '\n\u2022 Name:',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            WidgetSpan(
+              baseline: TextBaseline.alphabetic,
+              alignment: PlaceholderAlignment.bottom,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text('\n${entity.internal?.employee.identification.name ?? "---"}'),
+              ),
+            ),
+            const TextSpan(
+              text: '\n\u2022 Lastname:',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            WidgetSpan(
+              baseline: TextBaseline.alphabetic,
+              alignment: PlaceholderAlignment.bottom,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text('\n${entity.internal?.employee.identification.lastName ?? "---"}'),
+              ),
+            ),
+            const TextSpan(
+              text: '\n\u2022 Birthday:',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            WidgetSpan(
+              baseline: TextBaseline.alphabetic,
+              alignment: PlaceholderAlignment.bottom,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text('\n${entity.internal?.employee.identification.birthDay?.dateOnly ?? "---"}'),
+              ),
+            ),
+            const TextSpan(
+              text: '\n\u2022 Driver type:',
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            WidgetSpan(
+              baseline: TextBaseline.alphabetic,
+              alignment: PlaceholderAlignment.bottom,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Text('\n${entity.internal?.driverType ?? "---"}'),
               ),
             ),
             const TextSpan(
@@ -1021,54 +1307,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 child: Text('\n${entity.internal?.anamExpiration?.dateOnly ?? "---"}'),
               ),
             ),
-            const TextSpan(
-              text: '\n\u2022 Name:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.identification.name ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Lastname:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.identification.lastName ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Birthday:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.identification.birthDay?.dateOnly ?? "---"}'),
-              ),
-            ),
+            
             const TextSpan(
               text: '\n\u2022 Email:',
               style: TextStyle(
@@ -1230,7 +1469,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               ),
             ),
             const TextSpan(
-              text: '\n\u2022 Colonia:',
+              text: '\n\u2022 Subdivision/Colonia:',
               style: TextStyle(
                 fontWeight: FontWeight.w800,
               ),

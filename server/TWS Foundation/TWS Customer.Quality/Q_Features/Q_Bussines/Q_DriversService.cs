@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+﻿using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -72,10 +73,10 @@ public class Q_DriversService
     [MemberData(nameof(testingValues))]
     public async Task Update(bool internalValue) {
         Driver_Common changedEntity = await _depot!.Store(SampleDriverCommon(internalValue), true);
-
-        changedEntity.License = "lic_" + changedEntity.License;
+        Driver_Common copy = changedEntity.DeepCopy();
+        copy.License = "upd_" + changedEntity.License;
         UpdateOutput<Driver_Common> updateOutput = await _service.Update(new UpdateInput<Driver_Common> {
-            Entity = changedEntity,
+            Entity = copy,
         });
 
         Assert.Multiple(

@@ -355,9 +355,7 @@ class _AutoCompleteFieldState<T> extends State<AutoCompleteField<T>> with Single
 
   @override
   void dispose() {
-    focus.dispose();
     scrollController.dispose();
-    ctrl.dispose();
     super.dispose();
   }
 
