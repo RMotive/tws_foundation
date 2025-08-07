@@ -167,13 +167,13 @@ final class Driver extends EntityB<Driver> {
       );
     }
 
-    if ((fast!.trim().isEmpty || fast!.length != 24)) {
+    if ((fast!.trim().isEmpty || fast!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kFast, String, fast),
-          'Lenght must be 24 characters',
-          'strictLength(24)',
+          'Lenght must be 12 characters',
+          'strictLength(12)',
         ),
       );
     }
@@ -189,13 +189,13 @@ final class Driver extends EntityB<Driver> {
       );
     }
 
-    if ((visa!.trim().isEmpty || visa!.length != 24)) {
+    if ((visa!.trim().isEmpty || visa!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kVisa, String, visa),
-          'Lenght must be 24 characters',
-          'strictLength(24)',
+          'Lenght must be 12 characters',
+          'strictLength(12)',
         ),
       );
     }

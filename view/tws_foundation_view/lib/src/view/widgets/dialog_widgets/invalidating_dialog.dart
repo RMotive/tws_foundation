@@ -33,7 +33,7 @@ class InvalidatingDialog extends StatelessWidget {
       content: Text.rich(
         textAlign: TextAlign.center,
         TextSpan(
-          text:'Invalid values founded, Verify the following values and try again:',
+          text:'Invalid values found, Verify the following values and try again:',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             
