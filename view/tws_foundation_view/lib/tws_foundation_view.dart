@@ -65,7 +65,7 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/drivers_entity
 
 
 // [widgets]
-export 'src/view/widgets/dialog.dart';
+export 'src/view/widgets/dialog_widgets/dialog.dart';
 export 'src/view/widgets/text_input.dart';
 export 'src/view/widgets/button_flat.dart';
 export 'src/view/widgets/complex_widgets/entity_table/entity_table.dart';

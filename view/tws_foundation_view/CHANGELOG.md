@@ -36,7 +36,7 @@
         * [TWSArticleTableAgent]
         * [TWSArticleTableFieldOptions]
         
-    N. Added the following TWS widgets: 
+    N. Added the following view widgets: 
         * [TWSButtonFlat]
         * [TWSSection]
         * [TWSCascadeSection]
@@ -61,6 +61,7 @@
         * [TWSListViewer]
         * [TWSPhotoTaker]
         * [TWSFLoadingCircule] (Not exported. Only for internal use)
+        * [InvalidatingDialog]
 
     N. Dependencies added:
         * flutter_web_plugins

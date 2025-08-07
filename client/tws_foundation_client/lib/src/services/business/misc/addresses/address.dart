@@ -116,16 +116,90 @@ final class Address extends EntityB<Address> {
   @override
   List<EntityInvalidation<Address>> evaluate() {
     List<EntityInvalidation<Address>> results = <EntityInvalidation<Address>>[];
-    if (id < BigInt.zero) results.add(EntityInvalidation<Address>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
-    if (country.length < 2 || country.length > 3) results.add(EntityInvalidation<Address>(this, PropertyInfo(kCountry, String, country), "Country must be between 2 and 3 length", "strictLength(2,3)"));
-    if (state != null){
-      if (state!.length < 2 || state!.length > 4) results.add(EntityInvalidation<Address>(this, PropertyInfo(kState, String, state), "State length must be between 2 and 4", "strictLength(2,4)"));
-    } 
-    if (street != null && street!.trim().isEmpty || street!.length > 100) results.add(EntityInvalidation<Address>(this, PropertyInfo(kStreet, String, street), "Street must be 100 max length  or be empty",  "strictLength(0, 100)"));
-    if (altStreet != null &&  altStreet!.trim().isEmpty || altStreet!.length > 100) results.add(EntityInvalidation<Address>(this,  PropertyInfo(kAltStreet, String, altStreet), "altStreet must be 100 max length or be empty",  "strictLength(0, 100)"));
-    if (city != null && city!.trim().isEmpty || city!.length > 30) results.add(EntityInvalidation<Address>(this, PropertyInfo(kCity, String, city), "City must be 30 max length or be empty",  "strictLength(0, 30)"));
-    if (zip != null &&  zip!.trim().isEmpty || zip!.length > 5) results.add(EntityInvalidation<Address>(this, PropertyInfo(kZip, String, zip), "ZIP must be 5 length  or be empty ",  "strictLength(5)"));
-    if (subdivision != null && subdivision!.trim().isEmpty || subdivision!.length > 30) results.add(EntityInvalidation<Address>(this, PropertyInfo(kSubdivision, String, subdivision), "Subdivision/Colonia must be 30 max length or be empty",  "strictLength(0, 30)"));
+    if (id < BigInt.zero) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
+    if (country.length < 2 || country.length > 3) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kCountry, String, country),
+          "Country must be between 2 and 3 length",
+          "strictLength(2,3)",
+        ),
+      );
+    }
+    if (state != null) {
+      if (state!.length < 2 || state!.length > 4) {
+        results.add(
+          EntityInvalidation<Address>(
+            this,
+            PropertyInfo(kState, String, state),
+            "State length must be between 2 and 4",
+            "strictLength(2,4)",
+          ),
+        );
+      }
+    }
+    if (street != null && (street!.trim().isEmpty || street!.length > 100)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kStreet, String, street),
+          "Street must be 100 max length  or be empty",
+          "strictLength(0, 100)",
+        ),
+      );
+    }
+    if (altStreet != null &&
+        (altStreet!.trim().isEmpty || altStreet!.length > 100)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kAltStreet, String, altStreet),
+          "altStreet must be 100 max length or be empty",
+          "strictLength(0, 100)",
+        ),
+      );
+    }
+    if (city != null && (city!.trim().isEmpty || city!.length > 30)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kCity, String, city),
+          "City must be 30 max length or be empty",
+          "strictLength(0, 30)",
+        ),
+      );
+    }
+    if (zip != null && (zip!.trim().isEmpty || zip!.length > 5)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kZip, String, zip),
+          "ZIP must be 5 length  or be empty ",
+          "strictLength(5)",
+        ),
+      );
+    }
+    if (subdivision != null &&
+        (subdivision!.trim().isEmpty || subdivision!.length > 30)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kSubdivision, String, subdivision),
+          "Subdivision/Colonia must be 30 max length or be empty",
+          "strictLength(0, 30)",
+        ),
+      );
+    }
     return results;
   }
 }

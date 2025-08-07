@@ -7,6 +7,7 @@ import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomp
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_b.dart';
+import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
@@ -566,6 +567,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             entity.internal?.employee.curp = text.cleaned;
           },
         ),
+
         TextInput(
           label: "RFC",
           hint: "Enter an RFC number",
@@ -579,6 +581,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             entity.internal?.employee.rfc = text.cleaned;
           },
         ),
+        
         TextInput(
           label: "NSS",
           hint: "Enter an NSS number",
@@ -656,14 +659,14 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             spacing: 10,
             children: <Widget>[
               SectionDivider(text: 'Contact'),
-              _approachSection(entity),
+              _approachSection(entity, false),
             ],
           ),
 
         if (entity.internal?.employee.approach == null)
           FoldPanelWidget(
             title: "Contact Information",
-            child: _approachSection(entity),
+            child: _approachSection(entity, true),
           ),
 
         if (entity.internal?.employee.address != null)
@@ -671,7 +674,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             spacing: 10,
             children: <Widget>[
               SectionDivider(text: 'Address'),
-              _addressSection(entity),
+              _addressSection(entity, false),
             ],
           ),
 
@@ -679,13 +682,13 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         if (entity.internal?.employee.address == null)
           FoldPanelWidget(
             title: "Address",
-            child: _addressSection(entity),
+            child: _addressSection(entity, true),
           ),
       ],
     );
   }
 
-  Widget _addressSection(DriverCommon entity) {
+  Widget _addressSection(DriverCommon entity, bool isAdded) {
     List<String> countryOptions = FoundationCollections.kCountryList;
     List<String> usaStateOptions = FoundationCollections.kUStateCodes;
     List<String> mxStateOptions = FoundationCollections.kMXStateCodes;
@@ -702,14 +705,20 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               entity.internal?.employee.address?.country == "" ? null : entity.internal?.employee.address?.country,
           displayValue: (String? item) => item ?? "Not valid data",
           onChanged: (String? text) {
-            entity.internal?.employee.address =
-                entity.internal?.employee.address?.sanitize(
-                  country: text ?? '',
-                  state: '',
-                ) ??
-                Address().sanitize(
-                  country: text,
-                );
+            // Added entities can be nulleable, sanitize method will prevent null properties issues.
+            if(isAdded){
+              entity.internal?.employee.address =
+                  entity.internal?.employee.address?.sanitize(
+                    country: text ?? '',
+                    state: '',
+                  ) ??
+                  Address().sanitize(
+                    country: text ?? '',
+                  );
+            }else{
+              entity.internal?.employee.address?.country = text ?? '';
+            }
+            
             _addressState.react();
           },
         ),
@@ -729,9 +738,14 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                   entity.internal?.employee.address?.state == "" ? null : entity.internal?.employee.address?.state,
               displayValue: (String? item) => item ?? "Not valid data",
               onChanged: (String? text) {
-                entity.internal?.employee.address =
-                    entity.internal?.employee.address?.sanitize(state: text ?? '') ??
-                    Address().sanitize(state: text ?? '');
+                if(isAdded){
+                  entity.internal?.employee.address =
+                      entity.internal?.employee.address?.sanitize(state: text ?? '') ??
+                      Address().sanitize(state: text ?? '');
+                  return;
+                }
+                entity.internal?.employee.address?.state = text.cleaned;
+                
               },
             );
           },
@@ -746,8 +760,12 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.street,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address =
+            if(isAdded){
+              entity.internal?.employee.address =
                 entity.internal?.employee.address?.sanitize(state: text) ?? Address().sanitize(state: text);
+              return;
+            }
+            entity.internal?.employee.address?.street = text.cleaned;
           },
         ),
         TextInput(
@@ -772,8 +790,13 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.city,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address =
+            if(isAdded){
+              entity.internal?.employee.address =
                 entity.internal?.employee.address?.sanitize(city: text) ?? Address().sanitize(city: text);
+              return;
+            }
+            entity.internal?.employee.address?.city = text.cleaned;
+            
           },
         ),
         TextInput(
@@ -785,8 +808,11 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.city,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address =
+            if(isAdded){
+              entity.internal?.employee.address =
                 entity.internal?.employee.address?.sanitize(zip: text) ?? Address().sanitize(zip: text);
+            }
+            entity.internal?.employee.address?.zip = text.cleaned;
           },
         ),
         TextInput(
@@ -798,15 +824,19 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.address?.city,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.address =
-                entity.internal?.employee.address?.sanitize(subdivision: text) ?? Address().sanitize(subdivision: text);
+            if (isAdded) {
+              entity.internal?.employee.address =
+                  entity.internal?.employee.address?.sanitize(subdivision: text) ??
+                  Address().sanitize(subdivision: text);
+            }
+            entity.internal?.employee.address?.subdivision = text.cleaned;
           },
         ),
       ],
     );
   }
 
-  Widget _approachSection(DriverCommon entity) {
+  Widget _approachSection(DriverCommon entity, bool isAdded) {
     return Column(
       spacing: 10,
       children: <Widget>[
@@ -818,8 +848,13 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.email,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.approach =
+            if(isAdded){
+              entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(email: text) ?? Approach().sanitize(email: text);
+            }else{
+              entity.internal?.employee.approach?.email = text;
+            }
+
             entity.internal?.employee.approach?.status = entity.status;
           },
         ),
@@ -832,8 +867,13 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.enterprise,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.approach =
+            if(isAdded){  
+              entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(enterprise: text) ?? Approach().sanitize(enterprise: text);
+            }else{
+              entity.internal?.employee.approach?.enterprise = text.cleaned;
+            }
+
             entity.internal?.employee.approach?.status = entity.status;
           },
         ),
@@ -846,8 +886,13 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.personal,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.approach =
+            if(isAdded){
+              entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(personal: text) ?? Approach().sanitize(personal: text);
+            }else{
+              entity.internal?.employee.approach?.personal = text.cleaned;
+            }
+           
             entity.internal?.employee.approach?.status = entity.status;
           },
         ),
@@ -860,9 +905,14 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             text: entity.internal?.employee.approach?.alternative,
           ),
           onChanged: (String text) {
-            entity.internal?.employee.approach =
+            if(isAdded){
+              entity.internal?.employee.approach =
                 entity.internal?.employee.approach?.sanitize(alternative: text) ??
                 Approach().sanitize(alternative: text);
+            }else{
+              entity.internal?.employee.approach?.alternative = text.cleaned;
+            }
+            
             entity.internal?.employee.approach?.status = entity.status;
           },
         ),
@@ -948,57 +998,79 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           ],
         ),
       ),
-      onAccept: () async {
-        DriversServiceI driversService = Injector.get();
+      onAccept:() => _onUpdate(entity, router, context),
+    );
+  }
 
-        String authToken = await composeAuth();
+  void _onUpdate(DriverCommon entity, Router router, BuildContext context) async {
+    DriversServiceI driversService = Injector.get();
 
-        FoundationResponseResolver<UpdateOutput<DriverCommon>> resResolver = await driversService.update(
-          UpdateInput<DriverCommon>(entity),
-          authToken,
-        );
+    List<EntityInvalidation<DriverCommon>> invalidations = entity.evaluate();
 
-        String? errMessage;
-        resResolver.resolve(
-          objectBuilder:
-              () => UpdateOutput<DriverCommon>(
-                () => DriverCommon(),
+    if(invalidations.isNotEmpty){
+      router.pop();
+      showDialog(
+        context: context,
+        useRootNavigator: true,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return InvalidatingDialog(
+            title: 'Invalid Values',
+            invalidations: invalidations,
+            router: router,
+            context: context,
+          );
+        },
+      );
+      return;
+    }
+
+    String authToken = await composeAuth();
+
+    FoundationResponseResolver<UpdateOutput<DriverCommon>> resResolver = await driversService.update(
+      UpdateInput<DriverCommon>(entity),
+      authToken,
+    );
+
+    String? errMessage;
+    resResolver.resolve(
+      objectBuilder:
+          () => UpdateOutput<DriverCommon>(
+            () => DriverCommon(),
+          ),
+      onSuccess: (SuccessFrame<UpdateOutput<DriverCommon>> success) {
+        refresh();
+      },
+      onFailure: (FailureFrame failure, int status) {
+        errMessage = failure.content.advise;
+      },
+      onException: (TracedException exception) {
+        errMessage = FoundationMessages.unknownServerException;
+      },
+      onConnectionFailure: () {
+        errMessage = FoundationMessages.connectionError;
+      },
+      onFinally: () {
+        router.pop();
+        if (errMessage == null) return;
+
+        showDialog(
+          context: context,
+          useRootNavigator: true,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return Dialog(
+              showCancelButton: false,
+              title: 'Error Updating Driver',
+              content: Text(
+                errMessage as String,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
-          onSuccess: (SuccessFrame<UpdateOutput<DriverCommon>> success) {
-            refresh();
-          },
-          onFailure: (FailureFrame failure, int status) {
-            errMessage = failure.content.advise;
-          },
-          onException: (TracedException exception) {
-            errMessage = FoundationMessages.unknownServerException;
-          },
-          onConnectionFailure: () {
-            errMessage = FoundationMessages.connectionError;
-          },
-          onFinally: () {
-            router.pop();
-            if (errMessage == null) return;
-
-            showDialog(
-              context: context,
-              useRootNavigator: true,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Dialog(
-                  showCancelButton: false,
-                  title: 'Error Updating Driver',
-                  content: Text(
-                    errMessage as String,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  theming: Theming.get<FoundationThemeB>(context).error,
-                  onAccept: () {
-                    router.pop();
-                  },
-                );
+              theming: Theming.get<FoundationThemeB>(context).error,
+              onAccept: () {
+                router.pop();
               },
             );
           },
@@ -1487,62 +1559,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           ],
         ),
       ),
-      onAccept: () async {
-        DriversServiceI driversService = Injector.get();
-
-        String authToken = await composeAuth();
-
-        FoundationResponseResolver<UpdateOutput<DriverCommon>> resResolver = await driversService.update(
-          UpdateInput<DriverCommon>(entity),
-          authToken,
-        );
-
-        String? errMessage;
-        resResolver.resolve(
-          objectBuilder:
-              () => UpdateOutput<DriverCommon>(
-                () => DriverCommon(),
-              ),
-          onSuccess: (SuccessFrame<UpdateOutput<DriverCommon>> success) {
-            refresh();
-          },
-          onFailure: (FailureFrame failure, int status) {
-            errMessage = failure.content.advise;
-          },
-          onException: (TracedException exception) {
-            errMessage = FoundationMessages.unknownServerException;
-          },
-          onConnectionFailure: () {
-            errMessage = FoundationMessages.connectionError;
-          },
-          onFinally: () {
-            router.pop();
-            if (errMessage == null) return;
-
-            showDialog(
-              context: context,
-              useRootNavigator: true,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Dialog(
-                  showCancelButton: false,
-                  title: 'Error Updating Solution',
-                  content: Text(
-                    errMessage as String,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  theming: Theming.get<FoundationThemeB>(context).error,
-                  onAccept: () {
-                    router.pop();
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
+      onAccept: () => _onUpdate(entity, router, context),
     );
   }
 }

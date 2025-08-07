@@ -170,7 +170,6 @@ class _CreateWhisperAddressSection extends StatelessWidget {
             ),
           ],
         ),
-        
       ],
     );
   }
