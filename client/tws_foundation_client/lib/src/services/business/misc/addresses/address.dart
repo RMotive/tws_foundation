@@ -96,7 +96,7 @@ final class Address extends EntityB<Address> {
           kCity: city,
           kZip: zip,
           kCountry: country,
-          kSubdivision: kSubdivision
+        kSubdivision: subdivision,
       },
     );
   }

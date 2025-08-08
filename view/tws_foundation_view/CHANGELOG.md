@@ -62,6 +62,7 @@
         * [TWSPhotoTaker]
         * [TWSFLoadingCircule] (Not exported. Only for internal use)
         * [InvalidatingDialog]
+        * [ResumeDialog]
 
     N. Dependencies added:
         * flutter_web_plugins

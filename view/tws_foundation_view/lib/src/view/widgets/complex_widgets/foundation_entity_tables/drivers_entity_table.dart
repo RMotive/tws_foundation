@@ -2,12 +2,14 @@ import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/core/models/text_label.dart';
 import 'package:tws_foundation_view/src/data/const/static_collections.dart';
 import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
+import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
@@ -111,61 +113,57 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.internal?.employee.dates.cnap?.dateOnly,
         ),
 
-        if(entity.internal?.employee.approach != null)
-        Column(
-          spacing: 10,
-          children: <Widget>[
-            const SectionDivider(
-              text: 'Contact',
-            ),
-            PropertyViewer(
-              label: 'Email',
-              value: entity.internal?.employee.approach?.email,
-            ),
-            PropertyViewer(
-              label: 'Personal phone',
-              value: entity.internal?.employee.approach?.personal,
-            ),
-            PropertyViewer(
-              label: 'Enterprise phone',
-              value: entity.internal?.employee.approach?.enterprise,
-            ),
-            PropertyViewer(
-              label: 'Alternative contact',
-              value: entity.internal?.employee.approach?.alternative,
-            ),
-          ],
-        ),
+        if (entity.internal?.employee.approach != null) ...<Widget>[
+          const SectionDivider(
+            text: 'Contact',
+          ),
+          PropertyViewer(
+            label: 'Email',
+            value: entity.internal?.employee.approach?.email,
+          ),
+          PropertyViewer(
+            label: 'Personal phone',
+            value: entity.internal?.employee.approach?.personal,
+          ),
+          PropertyViewer(
+            label: 'Enterprise phone',
+            value: entity.internal?.employee.approach?.enterprise,
+          ),
+          PropertyViewer(
+            label: 'Alternative contact',
+            value: entity.internal?.employee.approach?.alternative,
+          ),
+        ],
         
-        if(entity.internal?.employee.address != null)
-        Column(
-          spacing: 10,
-          children: <Widget>[
-            const SectionDivider(
-              text: 'Address',
-            ),
-            PropertyViewer(
-              label: 'Country',
-              value: entity.internal?.employee.address?.country,
-            ),
-            PropertyViewer(
-              label: 'City',
-              value: entity.internal?.employee.address?.city,
-            ),
-            PropertyViewer(
-              label: 'Street',
-              value: entity.internal?.employee.address?.street,
-            ),
-            PropertyViewer(
-              label: 'Zip',
-              value: entity.internal?.employee.address?.zip,
-            ),
-            PropertyViewer(
-              label: 'Subdivision/Colonia',
-              value: entity.internal?.employee.address?.subdivision,
-            ),
-          ],
-        ),
+        if (entity.internal?.employee.address != null) ...<Widget>[
+          const SectionDivider(
+            text: 'Address',
+          ),
+          PropertyViewer(
+            label: 'Country',
+            value: entity.internal?.employee.address?.country,
+          ),
+          PropertyViewer(
+            label: 'City',
+            value: entity.internal?.employee.address?.city,
+          ),
+          PropertyViewer(
+            label: 'Street',
+            value: entity.internal?.employee.address?.street,
+          ),
+          PropertyViewer(
+            label: 'Alt. Street',
+            value: entity.internal?.employee.address?.altStreet,
+          ),
+          PropertyViewer(
+            label: 'Zip',
+            value: entity.internal?.employee.address?.zip,
+          ),
+          PropertyViewer(
+            label: 'Subdivision/Colonia',
+            value: entity.internal?.employee.address?.subdivision,
+          ),
+        ],
       ];
     }
 
@@ -805,7 +803,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           suffixLabel: ' opt.',
           maxLength: 5,
           controller: TextEditingController(
-            text: entity.internal?.employee.address?.city,
+            text: entity.internal?.employee.address?.zip,
           ),
           onChanged: (String text) {
             if(isAdded){
@@ -821,7 +819,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           suffixLabel: ' opt.',
           maxLength: 100,
           controller: TextEditingController(
-            text: entity.internal?.employee.address?.city,
+            text: entity.internal?.employee.address?.subdivision,
           ),
           onChanged: (String text) {
             if (isAdded) {
@@ -920,85 +918,35 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
     );
   }
 
-  Dialog _buildExternalDialog(DriverCommon entity, Router router, BuildContext context) {
-    return Dialog(
+  ResumeDialog _buildExternalDialog(DriverCommon entity, Router router, BuildContext context) {
+    return ResumeDialog(
       acceptLabel: 'Update',
       title: 'Confirm Driver external Update',
-      content: Text.rich(
-        TextSpan(
-          text: 'Are you sure you want to update an external driver?',
-          children: <InlineSpan>[
-            const TextSpan(
-              text: '\n',
-            ),
-            const TextSpan(
-              text: '\n\u2022 License:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.license}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Name:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.external?.identification.name ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Lastname:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.external?.identification.lastName ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Birthday:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.external?.identification.birthDay?.dateOnly ?? "---"}'),
-              ),
-            ),
-          ],
-        ),
-      ),
+      router: router,
+      context: context,
       onAccept:() => _onUpdate(entity, router, context),
+      values: <TextLabel>[
+        TextLabel(
+          title: 'License',
+          value: entity.license,
+        ),
+        TextLabel(
+          title: 'Situation',
+          value: entity.situation.name,
+        ),
+        TextLabel(
+          title: 'Status',
+          value: entity.status.name,
+        ),
+        TextLabel(
+          title: 'Name',
+          value: entity.external?.identification.name ?? "---",
+        ),
+        TextLabel(
+          title: 'Lastname',
+          value: entity.external?.identification.lastName ?? "---",
+        ),
+      ],
     );
   }
 
@@ -1079,487 +1027,163 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
     );
   }
 
-  Dialog _buildInternalDialog(DriverCommon entity, Router router, BuildContext context) {
-    return Dialog(
+  ResumeDialog _buildInternalDialog(DriverCommon entity, Router router, BuildContext context) {
+    return ResumeDialog(
       acceptLabel: 'Update',
       title: 'Confirm Driver Update',
-      content: Text.rich(
-        textAlign: TextAlign.center,
-        TextSpan(
-          text: 'Are you sure you want to update a driver?',
-          children: <InlineSpan>[
-            const TextSpan(
-              text: '\n',
-            ),
-            const TextSpan(
-              text: '\n\u2022 License:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.license}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Situation:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.situation.name}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Status:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.status.name}'),
-              ),
-            ),
-             const TextSpan(
-              text: '\n\u2022 Name:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.identification.name ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Lastname:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.identification.lastName ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Birthday:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.identification.birthDay?.dateOnly ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Driver type:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.driverType ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Licence expiration:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.licenseExpiration?.dateOnly ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Drugal reg. date:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.drugAlcRegistrationDate?.dateOnly ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Pull notice reg. date:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.pullNoticeRegistrationDate?.dateOnly ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 TWIC number:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.twic ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 TWIC expiration:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.twicExpiration?.dateOnly ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 VISA number:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.visa ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 VISA expiration:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.visaExpiration?.dateOnly ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 FAST number:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.fast ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 FAST expiration:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.fastExpiration?.dateOnly ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 ANAM number:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.anam ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 ANAM expiration:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.anamExpiration?.dateOnly ?? "---"}'),
-              ),
-            ),
-            
-            const TextSpan(
-              text: '\n\u2022 Email:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.approach?.email ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Entreprise phone:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.approach?.enterprise ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Personal phone:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.approach?.personal ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Alternative contact:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.approach?.alternative ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Country:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.address?.country ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 State:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.address?.state ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Street:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.address?.street ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Alt. Street:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.address?.altStreet ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 City:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.address?.city ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 ZIP:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.address?.zip ?? "---"}'),
-              ),
-            ),
-            const TextSpan(
-              text: '\n\u2022 Subdivision/Colonia:',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            WidgetSpan(
-              baseline: TextBaseline.alphabetic,
-              alignment: PlaceholderAlignment.bottom,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Text('\n${entity.internal?.employee.address?.subdivision ?? "---"}'),
-              ),
-            ),
-          ],
-        ),
-      ),
+      router: router,
+      context: context,
       onAccept: () => _onUpdate(entity, router, context),
+      values: <TextLabel>[
+        TextLabel(
+          title: 'License',
+          value: entity.license,
+        ),
+        TextLabel(
+          title: 'Situation',
+          value: entity.situation.name,
+        ),
+        TextLabel(
+          title: 'Status',
+          value: entity.status.name,
+        ),
+        TextLabel(
+          title: 'Name',
+          value: entity.internal?.employee.identification.name ?? "---",
+        ),
+        TextLabel(
+          title: 'Lastname',
+          value: entity.internal?.employee.identification.lastName ?? "---",
+        ),
+        TextLabel(
+          title: 'Birthday',
+          value: entity.internal?.employee.identification.birthDay?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'License',
+          value: entity.internal?.licenseExpiration?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'Driver type',
+          value: entity.internal?.driverType ?? "---",
+        ),
+        TextLabel(
+          title: 'VISA',
+          value: entity.internal?.visa ?? "---",
+        ),
+        TextLabel(
+          title: 'VISA Expiration',
+          value: entity.internal?.visaExpiration?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'ANAM',
+          value: entity.internal?.anam ?? "---",
+        ),
+        TextLabel(
+          title: 'ANAM Expiration',
+          value: entity.internal?.anamExpiration?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'TWIC',
+          value: entity.internal?.twic ?? "---",
+        ),
+        TextLabel(
+          title: 'TWIC Expiration',
+          value: entity.internal?.twicExpiration?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'FAST',
+          value: entity.internal?.fast ?? "---",
+        ),
+        TextLabel(
+          title: 'FAST Expiration',
+          value: entity.internal?.fastExpiration?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'Drug/Alc reg date',
+          value: entity.internal?.drugAlcRegistrationDate?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'Pull notice reg date',
+          value: entity.internal?.pullNoticeRegistrationDate?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'CURP',
+          value: entity.internal?.employee.curp ?? "---",
+        ),
+        TextLabel(
+          title: 'RFC',
+          value: entity.internal?.employee.rfc ?? "---",
+        ),
+        TextLabel(
+          title: 'NSS',
+          value: entity.internal?.employee.nss ?? "---",
+        ),
+        TextLabel(
+          title: 'IMSS reg. date',
+          value: entity.internal?.employee.dates.imss?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'CNAP date',
+          value: entity.internal?.employee.dates.cnap?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'Hiring date',
+          value: entity.internal?.employee.dates.hire?.dateOnly ?? "---",
+        ),
+        TextLabel(
+          title: 'Termination date',
+          value: entity.internal?.employee.dates.termination?.dateOnly ?? "---",
+        ),
+
+        /// Contact information
+        if(entity.internal?.employee.address != null) ...<TextLabel>[
+          TextLabel(
+            title: 'Email',
+            value: entity.internal?.employee.approach?.email ?? "---",
+          ),
+          TextLabel(
+            title: 'Personal phone',
+            value: entity.internal?.employee.approach?.personal ?? "---",
+          ),
+          TextLabel(
+            title: 'Enterprise phone',
+            value: entity.internal?.employee.approach?.enterprise ?? "---",
+          ),
+          TextLabel(
+            title: 'Alternative contact',
+            value: entity.internal?.employee.approach?.alternative ?? "---",
+          ),
+        ],
+      
+        /// Address information
+        if(entity.internal?.employee.address != null) ...<TextLabel>[
+          TextLabel(
+          title: 'Country',
+          value: entity.internal?.employee.address?.country ?? "---",
+        ),
+        TextLabel(
+          title: 'City',
+          value: entity.internal?.employee.address?.city ?? "---",
+        ),
+        TextLabel(
+          title: 'Street',
+          value: entity.internal?.employee.address?.street ?? "---",
+        ),
+        TextLabel(
+          title: 'Alt. street',
+          value: entity.internal?.employee.address?.altStreet ?? "---",
+        ),
+        TextLabel(
+          title: 'ZIP',
+          value: entity.internal?.employee.address?.zip ?? "---",
+        ),
+        TextLabel(
+          title: 'Subdivision/Colonia',
+          value: entity.internal?.employee.address?.subdivision ?? "---",
+        ),
+        ],
+      ],
     );
   }
 }
