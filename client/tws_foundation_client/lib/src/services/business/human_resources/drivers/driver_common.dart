@@ -51,6 +51,8 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   /// Creates a new [DriverCommon] instance.
   DriverCommon();
 
+  DriverCommon.a(this.license, this.status, this.situation);
+
   @override
   void decode(DataMap encode) {
     license = encode.get(kLicense);
@@ -67,7 +69,6 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
         kLicense: license,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
         FoundationCommonPropertyKeys.kSituation: situation.encode(),
-
       },
     );
   }
@@ -92,8 +93,8 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
         EntityInvalidation<DriverCommon>(
           this,
           PropertyInfo(kLicense, String, license),
-          'Wrong length ${license.length}',
-          '13 > length > 9',
+          'Length must be between 8 and 12 characters',
+          '13 > length > 7',
         ),
       );
     }

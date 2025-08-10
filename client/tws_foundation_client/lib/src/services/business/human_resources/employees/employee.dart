@@ -1,6 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/human_resources/approaches/approach.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Employee] factory method.
@@ -59,7 +58,7 @@ final class Employee extends EntityB<Employee> {
   Address? address;
 
   /// [approach] information.
-  Approach? approach = Approach();
+  Approach? approach;
   //! <-- Relations
 
   //! --> Getters
@@ -82,6 +81,7 @@ final class Employee extends EntityB<Employee> {
         kAddress: address?.encode(),
         kEmployeeDates: dates.encode(),
         kApproach: approach?.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -97,6 +97,7 @@ final class Employee extends EntityB<Employee> {
     identification = encode.getEntity(() => Identification(), kIdentification) ?? identification;
     address = encode.getEntity(() => Address(), kAddress);
     approach = encode.getEntity(() => Approach(), kApproach);
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status; 
   }
 
   @override
@@ -128,13 +129,13 @@ final class Employee extends EntityB<Employee> {
     }
 
     if (rfc != null) {
-      if (rfc!.length != 12) {
+      if (rfc!.length != 13) {
         invalidations.add(
           EntityInvalidation<Employee>(
             this,
             PropertyInfo(kRfc, String, rfc),
-            "CURP number must be 18 length",
-            "strictLength(12)",
+            "RFC number must be 13 length",
+            "strictLength(13)",
           ),
         );
       }

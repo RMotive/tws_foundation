@@ -11,14 +11,14 @@ namespace TWS_Customer.Features.Business;
 ///     [Interface] for <see cref="Situation"/> based [Service] implementations.
 /// </summary>
 public interface ISituationsService
-    : IService<Situation> {
+    : IReferenceService<Situation> {
 }
 
 /// <summary>
 ///     [Service] for <see cref="Situation"/> based operations.
 /// </summary>
 public class SituationsService
-    : BService<Situation, SituationsDepot>, ISituationsService {
+    : BReferenceService<Situation, SituationsDepot>, ISituationsService {
 
     /// <summary>
     ///     Creates a new instance of <see cref="SituationsService"/>.

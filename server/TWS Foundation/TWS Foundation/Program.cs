@@ -23,6 +23,7 @@ using TWS_Business.Depots.Indicators;
 using TWS_Business.Depots.Vehicles;
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
 using TWS_Business.Entities.Trailers;
@@ -95,6 +96,7 @@ public partial class Program {
                         options.JsonSerializerOptions.Converters.Add(
                                 new EntityConverter(
                                     [
+                                        typeof(Driver_Common),
                                         typeof(YardLog),
                                         typeof(LoadType),
                                     ]
@@ -165,7 +167,7 @@ public partial class Program {
                 services.AddScoped<IFeaturesDepot, FeaturesDepot>();
                 services.AddScoped<SectionsDepot>();
                 services.AddScoped<SituationsDepot>();
-                services.AddScoped<IStatusesDepot, StatusesDepot>();
+                services.AddScoped<StatusesDepot>();
                 services.AddScoped<IYardLogsDepot, YardLogsDepot>();
                 services.AddScoped<CarriersDepot>();
                 services.AddScoped<LoadTypesDepot>();
@@ -191,7 +193,6 @@ public partial class Program {
                 // --> [Customer] services.
                 services.AddScoped<ISecurityService, SecurityService>();
                 services.AddScoped<ISolutionsService, SolutionsService>();
-                services.AddScoped<ISolutionsService, SolutionsService>();
                 services.AddScoped<IAddressesService, AddressesService>();
                 services.AddScoped<ICarriersService, CarriersService>();
                 services.AddScoped<IDriversService, DriversService>();
@@ -208,6 +209,7 @@ public partial class Program {
                 services.AddScoped<ISituationsService, SituationsService>();
                 services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
                 services.AddScoped<ITrucksCommonService, TrucksService>();
+                services.AddScoped<IStatusesService, StatusesService>();
             }
 
             WebApplication app = builder.Build();

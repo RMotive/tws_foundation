@@ -127,6 +127,12 @@ final class Driver extends EntityB<Driver> {
 
   @override
   DataMap encode([DataMap? entityObject]) {
+    Status status = Status();
+    Situation situation = Situation();
+    status.reference = 'referdef';
+    situation.reference = 'referdef';
+    
+    DriverCommon common = DriverCommon.a("licenseDef", status, situation);
     return super.encode(
       <String, Object?>{
         kFast: fast,
@@ -134,14 +140,15 @@ final class Driver extends EntityB<Driver> {
         kVisa: visa,
         kTwic: twic,
         kDriverType: driverType,
-        kLicenseExpiration: licenseExpiration?.toIso8601String(),
-        kDrugalcRegistrationDate: drugAlcRegistrationDate?.toIso8601String(),
-        kPullnoticeRegistrationDate: pullNoticeRegistrationDate?.toIso8601String(),
-        kTwicExpiration: twicExpiration?.toIso8601String(),
-        kVisaExpiration: visaExpiration?.toIso8601String(),
-        kFastExpiration: fastExpiration?.toIso8601String(),
-        kAnamExpiration: anamExpiration?.toIso8601String(),
+        kLicenseExpiration: licenseExpiration?.dateOnlyIso,
+        kDrugalcRegistrationDate: drugAlcRegistrationDate?.dateOnlyIso,
+        kPullnoticeRegistrationDate: pullNoticeRegistrationDate?.dateOnlyIso,
+        kTwicExpiration: twicExpiration?.dateOnlyIso,
+        kVisaExpiration: visaExpiration?.dateOnlyIso,
+        kFastExpiration: fastExpiration?.dateOnlyIso,
+        kAnamExpiration: anamExpiration?.dateOnlyIso,
         kEmployee: employee.encode(),
+        'common': common.encode(),
       },
     );
   }
@@ -160,13 +167,13 @@ final class Driver extends EntityB<Driver> {
       );
     }
 
-    if ((fast!.trim().isEmpty || fast!.length != 24)) {
+    if ((fast!.trim().isEmpty || fast!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kFast, String, fast),
-          'Lenght must be 24 characters',
-          'strictLength(24)',
+          'Lenght must be 12 characters',
+          'strictLength(12)',
         ),
       );
     }
@@ -182,13 +189,13 @@ final class Driver extends EntityB<Driver> {
       );
     }
 
-    if ((visa!.trim().isEmpty || visa!.length != 24)) {
+    if ((visa!.trim().isEmpty || visa!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kVisa, String, visa),
-          'Lenght must be 24 characters',
-          'strictLength(24)',
+          'Lenght must be 12 characters',
+          'strictLength(12)',
         ),
       );
     }

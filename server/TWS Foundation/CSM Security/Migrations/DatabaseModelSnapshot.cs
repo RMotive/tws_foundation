@@ -17,7 +17,7 @@ namespace CSM_Security.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -214,12 +214,21 @@ namespace CSM_Security.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Action");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
                     b.Property<long>("FeatureShadow")
                         .HasColumnType("bigint")
                         .HasColumnName("Feature");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -239,6 +248,9 @@ namespace CSM_Security.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FeatureShadow");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("Reference")
                         .IsUnique();

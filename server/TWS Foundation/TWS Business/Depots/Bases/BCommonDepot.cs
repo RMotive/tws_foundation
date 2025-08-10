@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot;
@@ -67,7 +68,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     ///     Method scope query process.
     /// </param>
     /// <returns></returns>
-    protected IQueryable<TCommon> ProcessQuery<TParameters>(QueryInput<TCommon, TParameters> input, Func<IQueryable<TCommon>, IQueryable<TCommon>> process) {
+    public IQueryable<TCommon> ProcessQuery<TParameters>(QueryInput<TCommon, TParameters> input, Func<IQueryable<TCommon>, IQueryable<TCommon>> process) {
         IQueryable<TCommon> query = _dbSet;
 
 
@@ -148,7 +149,6 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         int paginationStart = range * (page - 1);
         int paginationEnd = page == pages ? remainder == 0 ? range : remainder : range;
         query = query
-            .AsNoTracking()
             .Skip(paginationStart)
             .Take(paginationEnd);
 
@@ -485,7 +485,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                     processedQuery = OrderQuery(query, parameters.Orderings);
                     processedQuery = FilterQuery(processedQuery, parameters.Filters);
 
-                    return processedQuery.AsTracking();
+                    return processedQuery;
                 }
             );
 
@@ -600,18 +600,27 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="original"> Lastest data set stored in db sorce. </param>
+    /// <param name="old"> Lastest data set stored in db sorce. </param>
     /// <param name="overwritten"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
-    void UpdateHelper(IEntity original, IEntity overwritten) {
-        EntityEntry previousEntry = _db.Entry(original);
-        if (previousEntry.State == EntityState.Unchanged) {
+    void UpdateHelper(IEntity old, IEntity overwritten, HashSet<IEntity>? visited) {
+        visited ??= [];
+
+        // Prevent iterate on duplicated entities.
+        if (visited.Contains(old))
+            return;
+
+        visited.Add(old);
+
+        EntityEntry oldEntry = _db.Entry(old);
+
+        if (oldEntry.State == EntityState.Unchanged) {
             // Update the non-navigation properties.
-            previousEntry.CurrentValues.SetValues(overwritten);
-            foreach (NavigationEntry navigation in previousEntry.Navigations) {
+            oldEntry.CurrentValues.SetValues(overwritten);
+            foreach (NavigationEntry navigation in oldEntry.Navigations) {
                 object? newNavigationValue = _db.Entry(overwritten).Navigation(navigation.Metadata.Name).CurrentValue;
                 // Validate if navigation is a collection.
                 if (navigation.CurrentValue is IEnumerable<object> previousCollection && newNavigationValue is IEnumerable<object> newCollection) {
-                    List<object> previousList = [.. previousCollection];
+                    List<object> oldList = [.. previousCollection];
                     List<object> newList = [.. newCollection];
                     // Perform a search for new items to add in the collection.
                     // NOTE: the followings iterations must be performed in diferent code segments to avoid index length conflicts.
@@ -628,25 +637,31 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                         }
                     }
                     // Find items to modify.
-                    for (int i = 0; i < previousList.Count; i++) {
+                    for (int i = 0; i < oldList.Count; i++) {
                         // For each new item stored in overwritten collection, will search for an ID match and update the overwritten.
                         foreach (object newitem in newList) {
-                            if (previousList[i] is IEntity previousItem && newitem is IEntity newItemSet && previousItem.Id == newItemSet.Id) {
-                                UpdateHelper(previousItem, newItemSet);
+                            if (oldList[i] is IEntity oldItem && newitem is IEntity newItemSet && oldItem.Id == newItemSet.Id) {
+                                UpdateHelper(oldItem, newItemSet, visited);
                             }
                         }
                     }
                 } else if (navigation.CurrentValue == null && newNavigationValue != null) {
                     // Create a new navigation overwritten.
                     // Also update the attached navigators.
+                    //oldEntry.Reference(navigation.Metadata.Name).CurrentValue = newNavigationValue;
                     //AttachDate(newNavigationValue);
                     EntityEntry newNavigationEntry = _db.Entry(newNavigationValue);
                     newNavigationEntry.State = EntityState.Added;
                     navigation.CurrentValue = newNavigationValue;
+
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
-                    // Update the existing navigation overwritten
-                    if (navigation.CurrentValue is IEntity currentItemSet && newNavigationValue is IEntity newItemSet) {
-                        UpdateHelper(currentItemSet, newItemSet);
+                    // Update the existing navigation and relationships
+                    if (navigation.CurrentValue is IEntity oldItemSet && newNavigationValue is IEntity newItemSet) {
+                        if (oldItemSet.Id > 0 && oldItemSet.Id != newItemSet.Id) {
+                            oldEntry.Reference(navigation.Metadata.Name).CurrentValue = newItemSet;
+                            return;
+                        }
+                        UpdateHelper(oldItemSet, newItemSet, visited);
                     }
                 }
 
@@ -671,35 +686,26 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// </exception>
     public async Task<UpdateOutput<TCommon>> Update(QueryInput<TCommon, UpdateInput<TCommon>> input) {
         UpdateInput<TCommon> parameters = input.Parameters;
-        IQueryable<TCommon> processedQuery = _dbSet;
 
         TCommon overwritten = parameters.Entity;
-        if (overwritten.Id == 0) {
-            if (!parameters.Create) {
-                throw new XDepot<TCommon>(XDepotSituations.CreateDisabled);
-            }
 
-            overwritten = await Create(overwritten);
+        IQueryable<TCommon> processedQuery = ProcessQuery(
+                input,
+                (sourceQuery) => sourceQuery
+            );
 
-            _db.SaveChanges();
-            _disposer?.Push(overwritten);
-            return new UpdateOutput<TCommon> {
-                Original = null,
-                Updated = overwritten,
-            };
-        }
 
         TCommon? original = await processedQuery
             .Where(r => r.Id == overwritten.Id)
-            .AsNoTracking()
             .FirstOrDefaultAsync()
             ?? throw new XDepot<TCommon>(XDepotSituations.Unfound);
+
+        /// --> When the entity is not saved yet.
         if (original == null) {
             if (!parameters.Create)
                 throw new XDepot<TCommon>(XDepotSituations.Unfound, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
 
             overwritten = await Create(overwritten);
-
             _db.SaveChanges();
             _disposer?.Push(overwritten);
             return new UpdateOutput<TCommon> {
@@ -708,11 +714,14 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
             };
         }
 
-        UpdateHelper(original, overwritten);
-        _db.SaveChanges();
+        TCommon oldCopy = original.DeepCopy();
+
+        UpdateHelper(original, overwritten, null);
+        await _db.SaveChangesAsync();
+
         return new UpdateOutput<TCommon> {
-            Original = original,
-            Updated = overwritten,
+            Original = oldCopy,
+            Updated = original,
         };
     }
 

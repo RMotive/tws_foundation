@@ -36,7 +36,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
             PropertyViewer(
               label: 'Timestamp',
-              value: entity.timestamp.fullDateString,
+              value: entity.timestamp.fullDate,
             ),
           ],
         ),

@@ -1,6 +1,30 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/misc/situations/situations_service_b.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+
+/// {interface} for [SituationsServiceI].
+///
+/// Defines base contract for [SituationsServiceI] implementations that specifies the methods to have providing [Situation] based operations and management.
+abstract interface class SituationsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Situation> {
+  /// Creates a new [SituationsServiceI] instance.
+  SituationsServiceI(
+    super.host,
+    super.servicePath,
+  );
+
+}
+
+/// {abstract} class for [SituationsServiceB].
+///
+/// Defines a base behavior for [SituationsServiceB] implementations that are representations of a {SolutionsService} providing operations for the {Security} service at the [FoundationServer].
+abstract class SituationsServiceB extends FoundationServiceB implements SituationsServiceI {
+  /// Creates a new [SituationsServiceB] instance.
+  SituationsServiceB(
+    super.host,
+    super.servicePath, {
+    super.client,
+    super.headers,
+  });
+}
 
 /// {private} {implementation} class for [SituationsService].
 final class SituationsService extends SituationsServiceB {

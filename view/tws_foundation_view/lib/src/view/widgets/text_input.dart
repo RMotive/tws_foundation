@@ -142,10 +142,10 @@ final class _TextInputState extends State<TextInput> {
   final GlobalKey<FormFieldState<String>> textFieldFormState = GlobalKey<FormFieldState<String>>();
 
   /// Controller for inner [TextFormField] behavior.
-  late TextEditingController textInputCtrl = widget.controller ?? TextEditingController();
+  late TextEditingController textInputCtrl;
 
   /// [Focus] identifier node for this [Widget] instance.
-  late FocusNode focusNode = widget.focusNode ?? FocusNode();
+  late FocusNode focusNode;
 
   /// {dep} application theme reference.
   late FoundationThemeB theming = Theming.get(context);
@@ -164,9 +164,11 @@ final class _TextInputState extends State<TextInput> {
 
   @override
   void initState() {
-    if (widget.focusEvents) setFocus();
 
     showSuffix = !widget.isOptional || widget.suffixLabel == null;
+    textInputCtrl = widget.controller ?? TextEditingController();
+    focusNode = widget.focusNode ?? FocusNode();
+    if (widget.focusEvents) setFocus();
     super.initState();
   }
 

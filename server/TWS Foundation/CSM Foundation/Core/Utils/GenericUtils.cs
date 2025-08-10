@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace CSM_Foundation.Core.Utils;
 public static class GenericUtils {
@@ -15,10 +16,20 @@ public static class GenericUtils {
         if (visited.TryGetValue(target, out var existingClone))
             return (TObject)existingClone;
 
-        TObject Cloned = (TObject?)Activator.CreateInstance(ObjectType)
-            ?? throw new Exception("PENDING WRONG ACTIVATION");
+        TObject Cloned;
 
+        if (ObjectType == null ||
+            ObjectType.IsAbstract ||
+            ObjectType.IsInterface ||
+            ObjectType.GetConstructor(Type.EmptyTypes) == null ||
+            ObjectType == typeof(Type))
+        {
+            return default!; 
+        }
+
+        Cloned = (TObject)(Activator.CreateInstance(ObjectType) ?? throw new Exception("PENDING WRONG ACTIVATION"));
         visited[target] = Cloned;
+
 
         PropertyInfo[] ObjectPropertiesInfo = ObjectType.GetProperties();
         foreach (PropertyInfo PropertyInfo in ObjectPropertiesInfo) {

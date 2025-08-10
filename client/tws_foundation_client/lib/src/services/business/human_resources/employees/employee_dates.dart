@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/extensions.dart';
 
 final class EmployeeDates extends EntityB<EmployeeDates> {
  
@@ -33,10 +34,10 @@ final class EmployeeDates extends EntityB<EmployeeDates> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
         <String, Object?>{
-          kImss: imss,
-          kHire: hire,
-          kTermination: termination,
-          kCnap: cnap,
+          kImss: imss?.dateOnlyIso,
+          kHire: hire?.dateOnlyIso,
+          kTermination: termination?.dateOnlyIso,
+          kCnap: cnap?.dateOnlyIso,
       },
     );
   }
@@ -44,10 +45,10 @@ final class EmployeeDates extends EntityB<EmployeeDates> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
-    imss = encode.get(kImss, null);
-    hire = encode.get(kHire, null);
-    termination = encode.get(kTermination, null);
-    cnap = encode.get(kCnap, null);
+    imss = encode.get(kImss);
+    hire = encode.get(kHire);
+    termination = encode.get(kTermination);
+    cnap = encode.get(kCnap);
   }
 
   @override

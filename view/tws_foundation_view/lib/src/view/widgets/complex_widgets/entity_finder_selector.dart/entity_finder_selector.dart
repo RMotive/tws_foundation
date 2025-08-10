@@ -3,6 +3,7 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
+import 'package:tws_foundation_view/src/view/widgets/tws_list_tile.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {widget} class.
@@ -19,12 +20,24 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// Whether the component is enabled.
   final bool enabled;
 
+  /// Build a custom label text for the [TEntity] items list.
+  final String Function(TEntity) textBuilder;
+
+  /// Pre-selected value for the widget.
+  final TEntity? initialValue;
+
+  /// Callback called when an [TEntity] item is selected.
+  final void Function(TEntity?)? onSelected;
+
   /// Creates a new [EntityFinderSelector] instance.
   const EntityFinderSelector({
     super.key,
     this.label,
     this.enabled = true,
+    this.initialValue,
+    this.onSelected,
     required this.entityBuilder,
+    required this.textBuilder,
   });
 
   @override
@@ -57,26 +70,100 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   /// {state} whether currently there's an error to display in the input [Widget].
   String? error;
 
+  /// {state} [TextEditingController] for the input text.
+  late final TextEditingController inputcontroller;
+
+  /// Get a key identificator for the [TEntity] object, to know when a set is a valid initial value,
+  /// usefull when manage creation forms with items that can be selected or created without this key idenfiticator (Like id property in [TEntity] models).
+  /// or handle a multi-set option, this function result modiefies the behavior for pre-selected values.
+  late final bool Function(TEntity?) hasKeyValue;
+
+  /// {state} current selection of the [TEntity] item.
+  TEntity? currentSelection;
+
+  /// {state} behavior scroll controller.
+  final ScrollController scrollController = ScrollController();
+
+  /// Stores the max [TEntity] view pages available.
+  late int viewPagesAvailable;
+
+  /// Current view page reached by lazzy loading.
+  int currentViewPage = 1;
+
+  /// List that contains all the entities loaded in selectable list.
+  List<TEntity> entitiesList = <TEntity>[];
+
+  /// View loading status for lazzy list behavior.
+  bool lazzyLoading = false;
+
+  /// Trigger the view service method for lazzy loadings.
+  void loadLazzyEntities() {
+    if(!lazzyLoading){
+      setState(() {
+        lazzyLoading = true;
+        searchInvok = viewInvokation();
+      });
+    }
+  }
+
+  /// Manage the service view data consume to populate the list content.
+  Future<ViewOutput<TEntity>> viewInvokation() async {
+    SessionStorageI sessionStorage = Injector.get();
+
+    FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
+      ViewInput<TEntity>.b(10, currentViewPage),
+      sessionStorage.token,
+    );
+
+    ViewOutput<TEntity> result =  resolver.resolveDirect(
+      () => ViewOutput<TEntity>(widget.entityBuilder),
+    );
+
+    viewPagesAvailable = result.pages;
+    entitiesList.addAll(result.entities);
+    currentViewPage++;
+    result.entities = entitiesList;
+    return result;
+  }
+
   @override
   void initState() {
     super.initState();
+    currentSelection = widget.initialValue;
+    // Initialize method to Check for a valid id in [widget.initialvalue] property, 
+    // if the id is not set, then the item is behing created on the fly, and not is valid as initial value.
+    hasKeyValue = (TEntity? set) {
+      if(set == null) return true;
+      return set.id > BigInt.zero;
+    };
+
+    inputcontroller =
+        widget.initialValue != null
+            ? TextEditingController(text: widget.textBuilder(currentSelection!).trim())
+            : TextEditingController();
 
     inputFocusNode.addListener(
       () {
         if (inputFocusNode.hasFocus) {
-          searchInvok = viewInvokation();
+          if(entitiesList.isEmpty) searchInvok = viewInvokation();
           overlayController.show();
         } else {
           overlayController.hide();
         }
       },
     );
+
+    scrollController.addListener((){
+      if (scrollController.position.pixels > scrollController.position.maxScrollExtent - 35) {
+        loadLazzyEntities();
+      }
+    });
+
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     theme = Theming.get(context);
   }
 
@@ -86,27 +173,28 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
     if (oldWidget.enabled != widget.enabled) {
       error = null;
     }
+    /// Set initial values.
+    if(oldWidget.initialValue != widget.initialValue) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          if (widget.initialValue != null && hasKeyValue(widget.initialValue)) {
+            currentSelection = widget.initialValue;
+            inputcontroller.text = widget.textBuilder(currentSelection!);
+          } else {
+            currentSelection = null;
+            inputcontroller.clear();
+          }
+        },
+      );
+    }
   }
 
   @override
   void dispose() {
-    inputFocusNode.dispose();
-
+    // Dispose defined controllers.
+    // [TextInput] widget dispose the Input and Focus controllers.
+    scrollController.dispose();
     super.dispose();
-  }
-
-  ///
-  Future<ViewOutput<TEntity>> viewInvokation() async {
-    SessionStorageI sessionStorage = Injector.get();
-
-    FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
-      ViewInput<TEntity>.b(2000, 1),
-      sessionStorage.token,
-    );
-
-    return resolver.resolveDirect(
-      () => ViewOutput<TEntity>(widget.entityBuilder),
-    );
   }
 
   @override
@@ -121,6 +209,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
           focusNode: inputFocusNode,
           errorText: error,
           autofocus: false,
+          controller: inputcontroller,
           suffixIcon: Icon(
             Icons.arrow_drop_down,
             size: 32,
@@ -155,7 +244,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
 
                         if (entities.isEmpty) {
                           WidgetsBinding.instance.addPostFrameCallback(
-                            (Duration timeStamp) {
+                            (_) {
                               setState(() {
                                 error = 'No entities to select';
                                 overlayController.hide();
@@ -172,8 +261,44 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                             ),
                           );
                         }
+                        /// ---> Move scroll to new content on lazzy loads.
+                        if (lazzyLoading) {
+                          lazzyLoading = false;
+                          WidgetsBinding.instance.addPostFrameCallback(
+                            (_) => scrollController.jumpTo(scrollController.position.maxScrollExtent - 200),
+                          );
+                        }
 
-                        return Column();
+                        return TextFieldTapRegion(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemExtent: 35,
+                            controller: scrollController,
+                            itemCount: data.entities.length,
+                            itemBuilder: (_, int index) {
+                              final TEntity entity = data.entities.elementAt(index);
+                              final String label = widget.textBuilder(entity);
+                              // Build the individual option component.
+                              return TwsListTile(
+                                label: label,
+                                width: double.maxFinite,
+                                textColor: theme.page.fore,
+                                onHoverColor: theme.page.accent,
+                                enabled: widget.enabled,
+                                onTap: (bool selected) {
+                                  if (selected) {
+                                    inputFocusNode.unfocus();
+                                    overlayController.hide();
+                                    currentSelection = entity;
+                                    inputcontroller.text = widget.textBuilder(entity);
+                                    widget.onSelected?.call(currentSelection);
+                                    print('selected');
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        );
                       },
                     ),
                   ),

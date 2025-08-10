@@ -15,7 +15,6 @@ final class Identification extends EntityB<Identification> {
   //! --> Properties
 
   /// Physical person name.
-  ///
   /// For more than one name split with space.
   String name = "";
 
@@ -44,7 +43,7 @@ final class Identification extends EntityB<Identification> {
     name = encode.get(EntityKeys.name);
     lastName = encode.get(kLastName);
     birthDay = encode.get(kBirthday);
-
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
     super.decode(encode);
   }
 
@@ -54,7 +53,8 @@ final class Identification extends EntityB<Identification> {
       <String, Object?>{
         EntityKeys.name: name,
         kLastName: lastName,
-        kBirthday: birthDay?.toIso8601String(),
+        kBirthday: birthDay?.dateOnlyIso,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }

@@ -1,6 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/human_resources/identifications/identification.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
@@ -28,9 +28,16 @@ final class DriverExternal extends EntityB<DriverExternal> {
 
   @override
   DataMap encode([DataMap? entityObject]) {
+    Status status = Status();
+    Situation situation = Situation();
+    status.reference = 'referdef';
+    situation.reference = 'referdef';
+    
+    DriverCommon common = DriverCommon.a("licenseDef", status, situation);
     return super.encode(
       <String, Object?>{
         kIdentification: identification.encode(),
+        'common': common.encode(),
       },
     );
   }

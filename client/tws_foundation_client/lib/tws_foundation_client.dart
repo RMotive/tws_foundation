@@ -13,6 +13,7 @@ library;
 
 /// [Services.Business.Misc.Status]
 export 'src/services/business/misc/statuses/status.dart';
+export 'src/services/business/misc/statuses/statuses_service.dart';
 
 /// [Services.Business.Misc.Address]
 export 'src/services/business/misc/addresses/address.dart';
@@ -107,6 +108,7 @@ export 'src/services/models/view_filters/view_filter_property.dart';
 
 // --> Exporting [src.services.business.situations]
 export 'src/services/business/misc/situations/situation.dart';
+export 'src/services/business/misc/situations/situations_service.dart';
 
 // --> Exporting [src.services.business.sct]
 export 'src/services/business/vehicules/scts/sct.dart';
@@ -130,6 +132,9 @@ export 'src/services/business/yardlogs/yard_log.dart';
 export 'src/services/business/yardlogs/yard_logs_service.dart';
 export 'src/services/business/yardlogs/yardlogs_service_i.dart';
 
+// --> Exporting [src.services.business.approaches]
+export 'src/services/business/human_resources/approaches/approach.dart';
+
 //! <-- Business services
 
 
@@ -146,3 +151,8 @@ export 'src/services/security/solutions/solutions_service_b.dart';
 
 // --> Exporting [src.services.security.contacts]
 export 'src/services/security/contacts/contact.dart';
+
+// --> Exporting [src.services.security.accounts]
+export 'src/services/security/accounts/account.dart';
+export 'src/services/security/accounts/accounts_service.dart';
+

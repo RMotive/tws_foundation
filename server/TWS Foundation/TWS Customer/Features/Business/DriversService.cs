@@ -1,6 +1,13 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Customer;
+using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Product;
+
+using Microsoft.EntityFrameworkCore;
 
 using TWS_Business;
 using TWS_Business.Depots;
@@ -23,6 +30,11 @@ public class DriversService
     : BService<Driver_Common, DriversDepot>, IDriversService {
 
     private readonly Database _db;
+
+    private  QueryProcessor<Driver_Common> queryProcessor => (sourceQuery) => {
+        sourceQuery = sourceQuery.Include(e => e.Internal!.Employee.Approach).Include(e => e.Internal!.Employee.Address);
+        return sourceQuery;
+    };
 
     /// <summary>
     ///     Creates a new instance of <see cref="DriversService"/>.
@@ -57,6 +69,27 @@ public class DriversService
         BatchOperationOutput<Driver_Common> output = new(successes, failures);
 
         return output;
+    }
+
+    public async override Task<ViewOutput<Driver_Common>> View(QueryInput<Driver_Common, ViewInput<Driver_Common>> input) {
+        input.PostProcessor = queryProcessor;
+        return await _depot.View(input);
+    }
+
+    public async override Task<UpdateOutput<Driver_Common>> Update(UpdateInput<Driver_Common> input) {
+        // Check if the trailer currently exist in database.
+        // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
+        Driver_Common overwritte = input.Entity;
+        if (input.Entity.Internal != null) {
+            input.Entity.Internal.Common = input.Entity;
+        } else {
+            input.Entity.External!.Common = input.Entity;
+        }
+        // Apply the include query processor to the input.
+        QueryInput<Driver_Common, UpdateInput<Driver_Common>> queryInput = GetOperationInput(input);
+        queryInput.PostProcessor = queryProcessor;
+
+        return await _depot.Update(queryInput);
     }
 
 
