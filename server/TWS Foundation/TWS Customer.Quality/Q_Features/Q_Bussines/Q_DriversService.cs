@@ -6,6 +6,7 @@ using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities.Drivers;
+using TWS_Business.Quality.Utils;
 
 using TWS_Customer.Features.Business;
 
@@ -14,24 +15,22 @@ public class Q_DriversService
     : BQ_Service<IDriversService, Driver_Common> {
 
     protected override Driver_Common DraftEntity(string entropy) {
-        throw new NotImplementedException();
+        return BusinessDraftUtils.SampleDriverCommon(true);
     }
 
     protected override IDriversService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-        _depot = new DriversDepot(BussinesDatabase, Disposer);
-        return new DriversService(_depot, BussinesDatabase);
+        TWS_Business.Database BussinesDatabase = BuildBusinessDb();
+        DriversDepot depot = new DriversDepot(BussinesDatabase, Disposer);
+        return new DriversService(depot, BussinesDatabase);
     }
-    #endregion
 
     public static readonly TheoryData<bool> testingValues = [true, false];
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        await _depot!.Store(SampleDriverCommon(true), true);
-
-        ViewOutput<Driver_Common> viewOutput = await _service.View(
+        await Store<Driver_Common, Driver, DriverExternal>(BusinessDraftUtils.SampleDriverCommon(true), true);
+        ViewOutput<Driver_Common> viewOutput = await service.View(
                 new QueryInput<Driver_Common, ViewInput<Driver_Common>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -55,11 +54,11 @@ public class Q_DriversService
 
     [Theory(DisplayName = "[Create]: Entities Creation")]
     [MemberData(nameof(testingValues))]
-    public async Task Create(bool internalValue) {
-        BatchOperationOutput<Driver_Common> batchOutput = await _service.Create([
-                SampleDriverCommon(internalValue),
-                SampleDriverCommon(internalValue),
-                SampleDriverCommon(internalValue)
+    public async Task CreateBatch(bool internalValue) {
+        BatchOperationOutput<Driver_Common> batchOutput = await service.Create([
+               BusinessDraftUtils.SampleDriverCommon(internalValue),
+               BusinessDraftUtils. SampleDriverCommon(internalValue),
+               BusinessDraftUtils.SampleDriverCommon(internalValue)
             ]);
 
         Assert.Multiple(
@@ -73,10 +72,10 @@ public class Q_DriversService
     [Theory(DisplayName = "[Update]: Update an entity")]
     [MemberData(nameof(testingValues))]
     public async Task Update(bool internalValue) {
-        Driver_Common changedEntity = await _depot!.Store(SampleDriverCommon(internalValue), true);
+        Driver_Common changedEntity = await Store<Driver_Common, Driver, DriverExternal>(BusinessDraftUtils.SampleDriverCommon(internalValue), true);
         Driver_Common copy = changedEntity.DeepCopy();
         copy.License = "upd_" + changedEntity.License;
-        UpdateOutput<Driver_Common> updateOutput = await _service.Update(new UpdateInput<Driver_Common> {
+        UpdateOutput<Driver_Common> updateOutput = await service.Update(new UpdateInput<Driver_Common> {
             Entity = copy,
         });
 

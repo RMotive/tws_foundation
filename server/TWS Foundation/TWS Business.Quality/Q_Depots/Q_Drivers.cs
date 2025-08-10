@@ -1,4 +1,6 @@
-﻿using TWS_Business.Depots;
+﻿using CSM_Foundation.Database.Entity.Depot;
+
+using TWS_Business.Depots;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
@@ -8,6 +10,9 @@ namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Drivers :
     BQ_CommonDepot<Driver_Common, Driver, DriverExternal, DriversDepot> {
+    protected override IQueryable<Driver_Common> CustomQueryProcessor(IQueryable<Driver_Common> sourceQuery) {
+        return sourceQuery;
+    }
 
     protected override Driver_Common EntityFactory(string entropy) {
         Situation situation = Store(

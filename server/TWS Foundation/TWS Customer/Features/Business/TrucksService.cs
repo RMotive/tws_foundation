@@ -1,10 +1,16 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Product;
+
+using Microsoft.EntityFrameworkCore;
 
 using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Depots.Vehicles;
+using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trucks;
 
@@ -31,6 +37,19 @@ public class TrucksService
     /// <param name="Depot">
     ///     <see cref="Truck_Common"/> based [Depot] handler to be used.
     /// </param>
+    /// 
+    private static QueryProcessor<Truck_Common> QueryProcessor => (sourceQuery) => {
+        sourceQuery = sourceQuery
+        .Include(e => e.Situation)
+        .Include(e => e.Location)
+        .Include(e => e.Internal!.Carrier.USDOT)
+        .Include(e => e.Internal!.SCT)
+        .Include(e => e.Internal!.Maintenance)
+        .Include(e => e.Internal!.Insurance);
+
+
+        return sourceQuery;
+    };
     public TrucksService(TrucksDepot Depot, Database Database) : base(Depot) {
         _db = Database;
     }
@@ -57,5 +76,19 @@ public class TrucksService
         BatchOperationOutput<Truck_Common> output = new(successes, failures);
 
         return output;
+    }
+
+    public async override Task<UpdateOutput<Truck_Common>> Update(UpdateInput<Truck_Common> input) {
+        // Replate common placeholder for the main common entity.
+        if (input.Entity.Internal != null) {
+            input.Entity.Internal.Common = input.Entity;
+        } else {
+            input.Entity.External!.Common = input.Entity;
+        }
+        // Apply the include query processor to the input.
+        QueryInput<Truck_Common, UpdateInput<Truck_Common>> queryInput = GetOperationInput(input);
+        queryInput.PostProcessor = QueryProcessor;
+
+        return await depot.Update(queryInput);
     }
 }

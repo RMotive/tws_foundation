@@ -102,5 +102,7 @@ public class Truck
 
         etBuilder.Link<Truck, SCT>(nameof(SCT));
         etBuilder.Link<Truck, Maintenance>(nameof(Maintenance));
+        etBuilder.Link<Truck, Insurance>(nameof(Insurance));
+
     }
 }

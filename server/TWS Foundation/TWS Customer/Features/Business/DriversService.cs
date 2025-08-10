@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models;
@@ -31,7 +30,7 @@ public class DriversService
 
     private readonly Database _db;
 
-    private  QueryProcessor<Driver_Common> queryProcessor => (sourceQuery) => {
+    private static QueryProcessor<Driver_Common> QueryProcessor => (sourceQuery) => {
         sourceQuery = sourceQuery.Include(e => e.Internal!.Employee.Approach).Include(e => e.Internal!.Employee.Address);
         return sourceQuery;
     };
@@ -72,14 +71,12 @@ public class DriversService
     }
 
     public async override Task<ViewOutput<Driver_Common>> View(QueryInput<Driver_Common, ViewInput<Driver_Common>> input) {
-        input.PostProcessor = queryProcessor;
-        return await _depot.View(input);
+        input.PostProcessor = QueryProcessor;
+        return await depot.View(input);
     }
 
     public async override Task<UpdateOutput<Driver_Common>> Update(UpdateInput<Driver_Common> input) {
-        // Check if the trailer currently exist in database.
-        // current: fetch and stores the lastest record data in database to compare and update with the trailer parameter.
-        Driver_Common overwritte = input.Entity;
+        // Replate common placeholder for the main common entity.
         if (input.Entity.Internal != null) {
             input.Entity.Internal.Common = input.Entity;
         } else {
@@ -87,9 +84,9 @@ public class DriversService
         }
         // Apply the include query processor to the input.
         QueryInput<Driver_Common, UpdateInput<Driver_Common>> queryInput = GetOperationInput(input);
-        queryInput.PostProcessor = queryProcessor;
+        queryInput.PostProcessor = QueryProcessor;
 
-        return await _depot.Update(queryInput);
+        return await depot.Update(queryInput);
     }
 
 

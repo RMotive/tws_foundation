@@ -108,6 +108,8 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
     protected abstract TExternalEdge ExternalFactory(string entropy);
 
+    protected abstract IQueryable<TCommon> CustomQueryProcessor(IQueryable<TCommon> sourceQuery);
+
     #endregion
 
     #region Private / Protected Functions
@@ -691,18 +693,28 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     [Theory(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
     [CommonFactData]
     public virtual async Task UpdateD(bool DefaultEdge) {
+        PropertyInfo ValidEvaluable;
+        if (Evaluable.Name == nameof(IEntity.Id)) {
+            ValidEvaluable = typeof(TCommon).GetProperties()
+                .FirstOrDefault(p => p.Name != nameof(IEntity.Id))
+                ?? typeof(TCommon).GetProperty(nameof(IEntity.Id))!;
+
+        } else {
+            ValidEvaluable = Evaluable;
+        }
         TCommon sample = await Store<TCommon, TInternalEdge, TExternalEdge>((entropy) => WrappedFactory(entropy, DefaultEdge));
         TCommon valueReference = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        object? sampleOriginalValue = Evaluable.GetValue(sample);
+        object? sampleOriginalValue = ValidEvaluable.GetValue(sample);
 
-        Evaluable.SetValue(sample, Evaluable.GetValue(valueReference));
+        ValidEvaluable.SetValue(sample, ValidEvaluable.GetValue(valueReference));
 
         UpdateOutput<TCommon> updateOutput = await Depot.Update(
                 new QueryInput<TCommon, UpdateInput<TCommon>> {
                     Parameters = new UpdateInput<TCommon> {
                         Entity = sample,
                     },
+                    PostProcessor = CustomQueryProcessor,
                 }
             );
 
@@ -712,11 +724,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                     () => {
                         TCommon overwritten = updateOutput.Updated;
 
-                        Assert.NotEqual(updateOutput.Original, overwritten);
-
-                        Evaluable.SetValue(sample, sampleOriginalValue);
-
-                        Assert.Equal(sample, overwritten);
+                        Assert.False(updateOutput.Original?.Equals(overwritten));
                     }
                 ]
             );

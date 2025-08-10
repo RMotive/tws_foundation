@@ -5,28 +5,29 @@ using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
+using TWS_Business.Quality.Utils;
 
 using TWS_Customer.Features.Business;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_StatusesService
-    : BQ_ServicesCustomer<IStatusesService> {
+    : BQ_Service<IStatusesService> {
 
     private StatusesDepot? _depot;
 
     #region [BQ_Service] implementations
     protected override IStatusesService ServiceFactory() {
-        TWS_Business.Database BussinesDatabase = BusinessDatabaseFactory();
-        _depot = new StatusesDepot(BussinesDatabase, Disposer);
-        return new StatusesService(_depot, BussinesDatabase);
+        TWS_Business.Database businessDatabase = BuildBusinessDb();
+        StatusesDepot depot = new StatusesDepot(businessDatabase, Disposer);
+        return new StatusesService(depot, businessDatabase);
     }
     #endregion
 
     [Fact(DisplayName = "[View]: Generates correctly a simple 1 page, 10 range view.")]
     public async Task View() {
         // Create a sample to prevent empty view results.
-        await _depot!.Store(SampleStatus("tst"), true);
-        ViewOutput<Status> viewOutput = await _service.View(
+        Store(BusinessDraftUtils.SampleStatus("tst"));
+        ViewOutput<Status> viewOutput = await service.View(
                 new QueryInput<Status, ViewInput<Status>> {
                     Parameters = new() {
                         Retroactive = false,
@@ -46,10 +47,10 @@ public class Q_StatusesService
 
     [Fact(DisplayName = "[Create]: Entities Creation")]
     public async Task Create() {
-        BatchOperationOutput<Status> batchOutput = await _service.Create([
-                SampleStatus("tst"),
-                SampleStatus("ts2"),
-                SampleStatus("ts3")
+        BatchOperationOutput<Status> batchOutput = await service.Create([
+                BusinessDraftUtils.SampleStatus("tst"),
+                BusinessDraftUtils.SampleStatus("ts2"),
+                BusinessDraftUtils.SampleStatus("ts3")
             ]);
 
         Assert.Multiple(
@@ -62,9 +63,9 @@ public class Q_StatusesService
 
     [Fact(DisplayName = "[Update]: Update an entity")]
     public async Task Update() {
-        Status changedEntity = await _depot!.Store(SampleStatus("tst"), true);
+        Status changedEntity = Store(BusinessDraftUtils.SampleStatus("tst"));
         changedEntity.Name = "updated_name" + changedEntity.Name;
-        UpdateOutput<Status> updateOutput = await _service.Update(new UpdateInput<Status> {
+        UpdateOutput<Status> updateOutput = await service.Update(new UpdateInput<Status> {
             Entity = changedEntity,
             Create = true,
         });
@@ -78,8 +79,8 @@ public class Q_StatusesService
 
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity")]
     public async Task Delete() {
-        Status sample = await _depot!.Store(SampleStatus("tst"), true);
-        Status deleted = await _service.Delete(sample);
+        Status sample = Store(BusinessDraftUtils.SampleStatus("tst"));
+        Status deleted = await service.Delete(sample);
 
         Assert.Equal(sample.Id, deleted.Id);
         Assert.Equal(sample.Name, deleted.Name);
@@ -88,12 +89,12 @@ public class Q_StatusesService
     [Fact(DisplayName = "[Delete]: Correctly deletes an entity collection")]
     public async Task DeleteCollection() {
         Status[] sample = [
-                await _depot!.Store(SampleStatus("tst"), true),
-                await _depot!.Store(SampleStatus("ts1"), true),
-                await _depot!.Store(SampleStatus("ts2"), true),
+                Store(BusinessDraftUtils.SampleStatus("tst")),
+                Store(BusinessDraftUtils.SampleStatus("ts1")),
+                Store(BusinessDraftUtils.SampleStatus("ts2")),
             ];
 
-        BatchOperationOutput<Status> batchOutput = await _service.Delete(sample);
+        BatchOperationOutput<Status> batchOutput = await service.Delete(sample);
 
         Assert.Multiple(
            () => Assert.False(batchOutput.Failed),
@@ -105,8 +106,8 @@ public class Q_StatusesService
     [Fact(DisplayName = "[Read]: Read a record filtering by reference property.")]
     public async Task Read() {
         // Create a sample to prevent empty read results.
-        Status status = await _depot!.Store(SampleStatus("tst"), true);
-        BatchOperationOutput<Status> batchResult = await _service.Read(status.Reference);
+        Status status = Store(BusinessDraftUtils.SampleStatus("tst"));
+        BatchOperationOutput<Status> batchResult = await service.Read(status.Reference);
 
         Assert.Multiple(
             () => Assert.True(batchResult.SuccessesCount > 0),

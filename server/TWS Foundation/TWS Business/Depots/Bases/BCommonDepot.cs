@@ -14,6 +14,8 @@ using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Utilitites;
 
+using CSM_Security.Abstractions;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -648,8 +650,6 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 } else if (navigation.CurrentValue == null && newNavigationValue != null) {
                     // Create a new navigation overwritten.
                     // Also update the attached navigators.
-                    //oldEntry.Reference(navigation.Metadata.Name).CurrentValue = newNavigationValue;
-                    //AttachDate(newNavigationValue);
                     EntityEntry newNavigationEntry = _db.Entry(newNavigationValue);
                     newNavigationEntry.State = EntityState.Added;
                     navigation.CurrentValue = newNavigationValue;
@@ -694,16 +694,10 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 (sourceQuery) => sourceQuery
             );
 
-
-        TCommon? original = await processedQuery
-            .Where(r => r.Id == overwritten.Id)
-            .FirstOrDefaultAsync()
-            ?? throw new XDepot<TCommon>(XDepotSituations.Unfound);
-
         /// --> When the entity is not saved yet.
-        if (original == null) {
+        if (overwritten.Id == 0) {
             if (!parameters.Create)
-                throw new XDepot<TCommon>(XDepotSituations.Unfound, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
+                throw new XDepot<TCommon>(XDepotSituations.CreateDisabled, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
 
             overwritten = await Create(overwritten);
             _db.SaveChanges();
@@ -714,6 +708,11 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
             };
         }
 
+        TCommon? original = await processedQuery
+        .Where(r => r.Id == overwritten.Id)
+        .FirstOrDefaultAsync()
+        ?? throw new XDepot<TCommon>(XDepotSituations.Unfound);
+    
         TCommon oldCopy = original.DeepCopy();
 
         UpdateHelper(original, overwritten, null);

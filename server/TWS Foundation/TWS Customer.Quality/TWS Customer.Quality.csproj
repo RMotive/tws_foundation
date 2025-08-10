@@ -31,6 +31,8 @@
     <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
     <ProjectReference Include="..\CSM Security.Quality\CSM Security.Quality.csproj" />
     <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />
+	<ProjectReference Include="..\TWS Business.Quality\TWS Business.Quality.csproj" />
+
   </ItemGroup>
 
 </Project>

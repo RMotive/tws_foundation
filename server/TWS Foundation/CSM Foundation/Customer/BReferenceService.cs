@@ -5,6 +5,7 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Foundation.Product;
 
 namespace CSM_Foundation.Customer;
 public class BReferenceService<TEntity, TDepot>
@@ -73,5 +74,9 @@ public class BReferenceService<TEntity, TDepot>
         };
 
         return _depot.Read(input);
+    }
+
+    public Task<TEntity> Create(TEntity entity) {
+        throw new NotImplementedException();
     }
 }

@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Customer;
+﻿using CSM_Foundation;
+using CSM_Foundation.Customer;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
 

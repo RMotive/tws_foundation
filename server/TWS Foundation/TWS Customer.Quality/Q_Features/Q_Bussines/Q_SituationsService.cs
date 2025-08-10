@@ -5,6 +5,7 @@ using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
+using TWS_Business.Quality.Utils;
 
 using TWS_Customer.Features.Business;
 
@@ -30,8 +31,8 @@ public class Q_SituationsService
     [Fact(DisplayName = "[Read]: Read a record filtering by reference property.")]
     public async Task Read() {
         // Create a sample to prevent empty read results.
-        Situation situation = await _depot!.Store(SampleSituation(), true);
-        BatchOperationOutput<Situation> batchResult = await _service.Read(situation.Reference);
+        Situation situation = Store(BusinessDraftUtils.SampleSituation());
+        BatchOperationOutput<Situation> batchResult = await service.Read(situation.Reference);
 
         Assert.Multiple(
             () => Assert.True(batchResult.SuccessesCount > 0),
