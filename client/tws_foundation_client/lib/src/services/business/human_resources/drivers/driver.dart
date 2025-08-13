@@ -49,7 +49,7 @@ final class Driver extends EntityB<Driver> {
 
   /// "Fast" permit number.
   ///
-  /// Length must be 24
+  /// Length must be 12
   String? fast;
 
   /// TODO: Define.
@@ -161,63 +161,63 @@ final class Driver extends EntityB<Driver> {
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(EntityKeys.id, int, id),
-          'Pointer cannot be less than 0',
-          'invalidPointer()',
+          'Pointer: $id, cannot be less than 0',
+          'id < 0',
         ),
       );
     }
 
-    if ((fast!.trim().isEmpty || fast!.length != 12)) {
+    if (fast != null && (fast!.trim().isEmpty || fast!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kFast, String, fast),
-          'Lenght must be 12 characters',
-          'strictLength(12)',
+          'Length: ${fast!.length}, must be empty or equal to 12 characters',
+          'length == 0 || 13 > length >  11',
         ),
       );
     }
 
-    if ((twic!.trim().isEmpty || twic!.length != 12)) {
+    if (twic != null && (twic!.trim().isEmpty || twic!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kTwic, String, twic),
-          'Lenght must be 12 characters',
-          'strictLength(12)',
+          'Length: ${twic!.length}, must be empty or equal to 12 characters',
+          'length == 0 || 13 > length >  11',
         ),
       );
     }
 
-    if ((visa!.trim().isEmpty || visa!.length != 12)) {
+    if (visa != null && (visa!.trim().isEmpty || visa!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kVisa, String, visa),
-          'Lenght must be 12 characters',
-          'strictLength(12)',
+          'Length: ${visa!.length}, must be empty or equal to 12 characters',
+          'length == 0 || 13 > length >  11',
         ),
       );
     }
 
-    if ((anam!.trim().isEmpty || anam!.length != 24)) {
+    if (anam != null && (anam!.trim().isEmpty || anam!.length != 24)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kAnam, String, anam),
-          'Lenght must be 24 characters',
-          'strictLength(24)',
+          'Length: ${anam!.length}, must be empty or equal to 24 characters',
+          'length == 0 || 25 > length >  23',
         ),
       );
     }
 
-    if ((driverType!.trim().isEmpty || driverType!.length != 12)) {
+    if (driverType != null && (driverType!.trim().isEmpty || driverType!.length != 12)) {
       invalidations.add(
         EntityInvalidation<Driver>(
           this,
           PropertyInfo(kDriverType, String, driverType),
-          'Lenght must be 12 characters',
-          'strictLength(12)',
+          'Length: ${driverType!.length}, must be empty or equal to 12 characters',
+          'length == 0 || 13 > length >  11',
         ),
       );
     }

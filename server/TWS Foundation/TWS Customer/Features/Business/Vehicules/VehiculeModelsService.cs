@@ -33,6 +33,13 @@ public class VehiculeModelsService
         this._db = Database;
     }
 
+    /// <summary>
+    /// Overrides the <see cref="BService{TEntity, TDepot}.Create"/> method to handle batch creation of <see cref="VehiculeModel"/> entities.
+    /// Stores the nested entities to prevent sanitization issues. 
+    /// </summary>
+    /// <param name="Entities"></param>
+    /// <param name="Sync"></param>
+    /// <returns></returns>
     public async override Task<BatchOperationOutput<VehiculeModel>> Create(VehiculeModel[] Entities, bool Sync = false) {
         VehiculeModel[] successes = [];
         EntityOperationFailure<VehiculeModel>[] failures = [];

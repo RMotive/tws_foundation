@@ -40,16 +40,16 @@ public class TrucksService
     /// 
     private static QueryProcessor<Truck_Common> QueryProcessor => (sourceQuery) => {
         sourceQuery = sourceQuery
-        .Include(e => e.Situation)
-        .Include(e => e.Location)
-        .Include(e => e.Internal!.Carrier.USDOT)
-        .Include(e => e.Internal!.SCT)
-        .Include(e => e.Internal!.Maintenance)
-        .Include(e => e.Internal!.Insurance);
-
-
+         .Include(e => e.Internal).ThenInclude(e => e!.Carrier).ThenInclude(e => e!.USDOT)
+         .Include(e => e.Internal).ThenInclude(e => e!.SCT)
+         .Include(e => e.Internal).ThenInclude(e => e!.Maintenance)
+         .Include(e => e.Internal).ThenInclude(e => e!.Insurance)
+         .Include(e => e.Internal).ThenInclude(e => e!.Model)
+         .Include(e => e.Situation)
+         .Include(e => e.Location);
         return sourceQuery;
     };
+
     public TrucksService(TrucksDepot Depot, Database Database) : base(Depot) {
         _db = Database;
     }

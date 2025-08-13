@@ -19,7 +19,7 @@ public class Q_TrucksService
     }
     protected override ITrucksCommonService ServiceFactory() {
         TWS_Business.Database businessDatabase = BuildBusinessDb();
-        TrucksDepot depot = new TrucksDepot(businessDatabase, Disposer);
+        TrucksDepot depot = new(businessDatabase, Disposer);
         return new TrucksService(depot, businessDatabase);
     }
 

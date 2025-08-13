@@ -20,7 +20,7 @@ public class Q_DriversService
 
     protected override IDriversService ServiceFactory() {
         TWS_Business.Database BussinesDatabase = BuildBusinessDb();
-        DriversDepot depot = new DriversDepot(BussinesDatabase, Disposer);
+        DriversDepot depot = new(BussinesDatabase, Disposer);
         return new DriversService(depot, BussinesDatabase);
     }
 

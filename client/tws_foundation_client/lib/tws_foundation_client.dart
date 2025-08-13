@@ -23,6 +23,12 @@ export 'src/services/business/misc/addresses/addresses_service.dart';
 
 //* --> [Services.Business.Vehicules]
 
+/// [Services.Business.Vehicules.Vehicules]
+export 'src/services/business/vehicules/usdots/usdot.dart';
+
+/// [Services.Business.Vehicules.insurances]
+export 'src/services/business/vehicules/insurances/insurance.dart';
+
 /// [Services.Business.Vehicules.LoadTypes]
 export 'src/services/business/vehicules/load_types/load_type.dart';
 export 'src/services/business/vehicules/load_types/load_types_service.dart';

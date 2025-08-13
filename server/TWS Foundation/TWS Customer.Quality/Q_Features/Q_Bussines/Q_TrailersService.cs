@@ -4,8 +4,6 @@ using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 
-using TWS_Business.Depots;
-using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Quality.Utils;

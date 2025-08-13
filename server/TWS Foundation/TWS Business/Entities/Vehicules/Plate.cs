@@ -89,5 +89,9 @@ public class Plate
                 Required: true,
                 Auto: true
             );
+        
+        etBuilder.Link<Plate, Truck>(nameof(Truck));
+        etBuilder.Link<Plate, Trailer>(nameof(Trailer));
+
     }
 }

@@ -7,29 +7,26 @@ Address addressBuilder() => Address();
 
 /// Defines a business entity that stores information about a location [Address] for buildings, employees, etc.
 final class Address extends EntityB<Address> {
-  /// [country] property key.
+  /// [Address.country] property key.
   static const String kCountry = "country";
 
-  /// [state] property key.
+  /// [Address.state] property key.
   static const String kState = "state";
 
-  /// [street] property key.
+  /// [Address.street] property key.
   static const String kStreet = "street";
 
-  /// [altStreet] property key.
+  /// [Address.altStreet] property key.
   static const String kAltStreet = "altstreet";
 
-  /// [city] property key.
+  /// [Address.city] property key.
   static const String kCity = "city";
 
-  /// [zip] property key.
+  /// [Address.zip] property key.
   static const String kZip = "zip";
 
-  /// [colonia] proeprty key.
+  /// [Address.subdivision] proeprty key.
   static const String kSubdivision = "subdivision";
-
-  /// [carriers] property key.
-  static const String kCarriers = "Carriers";
 
   /// Country universal code identificator.
   String country = "";
@@ -200,6 +197,7 @@ final class Address extends EntityB<Address> {
         ),
       );
     }
+
     return results;
   }
 }
