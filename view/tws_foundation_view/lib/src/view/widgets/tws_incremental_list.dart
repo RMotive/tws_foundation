@@ -2,10 +2,10 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-/// [TWSIncrementalList] Widget that shows a list of Generic [TModel] items.
+/// [IncrementalList] Widget that shows a list of Generic [TModel] items.
 /// This list has an built-in options to increment or remove items, 
 /// based on the [modelBuilder] property.
-class TWSIncrementalList<TModel> extends StatefulWidget {  
+class IncrementalList<TModel> extends StatefulWidget {  
   /// text in plural to name the record.
   final String title;
 
@@ -36,7 +36,7 @@ class TWSIncrementalList<TModel> extends StatefulWidget {
   /// set the min records available. When the min value is reached, the delete option will be disable.
   final int recordMin;
 
-  const TWSIncrementalList({
+  const IncrementalList({
     super.key,
     required this.recordList,
     required this.modelBuilder,
@@ -51,10 +51,10 @@ class TWSIncrementalList<TModel> extends StatefulWidget {
   }): assert(recordLimit >= 0, "Limit property must be >= 0");
 
   @override
-  State<TWSIncrementalList<TModel>> createState() => _TWSIncrementalListState<TModel>();
+  State<IncrementalList<TModel>> createState() => _IncrementalListState<TModel>();
 }
 
-class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>> {
+class _IncrementalListState<TModel> extends State<IncrementalList<TModel>> {
 
   /// Color pallet for the component.
   late SimpleTheming primaryColorTheme;

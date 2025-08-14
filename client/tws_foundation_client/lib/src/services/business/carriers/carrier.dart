@@ -1,6 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/usdots/usdot.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Carrier] default builder.

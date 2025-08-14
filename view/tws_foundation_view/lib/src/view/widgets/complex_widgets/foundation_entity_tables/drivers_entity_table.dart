@@ -33,10 +33,10 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
 
   @override
   Widget composeViewer(BuildContext buildContext, DriverCommon entity) {
-    List<Widget> edgeColumns = <Widget>[];
+    List<Widget> scopeColumns = <Widget>[];
 
     if (entity.internal != null) {
-      edgeColumns = <Widget>[
+      scopeColumns = <Widget>[
         const SectionDivider(text: 'Employee Identity'),
         PropertyViewer(
           label: 'Name',
@@ -168,7 +168,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
     }
 
     if (entity.external != null) {
-      edgeColumns = <Widget>[
+      scopeColumns = <Widget>[
         const SectionDivider(
           text: 'Employee identity',
         ),
@@ -209,7 +209,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             label: 'Status',
             value: entity.status.name,
           ),
-          ...edgeColumns,
+          ...scopeColumns,
         ],
       ),
     );
@@ -232,12 +232,13 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         );
       },
       formBuilder: (BuildContext buildContext, DriverCommon entity) {
-
+        
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
             spacing: 10,
             children: <Widget>[
+              const SectionDivider(text: 'Common details'),
               TextInput(
                 label: "TimeStamp",
                 controller: TextEditingController(
@@ -245,8 +246,46 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 ),
                 isEnabled: false,
               ),
+              TextInput(
+                label: "License",
+                hint: "Enter a License number",
+                maxLength: 12,
+                controller: TextEditingController(
+                  text: entity.license,
+                ),
+                onChanged: (String text) {
+                  entity.license = text;
+                },
+              ),
+              EntityFinderSelector<Situation, SituationsServiceI>(
+                label: "Situation",
+                initialValue: entity.situation,
+                entityBuilder: () => Situation(),
+                textBuilder: (Situation entity) {
+                  return entity.name.cleaned ?? "---";
+                },
+                onSelected: (Situation? selectedItem) {
+                  entity.situation = selectedItem ?? Situation();
+                },
+              ),
+              EntityFinderSelector<Status, StatusesServiceI>(
+                label: "Status",
+                initialValue: entity.status,
+                entityBuilder: () => Status(),
+                textBuilder: (Status entity) {
+                  return entity.name.cleaned ?? "---";
+                },
+                onSelected: (Status? selectedItem) {
+                  entity.status = selectedItem ?? Status();
+
+                  if (entity.internal != null){
+                    entity.internal?.employee.status = selectedItem ?? Status();
+                    entity.internal?.employee.approach?.status = selectedItem ?? Status();
+                  }
+                },
+              ),
           
-              entity.internal != null? _editorInternalFormBuilder(entity) : _editorExternalFormBuilder(entity)
+              entity.internal != null? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
             ],
           ),
         );
@@ -312,65 +351,16 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
     );
   }
 
-  Widget _editorExternalFormBuilder(DriverCommon entity) {
-    return Column(
-      spacing: 10,
-      children: <Widget>[
-        TextInput(
-          label: "License",
-          hint: "Enter a License number",
-          maxLength: 12,
-          controller: TextEditingController(
-            text: entity.license,
-          ),
-          onChanged: (String text) {
-            entity.license = text;
-          },
-        ),
-        EntityFinderSelector<Situation, SituationsServiceI>(
-          label: "Situation",
-          initialValue: entity.situation,
-          entityBuilder: () => Situation(),
-          textBuilder: (Situation entity) {
-            return entity.name.cleaned ?? "---";
-          },
-          onSelected: (Situation? selectedItem) {
-            entity.situation = selectedItem ?? Situation();
-          },
-        ),
-        EntityFinderSelector<Status, StatusesServiceI>(
-          label: "Status",
-          initialValue: entity.status,
-          entityBuilder: () => Status(),
-          textBuilder: (Status entity) {
-            return entity.name.cleaned ?? "---";
-          },
-          onSelected: (Status? selectedItem) {
-            entity.status = selectedItem ?? Status();
-          },
-        ),
-        _identificationSection(entity),
-      ],
-    );
+  Widget _externalEditorFormBuilder(DriverCommon entity) {
+    return _identificationSection(entity);
   }
 
-  Widget _editorInternalFormBuilder(DriverCommon entity) {
+  Widget _internalEditorFormBuilder(DriverCommon entity) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         spacing: 10,
         children: <Widget>[
-          TextInput(
-            label: "License",
-            hint: "Enter a License number",
-            maxLength: 12,
-            controller: TextEditingController(
-              text: entity.license,
-            ),
-            onChanged: (String text) {
-              entity.license = text;
-            },
-          ),
           TextInput(
             label: "Driver type",
             hint: "Enter the driver type",
@@ -379,30 +369,6 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             controller: TextEditingController(text: entity.internal?.driverType),
             onChanged: (String text) {
               entity.internal?.driverType = text;
-            },
-          ),
-          EntityFinderSelector<Situation, SituationsServiceI>(
-            label: "Situation",
-            initialValue: entity.situation,
-            entityBuilder: () => Situation(),
-            textBuilder: (Situation entity) {
-              return entity.name.cleaned ?? "---";
-            },
-            onSelected: (Situation? selectedItem) {
-              entity.situation = selectedItem ?? Situation();
-            },
-          ),
-          EntityFinderSelector<Status, StatusesServiceI>(
-            label: "Status",
-            initialValue: entity.status,
-            entityBuilder: () => Status(),
-            textBuilder: (Status entity) {
-              return entity.name.cleaned ?? "---";
-            },
-            onSelected: (Status? selectedItem) {
-              entity.status = selectedItem ?? Status();
-              entity.internal?.employee.status = selectedItem ?? Status();
-              entity.internal?.employee.approach?.status = selectedItem ?? Status();
             },
           ),
           Datepicker(

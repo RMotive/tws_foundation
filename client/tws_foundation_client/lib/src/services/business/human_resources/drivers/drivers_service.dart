@@ -12,7 +12,7 @@ abstract interface class DriversServiceI extends FoundationServiceB implements S
   /// Creates a [DriverCommon] collection.
   ///
   ///
-  /// [solutions] records to create and store. ([Solution.Id] property must be 0, [Solution.Timestamp] always will be overriden to the exact moment is stored at the data storages).
+  /// [drivers] records to create and store. ([DriverCommon.Id] property must be 0, [DriverCommon.Timestamp] always will be overriden to the exact moment is stored at the data storages).
   ///
   /// [auth] server authorization token.
   FoundationFutureResolver<BatchOperationOutput<DriverCommon>> create(List<DriverCommon> drivers, String auth);
@@ -28,7 +28,7 @@ abstract interface class DriversServiceI extends FoundationServiceB implements S
   /// Updates a [DriverCommon] based on the [DriverCommon.Id] pointer.
   ///
   ///
-  /// [input] record properties to update at the data storage.
+  /// [entity] record properties to update at the data storage.
   ///
   /// [auth] server authorization token.
   FoundationFutureResolver<DriverCommon> delete(DriverCommon entity, String auth);

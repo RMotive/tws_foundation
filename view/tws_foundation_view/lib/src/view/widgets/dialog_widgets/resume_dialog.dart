@@ -31,9 +31,9 @@ class ResumeDialog extends StatelessWidget {
   const ResumeDialog({
     super.key,
     required this.title,
-    required this.values,
     required this.router,
     required this.context,
+    required this.values,
     this.subTitle = 'Are you sure you want to update the following values?',
     this.acceptLabel = 'Accept',
     this.onAccept,

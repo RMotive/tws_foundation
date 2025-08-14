@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
@@ -8,6 +9,30 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 abstract interface class TrucksServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<TruckCommon> {
   /// Creates a new [TrucksServiceI] instance.
   TrucksServiceI(super.host, super.servicePath);
+
+  /// Creates a [TruckCommon] collection.
+  ///
+  ///
+  /// [trucks] records to create and store. ([TruckCommon.Id] property must be 0, [TruckCommon.Timestamp] always will be overriden to the exact moment is stored at the data storages).
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<BatchOperationOutput<TruckCommon>> create(List<TruckCommon> trucks, String auth);
+
+  /// Updates a [TruckCommon] based on the [TruckCommon.Id] pointer.
+  ///
+  ///
+  /// [input] record properties to update at the data storage.
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<UpdateOutput<TruckCommon>> update(UpdateInput<TruckCommon> input, String auth);
+
+  /// Updates a [DriverCommon] based on the [DriverCommon.Id] pointer.
+  ///
+  ///
+  /// [entity] record properties to update at the data storage.
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<TruckCommon> delete(TruckCommon entity, String auth);
 }
 
 /// {abstract} class.
@@ -45,6 +70,39 @@ final class TruckService extends TruckServiceB {
         'view',
         input,
         authToken: auth,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<BatchOperationOutput<TruckCommon>> create(List<TruckCommon> trucks, String authToken) async {
+    return FoundationResponseResolver<BatchOperationOutput<TruckCommon>>(
+      await postListSecure<TruckCommon>(
+        'create',
+        trucks,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<UpdateOutput<TruckCommon>> update(UpdateInput<TruckCommon> input, String authToken) async {
+    return FoundationResponseResolver<UpdateOutput<TruckCommon>>(
+      await postSecure(
+        'update',
+        input,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<TruckCommon> delete(TruckCommon entity, String authToken) async {
+    return FoundationResponseResolver<TruckCommon>(
+      await postSecure(
+        'delete',
+        entity,
+        authToken: authToken,
       ),
     );
   }
