@@ -99,6 +99,15 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
       );
     }
 
+    if (internal != null && external != null) {
+      invalidations.add(EntityInvalidation<DriverCommon>(
+        this,
+        PropertyInfo(EntityKeys.kExternal, DriverCommon, external),
+        'Unique violation',
+        'internal and external can\'t be set both',
+      ));
+    }
+
     invalidations.validateDependency(this, status);
     invalidations.validateDependency(this, situation);
     

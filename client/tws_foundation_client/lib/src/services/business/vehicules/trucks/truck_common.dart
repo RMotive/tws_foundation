@@ -1,11 +1,12 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 /// Implements a [EntityB] that stores common information for [Truck] and [TruckExternal].
 /// Each [TruckCommon] instance can have [internal] and [external] at the same time can only have one of them.
-final class TruckCommon extends EntityB<TruckCommon> {
+final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal> {
   /// [TruckCommon.economic] property key for [DataMap].
   static const String kEconomic = "economic";
 
@@ -38,18 +39,6 @@ final class TruckCommon extends EntityB<TruckCommon> {
 
   /// [Location] information.
   Location? location;
-
-  /// [Truck] (internal) information.
-  ///
-  /// Rules >
-  ///   1. If set [external] can't be set
-  Truck? internal;
-
-  /// [TruckExternal] information.
-  ///
-  /// Rules >
-  ///   1. If set [internal] can't be set
-  TruckExternal? external;
 
   //! <-- Relations
 
@@ -121,10 +110,21 @@ final class TruckCommon extends EntityB<TruckCommon> {
 
   @override
   List<EntityInvalidation<TruckCommon>> evaluate() {
-    final List<EntityInvalidation<TruckCommon>> invs = <EntityInvalidation<TruckCommon>>[];
+    final List<EntityInvalidation<TruckCommon>> invalidations = <EntityInvalidation<TruckCommon>>[];
 
-    if (economic.isEmpty || economic.length > 16) {
-      invs.add(
+    if (id < BigInt.zero) {
+      invalidations.add(
+        EntityInvalidation<TruckCommon>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
+
+    if (economic.trim().isEmpty || economic.length > 16) {
+      invalidations.add(
         EntityInvalidation<TruckCommon>(
           this,
           PropertyInfo(kEconomic, String, economic),
@@ -133,15 +133,32 @@ final class TruckCommon extends EntityB<TruckCommon> {
         ),
       );
     }
+
     if (internal != null && external != null) {
-      invs.add(EntityInvalidation<TruckCommon>(
+      invalidations.add(EntityInvalidation<TruckCommon>(
         this,
         PropertyInfo(kExternal, TruckExternal, external),
         'Unique violation',
         'internal and external can\'t be set both',
       ));
     }
+    
+    invalidations.validateDependency(this, status);
+    if (situation != null) invalidations.validateDependency(this, situation!);
+    if (location != null) invalidations.validateDependency(this, location!);
+    if (internal != null) invalidations.validateDependency(this, internal!);
+    if (external != null) invalidations.validateDependency(this, external!);
 
-    return invs;
+    return invalidations;
+  }
+
+  @override
+  TruckExternal externalFactory() {
+    return TruckExternal();
+  }
+  
+  @override
+  Truck internalFactory() {
+    return Truck();
   }
 }
