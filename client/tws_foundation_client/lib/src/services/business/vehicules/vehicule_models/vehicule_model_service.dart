@@ -5,7 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [VehiculeModelsServiceI].
 ///
 /// Defines base contract for [VehiculeModelsServiceI] implementations that specifies the methods to have providing [VehiculeModel] based operations and management.
-abstract interface class VehiculeModelsServiceI extends FoundationServiceB implements ServiceI {
+abstract interface class VehiculeModelsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<VehiculeModel> {
   /// Creates a new [VehiculeModelsServiceI] instance.
   VehiculeModelsServiceI(super.host, super.servicePath);
 

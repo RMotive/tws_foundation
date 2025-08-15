@@ -12,14 +12,15 @@ import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
+import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_incremental_list.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
 /// Address state class.
-class _AddresState extends ReactorB {}
+class _PlateState extends ReactorB {}
 
-_AddresState _addressState = _AddresState();
+_PlateState _addressState = _PlateState();
 // ignore: unused_element
 void Function() _addressEffect = () {};
 
@@ -299,12 +300,16 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
     );
   }
   Widget _internalEditorFormBuilder(TruckCommon entity) {
+    List<String> countryOptions = FoundationCollections.kCountryList;
+    List<String> usaStateOptions = FoundationCollections.kUStateCodes;
+    List<String> mxStateOptions = FoundationCollections.kMXStateCodes;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         children: <Widget>[
           TextInput(
-            label: "Vin",
+            label: "*Vin",
             controller: TextEditingController(text: entity.internal?.vin ?? ''),
             onChanged: (String value) => entity.internal?.vin = value,
           ),
@@ -314,6 +319,64 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
             onChanged: (String value) => entity.internal?.motor = value,
           ),
           const SectionDivider(text: 'Plates details'),
+
+          EntityFinderSelector<Carrier, CarrieresService>(
+            label: '*Carrier',
+            initialValue: entity.internal?.carrier,
+            textBuilder:(Carrier carrier) => carrier.name,
+            entityBuilder: () => Carrier(),
+            onSelected: (Carrier? carrier) {
+              entity.internal?.carrier = carrier ?? Carrier();
+            },
+          ),
+
+          EntityFinderSelector<Status, StatusesService>(
+            label: '*Status',
+            initialValue: entity.status,
+            textBuilder:(Status status) => status.name,
+            entityBuilder: () => Status(),
+            onSelected: (Status? status) {
+              entity.status = status ?? Status();
+              entity.internal?.sct?.status = status ?? Status();
+              entity.internal?.insurance?.status = status ?? Status();
+              entity.internal?.maintenance?.status = status ?? Status();
+              for (Plate plate in entity.internal!.plates) {
+                plate.status = status ?? Status();
+              }
+            },
+          ),
+          EntityFinderSelector<VehiculeModel, VehiculeModelService>(
+            label: '*Model',
+            initialValue: entity.internal?.model,
+            textBuilder:(VehiculeModel model) => '${model.manufacturer.name} - ${model.name}',
+            entityBuilder: () => VehiculeModel(),
+            onSelected: (VehiculeModel? model) {
+              entity.internal?.model = model ?? VehiculeModel();
+            },
+          ),
+
+          EntityFinderSelector<Situation, SituationsService>(
+            label: 'Situation',
+            initialValue: entity.situation,
+            textBuilder:(Situation situation) => situation.name,
+            entityBuilder: () => Situation(),
+            onSelected: (Situation? situation) {
+              entity.situation = situation;
+            },
+          ),
+
+           EntityFinderSelector<Location, LocationsService>(
+            label: 'Location',
+            initialValue: entity.location,
+            textBuilder:(Location location) => location.name,
+            entityBuilder: () => Location(),
+            onSelected: (Location? location) {
+              entity.location = location;
+            },
+          ),
+
+
+          
 
           IncrementalList<Plate>(
             recordMin: 1,
@@ -327,6 +390,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
               entity.internal!.plates.add(model);
             },
             recordBuilder: (Plate model, int index) {
+              
               return Column(
                 spacing: 10, 
                 children: <Widget>[
@@ -358,57 +422,39 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                       _addressState.react();
                     },
                   ),
-                  ReactiveWidget<_AddresState>(
+                  ReactiveWidget<_PlateState>(
                     reactor: _addressState,
-                    builder: (BuildContext ctx, _AddresState state) {
-                      String? currentCountry = entity.internal?.employee.address?.country;
+                    builder: (BuildContext ctx, _PlateState state) {
+                      String? currentCountry = entity.internal!.plates[index].country;
                       _addressEffect = state.react;
                       return AutoCompleteField<String>(
                         width: double.maxFinite,
-                        label: '${currentCountry ?? ''} State',
+                        label: '$currentCountry State',
                         suffixLabel: ' opt.',
                         isOptional: true,
-                        isEnabled: currentCountry != null,
+                        isEnabled: currentCountry != '',
                         nativeList: currentCountry == countryOptions[0] ? usaStateOptions : mxStateOptions,
                         initialValue:
-                            entity.internal?.employee.address?.state == "" ? null : entity.internal?.employee.address?.state,
+                            entity.internal!.plates[index].state == "" ? null : entity.internal!.plates[index].state,
                         displayValue: (String? item) => item ?? "Not valid data",
                         onChanged: (String? text) {
-                          if(isAdded){
-                            entity.internal?.employee.address =
-                                entity.internal?.employee.address?.sanitize(state: text ?? '') ??
-                                Address().sanitize(state: text ?? '');
-                            return;
-                          }
-                          entity.internal?.employee.address?.state = text.cleaned;
-                          
+                          entity.internal!.plates[index].state = text.cleaned;
                         },
                       );
                     },
                   ),
-                  TWSDatepicker(
+                  Datepicker(
                     width: double.maxFinite,
                     firstDate: DateTime(1999),
                     lastDate: DateTime(2040),
                     label: "Expiration",
-                    controller: TextEditingController(
-                        text: set.plates[index].expiration?.dateOnlyString),
+                    controller: TextEditingController(text: entity.internal!.plates[index].expiration?.dateOnly),
                     onChanged: (String text) {
-                      set.plates[index] = set.plates[index]
-                          .clone(expiration: DateTime.tryParse(text));
+                      entity.internal!.plates[index].expiration = DateTime.tryParse(text);
                     },
                   ),
                 ],
               );
-            },
-          ),
-          EntityFinderSelector<Carrier>(
-            label: 'Carrier',
-            initialValue: entity.internal?.carrier,
-            onSelected: (Carrier? carrier) {
-              if (carrier != null) {
-                entity.internal?.carrier = carrier;
-              }
             },
           ),
         ],
