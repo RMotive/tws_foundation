@@ -12,12 +12,12 @@ using TWS_Customer.Features.Business;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_TrucksService
-    : BQ_Service<ITrucksCommonService, Truck_Common> {
+    : BQ_Service<ITrucksService, Truck_Common> {
 
     protected override Truck_Common DraftEntity(string entropy) {
         return BusinessDraftUtils.SampleTruckCommon(true);
     }
-    protected override ITrucksCommonService ServiceFactory() {
+    protected override ITrucksService ServiceFactory() {
         TWS_Business.Database businessDatabase = BuildBusinessDb();
         TrucksDepot depot = new(businessDatabase, Disposer);
         return new TrucksService(depot, businessDatabase);

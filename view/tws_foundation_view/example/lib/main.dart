@@ -6,13 +6,16 @@ import 'package:example/entries/auth_page_entry.dart';
 import 'package:example/entries/category_layout_entry.dart';
 import 'package:example/entries/entity_category_pages/drivers_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/trucks_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
 import 'package:example/entries/entity_pages/drivers_page_entry.dart';
 import 'package:example/entries/entity_pages/employees_page_entry.dart';
+import 'package:example/entries/entity_pages/trucks_page_entry.dart';
 import 'package:example/entries/entity_pages/yard_logs_page_entry.dart';
 import 'package:example/entries/entity_tables/drivers_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/employees_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/solutions_entity_table_entry.dart';
+import 'package:example/entries/entity_tables/trucks_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/yardlogs_entity_table_entry.dart';
 import 'package:example/entries/navigation_layout_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
@@ -55,6 +58,9 @@ final class _MainAppState extends State<MainApp> {
     Injector.addSingleton<SituationsServiceI>(foundationServer.situationsService);
     Injector.addSingleton<StatusesServiceI>(foundationServer.statusService);
     Injector.addSingleton<AccountServiceI>(foundationServer.accountService);
+    Injector.addSingleton<LocationsServiceI>(foundationServer.locationsService);
+    Injector.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
+    Injector.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
 
 
     final SessionStorage sessionStorage = SessionStorage();
@@ -127,12 +133,14 @@ final class _MainAppState extends State<MainApp> {
               YardLogsPageEntry(),
               EmployeesPageEntry(),
               DriversPageEntry(),
+              TrucksPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
               EmployeesCategoryPageEntry(),
               YardLogsCategoryPageEntry(),
               DriversCategoryPageEntry(),
+              TrucksCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
@@ -140,6 +148,7 @@ final class _MainAppState extends State<MainApp> {
               SolutionsEntityTableEntry(),
               EmployeesEntityTableEntry(),
               DriversEntityTableEntry(),
+              TrucksEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

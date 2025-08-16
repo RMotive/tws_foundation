@@ -208,7 +208,7 @@ public partial class Program {
                 services.AddScoped<IManufacturersService, ManufacturersService>();
                 services.AddScoped<ISituationsService, SituationsService>();
                 services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
-                services.AddScoped<ITrucksCommonService, TrucksService>();
+                services.AddScoped<ITrucksService, TrucksService>();
                 services.AddScoped<IStatusesService, StatusesService>();
             }
 

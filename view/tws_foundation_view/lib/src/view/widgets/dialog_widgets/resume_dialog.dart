@@ -40,7 +40,7 @@ class ResumeDialog extends StatelessWidget {
   });
 
   List<InlineSpan> _buildSpans() {
-    List<InlineSpan> spans = [];
+    List<InlineSpan> spans = <InlineSpan>[];
     for (final TextLabel label in values) {
       spans.add(
         TextSpan(

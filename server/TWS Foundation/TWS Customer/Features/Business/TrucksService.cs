@@ -19,7 +19,7 @@ namespace TWS_Customer.Features.Business;
 /// <summary>
 ///     [Interface] for <see cref="Truck_Common"/> based [Service] implementations.
 /// </summary>
-public interface ITrucksCommonService
+public interface ITrucksService
     : IService<Truck_Common> {
 }
 
@@ -27,7 +27,7 @@ public interface ITrucksCommonService
 ///     [Service] for <see cref="Address"/> based operations.
 /// </summary>
 public class TrucksService
-    : BService<Truck_Common, TrucksDepot>, ITrucksCommonService {
+    : BService<Truck_Common, TrucksDepot>, ITrucksService {
 
     private readonly Database _db;
 

@@ -58,6 +58,10 @@ final class FoundationRoutes {
     name: 'YardLogs Creation',
   );
 
+  //! <--- YardLogs Routes
+
+  //! --> Drivers Routes
+
   static const Route driversPageRoute = Route(
     'drivers',
     name: 'Drivers Page',
@@ -68,7 +72,21 @@ final class FoundationRoutes {
     name: 'Drivers Creation',
   );
 
-  //! <--- YardLogs Routes
+  //! <-- Drivers Routes
+
+  //! --> Trucks Routes
+
+  static const Route trucksPageRoute = Route(
+    'trucks',
+    name: 'Trucks Page',
+  );
+
+  static const Route trucksCreateWhisperRoute = Route(
+    'create-trucks',
+    name: 'Trucks Creation',
+  );
+  
+  //! <-- Trucks Routes
 }
 
 /// {constant} class.

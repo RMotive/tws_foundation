@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
-/// TODO: DEFINE
+// TODO: DEFINE
 final class Truck extends EntityB<Truck> {
   /// [motor] property key.
   static const String kMotor = 'motor';
@@ -95,17 +95,7 @@ final class Truck extends EntityB<Truck> {
     insurance = encode.getEntity(() => Insurance(), kInsurance);
     sct = encode.getEntity(() => SCT(), kSct);
     maintenance = encode.getEntity(() => Maintenance(), kMaintenance);
-
-    List<DataMap> platesMaps = encode.get(kPlates);
-    if (platesMaps.isNotEmpty) {
-      plates = platesMaps.map<Plate>(
-        (Map<String, Object?> e) {
-          Plate plate = Plate();
-          plate.decode(e);
-          return plate;
-        },
-      ).toList();
-    }
+    plates = encode.getList(kPlates);
 
     super.decode(encode);
   }

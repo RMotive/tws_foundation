@@ -211,12 +211,19 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                 isEnabled: false,
               ),
               TextInput(
-                label: "Economic",
+                label: "*Economic",
+                maxLength: 16,
                 controller: TextEditingController(text: entity.economic),
                 onChanged: (String value) => entity.economic = value,
               ),
-          
-              entity.internal != null? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
+              
+              const SectionDivider(text: 'Truck details'),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: entity.internal != null? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
+              )
+              
             ],
           ),
         );
@@ -299,166 +306,454 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
       },
     );
   }
+
+  Widget _externalEditorFormBuilder(TruckCommon entity){
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        TextInput(
+          width: double.maxFinite,
+          label: "*Carrier",
+          maxLength: 100,
+          controller: TextEditingController(text: entity.external?.carrier),
+          onChanged: (String value) => entity.external?.carrier = value,
+        ),
+        TextInput(
+          width: double.maxFinite,
+          label: "VIN",
+          maxLength: 7,
+          controller: TextEditingController(text: entity.external?.vin),
+          onChanged: (String value) => entity.external?.vin = value.cleaned,
+        ),
+        TextInput(
+          width: double.maxFinite,
+          label: "USA Plate",
+          maxLength: 7,
+          controller: TextEditingController(text: entity.external?.usaPlate),
+          onChanged: (String value) => entity.external?.usaPlate = value.cleaned,
+        ),
+        TextInput(
+          width: double.maxFinite,
+          label: "MX Plate",
+          maxLength: 7,
+          controller: TextEditingController(text: entity.external?.mxPlate ?? ''),
+          onChanged: (String value) => entity.external?.mxPlate = value.cleaned,
+        ),
+      ],
+    );
+  }
+
   Widget _internalEditorFormBuilder(TruckCommon entity) {
     List<String> countryOptions = FoundationCollections.kCountryList;
     List<String> usaStateOptions = FoundationCollections.kUStateCodes;
     List<String> mxStateOptions = FoundationCollections.kMXStateCodes;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Column(
-        children: <Widget>[
-          TextInput(
-            label: "*Vin",
-            controller: TextEditingController(text: entity.internal?.vin ?? ''),
-            onChanged: (String value) => entity.internal?.vin = value,
-          ),
-          TextInput(
-            label: "Motor",
-            controller: TextEditingController(text: entity.internal?.motor ?? ''),
-            onChanged: (String value) => entity.internal?.motor = value,
-          ),
-          const SectionDivider(text: 'Plates details'),
+    return Column(
+      children: <Widget>[
+        TextInput(
+          width: double.maxFinite,
+          label: "*Vin",
+          maxLength: 17,
+          controller: TextEditingController(text: entity.internal?.vin),
+          onChanged: (String value) => entity.internal?.vin = value,
+        ),
+        TextInput(
+          width: double.maxFinite,
+          label: "Motor",
+          maxLength: 16,
+          controller: TextEditingController(text: entity.internal?.motor),
+          onChanged: (String value) => entity.internal?.motor = value.cleaned,
+        ),
 
-          EntityFinderSelector<Carrier, CarrieresService>(
-            label: '*Carrier',
-            initialValue: entity.internal?.carrier,
-            textBuilder:(Carrier carrier) => carrier.name,
-            entityBuilder: () => Carrier(),
-            onSelected: (Carrier? carrier) {
-              entity.internal?.carrier = carrier ?? Carrier();
-            },
-          ),
-
-          EntityFinderSelector<Status, StatusesService>(
-            label: '*Status',
-            initialValue: entity.status,
-            textBuilder:(Status status) => status.name,
-            entityBuilder: () => Status(),
-            onSelected: (Status? status) {
-              entity.status = status ?? Status();
-              entity.internal?.sct?.status = status ?? Status();
-              entity.internal?.insurance?.status = status ?? Status();
-              entity.internal?.maintenance?.status = status ?? Status();
-              for (Plate plate in entity.internal!.plates) {
-                plate.status = status ?? Status();
-              }
-            },
-          ),
-          EntityFinderSelector<VehiculeModel, VehiculeModelService>(
-            label: '*Model',
-            initialValue: entity.internal?.model,
-            textBuilder:(VehiculeModel model) => '${model.manufacturer.name} - ${model.name}',
-            entityBuilder: () => VehiculeModel(),
-            onSelected: (VehiculeModel? model) {
-              entity.internal?.model = model ?? VehiculeModel();
-            },
-          ),
-
-          EntityFinderSelector<Situation, SituationsService>(
-            label: 'Situation',
-            initialValue: entity.situation,
-            textBuilder:(Situation situation) => situation.name,
-            entityBuilder: () => Situation(),
-            onSelected: (Situation? situation) {
-              entity.situation = situation;
-            },
-          ),
-
-           EntityFinderSelector<Location, LocationsService>(
-            label: 'Location',
-            initialValue: entity.location,
-            textBuilder:(Location location) => location.name,
-            entityBuilder: () => Location(),
-            onSelected: (Location? location) {
-              entity.location = location;
-            },
-          ),
-
-
-          
-
-          IncrementalList<Plate>(
-            recordMin: 1,
-            recordLimit: 2,
-            modelBuilder:() => Plate(),
-            recordList: entity.internal!.plates,
-            onRemove: () {
-              entity.internal!.plates.removeLast();
-            },
-            onAdd: (Plate model) {
-              entity.internal!.plates.add(model);
-            },
-            recordBuilder: (Plate model, int index) {
-              
-              return Column(
-                spacing: 10, 
-                children: <Widget>[
-                  SectionDivider(
-                    text: "Plate ${index + 1}",
+        const SectionDivider(text: 'Plates details'),
+    
+        EntityFinderSelector<Carrier, CarrieresService>(
+          label: '*Carrier',
+          initialValue: entity.internal?.carrier,
+          textBuilder:(Carrier carrier) => carrier.name,
+          entityBuilder: () => Carrier(),
+          onSelected: (Carrier? carrier) {
+            entity.internal?.carrier = carrier ?? Carrier();
+          },
+        ),
+    
+        EntityFinderSelector<Status, StatusesService>(
+          label: '*Status',
+          initialValue: entity.status,
+          textBuilder:(Status status) => status.name,
+          entityBuilder: () => Status(),
+          onSelected: (Status? status) {
+            entity.status = status ?? Status();
+            entity.internal?.sct?.status = status ?? Status();
+            entity.internal?.insurance?.status = status ?? Status();
+            entity.internal?.maintenance?.status = status ?? Status();
+            for (Plate plate in entity.internal!.plates) {
+              plate.status = status ?? Status();
+            }
+          },
+        ),
+    
+        EntityFinderSelector<VehiculeModel, VehiculeModelService>(
+          label: '*Model',
+          initialValue: entity.internal?.model,
+          textBuilder:(VehiculeModel model) => '${model.manufacturer.name} - ${model.name}',
+          entityBuilder: () => VehiculeModel(),
+          onSelected: (VehiculeModel? model) {
+            entity.internal?.model = model ?? VehiculeModel();
+          },
+        ),
+    
+        EntityFinderSelector<Situation, SituationsService>(
+          label: 'Situation',
+          initialValue: entity.situation,
+          textBuilder:(Situation situation) => situation.name,
+          entityBuilder: () => Situation(),
+          onSelected: (Situation? situation) {
+            entity.situation = situation;
+          },
+        ),
+    
+         EntityFinderSelector<Location, LocationsService>(
+          label: 'Location',
+          initialValue: entity.location,
+          textBuilder:(Location location) => location.name,
+          entityBuilder: () => Location(),
+          onSelected: (Location? location) {
+            entity.location = location;
+          },
+        ),
+    
+        IncrementalList<Plate>(
+          recordMin: 1,
+          recordLimit: 2,
+          modelBuilder:() => Plate(),
+          recordList: entity.internal!.plates,
+          onRemove: () {
+            entity.internal!.plates.removeLast();
+          },
+          onAdd: (Plate model) {
+            entity.internal!.plates.add(model);
+          },
+          recordBuilder: (Plate model, int index) {
+            
+            return Column(
+              spacing: 10, 
+              children: <Widget>[
+                SectionDivider(
+                  text: "Plate ${index + 1}",
+                ),
+                TextInput(
+                  label: "Identifier",
+                  hint: "enter the plate identifier",
+                  maxLength: 12,
+                  controller: TextEditingController(
+                    text: entity.internal!.plates[index].identifier,
                   ),
-                  TextInput(
-                    label: "Identifier",
-                    hint: "enter the plate identifier",
-                    maxLength: 12,
-                    controller: TextEditingController(
-                      text: entity.internal!.plates[index].identifier,
-                    ),
-                    onChanged: (String text) {
-                      entity.internal!.plates[index].identifier = text;
-                    },
-                  ),
-                  AutoCompleteField<String>(
-                    width: double.maxFinite,
-                    label: 'Country',
-                    isOptional: true,
-                    nativeList: FoundationCollections.kCountryList,
-                    initialValue:
-                        entity.internal!.plates[index].country == "" ? null : entity.internal!.plates[index].country,
-                    displayValue: (String? item) => item ?? "Not valid data",
-                    onChanged: (String? text) {
-                      entity.internal!.plates[index].country = text.cleaned ?? '';
-                      
-                      _addressState.react();
-                    },
-                  ),
-                  ReactiveWidget<_PlateState>(
-                    reactor: _addressState,
-                    builder: (BuildContext ctx, _PlateState state) {
-                      String? currentCountry = entity.internal!.plates[index].country;
-                      _addressEffect = state.react;
-                      return AutoCompleteField<String>(
-                        width: double.maxFinite,
-                        label: '$currentCountry State',
-                        suffixLabel: ' opt.',
-                        isOptional: true,
-                        isEnabled: currentCountry != '',
-                        nativeList: currentCountry == countryOptions[0] ? usaStateOptions : mxStateOptions,
-                        initialValue:
-                            entity.internal!.plates[index].state == "" ? null : entity.internal!.plates[index].state,
-                        displayValue: (String? item) => item ?? "Not valid data",
-                        onChanged: (String? text) {
-                          entity.internal!.plates[index].state = text.cleaned;
-                        },
-                      );
-                    },
-                  ),
-                  Datepicker(
-                    width: double.maxFinite,
-                    firstDate: DateTime(1999),
-                    lastDate: DateTime(2040),
-                    label: "Expiration",
-                    controller: TextEditingController(text: entity.internal!.plates[index].expiration?.dateOnly),
-                    onChanged: (String text) {
-                      entity.internal!.plates[index].expiration = DateTime.tryParse(text);
-                    },
-                  ),
-                ],
-              );
-            },
+                  onChanged: (String text) {
+                    entity.internal!.plates[index].identifier = text;
+                  },
+                ),
+                AutoCompleteField<String>(
+                  width: double.maxFinite,
+                  label: 'Country',
+                  isOptional: true,
+                  nativeList: FoundationCollections.kCountryList,
+                  initialValue:
+                      entity.internal!.plates[index].country == "" ? null : entity.internal!.plates[index].country,
+                  displayValue: (String? item) => item ?? "Not valid data",
+                  onChanged: (String? text) {
+                    entity.internal!.plates[index].country = text ?? '';
+                    
+                    _addressState.react();
+                  },
+                ),
+                ReactiveWidget<_PlateState>(
+                  reactor: _addressState,
+                  builder: (BuildContext ctx, _PlateState state) {
+                    String? currentCountry = entity.internal!.plates[index].country;
+                    _addressEffect = state.react;
+                    return AutoCompleteField<String>(
+                      width: double.maxFinite,
+                      label: '$currentCountry State',
+                      suffixLabel: ' opt.',
+                      isOptional: true,
+                      isEnabled: currentCountry != '',
+                      nativeList: currentCountry == countryOptions[0] ? usaStateOptions : mxStateOptions,
+                      initialValue:
+                          entity.internal!.plates[index].state == "" ? null : entity.internal!.plates[index].state,
+                      displayValue: (String? item) => item ?? "Not valid data",
+                      onChanged: (String? text) {
+                        entity.internal!.plates[index].state = text.cleaned;
+                      },
+                    );
+                  },
+                ),
+                Datepicker(
+                  width: double.maxFinite,
+                  firstDate: DateTime(1999),
+                  lastDate: DateTime(2040),
+                  label: "Expiration",
+                  controller: TextEditingController(text: entity.internal!.plates[index].expiration?.dateOnly),
+                  onChanged: (String text) {
+                    entity.internal!.plates[index].expiration = DateTime.tryParse(text);
+                  },
+                ),
+              ],
+            );
+          },
+        ),
+    
+        // Validate if the optional entities exist in current record, to show an appropiate layout.
+        if(entity.internal?.maintenance != null)
+        _maintenanceSection(entity),
+    
+        if(entity.internal?.insurance != null)
+        _insuranceSection(entity),
+    
+        if(entity.internal?.sct != null)
+        _sctSection(entity),
+    
+        if(entity.internal?.maintenance == null)
+          FoldPanelWidget(
+            title: "Add Maintenance details",
+            child: _maintenanceSection(entity, isAdded: true),
           ),
-        ],
-      ),
+    
+        if(entity.internal?.insurance == null)
+          FoldPanelWidget(
+            title: 'Add Insurance details',
+            child: _insuranceSection(entity, isAdded: true),
+          ),
+    
+        if(entity.internal?.sct == null)
+          FoldPanelWidget(
+            title: 'Add an SCT',
+            child: _sctSection(entity, isAdded: true),
+          ),
+      ],
+    );
+  }
+
+  Widget _sctSection(TruckCommon entity, {bool isAdded = false}){
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        const SectionDivider(text: 'SCT details'),
+
+        TextInput(
+          label: "*Type",
+          hint: "Enter SCT type",
+          maxLength: 6,
+          isFixedLength: true,
+          controller: TextEditingController(
+            text: entity.internal?.sct?.type,
+          ),
+          onChanged: (String text) {
+            SCT? sct = entity.internal?.sct;
+            if(isAdded){
+              sct = sct != null ? sct.sanitize(type: text) : SCT().sanitize(type: text);
+              return;
+            }
+            entity.internal?.sct?.type = text;
+          },
+        ),
+        TextInput(
+          label: "*Number",
+          hint: "Enter SCT number",
+          maxLength: 25,
+          isFixedLength: true,
+          controller: TextEditingController(
+            text: entity.internal?.sct?.number,
+          ),
+          onChanged: (String text) {
+            SCT? sct = entity.internal?.sct;
+            if(isAdded){
+              sct = sct != null ? sct.sanitize(number: text) : SCT().sanitize(number: text);
+              return;
+            }
+            entity.internal?.sct?.number = text;
+          },
+        ),
+        TextInput(
+          label: "*Configuration",
+          hint: "Enter SCT config.",
+          maxLength: 10,
+          controller: TextEditingController(
+            text: entity.internal?.sct?.configuration,
+          ),
+          onChanged: (String text) {
+            SCT? sct = entity.internal?.sct;
+            if(isAdded){
+              sct = sct != null ? sct.sanitize(configuration: text) : SCT().sanitize(configuration: text);
+              return;
+            }
+            entity.internal?.sct?.configuration = text;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _insuranceSection(TruckCommon entity, {bool isAdded = false}){
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        TextInput(
+          label: "Policy",
+          hint: "*Enter the policy number",
+          maxLength: 12,
+          controller: TextEditingController(
+            text: entity.internal?.insurance?.policy,
+          ),
+          onChanged: (String text) {
+            Insurance? insurance = entity.internal?.insurance;
+            if(isAdded){
+              insurance = insurance != null ? insurance.sanitize(policy: text) : Insurance().sanitize(policy: text);
+              return;
+            }
+            entity.internal?.insurance?.policy = text;
+          },
+        ),
+        AutoCompleteField<String>(
+          width: double.maxFinite,
+          label: '*Country',
+          isOptional: true,
+          nativeList: FoundationCollections.kCountryList,
+          initialValue:
+              entity.internal?.insurance?.country == "" ? null : entity.internal?.insurance?.country,
+          displayValue: (String? item) => item ?? "Not valid data",
+          onChanged: (String? text) {
+            Insurance? insurance = entity.internal?.insurance;
+            if(isAdded){
+              insurance =
+                  insurance != null
+                      ? insurance.sanitize(country: text ?? "")
+                      : Insurance().sanitize(country: text ?? "");
+              return;
+            }
+            entity.internal?.insurance?.country = text.cleaned ?? '';
+          },
+        ),
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1999),
+          lastDate: DateTime(2040),
+          label: "*Expiration",
+          controller: TextEditingController(text: entity.internal?.insurance?.expiration.dateOnly),
+          onChanged: (String text) {
+            Insurance? insurance = entity.internal?.insurance;
+            if(isAdded){
+              insurance =
+                  insurance != null
+                      ? insurance.sanitize(expiration: DateTime.tryParse(text) ?? DateTime(0))
+                      : Insurance().sanitize(expiration: DateTime.tryParse(text) ?? DateTime(0));
+              return;
+            }
+            entity.internal?.insurance?.expiration = DateTime.tryParse(text) ?? DateTime(0);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _maintenanceSection(TruckCommon entity, {bool isAdded = false}){
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+        const SectionDivider(text: 'Maintenance'),
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1940),
+          lastDate: DateTime(2040),
+          label: "*Anual maintenance",
+          controller: TextEditingController(
+            text: entity.internal?.maintenance?.anual.dateOnly,
+          ),
+          onChanged: (String text) {
+            Maintenance? maintenance =  entity.internal?.maintenance;
+            if(isAdded){
+              maintenance = maintenance != null
+                  ? maintenance.sanitize(anual: DateTime.tryParse(text) ?? DateTime(0))
+                  : Maintenance().sanitize(anual: DateTime.tryParse(text) ?? DateTime(0));
+              return;
+            }
+
+            entity.internal?.maintenance?.anual = DateTime.tryParse(text) ?? DateTime(0);
+          },
+        ),
+        Datepicker(
+          width: double.maxFinite,
+          firstDate: DateTime(1940),
+          lastDate: DateTime(2040),
+          label: "*Trimestral maintenance",
+          controller: TextEditingController(
+            text: entity.internal?.maintenance?.trimestral.dateOnly,
+          ),
+          onChanged: (String text) {
+            Maintenance? maintenance =  entity.internal?.maintenance;
+            if(isAdded){
+             maintenance = maintenance != null
+                  ? maintenance.sanitize(trimestral: DateTime.tryParse(text) ?? DateTime(0))
+                  : Maintenance().sanitize(trimestral: DateTime.tryParse(text));
+              return;
+            }
+            entity.internal?.maintenance?.trimestral = DateTime.tryParse(text) ?? DateTime(0);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _modelSection(TruckCommon entity){
+    return Column(
+      spacing: 10,
+      children: <Widget>[
+
+        
+        // FoldPanelWidget(
+        //   title: 'Add model',
+        //   onChange: (bool visible) {
+        //     if(entity.internal?.model.id == BigInt.zero) return;
+        //     entity.internal?.model = VehiculeModel();
+        //   },
+        //   child: Column(
+        //     spacing: 10,
+        //     children: <Widget>[
+        //       EntityFinderSelector<Manufacturer, ManufacturerService>(
+        //         label: '*Manufacturer',
+        //         initialValue: entity.internal?.model.manufacturer,
+        //         textBuilder:(Manufacturer manufacturer) => manufacturer.name,
+        //         entityBuilder: () => Manufacturer(),
+        //         onSelected: (Manufacturer? manufacturer) {
+        //           entity.internal?.model.manufacturer = manufacturer ?? Manufacturer();
+        //         },
+        //       ),
+
+
+        //       TextInput(
+        //         label: '*name',
+        //         controller: TextEditingController(text: entity.internal?.model.name ?? ''),
+        //         onChanged: (String value) => entity.internal?.model.name = value,
+        //       ),
+        //       TextInput(
+        //         label: 'Description',
+        //         controller: TextEditingController(text: entity.internal?.model.description ?? ''),
+        //         onChanged: (String value) => entity.internal?.model.description = value,
+        //       ),
+        //       TextInput(
+        //         label: 'Model year',
+        //         controller: TextEditingController(text: entity.internal?.model.year.toString() ?? ''),
+        //         onChanged: (String value) {
+        //           int? year = int.tryParse(value);
+        //           if (year != null) {
+        //             entity.internal?.model.year = DateTime.tryParse(value) ?? DateTime.now();
+        //           }
+        //         },
+        //       ),
+        //     ],
+        //   )
+        // )
+      ],
     );
   }
   
