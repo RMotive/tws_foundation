@@ -1,5 +1,6 @@
 ﻿using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
@@ -40,6 +41,7 @@ public class TrucksService
     /// 
     private static QueryProcessor<Truck_Common> QueryProcessor => (sourceQuery) => {
         sourceQuery = sourceQuery
+         .Include(e => e.Internal).ThenInclude(e => e.Plates)
          .Include(e => e.Internal).ThenInclude(e => e!.Carrier).ThenInclude(e => e!.USDOT)
          .Include(e => e.Internal).ThenInclude(e => e!.SCT)
          .Include(e => e.Internal).ThenInclude(e => e!.Maintenance)
@@ -77,6 +79,11 @@ public class TrucksService
 
         return output;
     }
+    public async override Task<ViewOutput<Truck_Common>> View(QueryInput<Truck_Common, ViewInput<Truck_Common>> input) {
+        input.PostProcessor = QueryProcessor;
+        return await depot.View(input);
+    }
+
 
     public async override Task<UpdateOutput<Truck_Common>> Update(UpdateInput<Truck_Common> input) {
         // Replate common placeholder for the main common entity.

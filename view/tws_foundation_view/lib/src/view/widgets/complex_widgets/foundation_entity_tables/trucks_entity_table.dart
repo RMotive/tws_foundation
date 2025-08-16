@@ -148,7 +148,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
       child: EntityTableViewer(
         children: <Widget>[
           const SectionDivider(text: 'Common details'),
-           PropertyViewer(
+          PropertyViewer(
             label: 'Timestamp',
             value: entity.timestamp.toString(),
           ),
@@ -940,6 +940,10 @@ final class TrucksEntityTable extends FoundationEntityTableB<TrucksEntityTableAd
         EntityTableColumnOptions<TruckCommon>(
           title: 'Economic',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.economic,
+        ),
+        EntityTableColumnOptions<TruckCommon>(
+          title: 'Ownership',
+          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.internal != null? 'Own' : 'External',
         ),
         EntityTableColumnOptions<TruckCommon>(
           title: 'Economic',
