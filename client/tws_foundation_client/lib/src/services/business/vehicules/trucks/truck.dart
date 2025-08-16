@@ -95,8 +95,16 @@ final class Truck extends EntityB<Truck> {
     insurance = encode.getEntity(() => Insurance(), kInsurance);
     sct = encode.getEntity(() => SCT(), kSct);
     maintenance = encode.getEntity(() => Maintenance(), kMaintenance);
-    plates = encode.getList(kPlates);
-
+    List<DataMap> platesMaps = encode.getList(kPlates);
+    if (platesMaps.isNotEmpty) {
+      plates = platesMaps.map<Plate>(
+        (DataMap e) {
+          Plate plate = Plate();
+          plate.decode(e);
+          return plate;
+        },
+      ).toList();
+    }
     super.decode(encode);
   }
 

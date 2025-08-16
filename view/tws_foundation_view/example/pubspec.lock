@@ -428,7 +428,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "54-feature-trucks"
-      resolved-ref: a5a8f49a1243168ce08a2d916d42d4f6f4b0a767
+      resolved-ref: "4d18b467489dc01f833ac89d82a165671b4d8dd3"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"
