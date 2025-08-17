@@ -1,6 +1,7 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/manufacturers/manufacturer.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+
 
 
 /// [VehiculeModel] default builder.
@@ -25,13 +26,16 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   
   /// Validate nulleable inputs to avoid [VehiculeModel] entities with empty values.
   VehiculeModel? sanitize({
+    String? name,
+    String? description,
     DateTime? year,
     Manufacturer? manufacturer,
   }) {
     this.year = year ?? this.year;
     this.manufacturer = manufacturer ?? this.manufacturer;
-
-    if (this.year == DateTime(0) && this.manufacturer.id < BigInt.zero) {
+    this.name = name.sanitizeOrFallback(this.name) ?? '';
+    this.description = description.sanitizeOrFallback(this.description);
+    if (this.name.isEmpty && this.description == null && this.year == DateTime(0) && this.manufacturer.id < BigInt.zero) {
       return null;
     }
 

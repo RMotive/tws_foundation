@@ -1,8 +1,5 @@
 part of '../drivers_page_create_whisper.dart';
 
-class _EmployeeCreationState extends ReactorB { }
-final _EmployeeCreationState _employeeState = _EmployeeCreationState();
-
 class _CreateWhisperDriversSection extends StatelessWidget {
   final CreateEntityFormRecordReactor<DriverCommon>? itemState;
 
@@ -41,13 +38,6 @@ class _CreateWhisperDriversSection extends StatelessWidget {
             itemState: itemState,
             isEnabled: isEnabled,
           ),
-        ),
-
-        ReactiveWidget<_EmployeeCreationState>(
-          reactor: _employeeState,
-          builder: (BuildContext ctx, _EmployeeCreationState reactor) {
-            return Container();
-          },
         ),
 
         Row(

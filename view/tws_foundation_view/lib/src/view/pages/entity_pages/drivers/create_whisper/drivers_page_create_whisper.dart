@@ -64,17 +64,39 @@ final class DriversPageCreateWhisper extends PageB {
             return feedbacks;
           },
           recordDesigner: (DriverCommon entity, bool selected, bool valid) {
+            List<CreateEntityFormRecordField> commonFields = <CreateEntityFormRecordField>[
+              /// --> Driver ownership type
+              CreateEntityFormRecordField(
+                label: 'Ownership',
+                value: entity.internal != null ? 'Own' : 'External',
+              ),
+
+              /// --> Driver License
+              CreateEntityFormRecordField(
+                label: '*License',
+                value: entity.license,
+              ),
+
+              /// --> Driver Situation
+              CreateEntityFormRecordField(
+                label: '*Situation',
+                value: entity.situation.name.isEmpty ? "---" : entity.situation.name,
+              ),
+
+              /// --> Driver Status
+              CreateEntityFormRecordField(
+                label: '*Status',
+                value: entity.status.name.isEmpty ? "---" : entity.situation.name,
+              ),
+            ];
+
             if(entity.internal != null) {
               return CreateEntityFormRecord(
                 selected: selected,
                 fields: <CreateEntityFormRecordField>[
+                  /// --> Adding common fields.
+                  ...commonFields,
 
-                  /// --> Driver ownership type
-                  CreateEntityFormRecordField(
-                    label: 'Ownership',
-                    value: entity.internal != null ? 'Own' : 'External',
-                  ),
-                  
                   /// --> Driver name
                   CreateEntityFormRecordField(
                     label: '*Name',
@@ -85,24 +107,6 @@ final class DriversPageCreateWhisper extends PageB {
                   CreateEntityFormRecordField(
                     label: '*Lastname',
                     value: entity.internal?.employee.identification.lastName ?? "---",
-                  ),
-
-                  /// --> Driver License
-                  CreateEntityFormRecordField(
-                    label: '*License',
-                    value: entity.license,
-                  ),
-
-                  /// --> Driver Situation
-                  CreateEntityFormRecordField(
-                    label: '*Situation',
-                    value: entity.situation.name.isEmpty ? "---" : entity.situation.name,
-                  ),
-
-                  /// --> Driver Status
-                  CreateEntityFormRecordField(
-                    label: '*Status',
-                    value: entity.status.name.isEmpty ? "---" : entity.situation.name,
                   ),
 
                   /// --> Driver Type
@@ -300,11 +304,8 @@ final class DriversPageCreateWhisper extends PageB {
             return CreateEntityFormRecord(
               selected: selected,
               fields: <CreateEntityFormRecordField>[
-                /// --> Driver ownership type
-                CreateEntityFormRecordField(
-                  label: 'Ownership',
-                  value: 'External',
-                ),
+                
+                ...commonFields,
 
                 /// --> Driver License
                 CreateEntityFormRecordField(

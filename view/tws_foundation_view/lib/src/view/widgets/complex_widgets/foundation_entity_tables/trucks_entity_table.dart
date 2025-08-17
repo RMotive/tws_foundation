@@ -703,59 +703,6 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
       ],
     );
   }
-
-  Widget _modelSection(TruckCommon entity){
-    return Column(
-      spacing: 10,
-      children: <Widget>[
-
-        
-        // FoldPanelWidget(
-        //   title: 'Add model',
-        //   onChange: (bool visible) {
-        //     if(entity.internal?.model.id == BigInt.zero) return;
-        //     entity.internal?.model = VehiculeModel();
-        //   },
-        //   child: Column(
-        //     spacing: 10,
-        //     children: <Widget>[
-        //       EntityFinderSelector<Manufacturer, ManufacturerService>(
-        //         label: '*Manufacturer',
-        //         initialValue: entity.internal?.model.manufacturer,
-        //         textBuilder:(Manufacturer manufacturer) => manufacturer.name,
-        //         entityBuilder: () => Manufacturer(),
-        //         onSelected: (Manufacturer? manufacturer) {
-        //           entity.internal?.model.manufacturer = manufacturer ?? Manufacturer();
-        //         },
-        //       ),
-
-
-        //       TextInput(
-        //         label: '*name',
-        //         controller: TextEditingController(text: entity.internal?.model.name ?? ''),
-        //         onChanged: (String value) => entity.internal?.model.name = value,
-        //       ),
-        //       TextInput(
-        //         label: 'Description',
-        //         controller: TextEditingController(text: entity.internal?.model.description ?? ''),
-        //         onChanged: (String value) => entity.internal?.model.description = value,
-        //       ),
-        //       TextInput(
-        //         label: 'Model year',
-        //         controller: TextEditingController(text: entity.internal?.model.year.toString() ?? ''),
-        //         onChanged: (String value) {
-        //           int? year = int.tryParse(value);
-        //           if (year != null) {
-        //             entity.internal?.model.year = DateTime.tryParse(value) ?? DateTime.now();
-        //           }
-        //         },
-        //       ),
-        //     ],
-        //   )
-        // )
-      ],
-    );
-  }
   
   Widget _buildExternalDialog(TruckCommon entity, Router router, BuildContext context) { 
     return ResumeDialog(
