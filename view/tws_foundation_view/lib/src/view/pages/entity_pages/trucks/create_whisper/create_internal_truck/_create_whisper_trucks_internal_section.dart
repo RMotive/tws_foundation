@@ -1,8 +1,5 @@
 part of '../trucks_page_create_whisper.dart';
 
-class _EmployeeCreationState extends ReactorB { }
-final _EmployeeCreationState _employeeState = _EmployeeCreationState();
-
 class _CreateWhisperTrucksSection extends StatelessWidget {
   final CreateEntityFormRecordReactor<TruckCommon>? itemState;
 

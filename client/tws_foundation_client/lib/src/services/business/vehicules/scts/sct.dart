@@ -82,7 +82,7 @@ final class SCT extends EntityB<SCT> {
         kType: type,
         kNumber: number,
         kConfiguration: configuration,
-        FoundationCommonPropertyKeys.kStatus: status,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }

@@ -63,7 +63,7 @@ final class Maintenance extends EntityB<Maintenance> {
       <String, Object>{
         kAnual: anual.dateOnlyIso,
         kTrimestral: anual.dateOnlyIso,
-        FoundationCommonPropertyKeys.kStatus: status,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }

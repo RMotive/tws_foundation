@@ -67,7 +67,7 @@ final class Plate extends EntityB<Plate> {
         kCountry: country,
         kState: state,
         kExpiration: expiration?.dateOnlyIso,
-        FoundationCommonPropertyKeys.kStatus: status,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
