@@ -215,6 +215,10 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
             size: 32,
             color: theme.page.fore,
           ),
+          onChanged: (String text) {
+            // --> Clean selected item.
+            if(text.trim().isEmpty && widget.onSelected != null) widget.onSelected!(null);
+          },
         ),
       ),
       overlayChildBuilder: (BuildContext overlayChildContext) {

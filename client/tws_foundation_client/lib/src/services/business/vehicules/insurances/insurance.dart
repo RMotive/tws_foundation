@@ -13,9 +13,13 @@ final class Insurance  extends EntityB<Insurance> {
   static const String kExpiration = "expiration";
 
   /// Insurance policy number.
+  /// rules >
+  /// 21 > length > 0
   String policy = "";
 
   /// Country where the insurance is issued.
+  /// rules >
+  /// 4 > length > 0
   String country = "";
 
   /// Insurance expiration date.
@@ -95,7 +99,7 @@ final class Insurance  extends EntityB<Insurance> {
           this,
           PropertyInfo(kCountry, String, country),
           'lenght: ${country.length}, cannot be empty or greater than 3 characters',
-          '3 > length > 0',
+          '4 > length > 0',
         ),
       );
     }

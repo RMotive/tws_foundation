@@ -1,9 +1,7 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/data/const/static_collections.dart';
 import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
@@ -12,6 +10,7 @@ import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
+import 'package:tws_foundation_view/src/view/widgets/tws_incremental_list.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -30,6 +29,11 @@ final _TruckSectionState _truckSectionState = _TruckSectionState();
 void Function() _truckSectionStateReact = (){};
 
 Status _defaultStatus = Status();
+
+///  --> Addresses const information.
+const List<String> _countries = FoundationCollections.kCountryList;
+const List<String> _statesUSA = FoundationCollections.kUStateCodes;
+const List<String> _statesMX = FoundationCollections.kMXStateCodes;
 
 /// {whisper} class.
 final class TrucksPageCreateWhisper extends PageB {
@@ -84,7 +88,7 @@ final class TrucksPageCreateWhisper extends PageB {
               /// --> Truck Status
               CreateEntityFormRecordField(
                 label: '*Status',
-                value: entity.status.name,
+                value: entity.status.name.cleaned ?? '---',
               ),
 
               /// --> Truck Situation
@@ -122,7 +126,7 @@ final class TrucksPageCreateWhisper extends PageB {
                   /// --> Truck carrier name.
                   CreateEntityFormRecordField(
                     label: '*Carrier',
-                    value: entity.internal!.carrier.name,
+                    value: entity.internal!.carrier.name.cleaned ?? "---",
                   ),
 
                   /// --> Truck Plates.
@@ -139,7 +143,7 @@ final class TrucksPageCreateWhisper extends PageB {
                     /// --> Truck manufacturer name.
                     CreateEntityFormRecordField(
                       label: '*Manufacturer',
-                      value: entity.internal!.model.manufacturer.name,
+                      value: entity.internal!.model.manufacturer.name.cleaned ?? "---",
                     ),
 
                     /// --> Truck model name.
@@ -212,34 +216,28 @@ final class TrucksPageCreateWhisper extends PageB {
                 /// --> Adding common fields.
                 ...commonFields,
 
-                /// --> Driver ownership type.
-                CreateEntityFormRecordField(
-                  label: 'Ownership',
-                  value: 'External',
-                ),
-
                 /// --> Driver carrier name.
                 CreateEntityFormRecordField(
-                  label: 'Carrier',
+                  label: '*Carrier',
                   value: entity.external!.carrier.cleaned ?? '---',
                 ),
 
                 /// --> Driver vin numbger.
                 CreateEntityFormRecordField(
                   label: 'Vin #',
-                  value: entity.external!.vin.cleaned ?? '---',
+                  value: entity.external!.vin ?? '---',
                 ),
 
                 /// --> Driver USA plate.
                 CreateEntityFormRecordField(
                   label: 'USA Plate',
-                  value: entity.external!.usaPlate.cleaned ?? '---',
+                  value: entity.external!.usaPlate ?? '---',
                 ),
 
                 /// --> Driver MX plate.
                 CreateEntityFormRecordField(
                   label: 'MX Plate',
-                  value: entity.external!.mxPlate.cleaned ?? '---',
+                  value: entity.external!.mxPlate ?? '---',
                 ),
               ],
             );
@@ -306,41 +304,6 @@ final class TrucksPageCreateWhisper extends PageB {
                           ),
                         ),
                         Expanded(
-                          child: EntityFinderSelector<Situation, SituationsServiceI>(
-                            entityBuilder: () => Situation(),
-                            label: '*Assing a situation...',
-                            enabled:true,
-                            initialValue: itemState?.entity.situation,
-                            textBuilder: (Situation situation) {
-                              return situation.name.cleaned ?? '---';
-                            },
-                            onSelected: (Situation? situation) {
-                              itemState?.entity.situation = situation ?? Situation();
-                              itemState?.react();
-                            },
-                          ), 
-                        ),
-                      ],
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Expanded>[
-                        Expanded(
-                          child: EntityFinderSelector<Location, LocationsServiceI>(
-                            entityBuilder: () => Location(),
-                            label: '*Assing a location...',
-                            enabled:true,
-                            initialValue: itemState?.entity.location,
-                            textBuilder: (Location location) {
-                              return location.name.cleaned ?? '---';
-                            },
-                            onSelected: (Location? location) {
-                              itemState?.entity.location = location ?? Location();
-                              itemState?.react();
-                            },
-                          ), 
-                        ),
-                        Expanded(
                           child: EntityFinderSelector<Status, StatusesServiceI>(
                             entityBuilder: () => Status(),
                             label: '*Assing an status...',
@@ -365,8 +328,44 @@ final class TrucksPageCreateWhisper extends PageB {
                         ),
                       ],
                     ),
+                    Row(
+                      spacing: 10,
+                      children: <Expanded>[
+                        Expanded(
+                          child: EntityFinderSelector<Location, LocationsServiceI>(
+                            entityBuilder: () => Location(),
+                            label: 'Assing a location...',
+                            enabled:true,
+                            initialValue: itemState?.entity.location,
+                            textBuilder: (Location location) {
+                              return location.name.cleaned ?? '---';
+                            },
+                            onSelected: (Location? location) {
+                              itemState?.entity.location = location ?? Location();
+                              itemState?.react();
+                            },
+                          ), 
+                        ),
+                        Expanded(
+                          child: EntityFinderSelector<Situation, SituationsServiceI>(
+                            entityBuilder: () => Situation(),
+                            label: 'Assing a situation...',
+                            enabled:true,
+                            initialValue: itemState?.entity.situation,
+                            textBuilder: (Situation situation) {
+                              return situation.name.cleaned ?? '---';
+                            },
+                            onSelected: (Situation? situation) {
+                              itemState?.entity.situation = situation ?? Situation();
+                              itemState?.react();
+                            },
+                          ), 
+                        ),
+                        
+                      ],
+                    ),
                     const SectionDivider(
-                      text: 'Truck Information',
+                      text: '*Truck Information',
                     ),
                     // --> Driver edge Section
                     ReactiveWidget<_TruckSectionState>(
@@ -377,7 +376,7 @@ final class TrucksPageCreateWhisper extends PageB {
                           _CreateWhisperTrucksSection(
                             itemState: itemState,
                             isEnabled: formDisabled,
-                          ) : _CreateWhisperTrucksSection(
+                          ) : _CreateWhisperTrucksExternalSection(
                             itemState: itemState,
                             isEnabled: formDisabled,
                           );

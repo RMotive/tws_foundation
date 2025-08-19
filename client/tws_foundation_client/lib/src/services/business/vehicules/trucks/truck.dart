@@ -33,9 +33,13 @@ final class Truck extends EntityB<Truck> {
   //! --> Properties
 
   /// Motor identifier.
+  /// rules >
+  /// 1 : 16 > length > 14
   String? motor;
 
   ///Vehicule identifier number.
+  /// rules >
+  /// 1 : 18 > length > 0
   String vin = "";
 
   //! <-- Properties

@@ -32,7 +32,7 @@ public class StatusesService
     ///     <see cref=""/> based [Depot] handler to be used.
     /// </param>
     public StatusesService(StatusesDepot Depot, Database Database) : base(Depot) {
-        this._db = Database;
+        _db = Database;
     }
 
     public async override Task<BatchOperationOutput<Status>> Create(Status[] Entities, bool Sync = false) {

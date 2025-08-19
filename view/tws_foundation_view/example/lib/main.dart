@@ -61,6 +61,8 @@ final class _MainAppState extends State<MainApp> {
     Injector.addSingleton<LocationsServiceI>(foundationServer.locationsService);
     Injector.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
     Injector.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
+    Injector.addSingleton<CarriersServiceI>(foundationServer.carriersService);
+
 
 
     final SessionStorage sessionStorage = SessionStorage();

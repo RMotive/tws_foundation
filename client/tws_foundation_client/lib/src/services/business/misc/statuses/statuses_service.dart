@@ -44,7 +44,7 @@ final class StatusesService extends StatusesServiceB {
     super.client,
   }) : super(
           host,
-          'statuses',
+          'Statuses',
         );
 
   @override

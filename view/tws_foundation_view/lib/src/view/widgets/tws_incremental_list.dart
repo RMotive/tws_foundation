@@ -77,7 +77,6 @@ class _IncrementalListState<TModel> extends State<IncrementalList<TModel>> {
     return SizedBox(
       width: widget.width,
       child: Column(
-        spacing: 1,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SizedBox(
@@ -89,7 +88,7 @@ class _IncrementalListState<TModel> extends State<IncrementalList<TModel>> {
                 Text(
                   "${widget.title}: (${widget.recordList.length})",
                   style: TextStyle(
-                    color: primaryColorTheme.accent
+                    color: primaryColorTheme.fore
                   ),
                 ),
                 Row(
@@ -131,13 +130,22 @@ class _IncrementalListState<TModel> extends State<IncrementalList<TModel>> {
               ],
             ),
           ),
+          
           // --> show message when tmodelList is empty.
           Visibility(
             visible: widget.recordList.isEmpty,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: MessageWidget(
-                text: "No ${widget.title} added",
+              child: Column(
+                spacing: 10,
+                children: <Widget>[
+                  Divider(
+                    color: primaryColorTheme.accent,
+                  ),
+                  MessageWidget(
+                    text: "No ${widget.title} added",
+                  ),
+                ],
               ),
             ),
           ),

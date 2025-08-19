@@ -11,7 +11,7 @@ using TWS_Customer.Features.Business;
 
 using TWS_Foundation.Authentication;
 
-namespace TWS_Foundation.Controllers.Business.Vehicules;
+namespace TWS_Foundation.Controllers.Business.Misc;
 
 [ApiController, Feature("Statuses"), Route("[Controller]/[Action]")]
 public class StatusesController

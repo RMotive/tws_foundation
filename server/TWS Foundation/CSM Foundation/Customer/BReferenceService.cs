@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Bases;
+﻿using CSM_Foundation.Database;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
 using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
@@ -10,7 +11,7 @@ using CSM_Foundation.Product;
 namespace CSM_Foundation.Customer;
 public class BReferenceService<TEntity, TDepot>
      : IService<TEntity>
-    where TEntity : BNamedReferencedEntity
+    where TEntity : BNamedReferencedEntity, IEntity
     where TDepot : IDepot<TEntity> {
 
     /// <summary>
@@ -18,21 +19,21 @@ public class BReferenceService<TEntity, TDepot>
     /// </summary>
     protected readonly TDepot _depot;
 
-    readonly QueryProcessor<TEntity>? PreOperation;
+    readonly QueryProcessor<TEntity>? _preOperation;
 
-    readonly QueryProcessor<TEntity>? PostOperation;
+    readonly QueryProcessor<TEntity>? _postOperation;
 
     public BReferenceService(TDepot Depot, QueryProcessor<TEntity>? preOperation = null, QueryProcessor<TEntity>? postOperation = null) {
         this._depot = Depot;
-        PreOperation = preOperation;
-        PostOperation = postOperation;
+        _preOperation = preOperation;
+        _postOperation = postOperation;
     }
 
     protected QueryInput<TEntity, TParameters> GetOperationInput<TParameters>(TParameters parameters)
     => new() {
         Parameters = parameters,
-        PreProcessor = PreOperation,
-        PostProcessor = PostOperation
+        PreProcessor = _preOperation,
+        PostProcessor = _postOperation
     };
 
     public virtual Task<ViewOutput<TEntity>> View(QueryInput<TEntity, ViewInput<TEntity>> input) {

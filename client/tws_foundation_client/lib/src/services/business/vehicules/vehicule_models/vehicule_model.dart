@@ -89,7 +89,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
             this,
             PropertyInfo(EntityKeys.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty",
-            "length > 200",
+            "201 > length",
           ),
         );
       }

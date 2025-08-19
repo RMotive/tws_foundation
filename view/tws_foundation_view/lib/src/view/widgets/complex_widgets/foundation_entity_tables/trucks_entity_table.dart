@@ -349,6 +349,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
     List<String> mxStateOptions = FoundationCollections.kMXStateCodes;
 
     return Column(
+      spacing: 10,
       children: <Widget>[
         TextInput(
           width: double.maxFinite,
@@ -365,9 +366,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
           onChanged: (String value) => entity.internal?.motor = value.cleaned,
         ),
 
-        const SectionDivider(text: 'Plates details'),
-    
-        EntityFinderSelector<Carrier, CarrieresService>(
+        EntityFinderSelector<Carrier, CarriersServiceI>(
           label: '*Carrier',
           initialValue: entity.internal?.carrier,
           textBuilder:(Carrier carrier) => carrier.name,
@@ -377,7 +376,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
           },
         ),
     
-        EntityFinderSelector<Status, StatusesService>(
+        EntityFinderSelector<Status, StatusesServiceI>(
           label: '*Status',
           initialValue: entity.status,
           textBuilder:(Status status) => status.name,
@@ -393,7 +392,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
           },
         ),
     
-        EntityFinderSelector<VehiculeModel, VehiculeModelService>(
+        EntityFinderSelector<VehiculeModel, VehiculeModelsServiceI>(
           label: '*Model',
           initialValue: entity.internal?.model,
           textBuilder:(VehiculeModel model) => '${model.manufacturer.name} - ${model.name}',
@@ -403,7 +402,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
           },
         ),
     
-        EntityFinderSelector<Situation, SituationsService>(
+        EntityFinderSelector<Situation, SituationsServiceI>(
           label: 'Situation',
           initialValue: entity.situation,
           textBuilder:(Situation situation) => situation.name,
@@ -413,7 +412,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
           },
         ),
     
-         EntityFinderSelector<Location, LocationsService>(
+         EntityFinderSelector<Location, LocationsServiceI>(
           label: 'Location',
           initialValue: entity.location,
           textBuilder:(Location location) => location.name,
@@ -422,7 +421,8 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
             entity.location = location;
           },
         ),
-    
+        const SectionDivider(text: 'Plates details'),
+
         IncrementalList<Plate>(
           recordMin: 1,
           recordLimit: 2,

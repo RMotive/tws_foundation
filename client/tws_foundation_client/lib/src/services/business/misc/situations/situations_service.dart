@@ -33,7 +33,7 @@ final class SituationsService extends SituationsServiceB {
     super.client,
   }) : super(
           host,
-          'situations',
+          'Situations',
         );
 
   @override

@@ -1,8 +1,8 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Route, Router;
-import 'package:tws_foundation_view/src/view/pages/entity_pages/drivers/create_whisper/drivers_page_create_whisper.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
+import 'package:tws_foundation_view/src/view/pages/entity_pages/trucks/create_whisper/trucks_page_create_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
@@ -27,8 +27,7 @@ final class TrucksCategoryPage extends EntityCategoryPageB<TrucksEntityTableAdap
         FoundationRoutes.trucksCreateWhisperRoute,
         whisperOptions: RouteWhisperOptions(),
         pageBuilder: (BuildContext _, RouteData _) {
-          /// TODO change this -->
-          return DriversPageCreateWhisper();
+          return TrucksPageCreateWhisper();
         },
       ),
     ];

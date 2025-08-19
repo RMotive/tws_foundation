@@ -23,31 +23,35 @@ class _CreateWhisperTrucksSection extends StatelessWidget {
         Row(
           spacing: 10,
           children: <Widget>[
-            TextInput(
-              label: '*Vin',
-              isEnabled: isEnabled,
-              maxLength: 18,
-              controller: TextEditingController(
-                text: itemState?.entity.internal?.vin,
+            Expanded(
+              child: TextInput(
+                label: '*Vin',
+                isEnabled: isEnabled,
+                maxLength: 17,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.vin,
+                ),
+                onChanged: (String text) {
+                  Truck truck = itemState!.entity.internal!;
+                  truck.vin = text;
+                  itemState?.react();
+                },
               ),
-              onChanged: (String text) {
-                Truck truck = itemState!.entity.internal!;
-                truck.vin = text;
-                itemState?.react();
-              },
             ),
-            TextInput(
-              label: 'Motor',
-              isEnabled: isEnabled,
-              maxLength: 12,
-              controller: TextEditingController(
-                text: itemState?.entity.internal?.motor,
+            Expanded(
+              child: TextInput(
+                label: 'Motor',
+                isEnabled: isEnabled,
+                maxLength: 16,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.motor,
+                ),
+                onChanged: (String text) {
+                  Truck truck = itemState!.entity.internal!;
+                  truck.motor = text.cleaned;
+                  itemState?.react();
+                },
               ),
-              onChanged: (String text) {
-                Truck truck = itemState!.entity.internal!;
-                truck.motor = text.cleaned;
-                itemState?.react();
-              },
             ),
           ],
         ),
@@ -71,57 +75,73 @@ class _CreateWhisperTrucksSection extends StatelessWidget {
           itemState: itemState,
           isEnabled: isEnabled,
         ),
-
-        // EntityFinderSelector<Manufacturer, ManufacturerService>(
-        //         label: '*Manufacturer',
-        //         initialValue: entity.internal?.model.manufacturer,
-        //         textBuilder:(Manufacturer manufacturer) => manufacturer.name,
-        //         entityBuilder: () => Manufacturer(),
-        //         onSelected: (Manufacturer? manufacturer) {
-        //           entity.internal?.model.manufacturer = manufacturer ?? Manufacturer();
-        //         },
-        //       ),
-
-
-        //       TextInput(
-        //         label: '*name',
-        //         controller: TextEditingController(text: entity.internal?.model.name ?? ''),
-        //         onChanged: (String value) => entity.internal?.model.name = value,
-        //       ),
-        //       TextInput(
-        //         label: 'Description',
-        //         controller: TextEditingController(text: entity.internal?.model.description ?? ''),
-        //         onChanged: (String value) => entity.internal?.model.description = value,
-        //       ),
-        //       TextInput(
-        //         label: 'Model year',
-        //         controller: TextEditingController(text: entity.internal?.model.year.toString() ?? ''),
-        //         onChanged: (String value) {
-        //           int? year = int.tryParse(value);
-        //           if (year != null) {
-        //             entity.internal?.model.year = DateTime.tryParse(value) ?? DateTime.now();
-        //           }
-        //         },
-        //       ),
-
         
+        // --> Plates Section
+        SectionWidget(
+          title: "Plates",
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: IncrementalList<Plate>(
+              title: "Plates",
+              modelBuilder:() => Plate(),
+              recordLimit: 2,
+              recordList: itemState!.entity.internal!.plates, 
+              onAdd: (Plate plate) {
+                Truck model = itemState!.entity.internal!;
+                model.plates.add(plate);
+                itemState!.react();
+              },
+              onRemove: () {
+                Truck model = itemState!.entity.internal!;
+                model.plates.removeLast();
+                itemState!.react();
+              },
+              recordBuilder:(Plate record, int index) {
+                return _CreateWhisperPlatesSection(
+                  index: index,
+                  plate: record,
+                  identifierOnChange:(String text) {
+                    Truck truck = itemState!.entity.internal!;
+                    truck.plates[index].identifier = text;
+                    itemState!.react();
+                  },
+                  countryOnChange:(String? text) {
+                    Truck truck = itemState!.entity.internal!;
+                    truck.plates[index].country = text ?? '';
+                    if(truck.plates[index].country != text) truck.plates[index].state = null;
+                    itemState!.react();
+                    _plateEffect();
+                  }, 
+                  stateOnChange:(String? text) {
+                    Truck truck = itemState!.entity.internal!;
+                    truck.plates[index].state = text;
+                    itemState!.react();
+                  }, 
+                  expirationOnChange:(String text) {
+                    Truck truck = itemState!.entity.internal!;
+                    truck.plates[index].expiration = DateTime.tryParse(text);
+                    itemState!.react();
+                  },
+                );
+              },
+            ),
+          ),
+        ),
 
-       
+        _CreateWhisperSCTSection(
+          itemState: itemState,
+          isEnabled: isEnabled,
+        ),
 
-        FoldPanelWidget(
-          title: 'Add model',
-          onChange: (bool visible) {
-            if(entity.internal?.model.id == BigInt.zero) return;
-            entity.internal?.model = VehiculeModel();
-          },
-          child: Column(
-            spacing: 10,
-            children: <Widget>[
-              
-            ],
-          )
-        )
+        _CreateWhisperInsuranceSection(
+          itemState: itemState,
+          isEnabled: isEnabled,
+        ),
 
+        _CreateWhisperMaintenanceection(
+          itemState: itemState,
+          isEnabled: isEnabled,
+        ),
       ],
     );
   }
