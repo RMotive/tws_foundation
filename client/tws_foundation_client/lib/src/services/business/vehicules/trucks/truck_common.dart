@@ -99,11 +99,11 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
     return super.encode(
       <String, Object?>{
         kEconomic: economic,
-        kLocation: location,
-        kInternal: internal,
-        kExternal: external,
-        FoundationCommonPropertyKeys.kStatus: status,
-        FoundationCommonPropertyKeys.kSituation: situation,
+        kLocation: location?.encode(),
+        kInternal: internal?.encode(),
+        kExternal: external?.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
+        FoundationCommonPropertyKeys.kSituation: situation?.encode(),
       },
     );
   }

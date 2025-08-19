@@ -103,23 +103,28 @@ class _CreateWhisperTrucksSection extends StatelessWidget {
                   identifierOnChange:(String text) {
                     Truck truck = itemState!.entity.internal!;
                     truck.plates[index].identifier = text;
+                    truck.plates[index].status = _defaultStatus;
                     itemState!.react();
                   },
                   countryOnChange:(String? text) {
                     Truck truck = itemState!.entity.internal!;
                     truck.plates[index].country = text ?? '';
                     if(truck.plates[index].country != text) truck.plates[index].state = null;
+                    truck.plates[index].status = _defaultStatus;
                     itemState!.react();
+                    
                     _plateEffect();
                   }, 
                   stateOnChange:(String? text) {
                     Truck truck = itemState!.entity.internal!;
                     truck.plates[index].state = text;
+                    truck.plates[index].status = _defaultStatus;
                     itemState!.react();
                   }, 
                   expirationOnChange:(String text) {
                     Truck truck = itemState!.entity.internal!;
                     truck.plates[index].expiration = DateTime.tryParse(text);
+                    truck.plates[index].status = _defaultStatus;
                     itemState!.react();
                   },
                 );

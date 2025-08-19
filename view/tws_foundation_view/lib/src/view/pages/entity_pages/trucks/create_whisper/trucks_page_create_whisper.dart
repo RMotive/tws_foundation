@@ -314,13 +314,13 @@ final class TrucksPageCreateWhisper extends PageB {
                             },
                             onSelected: (Status? status) {
                               _defaultStatus = status ?? Status();
-                              itemState?.entity.status = status ?? Status();
+                              itemState?.entity.status = _defaultStatus;
                               // Setting default status values
-                              itemState?.entity.internal?.sct?.status = status ?? Status();
-                              itemState?.entity.internal?.insurance?.status = status ?? Status();
-                              itemState?.entity.internal?.maintenance?.status = status ?? Status();
+                              itemState?.entity.internal?.sct?.status = _defaultStatus;
+                              itemState?.entity.internal?.insurance?.status = _defaultStatus;
+                              itemState?.entity.internal?.maintenance?.status = _defaultStatus;
                               for (Plate plate in itemState!.entity.internal!.plates) {
-                                plate.status = status ?? Status();
+                                plate.status = _defaultStatus;
                               }
                               itemState.react();
                             },
@@ -361,7 +361,6 @@ final class TrucksPageCreateWhisper extends PageB {
                             },
                           ), 
                         ),
-                        
                       ],
                     ),
                     const SectionDivider(

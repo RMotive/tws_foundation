@@ -23,7 +23,7 @@ public class StatusesController
         service = Service;
     }
 
-    [HttpPost, Action("View")]
+    [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Status> options) => Ok(
         await service.View(
                 new QueryInput<Status, ViewInput<Status>> {
@@ -33,7 +33,7 @@ public class StatusesController
         );
 
     [HttpPost, Action("Read")]
-    public async Task<IActionResult> View([FromQuery] string reference) => Ok(
+    public async Task<IActionResult> Read([FromQuery] string reference) => Ok(
             await service.Read(reference)
         );
 }

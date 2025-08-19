@@ -1,4 +1,5 @@
 ﻿using CSM_Foundation.Database;
+using CSM_Foundation.Database.Entity.Models.Output;
 
 namespace CSM_Foundation.Product;
 
@@ -13,6 +14,5 @@ namespace CSM_Foundation.Product;
 public interface IService_Read<TEntity>
     : IService
     where TEntity : class, IEntity {
-
 
 }

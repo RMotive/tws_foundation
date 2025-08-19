@@ -33,6 +33,7 @@ class _CreateWhisperMaintenanceection extends StatelessWidget {
                 Maintenance().sanitize(
                   anual: DateTime.tryParse(date ?? "") ?? DateTime(0),
                 );
+            itemState?.entity.internal?.maintenance?.status = _defaultStatus;
             itemState?.react();
           },
         ),
@@ -53,6 +54,7 @@ class _CreateWhisperMaintenanceection extends StatelessWidget {
                 Maintenance().sanitize(
                   trimestral: DateTime.tryParse(date ?? "") ?? DateTime(0),
                 );
+            itemState?.entity.internal?.maintenance?.status = _defaultStatus;
             itemState?.react();
           },
         ),

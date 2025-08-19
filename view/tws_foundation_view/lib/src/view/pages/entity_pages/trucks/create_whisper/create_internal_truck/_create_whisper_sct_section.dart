@@ -24,6 +24,7 @@ class _CreateWhisperSCTSection extends StatelessWidget {
           controller: TextEditingController(text: itemState?.entity.internal?.sct?.type),
           onChanged: (String value){
             itemState?.entity.internal?.sct = itemState?.entity.internal?.sct?.sanitize(type: value) ?? SCT().sanitize(type: value);
+            itemState?.entity.internal?.sct?.status = _defaultStatus;
             itemState?.react();
           },
         ),
@@ -35,6 +36,7 @@ class _CreateWhisperSCTSection extends StatelessWidget {
           onChanged: (String value) {
             itemState?.entity.internal?.sct =
                 itemState?.entity.internal?.sct?.sanitize(number: value) ?? SCT().sanitize(type: value);
+            itemState?.entity.internal?.sct?.status = _defaultStatus;
             itemState?.react();
           } 
         ),
@@ -45,6 +47,7 @@ class _CreateWhisperSCTSection extends StatelessWidget {
           onChanged: (String value) {
             itemState?.entity.internal?.sct =
                 itemState?.entity.internal?.sct?.sanitize(configuration: value) ?? SCT().sanitize(type: value);
+            itemState?.entity.internal?.sct?.status = _defaultStatus;
             itemState?.react();
           },
         ),

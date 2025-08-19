@@ -28,6 +28,7 @@ class _CreateWhisperInsuranceSection extends StatelessWidget {
                   itemState?.entity.internal?.insurance =
                       itemState?.entity.internal?.insurance?.sanitize(policy: value) ??
                       Insurance().sanitize(policy: value);
+                  itemState?.entity.internal?.insurance?.status = _defaultStatus;
                   itemState?.react();
                 },
               ),
@@ -45,6 +46,7 @@ class _CreateWhisperInsuranceSection extends StatelessWidget {
                     itemState?.entity.internal?.insurance =
                         itemState?.entity.internal?.insurance?.sanitize(country: text ?? "") ??
                         Insurance().sanitize(country: text ?? "");
+                    itemState?.entity.internal?.insurance?.status = _defaultStatus;
                     itemState?.react();
                   },
                 ),
@@ -70,6 +72,7 @@ class _CreateWhisperInsuranceSection extends StatelessWidget {
                 Insurance().sanitize(
                   expiration: DateTime.tryParse(date ?? "") ?? DateTime(0),
                 ); 
+            itemState?.entity.internal?.insurance?.status = _defaultStatus;
             itemState?.react();
           },
         ),

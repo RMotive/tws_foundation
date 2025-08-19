@@ -9,7 +9,7 @@ using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Product;
 
 namespace CSM_Foundation.Customer;
-public class BReferenceService<TEntity, TDepot>
+public abstract class BReferenceService<TEntity, TDepot>
      : IService<TEntity>
     where TEntity : BNamedReferencedEntity, IEntity
     where TDepot : IDepot<TEntity> {
