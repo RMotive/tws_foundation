@@ -73,7 +73,7 @@ final class TruckExternal extends EntityB<TruckExternal> {
         kVin: vin,
         kUsaPlate: usaPlate,
         kMxPlate: mxPlate,
-        'common': common,
+        'common': common.encode(),
       },
     );
   }

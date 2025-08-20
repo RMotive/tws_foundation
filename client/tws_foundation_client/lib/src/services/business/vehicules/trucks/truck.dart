@@ -91,7 +91,7 @@ final class Truck extends EntityB<Truck> {
               (Plate e) => e.encode(),
             )
             .toList(),
-        'common': common
+        'common': common.encode(),
       },
     );
   }
