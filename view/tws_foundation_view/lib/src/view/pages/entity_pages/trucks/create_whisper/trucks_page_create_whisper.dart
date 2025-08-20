@@ -314,11 +314,14 @@ final class TrucksPageCreateWhisper extends PageB {
                             },
                             onSelected: (Status? status) {
                               _defaultStatus = status ?? Status();
+                              Truck? internal = itemState?.entity.internal;
                               itemState?.entity.status = _defaultStatus;
                               // Setting default status values
-                              itemState?.entity.internal?.sct?.status = _defaultStatus;
-                              itemState?.entity.internal?.insurance?.status = _defaultStatus;
-                              itemState?.entity.internal?.maintenance?.status = _defaultStatus;
+                              internal?.sct?.status = _defaultStatus;
+                              internal?.insurance?.status = _defaultStatus;
+                              internal?.maintenance?.status = _defaultStatus;
+                              if (internal!.model.id == BigInt.zero) internal.model.status = _defaultStatus;
+
                               for (Plate plate in itemState!.entity.internal!.plates) {
                                 plate.status = _defaultStatus;
                               }

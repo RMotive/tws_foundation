@@ -49,7 +49,9 @@ class _CreateWhisperModelSection extends StatelessWidget {
                 controller: TextEditingController(text: itemState?.entity.internal?.model.name ?? ''),
                 onChanged: (String value){
                   VehiculeModel? model =  itemState?.entity.internal?.model;
-                  model = model?.sanitize(name: value);
+                  if (model!.id != BigInt.zero) model = VehiculeModel();
+                  model = model.sanitize(name: value);
+                  model?.status = _defaultStatus;
                   itemState?.react();
                 },
               ),
@@ -59,7 +61,9 @@ class _CreateWhisperModelSection extends StatelessWidget {
                 controller: TextEditingController(text: itemState?.entity.internal?.model.description ?? ''),
                 onChanged: (String value) {
                   VehiculeModel? model =  itemState?.entity.internal?.model;
-                  model = model?.sanitize(description: value);
+                  if (model!.id != BigInt.zero) model = VehiculeModel();
+                  model = model.sanitize(description: value);
+                  model?.status = _defaultStatus;
                   itemState?.react();
                 } 
               ),
@@ -74,9 +78,11 @@ class _CreateWhisperModelSection extends StatelessWidget {
                 lastDate: DateTime(DateTime.now().year),
                 onChanged: (String? date) {
                   VehiculeModel? model =  itemState?.entity.internal?.model;
-                  model = model?.sanitize(
+                  if (model!.id != BigInt.zero) model = VehiculeModel();
+                  model = model.sanitize(
                     year: DateTime.tryParse(date ?? "") ?? DateTime(0),
                   );
+                  model?.status = _defaultStatus;
                   itemState?.react();
                 },
               ),

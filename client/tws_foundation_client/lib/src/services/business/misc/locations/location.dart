@@ -20,6 +20,9 @@ final class Location extends NamedEntityB<Location> {
   /// [Waypoint] navigation set.
   Waypoint? waypoint;
 
+  /// [Status] information.
+  Status status = Status();
+
   /// Generates a new [Location] instance from mandatory values.
   Location();
 
@@ -55,6 +58,7 @@ final class Location extends NamedEntityB<Location> {
       <String, Object?>{
         kAddress: address.encode(),
         kWaypoint: waypoint?.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -62,10 +66,9 @@ final class Location extends NamedEntityB<Location> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
-
     address = encode.getEntity(() => Address(), kAddress) ?? address;
     waypoint = encode.getEntity(() => Waypoint(), kWaypoint);
-
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? Status();
   }
 
   @override
@@ -105,6 +108,7 @@ final class Location extends NamedEntityB<Location> {
     }
 
     results.validateDependency(this, address);
+    results.validateDependency(this, status);
     if(waypoint != null) results.validateDependency(this, waypoint!);
 
     return results;
