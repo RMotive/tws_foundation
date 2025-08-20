@@ -46,7 +46,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
         <String, Object?>{
-        kYear: year.toUtc().toString(),
+        kYear: year.dateOnlyIso,
         kManufacturer: manufacturer.encode(),
       },
     );

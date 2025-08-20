@@ -71,6 +71,12 @@ final class Truck extends EntityB<Truck> {
 
   @override
   DataMap encode([DataMap? entityObject]) {
+    TruckCommon common = TruckCommon();
+    Status status = Status();
+    status.reference = 'referdef';
+    common.status = status;
+    common.economic = "economicholder";
+
     return super.encode(
       <String, Object?>{
         kVin: vin,
@@ -85,6 +91,7 @@ final class Truck extends EntityB<Truck> {
               (Plate e) => e.encode(),
             )
             .toList(),
+        'common': common
       },
     );
   }
