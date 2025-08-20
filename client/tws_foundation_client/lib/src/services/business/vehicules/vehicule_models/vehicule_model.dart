@@ -21,6 +21,9 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   /// Manufacturer property.
   Manufacturer manufacturer = Manufacturer();
 
+  /// Model Status.
+  Status status = Status();
+
   /// Generates a new [VehiculeModel] instance from mandatory values.
   VehiculeModel();
   
@@ -48,6 +51,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
         <String, Object?>{
         kYear: year.dateOnlyIso,
         kManufacturer: manufacturer.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -57,6 +61,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
     super.decode(encode);
     year = encode.get(kYear);
     manufacturer = encode.getEntity(() => Manufacturer(), kManufacturer) ?? manufacturer;
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? Status();
   }
 
   @override
@@ -96,6 +101,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
     }
 
     results.validateDependency(this, manufacturer);
+    results.validateDependency(this, status);
     return results;
   }
 
