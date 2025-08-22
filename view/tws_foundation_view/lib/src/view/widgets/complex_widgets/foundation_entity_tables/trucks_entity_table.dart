@@ -236,8 +236,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
     List<EntityInvalidation<TruckCommon>> invalidations = entity.evaluate();
 
     if(invalidations.isNotEmpty){
-      router.pop();
-      showDialog(
+      await showDialog(
         context: context,
         useRootNavigator: true,
         barrierDismissible: false,
@@ -451,6 +450,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                   ),
                   onChanged: (String text) {
                     entity.internal!.plates[index].identifier = text;
+                    entity.internal!.plates[index].status = entity.status;
                   },
                 ),
                 AutoCompleteField<String>(
@@ -463,7 +463,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                   displayValue: (String? item) => item ?? "Not valid data",
                   onChanged: (String? text) {
                     entity.internal!.plates[index].country = text ?? '';
-                    
+                    entity.internal!.plates[index].status = entity.status;
                     _addressState.react();
                   },
                 ),
@@ -484,6 +484,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                       displayValue: (String? item) => item ?? "Not valid data",
                       onChanged: (String? text) {
                         entity.internal!.plates[index].state = text.cleaned;
+                        entity.internal!.plates[index].status = entity.status;
                       },
                     );
                   },
@@ -496,6 +497,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                   controller: TextEditingController(text: entity.internal!.plates[index].expiration?.dateOnly),
                   onChanged: (String text) {
                     entity.internal!.plates[index].expiration = DateTime.tryParse(text);
+                    entity.internal!.plates[index].status = entity.status;
                   },
                 ),
               ],

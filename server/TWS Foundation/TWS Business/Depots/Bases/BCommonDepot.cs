@@ -612,7 +612,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
             return;
 
         visited.Add(old);
-
+        ///
         EntityEntry oldEntry = _db.Entry(old);
 
         if (oldEntry.State == EntityState.Unchanged) {
@@ -651,7 +651,9 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                     // Create a new navigation overwritten.
                     // Also update the attached navigators.
                     EntityEntry newNavigationEntry = _db.Entry(newNavigationValue);
-                    newNavigationEntry.State = EntityState.Added;
+                    if (navigation.CurrentValue is IEntity newValue && newValue.Id == 0) {
+                        newNavigationEntry.State = EntityState.Added;
+                    }
                     navigation.CurrentValue = newNavigationValue;
 
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {

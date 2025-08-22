@@ -922,8 +922,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
     List<EntityInvalidation<DriverCommon>> invalidations = entity.evaluate();
 
     if(invalidations.isNotEmpty){
-      router.pop();
-      showDialog(
+      await showDialog(
         context: context,
         useRootNavigator: true,
         barrierDismissible: false,
