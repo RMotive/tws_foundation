@@ -134,6 +134,7 @@ export 'src/services/business/vehicules/plates/plate.dart';
 export 'src/services/business/vehicules/trailers/trailer.dart';
 export 'src/services/business/vehicules/trailers/trailer_common.dart';
 export 'src/services/business/vehicules/trailers/trailer_external.dart';
+export 'src/services/business/vehicules/trailers/trailer_service.dart';
 
 // --> Exporing [src.services.business.yardlogs]
 export 'src/services/business/yardlogs/yard_log.dart';
@@ -144,7 +145,6 @@ export 'src/services/business/yardlogs/yardlogs_service_i.dart';
 export 'src/services/business/human_resources/approaches/approach.dart';
 
 //! <-- Business services
-
 
 // --> Exporting [src.services.security.security]
 export 'src/services/security/security/security_service_i.dart';
