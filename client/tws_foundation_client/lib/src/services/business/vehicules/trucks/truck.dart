@@ -121,9 +121,9 @@ final class Truck extends EntityB<Truck> {
 
   @override
   List<EntityInvalidation<Truck>> evaluate() {
-    List<EntityInvalidation<Truck>> results = <EntityInvalidation<Truck>>[];
+    List<EntityInvalidation<Truck>> invalidations = <EntityInvalidation<Truck>>[];
     if (id < BigInt.zero) {
-      results.add(
+      invalidations.add(
          EntityInvalidation<Truck>(
           this,
           PropertyInfo(EntityKeys.id, int, id),
@@ -133,7 +133,7 @@ final class Truck extends EntityB<Truck> {
       );
     }
     if (vin.trim().isEmpty || vin.length > 17) {
-      results.add(
+      invalidations.add(
         EntityInvalidation<Truck>(
           this,
           PropertyInfo(kVin, String, vin),
@@ -144,7 +144,7 @@ final class Truck extends EntityB<Truck> {
     }
     if (motor != null) {
       if (motor!.length < 15 && motor!.length > 16) {
-        results.add(
+        invalidations.add(
           EntityInvalidation<Truck>(
             this,
             PropertyInfo(kMotor, String, motor),
@@ -155,16 +155,16 @@ final class Truck extends EntityB<Truck> {
       }
     }
 
-    results.validateDependency(this, carrier);
-    results.validateDependency(this, model);
-    if (sct != null) results.validateDependency(this, sct!);
-    if (maintenance != null) results.validateDependency(this, maintenance!);
-    if (insurance != null) results.validateDependency(this, insurance!);
+    invalidations.validateDependency(this, carrier);
+    invalidations.validateDependency(this, model);
+    if (sct != null) invalidations.validateDependency(this, sct!);
+    if (maintenance != null) invalidations.validateDependency(this, maintenance!);
+    if (insurance != null) invalidations.validateDependency(this, insurance!);
     if (plates.isNotEmpty) {
       for (Plate plate in plates) {
-        results.validateDependency(this, plate);
+        invalidations.validateDependency(this, plate);
       }
     }
-    return results;
+    return invalidations;
   }
 }

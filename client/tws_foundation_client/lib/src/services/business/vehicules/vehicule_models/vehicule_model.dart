@@ -72,7 +72,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
         EntityInvalidation<VehiculeModel>(
           this,
           PropertyInfo(EntityKeys.id, int, id),
-          'Pointer: $id, cannot be less than 0',
+          'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
       );
@@ -82,7 +82,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
         EntityInvalidation<VehiculeModel>(
           this,
           PropertyInfo(EntityKeys.name, String, name),
-          "Lenght: ${name.length}, must be between 1 and 100 characters",
+          "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
       );
@@ -93,7 +93,7 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
           EntityInvalidation<VehiculeModel>(
             this,
             PropertyInfo(EntityKeys.description, String, description),
-            "Lenght: ${description!.length}, less than 200 characters or empty",
+            "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
         );

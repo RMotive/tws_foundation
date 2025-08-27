@@ -8,7 +8,7 @@ using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Quality.Utils;
 
-using TWS_Customer.Features.Business;
+using TWS_Customer.Features.Business.Vehicules;
 
 namespace TWS_Customer.Quality.Q_Features.Q_Bussines;
 public class Q_TrailersService
