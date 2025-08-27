@@ -50,6 +50,14 @@ final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerE
 
   //! --> Getters
 
+  /// Gets the current {trailer} class and size concatenated string.
+  /// 
+  /// Format: {trailer class} - {trailer size}
+  String? get classType {
+    if (type != null) return '${type?.trailerClass.name} - ${type?.size}';
+    return null;
+  }
+
   /// Gets the display value for the current {trailer} plates.
   ///
   /// Format: {USA Plate} / {MX Plate}

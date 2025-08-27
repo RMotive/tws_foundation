@@ -1,7 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/business/misc/sections/sections_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/trailer_classes/trailer_classes_service_i.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/trailer_types/trailer_types_service_i.dart';
+import 'package:tws_foundation_client/src/services/business/vehicules/trailers/trailer_service.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -65,6 +64,9 @@ final class FoundationServer extends ServerB {
   /// [Account] Entity Service.
   late final AccountServiceI accountService;
 
+  /// [Trailer] Entity Service.
+  late final TrailersServiceI trailersService;
+
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
     bool isRelease, {
@@ -88,6 +90,7 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<TrucksServiceI>? trucksServiceBuilder,
     ServiceImplementationBuilder<StatusesServiceI>? statusServiceBuilder,
     ServiceImplementationBuilder<AccountServiceI>? accountServiceBuilder,
+    ServiceImplementationBuilder<TrailersServiceI>? trailersServiceBuilder,
   }) : super(
             isRelease: isRelease,
             devHost ??
@@ -115,5 +118,6 @@ final class FoundationServer extends ServerB {
     trucksService = trucksServiceBuilder?.call(serverHost, httpClient) ?? TruckService(serverHost, client: httpClient);
     statusService = statusServiceBuilder?.call(serverHost, httpClient) ?? StatusesService(serverHost, client: httpClient);
     accountService = accountServiceBuilder?.call(serverHost, httpClient) ?? AccountService(serverHost, client: httpClient);
+    trailersService = trailersServiceBuilder?.call(serverHost, httpClient) ?? TrailersService(serverHost, client: httpClient);
   }
 }

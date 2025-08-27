@@ -33,6 +33,10 @@ export 'src/services/business/vehicules/insurances/insurance.dart';
 export 'src/services/business/vehicules/load_types/load_type.dart';
 export 'src/services/business/vehicules/load_types/load_types_service.dart';
 
+/// [Services.Business.Vehicules.trailer_classes]
+export 'src/services/business/vehicules/trailer_classes/trailer_class.dart';
+export 'src/services/business/vehicules/trailer_classes/trailer_classes_service.dart';
+
 /// [Services.Business.Vehicules.Trucks]
 export 'src/services/business/vehicules/trucks/truck.dart';
 export 'src/services/business/vehicules/trucks/truck_common.dart';
@@ -82,8 +86,6 @@ export 'src/services/business/vehicules/manufacturers/manufacturer.dart';
 export 'src/services/business/vehicules/manufacturers/manufacturer_service.dart';
 export 'src/services/business/misc/sections/section.dart';
 export 'src/services/business/misc/sections/sections_service.dart';
-export 'src/services/business/vehicules/trailer_classes/trailer_class.dart';
-export 'src/services/business/vehicules/trailer_classes/trailer_classes_service.dart';
 export 'src/services/business/vehicules/trailer_types/trailer_type.dart';
 export 'src/services/business/vehicules/trailer_types/trailer_types_service.dart';
 export 'src/services/business/vehicules/vehicule_models/vehicule_model.dart';
