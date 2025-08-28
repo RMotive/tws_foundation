@@ -39,7 +39,7 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
 
   @override
   void decode(DataMap encode) {
-    carrier = encode.get(carrier);
+    carrier = encode.get(kCarrier) ?? carrier;
     mxPlate = encode.get(kMxPlate);
     usaPlate = encode.get(kUsaPlate);
 
