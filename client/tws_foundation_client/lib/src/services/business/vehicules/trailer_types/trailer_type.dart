@@ -1,11 +1,12 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/core/extensions.dart';
+import 'package:tws_foundation_client/src/services/business/misc/statuses/status.dart';
 import 'package:tws_foundation_client/src/services/business/vehicules/trailer_classes/trailer_class.dart';
 
 /// [TrailerType] default builder.
 TrailerType trailertypeBuilder() => TrailerType();
-
 
 /// Defines a business entity that stores relevant data for a trailer operation, like [size] or [TrailerClass]. 
 final class TrailerType extends EntityB<TrailerType> {
@@ -23,6 +24,9 @@ final class TrailerType extends EntityB<TrailerType> {
 
   /// Foregin relation [TrailerClass] object.
   TrailerClass trailerClass = TrailerClass();
+
+  /// [Status] information.
+  Status status = Status();
 
   /// Generates a new [TrailerType] instance from mandatory values.
   TrailerType();
@@ -45,6 +49,7 @@ final class TrailerType extends EntityB<TrailerType> {
       <String, Object?>{
         kSize: size,
         ktrailerClass: trailerClass.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -54,6 +59,7 @@ final class TrailerType extends EntityB<TrailerType> {
     super.decode(encode);
     size = encode.get(kSize);
     trailerClass = encode.getEntity(() => TrailerClass(), ktrailerClass) ?? TrailerClass();
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kSCT) ?? Status();
   }
 
   @override
@@ -82,6 +88,7 @@ final class TrailerType extends EntityB<TrailerType> {
     }
 
     invalidations.validateDependency(this, trailerClass);
+    invalidations.validateDependency(this, status);
 
     return invalidations;
   }
