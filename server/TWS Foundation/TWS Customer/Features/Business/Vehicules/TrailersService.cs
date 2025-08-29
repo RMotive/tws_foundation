@@ -38,7 +38,8 @@ public class TrailersService
             .Include(e => e.Internal).ThenInclude(e => e!.Carrier).ThenInclude(e => e!.USDOT)
             .Include(e => e.Internal).ThenInclude(e => e!.SCT)
             .Include(e => e.Internal).ThenInclude(e => e!.Maintenance)
-            .Include(e => e.Internal).ThenInclude(e => e!.Model);
+            .Include(e => e.Internal).ThenInclude(e => e!.Model)
+            .Include(e => e.External);
 
         return sourceQuery;
     };

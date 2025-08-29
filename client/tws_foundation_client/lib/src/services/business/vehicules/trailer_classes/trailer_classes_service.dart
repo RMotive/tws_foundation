@@ -29,7 +29,7 @@ final class TrailerClassesService extends TrailerClassesServiceB {
     super.client,
   }) : super(
           host,
-          'TrailerClasses',
+          'trailerClasses',
         );
 
   @override

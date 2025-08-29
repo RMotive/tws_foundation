@@ -210,6 +210,8 @@ public partial class Program {
                 services.AddScoped<IVehiculeModelsService, VehiculeModelsService>();
                 services.AddScoped<ITrucksService, TrucksService>();
                 services.AddScoped<IStatusesService, StatusesService>();
+                services.AddScoped<ITrailersService, TrailersService>();
+
             }
 
             WebApplication app = builder.Build();

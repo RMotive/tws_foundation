@@ -32,7 +32,7 @@ final class TrailerTypesService extends TrailerTypesServiceB {
     super.client,
   }) : super(
           host,
-          'loadtypes',
+          'trailerTypes',
         );
 
   @override

@@ -63,6 +63,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/drivers_entity
 /// [Trucks Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/trucks_entity_table.dart';
 
+/// [Trailers Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/trailers_entity_table.dart';
+
 //! <-- Entity Tables
 
 
@@ -99,6 +102,9 @@ export 'src/view/pages/entity_pages/drivers/drivers_page.dart';
 
 /// [Trucks Page]
 export 'src/view/pages/entity_pages/trucks/trucks_page.dart';
+
+/// [Trailers Page]
+export 'src/view/pages/entity_pages/trailers/trailers_page.dart';
 
 //! <-- Entity Pages
 

@@ -16,7 +16,6 @@ import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_incremental_list.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-
 /// Address state class.
 class _PlateState extends ReactorB {}
 
@@ -24,8 +23,15 @@ _PlateState _addressState = _PlateState();
 // ignore: unused_element
 void Function() _addressEffect = () {};
 
+/// Address state class.
+class _TypeState extends ReactorB {}
+
+_TypeState _typeState = _TypeState();
+// ignore: unused_element
+void Function() _typeEffect = () {};
+
 /// {adapter} class.
-/// 
+///
 /// implements the [FoundationEntityTableAdapterB] for [TrailerCommon] entities.
 final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<TrailerCommon> {
   TrailersEntityTableAdapter({
@@ -35,7 +41,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
   @override
   Widget composeViewer(BuildContext buildContext, TrailerCommon entity) {
     List<Widget> scopeColumn = <Widget>[];
-    if (entity.internal != null){
+    if (entity.internal != null) {
       scopeColumn = <Widget>[
         const SectionDivider(text: 'Carrier details'),
 
@@ -47,7 +53,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           label: 'Carrier USDOT / MC',
           value: entity.internal?.carrier.usdot?.mc ?? '---',
         ),
-         PropertyViewer(
+        PropertyViewer(
           label: 'Carrier USDOT / SCAC',
           value: entity.internal?.carrier.usdot?.scac ?? '---',
         ),
@@ -74,8 +80,22 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           value: entity.internal?.model?.manufacturer.name ?? '---',
         ),
 
-        for(int i = 0; i < entity.internal!.plates.length; i++)
-          ...<Widget>[
+        const SectionDivider(text: 'SCT details'),
+
+        PropertyViewer(
+          label: 'SCT type',
+          value: entity.internal?.sct?.type ?? '---',
+        ),
+        PropertyViewer(
+          label: 'SCT number',
+          value: entity.internal?.sct?.number ?? '---',
+        ),
+        PropertyViewer(
+          label: 'SCT configuration',
+          value: entity.internal?.sct?.configuration ?? '---',
+        ),
+
+        for (int i = 0; i < entity.internal!.plates.length; i++) ...<Widget>[
           SectionDivider(
             text: '${i + 1} - ${entity.internal?.plates[i].country} Plate',
           ),
@@ -95,7 +115,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
       ];
     }
 
-    if(entity.external != null){
+    if (entity.external != null) {
       scopeColumn = <Widget>[
         PropertyViewer(
           label: 'Carrier',
@@ -122,7 +142,12 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           ),
           PropertyViewer(
             label: 'Ownership',
-            value: entity.internal != null ? 'Own' : entity.external != null ? 'External' : '---',
+            value:
+                entity.internal != null
+                    ? 'Own'
+                    : entity.external != null
+                    ? 'External'
+                    : '---',
           ),
           PropertyViewer(
             label: 'Economic',
@@ -131,6 +156,10 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           PropertyViewer(
             label: 'Status',
             value: entity.status.name,
+          ),
+          PropertyViewer(
+            label: 'Type',
+            value: entity.classType ?? '---',
           ),
           PropertyViewer(
             label: 'Situation',
@@ -142,15 +171,15 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           ),
 
           ...scopeColumn,
-        ]
+        ],
       ),
     );
   }
 
   @override
-  EntityTableAdapterEditor<TruckCommon>? composeEditor() {
-    return EntityTableAdapterEditor<TruckCommon>(
-      onUpdate: (BuildContext buildContext, TruckCommon entity) {
+  EntityTableAdapterEditor<TrailerCommon>? composeEditor() {
+    return EntityTableAdapterEditor<TrailerCommon>(
+      onUpdate: (BuildContext buildContext, TrailerCommon entity) {
         final Router router = Injector.get();
 
         showDialog(
@@ -163,19 +192,17 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           },
         );
       },
-      formBuilder:(BuildContext buildContext, TruckCommon entity) {
+      formBuilder: (BuildContext buildContext, TrailerCommon entity) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
             spacing: 10,
             children: <Widget>[
               const SectionDivider(text: 'Common details'),
-              
+
               TextInput(
                 label: "TimeStamp",
-                controller: TextEditingController(
-                  text: entity.timestamp.toString()
-                ),
+                controller: TextEditingController(text: entity.timestamp.toString()),
                 isEnabled: false,
               ),
               TextInput(
@@ -184,26 +211,27 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                 controller: TextEditingController(text: entity.economic),
                 onChanged: (String value) => entity.economic = value,
               ),
-              
+
               const SectionDivider(text: 'Truck details'),
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: entity.internal != null? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
-              )
-              
+                child:
+                    entity.internal != null ? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
+              ),
             ],
           ),
         );
       },
     );
   }
-  void _onUpdate(TruckCommon entity, Router router, BuildContext context) async {
-    TrucksServiceI trucksService = Injector.get();
 
-    List<EntityInvalidation<TruckCommon>> invalidations = entity.evaluate();
+  void _onUpdate(TrailerCommon entity, Router router, BuildContext context) async {
+    TrailersServiceI trucksService = Injector.get();
 
-    if(invalidations.isNotEmpty){
+    List<EntityInvalidation<TrailerCommon>> invalidations = entity.evaluate();
+
+    if (invalidations.isNotEmpty) {
       await showDialog(
         context: context,
         useRootNavigator: true,
@@ -222,18 +250,18 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
 
     String authToken = await composeAuth();
 
-    FoundationResponseResolver<UpdateOutput<TruckCommon>> resResolver = await trucksService.update(
-      UpdateInput<TruckCommon>(entity),
+    FoundationResponseResolver<UpdateOutput<TrailerCommon>> resResolver = await trucksService.update(
+      UpdateInput<TrailerCommon>(entity),
       authToken,
     );
 
     String? errMessage;
     resResolver.resolve(
       objectBuilder:
-          () => UpdateOutput<TruckCommon>(
-            () => TruckCommon(),
+          () => UpdateOutput<TrailerCommon>(
+            () => TrailerCommon(),
           ),
-      onSuccess: (SuccessFrame<UpdateOutput<TruckCommon>> success) {
+      onSuccess: (SuccessFrame<UpdateOutput<TrailerCommon>> success) {
         refresh();
       },
       onFailure: (FailureFrame failure, int status) {
@@ -274,7 +302,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
     );
   }
 
-  Widget _externalEditorFormBuilder(TruckCommon entity){
+  Widget _externalEditorFormBuilder(TrailerCommon entity) {
     return Column(
       spacing: 10,
       children: <Widget>[
@@ -284,13 +312,6 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           maxLength: 100,
           controller: TextEditingController(text: entity.external?.carrier),
           onChanged: (String value) => entity.external?.carrier = value,
-        ),
-        TextInput(
-          width: double.maxFinite,
-          label: "VIN",
-          maxLength: 7,
-          controller: TextEditingController(text: entity.external?.vin),
-          onChanged: (String value) => entity.external?.vin = value.cleaned,
         ),
         TextInput(
           width: double.maxFinite,
@@ -310,7 +331,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
     );
   }
 
-  Widget _internalEditorFormBuilder(TruckCommon entity) {
+  Widget _internalEditorFormBuilder(TrailerCommon entity) {
     List<String> countryOptions = FoundationCollections.kCountryList;
     List<String> usaStateOptions = FoundationCollections.kUStateCodes;
     List<String> mxStateOptions = FoundationCollections.kMXStateCodes;
@@ -318,71 +339,56 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
     return Column(
       spacing: 10,
       children: <Widget>[
-        TextInput(
-          width: double.maxFinite,
-          label: "*Vin",
-          maxLength: 17,
-          controller: TextEditingController(text: entity.internal?.vin),
-          onChanged: (String value) => entity.internal?.vin = value,
-        ),
-        TextInput(
-          width: double.maxFinite,
-          label: "Motor",
-          maxLength: 16,
-          controller: TextEditingController(text: entity.internal?.motor),
-          onChanged: (String value) => entity.internal?.motor = value.cleaned,
-        ),
-
         EntityFinderSelector<Carrier, CarriersServiceI>(
           label: '*Carrier',
           initialValue: entity.internal?.carrier,
-          textBuilder:(Carrier carrier) => carrier.name,
+          textBuilder: (Carrier carrier) => carrier.name,
           entityBuilder: () => Carrier(),
           onSelected: (Carrier? carrier) {
             entity.internal?.carrier = carrier ?? Carrier();
           },
         ),
-    
+
         EntityFinderSelector<Status, StatusesServiceI>(
           label: '*Status',
           initialValue: entity.status,
-          textBuilder:(Status status) => status.name,
+          textBuilder: (Status status) => status.name,
           entityBuilder: () => Status(),
           onSelected: (Status? status) {
             entity.status = status ?? Status();
             entity.internal?.sct?.status = status ?? Status();
-            entity.internal?.insurance?.status = status ?? Status();
             entity.internal?.maintenance?.status = status ?? Status();
+            if (entity.internal?.model?.id == BigInt.zero) entity.internal?.model?.status = status ?? Status();
             for (Plate plate in entity.internal!.plates) {
               plate.status = status ?? Status();
             }
           },
         ),
-    
+
         EntityFinderSelector<VehiculeModel, VehiculeModelsServiceI>(
           label: '*Model',
           initialValue: entity.internal?.model,
-          textBuilder:(VehiculeModel model) => '${model.manufacturer.name} - ${model.name}',
+          textBuilder: (VehiculeModel model) => '${model.manufacturer.name} - ${model.name}',
           entityBuilder: () => VehiculeModel(),
           onSelected: (VehiculeModel? model) {
             entity.internal?.model = model ?? VehiculeModel();
           },
         ),
-    
+
         EntityFinderSelector<Situation, SituationsServiceI>(
           label: 'Situation',
           initialValue: entity.situation,
-          textBuilder:(Situation situation) => situation.name,
+          textBuilder: (Situation situation) => situation.name,
           entityBuilder: () => Situation(),
           onSelected: (Situation? situation) {
             entity.situation = situation;
           },
         ),
-    
-         EntityFinderSelector<Location, LocationsServiceI>(
+
+        EntityFinderSelector<Location, LocationsServiceI>(
           label: 'Location',
           initialValue: entity.location,
-          textBuilder:(Location location) => location.name,
+          textBuilder: (Location location) => location.name,
           entityBuilder: () => Location(),
           onSelected: (Location? location) {
             entity.location = location;
@@ -393,7 +399,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
         IncrementalList<Plate>(
           recordMin: 1,
           recordLimit: 2,
-          modelBuilder:() => Plate(),
+          modelBuilder: () => Plate(),
           recordList: entity.internal!.plates,
           onRemove: () {
             entity.internal!.plates.removeLast();
@@ -402,9 +408,8 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
             entity.internal!.plates.add(model);
           },
           recordBuilder: (Plate model, int index) {
-            
             return Column(
-              spacing: 10, 
+              spacing: 10,
               children: <Widget>[
                 SectionDivider(
                   text: "Plate ${index + 1}",
@@ -414,7 +419,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                   hint: "enter the plate identifier",
                   maxLength: 12,
                   controller: TextEditingController(
-                    text: entity.internal!.plates[index].identifier,
+                    text: entity.internal!.plates.isNotEmpty ? entity.internal!.plates[index].identifier : null,
                   ),
                   onChanged: (String text) {
                     entity.internal!.plates[index].identifier = text;
@@ -427,18 +432,22 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                   isOptional: true,
                   nativeList: FoundationCollections.kCountryList,
                   initialValue:
-                      entity.internal!.plates[index].country == "" ? null : entity.internal!.plates[index].country,
+                      entity.internal!.plates.isEmpty || entity.internal!.plates[index].country == "" 
+                          ? null
+                          : entity.internal!.plates[index].country,
                   displayValue: (String? item) => item ?? "Not valid data",
                   onChanged: (String? text) {
-                    entity.internal!.plates[index].country = text ?? '';
-                    entity.internal!.plates[index].status = entity.status;
+                    Plate plate = entity.internal!.plates[index];
+                    if(text != plate.country) entity.internal!.plates[index].state = null;
+                    plate.country = text ?? '';
+                    plate.status = entity.status;
                     _addressState.react();
                   },
                 ),
                 ReactiveWidget<_PlateState>(
                   reactor: _addressState,
                   builder: (BuildContext ctx, _PlateState state) {
-                    String? currentCountry = entity.internal!.plates[index].country;
+                    String? currentCountry = entity.internal!.plates.isNotEmpty? entity.internal!.plates[index].country: null;
                     _addressEffect = state.react;
                     return AutoCompleteField<String>(
                       width: double.maxFinite,
@@ -448,7 +457,9 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                       isEnabled: currentCountry != '',
                       nativeList: currentCountry == countryOptions[0] ? usaStateOptions : mxStateOptions,
                       initialValue:
-                          entity.internal!.plates[index].state == "" ? null : entity.internal!.plates[index].state,
+                          entity.internal!.plates.isEmpty || entity.internal!.plates[index].state == ""
+                              ? null
+                              : entity.internal!.plates[index].state,
                       displayValue: (String? item) => item ?? "Not valid data",
                       onChanged: (String? text) {
                         entity.internal!.plates[index].state = text.cleaned;
@@ -462,7 +473,10 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                   firstDate: DateTime(1999),
                   lastDate: DateTime(2040),
                   label: "Expiration",
-                  controller: TextEditingController(text: entity.internal!.plates[index].expiration?.dateOnly),
+                  controller: TextEditingController(
+                    text:
+                        entity.internal!.plates.isNotEmpty ? entity.internal!.plates[index].expiration?.dateOnly : null,
+                  ),
                   onChanged: (String text) {
                     entity.internal!.plates[index].expiration = DateTime.tryParse(text);
                     entity.internal!.plates[index].status = entity.status;
@@ -472,30 +486,32 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
             );
           },
         ),
-    
+
+        if (entity.type != null)
+          EntityFinderSelector<TrailerType, TrailerTypesServiceI>(
+            label: 'Type',
+            initialValue: entity.type,
+            textBuilder: (TrailerType type) => "${type.trailerClass.name} - ${type.size}",
+            entityBuilder: () => TrailerType(),
+            onSelected: (TrailerType? location) {
+              entity.type = location;
+            },
+          ),
+
         // Validate if the optional entities exist in current record, to show an appropiate layout.
-        if(entity.internal?.maintenance != null)
-        _maintenanceSection(entity),
-    
-        if(entity.internal?.insurance != null)
-        _insuranceSection(entity),
-    
-        if(entity.internal?.sct != null)
-        _sctSection(entity),
-    
-        if(entity.internal?.maintenance == null)
+        if (entity.internal?.maintenance != null) _maintenanceSection(entity),
+
+        if (entity.internal?.sct != null) _sctSection(entity),
+
+        if (entity.type == null) _typeSection(entity),
+
+        if (entity.internal?.maintenance == null)
           FoldPanelWidget(
             title: "Add Maintenance details",
             child: _maintenanceSection(entity, isAdded: true),
           ),
-    
-        if(entity.internal?.insurance == null)
-          FoldPanelWidget(
-            title: 'Add Insurance details',
-            child: _insuranceSection(entity, isAdded: true),
-          ),
-    
-        if(entity.internal?.sct == null)
+
+        if (entity.internal?.sct == null)
           FoldPanelWidget(
             title: 'Add an SCT',
             child: _sctSection(entity, isAdded: true),
@@ -504,7 +520,61 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
     );
   }
 
-  Widget _sctSection(TruckCommon entity, {bool isAdded = false}){
+  Widget _typeSection(TrailerCommon entity, {bool isAdded = false}) {
+    return ReactiveWidget<_TypeState>(
+      reactor: _typeState,
+      builder: (BuildContext ctx, _TypeState reactor) {
+        return Column(
+          spacing: 10,
+          children: <Widget>[
+            EntityFinderSelector<TrailerType, TrailerTypesServiceI>(
+              label: 'Type',
+              initialValue: entity.type?.id != BigInt.zero ? entity.type : null,
+              textBuilder: (TrailerType type) => "${type.trailerClass.name} - ${type.size}",
+              entityBuilder: () => TrailerType(),
+              onSelected: (TrailerType? location) {
+                entity.type = location;
+              },
+            ),
+            FoldPanelWidget(
+              title: 'Add Trailer type',
+              child: Column(
+                spacing: 10,
+                children: <Widget>[
+                  EntityFinderSelector<TrailerClass, TrailerClassesServiceI>(
+                    label: 'Class',
+                    initialValue: entity.type?.trailerClass,
+                    enabled: entity.type?.id == BigInt.zero,
+                    textBuilder: (TrailerClass trailerClass) => trailerClass.name,
+                    entityBuilder: () => TrailerClass(),
+                    onSelected: (TrailerClass? trailerClass) {
+                      entity.type?.trailerClass = trailerClass ?? TrailerClass();
+                    },
+                  ),
+                  TextInput(
+                    label: "Size",
+                    hint: "enter the plate identifier",
+                    maxLength: 16,
+                    isEnabled: entity.type?.id == BigInt.zero,
+                    controller: TextEditingController(
+                      text: entity.type?.size,
+                    ),
+                    onChanged: (String text) {
+                      TrailerType? type = entity.type;
+                      if (type != null && type.id != BigInt.zero) type.id = BigInt.zero;
+                      type = type != null ? entity.type?.sanitize(size: text) : TrailerType().sanitize(size: text);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _sctSection(TrailerCommon entity, {bool isAdded = false}) {
     return Column(
       spacing: 10,
       children: <Widget>[
@@ -520,7 +590,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           ),
           onChanged: (String text) {
             SCT? sct = entity.internal?.sct;
-            if(isAdded){
+            if (isAdded) {
               sct = sct != null ? sct.sanitize(type: text) : SCT().sanitize(type: text);
               return;
             }
@@ -537,7 +607,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           ),
           onChanged: (String text) {
             SCT? sct = entity.internal?.sct;
-            if(isAdded){
+            if (isAdded) {
               sct = sct != null ? sct.sanitize(number: text) : SCT().sanitize(number: text);
               return;
             }
@@ -553,7 +623,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           ),
           onChanged: (String text) {
             SCT? sct = entity.internal?.sct;
-            if(isAdded){
+            if (isAdded) {
               sct = sct != null ? sct.sanitize(configuration: text) : SCT().sanitize(configuration: text);
               return;
             }
@@ -564,7 +634,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
     );
   }
 
-  Widget _insuranceSection(TruckCommon entity, {bool isAdded = false}){
+  Widget _insuranceSection(TruckCommon entity, {bool isAdded = false}) {
     return Column(
       spacing: 10,
       children: <Widget>[
@@ -577,7 +647,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           ),
           onChanged: (String text) {
             Insurance? insurance = entity.internal?.insurance;
-            if(isAdded){
+            if (isAdded) {
               insurance = insurance != null ? insurance.sanitize(policy: text) : Insurance().sanitize(policy: text);
               return;
             }
@@ -589,12 +659,11 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           label: '*Country',
           isOptional: true,
           nativeList: FoundationCollections.kCountryList,
-          initialValue:
-              entity.internal?.insurance?.country == "" ? null : entity.internal?.insurance?.country,
+          initialValue: entity.internal?.insurance?.country == "" ? null : entity.internal?.insurance?.country,
           displayValue: (String? item) => item ?? "Not valid data",
           onChanged: (String? text) {
             Insurance? insurance = entity.internal?.insurance;
-            if(isAdded){
+            if (isAdded) {
               insurance =
                   insurance != null
                       ? insurance.sanitize(country: text ?? "")
@@ -612,7 +681,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           controller: TextEditingController(text: entity.internal?.insurance?.expiration.dateOnly),
           onChanged: (String text) {
             Insurance? insurance = entity.internal?.insurance;
-            if(isAdded){
+            if (isAdded) {
               insurance =
                   insurance != null
                       ? insurance.sanitize(expiration: DateTime.tryParse(text) ?? DateTime(0))
@@ -626,7 +695,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
     );
   }
 
-  Widget _maintenanceSection(TruckCommon entity, {bool isAdded = false}){
+  Widget _maintenanceSection(TrailerCommon entity, {bool isAdded = false}) {
     return Column(
       spacing: 10,
       children: <Widget>[
@@ -640,11 +709,12 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
             text: entity.internal?.maintenance?.anual.dateOnly,
           ),
           onChanged: (String text) {
-            Maintenance? maintenance =  entity.internal?.maintenance;
-            if(isAdded){
-              maintenance = maintenance != null
-                  ? maintenance.sanitize(anual: DateTime.tryParse(text) ?? DateTime(0))
-                  : Maintenance().sanitize(anual: DateTime.tryParse(text) ?? DateTime(0));
+            Maintenance? maintenance = entity.internal?.maintenance;
+            if (isAdded) {
+              maintenance =
+                  maintenance != null
+                      ? maintenance.sanitize(anual: DateTime.tryParse(text) ?? DateTime(0))
+                      : Maintenance().sanitize(anual: DateTime.tryParse(text) ?? DateTime(0));
               return;
             }
 
@@ -660,11 +730,12 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
             text: entity.internal?.maintenance?.trimestral.dateOnly,
           ),
           onChanged: (String text) {
-            Maintenance? maintenance =  entity.internal?.maintenance;
-            if(isAdded){
-             maintenance = maintenance != null
-                  ? maintenance.sanitize(trimestral: DateTime.tryParse(text) ?? DateTime(0))
-                  : Maintenance().sanitize(trimestral: DateTime.tryParse(text));
+            Maintenance? maintenance = entity.internal?.maintenance;
+            if (isAdded) {
+              maintenance =
+                  maintenance != null
+                      ? maintenance.sanitize(trimestral: DateTime.tryParse(text) ?? DateTime(0))
+                      : Maintenance().sanitize(trimestral: DateTime.tryParse(text));
               return;
             }
             entity.internal?.maintenance?.trimestral = DateTime.tryParse(text) ?? DateTime(0);
@@ -673,10 +744,10 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
       ],
     );
   }
-  
-  Widget _buildExternalDialog(TruckCommon entity, Router router, BuildContext context) { 
+
+  Widget _buildExternalDialog(TrailerCommon entity, Router router, BuildContext context) {
     return ResumeDialog(
-      title: 'Confirm external truck update',
+      title: 'Confirm external trailer update',
       acceptLabel: 'Update',
       router: router,
       context: context,
@@ -689,6 +760,10 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
         TextLabel(
           title: "Status",
           value: entity.status.name,
+        ),
+        TextLabel(
+          title: "Type",
+          value: entity.classType ?? '---',
         ),
         TextLabel(
           title: "Situation",
@@ -710,19 +785,14 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           title: "Carrier",
           value: entity.external?.carrier ?? '---',
         ),
-        TextLabel(
-          title: "Vin",
-          value: entity.external?.vin ?? '---',
-        ),
       ],
     );
-
   }
 
-  Widget _buildInternalDialog(TruckCommon entity, Router router, BuildContext context) {
+  Widget _buildInternalDialog(TrailerCommon entity, Router router, BuildContext context) {
     return ResumeDialog(
       acceptLabel: "Update",
-      title: "Confirm truck update",
+      title: "Confirm trailer update",
       router: router,
       context: context,
       onAccept: () => _onUpdate(entity, router, context),
@@ -748,15 +818,11 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           value: entity.plates ?? '---',
         ),
         TextLabel(
-          title: "Vin",
-          value: entity.internal?.vin ?? '---',
-        ),
-        TextLabel(
-          title: "Motor",
-          value: entity.internal?.motor ?? '---',
+          title: "Type",
+          value: entity.classType ?? '---',
         ),
 
-        if(entity.internal?.sct != null) ...<TextLabel>[
+        if (entity.internal?.sct != null) ...<TextLabel>[
           TextLabel(
             title: "SCT #",
             value: entity.internal?.sct?.number ?? '---',
@@ -771,13 +837,12 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           ),
         ],
 
-        
         TextLabel(
           title: "Carrier",
           value: entity.internal?.carrier.name ?? '---',
         ),
 
-        if(entity.internal?.maintenance != null) ...<TextLabel>[
+        if (entity.internal?.maintenance != null) ...<TextLabel>[
           TextLabel(
             title: "Anual maintenance",
             value: entity.internal?.maintenance?.anual.dateOnly ?? '---',
@@ -792,98 +857,79 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           title: "Model",
           value:
               entity.internal?.model != null
-                  ? "${entity.internal?.model.manufacturer.name} - ${entity.internal?.model.name}"
+                  ? "${entity.internal?.model?.manufacturer.name} - ${entity.internal?.model?.name}"
                   : '---',
         ),
 
-        if(entity.internal?.insurance != null) ...<TextLabel>[
+        for (int i = 0; i < entity.internal!.plates.length; i++) ...<TextLabel>[
           TextLabel(
-            title: "Insurance policy",
-            value: entity.internal?.insurance?.policy ?? '---',
+            title: "${i + 1} - ${entity.internal?.plates[i].country} Plate",
+            value: '',
           ),
           TextLabel(
-            title: "Insurance country",
-            value: entity.internal?.insurance?.country ?? '---',
+            title: "Identifier",
+            value: entity.internal?.plates[i].identifier ?? '---',
           ),
           TextLabel(
-            title: "Insurance expiration",
-            value: entity.internal?.insurance?.expiration.dateOnly ?? '---',
+            title: "State",
+            value: entity.internal?.plates[i].state ?? '---',
+          ),
+          TextLabel(
+            title: "Expiration",
+            value: entity.internal?.plates[i].expiration?.dateOnly ?? '---',
           ),
         ],
-        
-
-        for(int i = 0; i < entity.internal!.plates.length; i++)
-          ...<TextLabel>[
-            TextLabel(
-              title: "${i + 1} - ${entity.internal?.plates[i].country} Plate",
-              value: '',
-            ),
-            TextLabel(
-              title: "Identifier",
-              value: entity.internal?.plates[i].identifier ?? '---',
-            ),
-            TextLabel(
-              title: "State",
-              value: entity.internal?.plates[i].state ?? '---',
-            ),
-            TextLabel(
-              title: "Expiration",
-              value: entity.internal?.plates[i].expiration?.dateOnly ?? '---',
-            ),
-
-          ],
       ],
     );
   }
 }
 
-
 /// {widget} class.
 ///
-/// Draws a {foundation} complex [EntityTable] based on [TruckCommon] {entity}, also handles basic available behavior.
-final class TrucksEntityTable extends FoundationEntityTableB<TrucksEntityTableAdapter> {
-  /// Creates a new [TrucksEntityTable] instance.
-  const TrucksEntityTable({
+/// Draws a {foundation} complex [EntityTable] based on [TrailerCommon] {entity}, also handles basic available behavior.
+final class TrailersEntityTable extends FoundationEntityTableB<TrailersEntityTableAdapter> {
+  /// Creates a new [TrailersEntityTable] instance.
+  const TrailersEntityTable({
     required super.adapter,
   });
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<TruckCommon, TrucksServiceI>(
-      entityFactory: () => TruckCommon(),
+    return EntityTable<TrailerCommon, TrailersServiceI>(
+      entityFactory: () => TrailerCommon(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<TruckCommon>>[
+      columns: <EntityTableColumnOptions<TrailerCommon>>[
         /// --> Economic column
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnOptions<TrailerCommon>(
           title: 'Economic',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.economic,
+          factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.economic,
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnOptions<TrailerCommon>(
           title: 'Ownership',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.internal != null? 'Own' : 'External',
+          factory:
+              (TrailerCommon entity, int index, BuildContext buildContext) =>
+                  entity.internal != null ? 'Own' : 'External',
         ),
-        EntityTableColumnOptions<TruckCommon>(
-          title: 'Economic',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.economic,
+        EntityTableColumnOptions<TrailerCommon>(
+          title: 'Type',
+          factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.classType ?? '---',
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnOptions<TrailerCommon>(
           title: 'Status',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.status.name,
+          factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.status.name,
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnOptions<TrailerCommon>(
           title: 'Situation',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.situation?.name ?? '---',
+          factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.situation?.name ?? '---',
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnOptions<TrailerCommon>(
           title: 'Location',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.location?.name ?? '---',
+          factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.location?.name ?? '---',
         ),
-        EntityTableColumnOptions<TruckCommon>(
-          title: 'Plates',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.plates,
+        EntityTableColumnOptions<TrailerCommon>(
+          title: 'Plates USA/MX',
+          factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.plates,
         ),
-        
-        
       ],
     );
   }

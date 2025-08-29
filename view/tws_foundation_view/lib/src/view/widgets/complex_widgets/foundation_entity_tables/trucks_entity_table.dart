@@ -462,8 +462,10 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                       entity.internal!.plates[index].country == "" ? null : entity.internal!.plates[index].country,
                   displayValue: (String? item) => item ?? "Not valid data",
                   onChanged: (String? text) {
-                    entity.internal!.plates[index].country = text ?? '';
-                    entity.internal!.plates[index].status = entity.status;
+                   Plate plate = entity.internal!.plates[index];
+                    if(text != plate.country) entity.internal!.plates[index].state = null;
+                    plate.country = text ?? '';
+                    plate.status = entity.status;
                     _addressState.react();
                   },
                 ),

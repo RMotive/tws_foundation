@@ -87,6 +87,20 @@ final class FoundationRoutes {
   );
   
   //! <-- Trucks Routes
+
+  //! --> Trailers Routes
+
+  static const Route trailersPageRoute = Route(
+    'trailers',
+    name: 'Trailers Page',
+  );
+
+  static const Route trailersCreateWhisperRoute = Route(
+    'create-trailers',
+    name: 'Trailers Creation',
+  );
+  
+  //! <-- Trailers Routes
 }
 
 /// {constant} class.
