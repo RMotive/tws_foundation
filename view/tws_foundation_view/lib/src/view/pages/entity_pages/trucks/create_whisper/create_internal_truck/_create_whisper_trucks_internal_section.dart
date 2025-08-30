@@ -140,7 +140,7 @@ class _CreateWhisperTrucksSection extends StatelessWidget {
           isEnabled: isEnabled,
         ),
 
-        _CreateWhisperMaintenanceection(
+        _CreateWhisperMaintenanceSection(
           itemState: itemState,
           isEnabled: isEnabled,
         ),

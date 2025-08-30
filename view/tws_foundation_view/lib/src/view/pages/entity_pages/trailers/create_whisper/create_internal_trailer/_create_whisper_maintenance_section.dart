@@ -1,7 +1,7 @@
-part of '../trucks_page_create_whisper.dart';
+part of '../trailers_page_create_whisper.dart';
 
 class _CreateWhisperMaintenanceSection extends StatelessWidget {
-  final CreateEntityFormRecordReactor<TruckCommon>? itemState;
+  final CreateEntityFormRecordReactor<TrailerCommon>? itemState;
 
   final bool isEnabled;
 

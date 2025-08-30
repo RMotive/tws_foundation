@@ -1,7 +1,7 @@
 part of '../trailers_page_create_whisper.dart';
 
 class _CreateWhisperTrailersSection extends StatelessWidget {
-  final CreateEntityFormRecordReactor<TruckCommon>? itemState;
+  final CreateEntityFormRecordReactor<TrailerCommon>? itemState;
 
   final bool isEnabled;
 
@@ -17,76 +17,97 @@ class _CreateWhisperTrailersSection extends StatelessWidget {
       spacing: 12,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
-          spacing: 10,
-          children: <Widget>[
-            Expanded(
-              child: TextInput(
-                label: 'Vin',
-                isEnabled: isEnabled,
-                maxLength: 18,
-                controller: TextEditingController(
-                  text: itemState?.entity.external?.vin,
-                ),
-                onChanged: (String text) {
-                  TruckExternal truck = itemState!.entity.external!;
-                  truck.vin = text;
-                  itemState?.react();
-                },
-              ),
-            ),
-            Expanded(
-              child: TextInput(
-                label: 'Carrier',
-                isEnabled: isEnabled,
-                maxLength: 12,
-                controller: TextEditingController(
-                  text: itemState?.entity.external?.carrier,
-                ),
-                onChanged: (String text) {
-                  TruckExternal truck = itemState!.entity.external!;
-                  truck.carrier = text;
-                  itemState?.react();
-                },
-              ),
-            ),
-          ],
+
+        // --> Carrier Information
+        EntityFinderSelector<Carrier, CarriersServiceI>(
+          entityBuilder: () => Carrier(),
+          label: '*Assing a carrier...',
+          enabled:true,
+          initialValue: itemState?.entity.internal?.carrier,
+          textBuilder: (Carrier carrier) {
+            return carrier.name;
+          },
+          onSelected: (Carrier? carrier) {
+            itemState?.entity.internal?.carrier = carrier ?? Carrier();
+            itemState?.react();
+          },
         ),
 
-        Row(
-          spacing: 10,
-          children: <Widget>[
-            Expanded(
-              child: TextInput(
-                label: 'USA Plate',
-                isEnabled: isEnabled,
-                maxLength: 18,
-                controller: TextEditingController(
-                  text: itemState?.entity.external?.usaPlate,
-                ),
-                onChanged: (String text) {
-                  TruckExternal truck = itemState!.entity.external!;
-                  truck.usaPlate = text;
-                  itemState?.react();
-                },
-              ),
+        _CreateWhisperModelSection(
+          itemState: itemState,
+          isEnabled: isEnabled,
+        ),
+
+        _CreateWhisperTypeSection(
+          itemState: itemState,
+          isEnabled: isEnabled,
+        ),
+        
+        // --> Plates Section
+        SectionWidget(
+          title: "Plates",
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: IncrementalList<Plate>(
+              title: "Plates",
+              modelBuilder:() => Plate(),
+              recordLimit: 2,
+              recordList: itemState?.entity.internal?.plates ?? <Plate>[], 
+              onAdd: (Plate plate) {
+                Trailer model = itemState!.entity.internal!;
+                model.plates.add(plate);
+                itemState!.react();
+              },
+              onRemove: () {
+                Trailer model = itemState!.entity.internal!;
+                model.plates.removeLast();
+                itemState!.react();
+              },
+              recordBuilder:(Plate record, int index) {
+                return _CreateWhisperPlatesSection(
+                  index: index,
+                  plate: record,
+                  identifierOnChange:(String text) {
+                    Trailer trailer = itemState!.entity.internal!;
+                    trailer.plates[index].identifier = text;
+                    trailer.plates[index].status = _defaultStatus;
+                    itemState!.react();
+                  },
+                  countryOnChange:(String? text) {
+                    Trailer trailer = itemState!.entity.internal!;
+                    trailer.plates[index].country = text ?? '';
+                    if(trailer.plates[index].country != text) trailer.plates[index].state = null;
+                    trailer.plates[index].status = _defaultStatus;
+                    itemState!.react();
+                    
+                    _plateEffect();
+                  }, 
+                  stateOnChange:(String? text) {
+                    Trailer trailer = itemState!.entity.internal!;
+                    trailer.plates[index].state = text;
+                    trailer.plates[index].status = _defaultStatus;
+                    itemState!.react();
+                  }, 
+                  expirationOnChange:(String text) {
+                    Trailer trailer = itemState!.entity.internal!;
+                    trailer.plates[index].expiration = DateTime.tryParse(text);
+                    trailer.plates[index].status = _defaultStatus;
+                    itemState!.react();
+                  },
+                );
+              },
             ),
-            Expanded(
-              child: TextInput(
-                label: 'MX Plate',
-                isEnabled: isEnabled,
-                maxLength: 12,
-                controller: TextEditingController(
-                  text: itemState?.entity.external?.mxPlate,
-                ),
-                onChanged: (String text) {
-                  TruckExternal truck = itemState!.entity.external!;
-                  truck.mxPlate = text;
-                  itemState?.react();
-                },
-              ),
-            ),
-          ],
+          ),
+        ),
+
+        _CreateWhisperSCTSection(
+          itemState: itemState,
+          isEnabled: isEnabled,
+        ),
+
+        _CreateWhisperMaintenanceSection(
+          itemState: itemState,
+          isEnabled: isEnabled,
         ),
       ],
     );

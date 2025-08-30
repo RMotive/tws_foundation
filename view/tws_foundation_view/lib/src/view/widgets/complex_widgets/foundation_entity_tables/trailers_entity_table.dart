@@ -23,7 +23,7 @@ _PlateState _addressState = _PlateState();
 // ignore: unused_element
 void Function() _addressEffect = () {};
 
-/// Address state class.
+/// Trailer type state class.
 class _TypeState extends ReactorB {}
 
 _TypeState _typeState = _TypeState();
@@ -212,7 +212,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                 onChanged: (String value) => entity.economic = value,
               ),
 
-              const SectionDivider(text: 'Truck details'),
+              const SectionDivider(text: 'Trailer details'),
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -284,7 +284,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           builder: (BuildContext context) {
             return Dialog(
               showCancelButton: false,
-              title: 'Error Updating Truck',
+              title: 'Error Updating Trailer',
               content: Text(
                 errMessage as String,
                 style: TextStyle(
@@ -394,13 +394,27 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
             entity.location = location;
           },
         ),
+
+        if (entity.type != null)
+          EntityFinderSelector<TrailerType, TrailerTypesServiceI>(
+            label: 'Type',
+            initialValue: entity.type,
+            textBuilder: (TrailerType type) => "${type.trailerClass.name} - ${type.size}",
+            entityBuilder: () => TrailerType(),
+            onSelected: (TrailerType? location) {
+              entity.type = location;
+            },
+          ),
+
+        if (entity.type == null) _typeSection(entity),
+        
         const SectionDivider(text: 'Plates details'),
 
         IncrementalList<Plate>(
           recordMin: 1,
           recordLimit: 2,
           modelBuilder: () => Plate(),
-          recordList: entity.internal!.plates,
+          recordList: entity.internal?.plates ?? <Plate>[],
           onRemove: () {
             entity.internal!.plates.removeLast();
           },
@@ -487,23 +501,11 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           },
         ),
 
-        if (entity.type != null)
-          EntityFinderSelector<TrailerType, TrailerTypesServiceI>(
-            label: 'Type',
-            initialValue: entity.type,
-            textBuilder: (TrailerType type) => "${type.trailerClass.name} - ${type.size}",
-            entityBuilder: () => TrailerType(),
-            onSelected: (TrailerType? location) {
-              entity.type = location;
-            },
-          ),
-
+        
         // Validate if the optional entities exist in current record, to show an appropiate layout.
         if (entity.internal?.maintenance != null) _maintenanceSection(entity),
 
         if (entity.internal?.sct != null) _sctSection(entity),
-
-        if (entity.type == null) _typeSection(entity),
 
         if (entity.internal?.maintenance == null)
           FoldPanelWidget(
@@ -520,7 +522,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
     );
   }
 
-  Widget _typeSection(TrailerCommon entity, {bool isAdded = false}) {
+  Widget _typeSection(TrailerCommon entity) {
     return ReactiveWidget<_TypeState>(
       reactor: _typeState,
       builder: (BuildContext ctx, _TypeState reactor) {
@@ -528,7 +530,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
           spacing: 10,
           children: <Widget>[
             EntityFinderSelector<TrailerType, TrailerTypesServiceI>(
-              label: 'Type',
+              label: 'Select a Type',
               initialValue: entity.type?.id != BigInt.zero ? entity.type : null,
               textBuilder: (TrailerType type) => "${type.trailerClass.name} - ${type.size}",
               entityBuilder: () => TrailerType(),
@@ -542,9 +544,9 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                 spacing: 10,
                 children: <Widget>[
                   EntityFinderSelector<TrailerClass, TrailerClassesServiceI>(
-                    label: 'Class',
+                    label: 'Select a Class',
                     initialValue: entity.type?.trailerClass,
-                    enabled: entity.type?.id == BigInt.zero,
+                    enabled: entity.type?.id != BigInt.zero || entity.type == null,
                     textBuilder: (TrailerClass trailerClass) => trailerClass.name,
                     entityBuilder: () => TrailerClass(),
                     onSelected: (TrailerClass? trailerClass) {
@@ -555,14 +557,14 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                     label: "Size",
                     hint: "enter the plate identifier",
                     maxLength: 16,
-                    isEnabled: entity.type?.id == BigInt.zero,
+                    isEnabled: entity.type?.id == BigInt.zero || entity.type == null,
                     controller: TextEditingController(
                       text: entity.type?.size,
                     ),
                     onChanged: (String text) {
-                      TrailerType? type = entity.type;
-                      if (type != null && type.id != BigInt.zero) type.id = BigInt.zero;
-                      type = type != null ? entity.type?.sanitize(size: text) : TrailerType().sanitize(size: text);
+                      if (entity.type != null && entity.type?.id != BigInt.zero) entity.type?.id = BigInt.zero;
+                      entity.type =
+                          entity.type != null ? entity.type?.sanitize(size: text) : TrailerType().sanitize(size: text);
                     },
                   ),
                 ],
@@ -628,67 +630,6 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
               return;
             }
             entity.internal?.sct?.configuration = text;
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _insuranceSection(TruckCommon entity, {bool isAdded = false}) {
-    return Column(
-      spacing: 10,
-      children: <Widget>[
-        TextInput(
-          label: "Policy",
-          hint: "*Enter the policy number",
-          maxLength: 12,
-          controller: TextEditingController(
-            text: entity.internal?.insurance?.policy,
-          ),
-          onChanged: (String text) {
-            Insurance? insurance = entity.internal?.insurance;
-            if (isAdded) {
-              insurance = insurance != null ? insurance.sanitize(policy: text) : Insurance().sanitize(policy: text);
-              return;
-            }
-            entity.internal?.insurance?.policy = text;
-          },
-        ),
-        AutoCompleteField<String>(
-          width: double.maxFinite,
-          label: '*Country',
-          isOptional: true,
-          nativeList: FoundationCollections.kCountryList,
-          initialValue: entity.internal?.insurance?.country == "" ? null : entity.internal?.insurance?.country,
-          displayValue: (String? item) => item ?? "Not valid data",
-          onChanged: (String? text) {
-            Insurance? insurance = entity.internal?.insurance;
-            if (isAdded) {
-              insurance =
-                  insurance != null
-                      ? insurance.sanitize(country: text ?? "")
-                      : Insurance().sanitize(country: text ?? "");
-              return;
-            }
-            entity.internal?.insurance?.country = text.cleaned ?? '';
-          },
-        ),
-        Datepicker(
-          width: double.maxFinite,
-          firstDate: DateTime(1999),
-          lastDate: DateTime(2040),
-          label: "*Expiration",
-          controller: TextEditingController(text: entity.internal?.insurance?.expiration.dateOnly),
-          onChanged: (String text) {
-            Insurance? insurance = entity.internal?.insurance;
-            if (isAdded) {
-              insurance =
-                  insurance != null
-                      ? insurance.sanitize(expiration: DateTime.tryParse(text) ?? DateTime(0))
-                      : Insurance().sanitize(expiration: DateTime.tryParse(text) ?? DateTime(0));
-              return;
-            }
-            entity.internal?.insurance?.expiration = DateTime.tryParse(text) ?? DateTime(0);
           },
         ),
       ],

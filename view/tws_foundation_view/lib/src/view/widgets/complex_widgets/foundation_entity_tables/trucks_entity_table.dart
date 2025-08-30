@@ -897,10 +897,6 @@ final class TrucksEntityTable extends FoundationEntityTableB<TrucksEntityTableAd
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.internal != null? 'Own' : 'External',
         ),
         EntityTableColumnOptions<TruckCommon>(
-          title: 'Economic',
-          factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.economic,
-        ),
-        EntityTableColumnOptions<TruckCommon>(
           title: 'Status',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.status.name,
         ),

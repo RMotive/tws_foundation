@@ -5,18 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/data/const/static_collections.dart';
+import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
+import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
+import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
+import 'package:tws_foundation_view/src/view/widgets/tws_incremental_list.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 part 'create_internal_trailer/_create_whisper_trailers_section.dart';
+part 'create_internal_trailer/_create_whisper_plates_section.dart';
+part 'create_internal_trailer/_create_whisper_model_section.dart';
+part 'create_internal_trailer/_create_whisper_sct_section.dart';
+part 'create_internal_trailer/_create_whisper_maintenance_section.dart';
+part 'create_internal_trailer/_create_whisper_type_section.dart';
+
+part '_create_whisper_trailer_external_section.dart';
 
 /// Driver section state class.
 final class _TrailerSectionState extends ReactorB {}
-final _TrailerSectionState _truckSectionState = _TrailerSectionState();
-void Function() _truckSectionStateReact = (){};
+final _TrailerSectionState _trailerSectionState = _TrailerSectionState();
+void Function() _trailerSectionStateReact = (){};
 
 Status _defaultStatus = Status();
 
@@ -63,13 +74,13 @@ final class TrailersPageCreateWhisper extends PageB {
           },
           recordDesigner: (TrailerCommon entity, bool selected, bool valid) {
             List<CreateEntityFormRecordField> commonFields = <CreateEntityFormRecordField>[
-              /// --> Truck ownership type
+              /// --> Trailer ownership type
               CreateEntityFormRecordField(
                 label: 'Ownership',
                 value: entity.internal != null? 'Own' : 'Internal',
               ),
 
-              /// --> Truck ownership type.
+              /// --> Trailer Economic type.
               CreateEntityFormRecordField(
                 label: '*Economic',
                 value: entity.economic.cleaned ?? '---',
@@ -239,7 +250,7 @@ final class TrailersPageCreateWhisper extends PageB {
                             common.internal = null;
                             common.external = TrailerExternal();
                           }
-                          _truckSectionStateReact();
+                          _trailerSectionStateReact();
                           itemState.react();
                         },
                       ),
@@ -324,23 +335,23 @@ final class TrailersPageCreateWhisper extends PageB {
                       ],
                     ),
                     const SectionDivider(
-                      text: '*Truck Information',
+                      text: '*Trailer Information',
                     ),
-                    // --> Driver edge Section
-                    // ReactiveWidget<_TrailerSectionState>(
-                    //   reactor: _truckSectionState,
-                    //   builder: (BuildContext ctx, _TrailerSectionState reactor) {
-                    //     _truckSectionStateReact = reactor.react;
-                    //     return itemState?.entity.internal != null? 
-                    //       _CreateWhisperTrailersSection(
-                    //         itemState: itemState,
-                    //         isEnabled: formDisabled,
-                    //       ) : _CreateWhisperTrailersSection(
-                    //         itemState: itemState,
-                    //         isEnabled: formDisabled,
-                    //       );
-                    //   },
-                    // )
+                    //--> Driver edge Section
+                    ReactiveWidget<_TrailerSectionState>(
+                      reactor: _trailerSectionState,
+                      builder: (BuildContext ctx, _TrailerSectionState reactor) {
+                        _trailerSectionStateReact = reactor.react;
+                        return itemState?.entity.internal != null? 
+                          _CreateWhisperTrailersSection(
+                            itemState: itemState,
+                            isEnabled: formDisabled,
+                          ) : _CreateWhisperTrailersExternalSection(
+                            itemState: itemState,
+                            isEnabled: formDisabled,
+                          );
+                      },
+                    ),
                   ],
                   
 

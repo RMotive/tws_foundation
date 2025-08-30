@@ -428,7 +428,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "52-feature-trailers"
-      resolved-ref: "7b5bed92884f06a2d2285a0673eae52114aa8107"
+      resolved-ref: "67595c1bdac7532c63c57d6e4128af0094298c12"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

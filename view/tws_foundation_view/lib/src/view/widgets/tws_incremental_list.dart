@@ -159,7 +159,7 @@ class _IncrementalListState<TModel> extends State<IncrementalList<TModel>> {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                prototypeItem: widget.recordBuilder(widget.modelBuilder(), 0),
+                // prototypeItem: widget.recordBuilder(widget.modelBuilder(), 0),
                 itemCount: widget.recordList.length,
                 itemBuilder:(BuildContext context, int index) {
                   return widget.recordBuilder(widget.recordList[index], index);
