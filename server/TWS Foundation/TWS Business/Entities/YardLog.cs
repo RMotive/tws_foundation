@@ -6,7 +6,6 @@ using CSM_Foundation.Database.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using TWS_Business.Bases;
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
 using TWS_Business.Entities.Vehicules;
@@ -31,6 +30,12 @@ public class YardLog
     /// </summary>
     public bool Entry { get; set; }
 
+
+    /// <summary>
+    ///     Wheter the record is a reservation.
+    /// </summary>
+    public bool Reservation { get; set; }
+
     /// <summary>
     ///     <see cref="YardLog"/> record load seal.
     /// </summary>
@@ -52,12 +57,12 @@ public class YardLog
     /// <summary>
     ///     <see cref="YardLog"/> record evidence photo.
     /// </summary>
-    public byte[] Evidence { get; set; } = [];
+        // public byte[] Evidence { get; set; } = [];
 
     /// <summary>
     ///     <see cref="YardLog"/> damage evidence photo.
     /// </summary>
-    public byte[]? Damage { get; set; }
+        // public byte[]? Damage { get; set; }
 
     #endregion
 
@@ -104,14 +109,23 @@ public class YardLog
 
     #endregion
 
+    #region Dependents
+    /// <summary>
+    /// Collection of images resouces for <see cref="Truck"/>, <see cref="Trailer"/> and damages.
+    /// </summary>
+    [Relation]
+    public ICollection<Resource> Resources { get; set; } = [];
+
+    #endregion
+
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Yard_Logs");
 
         etBuilder.Property(nameof(Seal)).HasMaxLength(64);
         etBuilder.Property(nameof(SealAlt)).HasMaxLength(64);
         etBuilder.Property(nameof(FromTo)).HasMaxLength(100).IsRequired();
-        etBuilder.Property(nameof(Evidence)).IsRequired();
-        etBuilder.Property(nameof(Damage));
+        //etBuilder.Property(nameof(Evidence)).IsRequired();
+        //etBuilder.Property(nameof(Damage));
 
         etBuilder.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
         etBuilder.Link<YardLog, Employee>(nameof(Guard), Required: true);

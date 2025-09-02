@@ -35,6 +35,18 @@ public class Location
     [Relation]
     public Address Address { get; set; } = default!;
 
+    /// <summary>
+    ///     <see cref="Resource"/> Location image information.
+    /// </summary>
+    [Relation]
+    public Resource? Resource { get; set; }
+
+    /// <summary>
+    ///     <see cref="Entities.Waypoint"/> dependant from this <see cref="Waypoint"/>.
+    /// </summary>
+    public Waypoint? Waypoint { get; set; }
+
+
     #endregion
 
     #region Dependants
@@ -54,11 +66,7 @@ public class Location
     /// </summary>
     public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
-    /// <summary>
-    ///     <see cref="Entities.Waypoint"/> dependant from this <see cref="Waypoint"/>.
-    /// </summary>
-    public Waypoint? Waypoint { get; set; }
-
+  
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
@@ -73,5 +81,7 @@ public class Location
                 Required: true,
                 Auto: true
             );
+        etBuilder.Link<Location, Resource>(nameof(Resource));
+
     }
 }
