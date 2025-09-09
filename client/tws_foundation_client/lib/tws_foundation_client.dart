@@ -139,7 +139,6 @@ export 'src/services/business/vehicules/trailers/trailer_service.dart';
 // --> Exporing [src.services.business.yardlogs]
 export 'src/services/business/yardlogs/yard_log.dart';
 export 'src/services/business/yardlogs/yard_logs_service.dart';
-export 'src/services/business/yardlogs/yardlogs_service_i.dart';
 
 // --> Exporting [src.services.business.approaches]
 export 'src/services/business/human_resources/approaches/approach.dart';

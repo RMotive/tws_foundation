@@ -15,6 +15,8 @@ using CSM_Foundation.Database.Utilitites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+using static Azure.Core.HttpHeader;
+
 namespace CSM_Foundation.Database.Entity.Depot;
 
 /// <summary>
@@ -96,7 +98,7 @@ public abstract class BDepot<TDatabase, TEntity>
     /// </summary>
     /// <param name="entity">Current entity to process and store.</param>
     /// <param name="entitiesHash">List of stored entities. The content is verified to avoid duplications. </param>
-    static void StoreNestedEntities(IEntity entity, HashSet<IEntity> entitiesHash) {
+    public void StoreNestedEntities(IEntity entity, HashSet<IEntity> entitiesHash) {
 
         if (entity == null || entitiesHash.Contains(entity)) return;
         entitiesHash.Add(entity);
@@ -110,6 +112,43 @@ public abstract class BDepot<TDatabase, TEntity>
             } else if (value is IEnumerable<IEntity> collection) {
                 foreach (var item in collection) {
                     StoreNestedEntities(item, entitiesHash);
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// Recurses through the nested entities of a common entity and stores them in a hash set to avoid duplicates.
+    /// </summary>
+    /// <param name="entity">Current entity to process and store.</param>
+    /// <param name="entitiesHash">List of stored entities. The content is verified to avoid duplications. </param>
+    public void StoreNestedCommonEntities<TCommon, TInternal, TExternal>(TCommon commonRoot, IEntity entity, HashSet<IEntity> entitiesHash, bool rootChecked) 
+        where TCommon : class, ICommonEntity<TInternal, TExternal>, new()
+        where TInternal : class, ICommonScopeEntity<TCommon>
+        where TExternal : class, ICommonScopeEntity<TCommon> {
+
+        if (entity == null || entitiesHash.Contains(entity)) return;
+
+        if (!rootChecked) {
+            rootChecked = true;
+            if (commonRoot.Internal != null) StoreNestedCommonEntities<TCommon, TInternal, TExternal>(commonRoot, commonRoot.Internal, entitiesHash, rootChecked);
+            if (commonRoot.External != null) StoreNestedCommonEntities<TCommon, TInternal, TExternal>(commonRoot, commonRoot.External, entitiesHash, rootChecked);
+            entitiesHash.Add(commonRoot);
+
+        } else {
+            entitiesHash.Add(entity);
+        }
+
+        Type type = entity.GetType();
+        foreach (PropertyInfo prop in type.GetProperties()) {
+            var value = prop.GetValue(entity);
+
+            if (value is IEntity nestedEntity) {
+                StoreNestedCommonEntities<TCommon, TInternal, TExternal>(commonRoot, nestedEntity, entitiesHash, rootChecked);
+            } else if (value is IEnumerable<IEntity> collection) {
+                foreach (var item in collection) {
+                    StoreNestedCommonEntities<TCommon, TInternal, TExternal>(commonRoot, item, entitiesHash, rootChecked);
                 }
             }
         }

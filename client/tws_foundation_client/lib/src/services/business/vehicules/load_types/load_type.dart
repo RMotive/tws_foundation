@@ -15,14 +15,47 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
   @override
   List<EntityInvalidation<LoadType>> evaluate() {
     List<EntityInvalidation<LoadType>> results = <EntityInvalidation<LoadType>>[];
-    if (id < BigInt.zero) results.add(EntityInvalidation<LoadType>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
-    if (name.trim().isEmpty || name.length > 100) results.add(EntityInvalidation<LoadType>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 100 max length", "structLength(100)"));
-    if (reference.length != 8) results.add(EntityInvalidation<LoadType>(this, PropertyInfo(EntityKeys.kReference, String, reference), "Reference value must contain 8 characters", "strictLength(8)"));
-    if (description != null){
-      if (description!.length > 200) {
-        results.add(EntityInvalidation<LoadType>(this, PropertyInfo(EntityKeys.description, String, description), "Description must be 200 max length", "strictLength(200)"));
+    if (id < BigInt.zero) {
+      results.add(
+        EntityInvalidation<LoadType>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer: $id, cannot be less than 0.',
+          '$id < 0',
+        ),
+      );
+    }
+    if (name.trim().isEmpty || name.length > 100) {
+      results.add(
+        EntityInvalidation<LoadType>(
+          this,
+          PropertyInfo(EntityKeys.name, String, name),
+          "Lenght: ${name.length}, must be between 1 and 100 characters.",
+          "101 > length > 0",
+        ),
+      );
+    }
+    if (description != null) {
+      if (description!.trim().isEmpty || description!.length > 200) {
+        results.add(
+          EntityInvalidation<LoadType>(
+            this,
+            PropertyInfo(EntityKeys.description, String, description),
+            "Lenght: ${description!.length}, less than 200 characters or empty.",
+            "201 > length",
+          ),
+        );
       }
-      if (description!.trim().isEmpty) results.add(EntityInvalidation<LoadType>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
+    }
+    if (reference.length != 8) {
+      results.add(
+        EntityInvalidation<LoadType>(
+          this,
+          PropertyInfo(EntityKeys.kReference, String, reference),
+          "Reference value must contain 8 characters",
+          "strictLength(8)",
+        ),
+      );
     }
     return results;
   }

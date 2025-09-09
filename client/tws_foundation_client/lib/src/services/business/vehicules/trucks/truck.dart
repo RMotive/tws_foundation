@@ -6,28 +6,28 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 // TODO: DEFINE
 final class Truck extends EntityB<Truck> {
-  /// [motor] property key.
+  /// [Truck.motor] property key.
   static const String kMotor = 'motor';
 
-  /// [vin] property key.
+  /// [Truck.vin] property key.
   static const String kVin = 'vin';
 
-  /// [carrier] property key.
+  /// [Truck.carrier] property key.
   static const String kCarrier = 'carrier';
 
-  /// [sct] property key.
+  /// [Truck.sct] property key.
   static const String kSct = "sct";
 
-  /// [maintenance] property key.
+  /// [Truck.maintenance] property key.
   static const String kMaintenance = 'maintenance';
 
-  /// [insurance] property key.
+  /// [Truck.insurance] property key.
   static const String kInsurance = 'insurance';
 
-  /// [model] property key.
+  /// [Truck.model] property key.
   static const String kModel = 'model';
 
-  /// [plates] property key.
+  /// [Truck.plates] property key.
   static const String kPlates = 'Plates';
 
   //! --> Properties

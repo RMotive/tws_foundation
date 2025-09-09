@@ -54,16 +54,6 @@ public class YardLog
     [StringLength(100, MinimumLength = 10)]
     public string FromTo { get; set; } = string.Empty;
 
-    /// <summary>
-    ///     <see cref="YardLog"/> record evidence photo.
-    /// </summary>
-        // public byte[] Evidence { get; set; } = [];
-
-    /// <summary>
-    ///     <see cref="YardLog"/> damage evidence photo.
-    /// </summary>
-        // public byte[]? Damage { get; set; }
-
     #endregion
 
     #region Relations
@@ -124,8 +114,6 @@ public class YardLog
         etBuilder.Property(nameof(Seal)).HasMaxLength(64);
         etBuilder.Property(nameof(SealAlt)).HasMaxLength(64);
         etBuilder.Property(nameof(FromTo)).HasMaxLength(100).IsRequired();
-        //etBuilder.Property(nameof(Evidence)).IsRequired();
-        //etBuilder.Property(nameof(Damage));
 
         etBuilder.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
         etBuilder.Link<YardLog, Employee>(nameof(Guard), Required: true);

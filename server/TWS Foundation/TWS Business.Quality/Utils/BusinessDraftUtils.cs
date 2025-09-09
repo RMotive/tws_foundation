@@ -24,7 +24,7 @@ public static class BusinessDraftUtils {
         return new YardLog {
             Entry = true,
             FromTo = Entropy,
-            Evidence = [],
+            Reservation = false,
             Seal = Entropy[..10],
             LoadType = SampleLoadtype(),
             Guard = SampleEmployee(),

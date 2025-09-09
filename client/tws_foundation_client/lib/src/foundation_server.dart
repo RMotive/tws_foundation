@@ -50,7 +50,7 @@ final class FoundationServer extends ServerB {
   late final VehiculeModelsServiceI vehiculeModelsService;
 
   /// [YardLog] Entity service.
-  late final YardlogsServiceI yardlogsService;
+  late final YardLogsServiceI yardlogsService;
 
   /// [DriverCommon] Entity Service.
   late final DriversServiceI driversService;
@@ -85,7 +85,7 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<TrailerClassesServiceI>? trailerClassesServiceBuilder,
     ServiceImplementationBuilder<TrailerTypesServiceI>? trailerTypesServiceBuilder,
     ServiceImplementationBuilder<VehiculeModelsServiceI>? vehiculemodelsServiceBuilder,
-    ServiceImplementationBuilder<YardlogsServiceI>? yardlogsServiceBuilder,
+    ServiceImplementationBuilder<YardLogsServiceI>? yardlogsServiceBuilder,
     ServiceImplementationBuilder<DriversServiceI>? driversServiceBuilder,
     ServiceImplementationBuilder<TrucksServiceI>? trucksServiceBuilder,
     ServiceImplementationBuilder<StatusesServiceI>? statusServiceBuilder,

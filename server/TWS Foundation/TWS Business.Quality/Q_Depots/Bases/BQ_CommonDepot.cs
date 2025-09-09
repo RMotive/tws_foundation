@@ -142,10 +142,12 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
 
             if (internalRelation != null) {
                 Disposer.Push(internalRelation);
+                common.Internal = internalRelation;
                 continue;
-            }
+            } 
 
             Disposer.Push(externalRelation!);
+            common.External = externalRelation;
 
         }
     }
