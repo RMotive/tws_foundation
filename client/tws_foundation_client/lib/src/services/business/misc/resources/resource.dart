@@ -39,7 +39,7 @@ final class Resource extends NamedEntityB<Resource> {
   
   @override
   void decode(DataMap encode) {
-    file = encode.get(kFile);
+    file = encode.get<Uint8List>(kFile, file);
     extension = encode.get(kExtension);
     yardlog = encode.getEntity(() => YardLog(), kYardLog);
     super.decode(encode);

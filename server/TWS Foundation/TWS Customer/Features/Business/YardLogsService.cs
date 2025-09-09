@@ -28,28 +28,29 @@ public class YardLogsService
             .Include(e => e.Resources)
             .Include(e => e.Guard).ThenInclude(e => e.Approach)
             .Include(e => e.Guard).ThenInclude(e => e.Address)
-            .Include(e => e.Guard).ThenInclude(e => e.Account)
             .Include(e => e.Section).ThenInclude(e => e.Resource)
+            .Include(e => e.Driver)
+            .Include(e => e.Truck)
+            .Include(e => e.Trailer);
 
-            .Include(e => e.Truck).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
-            .Include(e => e.Truck).ThenInclude(e => e!.Situation)
-            .Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
-            .Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
-            .Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Insurance)
-            .Include(e => e.Truck).ThenInclude(e => e!.External)
+            //.Include(e => e.Truck).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
+            //.Include(e => e.Truck).ThenInclude(e => e!.Situation)
+            //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
+            //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
+            //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Insurance)
+            //.Include(e => e.Truck).ThenInclude(e => e!.External)
 
-            .Include(e => e.Trailer).ThenInclude(e => e!.Type)
-            .Include(e => e.Trailer).ThenInclude(e => e!.Situation)
-            .Include(e => e.Trailer).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
-            .Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
-            .Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Model)
-            .Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
-            .Include(e => e.Trailer).ThenInclude(e => e!.External)
+            //.Include(e => e.Trailer).ThenInclude(e => e!.Type)
+            //.Include(e => e.Trailer).ThenInclude(e => e!.Situation)
+            //.Include(e => e.Trailer).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
+            //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
+            //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Model)
+            //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
+            //.Include(e => e.Trailer).ThenInclude(e => e!.External)
 
-            .Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Approach)
-            .Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Address)
-            .Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Approach)
-            .Include(e => e.Trailer).ThenInclude(e => e!.External);
+            //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Address)
+            //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Approach)
+            //.Include(e => e.Driver).ThenInclude(e => e!.External);
 
         return sourceQuery;
     };

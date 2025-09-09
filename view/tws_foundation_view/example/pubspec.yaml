@@ -32,7 +32,7 @@ dependencies:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: 52-feature-trailers
+      ref: 71-feature-yardlogs
 
   tws_foundation_view:
     path: ../

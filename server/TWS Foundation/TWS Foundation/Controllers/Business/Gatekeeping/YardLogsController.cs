@@ -18,11 +18,11 @@ namespace TWS_Foundation.Controllers.Business.Gatekeeping;
 ///     [Controller] that represents [YardLogs] feature based operations.
 /// </summary>
 [ApiController, Feature("YardLogs"), Route("[Controller]/[Action]")]
-public class TrucksController
+public class YardLogsController
     : ControllerBase {
 
     readonly IYardLogsService Service;
-    public TrucksController(IYardLogsService Service) {
+    public YardLogsController(IYardLogsService Service) {
         this.Service = Service;
     }
 

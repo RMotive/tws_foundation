@@ -60,7 +60,7 @@ final class YardLogsEntityTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<YardLog, YardlogsServiceI>(
+    return EntityTable<YardLog, YardLogsServiceI>(
       adapter: adapter,
       entityFactory: () => YardLog(),
       columns: <EntityTableColumnOptions<YardLog>>[
@@ -98,11 +98,11 @@ final class YardLogsEntityTable extends StatelessWidget {
         ),
         EntityTableColumnOptions<YardLog>(
           title: 'Trailer Number',
-          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer.economic,
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.economic ?? '---',
         ),
         EntityTableColumnOptions<YardLog>(
           title: 'Trailer Plate',
-          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer.plates,
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.plates ?? '---',
         ),
         EntityTableColumnOptions<YardLog>(
           title: 'Seal',
@@ -120,7 +120,7 @@ final class YardLogsEntityTable extends StatelessWidget {
           title: 'Damaged',
           customFactory: (YardLog entity, int index, BuildContext buildContext) {
             return Icon(
-              entity.damage != null ? Icons.check : Icons.close,
+              entity.getResource('damage') != null ? Icons.check : Icons.close,
             );
           },
         ),

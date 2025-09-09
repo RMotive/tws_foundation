@@ -1,12 +1,8 @@
-﻿using System.Reflection;
-
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities;
 using TWS_Business.Entities.Drivers;
@@ -171,6 +167,11 @@ public class Database
     public DbSet<Status> Statuses { get; set; } = default!;
 
     public DbSet<Situation> Situations { get; set; } = default!;
+
+    #endregion
+
+    #region Miscellaneous
+    public DbSet<Resource> Resources { get; set; } = default!;
 
     #endregion
 }

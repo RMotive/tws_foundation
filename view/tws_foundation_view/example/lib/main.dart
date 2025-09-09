@@ -7,12 +7,15 @@ import 'package:example/entries/category_layout_entry.dart';
 import 'package:example/entries/entity_category_pages/drivers_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/trailers_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/trucks_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
 import 'package:example/entries/entity_pages/drivers_page_entry.dart';
 import 'package:example/entries/entity_pages/trailers_page_entry.dart';
 import 'package:example/entries/entity_pages/trucks_page_entry.dart';
+import 'package:example/entries/entity_pages/yard_logs_page_entry.dart';
 import 'package:example/entries/entity_tables/drivers_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/trailers_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/trucks_entity_table_entry.dart';
+import 'package:example/entries/entity_tables/yardlogs_entity_table_entry.dart';
 import 'package:example/entries/navigation_layout_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
@@ -45,7 +48,7 @@ final class _MainAppState extends State<MainApp> {
 
     Injector.addSingleton<FoundationServer>(foundationServer);
     Injector.addSingleton<SecurityServiceI>(foundationServer.securityService);
-    Injector.addSingleton<YardlogsServiceI>(foundationServer.yardlogsService);
+    Injector.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
     Injector.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
     Injector.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
     Injector.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
@@ -130,7 +133,7 @@ final class _MainAppState extends State<MainApp> {
               ),
 
               //! --> Entity Pages
-              // YardLogsPageEntry(),
+              YardLogsPageEntry(),
               // EmployeesPageEntry(),
               DriversPageEntry(),
               TrucksPageEntry(),
@@ -139,14 +142,14 @@ final class _MainAppState extends State<MainApp> {
 
               //! --> Entity Category Pages
               // EmployeesCategoryPageEntry(),
-              // YardLogsCategoryPageEntry(),
+              YardLogsCategoryPageEntry(),
               DriversCategoryPageEntry(),
               TrucksCategoryPageEntry(),
               TrailersCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
-              // YardLogsEntityTableEntry(),
+              YardLogsEntityTableEntry(),
               // SolutionsEntityTableEntry(),
               // EmployeesEntityTableEntry(),
               DriversEntityTableEntry(),

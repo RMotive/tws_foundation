@@ -4,8 +4,6 @@ using CSM_Foundation.Database.Entity;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Bases;
-using TWS_Business.Entities.Vehicules;
-using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Business.Entities;
 
@@ -53,7 +51,7 @@ public class Section
     ///     <see cref="Resource"/> Section image information.
     /// </summary>
     [Relation]
-    public Resource? Resource { get; set; } = default!;
+    public Resource? Resource { get; set; }
 
     #endregion
 
