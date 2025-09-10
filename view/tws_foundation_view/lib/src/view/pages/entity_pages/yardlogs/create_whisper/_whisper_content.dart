@@ -3,9 +3,14 @@ part of 'create_yardlogs_whisper.dart';
 /// Draws and handles the content for [CreateYardLogsWhisper], drawing each necessary
 /// section and gathering required information to correctly create [YardLog] entities.
 final class _CreateYardLogsWhisperContent extends StatefulWidget {
-  /// Create a new [_CreateYardLogsWhisperContent] instance.
-  const _CreateYardLogsWhisperContent();
+  /// Whether the created yardlog is a reservation or not.
+  final bool isResevation;
 
+  /// Create a new [_CreateYardLogsWhisperContent] instance.
+  const _CreateYardLogsWhisperContent({
+    required this.isResevation,
+  });
+  
   @override
   State<_CreateYardLogsWhisperContent> createState() => _CreateYardLogsWhisperContentState();
 }
@@ -99,6 +104,76 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                     _TrailerSection(
                       onSelection: (TrailerCommon selTrailer) => entity.trailer = selTrailer,
                     ),
+
+                    /// --> Seal information.
+                    Row(
+                      spacing: 10,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextInput(
+                            maxLength: 64,
+                            label: 'Seal',
+                            hint: 'Enter seal information',
+                            onChanged: (String value) => entity.sanitize(seal: value),
+                            controller: TextEditingController(
+                              text: entity.seal,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextInput(
+                            maxLength: 64,
+                            label: 'Seal #2',
+                            hint: 'Enter seal information',
+                            onChanged: (String value) => entity.sanitize(sealAlt: value),
+                            controller: TextEditingController(
+                              text: entity.sealAlt,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      spacing: 10,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextInput(
+                            width: double.maxFinite,
+                            maxLength: 100,
+                            label: '*From / To',
+                            hint: 'Enter seal information',
+                            onChanged: (String value) => entity.sanitize(sealAlt: value),
+                            controller: TextEditingController(
+                              text: entity.sealAlt,
+                            ),
+                          ),
+                        ),
+                        // Expanded(
+                        //   child: EntityFinderSelector<Section, SectionsService>(
+                        //     label: 'Section',
+                        //     entityBuilder: () => Section(),
+                        //     onSelection: (Section selSection) => entity.section = selSection,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                    
+                    Row(
+                      spacing: 10,
+                      children: <Widget>[
+                        PhotoTaker(
+                          label: 'Truck Front',
+                          preLoad:  (() {
+                            final Resource? resource = entity.getResource("TckFnt01");
+                            if(resource != null) XFile.fromData(entity.getResource("TckFnt01")) 
+                          })(),
+                          onPhotoTaken: (XFile photo) {
+                            
+                          }
+                        
+                      ],
+                    )
+
                   ],
                 ),
               ),

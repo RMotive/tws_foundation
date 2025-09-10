@@ -7,8 +7,8 @@ import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_file_picker.dart';
-part 'tws_photo_taker_photo_preview.dart';
-part 'tws_photo_taker_camera.dart';
+part 'photo_taker_photo_preview.dart';
+part 'photo_taker_camera.dart';
 
 /// Initialize an [CameraPlatform] object to access to the device camera functions.
 final CameraPlatform _cameraPlatform = CameraPlatform.instance;
@@ -16,12 +16,12 @@ final CameraPlatform _cameraPlatform = CameraPlatform.instance;
 /// Logs advisor intializing.
 const Console _advisor = Console('TWSPhotoTaker');
 
-/// [TWSPhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
+/// [PhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
 ///
 /// This widget can:
 ///   - Take photos using devices with camera capabilities (mobile or PC).
 ///   - Select and load any image file in local storage (mobile or PC).
-final class TWSPhotoTaker extends StatefulWidget {
+final class PhotoTaker extends StatefulWidget {
   /// Preload an image on widget load.
   final XFile? preLoad;
 
@@ -54,7 +54,7 @@ final class TWSPhotoTaker extends StatefulWidget {
   /// Ideal when is updating some records and want to delete the preloaded image.
   final bool cancelButtonEnable;
 
-  const TWSPhotoTaker({
+  const PhotoTaker({
     super.key,
     this.preLoad,
     this.onPhotoTaken,
@@ -67,10 +67,10 @@ final class TWSPhotoTaker extends StatefulWidget {
   });
 
   @override
-  State<TWSPhotoTaker> createState() => _TWSPhotoTakerState();
+  State<PhotoTaker> createState() => _PhotoTakerState();
 }
 
-class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
+class _PhotoTakerState extends State<PhotoTaker> {
   /// Theme Manager injector.
   late ThemeManager themeManager = ThemeManager.of(context);
 
@@ -87,7 +87,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
   Uint8List? originalImg;
 
   @override
-  void didUpdateWidget(covariant TWSPhotoTaker oldWidget) {
+  void didUpdateWidget(covariant PhotoTaker oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.preLoad == null) {
       _photo = null;
@@ -201,7 +201,7 @@ class _TWSPhotoTakerState extends State<TWSPhotoTaker> {
                   showDialog(
                     context: context,
                     builder:
-                        (BuildContext context) => _TWSPhotoTakerPhotoPreview(
+                        (BuildContext context) => _PhotoTakerPhotoPreview(
                           file: _photo,
                           originalBytes: originalImg,
                         ),

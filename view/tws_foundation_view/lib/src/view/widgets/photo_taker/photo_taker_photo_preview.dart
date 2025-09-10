@@ -1,11 +1,11 @@
-part of 'tws_photo_taker.dart';
+part of 'photo_taker.dart';
 
-final class _TWSPhotoTakerPhotoPreview extends StatelessWidget {
+final class _PhotoTakerPhotoPreview extends StatelessWidget {
   final XFile? file;
 
   final Uint8List? originalBytes;
 
-  const _TWSPhotoTakerPhotoPreview({this.file, this.originalBytes});
+  const _PhotoTakerPhotoPreview({this.file, this.originalBytes});
 
   @override
   Widget build(BuildContext context) {
