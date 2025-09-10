@@ -42,6 +42,10 @@
         - [Status]
 
     7. Added [ReadReferenceServiceB] & [ReadReferenceServiceI] for read referenced entities.
+
+    8. Added [Resource] business entity.
+
+    9. Added the constant class [FoundationReferences] for reference keys storage.
         
 - Fixes:
 

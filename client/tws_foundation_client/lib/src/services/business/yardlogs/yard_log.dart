@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/services/business/misc/resources/resource.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -90,6 +91,7 @@ final class YardLog extends EntityB<YardLog> {
   TrailerCommon? trailer = TrailerCommon();
 
   /// [Resource] content attached to the entry.
+  /// 
   /// In this list the truck and trailer, and any damage evidence photos are stored.
   List<Resource> resources = <Resource>[];
 
@@ -108,20 +110,30 @@ final class YardLog extends EntityB<YardLog> {
   }
 
   /// Adds or replaces a [Resource] in the [resources] list. 
+  /// 
   /// If a [Resource] with the same name already exists, it will be replaced.
-  void setResource(Resource resource, {int? replaceOnIndex}){
-    // Remove any existing resource with the same name.
-    resources.removeWhere((Resource e) => e.name == resource.name);
+  /// 
+  /// If [replaceOnRef] is provided, it will search for a resource with a name that contains the [replaceOnRef] string and replace it.
+  void setResource(Resource resource, {String? replaceOnRef}){
+    // Remove any existing resource with the same reference.
+    late int replaceOnIndex;
+
+    if(replaceOnRef != null){
+      resources.removeWhere((Resource e) => e.name.contains(replaceOnRef));
+      replaceOnIndex = getIndexResource(replaceOnRef);
+    }
     
-    if(replaceOnIndex != null && replaceOnIndex >= 0 && replaceOnIndex < resources.length){
+    if(replaceOnIndex != -1 && replaceOnIndex >= 0 && replaceOnIndex < resources.length){
       resources[replaceOnIndex] = resource;
       return;
     }
+
     resources.add(resource);
   }
 
   /// Searches for a [Resource] in the [resources] list by name, using the .Contains() string method, and returns its index.
   /// Returns -1 if not found.
+  /// 
   /// This method is useful for checking if a resource exists before adding or modifying it.
   int getIndexResource(String search){
     return resources.indexWhere((Resource e) => e.name.contains(search));
@@ -254,8 +266,7 @@ final class YardLog extends EntityB<YardLog> {
         );
       }
     }
-    // Loadtype: 3 == "Botado"
-    if (loadType.reference != "Botad001" && trailer == null) {
+    if (loadType.reference != FoundationReferences.loadTypeBotado && trailer == null) {
       invalidations.add(
         EntityInvalidation<YardLog>(
           this,
@@ -266,7 +277,7 @@ final class YardLog extends EntityB<YardLog> {
       );
     }
 
-    if (loadType.reference == "Botad001" && trailer != null) {
+    if (loadType.reference == FoundationReferences.loadTypeBotado && trailer != null) {
       invalidations.add(
         EntityInvalidation<YardLog>(
           this,
@@ -276,6 +287,51 @@ final class YardLog extends EntityB<YardLog> {
         ),
       );
     }
+
+    invalidations.validateDependency(this, loadType);
+    invalidations.validateDependency(this, guard);
+    invalidations.validateDependency(this, section);
+    invalidations.validateDependency(this, driver);
+    invalidations.validateDependency(this, truck);
+    if(trailer != null) invalidations.validateDependency(this, trailer!);
+
+    /// resources validations -> [truckFront, truckLateral, trailerLateral, trailerBack]:
+    List<bool> evidenceFlags = <bool>[false, false, false, false];
+
+    if (resources.isNotEmpty) {
+      for (Resource resource in resources) {
+        invalidations.validateDependency(this, resource);
+        evidenceFlags[0] = evidenceFlags[0] || resource.name.contains(FoundationReferences.truckFrontRes);
+        evidenceFlags[1] = evidenceFlags[1] || resource.name.contains(FoundationReferences.truckLateralRes);
+        evidenceFlags[2] = evidenceFlags[2] || resource.name.contains(FoundationReferences.trailerLateralRes);
+        evidenceFlags[3] = evidenceFlags[3] || resource.name.contains(FoundationReferences.trailerBackRes);
+      }
+      if (trailer != null &&
+          !evidenceFlags[2] &&
+          !evidenceFlags[3]) {
+        invalidations.add(
+          EntityInvalidation<YardLog>(
+            this,
+            PropertyInfo(kResources, List<Resource>, resources),
+            'Debe agregar alguna evidencia del remolque.',
+            'resources contains ${FoundationReferences.trailerLateralRes} || ${FoundationReferences.trailerBackRes}',
+          ),
+        );
+      }
+      if(!evidenceFlags[0] && !evidenceFlags[1]){
+        invalidations.add(
+          EntityInvalidation<YardLog>(
+            this,
+            PropertyInfo(kResources, List<Resource>, resources),
+            'Debe agregar la evidencia del camión.',
+            'resources contains ${FoundationReferences.truckFrontRes} || ${FoundationReferences.truckLateralRes}',
+          ),
+        );
+      }
+    }
+
+
+
 
     return invalidations;
   }
