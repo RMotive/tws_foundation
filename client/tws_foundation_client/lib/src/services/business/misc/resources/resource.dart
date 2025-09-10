@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:csm_client/csm_client.dart';
@@ -39,7 +40,7 @@ final class Resource extends NamedEntityB<Resource> {
   
   @override
   void decode(DataMap encode) {
-    file = encode.get<Uint8List>(kFile, file);
+    file = Uint8List.fromList(utf8.encode(encode.get(kFile)));
     extension = encode.get(kExtension);
     yardlog = encode.getEntity(() => YardLog(), kYardLog);
     super.decode(encode);
