@@ -1,7 +1,7 @@
-part of 'tws_photo_taker.dart';
+part of 'photo_taker.dart';
 
 ///
-final class _TWSPhotoTakerPhotoCamera extends StatefulWidget {
+final class PhotoTakerPhotoCamera extends StatefulWidget {
   ///
   final void Function(XFile) onSave;
 
@@ -9,21 +9,20 @@ final class _TWSPhotoTakerPhotoCamera extends StatefulWidget {
   final CameraDescription? camera;
 
   ///
-  const _TWSPhotoTakerPhotoCamera({required this.camera, required this.onSave});
+  const PhotoTakerPhotoCamera({
+    super.key,
+    required this.camera,
+    required this.onSave,
+  });
 
   @override
-  State<_TWSPhotoTakerPhotoCamera> createState() =>
-      _TWSPhotoTakerPhotoCameraState();
+  State<PhotoTakerPhotoCamera> createState() =>
+      _PhotoTakerPhotoCameraState();
 }
 
-class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
-  /// Theme Manager injector.
-  late ThemeManager themeManager = ThemeManager.of(context);
-
+class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> {
+  /// Instance of the current theming.
   late FoundationThemeB theme;
-
-  /// Theme reference key.
-  final UniqueKey ref = UniqueKey();
 
   ///
   int? _camera;
@@ -43,19 +42,17 @@ class _TWSPhotoTakerPhotoCameraState extends State<_TWSPhotoTakerPhotoCamera> {
 
     return _cameraPlatform.buildPreview(_camera!);
   }
-
-  ///
-  void themeUpdateListener(FoundationThemeB theme) {
-    setState(() {
-      this.theme = theme;
-    });
+  
+  @override
+  void didChangeDependencies() {
+    theme = Theming.get<FoundationThemeB>(context);
+    super.didChangeDependencies();
   }
 
   ///
   @override
   void initState() {
     super.initState();
-    theme = themeManager.castData();
     _cameraDefinition = widget.camera;
     if (_cameraDefinition != null) {
       _cameraPlatform

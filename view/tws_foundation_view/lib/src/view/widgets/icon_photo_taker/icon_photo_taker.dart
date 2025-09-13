@@ -4,24 +4,29 @@ import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router;
+import 'package:flutter_svg/svg.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
-import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
+import 'package:tws_foundation_view/src/view/widgets/photo_taker/photo_taker.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_file_picker.dart';
-part 'photo_taker_photo_preview.dart';
-part 'photo_taker_camera.dart';
 
 /// Initialize an [CameraPlatform] object to access to the device camera functions.
 final CameraPlatform _cameraPlatform = CameraPlatform.instance;
 
 /// Logs advisor intializing.
-const Console _advisor = Console('TWSPhotoTaker');
+const Console _advisor = Console('IconPhotoTaker');
 
 /// [PhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
 ///
 /// This widget can:
 ///   - Take photos using devices with camera capabilities (mobile or PC).
 ///   - Select and load any image file in local storage (mobile or PC).
-final class PhotoTaker extends StatefulWidget {
+final class IconPhotoTaker extends StatefulWidget {
+  /// Height of the icon button.
+  final double height;
+
+  /// Path to the svg icon to use as button.
+  final String svgRoute;
+
   /// Preload an image on widget load.
   final XFile? preLoad;
 
@@ -54,8 +59,9 @@ final class PhotoTaker extends StatefulWidget {
   /// Ideal when is updating some records and want to delete the preloaded image.
   final bool cancelButtonEnable;
 
-  const PhotoTaker({
+  const IconPhotoTaker({
     super.key,
+    this.height = 250,
     this.preLoad,
     this.onPhotoTaken,
     this.preLoadBase64,
@@ -64,13 +70,14 @@ final class PhotoTaker extends StatefulWidget {
     this.showFilePicker = true,
     this.cancelButtonEnable = true,
     this.onCancel,
+    required this.svgRoute,
   });
 
   @override
-  State<PhotoTaker> createState() => _PhotoTakerState();
+  State<IconPhotoTaker> createState() => _PhotoTakerState();
 }
 
-class _PhotoTakerState extends State<PhotoTaker> {
+class _PhotoTakerState extends State<IconPhotoTaker> {
   /// Instance of the current theming.
   late FoundationThemeB theme;
 
@@ -82,11 +89,10 @@ class _PhotoTakerState extends State<PhotoTaker> {
   Uint8List? originalImg;
 
   @override
-  void didUpdateWidget(covariant PhotoTaker oldWidget) {
+  void didUpdateWidget(covariant IconPhotoTaker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.preLoad == null) {
-      _photo = null;
-    }
+    _photo = widget.preLoad;
+
   }
 
   void getCameras() {
@@ -132,12 +138,6 @@ class _PhotoTakerState extends State<PhotoTaker> {
     getCameras();
   }
 
-  void themeUpdateListener(FoundationThemeB theme) {
-    setState(() {
-      this.theme = theme;
-    });
-  }
-
   void _openCameraDialog() {
     showDialog(
       context: context,
@@ -160,6 +160,76 @@ class _PhotoTakerState extends State<PhotoTaker> {
     return Column(
       spacing: 8,
       children: <Widget>[
+        PointerArea(
+          cursor: SystemMouseCursors.click,
+          onClick: () {
+            _photo == null && originalImg == null
+                ? _openCameraDialog()
+                : showDialog(
+                  context: context,
+                  builder:
+                      (BuildContext context) => PhotoTakerPhotoPreview(
+                        file: _photo,
+                        originalBytes: originalImg,
+                      ),
+                );
+          },
+          child: SizedBox(
+            height: widget.height,
+            width: double.maxFinite,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.fromBorderSide(
+                  BorderSide(
+                    width: 1,
+                    color: theme.page.accent,
+                    strokeAlign: BorderSide.strokeAlignCenter,
+                  ),
+                ),
+              ),
+              child: Visibility(
+                visible: widget.preLoadBase64 == null && _photo == null,
+                replacement: _photo == null && originalImg != null
+                          ? FittedBox(
+                            child: Image.memory(originalImg!),
+                          )
+                          : FittedBox(
+                            child: Image.network(
+                              _photo?.path ?? '',
+                            ),
+                          ),
+                child: Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.add_a_photo_outlined,
+                          color: theme.page.fore,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset(
+                          widget.svgRoute,
+                          height: widget.height,
+                          colorFilter: ColorFilter.mode(
+                            theme.page.fore,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
         if (widget.showFilePicker)
           TwsFilePicker(
             dialogTitle: "Select a picture",
@@ -178,54 +248,6 @@ class _PhotoTakerState extends State<PhotoTaker> {
               });
             },
           ),
-        ButtonFlat(
-          disabled: _loadingCamera || _cameras.isEmpty || widget.disabled,
-          label:
-              _loadingCamera
-                  ? 'Obteniendo información de las cámaras'
-                  : _cameras.isNotEmpty
-                  ? widget.label
-                  : 'No hay cámaras disponibles',
-          onClick: _openCameraDialog,
-        ),
-        Row(
-          spacing: 12,
-          children: <Widget>[
-            Visibility(
-              visible: widget.preLoadBase64 == null && _photo == null,
-              replacement: PointerArea(
-                cursor: SystemMouseCursors.click,
-                onClick: () {
-                  showDialog(
-                    context: context,
-                    builder:
-                        (BuildContext context) => PhotoTakerPhotoPreview(
-                          file: _photo,
-                          originalBytes: originalImg,
-                        ),
-                  );
-                },
-                child:
-                    _photo == null && originalImg != null
-                        ? SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: Image.memory(originalImg!),
-                        )
-                        : Image.network(
-                          _photo?.path ?? '',
-                          width: 48,
-                          height: 48,
-                        ),
-              ),
-              child: Icon(Icons.photo, size: 48, color: theme.page.fore),
-            ),
-            Text(
-              style: TextStyle(color: theme.page.fore),
-              _photo == null && widget.preLoadBase64 == null ? 'Vacío' : 'Foto guardada',
-            ),
-          ],
-        ),
       ],
     );
   }

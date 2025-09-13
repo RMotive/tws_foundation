@@ -1,6 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/misc/resources/resource.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Entity] that represents a vehicules control entry for a yard logging system where
@@ -101,12 +100,11 @@ final class YardLog extends EntityB<YardLog> {
 
   /// Retrieves a [Resource] from the [resources] list by searching for a matching name, using the .Contrains() string method.
   Resource? getResource(String search){
-    resources.map(
-      (Resource e) {
-        return e.name.contains(search) ? e : null;
-      },
+    Resource match  = resources.firstWhere(
+      (Resource e) => e.name.contains(search),
+      orElse: () => Resource(),
     );
-    return null;
+    return match.name.isEmpty ? null : match;
   }
 
   /// Adds or replaces a [Resource] in the [resources] list. 

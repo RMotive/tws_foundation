@@ -10,7 +10,7 @@ final class _CreateYardLogsWhisperContent extends StatefulWidget {
   const _CreateYardLogsWhisperContent({
     required this.isResevation,
   });
-  
+
   @override
   State<_CreateYardLogsWhisperContent> createState() => _CreateYardLogsWhisperContentState();
 }
@@ -69,18 +69,23 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                     OptionsSelector<bool>(
                       height: 100,
                       fontSize: 30,
-                      title: 'Event',
+                      title: 'Evento',
                       options: <OptionsSelectorOption<bool>>[
                         OptionsSelectorOption<bool>(
-                          title: 'Entry',
+                          title: 'Salida',
                           value: true,
                         ),
                         OptionsSelectorOption<bool>(
-                          title: 'Exit',
+                          title: 'Entrada',
                           value: false,
                         ),
                       ],
-                      onSelect: (List<bool> selected) => entity.entry = selected[0],
+                      onSelect: (List<bool> selected) {
+                        entity.entry = selected.first;
+                        setState(() {
+                          
+                        });
+                      },
                     ),
 
                     // --> Load Type Selection.
@@ -105,6 +110,176 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                       onSelection: (TrailerCommon selTrailer) => entity.trailer = selTrailer,
                     ),
 
+                    SectionWidget(
+                      title: "Fotos del camión y remolque", 
+                      outterPadding: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          spacing: 10,
+                          children: <Widget>[
+                            Row(
+                              spacing: 10,
+                              children: <Widget>[
+                                Expanded(
+                                  child: SizedBox(
+                                    child: IconPhotoTaker(
+                                      svgRoute: FoundationAssets.truckFrontSvg,
+                                      label: 'Frontal del camión',
+                                      preLoad:
+                                          (() {
+                                            // Preload existing photo if any.
+                                            final Resource? resource = itemState.entity.getResource(
+                                              FoundationReferences.truckFrontRes,
+                                            );
+                                            if (resource != null) return XFile.fromData(resource.file);
+                                            return null;
+                                          })(),
+                                      onPhotoTaken: (XFile photo) async {
+                                        Resource resource = Resource();
+                                        resource.file = await photo.readAsBytes();
+                                        resource.name = FoundationReferences.truckFrontRes;
+                                        resource.extension = 'jpeg';
+                                        itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.truckFrontRes);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                // Expanded(
+                                //   child: IconPhotoTaker(
+                                //     svgRoute: FoundationAssets.truckLateralSvg,
+                                //     label: 'Lateral del camión',
+                                //     preLoad:
+                                //         (() {
+                                //           // Preload existing photo if any.
+                                //           final Resource? resource = entity.getResource(
+                                //             FoundationReferences.truckLateralRes,
+                                //           );
+                                //           if (resource != null) return XFile.fromData(resource.file);
+                                //           return null;
+                                //         })(),
+                                //     onPhotoTaken: (XFile photo) async {
+                                //       Resource resource = Resource();
+                                //       resource.file = await photo.readAsBytes();
+                                //       resource.name = FoundationReferences.truckLateralRes;
+                                //       resource.extension = 'jpeg';
+                                //       entity.setResource(resource, replaceOnRef: FoundationReferences.truckLateralRes);
+                                //       itemState.react();
+                                //     },
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                            // Row(
+                            //   spacing: 10,
+                            //   children: <Widget>[
+                            //     Expanded(
+                            //       child: IconPhotoTaker(
+                            //         svgRoute: FoundationAssets.trailerBackSvg,
+                            //         label: 'Frontal del Trailer',
+                            //         preLoad:
+                            //             (() {
+                            //               // Preload existing photo if any.
+                            //               final Resource? resource = entity.getResource(
+                            //                 FoundationReferences.trailerBackRes,
+                            //               );
+                            //               if (resource != null) return XFile.fromData(resource.file);
+                            //               return null;
+                            //             })(),
+                            //         onPhotoTaken: (XFile photo) async {
+                            //           Resource resource = Resource();
+                            //           resource.file = await photo.readAsBytes();
+                            //           resource.name = FoundationReferences.trailerBackRes;
+                            //           resource.extension = 'jpeg';
+                            //           entity.setResource(resource, replaceOnRef: FoundationReferences.trailerBackRes);
+                            //           itemState.react();
+                            //         },
+                            //       ),
+                            //     ),
+                            //     Expanded(
+                            //       child: IconPhotoTaker(
+                            //         svgRoute: FoundationAssets.trailerLateralSvg,
+                            //         label: 'Lateral del trailer',
+                            //         preLoad:
+                            //             (() {
+                            //               // Preload existing photo if any.
+                            //               final Resource? resource = entity.getResource(
+                            //                 FoundationReferences.trailerLateralRes,
+                            //               );
+                            //               if (resource != null) return XFile.fromData(resource.file);
+                            //               return null;
+                            //             })(),
+                            //         onPhotoTaken: (XFile photo) async {
+                            //           Resource resource = Resource();
+                            //           resource.file = await photo.readAsBytes();
+                            //           resource.name = FoundationReferences.trailerLateralRes;
+                            //           resource.extension = 'jpeg';
+                            //           entity.setResource(resource, replaceOnRef: FoundationReferences.trailerLateralRes);
+                            //           itemState.react();
+                            //         },
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // SectionWidget(
+                    //   title: "Daños",
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(8.0),
+                    //     child: Row(
+                    //       spacing: 10,
+                    //       children: <Widget>[
+                    //         Expanded(
+                    //           child: IconPhotoTaker(
+                    //             svgRoute: FoundationAssets.damagedSvg,
+                    //             label: 'Daño 1',
+                    //             preLoad:
+                    //                 (() {
+                    //                   // Preload existing photo if any.
+                    //                   final Resource? resource = entity.getResource(FoundationReferences.damage1Res);
+                    //                   if (resource != null) return XFile.fromData(resource.file);
+                    //                   return null;
+                    //                 })(),
+                    //             onPhotoTaken: (XFile photo) async {
+                    //               Resource resource = Resource();
+                    //               resource.file = await photo.readAsBytes();
+                    //               resource.name = FoundationReferences.damage1Res;
+                    //               resource.extension = 'jpeg';
+                    //               entity.setResource(resource, replaceOnRef: FoundationReferences.damage1Res);
+                    //               itemState.react();
+                    //             },
+                    //           ),
+                    //         ),
+                    //         Expanded(
+                    //           child: IconPhotoTaker(
+                    //             svgRoute: FoundationAssets.damagedSvg,
+                    //             label: 'Daño 2',
+                    //             preLoad:
+                    //                 (() {
+                    //                   // Preload existing photo if any.
+                    //                   final Resource? resource = entity.getResource(FoundationReferences.damage2Res);
+                    //                   if (resource != null) return XFile.fromData(resource.file);
+                    //                   return null;
+                    //                 })(),
+                    //             onPhotoTaken: (XFile photo) async {
+                    //               Resource resource = Resource();
+                    //               resource.file = await photo.readAsBytes();
+                    //               resource.name = FoundationReferences.damage2Res;
+                    //               resource.extension = 'jpeg';
+                    //               entity.setResource(resource, replaceOnRef: FoundationReferences.damage2Res);
+                    //               itemState.react();
+                    //             },
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+
                     /// --> Seal information.
                     Row(
                       spacing: 10,
@@ -113,7 +288,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                           child: TextInput(
                             maxLength: 64,
                             label: 'Seal',
-                            hint: 'Enter seal information',
+                            hint: 'Ingrese la información del sello',
                             onChanged: (String value) => entity.sanitize(seal: value),
                             controller: TextEditingController(
                               text: entity.seal,
@@ -124,7 +299,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                           child: TextInput(
                             maxLength: 64,
                             label: 'Seal #2',
-                            hint: 'Enter seal information',
+                            hint: 'Ingrese la información del sello',
                             onChanged: (String value) => entity.sanitize(sealAlt: value),
                             controller: TextEditingController(
                               text: entity.sealAlt,
@@ -140,8 +315,8 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                           child: TextInput(
                             width: double.maxFinite,
                             maxLength: 100,
-                            label: '*From / To',
-                            hint: 'Enter seal information',
+                            label: entity.entry ? '*Origen' : '*Destino',
+                            hint: 'Ingresar información de origen/destino',
                             onChanged: (String value) => entity.sanitize(sealAlt: value),
                             controller: TextEditingController(
                               text: entity.sealAlt,
@@ -157,23 +332,8 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                         // ),
                       ],
                     ),
-                    
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        PhotoTaker(
-                          label: 'Truck Front',
-                          preLoad:  (() {
-                            final Resource? resource = entity.getResource("TckFnt01");
-                            if(resource != null) XFile.fromData(entity.getResource("TckFnt01")) 
-                          })(),
-                          onPhotoTaken: (XFile photo) {
-                            
-                          }
-                        
-                      ],
-                    )
 
+                    
                   ],
                 ),
               ),
