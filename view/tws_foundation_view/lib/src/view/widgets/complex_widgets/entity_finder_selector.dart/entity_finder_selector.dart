@@ -23,6 +23,8 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// Build a custom label text for the [TEntity] items list.
   final String Function(TEntity) textBuilder;
 
+  final RichText Function(TEntity)? richTextBuilder;
+
   /// Pre-selected value for the widget.
   final TEntity? initialValue;
 
@@ -36,6 +38,7 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
     this.enabled = true,
     this.initialValue,
     this.onSelected,
+    this.richTextBuilder,
     required this.entityBuilder,
     required this.textBuilder,
   });
@@ -203,22 +206,33 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
       controller: overlayController,
       child: CompositedTransformTarget(
         link: link,
-        child: TextInput(
-          label: widget.label,
-          isEnabled: widget.enabled,
-          focusNode: inputFocusNode,
-          errorText: error,
-          autofocus: false,
-          controller: inputcontroller,
-          suffixIcon: Icon(
-            Icons.arrow_drop_down,
-            size: 32,
-            color: theme.page.fore,
-          ),
-          onChanged: (String text) {
-            // --> Clean selected item.
-            if(text.trim().isEmpty && widget.onSelected != null) widget.onSelected!(null);
-          },
+        child: Stack(
+          children: <Widget>[
+            /// Custom text formatting.
+            if(widget.richTextBuilder != null && currentSelection != null && overlayController.isShowing)
+             Positioned.fill(
+              child: widget.richTextBuilder!(currentSelection!)
+            ),
+
+            /// Main input filed component.
+            TextInput(
+              label: widget.label,
+              isEnabled: widget.enabled,
+              focusNode: inputFocusNode,
+              errorText: error,
+              autofocus: false,
+              controller: inputcontroller,
+              suffixIcon: Icon(
+                Icons.arrow_drop_down,
+                size: 32,
+                color: theme.page.fore,
+              ),
+              onChanged: (String text) {
+                // --> Clean selected item.
+                if(text.trim().isEmpty && widget.onSelected != null) widget.onSelected!(null);
+              },
+            ),
+          ],
         ),
       ),
       overlayChildBuilder: (BuildContext overlayChildContext) {

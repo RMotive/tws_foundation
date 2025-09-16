@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -29,10 +30,22 @@ final class OptionsSelectorOption<TValue> {
   /// Option value.
   final TValue value;
 
+  /// SVG resorce icon route.
+  final String? resource;
+
+  /// Icon rotation ratio: 1 = 90º, 2 = 180º, etc.
+  final int iconRotation;
+
+  /// Icon color to apply.
+  final Color? iconColor;
+
   /// Creates a new [OptionsSelectorOption] instance.
   const OptionsSelectorOption({
     required this.title,
     required this.value,
+    this.iconRotation = 0,
+    this.resource,
+    this.iconColor,
   });
 }
 
@@ -81,11 +94,11 @@ final class OptionsSelector<TValue> extends StatefulWidget {
     this.height,
     this.fontSize = 16,
     this.preSelected,
-    required this.title,
     this.optional = false,
     this.isEnabled = true,
     this.multiSelection = false,
     this.hSpacing = _kDefItemSpacing,
+    required this.title,
     required this.options,
     required this.onSelect,
   });
@@ -225,6 +238,9 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
                                   label: option.title,
                                   height: widget.height,
                                   fontSize: widget.fontSize,
+                                  resource: option.resource,
+                                  iconColor: option.iconColor,
+                                  iconRotation: option.iconRotation,
                                   onSelect: () {
                                     fieldState.reset();
                                     onSelectionChange(option.value);
@@ -267,6 +283,15 @@ final class _OptionsSelectorItem extends StatefulWidget {
   /// Whether the current item is selected.
   final bool selected;
 
+  /// SVG resource icon route.
+  final String? resource;
+
+  /// Color to apply to the icon.
+  final Color? iconColor;
+
+  /// Icon rotation ratio: 1 = 90º, 2 = 180º, etc.
+  final int iconRotation;
+
   /// {event} callback when item is selected.
   final void Function() onSelect;
 
@@ -274,9 +299,12 @@ final class _OptionsSelectorItem extends StatefulWidget {
   const _OptionsSelectorItem({
     this.height,
     this.fontSize = 16,
+    this.selected = false,
+    this.iconRotation = 0,
+    this.resource,
+    this.iconColor,
     required this.label,
     required this.width,
-    this.selected = false,
     required this.onSelect,
   });
 
@@ -326,7 +354,42 @@ final class _OptionsSelectorItemState extends State<_OptionsSelectorItem> {
           child: SizedBox(
             width: widget.width,
             height: widget.height,
-            child: Center(
+            child: widget.resource != null? 
+            FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Column(
+                spacing: 10,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RotatedBox(
+                      quarterTurns: widget.iconRotation,
+                      child: SvgPicture.asset(
+                        widget.resource!,
+                        height: widget.height,
+                        colorFilter: ColorFilter.mode(
+                                  widget.selected
+                                      ? widget.iconColor ?? theme.page.foreAlt ?? theme.page.fore
+                                      : widget.iconColor ?? theme.page.fore,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    widget.label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: widget.fontSize,
+                      fontWeight: FontWeight.w500,
+                      color: widget.selected ? theme.page.foreAlt : theme.page.fore,
+                    ),
+                  ),
+                ],
+              ),
+            )
+            : Center(
               child: Text(
                 widget.label,
                 textAlign: TextAlign.center,

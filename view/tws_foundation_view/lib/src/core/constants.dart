@@ -142,7 +142,7 @@ final class FoundationAssets {
   static const String damagedSvg = '$_businessPath/wide_logo_white.webp';
 
   ///
-  static const String entrySelectedSvg = '$_businessPath/entry_selected.svg';
+  static const String exitSvg = '$_businessPath/exit.svg';
 
   ///
   static const String trailerBackSvg = '$_businessPath/trailer_back.svg';

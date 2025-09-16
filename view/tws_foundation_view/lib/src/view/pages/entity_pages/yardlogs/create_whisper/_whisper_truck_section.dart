@@ -57,6 +57,17 @@ final class _TruckSectionState extends State<_TruckSection> {
               textBuilder: (TruckCommon truck) {
                 return truck.economic;
               },
+              richTextBuilder: (TruckCommon truck) {
+                return RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(text: truck.economic, style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: ' - ${truck.plates} - ', style: TextStyle(color: Colors.green)),
+                      // TextSpan(text: truck.eco,),
+                    ],
+                  ),
+                );
+              },
             ),
 
             /// --> External Truck Creation.

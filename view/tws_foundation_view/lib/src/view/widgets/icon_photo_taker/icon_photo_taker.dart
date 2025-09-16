@@ -20,12 +20,14 @@ const Console _advisor = Console('IconPhotoTaker');
 /// This widget can:
 ///   - Take photos using devices with camera capabilities (mobile or PC).
 ///   - Select and load any image file in local storage (mobile or PC).
+/// 
+/// Supported extensions: .svg
 final class IconPhotoTaker extends StatefulWidget {
   /// Height of the icon button.
   final double height;
 
   /// Path to the svg icon to use as button.
-  final String svgRoute;
+  final String resourceRoute;
 
   /// Preload an image on widget load.
   final XFile? preLoad;
@@ -35,9 +37,6 @@ final class IconPhotoTaker extends StatefulWidget {
 
   /// Disable controls component.
   final bool disabled;
-
-  /// Title text.
-  final String label;
 
   /// Display and aditional control button to select any image file stored in the device.
   final bool showFilePicker;
@@ -54,6 +53,9 @@ final class IconPhotoTaker extends StatefulWidget {
   /// Method to trigger when the cancel button is clicked or the file selection dialog is closed and it's empty.
   final void Function()? onCancel;
 
+  /// Color to apply to the icon.
+  final Color? iconColor;
+
   /// Enabled the cancel current image loaded.
   ///
   /// Ideal when is updating some records and want to delete the preloaded image.
@@ -66,11 +68,11 @@ final class IconPhotoTaker extends StatefulWidget {
     this.onPhotoTaken,
     this.preLoadBase64,
     this.disabled = false,
-    this.label = 'Tomar foto',
     this.showFilePicker = true,
     this.cancelButtonEnable = true,
     this.onCancel,
-    required this.svgRoute,
+    this.iconColor,
+    required this.resourceRoute,
   });
 
   @override
@@ -94,6 +96,7 @@ class _PhotoTakerState extends State<IconPhotoTaker> {
     _photo = widget.preLoad;
 
   }
+
 
   void getCameras() {
     if (_cameras.isNotEmpty) {
@@ -215,10 +218,10 @@ class _PhotoTakerState extends State<IconPhotoTaker> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SvgPicture.asset(
-                          widget.svgRoute,
+                          widget.resourceRoute,
                           height: widget.height,
                           colorFilter: ColorFilter.mode(
-                            theme.page.fore,
+                            widget.iconColor ?? theme.page.fore,
                             BlendMode.srcIn,
                           ),
                         ),
