@@ -75,6 +75,10 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
 
     return '${external?.usaPlate ?? '---'} / ${external?.mxPlate ?? '---'}';
   }
+  /// Gets the available internal or external carrier name.
+  String get carrier => internal != null
+      ? internal!.carrier.name
+      : external?.carrier ?? 'Empty carrier.';
 
   //! <-- Getters
 
