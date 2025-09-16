@@ -206,33 +206,22 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
       controller: overlayController,
       child: CompositedTransformTarget(
         link: link,
-        child: Stack(
-          children: <Widget>[
-            /// Custom text formatting.
-            if(widget.richTextBuilder != null && currentSelection != null && overlayController.isShowing)
-             Positioned.fill(
-              child: widget.richTextBuilder!(currentSelection!)
-            ),
-
-            /// Main input filed component.
-            TextInput(
-              label: widget.label,
-              isEnabled: widget.enabled,
-              focusNode: inputFocusNode,
-              errorText: error,
-              autofocus: false,
-              controller: inputcontroller,
-              suffixIcon: Icon(
-                Icons.arrow_drop_down,
-                size: 32,
-                color: theme.page.fore,
-              ),
-              onChanged: (String text) {
-                // --> Clean selected item.
-                if(text.trim().isEmpty && widget.onSelected != null) widget.onSelected!(null);
-              },
-            ),
-          ],
+        child: TextInput(
+          label: widget.label,
+          isEnabled: widget.enabled,
+          focusNode: inputFocusNode,
+          errorText: error,
+          autofocus: false,
+          controller: inputcontroller,
+          suffixIcon: Icon(
+            Icons.arrow_drop_down,
+            size: 32,
+            color: theme.page.fore,
+          ),
+          onChanged: (String text) {
+            // --> Clean selected item.
+            if(text.trim().isEmpty && widget.onSelected != null) widget.onSelected!(null);
+          },
         ),
       ),
       overlayChildBuilder: (BuildContext overlayChildContext) {
@@ -310,6 +299,9 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                                     currentSelection = entity;
                                     inputcontroller.text = widget.textBuilder(entity);
                                     widget.onSelected?.call(currentSelection);
+                                    setState(() {
+                                      
+                                    });
                                     print('selected');
                                   }
                                 },

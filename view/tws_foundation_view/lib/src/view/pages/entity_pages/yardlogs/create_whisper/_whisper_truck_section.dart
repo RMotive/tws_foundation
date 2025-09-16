@@ -63,7 +63,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                     children: <TextSpan>[
                       TextSpan(text: truck.economic, style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(text: ' - ${truck.plates} - ', style: TextStyle(color: Colors.green)),
-                      // TextSpan(text: truck.eco,),
+                      TextSpan(text: truck.carrier),
                     ],
                   ),
                 );
