@@ -25,7 +25,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   Status status = Status();
 
   /// [Situation] information.
-  Situation situation = Situation();
+  Situation? situation = Situation();
 
   //! <-- Relations
 
@@ -57,7 +57,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   void decode(DataMap encode) {
     license = encode.get(kLicense);
     status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
-    situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation) ?? situation;
+    situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation);
 
     super.decode(encode);
   }
@@ -68,7 +68,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
       <String, Object?>{
         kLicense: license,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
-        FoundationCommonPropertyKeys.kSituation: situation.encode(),
+        FoundationCommonPropertyKeys.kSituation: situation?.encode(),
       },
     );
   }
@@ -109,8 +109,8 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
     }
 
     invalidations.validateDependency(this, status);
-    invalidations.validateDependency(this, situation);
     
+    if (situation != null) invalidations.validateDependency(this, situation!);
     if (internal != null) invalidations.validateDependency(this, internal!);   
     if (external != null) invalidations.validateDependency(this, external!);
 

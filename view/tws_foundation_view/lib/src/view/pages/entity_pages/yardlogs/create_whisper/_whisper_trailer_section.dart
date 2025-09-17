@@ -46,17 +46,17 @@ final class _TrailerSectionState extends State<_TrailerSection> {
           spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            /// --> Driver selection.
-            EntityFinderSelector<DriverCommon, DriversServiceI>(
-              entityBuilder: () => DriverCommon(),
-              textBuilder: (DriverCommon driver) {
-                return driver.name ?? "Invalid Driver";
+            /// --> Trailer selection.
+            EntityFinderSelector<TrailerCommon, TrailersServiceI>(
+              entityBuilder: () => TrailerCommon(),
+              textBuilder: (TrailerCommon trailer) {
+                return trailer.economic;
               },
               label: 'Select a Trailer...',
               enabled: externalTrailer == null,
             ),
 
-            /// --> External Driver Creation.
+            /// --> External Trailer Creation.
             FoldPanelWidget(
               title: 'Create External Trailer',
               visible: externalTrailer != null,
@@ -111,6 +111,7 @@ final class _TrailerSectionState extends State<_TrailerSection> {
                           ),
                         ],
                       ),
+                      
 
                       /// --> Plates (USA / MEX)
                       _SpacedWrap(

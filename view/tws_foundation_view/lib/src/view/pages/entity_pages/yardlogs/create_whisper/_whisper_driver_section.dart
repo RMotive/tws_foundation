@@ -63,7 +63,7 @@ final class _DriversSectionState extends State<_DriversSection> {
               label: 'Select a Driver...',
               enabled: externalDriver == null,
               textBuilder: (DriverCommon driver) {
-                return "${driver.name} - ${driver.license}" ?? "Invalid Driver";
+                return "${driver.name} - ${driver.license}";
               },
             ),
 

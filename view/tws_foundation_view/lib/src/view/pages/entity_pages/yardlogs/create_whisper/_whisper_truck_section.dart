@@ -100,6 +100,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                         children: <Widget>[
                           /// --> MEX Plate
                           TextInput(
+                            
                             label: 'MEX Plate',
                             width: inputWidth,
                             maxLength: _kPlateMaxLength,
@@ -108,6 +109,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                               if (externalTruck == null) return;
 
                               externalTruck!.external!.mxPlate = text;
+                              widget.onSelection(externalTruck!);
                             },
                           ),
 
@@ -121,6 +123,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                               if (externalTruck == null) return;
 
                               externalTruck!.external!.usaPlate = text;
+                              widget.onSelection(externalTruck!);
                             },
                           ),
                         ],
@@ -135,6 +138,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                           if (externalTruck == null) return;
 
                           externalTruck!.economic = text;
+                          widget.onSelection(externalTruck!);
                         },
                       ),
 
@@ -147,6 +151,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                           if (externalTruck == null) return;
 
                           externalTruck!.external!.carrier = text;
+                          widget.onSelection(externalTruck!);
                         },
                       ),
                     ],
