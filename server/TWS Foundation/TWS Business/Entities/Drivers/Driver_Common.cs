@@ -38,7 +38,7 @@ public class Driver_Common
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
     [Relation]
-    public Situation Situation { get; set; } = default!;
+    public Situation? Situation { get; set; } = default!;
 
     #endregion
 

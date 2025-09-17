@@ -61,9 +61,9 @@ final class StatusesService extends StatusesServiceB {
   @override
   FoundationFutureResolver<Status?> read(String reference, String auth) async {
     return FoundationResponseResolver<Status?>(
-      await get(
-        'read?reference=$reference',
-        auth: auth,
+      await getSecure(
+        'Read?reference=$reference',
+        auth,
       ),
     );
   }

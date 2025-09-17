@@ -19,25 +19,25 @@ final class _CreateYardLogsWhisperContent extends StatefulWidget {
 final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhisperContent> {
   /// {state} stores the last [_getUserData] invokation.
   late final Future<Employee?> _getUserEmployeeInstance = _getUserData();
-
-  /// {state} stores the default entity situation.
-  late final Situation defSituation;
   
   /// {state} stores the default entity status.
-  late final Status defStatus;
+  late final Status? defStatus;
 
   /// Gets the current user [Employee] data (if there's) as required to generate a [YardLog].
   Future<Employee?> _getUserData() async {
     SessionStorageI sessionStorage = Injector.get();
     EmployeesServiceI employeesService = Injector.get();
-    SituationsServiceI situationService = Injector.get();
     StatusesServiceI statusService = Injector.get();
 
     String token = sessionStorage.token;
 
     FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
-    FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(, token);
+    FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive, token);
 
+    // TODO check nulls
+    defStatus = statusResponseResolver.resolveDirect(
+      () => Status(),
+    );
     return responseResolver.resolveDirect(
       () => Employee(),
     );

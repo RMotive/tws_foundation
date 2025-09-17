@@ -14,5 +14,5 @@ public interface IReferenceService<TEntity>
     /// </summary>
     /// <param name="reference"></param>
     /// <returns></returns>
-    Task<BatchOperationOutput<TEntity>> Read(string reference);
+    Task<TEntity?> Read(string reference);
 }

@@ -32,7 +32,7 @@ public class StatusesController
             )
         );
 
-    [HttpPost, Action("Read")]
+    [HttpGet, Action("read")]
     public async Task<IActionResult> Read([FromQuery] string reference) => Ok(
             await service.Read(reference)
         );

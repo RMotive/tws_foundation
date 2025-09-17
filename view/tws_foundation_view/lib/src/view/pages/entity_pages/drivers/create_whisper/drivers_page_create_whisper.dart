@@ -78,15 +78,16 @@ final class DriversPageCreateWhisper extends PageB {
               ),
 
               /// --> Driver Situation
+              if(entity.situation != null)
               CreateEntityFormRecordField(
                 label: '*Situation',
-                value: entity.situation.name.isEmpty ? "---" : entity.situation.name,
+                value: entity.situation!.name.isEmpty ? "---" : entity.situation!.name,
               ),
 
               /// --> Driver Status
               CreateEntityFormRecordField(
                 label: '*Status',
-                value: entity.status.name.isEmpty ? "---" : entity.situation.name,
+                value: entity.status.name.isEmpty ? "---" : entity.status.name,
               ),
             ];
 

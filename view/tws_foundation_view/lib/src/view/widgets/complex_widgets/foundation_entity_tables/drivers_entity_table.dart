@@ -203,7 +203,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           ),
           PropertyViewer(
             label: 'Situation',
-            value: entity.situation.name,
+            value:  entity.situation?.name ?? '--- ',
           ),
           PropertyViewer(
             label: 'Status',
@@ -898,7 +898,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         ),
         TextLabel(
           title: 'Situation',
-          value: entity.situation.name,
+          value: entity.situation?.name ?? '---',
         ),
         TextLabel(
           title: 'Status',
@@ -1006,7 +1006,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         ),
         TextLabel(
           title: 'Situation',
-          value: entity.situation.name,
+          value: entity.situation?.name ?? '---',
         ),
         TextLabel(
           title: 'Status',
