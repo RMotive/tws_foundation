@@ -30,6 +30,10 @@ final class FoundationReferences{
   static const String loadTypeEmpty = "empty003";
   //* <-- Load types references.
 
+
+  //* --> Status references.
+  static const String statusActive = "actve001";
+
   //* --> Resources references.
 
   /// Reference for truck front evidence resource.
