@@ -59,8 +59,8 @@ final class StatusesService extends StatusesServiceB {
   }
 
   @override
-  FoundationFutureResolver<BatchOperationOutput<Status>> read(String reference, String auth) async {
-    return FoundationResponseResolver<BatchOperationOutput<Status>>(
+  FoundationFutureResolver<Status?> read(String reference, String auth) async {
+    return FoundationResponseResolver<Status?>(
       await get(
         'read?reference=$reference',
         auth: auth,

@@ -66,7 +66,7 @@ public abstract class BReferenceService<TEntity, TDepot>
         return _depot.Delete(entities);
     }
 
-    public virtual Task<BatchOperationOutput<TEntity>> Read(string reference) {
+    public virtual async Task<TEntity?> Read(string reference) {
         QueryInput <TEntity, FilterQueryInput < TEntity >> input = new() {
             Parameters = new FilterQueryInput<TEntity> {
                 Behavior = FilteringBehaviors.First,
@@ -74,7 +74,9 @@ public abstract class BReferenceService<TEntity, TDepot>
             }
         };
 
-        return _depot.Read(input);
+        BatchOperationOutput<TEntity> result = await _depot.Read(input);
+
+        return result.Successes.Length > 0? result.Successes.First() : null;
     }
 
     public Task<TEntity> Create(TEntity entity) {
