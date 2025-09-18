@@ -32,12 +32,12 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
     String token = sessionStorage.token;
 
     FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
-    FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive, token);
+    // FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive, token);
 
-    // TODO check nulls
-    defStatus = statusResponseResolver.resolveDirect(
-      () => Status(),
-    );
+    // // TODO check nulls
+    // defStatus = statusResponseResolver.resolveDirect(
+    //   () => Status(),
+    // );
     return responseResolver.resolveDirect(
       () => Employee(),
     );
