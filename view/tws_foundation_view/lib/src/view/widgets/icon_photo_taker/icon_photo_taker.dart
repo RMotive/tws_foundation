@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_svg/svg.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
+import 'package:tws_foundation_view/src/view/widgets/file_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/photo_taker/photo_taker.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_file_picker.dart';
 
 /// Initialize an [CameraPlatform] object to access to the device camera functions.
 final CameraPlatform _cameraPlatform = CameraPlatform.instance;
@@ -234,7 +235,7 @@ class _PhotoTakerState extends State<IconPhotoTaker> {
           ),
         ),
         if (widget.showFilePicker)
-          TwsFilePicker(
+          FileSelector(
             dialogTitle: "Select a picture",
             fileType: FileType.image,
             cancelEnable: (_photo != null || widget.preLoadBase64 != null) && widget.cancelButtonEnable,

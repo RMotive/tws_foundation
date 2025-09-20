@@ -3,8 +3,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
 
-/// [TwsFilePicker] Widget that shows a dialog (web or mobile) to select one or multiple specified extension files.
-class TwsFilePicker extends StatefulWidget {
+/// [FileSelector] Widget that shows a dialog (web or mobile) to select one or multiple specified extension files.
+class FileSelector extends StatefulWidget {
   /// Title for the file picker dialog.
   final String dialogTitle;
 
@@ -30,7 +30,7 @@ class TwsFilePicker extends StatefulWidget {
   /// This property es false by default.
   final bool cancelEnable;
 
-  const TwsFilePicker({
+  const FileSelector({
     super.key,
     required this.dialogTitle,
     required this.onSelect,
@@ -42,10 +42,10 @@ class TwsFilePicker extends StatefulWidget {
   });
 
   @override
-  State<TwsFilePicker> createState() => _TwsFilePickerState();
+  State<FileSelector> createState() => _FileSelectorState();
 }
 
-class _TwsFilePickerState extends State<TwsFilePicker> {
+class _FileSelectorState extends State<FileSelector> {
   // Lists to store the user selection.
   late List<XFile> selectedXfiles;
   late List<PlatformFile> selectedPlatformFiles;

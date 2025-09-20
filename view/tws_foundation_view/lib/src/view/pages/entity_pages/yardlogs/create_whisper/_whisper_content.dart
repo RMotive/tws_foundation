@@ -17,11 +17,21 @@ final class _CreateYardLogsWhisperContent extends StatefulWidget {
 
 /// Handles [State] for [_CreateYardLogsWhisperContent].
 final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhisperContent> {
+
+  /// {state} Instance of the current theming.
+  late FoundationThemeB theme;
+
   /// {state} stores the last [_getUserData] invokation.
   late final Future<Employee?> _getUserEmployeeInstance = _getUserData();
   
   /// {state} stores the default entity status.
   late final Status? defStatus;
+
+  @override
+  void didChangeDependencies() {
+    theme = Theming.get<FoundationThemeB>(context);
+    super.didChangeDependencies();
+  }
 
   /// Gets the current user [Employee] data (if there's) as required to generate a [YardLog].
   Future<Employee?> _getUserData() async {
@@ -32,12 +42,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
     String token = sessionStorage.token;
 
     FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
-    // FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive, token);
-
-    // // TODO check nulls
-    // defStatus = statusResponseResolver.resolveDirect(
-    //   () => Status(),
-    // );
+   
     return responseResolver.resolveDirect(
       () => Employee(),
     );
@@ -365,33 +370,45 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                         ),
                       )
                     ),
-                    
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        Expanded(
-                          child: TextInput(
-                            width: double.maxFinite,
-                            maxLength: 100,
-                            label: itemState.entity.entry ? '*Origen' : '*Destino',
-                            hint: 'Ingresar información de origen/destino',
-                            onChanged: (String value) => itemState.entity.sanitize(sealAlt: value),
-                            controller: TextEditingController(
-                              text: itemState.entity.sealAlt,
+                    TextInput(
+                      width: double.maxFinite,
+                      maxLength: 100,
+                      label: itemState.entity.entry ? '*Origen' : '*Destino',
+                      hint: 'Ingresar información de origen/destino',
+                      onChanged: (String value) => itemState.entity.fromTo,
+                      controller: TextEditingController(
+                        text: itemState.entity.fromTo,
+                      ),
+                    ),
+                    SectionWidget(
+                      title: 'Sección', 
+                      child: Column(
+                        spacing: 10,
+                        children: <Widget>[
+                          Expanded(
+                            child: EntityFinderSelector<Section, SectionsServiceI>(
+                              label: 'Section',
+                              entityBuilder: () => Section(),
+                              textBuilder: (Section section) {
+                                return section.name;
+                              },
+                              onSelected: (Section? selSection) {
+                                itemState.entity.section = selSection ?? Section();
+                              } 
                             ),
                           ),
-                        ),
-                        // Expanded(
-                        //   child: EntityFinderSelector<Section, SectionsService>(
-                        //     label: 'Section',
-                        //     entityBuilder: () => Section(),
-                        //     onSelection: (Section selSection) => entity.section = selSection,
-                        //   ),
-                        // ),
-                      ],
+                          Expanded(
+                            child: SvgPicture.asset(
+                              FoundationAssets.truckFrontSvg,
+                              colorFilter: ColorFilter.mode(
+                                theme.page.fore,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-
-                    
                   ],
                 ),
               ),

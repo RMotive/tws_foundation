@@ -65,6 +65,9 @@ final class _DriversSectionState extends State<_DriversSection> {
               textBuilder: (DriverCommon driver) {
                 return "${driver.name} - ${driver.license}";
               },
+              onSelected:(DriverCommon? driver) {
+                widget.onSelection?.call(driver ?? DriverCommon());
+              },  
             ),
 
             /// --> External Driver Creation.

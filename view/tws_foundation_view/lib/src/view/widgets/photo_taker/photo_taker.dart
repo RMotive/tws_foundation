@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_file_picker.dart';
+import 'package:tws_foundation_view/src/view/widgets/file_selector.dart';
 part 'photo_taker_photo_preview.dart';
 part 'photo_taker_camera.dart';
 
@@ -161,7 +161,7 @@ class _PhotoTakerState extends State<PhotoTaker> {
       spacing: 8,
       children: <Widget>[
         if (widget.showFilePicker)
-          TwsFilePicker(
+          FileSelector(
             dialogTitle: "Select a picture",
             fileType: FileType.image,
             cancelEnable: (_photo != null || widget.preLoadBase64 != null) && widget.cancelButtonEnable,

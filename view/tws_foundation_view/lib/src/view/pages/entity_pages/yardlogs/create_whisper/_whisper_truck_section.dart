@@ -68,6 +68,9 @@ final class _TruckSectionState extends State<_TruckSection> {
                   ),
                 );
               },
+              onSelected:(TruckCommon? truck) {
+                widget.onSelection(truck ?? TruckCommon());
+              },  
             ),
 
             /// --> External Truck Creation.

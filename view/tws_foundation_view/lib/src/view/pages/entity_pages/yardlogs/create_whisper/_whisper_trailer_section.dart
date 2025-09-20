@@ -54,6 +54,9 @@ final class _TrailerSectionState extends State<_TrailerSection> {
               },
               label: 'Select a Trailer...',
               enabled: externalTrailer == null,
+              onSelected: (TrailerCommon? trailer) {
+                widget.onSelection?.call(trailer ?? TrailerCommon());
+              },
             ),
 
             /// --> External Trailer Creation.

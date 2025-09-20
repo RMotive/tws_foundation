@@ -143,15 +143,12 @@ final class YardLog extends EntityB<YardLog> {
   YardLog();
 
   /// Validates nullable inputs to prevent [YardLog] entities with empty or invalid values.
-  YardLog? sanitize({
+  void sanitize({
     String? seal,
     String? sealAlt,
   }) {
     this.seal = seal.sanitizeOrFallback(this.seal);
     this.sealAlt = sealAlt.sanitizeOrFallback(this.sealAlt);
-
-
-    return this;
   }
 
   @override
