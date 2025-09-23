@@ -1,5 +1,7 @@
 part of 'photo_taker.dart';
-
+/// {class}
+/// 
+/// Widget dependency for [PhotoTaker] widget. Not intended for use as a standalone widget. 
 final class PhotoTakerPhotoPreview extends StatelessWidget {
   final XFile? file;
 

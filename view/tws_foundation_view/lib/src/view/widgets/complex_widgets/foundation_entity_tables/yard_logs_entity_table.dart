@@ -1,6 +1,7 @@
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:flutter_svg/svg.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -10,12 +11,68 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/file_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/image_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
-import 'package:tws_foundation_view/src/view/widgets/photo_taker/photo_taker.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
+
+/// Damage state class.
+class _Damage1State extends ReactorB {}
+_Damage1State _damage1State = _Damage1State();
+void Function() _damage1React = () {};
+
+class _Damage2State extends ReactorB {}
+_Damage2State _damage2State = _Damage2State();
+void Function() _damage2React = () {};
+
+class _TruckFrontState extends ReactorB {}
+_TruckFrontState _truckFrontState = _TruckFrontState();
+void Function() _truckFrontReact = () {};
+
+class _TruckLateralState extends ReactorB {}
+_TruckLateralState _truckLateralState = _TruckLateralState();
+void Function() _truckLateralReact = () {};
+
+class _TrailerBackState extends ReactorB {}
+_TrailerBackState _trailerBackState = _TrailerBackState();
+void Function() _trailerBackReact = () {};
+
+class _TrailerLateralState extends ReactorB {}
+_TrailerLateralState _trailerLateralState = _TrailerLateralState();
+void Function() _trailerLateralReact = () {};
+
+class _Seal1State extends ReactorB {}
+_Seal1State _seal1State = _Seal1State();
+void Function() _seal1React = () {};
+
+class _Seal2State extends ReactorB {}
+_Seal2State _seal2State = _Seal2State();
+void Function() _seal2React = () {};
+
+class _SectionState extends ReactorB {}
+_SectionState _sectionState = _SectionState();
+void Function() _sectionReact = () {};
+
+class _BlendedSVG extends StatelessWidget {
+  final String route;
+  const _BlendedSVG({
+    required this.route,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    return SvgPicture.asset(
+      route,
+      colorFilter: ColorFilter.mode(
+        theme.page.fore,
+        BlendMode.srcIn,
+      ),
+    );
+  }
+}
 
 /// {adapter} class.
 ///
@@ -39,6 +96,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
     Resource? trailerBack = entity.getResource(FoundationReferences.trailerBackRes);
     Resource? trailerLateral = entity.getResource(FoundationReferences.trailerLateralRes);
+
+    Resource? seal1 = entity.getResource(FoundationReferences.seal1Res);
+    Resource? seal2 = entity.getResource(FoundationReferences.seal2Res);
 
     return SizedBox.expand(
       child: SingleChildScrollView(
@@ -158,18 +218,6 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               value: entity.fromTo,
             ),
             
-            /// --> First seal property view.
-            PropertyViewer(
-              label: 'Seal #1',
-              value: entity.seal ?? '---',
-            ),
-
-            /// --> Second seal property view.
-            PropertyViewer(
-              label: 'Seal #2',
-              value: entity.sealAlt ?? '---',
-            ),
-
             /// --> Section property view.
             PropertyViewer(
               label: 'Section',
@@ -178,6 +226,39 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
             /// --> Log evidences.
             const SectionDivider(text: 'Evidences'),
+            SectionWidget(
+              title: 'Seals', 
+              child: Column(
+                spacing: 10,
+                children: <Widget>[
+                  /// --> First seal property view.
+                  PropertyViewer(
+                    label: 'Seal #1',
+                    value: entity.seal ?? '---',
+                  ),
+
+                  if(seal1 != null)
+                  Expanded(
+                    child: ImageViewer(
+                      resource: seal1, 
+                    ),
+                  ),
+
+                  /// --> Second seal property view.
+                  PropertyViewer(
+                    label: 'Seal #2',
+                    value: entity.sealAlt ?? '---',
+                  ),
+
+                  if(seal2 != null)
+                  Expanded(
+                    child: ImageViewer(
+                      resource: seal2, 
+                    ),
+                  ),
+                ],
+              )
+            ),
 
             /// --> Damages evidences.
             SectionWidget(
@@ -186,13 +267,17 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 spacing: 10,
                 children: <Widget>[
                   if(damage1 != null)
-                  PhotoTakerPhotoPreview(
-                    originalBytes: damage1.file, 
+                  Expanded(
+                    child: ImageViewer(
+                      resource: damage1, 
+                    ),
                   ),
 
                   if(damage2 != null)
-                  PhotoTakerPhotoPreview(
-                    originalBytes: damage2.file, 
+                  Expanded(
+                    child: ImageViewer(
+                      resource: damage2, 
+                    ),
                   ),
 
                   if(damage1 == null && damage2 == null)
@@ -203,18 +288,23 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
             /// --> Truck evidences.
             SectionWidget(
+              outterPadding: EdgeInsets.zero,
               title: 'Truck', 
               child: Column(
                 spacing: 10,
                 children: <Widget>[
                   if(truckFront != null)
-                  PhotoTakerPhotoPreview(
-                    originalBytes: truckFront.file, 
+                  Expanded(
+                    child: ImageViewer(
+                      resource: truckFront, 
+                    ),
                   ),
 
                   if(truckLateral != null)
-                  PhotoTakerPhotoPreview(
-                    originalBytes: truckLateral.file, 
+                  Expanded(
+                    child: ImageViewer(
+                      resource: truckLateral, 
+                    ),
                   ),
 
                   if(truckFront == null && truckLateral == null)
@@ -225,18 +315,23 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
             /// --> Trailer evidences
             SectionWidget(
+              outterPadding: EdgeInsets.zero,
               title: 'Trailer', 
               child: Column(
                 spacing: 10,
                 children: <Widget>[
                   if(trailerBack != null)
-                  PhotoTakerPhotoPreview(
-                    originalBytes: trailerBack.file, 
+                  Expanded(
+                    child: ImageViewer(
+                      resource: trailerBack, 
+                    ),
                   ),
 
                   if(trailerLateral != null)
-                  PhotoTakerPhotoPreview(
-                    originalBytes: trailerLateral.file, 
+                  Expanded(
+                    child: ImageViewer(
+                      resource: trailerLateral, 
+                    ),
                   ),
 
                   if(trailerBack == null && trailerLateral == null)
@@ -264,18 +359,6 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         );
       }, 
       formBuilder:(BuildContext buildContext, YardLog entity) {
-        final FoundationThemeB theme = Theming.get<FoundationThemeB>(buildContext);
-
-        /// Getting resources evidences.
-        Resource? damage1 = entity.getResource(FoundationReferences.damage1Res);
-        Resource? damage2 = entity.getResource(FoundationReferences.damage2Res);
-
-        Resource? truckFront = entity.getResource(FoundationReferences.truckFrontRes);
-        Resource? truckLateral = entity.getResource(FoundationReferences.truckLateralRes);
-
-        Resource? trailerBack = entity.getResource(FoundationReferences.trailerBackRes);
-        Resource? trailerLateral = entity.getResource(FoundationReferences.trailerLateralRes);
-
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -344,101 +427,307 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 maxLength: 100,
                 label: entity.entry ? '*From' : '*To',
                 hint: 'Ingresar información de origen/destino',
-                onChanged: (String value) => entity.fromTo,
+                onChanged: (String value) => entity.fromTo = value,
                 controller: TextEditingController(
                   text: entity.fromTo,
                 ),
               ),
+
+              /// Truck evidences section.
               SectionWidget(
+                outterPadding: EdgeInsets.zero,
                 title: 'Truck evidences',
                 child: Column(
                   spacing: 10,
                   children: <Widget>[
+                    ReactiveWidget<_TruckFrontState>(
+                      reactor: _truckFrontState,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _truckFrontReact = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.truckFrontRes);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.truckFrontSvg);
+                      },
+                    ),
+                    FileSelector(
+                      dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.truckFrontRes));
+                        _truckFrontReact();
+                      },
+                      onSelect:(List<XFile> xFiles, _) async {
+                        _setResource(xFiles, FoundationReferences.truckFrontRes, entity);
+                        _truckFrontReact();
+                      },  
+                    ),
 
+                    ReactiveWidget<_TruckLateralState>(
+                      reactor: _truckLateralState,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _truckLateralReact = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.truckLateralRes);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.truckLateralSvg);
+                      },
+                    ),
+                    FileSelector(
+                      dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.truckLateralRes));
+                        _truckLateralReact(); 
+                      },
+                      onSelect:(List<XFile> xFiles, _) async {
+                        _setResource(xFiles, FoundationReferences.truckLateralRes, entity);
+                        _truckLateralReact(); 
+                      },  
+                    ),
                   ],
                 ),
               ),
+
+              /// --> Trailer evidence section.
               SectionWidget(
+                outterPadding: EdgeInsets.zero,
                 title: 'Trailer evidences',
                 child: Column(
                   spacing: 10,
                   children: <Widget>[
-
+                    ReactiveWidget<_TrailerBackState>(
+                      reactor: _trailerBackState,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _trailerBackReact = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.trailerBackRes);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.trailerBackSvg);
+                      },
+                    ),
+                    FileSelector(
+                      dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.trailerBackRes));
+                        _trailerBackReact();
+                      },
+                      onSelect:(List<XFile> xFiles, _) async {
+                        _setResource(xFiles, FoundationReferences.trailerBackRes, entity);
+                        _trailerBackReact();
+                      },  
+                    ),
+                    
+                    ReactiveWidget<_TrailerLateralState>(
+                      reactor: _trailerLateralState,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _trailerLateralReact = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.trailerLateralRes);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.trailerLateralSvg);
+                      },
+                    ),
+                    FileSelector(
+                      dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.trailerLateralRes));
+                        _trailerLateralReact(); 
+                      },
+                      onSelect:(List<XFile> xFiles, _) async {
+                        _setResource(xFiles, FoundationReferences.trailerLateralRes, entity);
+                        _trailerLateralReact(); 
+                      },  
+                    ),
                   ],
                 ),
               ),
+
+              /// --> Damage evidence section.
               SectionWidget(
+                outterPadding: EdgeInsets.zero,
                 title: 'Damage evidences',
                 child: Column(
                   spacing: 10,
                   children: <Widget>[
-                    PhotoTakerPhotoPreview(
-                        originalBytes:
-                            entity.getResource(FoundationReferences.damage1Res)?.file ?? FoundationAssets.damagedSvg.bytes,
+                    ReactiveWidget<_Damage1State>(
+                      reactor: _damage1State,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _damage1React = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.damage1Res);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.damagedSvg);
+                      },
                     ),
                     FileSelector(
                       dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.damage1Res));
+                        _damage1React();
+                      },
                       onSelect:(List<XFile> xFiles, _) async {
-                        Resource resource = Resource();
-                        resource.file = await xFiles.first.readAsBytes();
-                        resource.name = FoundationReferences.damage1Res;
-                        resource.extension = xFiles.first.path.split('.').last;
-                        entity.setResource(resource, replaceOnRef: FoundationReferences.damage1Res);
+                        _setResource(xFiles, FoundationReferences.damage1Res, entity);
+                        _damage1React();
                       },  
                     ),
-                    PhotoTakerPhotoPreview(
-                        originalBytes:
-                            entity.getResource(FoundationReferences.damage2Res)?.file ?? FoundationAssets.damagedSvg.bytes,
+                    ReactiveWidget<_Damage2State>(
+                      reactor: _damage2State,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _damage2React = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.damage2Res);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.damagedSvg);
+                      },
                     ),
                     FileSelector(
                       dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.damage2Res));
+                        _damage2React(); 
+                      },
                       onSelect:(List<XFile> xFiles, _) async {
-                        Resource resource = Resource();
-                        resource.file = await xFiles.first.readAsBytes();
-                        resource.name = FoundationReferences.damage2Res;
-                        resource.extension = xFiles.first.path.split('.').last;
-                        entity.setResource(resource, replaceOnRef: FoundationReferences.damage1Res);
+                        _setResource(xFiles, FoundationReferences.damage2Res, entity);
+                        _damage2React(); 
                       },  
                     ),
                   ],
                 ),
               ),
+
               SectionWidget(
+                outterPadding: EdgeInsets.zero,
                 title: 'Seals',
                 child: Column(
                   spacing: 10,
-                  children: <Widget>[
+                  children: <Widget>[ 
 
+                    ///* --> First Seal
+                    TextInput(
+                      width: double.maxFinite,
+                      maxLength: 64,
+                      label: 'Seal #1',
+                      hint: 'Seal number',
+                      onChanged: (String value) => entity.sanitize(seal: value),
+                      controller: TextEditingController(
+                        text: entity.seal,
+                      ),
+                    ),
+                    ReactiveWidget<_Seal1State>(
+                      reactor: _seal1State,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _seal1React = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.seal1Res);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.sealSvg);
+                      },
+                    ),
+                    FileSelector(
+                      dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.seal1Res));
+                        _seal1React();
+                      },
+                      onSelect:(List<XFile> xFiles, _) async {
+                        _setResource(xFiles, FoundationReferences.seal1Res, entity);
+                        _seal1React();
+                      },  
+                    ),
+
+                    ///* --> Second Seal
+                    TextInput(
+                      width: double.maxFinite,
+                      maxLength: 64,
+                      label: 'Seal #2',
+                      hint: 'Seal number',
+                      onChanged: (String value) => entity.sanitize(sealAlt: value),
+                      controller: TextEditingController(
+                        text: entity.sealAlt,
+                      ),
+                    ),
+                    ReactiveWidget<_Seal2State>(
+                      reactor: _seal2State,
+                      builder: (BuildContext ctx, ReactorI reactor) {
+                        _seal2React = reactor.react;
+                        Resource? resource = entity.getResource(FoundationReferences.seal2Res);
+                        if(resource != null) {
+                          return ImageViewer(
+                            resource: resource,
+                          );
+                        }
+                        return _BlendedSVG(route: FoundationAssets.sealSvg);
+                      },
+                    ),
+                    FileSelector(
+                      dialogTitle: 'Select a damage image',
+                      fileType: FileType.image,
+                      onRemove:() {
+                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.seal2Res));
+                        _seal2React(); 
+                      },
+                      onSelect:(List<XFile> xFiles, _) async {
+                        _setResource(xFiles, FoundationReferences.seal2Res, entity);
+                        _seal2React(); 
+                      },  
+                    ),
                   ],
                 ),
               ),
 
               SectionWidget(
+                outterPadding: EdgeInsets.zero,
                 title: 'Section', 
                 child: Column(
                   spacing: 10,
                   children: <Widget>[
-                    Expanded(
-                      child: EntityFinderSelector<Section, SectionsServiceI>(
-                        label: 'Section',
-                        entityBuilder: () => Section(),
-                        textBuilder: (Section section) {
-                          return section.name;
-                        },
-                        onSelected: (Section? selSection) {
-                          entity.section = selSection ?? Section();
-                        } 
-                      ),
+                    EntityFinderSelector<Section, SectionsServiceI>(
+                      label: 'Section',
+                      entityBuilder: () => Section(),
+                      textBuilder: (Section section) {
+                        return section.name;
+                      },
+                      onSelected: (Section? selSection) {
+                        entity.section = selSection ?? Section();
+                      } 
                     ),
-                    Expanded(
-                      child: SvgPicture.asset(
-                        FoundationAssets.truckFrontSvg,
-                        colorFilter: ColorFilter.mode(
-                          theme.page.fore,
-                          BlendMode.srcIn,
-                        ),
-                      ),
+                    if(entity.section.id <= BigInt.zero)
+                    _BlendedSVG(
+                      route: FoundationAssets.yardlogPlaceholderSvg,
+                    ),
+                    if(entity.section.id > BigInt.zero)
+                    ImageViewer(
+                      resource: entity.section
                     )
+
+                    
                   ],
                 ),
               ),
@@ -605,6 +894,14 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         ),
       ],
     );
+  }
+
+  void _setResource(List<XFile> xFiles, String reference, YardLog entity) async {
+    Resource resource = Resource();
+    resource.file = await xFiles.first.readAsBytes();
+    resource.name = reference;
+    resource.extension = xFiles.first.name.split('.').last;
+    entity.setResource(resource, replaceOnRef: reference);
   }
 }
 

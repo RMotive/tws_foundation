@@ -64,6 +64,7 @@ final class _MainAppState extends State<MainApp> {
     Injector.addSingleton<TrailersServiceI>(foundationServer.trailersService);
     Injector.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
     Injector.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
+    Injector.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
 
 
     final SessionStorage sessionStorage = SessionStorage();

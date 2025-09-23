@@ -1,12 +1,27 @@
-import 'dart:typed_data';
-
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router;
+import 'package:flutter_svg/svg.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/data/const/resource_extensions.dart';
+import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-/// [TWSImageViewer] Displays an image component, that expands the image on tap, based on the display or windows app dimensions.
-class TWSImageViewer extends StatelessWidget {
-  ///A base64 string image converted to bits.
-  final Uint8List img;
+/// Extensions suppoted by [Image] flutter class.
+final Set<String> _imageExtensions = <String>{
+  FoundationExtension.jpge,
+  FoundationExtension.jpg,
+  FoundationExtension.png,
+  FoundationExtension.bmp,
+  FoundationExtension.wbmp,
+  FoundationExtension.gif,
+};
+
+/// [ImageViewer] Displays an image component, that expands the image on tap, based on the display or windows app dimensions.
+class ImageViewer extends StatelessWidget {
+  /// A resource entity for content display.
+  /// 
+  /// Suported formats: 
+  final Resource resource;
 
   /// Component width.
   final double? width;
@@ -23,12 +38,16 @@ class TWSImageViewer extends StatelessWidget {
   /// Text alignment.
   final TextAlign align;
 
-  const TWSImageViewer({
+  /// SVG Color.
+  final Color? svgColor;
+
+  const ImageViewer({
     super.key,
-    required this.img,
+    required this.resource,
     this.title,
     this.width,
     this.height,
+    this.svgColor,
     this.style = const TextStyle(
       fontWeight: FontWeight.bold,
       overflow: TextOverflow.ellipsis,
@@ -36,9 +55,29 @@ class TWSImageViewer extends StatelessWidget {
     this.align = TextAlign.center,
   });
 
+  
+  Widget _convertImage(bool isImage, bool isSVG, Color? svgColor){
+    if(isImage) return Image.memory(filterQuality: FilterQuality.high, resource.file);
+    if (isSVG) {
+      return SvgPicture.memory(
+        resource.file,
+        colorFilter: ColorFilter.mode(
+        svgColor ?? svgColor!,
+        BlendMode.srcIn,
+      ),
+      );
+    }
+    
+    return MessageWidget(text: 'Invalid image extension.');
+  }
   @override
   Widget build(BuildContext context) {
-    void imageViewDialog(Uint8List img) {
+    Color? backgroundColor;
+    final bool isImage = _imageExtensions.contains(resource.extension.toLowerCase());
+    final bool isSVG = resource.extension.toLowerCase() == FoundationExtension.svg;
+    if(isSVG && svgColor == null) backgroundColor = Theming.get<FoundationThemeB>(context).page.back;
+
+    void imageViewDialog() {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -70,7 +109,7 @@ class TWSImageViewer extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Image.memory(filterQuality: FilterQuality.high, img),
+                    _convertImage(isImage, isSVG, backgroundColor),
                   ],
                 ),
               ],
@@ -87,13 +126,13 @@ class TWSImageViewer extends StatelessWidget {
         if (title != null) Text(title!, textAlign: align, style: style),
         PointerArea(
           cursor: SystemMouseCursors.click,
-          onClick: () => imageViewDialog(img),
+          onClick: () => imageViewDialog(),
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: width ?? double.maxFinite,
               maxHeight: height ?? double.maxFinite,
             ),
-            child: Image.memory(img),
+            child: _convertImage(isImage, isSVG, backgroundColor),
           ),
         ),
       ],

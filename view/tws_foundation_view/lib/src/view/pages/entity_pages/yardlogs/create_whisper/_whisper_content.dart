@@ -42,6 +42,8 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
     String token = sessionStorage.token;
 
     FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
+
+    // FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive,token);
    
     return responseResolver.resolveDirect(
       () => Employee(),

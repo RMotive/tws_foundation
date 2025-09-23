@@ -1,6 +1,6 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/misc/locations/location.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Section] default builder.
 Section sectionBuilder() => Section();
@@ -8,17 +8,17 @@ Section sectionBuilder() => Section();
 /// Defines a business entity that stores a [Section] data in a yard [Location], 
 /// where [Trailer] and [Truck] entities are stored, arrived and depart as part of its operations.
 final class Section extends NamedEntityB<Section> {
-  /// [yard] property key.
+  /// [Section.yard] property key.
   static const String kYard = "yard";
 
-  /// [capacity] property key.
+  /// [Section.capacity] property key.
   static const String kCapacity = "capacity";
 
-  /// [ocupancy] property key.
+  /// [Section.ocupancy] property key.
   static const String kOcupancy = "ocupancy";
 
-  /// [location] property key.
-  static const String kLocationNavigation = "location";
+  /// [Section.resource] property key.
+  static const String kResource = "resource";
 
   /// Section vehicule storage capacity.
   int capacity = 0;
@@ -29,6 +29,9 @@ final class Section extends NamedEntityB<Section> {
   /// [Location] Yard location entity asociate to this section.
   Location yard = Location();
 
+  /// [Resource] for visual represantation of this section entity.
+  Resource? resource;
+
   /// Generates a new [Section] instance from mandatory values.
   Section();
 
@@ -38,6 +41,7 @@ final class Section extends NamedEntityB<Section> {
       <String, Object?>{
         kCapacity: capacity,
         kOcupancy: ocupancy,
+        kResource: resource?.encode(),
         kYard: yard.encode(),
       },
     );
@@ -49,6 +53,7 @@ final class Section extends NamedEntityB<Section> {
     yard = Location();
     capacity = encode.get(kCapacity);
     ocupancy = encode.get(kOcupancy);
+    resource = encode.getEntity(() => Resource(), kResource);
     yard.decode(encode.get(kYard));
   }
 
@@ -66,6 +71,7 @@ final class Section extends NamedEntityB<Section> {
     }
 
     results.validateDependency(this, yard);
+    if(resource != null) results.validateDependency(this, resource!);
 
     return results;
   }

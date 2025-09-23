@@ -17,8 +17,8 @@ class FileSelector extends StatefulWidget {
   /// Function to trigger on finishing file loading.
   final dynamic Function(FilePickerStatus)? onFileLoading;
 
-  /// Function to trigger when the dialog is closed without any selection.
-  final void Function()? onCancel;
+  /// Function to trigger when the remove button is pressed.
+  final void Function()? onRemove;
 
   /// Return the user file selection in both, [XFile] and [PlatformFile] format.
   final void Function(List<XFile> xFiles, List<PlatformFile> files) onSelect;
@@ -38,7 +38,7 @@ class FileSelector extends StatefulWidget {
     this.cancelEnable = false,
     this.allowedExtensions,
     this.onFileLoading,
-    this.onCancel,
+    this.onRemove,
   });
 
   @override
@@ -51,7 +51,7 @@ class _FileSelectorState extends State<FileSelector> {
   late List<PlatformFile> selectedPlatformFiles;
 
   void clearStorage() {
-    widget.onCancel?.call();
+    widget.onRemove?.call();
     setState(() {
       selectedPlatformFiles = <PlatformFile>[];
       selectedXfiles = <XFile>[];
@@ -83,7 +83,7 @@ class _FileSelectorState extends State<FileSelector> {
       // When the user cancel the selection:
       if (mounted) {
         setState(() {
-          widget.onCancel;
+          widget.onRemove;
         });
       }
     }
@@ -108,7 +108,7 @@ class _FileSelectorState extends State<FileSelector> {
         ),
         Expanded(
           child: ButtonFlat(
-            label: "Cancel",
+            label: "Remove",
             onClick: () => clearStorage(),
             disabled: (selectedXfiles.isEmpty || selectedPlatformFiles.isEmpty) && !widget.cancelEnable,
           ),

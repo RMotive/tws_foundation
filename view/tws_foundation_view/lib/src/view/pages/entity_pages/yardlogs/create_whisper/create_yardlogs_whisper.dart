@@ -1,13 +1,11 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
-import 'package:tws_foundation_view/src/view/widgets/icon_photo_taker/icon_photo_taker.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/photo_taker/icon_photo_taker.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';

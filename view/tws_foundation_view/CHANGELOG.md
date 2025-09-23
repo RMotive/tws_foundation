@@ -65,6 +65,8 @@
         * [ResumeDialog]
         * [IconPhotoTaker]
 
+    N. Added [ResourceExtensions] file in constant data folder.
+
     N. Dependencies added:
         * flutter_web_plugins
 

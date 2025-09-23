@@ -171,7 +171,7 @@ class _PhotoTakerState extends State<PhotoTaker> {
                 widget.onPhotoTaken?.call(xFiles.first);
               });
             },
-            onCancel: () {
+            onRemove: () {
               setState(() {
                 _photo = null;
                 widget.onCancel?.call();
