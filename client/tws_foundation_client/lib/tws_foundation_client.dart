@@ -139,6 +139,7 @@ export 'src/models/frames/success_frame.dart';
 
 // --> Exporting [src.services]
 export 'src/services/view_service_i.dart';
+export 'src/services/create_service_i.dart';
 export 'src/services/foundation_service_b.dart';
 export 'src/services/foundation_response_resolver.dart';
 
