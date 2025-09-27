@@ -150,6 +150,7 @@ export 'src/services/models/inputs/update_input.dart';
 // --> Exporting [src.services.models.outputs]
 export 'src/services/models/outputs/view_output.dart';
 export 'src/services/models/outputs/update_output.dart';
+export 'src/services/models/outputs/batch_operation_output.dart';
 
 // --> Exporting [src.services.models.view_filters]
 export 'src/services/models/view_filters/view_filter_i.dart';
