@@ -37,6 +37,7 @@ final class _TruckSectionState extends State<_TruckSection> {
 
   @override
   Widget build(BuildContext context) {
+    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
     return SectionWidget(
       title: '*Truck',
       outterPadding: EdgeInsets.zero,
@@ -50,7 +51,7 @@ final class _TruckSectionState extends State<_TruckSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             /// --> Truck selection.
-            EntityFinderSelector<TruckCommon, TrucksServiceI>(
+            EntityRichFinderSelector<TruckCommon, TrucksServiceI>(
               entityBuilder: () => TruckCommon(),
               label: 'Select a Truck...',
               enabled: externalTruck == null,
@@ -58,14 +59,22 @@ final class _TruckSectionState extends State<_TruckSection> {
                 return truck.economic;
               },
               richTextBuilder: (TruckCommon truck) {
-                return RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(text: truck.economic, style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: ' - ${truck.plates} - ', style: TextStyle(color: Colors.green)),
-                      TextSpan(text: truck.carrier),
-                    ],
-                  ),
+                return TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: truck.economic,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: theme.page.fore,
+                      ),
+                    ),
+                    TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
+                    TextSpan(text: truck.plates, style: TextStyle(color: theme.warning.accent)),
+                    TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
+                    TextSpan(text: truck.plates, style:  TextStyle(color: theme.page.accent)),
+                    TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
+                    TextSpan(text: truck.carrier, style: TextStyle(color: theme.page.fore) ),
+                  ],
                 );
               },
               onSelected:(TruckCommon? truck) {

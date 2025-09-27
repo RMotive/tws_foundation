@@ -19,7 +19,7 @@ public class TrailerExternal
     ///     Carrier idenfitication.
     /// </summary>
     [StringLength(100, MinimumLength = 1)]
-    public string Carrier { get; set; } = string.Empty;
+    public string? Carrier { get; set; }
 
     /// <summary>
     ///     Mexican plate number.
@@ -38,7 +38,7 @@ public class TrailerExternal
     protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Trailers_Externals");
 
-        etBuilder.Property(nameof(Carrier)).HasMaxLength(100).IsRequired();
+        etBuilder.Property(nameof(Carrier)).HasMaxLength(100);
         etBuilder.Property(nameof(UsaPlate)).HasMaxLength(7);
         etBuilder.Property(nameof(MxPlate)).HasMaxLength(7);
     }

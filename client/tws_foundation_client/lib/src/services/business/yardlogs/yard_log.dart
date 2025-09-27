@@ -71,14 +71,8 @@ final class YardLog extends EntityB<YardLog> {
 
   //! --> Relations
 
-  /// [LoadType] information.
-  LoadType loadType = LoadType();
-
   /// [Employee] information.
   Employee guard = Employee();
-
-  /// [Section] information.
-  Section section = Section();
 
   /// [DriverCommon] information.
   DriverCommon driver = DriverCommon();
@@ -88,6 +82,12 @@ final class YardLog extends EntityB<YardLog> {
 
   /// [TrailerCommon] information.
   TrailerCommon? trailer = TrailerCommon();
+
+  /// [LoadType] information.
+  LoadType loadType = LoadType();
+
+  /// [Section] information.
+  Section? section = Section();
 
   /// [Resource] content attached to the entry.
   /// 
@@ -160,9 +160,9 @@ final class YardLog extends EntityB<YardLog> {
         kSealAlt: sealAlt,
         kFromTo: fromTo,
         kReservation: reservation,
-        kLoadType: loadType.encode(),
+        kLoadType: loadType?.encode(),
         kGuard: guard.encode(),
-        kSection: section.encode(),
+        kSection: section?.encode(),
         kDriver: driver.encode(),
         kTruck: truck.encode(),
         kTrailer: trailer?.encode(),
@@ -182,9 +182,9 @@ final class YardLog extends EntityB<YardLog> {
     sealAlt = encode.get(kSealAlt);
     fromTo = encode.get(kFromTo);
     reservation = encode.get(kReservation);
-    loadType = encode.getEntity(() => LoadType(), kLoadType) ?? loadType;
+    loadType = encode.getEntity(() => LoadType(), kLoadType) ?? LoadType();
     guard = encode.getEntity(() => Employee(), kGuard) ?? guard;
-    section = encode.getEntity(() => Section(), kSection) ?? section;
+    section = encode.getEntity(() => Section(), kSection);
     driver = encode.getEntity(() => DriverCommon(), kDriver) ?? driver;
     truck = encode.getEntity(() => TruckCommon(), kTruck) ?? truck;
     trailer = encode.getEntity(() => TrailerCommon(), kTrailer) ?? trailer;
@@ -285,7 +285,7 @@ final class YardLog extends EntityB<YardLog> {
 
     invalidations.validateDependency(this, loadType);
     invalidations.validateDependency(this, guard);
-    invalidations.validateDependency(this, section);
+    if(section != null) invalidations.validateDependency(this, section!);
     invalidations.validateDependency(this, driver);
     invalidations.validateDependency(this, truck);
     if(trailer != null) invalidations.validateDependency(this, trailer!);

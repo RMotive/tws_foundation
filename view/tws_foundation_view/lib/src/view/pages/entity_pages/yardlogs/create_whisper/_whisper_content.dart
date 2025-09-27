@@ -1,13 +1,23 @@
 part of 'create_yardlogs_whisper.dart';
 
+/// State manager for Section fields.
+class _SectionState extends ReactorB {}
+_SectionState _sectionState = _SectionState();
+void Function() _sectionReact = () {};
+
 /// Draws and handles the content for [CreateYardLogsWhisper], drawing each necessary
 /// section and gathering required information to correctly create [YardLog] entities.
 final class _CreateYardLogsWhisperContent extends StatefulWidget {
   /// Whether the created yardlog is a reservation or not.
   final bool isResevation;
 
+  /// Creation {event} controller.
+    final CreateEntityFormController controller;
+  
+
   /// Create a new [_CreateYardLogsWhisperContent] instance.
   const _CreateYardLogsWhisperContent({
+    required this.controller,
     required this.isResevation,
   });
 
@@ -43,8 +53,10 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
 
     FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
 
-    // FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive,token);
-   
+    FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive,token);
+
+    defStatus = statusResponseResolver.resolveDirect(() => Status());
+
     return responseResolver.resolveDirect(
       () => Employee(),
     );
@@ -73,6 +85,11 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
         return CreateEntityForm<YardLog>(
           isMultiple: false,
           entityFactory: () => YardLog(),
+          controller: widget.controller,
+          onCreate: (List<YardLog> entities) {
+            print('creation...');
+            return <UserFeedback>[];
+          },
           formDesigner: (CreateEntityFormRecordReactor<YardLog>? itemState) {
             return SingleChildScrollView(
               child: Padding(
@@ -85,6 +102,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                       height: 200,
                       fontSize: 100,
                       title: 'Evento',
+                      preSelected: [itemState!.entity.entry],
                       options: <OptionsSelectorOption<bool>>[
                         OptionsSelectorOption<bool>(
                           title: 'Entrada',
@@ -99,7 +117,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                         ),
                       ],
                       onSelect: (List<bool> selected) {
-                        itemState!.entity.entry = selected.first;
+                        itemState.entity.entry = selected.first;
                       },
                     ),
 
@@ -112,17 +130,28 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
 
                     /// --> Driver selection.
                     _DriversSection(
-                      onSelection: (DriverCommon selDriver) => itemState!.entity.driver = selDriver,
+                      onSelection: (DriverCommon selDriver) => itemState.entity.driver = selDriver,
                     ),
 
                     /// --> Truck selection.
                     _TruckSection(
-                      onSelection: (TruckCommon selTruck) => itemState!.entity.truck = selTruck,
+                      onSelection: (TruckCommon selTruck) => itemState.entity.truck = selTruck,
                     ),
 
                     /// --> Trailer selection.
                     _TrailerSection(
-                      onSelection: (TrailerCommon selTrailer) => itemState!.entity.trailer = selTrailer,
+                      onSelection: (TrailerCommon selTrailer) => itemState.entity.trailer = selTrailer,
+                    ),
+
+                    TextInput(
+                      width: double.maxFinite,
+                      maxLength: 100,
+                      label: itemState.entity.entry ? '*Origen' : '*Destino',
+                      hint: 'Ingresar información de origen/destino',
+                      onChanged: (String value) => itemState.entity.fromTo,
+                      controller: TextEditingController(
+                        text: itemState.entity.fromTo,
+                      ),
                     ),
 
                     SectionWidget(
@@ -143,7 +172,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                     preLoad:
                                         (() {
                                           // Preload existing photo if any.
-                                          final Resource? resource = itemState!.entity.getResource(
+                                          final Resource? resource = itemState.entity.getResource(
                                             FoundationReferences.truckFrontRes,
                                           );
                                           if (resource != null) return XFile.fromData(resource.file);
@@ -154,7 +183,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.truckFrontRes;
                                       resource.extension = photo.path.split('.').last;
-                                      itemState!.entity.setResource(resource, replaceOnRef: FoundationReferences.truckFrontRes);
+                                      itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.truckFrontRes);
                                     },
                                   ),
                                 ),
@@ -164,7 +193,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                     preLoad:
                                         (() {
                                           // Preload existing photo if any.
-                                          final Resource? resource = itemState!.entity.getResource(
+                                          final Resource? resource = itemState.entity.getResource(
                                             FoundationReferences.truckLateralRes,
                                           );
                                           if (resource != null) return XFile.fromData(resource.file);
@@ -175,7 +204,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.truckLateralRes;
                                       resource.extension = photo.path.split('.').last;
-                                      itemState!.entity.setResource(resource, replaceOnRef: FoundationReferences.truckLateralRes);
+                                      itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.truckLateralRes);
                                     },
                                   ),
                                 ),
@@ -192,7 +221,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                     preLoad:
                                         (() {
                                           // Preload existing photo if any.
-                                          final Resource? resource = itemState!.entity.getResource(
+                                          final Resource? resource = itemState.entity.getResource(
                                             FoundationReferences.trailerBackRes,
                                           );
                                           if (resource != null) return XFile.fromData(resource.file);
@@ -203,7 +232,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.trailerBackRes;
                                       resource.extension = photo.path.split('.').last;
-                                      itemState!.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerBackRes);
+                                      itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerBackRes);
                                     },
                                   ),
                                 ),
@@ -213,7 +242,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                     preLoad:
                                         (() {
                                           // Preload existing photo if any.
-                                          final Resource? resource = itemState!.entity.getResource(
+                                          final Resource? resource = itemState.entity.getResource(
                                             FoundationReferences.trailerLateralRes,
                                           );
                                           if (resource != null) return XFile.fromData(resource.file);
@@ -224,7 +253,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.trailerLateralRes;
                                       resource.extension = photo.path.split('.').last;
-                                      itemState!.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerLateralRes);
+                                      itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerLateralRes);
                                     },
                                   ),
                                 ),
@@ -237,6 +266,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
 
                     SectionWidget(
                       title: "Daños",
+                      outterPadding: EdgeInsets.zero,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -248,7 +278,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                 preLoad:
                                     (() {
                                       // Preload existing photo if any.
-                                      final Resource? resource = itemState!.entity.getResource(
+                                      final Resource? resource = itemState.entity.getResource(
                                         FoundationReferences.damage1Res,
                                       );
                                       if (resource != null) return XFile.fromData(resource.file);
@@ -259,7 +289,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                   resource.file = await photo.readAsBytes();
                                   resource.name = FoundationReferences.damage1Res;
                                   resource.extension = photo.path.split('.').last;
-                                  itemState!.entity.setResource(resource, replaceOnRef: FoundationReferences.damage1Res);
+                                  itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.damage1Res);
                                 },
                               ),
                             ),
@@ -269,7 +299,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                 preLoad:
                                     (() {
                                       // Preload existing photo if any.
-                                      final Resource? resource = itemState!.entity.getResource(
+                                      final Resource? resource = itemState.entity.getResource(
                                         FoundationReferences.damage2Res,
                                       );
                                       if (resource != null) return XFile.fromData(resource.file);
@@ -280,7 +310,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                   resource.file = await photo.readAsBytes();
                                   resource.name = FoundationReferences.damage2Res;
                                   resource.extension = photo.path.split('.').last;
-                                  itemState!.entity.setResource(resource, replaceOnRef: FoundationReferences.damage2Res);
+                                  itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.damage2Res);
                                 },
                               ),
                             ),
@@ -292,6 +322,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                     /// --> Seal information.
                     SectionWidget(
                       title: 'Sellos', 
+                      outterPadding: EdgeInsets.zero,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -307,7 +338,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                     hint: 'Numero de sello 1',
                                     onChanged: (String value) => itemState.entity.sanitize(seal: value),
                                     controller: TextEditingController(
-                                      text: itemState!.entity.seal,
+                                      text: itemState.entity.seal,
                                     ),
                                   ),
                                 ),
@@ -372,43 +403,60 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                         ),
                       )
                     ),
-                    TextInput(
-                      width: double.maxFinite,
-                      maxLength: 100,
-                      label: itemState.entity.entry ? '*Origen' : '*Destino',
-                      hint: 'Ingresar información de origen/destino',
-                      onChanged: (String value) => itemState.entity.fromTo,
-                      controller: TextEditingController(
-                        text: itemState.entity.fromTo,
-                      ),
-                    ),
+                    
                     SectionWidget(
-                      title: 'Sección', 
-                      child: Column(
-                        spacing: 10,
-                        children: <Widget>[
-                          Expanded(
-                            child: EntityFinderSelector<Section, SectionsServiceI>(
-                              label: 'Section',
+                      title: 'Sección',
+                      outterPadding: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          spacing: 10,
+                          children: <Widget>[
+                            EntityFinderSelector<Section, SectionsServiceI>(
+                              label: 'Sección',
                               entityBuilder: () => Section(),
                               textBuilder: (Section section) {
                                 return section.name;
                               },
                               onSelected: (Section? selSection) {
                                 itemState.entity.section = selSection ?? Section();
+                                _sectionReact();
                               } 
                             ),
-                          ),
-                          Expanded(
-                            child: SvgPicture.asset(
-                              FoundationAssets.truckFrontSvg,
-                              colorFilter: ColorFilter.mode(
-                                theme.page.fore,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          )
-                        ],
+
+                            ReactiveWidget<_SectionState>(
+                              reactor: _sectionState,
+                              builder: (BuildContext ctx, _SectionState reactor) {
+                                _sectionReact = reactor.react;
+                                if (itemState.entity.section.id > BigInt.zero && itemState.entity.section.resource != null){
+                                  return ImageViewer(
+                                    resource: itemState.entity.section.resource!,
+                                  );
+                                }
+
+                                if (itemState.entity.section.id > BigInt.zero && itemState.entity.section.resource == null) {
+                                  return  const Center(
+                                    child: MessageWidget(
+                                      text: 'No hay una imagen disponible.',
+                                    ),
+                                  );
+                                }
+
+                                return SizedBox(
+                                  height: 200,
+                                  width: double.maxFinite,
+                                  child: SvgPicture.asset(
+                                    FoundationAssets.yardPlaceholderSvg,
+                                    colorFilter: ColorFilter.mode(
+                                      theme.page.fore,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ), 
+                          ],
+                        ),
                       ),
                     ),
                   ],

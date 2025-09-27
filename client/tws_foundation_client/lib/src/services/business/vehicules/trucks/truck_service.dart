@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/create_service_i.dart';
 import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -6,17 +7,9 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Represents a contract for a [TrucksServiceI] implementation, wich is responsible to manage operations
 /// related with [TruckCommon] entity at {Foundation Server}.
-abstract interface class TrucksServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<TruckCommon> {
+abstract interface class TrucksServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<TruckCommon>, CreateServiceI<TruckCommon> {
   /// Creates a new [TrucksServiceI] instance.
   TrucksServiceI(super.host, super.servicePath);
-
-  /// Creates a [TruckCommon] collection.
-  ///
-  ///
-  /// [trucks] records to create and store. ([TruckCommon.Id] property must be 0, [TruckCommon.Timestamp] always will be overriden to the exact moment is stored at the data storages).
-  ///
-  /// [auth] server authorization token.
-  FoundationFutureResolver<BatchOperationOutput<TruckCommon>> create(List<TruckCommon> trucks, String auth);
 
   /// Updates a [TruckCommon] based on the [TruckCommon.Id] pointer.
   ///

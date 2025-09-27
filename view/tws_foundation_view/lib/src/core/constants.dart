@@ -169,7 +169,7 @@ final class FoundationAssets {
   static const String sealSvg = '$_businessPath/seal.svg';
 
   ///
-  static const String yardlogPlaceholderSvg = '$_businessPath/yard_placeholder.svg';
+  static const String yardPlaceholderSvg = '$_businessPath/yard_placeholder.svg';
 
 }
 

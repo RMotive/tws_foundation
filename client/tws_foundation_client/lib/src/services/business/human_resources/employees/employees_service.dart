@@ -1,4 +1,6 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/create_service_i.dart';
+import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {abstract} class.
@@ -24,7 +26,7 @@ abstract class EmployeesServiceB extends FoundationServiceB implements Employees
 /// {interface} class.
 ///
 /// Defines a [ServiceI] contract for [Employee] operations.
-abstract interface class EmployeesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Employee> {
+abstract interface class EmployeesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Employee>, CreateServiceI<Employee> {
   /// Creates a new [EmployeesServiceI] instance.
   EmployeesServiceI(
     super.host,
@@ -57,6 +59,17 @@ final class EmployeesService extends EmployeesServiceB {
       await postSecure<ViewInput<Employee>>(
         'view',
         input,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<BatchOperationOutput<Employee>> create(List<Employee> employees, String authToken) async {
+    return FoundationResponseResolver<BatchOperationOutput<Employee>>(
+      await postListSecure<Employee>(
+        'create',
+        employees,
         authToken: authToken,
       ),
     );

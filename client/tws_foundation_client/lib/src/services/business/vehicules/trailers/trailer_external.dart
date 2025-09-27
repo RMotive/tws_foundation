@@ -18,7 +18,7 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
   /// 
   /// rules > 
   ///   1. 101 > length > 0
-  String carrier = "";
+  String? carrier;
 
   /// Mexican plate identifier.
   /// 
@@ -78,7 +78,7 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
       );
     }
 
-    if (carrier.length > 100 || carrier.isEmpty) {
+    if (carrier != null && carrier!.length > 100 || carrier!.isEmpty) {
       invalidations.add(
         EntityInvalidation<TrailerExternal>(
           this,
@@ -87,7 +87,7 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
             String,
             carrier,
           ),
-          'Lenght: ${carrier.length}, must be between 1 and 100 characters.',
+          'Lenght: ${carrier!.length}, must be empty or between 1 and 100 characters.',
           '101 > length > 0',
         ),
       );

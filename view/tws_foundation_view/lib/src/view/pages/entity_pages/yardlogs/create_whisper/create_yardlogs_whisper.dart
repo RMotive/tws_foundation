@@ -1,9 +1,13 @@
+
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_rich_finder_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/image_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/photo_taker/icon_photo_taker.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
@@ -51,12 +55,16 @@ final class CreateYardLogsWhisper extends PageB {
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+    final CreateEntityFormController creationController = CreateEntityFormController();
     return Whisper(
       title: 'Create YardLog(s)',
-      onPerform: () {},
+      onPerform: () {
+        creationController.create();
+      },
       child:
           (_) => _CreateYardLogsWhisperContent(
             isResevation: isResevation,
+            controller: creationController,
           ),
     );
   }

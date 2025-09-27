@@ -104,7 +104,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 12,
+          spacing: 10,
           children: <Widget>[
             SectionDivider(text: 'Yardlog details'),
             /// --> Creation date property view.
@@ -113,99 +113,23 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               value: entity.timestamp.fullDate,
             ),
 
-            /// --> Event property view.
-            PropertyViewer(
-              label: 'Event',
-              value: entity.entry ? 'In' : 'Out',
-            ),
-
             /// --> Reservation property view.
             PropertyViewer(
               label: 'Reservation', 
               value: entity.reservation? 'Yes' : 'No',
             ),
 
+            /// --> Event property view.
+            PropertyViewer(
+              label: 'Event',
+              value: entity.entry ? 'In' : 'Out',
+            ),
+
             PropertyViewer(
               label: 'Guard', 
               value: '${entity.guard.identification.name} ${entity.guard.identification.lastName}',
             ),
-            
-            /// --> Driver section
-            SectionWidget(
-              title: "Driver",
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  /// --> Driver name property view.
-                  PropertyViewer(
-                    label: 'Name',
-                    value: entity.driver.name,
-                  ),
 
-                  /// --> Driver licence property view.
-                  PropertyViewer(
-                    label: 'Licence',
-                    value: entity.driver.license,
-                  ),
-                ],
-              ),
-            ),
-
-            /// --> Truck section
-            SectionWidget(
-              title: "Truck",
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  /// --> Truck economic property view.
-                  PropertyViewer(
-                    label: 'Economic',
-                    value: entity.truck.economic,
-                  ),
-
-                  /// --> Truck plates property view.
-                  PropertyViewer(
-                    label: 'Plates',
-                    value: entity.truck.plates,
-                  ),
-
-                  /// --> Truck carrier property view.
-                  PropertyViewer(
-                    label: 'Carrier',
-                    value: entity.truck.carrier,
-                  ),
-                ],
-              ),
-            ),
-
-            /// --> Trailer type section.
-            if(entity.trailer != null)
-            SectionWidget(
-              title: "Trailer",
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  /// --> Trailer economic property view.
-                  PropertyViewer(
-                    label: 'Economic',
-                    value: entity.trailer!.economic,
-                  ),
-
-                  /// --> Trailer plates property view.
-                  PropertyViewer(
-                    label: 'Plates',
-                    value: entity.trailer!.plates,
-                  ),
-
-                  /// --> Trailer type property view.
-                  PropertyViewer(
-                    label: 'Type',
-                    value: entity.trailer!.classType,
-                  ),
-                ],
-              ),
-            ),
-            
             /// --> Load Type property view.
             PropertyViewer(
               label: 'Load Type',
@@ -223,93 +147,125 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               label: 'Section',
               value: '${entity.section.yard.name} - ${entity.section.name}',
             ),
+            
+            /// --> Driver section
+            const SectionDivider(text: 'Driver'),
+            /// --> Driver name property view.
+            PropertyViewer(
+              label: 'Name',
+              value: entity.driver.name,
+            ),
+
+            /// --> Driver licence property view.
+            PropertyViewer(
+              label: 'Licence',
+              value: entity.driver.license,
+            ),
+            /// --> Truck section
+            const SectionDivider(text: 'Truck'),
+            /// --> Truck economic property view.
+            PropertyViewer(
+              label: 'Economic',
+              value: entity.truck.economic,
+            ),
+
+            /// --> Truck plates property view.
+            PropertyViewer(
+              label: 'Plates',
+              value: entity.truck.plates,
+            ),
+
+            /// --> Truck carrier property view.
+            PropertyViewer(
+              label: 'Carrier',
+              value: entity.truck.carrier,
+            ),
+            /// --> Trailer type section.
+            if(entity.trailer != null)
+            ...<Widget>[
+              const SectionDivider(text: 'Trailer'),
+              /// --> Trailer economic property view.
+              PropertyViewer(
+                label: 'Economic',
+                value: entity.trailer!.economic,
+              ),
+
+              /// --> Trailer plates property view.
+              PropertyViewer(
+                label: 'Plates',
+                value: entity.trailer!.plates,
+              ),
+
+              /// --> Trailer type property view.
+              PropertyViewer(
+                label: 'Type',
+                value: entity.trailer!.classType,
+              ),
+            ],
 
             /// --> Log evidences.
             const SectionDivider(text: 'Evidences'),
             SectionWidget(
               title: 'Seals', 
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  /// --> First seal property view.
-                  PropertyViewer(
-                    label: 'Seal #1',
-                    value: entity.seal ?? '---',
+              outterPadding: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Center(
+                  child: Column(
+                    spacing: 10,
+                    children: <Widget>[
+                      /// --> First seal property view.
+                      PropertyViewer(
+                        label: 'Seal #1',
+                        value: entity.seal,
+                      ),
+                  
+                      if(seal1 != null)
+                      ImageViewer(
+                        resource: seal1, 
+                      ),
+                  
+                      /// --> Second seal property view.
+                      PropertyViewer(
+                        label: 'Seal #2',
+                        value: entity.sealAlt,
+                      ),
+                  
+                      if(seal2 != null)
+                      ImageViewer(
+                        resource: seal2, 
+                      ),
+                    ],
                   ),
-
-                  if(seal1 != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: seal1, 
-                    ),
-                  ),
-
-                  /// --> Second seal property view.
-                  PropertyViewer(
-                    label: 'Seal #2',
-                    value: entity.sealAlt ?? '---',
-                  ),
-
-                  if(seal2 != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: seal2, 
-                    ),
-                  ),
-                ],
+                ),
               )
-            ),
-
-            /// --> Damages evidences.
-            SectionWidget(
-              title: 'Damages', 
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  if(damage1 != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: damage1, 
-                    ),
-                  ),
-
-                  if(damage2 != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: damage2, 
-                    ),
-                  ),
-
-                  if(damage1 == null && damage2 == null)
-                  const MessageWidget(text: 'No damages evidences'),
-                ],
-              ),
             ),
 
             /// --> Truck evidences.
             SectionWidget(
               outterPadding: EdgeInsets.zero,
               title: 'Truck', 
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  if(truckFront != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: truckFront, 
-                    ),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Center(
+                  child: Column(
+                    spacing: 10,
+                    children: <Widget>[
+                      if(truckFront != null)
+                      ImageViewer(
+                        resource: truckFront, 
+                      ),
+                  
+                      if(truckLateral != null)
+                      ImageViewer(
+                        resource: truckLateral, 
+                      ),
+                  
+                      if(truckFront == null && truckLateral == null)
+                      const MessageWidget(text: 'No truck evidences'),
+                    ],
                   ),
-
-                  if(truckLateral != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: truckLateral, 
-                    ),
-                  ),
-
-                  if(truckFront == null && truckLateral == null)
-                  const MessageWidget(text: 'No truck evidences'),
-                ],
+                ),
               ),
             ),
 
@@ -317,26 +273,55 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
             SectionWidget(
               outterPadding: EdgeInsets.zero,
               title: 'Trailer', 
-              child: Column(
-                spacing: 10,
-                children: <Widget>[
-                  if(trailerBack != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: trailerBack, 
-                    ),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Center(
+                  child: Column(
+                    spacing: 10,
+                    children: <Widget>[
+                      if(trailerBack != null)
+                      ImageViewer(
+                        resource: trailerBack, 
+                      ),
+                  
+                      if(trailerLateral != null)
+                      ImageViewer(
+                        resource: trailerLateral, 
+                      ),
+                  
+                      if(trailerBack == null && trailerLateral == null)
+                      const MessageWidget(text: 'No trailer evidences'),
+                    ],
                   ),
+                ),
+              ),
+            ),
 
-                  if(trailerLateral != null)
-                  Expanded(
-                    child: ImageViewer(
-                      resource: trailerLateral, 
-                    ),
+            /// --> Damages evidences.
+            SectionWidget(
+              title: 'Damages', 
+              outterPadding: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Center(
+                  child: Column(
+                    spacing: 10,
+                    children: <Widget>[
+                      if(damage1 != null)
+                      ImageViewer(
+                        resource: damage1, 
+                      ),
+                  
+                      if(damage2 != null)
+                      ImageViewer(
+                        resource: damage2, 
+                      ),
+                  
+                      if(damage1 == null && damage2 == null)
+                      const MessageWidget(text: 'No damages evidences'),
+                    ],
                   ),
-
-                  if(trailerBack == null && trailerLateral == null)
-                  const MessageWidget(text: 'No trailer evidences'),
-                ],
+                ),
               ),
             ),
           ],
@@ -362,22 +347,20 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
-            spacing: 10,
+            spacing: 20,
             children: <Widget>[
               const SectionDivider(text: 'Yardlog details'),
               OptionsSelector<bool>(
                 title: 'Event',
+                preSelected: <bool>[entity.entry],
                 options:  <OptionsSelectorOption<bool>>[
                   OptionsSelectorOption<bool>(
                     title: 'In',
                     value: true,
-                    resource: FoundationAssets.exitSvg,
                   ),
                   OptionsSelectorOption<bool>(
                     title: 'Out',
                     value: false,
-                    resource: FoundationAssets.exitSvg,
-                    iconRotation: 2,
                   ),
                 ],
                 onSelect: (List<bool> selected) {
@@ -393,7 +376,8 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               /// --> Driver selection.
               EntityFinderSelector<DriverCommon, DriversServiceI>(
                 entityBuilder: () => DriverCommon(),
-                label: 'Select a Driver...',
+                label: '*Select a Driver...',
+                initialValue: entity.driver,
                 textBuilder: (DriverCommon driver) {
                   return "${driver.name} - ${driver.license}";
                 },
@@ -403,7 +387,8 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               ),
               EntityFinderSelector<TruckCommon, TrucksServiceI>(
                 entityBuilder: () => TruckCommon(),
-                label: 'Select a Truck...',
+                label: '*Select a Truck...',
+                initialValue: entity.truck,
                 textBuilder: (TruckCommon truck) {
                   return truck.economic;
                 },
@@ -414,6 +399,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               EntityFinderSelector<TrailerCommon, TrailersServiceI>(
                 entityBuilder: () => TrailerCommon(),
                 label: 'Select a Trailer...',
+                initialValue: entity.trailer,
                 textBuilder: (TrailerCommon trailer) {
                   return trailer.economic;
                 },
@@ -426,7 +412,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 width: double.maxFinite,
                 maxLength: 100,
                 label: entity.entry ? '*From' : '*To',
-                hint: 'Ingresar información de origen/destino',
+                hint: 'Enter the From/To information',
                 onChanged: (String value) => entity.fromTo = value,
                 controller: TextEditingController(
                   text: entity.fromTo,
@@ -436,7 +422,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               /// Truck evidences section.
               SectionWidget(
                 outterPadding: EdgeInsets.zero,
-                title: 'Truck evidences',
+                title: '*Truck evidences',
                 child: Column(
                   spacing: 10,
                   children: <Widget>[
@@ -709,25 +695,40 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   spacing: 10,
                   children: <Widget>[
                     EntityFinderSelector<Section, SectionsServiceI>(
-                      label: 'Section',
+                      label: '*Section',
                       entityBuilder: () => Section(),
+                      initialValue: entity.section,
                       textBuilder: (Section section) {
                         return section.name;
                       },
                       onSelected: (Section? selSection) {
                         entity.section = selSection ?? Section();
+                        _sectionReact();
                       } 
                     ),
-                    if(entity.section.id <= BigInt.zero)
-                    _BlendedSVG(
-                      route: FoundationAssets.yardlogPlaceholderSvg,
-                    ),
-                    if(entity.section.id > BigInt.zero)
-                    ImageViewer(
-                      resource: entity.section
-                    )
+                    ReactiveWidget<_SectionState>(
+                      reactor: _sectionState,
+                      builder: (BuildContext ctx, _SectionState reactor) {
+                        _sectionReact = reactor.react;
+                        if (entity.section.id > BigInt.zero && entity.section.resource != null){
+                          return  ImageViewer(
+                            resource: entity.section.resource!,
+                          );
+                        }
 
-                    
+                        if (entity.section.id > BigInt.zero && entity.section.resource == null) {
+                          return  const Center(
+                            child: MessageWidget(
+                              text: 'Not section image to show.',
+                            ),
+                          );
+                        }
+
+                        return _BlendedSVG(
+                          route: FoundationAssets.yardPlaceholderSvg,
+                        );
+                      },
+                    ), 
                   ],
                 ),
               ),
@@ -832,10 +833,6 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         TextLabel(
           title: 'Guard',
           value: '${entity.guard.identification.name} ${entity.guard.identification.lastName}',
-        ),
-        TextLabel(
-          title: 'Reservation',
-          value: entity.reservation ? 'Yes' : 'No',
         ),
         TextLabel(
           title: 'Driver name',

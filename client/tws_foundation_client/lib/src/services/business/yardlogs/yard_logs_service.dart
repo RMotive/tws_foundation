@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/create_service_i.dart';
 import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -6,17 +7,9 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Represents a contract for a [YardLogsServiceI] implementation, wich is responsible to manage operations
 /// related with [YardLog] entity at {Foundation Server}.
-abstract interface class YardLogsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<YardLog> {
+abstract interface class YardLogsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<YardLog>, CreateServiceI<YardLog> {
   /// Creates a new [YardLogsServiceI] instance.
   YardLogsServiceI(super.host, super.servicePath);
-
-  /// Creates a [YardLog] collection.
-  ///
-  ///
-  /// [yardlogs] records to create and store. ([YardLog.Id] property must be 0, [YardLog.Timestamp] always will be overriden to the exact moment is stored at the data storages).
-  ///
-  /// [auth] server authorization token.
-  FoundationFutureResolver<BatchOperationOutput<YardLog>> create(List<YardLog> yardlogs, String auth);
 
   /// Updates a [YardLog] based on the [YardLog.Id] pointer.
   ///

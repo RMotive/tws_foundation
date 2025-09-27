@@ -9,12 +9,12 @@ class SectionDivider extends StatelessWidget {
   final Color? color;
   
   /// Centered text title.
-  final String text;
+  final String? text;
   
   const SectionDivider({
     super.key,
     this.color,
-    required this.text,
+    this.text,
   });
 
   @override
@@ -23,34 +23,36 @@ class SectionDivider extends StatelessWidget {
     if(color == null){
       mainColor = Theming.get<FoundationThemeB>(context).control.fore;
     }
-
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Divider(
-              color: mainColor,
-            )
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              text,
-              style: TextStyle(
-                fontWeight: FontWeight.w100,
-                fontStyle: FontStyle.italic,
-                color: mainColor
+    if (text != null) {
+      return Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Divider(
+                color: mainColor,
               ),
             ),
-          ),
-          Expanded(
-            child: Divider(
-              color: mainColor,
-            )
-          )
-        ],
-      ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                text!,
+                style: TextStyle(fontWeight: FontWeight.w100, fontStyle: FontStyle.italic, color: mainColor),
+              ),
+            ),
+            Expanded(
+              child: Divider(
+                color: mainColor,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Divider(
+      color: mainColor,
     );
+    
   }
 }

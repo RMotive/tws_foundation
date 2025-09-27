@@ -67,7 +67,7 @@ final class OptionsSelector<TValue> extends StatefulWidget {
   /// selection options stack is given, when it is disabled the collection will only contain the only selected option.
   final FutureOr<void> Function(List<TValue> selected) onSelect;
 
-  /// Values pre-selected.
+  /// Values pre-selected, search the matching options values and set has selected items.
   final List<TValue>? preSelected;
 
   /// Whether the [Widget] is enabled.

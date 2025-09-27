@@ -49,6 +49,7 @@ final class CreateEntityForm<TEntity extends EntityI<TEntity>> extends StatefulW
 
   /// A [FutureOr] list for the submit of the added items, returning the result [EntityCreationFormFeedback] status.
   final FutureOr<List<UserFeedback>> Function(List<TEntity> entities)? onCreate;
+  
 
   /// Creates a new [CreateEntityForm] instance.
   const CreateEntityForm({
@@ -86,16 +87,25 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends Sta
   ///
   List<CreateEntityFormRecordReactor<TEntity>> recordReactors = <CreateEntityFormRecordReactor<TEntity>>[];
 
+  /// Validator method for entities creation
+  late bool Function(TEntity entity) validator;
+
   @override
   void initState() {
     super.initState();
     widget.controller?.addListener(performCreate);
-
+    
     currRecordReactor = CreateEntityFormRecordReactor<TEntity>(
       widget.entityFactory(),
     );
 
     recordReactors.add(currRecordReactor);
+    validator = widget.validator ?? (TEntity entity){ 
+      List<EntityInvalidation<TEntity>> invalidations = <EntityInvalidation<TEntity>>[];
+      invalidations = entity.evaluate();
+      return invalidations.isEmpty;
+    };
+    
   }
 
   @override
@@ -114,28 +124,37 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends Sta
     }
   }
 
-  /// Performs the {create} operation for the current managed [TEntity] records.
-  void performCreate() async {
-    if (widget.onCreate == null) return;
-
+  /// Validate the creation content based on [TEntity.evaluation] method.
+  /// 
+  /// Return empty when a invalid entity is founded.
+  List<TEntity>? validateEntities(List<CreateEntityFormRecordReactor<TEntity>> recordReactor){
     bool areInvalid = false;
     final List<TEntity> entities = <TEntity>[];
-    for (CreateEntityFormRecordReactor<TEntity> recordReactor in recordReactors) {
-      TEntity entity = recordReactor.entity;
+    for (CreateEntityFormRecordReactor<TEntity> record in recordReactors) {
+      TEntity entity = record.entity;
       entities.add(entity);
 
-      if (widget.validator == null) {
-        continue;
-      }
-
-      bool isValid = widget.validator!(entity);
-      recordReactor.isValid = isValid;
+      bool isValid = validator(entity);
+      record.isValid = isValid;
       if (!isValid && !areInvalid) {
         areInvalid = true;
       }
     }
 
     if (areInvalid) {
+      return null;
+    }
+
+    return entities;
+  }
+
+  /// Performs the {create} operation for the current managed [TEntity] records.
+  void performCreate() async {
+    if (widget.onCreate == null) return;
+
+    final List<TEntity>? entities = validateEntities(recordReactors);
+
+    if(entities == null){
       setState(() {});
       return;
     }
