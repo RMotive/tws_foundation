@@ -12,9 +12,8 @@ final class _CreateYardLogsWhisperContent extends StatefulWidget {
   final bool isResevation;
 
   /// Creation {event} controller.
-    final CreateEntityFormController controller;
+  final CreateEntityFormController controller;
   
-
   /// Create a new [_CreateYardLogsWhisperContent] instance.
   const _CreateYardLogsWhisperContent({
     required this.controller,
@@ -82,10 +81,13 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
           );
         }
 
-        return CreateEntityForm<YardLog>(
+        return CreateEntityForm<YardLog, YardLogsServiceI>(
           isMultiple: false,
           entityFactory: () => YardLog(),
           controller: widget.controller,
+          buildEntityTag: (YardLog entity) {
+            return 'Yardlog with: ${entity.driver.name} and truck ${entity.truck.economic}';
+          },
           onCreate: (List<YardLog> entities) {
             print('creation...');
             return <UserFeedback>[];
@@ -428,13 +430,13 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                               reactor: _sectionState,
                               builder: (BuildContext ctx, _SectionState reactor) {
                                 _sectionReact = reactor.react;
-                                if (itemState.entity.section.id > BigInt.zero && itemState.entity.section.resource != null){
+                                if (itemState.entity.section != null && (itemState.entity.section!.id > BigInt.zero && itemState.entity.section!.resource != null)){
                                   return ImageViewer(
-                                    resource: itemState.entity.section.resource!,
+                                    resource: itemState.entity.section!.resource!,
                                   );
                                 }
 
-                                if (itemState.entity.section.id > BigInt.zero && itemState.entity.section.resource == null) {
+                                if (itemState.entity.section != null && (itemState.entity.section!.id > BigInt.zero && itemState.entity.section!.resource == null)) {
                                   return  const Center(
                                     child: MessageWidget(
                                       text: 'No hay una imagen disponible.',

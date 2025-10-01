@@ -6,17 +6,25 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {whisper} class.
 final class EmployeesPageCreateWhisper extends PageB {
+
   /// Creates a new [EmployeesPageCreateWhisper] instance.
   const EmployeesPageCreateWhisper();
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+    final CreateEntityFormController creationController = CreateEntityFormController();
     return Whisper(
       title: 'Create Employee(s)',
-      onPerform: () {},
+      onPerform: () {
+        creationController.create();
+      },
       child: (GlobalKey<FormState> formState) {
-        return CreateEntityForm<Employee>(
+        return CreateEntityForm<Employee, EmployeesServiceI>(
           entityFactory: () => Employee(),
+          controller: creationController,
+          buildEntityTag: (Employee entity) {
+            return 'Employee with name: ${entity.fullName}';
+          },
           recordDesigner: (Employee entity, bool selected, bool valid) {
             return CreateEntityFormRecord(
               selected: selected,

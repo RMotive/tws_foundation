@@ -145,7 +145,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
             /// --> Section property view.
             PropertyViewer(
               label: 'Section',
-              value: '${entity.section.yard.name} - ${entity.section.name}',
+              value: entity.section != null? '${entity.section!.yard.name} - ${entity.section!.name}' : '---',
             ),
             
             /// --> Driver section
@@ -710,13 +710,13 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       reactor: _sectionState,
                       builder: (BuildContext ctx, _SectionState reactor) {
                         _sectionReact = reactor.react;
-                        if (entity.section.id > BigInt.zero && entity.section.resource != null){
+                        if (entity.section != null && (entity.section!.id > BigInt.zero && entity.section!.resource != null)){
                           return  ImageViewer(
-                            resource: entity.section.resource!,
+                            resource: entity.section!.resource!,
                           );
                         }
 
-                        if (entity.section.id > BigInt.zero && entity.section.resource == null) {
+                        if (entity.section != null && (entity.section!.id > BigInt.zero && entity.section!.resource == null)) {
                           return  const Center(
                             child: MessageWidget(
                               text: 'Not section image to show.',
@@ -887,7 +887,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         ),
         TextLabel(
           title: 'Section',
-          value: '${entity.section.yard.name} - ${entity.section.name}',
+          value: entity.section != null? '${entity.section!.yard.name} - ${entity.section!.name}' : '---',
         ),
       ],
     );
@@ -983,7 +983,7 @@ final class YardLogsEntityTable extends StatelessWidget {
         ),
         EntityTableColumnOptions<YardLog>(
           title: 'Section',
-          factory: (YardLog entity, int index, BuildContext buildContext) => entity.section.name,
+          factory: (YardLog entity, int index, BuildContext buildContext) =>  entity.section?.name ?? '---',
         ),
         EntityTableColumnOptions<YardLog>(
           title: 'Guard',

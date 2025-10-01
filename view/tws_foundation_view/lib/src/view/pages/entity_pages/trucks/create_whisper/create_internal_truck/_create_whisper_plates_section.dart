@@ -32,7 +32,7 @@ class _CreateWhisperPlatesSection extends StatelessWidget {
       spacing: 10,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        SectionDivider(text: 'Plate $index'),
+        SectionDivider(text: 'Plate ${index + 1}'),
         Row(
           spacing: 10,
           children: <Widget>[
@@ -50,7 +50,7 @@ class _CreateWhisperPlatesSection extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 20),
                 child: AutoCompleteField<String>(
                   nativeList: _countries,
-                  initialValue: plate.country == "" ? null :  plate.country,
+                  initialValue: plate.country.cleaned ?? plate.country,
                   displayValue: (String? item) => item ?? "Invalid data",
                   label: '*Country',
                   onChanged: countryOnChange,
@@ -73,7 +73,7 @@ class _CreateWhisperPlatesSection extends StatelessWidget {
                     nativeList: currentCountry == _countries[0] ? _statesUSA : _statesMX,
                     initialValue: plate.state == "" ? null :  plate.state,
                     displayValue:(String? item) => item ?? "Not valid data",
-                    label: '*$currentCountry State',
+                    label: '$currentCountry State',
                     isOptional: true,
                     onChanged: stateOnChange,
                   ),

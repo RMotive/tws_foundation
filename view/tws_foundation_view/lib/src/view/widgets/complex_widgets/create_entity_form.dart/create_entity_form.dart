@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
-import 'package:flutter/material.dart' hide Router;
+import 'package:flutter/material.dart' hide Router, Dialog;
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -25,7 +26,7 @@ const double _kColWidthLimit = 300;
 ///
 ///
 /// Handles the creation and submit of [TEntity] entites, displaying a custom creation form for items and display a list of added items and it's current values.
-final class CreateEntityForm<TEntity extends EntityI<TEntity>> extends StatefulWidget {
+final class CreateEntityForm<TEntity extends EntityI<TEntity>, TServiceI extends CreateServiceI<TEntity>> extends StatefulWidget {
   /// [TEntity] default object factory.
   final TEntity Function() entityFactory;
 
@@ -49,8 +50,12 @@ final class CreateEntityForm<TEntity extends EntityI<TEntity>> extends StatefulW
 
   /// A [FutureOr] list for the submit of the added items, returning the result [EntityCreationFormFeedback] status.
   final FutureOr<List<UserFeedback>> Function(List<TEntity> entities)? onCreate;
-  
 
+  /// Builds a user-friendly message that identifies the entity that failed during record creation on the {server} side.
+  /// 
+  /// e.g: "Truck - {economic} - {plates} - etc..".
+  final String Function(TEntity entity)? buildEntityTag;
+  
   /// Creates a new [CreateEntityForm] instance.
   const CreateEntityForm({
     super.key,
@@ -61,6 +66,7 @@ final class CreateEntityForm<TEntity extends EntityI<TEntity>> extends StatefulW
     this.onCreate,
     this.onClose,
     this.recordDesigner,
+    this.buildEntityTag,
     required this.formDesigner,
   }) : assert(
          (isMultiple && recordDesigner != null) || (!isMultiple && recordDesigner == null),
@@ -68,13 +74,13 @@ final class CreateEntityForm<TEntity extends EntityI<TEntity>> extends StatefulW
        );
 
   @override
-  State<CreateEntityForm<TEntity>> createState() => _CreateEntityFormState<TEntity>();
+  State<CreateEntityForm<TEntity, TServiceI>> createState() => _CreateEntityFormState<TEntity, TServiceI>();
 }
 
 /// {state} class.
 ///
 /// Handles [State] for [CreateEntityForm].
-final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends State<CreateEntityForm<TEntity>> {
+final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI extends CreateServiceI<TEntity>> extends State<CreateEntityForm<TEntity, TServiceI>> {
   /// Application routing service.
   final Router _router = Injector.get();
 
@@ -116,7 +122,7 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends Sta
   }
 
   @override
-  void didUpdateWidget(covariant CreateEntityForm<TEntity> oldWidget) {
+  void didUpdateWidget(covariant CreateEntityForm<TEntity, TServiceI> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.controller != oldWidget.controller) {
@@ -136,15 +142,13 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends Sta
 
       bool isValid = validator(entity);
       record.isValid = isValid;
+      record.react();
       if (!isValid && !areInvalid) {
         areInvalid = true;
       }
     }
 
-    if (areInvalid) {
-      return null;
-    }
-
+    if (areInvalid) return null;
     return entities;
   }
 
@@ -160,6 +164,118 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>> extends Sta
     }
 
     List<UserFeedback> userFeedbacks = await widget.onCreate!(entities);
+    SessionStorageI sessionStorage = Injector.get();
+    TServiceI creationService = Injector.get();
+    FoundationResponseResolver<BatchOperationOutput<TEntity>> resolver = await creationService.create(
+      entities,
+      sessionStorage.token,
+    ).onError((_, _) async {
+      await showDialog(
+        context: context,
+        useRootNavigator: true,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            showCancelButton: false,
+            title: 'Error',
+            content: Text(
+              'Something go wrong, contact to the administator or retry the operation.'
+            ),
+            theming: Theming.get<FoundationThemeB>(context).error,
+            onAccept: () {
+              _router.pop();
+            },
+          );
+        },
+      );
+      return Future<FoundationResponseResolver<BatchOperationOutput<TEntity>>>.delayed(Duration.zero);
+    });
+
+    String? errMessage;
+    RichText? failureEntitiesMessage;
+    List<TEntity> failureEntities = <TEntity>[];
+    resolver.resolve(
+      objectBuilder: () => BatchOperationOutput<TEntity>(widget.entityFactory),
+      onSuccess: (SuccessFrame<BatchOperationOutput<TEntity>> success) {
+        List<EntityOperationFailure<TEntity>> failures = success.content.failures;
+        if (failureEntities.isNotEmpty) {
+          failureEntitiesMessage = RichText(
+            text: TextSpan(
+              text: 'Cannot create some of the items, please verify the data and try again:\n\n',
+              children:
+                  widget.buildEntityTag != null
+                      ? List<InlineSpan>.generate(failures.length, (int index) {
+                        return TextSpan(
+                          text: "${index + 1}.- ${widget.buildEntityTag!(failures[index].entity)}",
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: 'Error: ${failures[index].message}',
+                            ),
+                          ],
+                        );
+                      })
+                      : null,
+            ),
+          );
+
+          showDialog(
+            context: context,
+            useRootNavigator: true,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Dialog(
+                showCancelButton: false,
+                title: 'Error Creating records.',
+                richContent: failureEntitiesMessage!,
+                theming: Theming.get<FoundationThemeB>(context).error,
+                onAccept: () {
+                  _router.pop();
+                },
+              );
+            },
+          );
+
+        }
+      },
+      onFailure: (FailureFrame failure, int status) {
+        errMessage = failure.content.advise;
+      },
+      onException: (TracedException exception) {
+        errMessage = FoundationMessages.unknownServerException;
+      },
+      onConnectionFailure: () {
+        errMessage = FoundationMessages.connectionError;
+      },
+      onFinally: () {
+        if (errMessage == null){
+          _router.pop();
+          return;
+        } 
+
+        showDialog(
+          context: context,
+          useRootNavigator: true,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return Dialog(
+              showCancelButton: false,
+              title: 'Error Creating records.',
+              content: Text(
+                errMessage!,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              theming: Theming.get<FoundationThemeB>(context).error,
+              onAccept: () {
+                _router.pop();
+              },
+            );
+          },
+        );
+      },
+    );
+
     if (userFeedbacks.isEmpty) {
       _router.pop();
       widget.onClose?.call();

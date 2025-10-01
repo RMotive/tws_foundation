@@ -15,6 +15,11 @@ final class Dialog extends StatefulWidget {
   /// Text content.
   final Text? content;
 
+  /// Rich Text content.
+  /// 
+  /// If [content] property is set, this rich text property will have no effect.
+  final RichText? richContent;
+
   /// Show an optional cancel button.
   final bool showCancelButton;
 
@@ -36,6 +41,7 @@ final class Dialog extends StatefulWidget {
     this.onAccept,
     this.content,
     this.theming,
+    this.richContent,
     this.showCancelButton = true,
     this.title = 'Confirmation',
     this.acceptLabel = 'Accept',
@@ -158,7 +164,8 @@ final class _DialogState extends State<Dialog> {
                           child: DefaultTextStyle(
                             style: TextStyle(color: theming.fore),
                             child:
-                                widget.content ??
+                                widget.content ?? 
+                                widget.richContent ??
                                 const Text(
                                   'Are you sure you want to continue?',
                                 ),

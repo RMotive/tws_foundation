@@ -87,7 +87,7 @@ final class YardLog extends EntityB<YardLog> {
   LoadType loadType = LoadType();
 
   /// [Section] information.
-  Section? section = Section();
+  Section? section;
 
   /// [Resource] content attached to the entry.
   /// 
@@ -160,7 +160,7 @@ final class YardLog extends EntityB<YardLog> {
         kSealAlt: sealAlt,
         kFromTo: fromTo,
         kReservation: reservation,
-        kLoadType: loadType?.encode(),
+        kLoadType: loadType.encode(),
         kGuard: guard.encode(),
         kSection: section?.encode(),
         kDriver: driver.encode(),

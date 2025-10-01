@@ -29,19 +29,26 @@ Status _defaultStatus = Status();
 
 /// {whisper} class.
 final class DriversPageCreateWhisper extends PageB {
+
   /// Creates a new [DriversPageCreateWhisper] instance.
   const DriversPageCreateWhisper();
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+    final CreateEntityFormController creationController = CreateEntityFormController();
+
     return Whisper(
       title: 'Create Driver(s)',
       onPerform: () {
-        print('perform');
+        creationController.create();
       },
       child:(GlobalKey<FormState> formState) {
-        return CreateEntityForm<DriverCommon>(
+        return CreateEntityForm<DriverCommon, DriversServiceI>(
           entityFactory: () => DriverCommon(),
+          controller: creationController,
+          buildEntityTag:(DriverCommon entity) {
+            return ' Driver with license: ${entity.license}';
+          },
           onCreate: (List<DriverCommon> entities) {
             List<UserFeedback> feedbacks = <UserFeedback>[];
             List<EntityInvalidation<DriverCommon>> invalidations = <EntityInvalidation<DriverCommon>>[];

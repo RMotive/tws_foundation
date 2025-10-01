@@ -43,14 +43,20 @@ final class TrailersPageCreateWhisper extends PageB {
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+    final CreateEntityFormController creationController = CreateEntityFormController();
+
     return Whisper(
       title: 'Create Trailer(s)',
       onPerform: () {
-        print('perform');
+        creationController.create();
       },
       child:(GlobalKey<FormState> formState) {
-        return CreateEntityForm<TrailerCommon>(
+        return CreateEntityForm<TrailerCommon, TrailersServiceI>(
           entityFactory: () => TrailerCommon(),
+          controller: creationController,
+          buildEntityTag: (TrailerCommon entity) {
+            return 'Trailer with number: ${entity.economic}';
+          },
           onCreate: (List<TrailerCommon> entities) {
             List<UserFeedback> feedbacks = <UserFeedback>[];
             List<EntityInvalidation<TrailerCommon>> invalidations = <EntityInvalidation<TrailerCommon>>[];

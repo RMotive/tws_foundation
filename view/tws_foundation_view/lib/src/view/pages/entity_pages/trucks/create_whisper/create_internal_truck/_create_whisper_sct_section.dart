@@ -20,7 +20,6 @@ class _CreateWhisperSCTSection extends StatelessWidget {
         TextInput(
           label: '*Type',
           maxLength: 6,
-          isFixedLength: true,
           controller: TextEditingController(text: itemState?.entity.internal?.sct?.type),
           onChanged: (String value){
             itemState?.entity.internal?.sct = itemState?.entity.internal?.sct?.sanitize(type: value) ?? SCT().sanitize(type: value);
@@ -31,7 +30,6 @@ class _CreateWhisperSCTSection extends StatelessWidget {
         TextInput(
           label: '*Number',
           maxLength: 25,
-          isFixedLength: true,
           controller: TextEditingController(text: itemState?.entity.internal?.sct?.number),
           onChanged: (String value) {
             itemState?.entity.internal?.sct =

@@ -62,6 +62,8 @@ public class TrucksService
 
         foreach (Truck_Common entity in Entities) {
             try {
+                entity.Internal?.Common = entity;
+                entity.External?.Common = entity;
                 Truck_Common attachedEntity = await depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {

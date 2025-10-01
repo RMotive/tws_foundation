@@ -1,6 +1,4 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/create_service_i.dart';
-import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
@@ -10,14 +8,6 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 abstract interface class TrailersServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<TrailerCommon>, CreateServiceI<TrailerCommon> {
   /// Creates a new [TrailersServiceI] instance.
   TrailersServiceI(super.host, super.servicePath);
-
-  /// Creates a [TrailerCommon] collection.
-  ///
-  ///
-  /// [trailers] records to create and store. ([TrailerCommon.Id] property must be 0, [TrailerCommon.Timestamp] always will be overriden to the exact moment is stored at the data storages).
-  ///
-  /// [auth] server authorization token.
-  FoundationFutureResolver<BatchOperationOutput<TrailerCommon>> create(List<TrailerCommon> trailers, String auth);
 
   /// Updates a [TrailerCommon] based on the [TrailerCommon.Id] pointer.
   ///
