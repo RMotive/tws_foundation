@@ -196,7 +196,6 @@ final class _TextInputState extends State<TextInput> {
   @override
   void dispose() {
     focusNode.dispose();
-    textInputCtrl.dispose();
     _deBouncer?.cancel();
     super.dispose();
   }

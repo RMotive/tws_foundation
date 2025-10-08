@@ -24,7 +24,7 @@ class _CreateWhisperTrucksExternalSection extends StatelessWidget {
               child: TextInput(
                 label: 'Vin',
                 isEnabled: isEnabled,
-                maxLength: 18,
+                maxLength: 17,
                 controller: TextEditingController(
                   text: itemState?.entity.external?.vin,
                 ),
@@ -39,7 +39,7 @@ class _CreateWhisperTrucksExternalSection extends StatelessWidget {
               child: TextInput(
                 label: 'Carrier',
                 isEnabled: isEnabled,
-                maxLength: 12,
+                maxLength: 100,
                 controller: TextEditingController(
                   text: itemState?.entity.external?.carrier,
                 ),
@@ -60,7 +60,7 @@ class _CreateWhisperTrucksExternalSection extends StatelessWidget {
               child: TextInput(
                 label: 'USA Plate',
                 isEnabled: isEnabled,
-                maxLength: 18,
+                maxLength: 7,
                 controller: TextEditingController(
                   text: itemState?.entity.external?.usaPlate,
                 ),
@@ -75,7 +75,7 @@ class _CreateWhisperTrucksExternalSection extends StatelessWidget {
               child: TextInput(
                 label: 'MX Plate',
                 isEnabled: isEnabled,
-                maxLength: 12,
+                maxLength: 7,
                 controller: TextEditingController(
                   text: itemState?.entity.external?.mxPlate,
                 ),

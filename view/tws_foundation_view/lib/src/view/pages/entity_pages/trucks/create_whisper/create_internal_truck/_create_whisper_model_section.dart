@@ -39,7 +39,8 @@ class _CreateWhisperModelSection extends StatelessWidget {
                 entityBuilder: () => Manufacturer(),
                 onSelected: (Manufacturer? manufacturer) {
                   VehiculeModel? model =  itemState?.entity.internal?.model;
-                  model = model?.sanitize(manufacturer: manufacturer ?? Manufacturer());
+                  if (model!.id != BigInt.zero) model = VehiculeModel();
+                  model = model.sanitize(manufacturer: manufacturer ?? Manufacturer());
                   itemState?.react();
                 },
               ),

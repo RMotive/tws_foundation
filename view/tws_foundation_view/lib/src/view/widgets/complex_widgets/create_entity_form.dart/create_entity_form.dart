@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
+import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -93,9 +93,6 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
   ///
   List<CreateEntityFormRecordReactor<TEntity>> recordReactors = <CreateEntityFormRecordReactor<TEntity>>[];
 
-  /// Validator method for entities creation
-  late bool Function(TEntity entity) validator;
-
   @override
   void initState() {
     super.initState();
@@ -105,13 +102,7 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
       widget.entityFactory(),
     );
 
-    recordReactors.add(currRecordReactor);
-    validator = widget.validator ?? (TEntity entity){ 
-      List<EntityInvalidation<TEntity>> invalidations = <EntityInvalidation<TEntity>>[];
-      invalidations = entity.evaluate();
-      return invalidations.isEmpty;
-    };
-    
+    recordReactors.add(currRecordReactor);    
   }
 
   @override
@@ -132,45 +123,80 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
 
   /// Validate the creation content based on [TEntity.evaluation] method.
   /// 
-  /// Return empty when a invalid entity is founded.
-  List<TEntity>? validateEntities(List<CreateEntityFormRecordReactor<TEntity>> recordReactor){
-    bool areInvalid = false;
-    final List<TEntity> entities = <TEntity>[];
+  /// Return a boolean with the validation results.
+  /// 
+  /// If any entity not pass the [TEntity.evaluation] method, return a false.
+  (List<TEntity>, bool) validateEntities(List<CreateEntityFormRecordReactor<TEntity>> recordReactor){
+    List<TEntity> entities = <TEntity>[];
+    int index = 0;
     for (CreateEntityFormRecordReactor<TEntity> record in recordReactors) {
+      index++;
       TEntity entity = record.entity;
       entities.add(entity);
+      
+      /// Validated the record data.
+      bool isValid = widget.validator?.call(entity) ?? true;
+      List<EntityInvalidation<TEntity>> invalidations = entity.evaluate();
+      record.isValid = isValid && invalidations.isEmpty;
 
-      bool isValid = validator(entity);
-      record.isValid = isValid;
-      record.react();
-      if (!isValid && !areInvalid) {
-        areInvalid = true;
+      /// Update the record column when is invalid.
+      if(!record.isValid){
+        record.react();
+        /// Mark the whole list as invalid.
+        if(invalidations.isNotEmpty){
+          showInvalidationDialog(entity, invalidations, index);
+          return  (entities, false);
+        }
       }
     }
 
-    if (areInvalid) return null;
-    return entities;
+    return (entities, true);
   }
+  void showInvalidationDialog(TEntity entity, List<EntityInvalidation<TEntity>> invalidations, int index){
 
+    showDialog(
+      context: context,
+      useRootNavigator: true,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return InvalidatingDialog(
+          context: context,
+          title: 'Wrong or missing information on record',
+          header: 'Invalid information in ${widget.buildEntityTag?.call(entity)}.',
+          router: _router,
+          invalidations: invalidations,
+        );
+      },
+    );
+  }
   /// Performs the {create} operation for the current managed [TEntity] records.
   void performCreate() async {
-    if (widget.onCreate == null) return;
+    /// Stores the entities to create when 
+    late List<TEntity> entities;
 
-    final List<TEntity>? entities = validateEntities(recordReactors);
+    /// Flag for any invalidated entity in entities list.
+    late bool isValid;
+    (entities, isValid) = validateEntities(recordReactors);
+    List<UserFeedback> userFeedbacks = <UserFeedback>[];
 
-    if(entities == null){
+    /// Return if any entity is invalid.
+    if (!isValid){
       setState(() {});
       return;
     }
 
-    List<UserFeedback> userFeedbacks = await widget.onCreate!(entities);
+    if(widget.onCreate != null){
+      userFeedbacks = await widget.onCreate!(entities);
+    }
+    String? errMessage;
     SessionStorageI sessionStorage = Injector.get();
     TServiceI creationService = Injector.get();
     FoundationResponseResolver<BatchOperationOutput<TEntity>> resolver = await creationService.create(
       entities,
       sessionStorage.token,
-    ).onError((_, _) async {
-      await showDialog(
+    ).onError((_, _) {
+      errMessage = FoundationMessages.unknownServerException;
+      showDialog(
         context: context,
         useRootNavigator: true,
         barrierDismissible: false,
@@ -179,7 +205,7 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
             showCancelButton: false,
             title: 'Error',
             content: Text(
-              'Something go wrong, contact to the administator or retry the operation.'
+              FoundationMessages.unknownServerException
             ),
             theming: Theming.get<FoundationThemeB>(context).error,
             onAccept: () {
@@ -191,14 +217,13 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
       return Future<FoundationResponseResolver<BatchOperationOutput<TEntity>>>.delayed(Duration.zero);
     });
 
-    String? errMessage;
     RichText? failureEntitiesMessage;
-    List<TEntity> failureEntities = <TEntity>[];
     resolver.resolve(
       objectBuilder: () => BatchOperationOutput<TEntity>(widget.entityFactory),
       onSuccess: (SuccessFrame<BatchOperationOutput<TEntity>> success) {
         List<EntityOperationFailure<TEntity>> failures = success.content.failures;
-        if (failureEntities.isNotEmpty) {
+        if (failures.isNotEmpty) {
+          errMessage = FoundationMessages.unknownServerException;
           failureEntitiesMessage = RichText(
             text: TextSpan(
               text: 'Cannot create some of the items, please verify the data and try again:\n\n',
@@ -206,10 +231,10 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
                   widget.buildEntityTag != null
                       ? List<InlineSpan>.generate(failures.length, (int index) {
                         return TextSpan(
-                          text: "${index + 1}.- ${widget.buildEntityTag!(failures[index].entity)}",
+                          text: "${index + 1}.- ${widget.buildEntityTag!(failures[index].entity)}\n",
                           children: <InlineSpan>[
                             TextSpan(
-                              text: 'Error: ${failures[index].message}',
+                              text: 'Error: ${failures[index].message}\n\n',
                             ),
                           ],
                         );
@@ -227,7 +252,6 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
                 showCancelButton: false,
                 title: 'Error Creating records.',
                 richContent: failureEntitiesMessage!,
-                theming: Theming.get<FoundationThemeB>(context).error,
                 onAccept: () {
                   _router.pop();
                 },
@@ -247,7 +271,7 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        if (errMessage == null){
+        if (errMessage == null && failureEntitiesMessage == null){
           _router.pop();
           return;
         } 
@@ -268,6 +292,11 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
               ),
               theming: Theming.get<FoundationThemeB>(context).error,
               onAccept: () {
+                if (userFeedbacks.isEmpty) {
+                  _router.pop();
+                  widget.onClose?.call();
+                  return;
+                }
                 _router.pop();
               },
             );
@@ -276,10 +305,7 @@ final class _CreateEntityFormState<TEntity extends EntityI<TEntity>, TServiceI e
       },
     );
 
-    if (userFeedbacks.isEmpty) {
-      _router.pop();
-      widget.onClose?.call();
-    }
+   
   }
 
   @override

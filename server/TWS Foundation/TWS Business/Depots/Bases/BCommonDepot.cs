@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Numerics;
 using System.Reflection;
 
 using CSM_Foundation.Core.Utils;
@@ -223,8 +224,33 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         return tmpDependency is null
             ? throw new Exception($"[{GetType().Name}] entity requires [{typeof(TCommon2)}] dependency")
             : tmpDependency;
+    
+    
     }
 
+    /// <summary>
+    /// Gets an entity from cache or adds it to the cache if not exists.
+    /// Stores the tracked instances for entities to avoid multiple instances of the same entity in memory.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="entity"> Entity to retrieve from cache or add if not exists. </param>
+    /// <param name="cache"> Cache dictionary to store the tracked entities of {TEntity}</param>
+    /// <returns> The cached entity, if id not exists in db, then return the same entity without tracking.</returns>
+    public async Task<TEntity> GetEntityCache<TEntity>(TEntity entity, Dictionary<BigInteger, TEntity> cache) where TEntity : class, IEntity {
+        /// Search for the entity in the cache dictionary.
+        if (cache.TryGetValue(entity.Id, out TEntity? cachedEntity)) {
+            return cachedEntity;
+        }
+
+        /// Try to add the entity to the cache if not exists.
+        TEntity? trackedEntity = await _db.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == entity.Id);
+        if (trackedEntity != null) {
+            cache[entity.Id] = trackedEntity;
+            return trackedEntity;
+        }
+
+        return entity;
+    }
     /// <summary>
     /// Stores the specified common entity and its nested entities in the database.
     /// </summary>
@@ -242,7 +268,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
 
         foreach (IEntity entity in entitiesToAdd.Reverse()) {
             if (entity.Id == 0) {
-                _db.Add(entity);
+                _db.Attach(entity);
                 _disposer?.Push(entity);
             }
         }

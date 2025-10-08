@@ -16,7 +16,7 @@ final class Truck extends EntityB<Truck> {
   static const String kCarrier = 'carrier';
 
   /// [Truck.sct] property key.
-  static const String kSct = "sct";
+  static const String kSct = "SCT";
 
   /// [Truck.maintenance] property key.
   static const String kMaintenance = 'maintenance';

@@ -42,6 +42,7 @@ class _CreateWhisperInsuranceSection extends StatelessWidget {
                   initialValue: itemState?.entity.internal?.insurance?.country == "" ? null :  itemState?.entity.internal?.insurance?.country,
                   displayValue:(String? item) => item ?? "Invalid data",
                   label: '*Country',
+                  isOptional: true,
                   onChanged: (String? text) {
                     itemState?.entity.internal?.insurance =
                         itemState?.entity.internal?.insurance?.sanitize(country: text ?? "") ??

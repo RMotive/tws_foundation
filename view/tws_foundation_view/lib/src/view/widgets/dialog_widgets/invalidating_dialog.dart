@@ -8,6 +8,9 @@ class InvalidatingDialog extends StatelessWidget {
   /// Dialog title.
   final String title;
 
+  /// content header text.
+  final String? header;
+
   /// Invalidation list.
   final List<EntityInvalidation<Object>> invalidations;
 
@@ -23,6 +26,7 @@ class InvalidatingDialog extends StatelessWidget {
     required this.invalidations,
     required this.router,
     required this.context,
+    this.header,
   });
 
   @override
@@ -33,7 +37,7 @@ class InvalidatingDialog extends StatelessWidget {
       content: Text.rich(
         textAlign: TextAlign.center,
         TextSpan(
-          text:'Invalid values found, Verify the following values and try again:',
+          text: '${header != null? '$header\n\n' : ''}Invalid values found, Verify the following values and try again:',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             

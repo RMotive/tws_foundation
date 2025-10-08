@@ -602,10 +602,11 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
     return Column(
       spacing: 10,
       children: <Widget>[
+        const SectionDivider(text: 'Insurance details'),
         TextInput(
           label: "Policy",
           hint: "*Enter the policy number",
-          maxLength: 12,
+          maxLength: 20,
           controller: TextEditingController(
             text: entity.internal?.insurance?.policy,
           ),
@@ -664,7 +665,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
     return Column(
       spacing: 10,
       children: <Widget>[
-        const SectionDivider(text: 'Maintenance'),
+        const SectionDivider(text: 'Maintenance details'),
         Datepicker(
           width: double.maxFinite,
           firstDate: DateTime(1940),
@@ -885,6 +886,7 @@ final class TrucksEntityTable extends FoundationEntityTableB<TrucksEntityTableAd
   Widget build(BuildContext context) {
     return EntityTable<TruckCommon, TrucksServiceI>(
       entityFactory: () => TruckCommon(),
+      ranges: <int>[3],
       adapter: adapter,
       columns: <EntityTableColumnOptions<TruckCommon>>[
         /// --> Economic column

@@ -51,6 +51,8 @@ public class DriversService
 
         foreach (Driver_Common entity in Entities) {
             try {
+                entity.Internal?.Common = entity;
+                entity.External?.Common = entity;
                 Driver_Common attachedEntity = await depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {

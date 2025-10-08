@@ -1,7 +1,6 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database;
+﻿using System.Numerics;
+
 using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
@@ -13,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using TWS_Business;
 using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Customer.Features.Business;
@@ -56,16 +56,59 @@ public class TrucksService
     public TrucksService(TrucksDepot Depot, Database Database) : base(Depot) {
         _db = Database;
     }
+
+
     public async override Task<BatchOperationOutput<Truck_Common>> Create(Truck_Common[] Entities, bool Sync = false) {
         Truck_Common[] successes = [];
         EntityOperationFailure<Truck_Common>[] failures = [];
 
         foreach (Truck_Common entity in Entities) {
             try {
+                Dictionary<BigInteger, Status> statusCache = [];
+                Dictionary<BigInteger, Location> locationCache = [];
+                Dictionary<BigInteger, Situation> situationCache = [];
+                Dictionary<BigInteger, Carrier> carrierCache = [];
+                Dictionary<BigInteger, VehiculeModel> vehiculeCache = [];
+                Dictionary<BigInteger, Manufacturer> manufacturerCache = [];
+
+
+                Status? activeStatus = await _db.Statuses.FirstOrDefaultAsync(e => e.Reference == Constants.References.statusActive);
+                if (entity.Location != null) {
+                    entity.Location = await depot.GetEntityCache(entity.Location, locationCache);
+                }
+
+                if (entity.Situation != null) {
+                    entity.Situation = await depot.GetEntityCache(entity.Situation, situationCache);
+                }
+
+
+                if (activeStatus != null) {
+                    statusCache[activeStatus.Id] = activeStatus;
+                    entity.Status = await depot.GetEntityCache(entity.Status, statusCache);
+
+                    if (entity.Internal != null) {
+                        entity.Internal!.Maintenance?.Status = activeStatus;
+                        entity.Internal!.Insurance?.Status = activeStatus;
+                        entity.Internal!.SCT?.Status = activeStatus;
+                        if (entity.Internal!.Model.Id > 0) {
+                            entity.Internal.Model = await depot.GetEntityCache(entity.Internal.Model, vehiculeCache);
+                        } else {
+                            entity.Internal.Model.Status = activeStatus;
+                            entity.Internal.Model.Manufacturer = await depot.GetEntityCache(entity.Internal.Model.Manufacturer, manufacturerCache);
+                        }
+
+                        entity.Internal.Carrier = await depot.GetEntityCache(entity.Internal!.Carrier!, carrierCache);
+
+                        foreach (Plate plate in entity.Internal?.Plates ?? []) {
+                            plate.Status = activeStatus;
+                        }
+                    }
+                }
                 entity.Internal?.Common = entity;
                 entity.External?.Common = entity;
-                Truck_Common attachedEntity = await depot.Store(entity);
-                successes = [.. successes, attachedEntity];
+
+                _db.Attach(entity);
+                successes = [.. successes, entity];
             } catch (Exception excep) {
                 if (Sync) {
                     throw;

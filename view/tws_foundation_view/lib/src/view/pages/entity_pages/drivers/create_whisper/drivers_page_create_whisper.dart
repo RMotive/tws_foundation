@@ -1,9 +1,7 @@
-import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
-import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/data/const/static_collections.dart';
 import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
@@ -48,27 +46,6 @@ final class DriversPageCreateWhisper extends PageB {
           controller: creationController,
           buildEntityTag:(DriverCommon entity) {
             return ' Driver with license: ${entity.license}';
-          },
-          onCreate: (List<DriverCommon> entities) {
-            List<UserFeedback> feedbacks = <UserFeedback>[];
-            List<EntityInvalidation<DriverCommon>> invalidations = <EntityInvalidation<DriverCommon>>[];
-
-            for(DriverCommon entity in entities){
-              invalidations.addAll(entity.evaluate());
-            }
-
-            if(invalidations.isNotEmpty){
-              for(EntityInvalidation<DriverCommon> invalidation in invalidations){
-                UserFeedback feedback = UserFeedback(
-                  type: UserFeedbackType.error,
-                  message: invalidation.reason,
-                );
-                feedbacks.add(feedback);
-              }
-              return feedbacks;
-            }
-
-            return feedbacks;
           },
           recordDesigner: (DriverCommon entity, bool selected, bool valid) {
             List<CreateEntityFormRecordField> commonFields = <CreateEntityFormRecordField>[
@@ -143,7 +120,7 @@ final class DriversPageCreateWhisper extends PageB {
                   CreateEntityFormRecordField(
                     label: 'VISA Expiration',
                     value: entity.internal?.visaExpiration?.dateOnly ?? '---',
-                  ),
+                    ),
 
                   /// --> Driver FAST number
                    if(entity.internal?.fast != null)

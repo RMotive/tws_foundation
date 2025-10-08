@@ -64,7 +64,6 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
   @override
   Widget build(BuildContext context) {
     return AsyncWidget<Employee?>(
-      isStatic: true,
       future: _getUserEmployeeInstance,
       successBuilder: (BuildContext buildContext, Employee? data) {
         if (data == null) {
@@ -87,10 +86,6 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
           controller: widget.controller,
           buildEntityTag: (YardLog entity) {
             return 'Yardlog with: ${entity.driver.name} and truck ${entity.truck.economic}';
-          },
-          onCreate: (List<YardLog> entities) {
-            print('creation...');
-            return <UserFeedback>[];
           },
           formDesigner: (CreateEntityFormRecordReactor<YardLog>? itemState) {
             return SingleChildScrollView(
