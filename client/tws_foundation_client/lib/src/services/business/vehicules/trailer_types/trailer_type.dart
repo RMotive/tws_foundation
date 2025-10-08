@@ -14,7 +14,7 @@ final class TrailerType extends EntityB<TrailerType> {
   static const String kSize = "size";
 
   /// [TrailerType.trailerClass] property key.
-  static const String ktrailerClass = "trailerClass";
+  static const String ktrailerClass = "class";
 
   /// Trailer dimensions.
   /// 
@@ -59,7 +59,7 @@ final class TrailerType extends EntityB<TrailerType> {
     super.decode(encode);
     size = encode.get(kSize);
     trailerClass = encode.getEntity(() => TrailerClass(), ktrailerClass) ?? TrailerClass();
-    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kSCT) ?? Status();
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? Status();
   }
 
   @override

@@ -30,9 +30,10 @@ class _CreateWhisperTypeSection extends StatelessWidget {
               initialValue: itemState?.entity.type?.id != BigInt.zero ? itemState?.entity.type : null,
               textBuilder: (TrailerType type) => "${type.trailerClass.name} - ${type.size}",
               entityBuilder: () => TrailerType(),
-              onSelected: (TrailerType? location) {
-                itemState?.entity.type = location;
+              onSelected: (TrailerType? type) {
+                itemState?.entity.type = type;
                 itemState?.react();
+                reactor.react();
               },
             ),
             FoldPanelWidget(
@@ -43,12 +44,13 @@ class _CreateWhisperTypeSection extends StatelessWidget {
                   EntityFinderSelector<TrailerClass, TrailerClassesServiceI>(
                     label: 'Select a Class',
                     initialValue: itemState?.entity.type?.trailerClass,
-                    enabled: itemState?.entity.type?.id != BigInt.zero || itemState?.entity.type == null,
+                    enabled: itemState?.entity.type?.id == BigInt.zero || itemState?.entity.type == null,
                     textBuilder: (TrailerClass trailerClass) => trailerClass.name,
                     entityBuilder: () => TrailerClass(),
                     onSelected: (TrailerClass? trailerClass) {
                       itemState?.entity.type?.trailerClass = trailerClass ?? TrailerClass();
                       itemState?.react();
+                      reactor.react();
                     },
                   ),
                   TextInput(
@@ -57,18 +59,14 @@ class _CreateWhisperTypeSection extends StatelessWidget {
                     maxLength: 16,
                     isEnabled: itemState?.entity.type?.id == BigInt.zero || itemState?.entity.type == null,
                     controller: TextEditingController(
-                      text: itemState?.entity.type?.size,
+                      text: itemState?.entity.type?.id == BigInt.zero? itemState?.entity.type?.size : null,
                     ),
                     onChanged: (String text) {
-                      if (itemState?.entity.type != null && itemState?.entity.type?.id != BigInt.zero) {
-                        itemState?.entity.type?.id = BigInt.zero;
-                      }
                       itemState?.entity.type =
                           itemState?.entity.type != null
                               ? itemState?.entity.type?.sanitize(size: text)
                               : TrailerType().sanitize(size: text);
                       itemState?.react();
-
                     },
                   ),
                 ],

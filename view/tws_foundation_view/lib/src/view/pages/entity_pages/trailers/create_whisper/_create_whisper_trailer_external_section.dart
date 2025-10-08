@@ -45,7 +45,7 @@ class _CreateWhisperTrailersExternalSection extends StatelessWidget {
               child: TextInput(
                 label: 'USA Plate',
                 isEnabled: isEnabled,
-                maxLength: 18,
+                maxLength: 7,
                 controller: TextEditingController(
                   text: itemState?.entity.external?.usaPlate,
                 ),
@@ -60,7 +60,7 @@ class _CreateWhisperTrailersExternalSection extends StatelessWidget {
               child: TextInput(
                 label: 'MX Plate',
                 isEnabled: isEnabled,
-                maxLength: 12,
+                maxLength: 7,
                 controller: TextEditingController(
                   text: itemState?.entity.external?.mxPlate,
                 ),

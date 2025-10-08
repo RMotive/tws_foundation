@@ -265,6 +265,7 @@ final class TrailersPageCreateWhisper extends PageB {
                               return status.name;
                             },
                             onSelected: (Status? status) {
+                              // TODO check correct status assignment on other properties selections.
                               _defaultStatus = status ?? Status();
                               Trailer? internal = itemState?.entity.internal;
                               // Setting default status values, only for unique entities.
@@ -295,7 +296,7 @@ final class TrailersPageCreateWhisper extends PageB {
                               return location.name.cleaned ?? '---';
                             },
                             onSelected: (Location? location) {
-                              itemState?.entity.location = location ?? Location();
+                              itemState?.entity.location = location;
                               itemState?.react();
                             },
                           ), 
@@ -310,7 +311,7 @@ final class TrailersPageCreateWhisper extends PageB {
                               return situation.name.cleaned ?? '---';
                             },
                             onSelected: (Situation? situation) {
-                              itemState?.entity.situation = situation ?? Situation();
+                              itemState?.entity.situation = situation;
                               itemState?.react();
                             },
                           ), 
