@@ -22,20 +22,20 @@ public class Identification
     /// <summary>
     ///     Physical person name. 
     /// </summary>
-    /// <remarks>
-    ///     For more than one name split with double space.
-    /// </remarks>
     [StringLength(32, MinimumLength = 1)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    ///     Physical person name last name.
+    ///     Physical person father last name.
     /// </summary>
-    /// <remarks>
-    ///     For more than one name split with double space.
-    /// </remarks>
     [StringLength(32, MinimumLength = 1)]
-    public string LastName { get; set; } = string.Empty;
+    public string FirstLastname { get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Physical person mother last name.
+    /// </summary>
+    [StringLength(32, MinimumLength = 1)]
+    public string? SecondLastname { get; set; }
 
     /// <summary>
     ///     Person birth day.
@@ -58,8 +58,9 @@ public class Identification
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
-        etBuilder.Property(nameof(LastName)).HasMaxLength(32).IsRequired();
         etBuilder.Property(nameof(Name)).HasMaxLength(32).IsRequired();
+        etBuilder.Property(nameof(FirstLastname)).HasMaxLength(32).IsRequired();
+        etBuilder.Property(nameof(SecondLastname)).HasMaxLength(32);
 
         etBuilder.Link<Identification, Status>(
                 nameof(Status),

@@ -64,7 +64,9 @@ public class Driver_Common
             if (ident == null)
                 return null;
 
-            return $"{ident.Name} {ident.LastName}";
+            if(ident.SecondLastname != null) return $"{ident.Name} {ident.FirstLastname} {ident.SecondLastname}";
+
+            return $"{ident.Name} {ident.FirstLastname}";
         }
     }
 
