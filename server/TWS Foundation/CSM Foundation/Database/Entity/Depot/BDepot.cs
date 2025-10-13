@@ -83,7 +83,7 @@ public abstract class BDepot<TDatabase, TEntity>
 
         foreach (IEntity entity in entitiesToAdd.Reverse()) {
             if (entity.Id == 0) {
-                _db.Add(entity);
+                _db.Attach(entity);
                 _disposer?.Push(entity);
             }
         }

@@ -14,14 +14,20 @@ final class Location extends NamedEntityB<Location> {
   /// [Location.waypoint] Property key.
   static const String kWaypoint = "waypoint";
 
-  /// [Address] navigation set.
+  /// [Location.sections] Property key.
+  static const String kSections = "sections";
+
+  /// [Location.address] navigation set.
   Address address = Address();
 
-  /// [Waypoint] navigation set.
+  /// [Location.status] information.
+  Status status = Status();
+
+  /// [Location.waypoint] navigation set.
   Waypoint? waypoint;
 
-  /// [Status] information.
-  Status status = Status();
+  /// [Location.sections]s information.
+  List<Section> sections = <Section>[];
 
   /// Generates a new [Location] instance from mandatory values.
   Location();
@@ -59,6 +65,11 @@ final class Location extends NamedEntityB<Location> {
         kAddress: address.encode(),
         kWaypoint: waypoint?.encode(),
         FoundationCommonPropertyKeys.kStatus: status.encode(),
+        kSections: sections
+            .map(
+              (Section e) => e.encode(),
+            )
+            .toList(),
       },
     );
   }
@@ -69,6 +80,16 @@ final class Location extends NamedEntityB<Location> {
     address = encode.getEntity(() => Address(), kAddress) ?? address;
     waypoint = encode.getEntity(() => Waypoint(), kWaypoint);
     status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? Status();
+    List<DataMap> sectionsMaps = encode.getList(kSections);
+    if (sectionsMaps.isNotEmpty) {
+      sections = sectionsMaps.map<Section>(
+        (DataMap e) {
+          Section section = Section();
+          section.decode(e);
+          return section;
+        },
+      ).toList();
+    }
   }
 
   @override
