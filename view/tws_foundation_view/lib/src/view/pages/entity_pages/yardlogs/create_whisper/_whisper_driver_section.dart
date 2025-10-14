@@ -119,7 +119,7 @@ final class _DriversSectionState extends State<_DriversSection> {
                         children: <Widget>[
                           /// --> Name
                           TextInput(
-                            label: 'Name',
+                            label: '*Name',
                             width: inputWidth,
                             maxLength: _kNamingMaxLength,
                             deBounce: _kDefaultInputDebounce,
@@ -134,13 +134,25 @@ final class _DriversSectionState extends State<_DriversSection> {
                           /// --> Last Name
                           TextInput(
                             width: inputWidth,
-                            label: 'Last Name',
+                            label: '*First Last Name',
                             maxLength: _kNamingMaxLength,
                             deBounce: _kDefaultInputDebounce,
                             onChanged: (String text) {
                               if (externalDriver == null) return;
 
-                              externalDriver!.external!.identification.lastName = text;
+                              externalDriver!.external!.identification.firstLastName = text;
+                              widget.onSelection?.call(externalDriver!);
+                            },
+                          ),
+                          TextInput(
+                            width: inputWidth,
+                            label: 'Second Last Name',
+                            maxLength: _kNamingMaxLength,
+                            deBounce: _kDefaultInputDebounce,
+                            onChanged: (String text) {
+                              if (externalDriver == null) return;
+
+                              externalDriver!.external!.identification.secondLastName = text;
                               widget.onSelection?.call(externalDriver!);
                             },
                           ),

@@ -28,8 +28,13 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
 
         /// --> Last Name
         PropertyViewer(
-          label: 'Name',
-          value: entity.identification.lastName,
+          label: 'First lastname',
+          value: entity.identification.firstLastName,
+        ),
+
+        PropertyViewer(
+          label: 'Second lastname',
+          value: entity.identification.secondLastName,
         ),
 
         /// --> Last Name

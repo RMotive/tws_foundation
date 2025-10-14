@@ -23,6 +23,7 @@ class _CreateWhisperDriversExternalsSection extends StatelessWidget {
             Expanded(
               child: TextInput(
                 label: 'Name',
+                maxLength: 32,
                 isEnabled: isDisabled,
                 controller: TextEditingController(
                   text: itemState?.entity.external?.identification.name,
@@ -37,14 +38,15 @@ class _CreateWhisperDriversExternalsSection extends StatelessWidget {
             
             Expanded(
               child: TextInput(
-                label: 'Lastname',
+                label: 'First lastname',
                 isEnabled: isDisabled,
+                maxLength: 32,
                 controller: TextEditingController(
-                  text: itemState?.entity.external?.identification.lastName,
+                  text: itemState?.entity.external?.identification.firstLastName,
                 ),
                 onChanged: (String text) {
                   DriverExternal driver = itemState!.entity.external!;
-                  driver.identification.lastName = text;
+                  driver.identification.firstLastName = text;
                   itemState?.react();
                 },
               ),
@@ -52,24 +54,49 @@ class _CreateWhisperDriversExternalsSection extends StatelessWidget {
 
           ],
         ),
+
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            Expanded(
+              child: TextInput(
+                label: 'Second lastname',
+                isEnabled: isDisabled,
+                maxLength: 32,
+                isOptional: true,
+                controller: TextEditingController(
+                  text: itemState?.entity.external?.identification.secondLastName,
+                ),
+                onChanged: (String text) {
+                  DriverExternal driver = itemState!.entity.external!;
+                  driver.identification.secondLastName = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+            Expanded(
+              child: Datepicker(
+                width: double.maxFinite,
+                label: 'Birthday',
+                isDisabled: isDisabled,
+                controller: TextEditingController(text: itemState?.entity.external?.identification.birthDay?.dateOnly),
+                firstDate: DateTime(1950), 
+                lastDate: DateTime(DateTime.now().year),
+                onChanged: (String? date) {
+                  DriverExternal driver = itemState!.entity.external!;
+                  if (date == null) {
+                    driver.identification.birthDay = null;
+                    return;
+                  }
+                  driver.identification.birthDay = DateTime.tryParse(date);
+                  itemState?.react();
+                },
+              ),
+            ),
+          ],
+        )
           
-        Datepicker(
-          width: double.maxFinite,
-          label: 'Birthday',
-          isDisabled: isDisabled,
-          controller: TextEditingController(text: itemState?.entity.external?.identification.birthDay?.dateOnly),
-          firstDate: DateTime(1950), 
-          lastDate: DateTime(DateTime.now().year),
-          onChanged: (String? date) {
-            DriverExternal driver = itemState!.entity.external!;
-            if (date == null) {
-              driver.identification.birthDay = null;
-              return;
-            }
-            driver.identification.birthDay = DateTime.tryParse(date);
-            itemState?.react();
-          },
-        ),
+        
       ],
     );
   }

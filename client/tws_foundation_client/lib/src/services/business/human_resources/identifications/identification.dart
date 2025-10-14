@@ -18,13 +18,21 @@ final class Identification extends EntityB<Identification> {
   //! --> Properties
 
   /// Physical person name.
-  /// For more than one name split with space.
+  /// 
+  /// rules > 
+  /// 33 > Length > 0
   String name = "";
 
   /// Physical person first last name.
+  /// 
+  /// rules >
+  /// 33 > Length > 0
   String firstLastName = "";
   
   /// Physical person second last name.
+  /// 
+  /// rules >
+  /// 33 > Length
   String? secondLastName;
 
   /// Persona bith day.
@@ -41,6 +49,9 @@ final class Identification extends EntityB<Identification> {
 
   /// Creates a new [Identification] instance.
   Identification();
+
+  /// Gets the full name of the identified person.
+  String get fullname => '$name $firstLastName ${secondLastName ?? ""}'.trim();
 
   @override
   void decode(DataMap encode) {

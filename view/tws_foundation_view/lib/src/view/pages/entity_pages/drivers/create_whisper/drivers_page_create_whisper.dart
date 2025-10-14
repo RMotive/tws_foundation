@@ -90,8 +90,13 @@ final class DriversPageCreateWhisper extends PageB {
 
                   /// --> Driver lastname
                   CreateEntityFormRecordField(
-                    label: '*Lastname',
-                    value: entity.internal?.employee.identification.lastName ?? "---",
+                    label: '*First lastname',
+                    value: entity.internal?.employee.identification.firstLastName ?? "---",
+                  ),
+
+                  CreateEntityFormRecordField(
+                    label: 'Second lastname',
+                    value: entity.internal?.employee.identification.secondLastName ?? "---",
                   ),
 
                   /// --> Driver Type
@@ -306,8 +311,13 @@ final class DriversPageCreateWhisper extends PageB {
 
                 /// --> Driver lastname
                 CreateEntityFormRecordField(
-                  label: '*Lastname',
-                  value: entity.external?.identification.lastName ?? "---",
+                  label: '*First lastname',
+                  value: entity.external?.identification.firstLastName ?? "---",
+                ),
+
+                CreateEntityFormRecordField(
+                  label: 'Second lastname',
+                  value: entity.external?.identification.secondLastName ?? "---",
                 ),
 
                 /// --> Driver Birthday

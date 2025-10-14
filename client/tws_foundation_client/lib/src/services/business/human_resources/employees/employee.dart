@@ -63,7 +63,7 @@ final class Employee extends EntityB<Employee> {
 
   //! --> Getters
 
-  String get fullName => '${identification.name} ${identification.lastName}';
+  String get fullName => identification.fullname;
 
   //! <-- Getters
 

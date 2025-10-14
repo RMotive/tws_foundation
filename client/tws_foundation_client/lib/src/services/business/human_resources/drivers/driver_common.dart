@@ -43,7 +43,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
 
     if (ident == null) return null;
 
-    return '${ident.name} ${ident.lastName}';
+    return ident.fullname;
   }
 
   //! <-- Getters

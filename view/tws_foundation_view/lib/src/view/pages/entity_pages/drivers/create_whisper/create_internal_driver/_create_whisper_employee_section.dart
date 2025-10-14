@@ -38,14 +38,15 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
 
             Expanded(
               child: TextInput(
-                label: '*Lastname',
+                label: '*First lastname',
                 isEnabled: isEnabled,
+                maxLength: 32,
                 controller: TextEditingController(
                   text: itemState?.entity.internal?.employee.identification.name,
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.identification.lastName = text;
+                  employee.identification.firstLastName = text;
                   itemState?.react();
                 },
               ),
@@ -54,6 +55,26 @@ class _CreateWhisperEmployeeSection extends StatelessWidget {
         ),
 
         /// --> Employee internal information.
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            Expanded(
+              child: TextInput(
+                label: 'Second lastname',
+                isEnabled: isEnabled,
+                maxLength: 32,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.employee.identification.name,
+                ),
+                onChanged: (String text) {
+                  Employee employee = itemState!.entity.internal!.employee;
+                  employee.identification.secondLastName = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+          ],
+        ),
         Row(
           spacing: 10,
           children: <Widget>[

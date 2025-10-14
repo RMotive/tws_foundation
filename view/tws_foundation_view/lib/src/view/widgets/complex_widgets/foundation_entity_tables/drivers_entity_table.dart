@@ -43,8 +43,12 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.internal?.employee.identification.name,
         ),
         PropertyViewer(
-          label: 'Last name',
-          value: entity.internal?.employee.identification.lastName,
+          label: 'First last name',
+          value: entity.internal?.employee.identification.firstLastName,
+        ),
+        PropertyViewer(
+          label: 'Second last name',
+          value: entity.internal?.employee.identification.secondLastName,
         ),
         PropertyViewer(
           label: 'Birthday',
@@ -177,8 +181,12 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.external?.identification.name,
         ),
         PropertyViewer(
-          label: 'Last name',
-          value: entity.external?.identification.lastName,
+          label: 'First Last name',
+          value: entity.external?.identification.firstLastName,
+        ),
+        PropertyViewer(
+          label: 'Second Last name',
+          value: entity.external?.identification.secondLastName,
         ),
       ];
     }
@@ -247,7 +255,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 isEnabled: false,
               ),
               TextInput(
-                label: "License",
+                label: "*License",
                 hint: "Enter a License number",
                 maxLength: 12,
                 controller: TextEditingController(
@@ -257,19 +265,8 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                   entity.license = text;
                 },
               ),
-              EntityFinderSelector<Situation, SituationsServiceI>(
-                label: "Situation",
-                initialValue: entity.situation,
-                entityBuilder: () => Situation(),
-                textBuilder: (Situation entity) {
-                  return entity.name.cleaned ?? "---";
-                },
-                onSelected: (Situation? selectedItem) {
-                  entity.situation = selectedItem ?? Situation();
-                },
-              ),
               EntityFinderSelector<Status, StatusesServiceI>(
-                label: "Status",
+                label: "*Status",
                 initialValue: entity.status,
                 entityBuilder: () => Status(),
                 textBuilder: (Status entity) {
@@ -282,6 +279,17 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                     entity.internal?.employee.status = selectedItem ?? Status();
                     entity.internal?.employee.approach?.status = selectedItem ?? Status();
                   }
+                },
+              ),
+              EntityFinderSelector<Situation, SituationsServiceI>(
+                label: "Situation",
+                initialValue: entity.situation,
+                entityBuilder: () => Situation(),
+                textBuilder: (Situation entity) {
+                  return entity.name.cleaned ?? "---";
+                },
+                onSelected: (Situation? selectedItem) {
+                  entity.situation = selectedItem ?? Situation();
                 },
               ),
           
@@ -299,7 +307,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
       children: <Widget>[
         SectionDivider(text: 'Identity'),
         TextInput(
-          label: "Name",
+          label: "*Name",
           hint: "Enter a name",
           maxLength: 32,
           controller: TextEditingController(
@@ -314,17 +322,32 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           },
         ),
         TextInput(
-          label: "Lastname",
+          label: "*First Lastname",
           hint: "enter a lastname",
           maxLength: 32,
           controller: TextEditingController(
-            text: entity.internal?.employee.identification.lastName ?? entity.external?.identification.lastName,
+            text: entity.internal?.employee.identification.firstLastName ?? entity.external?.identification.firstLastName,
           ),
           onChanged: (String text) {
             if (entity.internal != null) {
-              entity.internal?.employee.identification.lastName = text;
+              entity.internal?.employee.identification.firstLastName = text;
             } else {
-              entity.external?.identification.lastName = text;
+              entity.external?.identification.firstLastName = text;
+            }
+          },
+        ),
+        TextInput(
+          label: "Second Lastname",
+          hint: "enter a lastname",
+          maxLength: 32,
+          controller: TextEditingController(
+            text: entity.internal?.employee.identification.secondLastName ?? entity.external?.identification.secondLastName,
+          ),
+          onChanged: (String text) {
+            if (entity.internal != null) {
+              entity.internal?.employee.identification.secondLastName = text;
+            } else {
+              entity.external?.identification.secondLastName = text;
             }
           },
         ),
@@ -909,8 +932,12 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.external?.identification.name ?? "---",
         ),
         TextLabel(
-          title: 'Lastname',
-          value: entity.external?.identification.lastName ?? "---",
+          title: 'First Lastname',
+          value: entity.external?.identification.firstLastName ?? "---",
+        ),
+        TextLabel(
+          title: 'Second Lastname',
+          value: entity.external?.identification.secondLastName ?? "---",
         ),
       ],
     );
@@ -1017,8 +1044,12 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           value: entity.internal?.employee.identification.name ?? "---",
         ),
         TextLabel(
-          title: 'Lastname',
-          value: entity.internal?.employee.identification.lastName ?? "---",
+          title: 'First Lastname',
+          value: entity.internal?.employee.identification.firstLastName ?? "---",
+        ),
+        TextLabel(
+          title: 'Second Lastname',
+          value: entity.internal?.employee.identification.secondLastName ?? "---",
         ),
         TextLabel(
           title: 'Birthday',

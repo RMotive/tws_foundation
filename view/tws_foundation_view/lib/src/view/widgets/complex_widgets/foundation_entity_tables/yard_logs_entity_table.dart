@@ -127,7 +127,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
             PropertyViewer(
               label: 'Guard', 
-              value: '${entity.guard.identification.name} ${entity.guard.identification.lastName}',
+              value: '${entity.guard.identification.name} ${entity.guard.identification.firstLastName} ${entity.guard.identification.secondLastName}' ,
             ),
 
             /// --> Load Type property view.
@@ -832,7 +832,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         ),
         TextLabel(
           title: 'Guard',
-          value: '${entity.guard.identification.name} ${entity.guard.identification.lastName}',
+          value: '${entity.guard.identification.name} ${entity.guard.identification.firstLastName} ${entity.guard.identification.secondLastName}' ,
         ),
         TextLabel(
           title: 'Driver name',
@@ -990,7 +990,7 @@ final class YardLogsEntityTable extends StatelessWidget {
           factory: (YardLog entity, int index, BuildContext buildContext) {
             Identification guardIdent = entity.guard.identification;
 
-            return '${guardIdent.name} ${guardIdent.lastName}';
+            return '${guardIdent.name} ${guardIdent.firstLastName} ${guardIdent.secondLastName}';
           },
         ),
       ],
