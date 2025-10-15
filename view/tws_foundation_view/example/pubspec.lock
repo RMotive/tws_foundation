@@ -444,7 +444,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: "55-feature-locations"
-      resolved-ref: a3a27c296b3afda85cda52b62dc46888e7876e2a
+      resolved-ref: c156eada35a0ef5aa07f26a8e488b0c0dd2fed72
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

@@ -101,6 +101,18 @@ final class FoundationRoutes {
   );
   
   //! <-- Trailers Routes
+
+  //! --> Locations Routes
+  static const Route locationsPageRoute = Route(
+    'locations',
+    name: 'Locations Page',
+  );
+
+  static const Route locationsCreateWhisperRoute = Route(
+    'create-locations',
+    name: 'Locations Creation',
+  );
+  //! <-- Locations Routes
 }
 
 /// {constant} class.

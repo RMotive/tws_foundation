@@ -1,6 +1,5 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/misc/waypoints/waypoint.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Location] default builder.

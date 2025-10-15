@@ -42,6 +42,9 @@ export 'src/services/business/misc/sections/sections_service.dart';
 /// [Services.Business.Misc.Resources]
 export 'src/services/business/misc/resources/resource.dart';
 
+/// [Services.Business.Misc.Waypoints]
+export 'src/services/business/misc/waypoints/waypoint.dart';
+
 //* <-- [Services.Business.Misc]
 
 //* --> [Services.Business.Vehicules]
