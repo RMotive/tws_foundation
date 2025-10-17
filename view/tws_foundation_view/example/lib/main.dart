@@ -5,16 +5,17 @@ import 'package:example/core/landing_utils.dart';
 import 'package:example/entries/auth_page_entry.dart';
 import 'package:example/entries/category_layout_entry.dart';
 import 'package:example/entries/entity_category_pages/drivers_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/locations_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/trailers_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/trucks_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
-import 'package:example/entries/entity_pages/drivers_page_entry.dart';
-import 'package:example/entries/entity_pages/trailers_page_entry.dart';
-import 'package:example/entries/entity_pages/trucks_page_entry.dart';
-import 'package:example/entries/entity_pages/yard_logs_page_entry.dart';
+import 'package:example/entries/entity_pages/employees_page_entry.dart';
+import 'package:example/entries/entity_pages/locations_page_entry.dart';
 import 'package:example/entries/entity_tables/drivers_entity_table_entry.dart';
+import 'package:example/entries/entity_tables/employees_entity_table_entry.dart';
+import 'package:example/entries/entity_tables/locations_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/trailers_entity_table_entry.dart';
-import 'package:example/entries/entity_tables/trucks_entity_table_entry.dart';
 import 'package:example/entries/entity_tables/yardlogs_entity_table_entry.dart';
 import 'package:example/entries/navigation_layout_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
@@ -134,28 +135,31 @@ final class _MainAppState extends State<MainApp> {
               ),
 
               //! --> Entity Pages
-              YardLogsPageEntry(),
-              // EmployeesPageEntry(),
-              DriversPageEntry(),
-              TrucksPageEntry(),
-              TrailersPageEntry(),
+              // YardLogsPageEntry(),
+              EmployeesPageEntry(),
+              // DriversPageEntry(),
+              // TrucksPageEntry(),
+              // TrailersPageEntry(),
+              LocationsPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
-              // EmployeesCategoryPageEntry(),
+              EmployeesCategoryPageEntry(),
               YardLogsCategoryPageEntry(),
               DriversCategoryPageEntry(),
               TrucksCategoryPageEntry(),
               TrailersCategoryPageEntry(),
+              LocationsCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
               YardLogsEntityTableEntry(),
               // SolutionsEntityTableEntry(),
-              // EmployeesEntityTableEntry(),
+              EmployeesEntityTableEntry(),
               DriversEntityTableEntry(),
-              TrucksEntityTableEntry(),
+              // TrucksEntityTableEntry(),
               TrailersEntityTableEntry(),
+              LocationsEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

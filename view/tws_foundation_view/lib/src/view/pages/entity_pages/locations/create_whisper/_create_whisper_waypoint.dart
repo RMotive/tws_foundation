@@ -29,19 +29,59 @@ class _CreateWhisperWaypointsSection extends StatelessWidget {
               child: TextInput(
                 label: 'Longitude',
                 isEnabled: isEnabled,
+                keyboardType: TextInputType.number,
+                formatter: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp(r'[-0-9.]')),
+                  CoordenatesPrecisionFormtter(),
+                ],
                 controller: TextEditingController(
                   text: itemState?.entity.waypoint?.longitude.toString(),
                 ),
-                keyboardType: TextInputType.number,
                 onChanged: (String text) {
                   Location location = itemState!.entity;
-                  location.waypoint ??= Waypoint();
-                  location.waypoint!.longitude = double.tryParse(text) ?? 0.0;
-                  itemState.react();
+                  location.waypoint = location.waypoint?.sanitize(longitude: double.tryParse(text) ?? 0.0) ?? Waypoint().sanitize(longitude: double.tryParse(text) ?? 0.0);
+                  itemState?.react();
+                },
+              ),
+            ),
+            Expanded(
+              child: TextInput(
+                label: 'Latitude',
+                isEnabled: isEnabled,
+                keyboardType: TextInputType.number,
+                formatter: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp(r'[-0-9.]')),
+                  CoordenatesPrecisionFormtter(),
+                ],
+                controller: TextEditingController(
+                  text: itemState?.entity.waypoint?.latitude.toString(),
+                ),
+                onChanged: (String text) {
+                  Location location = itemState!.entity;
+                  location.waypoint = location.waypoint?.sanitize(latitude: double.tryParse(text) ?? 0.0) ?? Waypoint().sanitize(latitude: double.tryParse(text) ?? 0.0);
+                  itemState?.react();
                 },
               ),
             ),
           ],
+        ),
+        TextInput(
+          width: double.maxFinite,
+          label: 'Altitude',
+          isEnabled: isEnabled,
+          keyboardType: TextInputType.number,
+          formatter: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'[-0-9.]')),
+            CoordenatesPrecisionFormtter(),
+          ],
+          controller: TextEditingController(
+            text: itemState?.entity.waypoint?.altitude.toString(),
+          ),
+          onChanged: (String text) {
+            Location location = itemState!.entity;
+            location.waypoint = location.waypoint?.sanitize(altitude: double.tryParse(text) ?? 0.0) ?? Waypoint().sanitize(altitude: double.tryParse(text) ?? 0.0);
+            itemState?.react();
+          },
         ),
       ],
     );

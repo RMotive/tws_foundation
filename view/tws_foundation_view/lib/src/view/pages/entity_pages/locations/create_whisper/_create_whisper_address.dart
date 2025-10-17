@@ -7,11 +7,11 @@ _AddresState _addresState = _AddresState();
 // ignore: unused_element
 void Function() _addressEffect = () {};
 
-class _CreateWhisperAddressSection extends StatelessWidget {
+class _CreateWhisperAddressesSection extends StatelessWidget {
   final CreateEntityFormRecordReactor<Location>? itemState;
   final bool isEnabled;
 
-  const _CreateWhisperAddressSection({
+  const _CreateWhisperAddressesSection({
     required this.itemState,
     required this.isEnabled,
   });
@@ -51,7 +51,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 },
               ),
             ),
-             ReactiveWidget<_AddresState>(
+            ReactiveWidget<_AddresState>(
               reactor: _addresState,
               builder: (BuildContext ctx, _AddresState state) {
                 final String? currentCountry = itemState?.entity.address.country;
@@ -106,7 +106,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Location location = itemState!.entity;
-                  location.address = location.address.sanitize(state: text) ?? Address().sanitize(state: text) ?? Address();
+                  location.address = location.address.sanitize(street: text) ?? Address().sanitize(street: text) ?? Address();
                   itemState?.react();
                 },
               ),
@@ -156,7 +156,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 label: 'Subdivision/Colonia',
                 deBounce: Duration(milliseconds: 300),
                 isEnabled: isEnabled,
-                maxLength: 13,
+                maxLength: 30,
                 isOptional: true,
                 controller: TextEditingController(
                   text: itemState?.entity.address.subdivision,

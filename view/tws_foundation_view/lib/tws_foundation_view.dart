@@ -66,6 +66,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/trucks_entity_
 /// [Trailers Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/trailers_entity_table.dart';
 
+/// [Location Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/locations_entity_table.dart';
+
 //! <-- Entity Tables
 
 
@@ -105,6 +108,9 @@ export 'src/view/pages/entity_pages/trucks/trucks_page.dart';
 
 /// [Trailers Page]
 export 'src/view/pages/entity_pages/trailers/trailers_page.dart';
+
+/// [Location Page]
+export 'src/view/pages/entity_pages/locations/locations_page.dart';
 
 //! <-- Entity Pages
 
