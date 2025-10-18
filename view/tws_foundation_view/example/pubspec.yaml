@@ -32,7 +32,7 @@ dependencies:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: 55-feature-locations
+      ref: 56-feature-sections
 
   tws_foundation_view:
     path: ../

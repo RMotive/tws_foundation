@@ -1,6 +1,3 @@
-
-import 'dart:ffi';
-
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/services/business/misc/locations/location.dart';
 
@@ -85,7 +82,7 @@ final class Waypoint extends EntityB<Waypoint> {
       invalidations.add(
         EntityInvalidation<Waypoint>(
           this,
-          PropertyInfo(kLongitude, Double, longitude),
+          PropertyInfo(kLongitude, double, longitude),
           'Must provide a valid longitude value',
           'value != 0',
         ),
@@ -95,7 +92,7 @@ final class Waypoint extends EntityB<Waypoint> {
       invalidations.add(
         EntityInvalidation<Waypoint>(
           this,
-          PropertyInfo(klatitude, Double, latitude),
+          PropertyInfo(klatitude, double, latitude),
           'Must provide a valid latitude value',
           'value != 0',
         ),
@@ -106,7 +103,7 @@ final class Waypoint extends EntityB<Waypoint> {
       invalidations.add(
         EntityInvalidation<Waypoint>(
           this,
-          PropertyInfo(kAltitude, Double, altitude),
+          PropertyInfo(kAltitude, double, altitude),
           'Must provide a valid altitude value or be empty',
           'value != 0',
         ),
