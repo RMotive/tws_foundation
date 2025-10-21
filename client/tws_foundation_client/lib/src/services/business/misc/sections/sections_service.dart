@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [SectionsServiceI].
 ///
 /// Defines base contract for [SectionsServiceI] implementations that specifies the methods to have providing [Section] based operations and management.
-abstract interface class SectionsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Section> {
+abstract interface class SectionsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Section>, CreateServiceI<Section> {
   /// Creates a new [SectionsServiceI] instance.
   SectionsServiceI(
     super.host,
@@ -18,7 +18,6 @@ abstract interface class SectionsServiceI extends FoundationServiceB implements 
   ///
   /// [auth] server authorization token.
   FoundationFutureResolver<UpdateOutput<Section>> update(UpdateInput<Section> input, String auth);
-
 }
 
 /// {abstract} class for [SectionsServiceB].
@@ -62,6 +61,17 @@ final class SectionsService extends SectionsServiceB {
         'update',
         input,
         authToken: authToken,
+      ),
+    );
+  }
+  
+  @override
+  FoundationFutureResolver<BatchOperationOutput<Section>> create(List<Section> sections, String auth) async {
+    return FoundationResponseResolver<BatchOperationOutput<Section>>(
+      await postListSecure<Section>(
+        'create',
+        sections,
+        authToken: auth,
       ),
     );
   }
