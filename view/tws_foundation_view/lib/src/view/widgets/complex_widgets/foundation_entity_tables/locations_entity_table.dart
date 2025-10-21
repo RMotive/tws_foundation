@@ -432,7 +432,7 @@ final class LocationsEntityTableAdatper extends FoundationEntityTableAdapterB<Lo
   }
   Widget _buildUpdateDialog(Location entity, Router router, BuildContext context){
     return ResumeDialog(
-      title: 'Confirm Yardlog update',
+      title: 'Confirm Location update',
       router: router,
       context: context,
       acceptLabel: 'Update',

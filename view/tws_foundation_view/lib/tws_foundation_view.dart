@@ -69,6 +69,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/trailers_entit
 /// [Location Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/locations_entity_table.dart';
 
+/// [Sections Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/sections_entity_table.dart';
+
 //! <-- Entity Tables
 
 
@@ -111,6 +114,10 @@ export 'src/view/pages/entity_pages/trailers/trailers_page.dart';
 
 /// [Location Page]
 export 'src/view/pages/entity_pages/locations/locations_page.dart';
+
+/// [Section Page]
+export 'src/view/pages/entity_pages/sections/sections_page.dart';
+
 
 //! <-- Entity Pages
 

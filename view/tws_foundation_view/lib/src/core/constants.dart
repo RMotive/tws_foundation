@@ -113,6 +113,18 @@ final class FoundationRoutes {
     name: 'Locations Creation',
   );
   //! <-- Locations Routes
+
+   //! --> Sections Routes
+  static const Route sectionsPageRoute = Route(
+    'sections',
+    name: 'Sections Page',
+  );
+
+  static const Route sectionsCreateWhisperRoute = Route(
+    'create-sections',
+    name: 'Sections Creation',
+  );
+  //! <-- Locations Routes
 }
 
 /// {constant} class.
