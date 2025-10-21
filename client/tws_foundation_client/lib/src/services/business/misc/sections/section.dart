@@ -26,6 +26,9 @@ final class Section extends NamedEntityB<Section> {
   /// Section vehicule ocupancy.
   int ocupancy = 0;
 
+  /// [Status] Status entity asociate to this section.
+  Status status = Status();
+
   /// [Location] Yard location entity asociate to this section.
   Location yard = Location();
 
@@ -42,6 +45,7 @@ final class Section extends NamedEntityB<Section> {
         kCapacity: capacity,
         kOcupancy: ocupancy,
         kResource: resource?.encode(),
+        FoundationCommonPropertyKeys.kSCT: status.encode(),
         kYard: yard.encode(),
       },
     );
@@ -54,6 +58,7 @@ final class Section extends NamedEntityB<Section> {
     capacity = encode.get(kCapacity);
     ocupancy = encode.get(kOcupancy);
     resource = encode.getEntity(() => Resource(), kResource);
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kSCT) ?? Status();
     yard.decode(encode.get(kYard));
   }
 
@@ -61,16 +66,65 @@ final class Section extends NamedEntityB<Section> {
   List<EntityInvalidation<Section>> evaluate() {
     List<EntityInvalidation<Section>> results = <EntityInvalidation<Section>>[];
 
-    if (id < BigInt.zero) results.add(EntityInvalidation<Section>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
-    if (name.trim().isEmpty || name.length > 100) results.add(EntityInvalidation<Section>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 100 max length", "structLength(100)"));
+    if (id < BigInt.zero) {
+      results.add(
+        EntityInvalidation<Section>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'id < 0',
+        ),
+      );
+    }
+    
+    if (name.trim().isEmpty || name.length > 100) {
+      results.add(
+        EntityInvalidation<Section>(
+          this,
+          PropertyInfo(EntityKeys.name, String, name),
+          "Name: ${name.length}, must be 100 max length",
+          "101 > length > 0",
+        ),
+      );
+    }
+
     if (description != null) {
       if (description!.length > 200) {
-        results.add(EntityInvalidation<Section>(this, PropertyInfo(EntityKeys.description, String, description), "Description must be 200 max length", "strictLength(200)"));
+        results.add(
+          EntityInvalidation<Section>(
+            this,
+            PropertyInfo(EntityKeys.description, String, description),
+            "Description: ${description!.length}, must be 200 max length",
+            "201 > length",
+          ),
+        );
       }
-      if (description!.trim().isEmpty) results.add(EntityInvalidation<Section>(this, PropertyInfo(EntityKeys.description, String, description), "Description is empty but not null.", "notEmpty()"));
+
+      if (description!.trim().isEmpty) {
+        results.add(
+          EntityInvalidation<Section>(
+            this,
+            PropertyInfo(EntityKeys.description, String, description),
+            "Description is empty but not null.",
+            "value > 0 || value == null",
+          ),
+        );
+      }
+    }
+
+    if(capacity < 0) {
+      results.add(
+        EntityInvalidation<Section>(
+          this,
+          PropertyInfo(kCapacity, int, capacity),
+          "Capacity: $capacity, cannot be less than 0",
+          "value >= 0",
+        ),
+      );
     }
 
     results.validateDependency(this, yard);
+    results.validateDependency(this, status);
     if(resource != null) results.validateDependency(this, resource!);
 
     return results;

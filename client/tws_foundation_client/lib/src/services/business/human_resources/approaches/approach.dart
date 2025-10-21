@@ -50,8 +50,7 @@ final class Approach extends EntityB<Approach> {
     String? enterprise,
     String? personal,
     String? alternative,
-  }){
-
+  }) {
     this.email = email.sanitizeOrFallback(this.email) ?? "";
     this.enterprise = enterprise.sanitizeOrFallback(this.enterprise);
     this.personal = personal.sanitizeOrFallback(this.personal);
@@ -100,7 +99,7 @@ final class Approach extends EntityB<Approach> {
           this,
           PropertyInfo(EntityKeys.id, int, id),
           'Pointer cannot be less than 0',
-          'invalidPointer()',
+          'id < 0',
         ),
       );
     }
@@ -110,41 +109,80 @@ final class Approach extends EntityB<Approach> {
         EntityInvalidation<Approach>(
           this,
           PropertyInfo(kEmail, String, email),
-          'Email length cannot exceed 64 characters or be empty',
-          'StrictLength()',
+          'Length: ${email.length}, Email length cannot exceed 64 characters or be empty',
+          '65 > length > 0',
         ),
       );
     }
 
-    if (enterprise != null && enterprise!.length > 13) {
-      invalidations.add(
-        EntityInvalidation<Approach>(
-          this,
-          PropertyInfo(kEnterprise, String, enterprise),
-          'Enterprise phone length cannot exceed 13 characters',
-          'StrictLength()',
-        ),
-      );
+    if (enterprise != null) {
+      if (enterprise!.length > 13) {
+        invalidations.add(
+          EntityInvalidation<Approach>(
+            this,
+            PropertyInfo(kEnterprise, String, enterprise),
+            'Enterprise phone length: ${enterprise?.length} cannot exceed 13 characters',
+            '14 > length || length == null',
+          ),
+        );
+      }
+
+      if(enterprise!.trim().isEmpty){
+        invalidations.add(
+          EntityInvalidation<Approach>(
+            this,
+            PropertyInfo(kEnterprise, String, enterprise),
+            'Enterprise phone length: ${enterprise?.length}, cannot be empty if provided',
+            '14 > length || length == null',
+          ),
+        );
+      }
     }
-    if (personal != null && personal!.length > 13) {
-      invalidations.add(
-        EntityInvalidation<Approach>(
-          this,
-          PropertyInfo(kPersonal, String, personal),
-          'Personal phone length cannot exceed 13 characters',
-          'StrictLength()',
-        ),
-      );
+
+    if (personal != null) {
+      if (personal!.length > 13) {
+        invalidations.add(
+          EntityInvalidation<Approach>(
+            this,
+            PropertyInfo(kPersonal, String, personal),
+            'Personal phone length: ${personal!.length}, cannot exceed 13 characters',
+            '14 > length || length == null',
+          ),
+        );
+      }
+
+      if(personal!.trim().isEmpty){
+         invalidations.add(
+          EntityInvalidation<Approach>(
+            this,
+            PropertyInfo(kPersonal, String, personal),
+            'Personal phone length: ${personal!.length}, cannot be empty if provided',
+            '14 > length || length == null',
+          ),
+        );
+      }
     }
-    if (alternative != null && alternative!.length > 30) {
-      invalidations.add(
-        EntityInvalidation<Approach>(
-          this,
-          PropertyInfo(kAlternative, String, alternative),
-          'Alternative contact length cannot exceed 30 characters',
-          'StrictLength()',
-        ),
-      );
+    if (alternative != null) {
+      if (alternative!.length > 30) {
+        invalidations.add(
+          EntityInvalidation<Approach>(
+            this,
+            PropertyInfo(kAlternative, String, alternative),
+            'Alternative contact length: ${alternative!.length}, cannot exceed 30 characters',
+            '31 > length || length == null',
+          ),
+        );
+      }
+      if (alternative!.trim().isEmpty) {
+        invalidations.add(
+          EntityInvalidation<Approach>(
+            this,
+            PropertyInfo(kAlternative, String, alternative),
+            'Alternative contact length: ${alternative!.length}, cannot be empty if provided',
+            '31 > length || length == null',
+          ),
+        );
+      }
     }
     
     invalidations.validateDependency(this, status);
