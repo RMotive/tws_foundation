@@ -11,6 +11,14 @@ abstract interface class SectionsServiceI extends FoundationServiceB implements 
     super.servicePath,
   );
 
+  /// Updates a [Section] based on the [Section.Id] pointer.
+  ///
+  ///
+  /// [input] record properties to update at the data storage.
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<UpdateOutput<Section>> update(UpdateInput<Section> input, String auth);
+
 }
 
 /// {abstract} class for [SectionsServiceB].
@@ -41,6 +49,17 @@ final class SectionsService extends SectionsServiceB {
     return FoundationResponseResolver<ViewOutput<Section>>(
       await postSecure<ViewInput<Section>>(
         'view',
+        input,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<UpdateOutput<Section>> update(UpdateInput<Section> input, String authToken) async {
+    return FoundationResponseResolver<UpdateOutput<Section>>(
+      await postSecure(
+        'update',
         input,
         authToken: authToken,
       ),
