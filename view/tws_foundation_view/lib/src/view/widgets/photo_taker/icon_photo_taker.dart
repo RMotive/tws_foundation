@@ -84,8 +84,6 @@ class _PhotoTakerState extends State<IconPhotoTaker> {
   /// Instance of the current theming.
   late FoundationThemeB theme;
 
-  bool _loadingCamera = true;
-
   XFile? _photo;
   CameraDescription? _cameraDefinition;
   List<CameraDescription> _cameras = <CameraDescription>[];
@@ -116,14 +114,12 @@ class _PhotoTakerState extends State<IconPhotoTaker> {
 
         setState(() {
           _cameraDefinition = cameraDescription;
-          _loadingCamera = false;
         });
       },
       onError: (Object ex, StackTrace t) {
         _advisor.exception('Camera Exception', Exception(ex), t);
         setState(() {
           _cameras = <CameraDescription>[];
-          _loadingCamera = false;
         });
       },
     );

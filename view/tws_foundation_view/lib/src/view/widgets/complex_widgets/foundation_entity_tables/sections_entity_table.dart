@@ -5,10 +5,7 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/models/coordenates_precisio_formtter.dart';
 import 'package:tws_foundation_view/src/core/models/text_label.dart';
-import 'package:tws_foundation_view/src/data/const/static_collections.dart';
-import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_b.dart';
@@ -133,6 +130,17 @@ final class SectionsEntityTableAdatper extends FoundationEntityTableAdapterB<Sec
                   text: entity.timestamp.fullDate,
                 ),
               ),
+              EntityFinderSelector<Status, StatusesServiceI>(
+                entityBuilder:() => Status(),
+                label: 'Select Status',
+                initialValue: entity.status,
+                textBuilder: (Status status) {
+                  return status.name;
+                },
+                onSelected: (Status? status) {
+                  entity.status = status ?? Status();
+                },
+              ),
               TextInput(
                 width: double.infinity,
                 label: '*Name',
@@ -155,7 +163,6 @@ final class SectionsEntityTableAdatper extends FoundationEntityTableAdapterB<Sec
                   entity.description = text.cleaned;
                 },
               ),
-
               TextInput(
                 width: double.infinity,
                 label: 'Capacity',
@@ -170,18 +177,6 @@ final class SectionsEntityTableAdatper extends FoundationEntityTableAdapterB<Sec
                   entity.capacity = int.tryParse(text) ?? -1;
                 },
               ),
-              EntityFinderSelector<Status, StatusesServiceI>(
-                entityBuilder:() => Status(),
-                label: 'Select Status',
-                initialValue: entity.status,
-                textBuilder: (Status status) {
-                  return status.name;
-                },
-                onSelected: (Status? status) {
-                  entity.status = status ?? Status();
-                },
-              ),
-
               EntityFinderSelector<Location, LocationsServiceI>(
                 entityBuilder:() => Location(),
                 label: 'Select Yard',
@@ -373,7 +368,7 @@ final class SectionsEntityTable extends FoundationEntityTableB<SectionsEntityTab
         /// --> Section status.
         EntityTableColumnOptions<Section>(
           title: 'Status',
-          factory: (Section entity, int index, BuildContext buildContext) => entity.name,
+          factory: (Section entity, int index, BuildContext buildContext) => entity.status.name,
         ),
 
         /// --> Country

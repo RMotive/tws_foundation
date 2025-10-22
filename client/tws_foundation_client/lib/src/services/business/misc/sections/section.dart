@@ -58,7 +58,7 @@ final class Section extends NamedEntityB<Section> {
     capacity = encode.get(kCapacity);
     ocupancy = encode.get(kOcupancy);
     resource = encode.getEntity(() => Resource(), kResource);
-    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kSCT) ?? Status();
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? Status();
     yard.decode(encode.get(kYard));
   }
 
