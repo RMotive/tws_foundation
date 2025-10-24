@@ -175,6 +175,7 @@ export 'src/services/security/solutions/solutions_service_b.dart';
 
 // --> Exporting [src.services.security.contacts]
 export 'src/services/security/contacts/contact.dart';
+export 'src/services/security/contacts/contacts_service.dart';
 
 // --> Exporting [src.services.security.accounts]
 export 'src/services/security/accounts/account.dart';

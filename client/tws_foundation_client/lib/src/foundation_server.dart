@@ -65,6 +65,9 @@ final class FoundationServer extends ServerB {
   /// [Trailer] Entity Service.
   late final TrailersServiceI trailersService;
 
+  /// [Contact] Entity Service.
+  late final ContactsServiceI contactService;
+
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
     bool isRelease, {
@@ -89,6 +92,7 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<StatusesServiceI>? statusServiceBuilder,
     ServiceImplementationBuilder<AccountServiceI>? accountServiceBuilder,
     ServiceImplementationBuilder<TrailersServiceI>? trailersServiceBuilder,
+    ServiceImplementationBuilder<ContactsServiceI>? contactsServiceBuilder,
 
   }) : super(
             isRelease: isRelease,
@@ -118,5 +122,6 @@ final class FoundationServer extends ServerB {
     statusService = statusServiceBuilder?.call(serverHost, httpClient) ?? StatusesService(serverHost, client: httpClient);
     accountService = accountServiceBuilder?.call(serverHost, httpClient) ?? AccountService(serverHost, client: httpClient);
     trailersService = trailersServiceBuilder?.call(serverHost, httpClient) ?? TrailersService(serverHost, client: httpClient);
+    contactService = contactsServiceBuilder?.call(serverHost, httpClient) ?? ContactsService(serverHost, client: httpClient);
   }
 }
