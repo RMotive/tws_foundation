@@ -12,12 +12,12 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTableAdatper> {
+final class AccountsCategoryPage extends EntityCategoryPageB<AccountsEntityTableAdatper> {
   /// Creates a new [EmployeesCategoryPage] instance.
-  EmployeesCategoryPage({
+  AccountsCategoryPage({
     super.cusRoute,
   }) : super(
-         title: 'Employees',
+         title: 'Accounts',
          route: FoundationRoutes.employeesPageRoute,
        );
 
@@ -35,14 +35,14 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
   }
 
   @override
-  EmployeesEntityTableAdatper composeAdapter() {
-    return EmployeesEntityTableAdatper(
+  AccountsEntityTableAdatper composeAdapter() {
+    return AccountsEntityTableAdatper(
       authBuilder: authBuilder,
     );
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(EmployeesEntityTableAdatper adapter) {
+  List<ActionsRibbonNodeI> composeRibbonController(AccountsEntityTableAdatper adapter) {
     return <ActionsRibbonNodeI>[];
   }
 
@@ -56,7 +56,7 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
 
   @override
   PageI composePage(BuildContext buildContext, RouteData routeData) {
-    return EmployeesPage(
+    return AccountsPage(
       adapter: adapter,
     );
   }
@@ -64,16 +64,16 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [Employee] business entity to interact and manage data related with it.
-final class EmployeesPage extends EntityPageB<EmployeesEntityTableAdatper> {
-  /// Creates a new [EmployeesPage] instance.
-  EmployeesPage({
+/// Implements a [PageB], draws a complex {csm} design for the [Account] business entity to interact and manage data related with it.
+final class AccountsPage extends EntityPageB<AccountsEntityTableAdatper> {
+  /// Creates a new [AccountsPage] instance.
+  AccountsPage({
     required super.adapter,
   });
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
-    return EmployeesEntityTable(
+    return AccountsEntityTable(
       adapter: adapter,
     );
   }
