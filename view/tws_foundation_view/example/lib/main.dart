@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
+import 'package:example/entries/entity_category_pages/contacts_category_page_entry.dart';
+import 'package:example/entries/entity_pages/contacts_page_entry.dart';
+import 'package:example/entries/entity_tables/contacts_entity_table_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
@@ -50,8 +53,7 @@ final class _MainAppState extends State<MainApp> {
     Injector.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
     Injector.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
     Injector.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
-    Injector.addSingleton<AccountServiceI>(foundationServer.accountService);
-
+    Injector.addSingleton<ContactsServiceI>(foundationServer.contactService);
 
     final SessionStorage sessionStorage = SessionStorage();
     await sessionStorage.init();
@@ -127,6 +129,7 @@ final class _MainAppState extends State<MainApp> {
               // // TrucksPageEntry(),
               // // TrailersPageEntry(),
               // LocationsPageEntry(),
+              ContactsPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
@@ -137,6 +140,7 @@ final class _MainAppState extends State<MainApp> {
               // TrucksCategoryPageEntry(),
               // TrailersCategoryPageEntry(),
               // LocationsCategoryPageEntry(),
+              ContactsCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
@@ -148,6 +152,7 @@ final class _MainAppState extends State<MainApp> {
               // // TrucksEntityTableEntry(),
               // TrailersEntityTableEntry(),
               // LocationsEntityTableEntry(),
+              ContactsEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

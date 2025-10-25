@@ -137,6 +137,18 @@ final class FoundationRoutes {
     name: 'Accounts Creation',
   );
   //! <-- Accounts Routes
+
+  //! --> Contacts Routes
+  static const Route contactsPageRoute = Route(
+    'contacts',
+    name: 'Contacts Page',
+  );
+
+  static const Route contactsCreateWhisperRoute = Route(
+    'create-contacts',
+    name: 'Contacts Creation',
+  );
+  //! <-- Contacts Routes
 }
 
 /// {constant} class.

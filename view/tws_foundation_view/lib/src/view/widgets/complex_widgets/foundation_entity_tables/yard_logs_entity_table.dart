@@ -797,7 +797,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
           builder: (BuildContext context) {
             return Dialog(
               showCancelButton: false,
-              title: 'Error Updating Truck',
+              title: 'Error Updating Yard log',
               content: Text(
                 errMessage as String,
                 style: TextStyle(

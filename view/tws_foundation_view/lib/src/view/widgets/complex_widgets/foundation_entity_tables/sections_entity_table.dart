@@ -271,7 +271,7 @@ final class SectionsEntityTableAdatper extends FoundationEntityTableAdapterB<Sec
           builder: (BuildContext context) {
             return Dialog(
               showCancelButton: false,
-              title: 'Error Updating Truck',
+              title: 'Error Updating Section',
               content: Text(
                 errMessage as String,
                 style: TextStyle(

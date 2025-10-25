@@ -413,7 +413,7 @@ final class LocationsEntityTableAdatper extends FoundationEntityTableAdapterB<Lo
           builder: (BuildContext context) {
             return Dialog(
               showCancelButton: false,
-              title: 'Error Updating Truck',
+              title: 'Error Updating Location',
               content: Text(
                 errMessage as String,
                 style: TextStyle(

@@ -227,7 +227,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
   }
 
   void _onUpdate(TrailerCommon entity, Router router, BuildContext context) async {
-    TrailersServiceI trucksService = Injector.get();
+    TrailersServiceI trailersService = Injector.get();
 
     List<EntityInvalidation<TrailerCommon>> invalidations = entity.evaluate();
 
@@ -250,7 +250,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
 
     String authToken = await composeAuth();
 
-    FoundationResponseResolver<UpdateOutput<TrailerCommon>> resResolver = await trucksService.update(
+    FoundationResponseResolver<UpdateOutput<TrailerCommon>> resResolver = await trailersService.update(
       UpdateInput<TrailerCommon>(entity),
       authToken,
     );

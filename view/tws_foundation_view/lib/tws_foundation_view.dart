@@ -75,6 +75,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/sections_entit
 /// [Accounts Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/accounts_entity_table.dart';
 
+/// [Contacts Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/contacts_entity_table.dart';
+
 //! <-- Entity Tables
 
 
@@ -123,6 +126,9 @@ export 'src/view/pages/entity_pages/sections/sections_page.dart';
 
 /// [Account Page]
 export 'src/view/pages/entity_pages/accounts/accounts_page.dart';
+
+/// [Contact Page]
+export 'src/view/pages/entity_pages/contacts/contacts_page.dart';
 
 
 //! <-- Entity Pages

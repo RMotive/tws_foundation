@@ -74,7 +74,7 @@ final class TrailersCategoryPage extends EntityCategoryPageB<TrailersEntityTable
 ///
 /// Implements a [PageB], draws a complex {csm} design for the [TrailersPage] business entity to interact and manage data related with it.
 final class TrailersPage extends EntityPageB<TrailersEntityTableAdapter> {
-  /// Creates a new [TrucksPage] instance.
+  /// Creates a new [TrailersPage] instance.
   TrailersPage({
     required super.adapter,
   });
