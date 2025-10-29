@@ -14,7 +14,7 @@ public interface IPermitsDepot
 
 /// <summary>
 ///     Implements a <see cref="BDepot{TMigrationDatabases, TMigrationSet}"/>
-///     representing a depot to handle <see cref="Solution"/> dataDatabases entity mirror.
+///     representing a depot to handle <see cref="Permit"/> dataDatabases entity mirror.
 /// </summary>
 public class PermitsDepot
     : BDepot<Database, Permit>, IPermitsDepot {

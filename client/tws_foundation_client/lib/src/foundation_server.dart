@@ -8,10 +8,10 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Defines the base behavior for a [FoundationServer] that handles the network address to communicate with a [FoundationServer] and its [ServiceI] implementations.
 final class FoundationServer extends ServerB {
-  ///
+  /// {solution} security Entity service.
   late final SecurityServiceI securityService;
 
-  ///
+  /// [Solution] Entity service.
   late final SolutionsServiceI solutionsService;
 
   /// [Address] Entity service.
@@ -68,6 +68,15 @@ final class FoundationServer extends ServerB {
   /// [Contact] Entity Service.
   late final ContactsServiceI contactService;
 
+  /// [Permit] Entity Service.
+  late final PermitsServiceI permitsService;
+
+  /// [Feature] Entity Service.
+  late final FeaturesServiceI featuresService;
+
+  /// [Action] Entity Service.
+  late final ActionsServiceI actionsService;
+
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
     bool isRelease, {
@@ -93,6 +102,9 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<AccountServiceI>? accountServiceBuilder,
     ServiceImplementationBuilder<TrailersServiceI>? trailersServiceBuilder,
     ServiceImplementationBuilder<ContactsServiceI>? contactsServiceBuilder,
+    ServiceImplementationBuilder<PermitsServiceI>? permitsServiceBuilder,
+    ServiceImplementationBuilder<FeaturesServiceI>? featuresServiceBuilder,
+    ServiceImplementationBuilder<ActionsServiceI>? actionsServiceBuilder,
 
   }) : super(
             isRelease: isRelease,
@@ -123,5 +135,8 @@ final class FoundationServer extends ServerB {
     accountService = accountServiceBuilder?.call(serverHost, httpClient) ?? AccountService(serverHost, client: httpClient);
     trailersService = trailersServiceBuilder?.call(serverHost, httpClient) ?? TrailersService(serverHost, client: httpClient);
     contactService = contactsServiceBuilder?.call(serverHost, httpClient) ?? ContactsService(serverHost, client: httpClient);
+    permitsService = permitsServiceBuilder?.call(serverHost, httpClient) ?? PermitsService(serverHost, client: httpClient);
+    featuresService = featuresServiceBuilder?.call(serverHost, httpClient) ?? FeaturesService(serverHost, client: httpClient);
+    actionsService = actionsServiceBuilder?.call(serverHost, httpClient) ?? ActionsService(serverHost, client: httpClient);
   }
 }

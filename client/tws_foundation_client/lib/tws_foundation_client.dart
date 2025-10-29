@@ -181,3 +181,15 @@ export 'src/services/security/contacts/contacts_service.dart';
 export 'src/services/security/accounts/account.dart';
 export 'src/services/security/accounts/accounts_service.dart';
 
+// --> Exporting [src.services.security.permits]
+export 'src/services/security/permits/permit.dart';
+export 'src/services/security/permits/permits_service.dart';
+
+// --> Exporting [src.services.security.features]
+export 'src/services/security/features/feature.dart';
+export 'src/services/security/features/features_service.dart';
+
+// --> Exporting [src.services.security.actions]
+export 'src/services/security/actions/action.dart';
+export 'src/services/security/actions/actions_service.dart';
+

@@ -12,20 +12,20 @@ using TWS_Foundation.Authentication;
 
 namespace TWS_Foundation.Controllers.Security;
 
-[ApiController, Feature("Permits"), Route("[Controller]/[Action]")]
-public class PermitsController
+[ApiController, Feature("Features"), Route("[Controller]/[Action]")]
+public class FeaturesController
     : ControllerBase {
 
-    readonly IPermitsService Service;
-    public PermitsController(IPermitsService Service) {
+    readonly IFeaturesService Service;
+    public FeaturesController(IFeaturesService Service) {
         this.Service = Service;
     }
 
     [HttpPost(), Action("View")]
-    public async Task<IActionResult> View(ViewInput<Permit> options) {
+    public async Task<IActionResult> View(ViewInput<Feature> options) {
         return Ok(
                 await Service.View(
-                        new QueryInput<Permit, ViewInput<Permit>> {
+                        new QueryInput<Feature, ViewInput<Feature>> {
                             Parameters = options
                         }
                     )
@@ -33,13 +33,13 @@ public class PermitsController
     }
 
     [HttpPost(), Action("Create")]
-    public async Task<IActionResult> Create(Permit[] permits) {
-        return Ok(await Service.Create(permits));
+    public async Task<IActionResult> Create(Feature[] features) {
+        return Ok(await Service.Create(features));
     }
 
     [HttpPost(), Action("Update")]
-    public async Task<IActionResult> Update(UpdateInput<Permit> permit) {
-        UpdateOutput<Permit> Output = await Service.Update(permit);
+    public async Task<IActionResult> Update(UpdateInput<Feature> feature) {
+        UpdateOutput<Feature> Output = await Service.Update(feature);
         return Ok(Output);
     }
 

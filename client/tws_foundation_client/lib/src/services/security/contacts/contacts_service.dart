@@ -45,7 +45,7 @@ abstract class ContactsServiceB extends FoundationServiceB implements ContactsSe
 /// {Foundation Client} built-in native implementation for [ContactsService], provides standard operations and communication with
 /// foundation server to call and operate with this service and handle [Contact] based operations.
 final class ContactsService extends ContactsServiceB {
-  /// Creates a new [YardLogsService] instance.
+  /// Creates a new [ContactsService] instance.
   ContactsService(
     Uri host, {
     super.client,

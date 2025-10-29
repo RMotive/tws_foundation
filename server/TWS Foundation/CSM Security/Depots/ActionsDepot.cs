@@ -1,13 +1,23 @@
 ﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Depot;
 
+using Action = CSM_Security.Entities.Action;
+
 namespace CSM_Security.Depots;
 
 /// <summary>
-///     [Depot] that provides operations for <see cref="Entities.Action"/> entity.
+///     [Interface] for [PermitsDepot] implementations.
+/// </summary>
+public interface IActionsDepot
+    : IDepot<Action> {
+}
+
+
+/// <summary>
+///     [Depot] that provides operations for <see cref= Action"/> entity.
 /// </summary>
 public class ActionsDepot
-    : BDepot<Database, Entities.Action> {
+    : BDepot<Database, Action>, IActionsDepot {
 
     /// <summary>
     ///     Creates a new <see cref="ActionsDepot"/> instance.
