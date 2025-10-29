@@ -28,7 +28,7 @@ abstract interface class ContactsServiceI extends FoundationServiceB implements 
 
 /// {abstract} class.
 ///
-/// Represents a base behavior implementation for a [YardLogsServiceI] implementation, providing shared default
+/// Represents a base behavior implementation for a [ContactsServiceI] implementation, providing shared default
 /// behavior along built-in native and custom outside implementations.
 abstract class ContactsServiceB extends FoundationServiceB implements ContactsServiceI {
   /// Creates a new [ContactsServiceB] instance.

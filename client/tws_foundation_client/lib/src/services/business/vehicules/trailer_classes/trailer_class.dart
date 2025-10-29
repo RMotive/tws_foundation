@@ -31,9 +31,9 @@ final class TrailerClass extends NamedEntityB<TrailerClass> {
 
   @override
   List<EntityInvalidation<TrailerClass>> evaluate() {
-    List<EntityInvalidation<TrailerClass>> results = <EntityInvalidation<TrailerClass>>[];
+    List<EntityInvalidation<TrailerClass>> invalidations = <EntityInvalidation<TrailerClass>>[];
     if (id < BigInt.zero) {
-      results.add(
+      invalidations.add(
         EntityInvalidation<TrailerClass>(
           this,
           PropertyInfo(EntityKeys.id, int, id),
@@ -43,7 +43,7 @@ final class TrailerClass extends NamedEntityB<TrailerClass> {
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
+      invalidations.add(
         EntityInvalidation<TrailerClass>(
           this,
           PropertyInfo(EntityKeys.name, String, name),
@@ -54,7 +54,7 @@ final class TrailerClass extends NamedEntityB<TrailerClass> {
     }
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        results.add(
+        invalidations.add(
           EntityInvalidation<TrailerClass>(
             this,
             PropertyInfo(EntityKeys.description, String, description),
@@ -64,7 +64,7 @@ final class TrailerClass extends NamedEntityB<TrailerClass> {
         );
       }
     }
-    return results;
+    return invalidations;
   }
 
 }

@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace TWS_Business.Bases;
 
-
 /// <summary>
 ///     Represents a { TWS Business } named referenced entity implementation. 
 /// </summary>

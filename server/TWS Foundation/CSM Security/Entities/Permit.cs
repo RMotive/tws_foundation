@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CSM_Foundation.Database;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
-
 using CSM_Security.Abstractions;
 
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +11,9 @@ namespace CSM_Security.Entities;
 ///     [Entity] that stores and handles specific Feature / Solution / Action authorization for Accounts.
 /// </summary>
 public class Permit
-    : BNamedEntity {
+    : BNamedReferencedEntity {
 
     #region Properties
-
-    /// <summary>
-    ///     Unique identifier reference.
-    /// </summary>
-    /// <remarks>
-    ///     Strictly 8 length value
-    /// </remarks>
-    [StringLength(8, MinimumLength = 8)]
-    public string Reference { get; set; } = string.Empty;
 
     /// <summary>
     ///     Wheter the Permit is globally enabled.
