@@ -78,6 +78,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/accounts_entit
 /// [Contacts Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/contacts_entity_table.dart';
 
+/// [Permits Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/permits_entity_table.dart';
+
 //! <-- Entity Tables
 
 
@@ -118,17 +121,20 @@ export 'src/view/pages/entity_pages/trucks/trucks_page.dart';
 /// [Trailers Page]
 export 'src/view/pages/entity_pages/trailers/trailers_page.dart';
 
-/// [Location Page]
+/// [Locations Page]
 export 'src/view/pages/entity_pages/locations/locations_page.dart';
 
-/// [Section Page]
+/// [Sections Page]
 export 'src/view/pages/entity_pages/sections/sections_page.dart';
 
-/// [Account Page]
+/// [Accounts Page]
 export 'src/view/pages/entity_pages/accounts/accounts_page.dart';
 
-/// [Contact Page]
+/// [Contacts Page]
 export 'src/view/pages/entity_pages/contacts/contacts_page.dart';
+
+/// [Permits Page]
+export 'src/view/pages/entity_pages/permits/permits_page.dart';
 
 
 //! <-- Entity Pages

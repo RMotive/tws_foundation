@@ -5,16 +5,16 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {entry} class.
 ///
-/// Implements a [PackageLandingEntryB] for [ContactsPage] from {tws_foundation_view} package as part of the package landing playground.
-final class  ContactsPageEntry extends PackageLandingEntryB<LandingThemeB> {
-  /// Creates a new [ContactsPage] instance.
-  ContactsPageEntry({
+/// Implements a [PackageLandingEntryB] for [PermitsPage] from {tws_foundation_view} package as part of the package landing playground.
+final class  PermitsPageEntry extends PackageLandingEntryB<LandingThemeB> {
+  /// Creates a new [PermitsPage] instance.
+  PermitsPageEntry({
     super.key,
   }) : super(
-         name: 'Contacts Page',
+         name: 'Permits Page',
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
-             text: 'A Contacts page provides visual interaction with the business entity management operations',
+             text: 'A Permits page provides visual interaction with the security entity management operations',
              style: TextStyle(
                color: foreColor,
              ),
@@ -24,8 +24,8 @@ final class  ContactsPageEntry extends PackageLandingEntryB<LandingThemeB> {
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
-    return ContactsPage(
-      adapter: ContactsEntityTableAdapter(),
+    return PermitsPage(
+      adapter: PermitsEntityTableAdapter(),
     );
   }
 }

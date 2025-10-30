@@ -149,6 +149,20 @@ final class FoundationRoutes {
     name: 'Contacts Creation',
   );
   //! <-- Contacts Routes
+
+  //! --> Permits Routes
+  static const Route permitsPageRoute = Route(
+    'permits',
+    name: 'Permits Page',
+  );
+
+  static const Route permitsCreateWhisperRoute = Route(
+    'create-permits',
+    name: 'Permits Creation',
+  );
+  //! <-- Permits Routes
+
+  
 }
 
 /// {constant} class.

@@ -95,6 +95,17 @@ final class Permit extends NamedReferencedEntityB<Permit> {
       }
     }
 
+    if (reference.length != 8) {
+        invalidations.add(
+          EntityInvalidation<Permit>(
+            this,
+            PropertyInfo(EntityKeys.kReference, String, reference),
+            'lentgh: ${reference.length}, must be exactly 8 characters',
+            'length == 8',
+          ),
+        );
+      }
+
     invalidations.validateDependency(this, solution);
     invalidations.validateDependency(this, feature);
     invalidations.validateDependency(this, action);

@@ -5,26 +5,26 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {entry} class.
 ///
-/// Implements a [PackageLandingEntryB] for [ContactsPage] from {tws_foundation_view} package as part of the package landing playground.
-final class ContactsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB> {
+/// Implements a [PackageLandingEntryB] for [PermitsPage] from {tws_foundation_view} package as part of the package landing playground.
+final class PermitsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB> {
   late final CategoryLayoutPageI categoryPage;
 
-  /// Creates a new [ContactsCategoryPageEntry] instance.
-  ContactsCategoryPageEntry({
+  /// Creates a new [PermitsCategoryPageEntry] instance.
+  PermitsCategoryPageEntry({
     super.key,
   }) : super(
-         name: 'Contacts Category Page',
+         name: 'Permits Category Page',
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:
-                 'An Contacts Category page provides visual interaction with the business entity management operations',
+                 'An Permits Category page provides visual interaction with the business entity management operations',
              style: TextStyle(
                color: foreColor,
              ),
            );
          },
        ) {
-    categoryPage = ContactsCategoryPage();
+    categoryPage = PermitsCategoryPage();
   }
 
   @override
@@ -36,7 +36,7 @@ final class ContactsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     RouteData routeData = RouteData(
       route: categoryPage.route,
-      absolutePath: '/contacts_category_page',
+      absolutePath: '/permits_category_page',
     );
 
     return CategoryLayout(

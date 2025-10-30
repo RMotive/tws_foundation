@@ -12,7 +12,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTableAdatper> {
+final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTableAdapter> {
   /// Creates a new [ContactsCategoryPage] instance.
   ContactsCategoryPage({
     super.cusRoute,
@@ -35,14 +35,14 @@ final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTable
   }
 
   @override
-  ContactsEntityTableAdatper composeAdapter() {
-    return ContactsEntityTableAdatper(
+  ContactsEntityTableAdapter composeAdapter() {
+    return ContactsEntityTableAdapter(
       authBuilder: authBuilder,
     );
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(ContactsEntityTableAdatper adapter) {
+  List<ActionsRibbonNodeI> composeRibbonController(ContactsEntityTableAdapter adapter) {
      return <ActionsRibbonNodeI>[
       ActionsRisbbonRefresh(
         onRefresh: adapter.refresh,
@@ -74,7 +74,7 @@ final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTable
 /// {page} class.
 ///
 /// Implements a [PageB], draws a complex {csm} design for the [Contact] business entity to interact and manage data related with it.
-final class ContactsPage extends EntityPageB<ContactsEntityTableAdatper> {
+final class ContactsPage extends EntityPageB<ContactsEntityTableAdapter> {
   /// Creates a new [ContactsPage] instance.
   ContactsPage({
     required super.adapter,

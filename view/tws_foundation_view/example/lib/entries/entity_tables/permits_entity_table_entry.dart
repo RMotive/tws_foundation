@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 
 ///
-final class ContactsEntityTableEntry extends PackageLandingEntryB<LandingThemeB> {
-  /// Creates a new [ContactsEntityTableEntry] instance.
-  ContactsEntityTableEntry({
+final class PermitsEntityTableEntry extends PackageLandingEntryB<LandingThemeB> {
+  /// Creates a new [PermitsEntityTableEntry] instance.
+  PermitsEntityTableEntry({
     super.key,
   }) : super(
-         name: 'Contacts Entity Table',
+         name: 'Permits Entity Table',
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:
-                 'Foundation {CSM} Entity Table representing [Contact] entity data and interactions, handles foundation possible interactions related with [Driver_Common] data management, like details drawer viewer, inline entity edition, entity remotion, etc.',
+                 'Foundation {CSM} Entity Table representing [Permit] entity data and interactions, handles foundation possible interactions related with [Driver_Common] data management, like details drawer viewer, inline entity edition, entity remotion, etc.',
              style: TextStyle(
                color: foreColor,
              ),
@@ -25,8 +25,8 @@ final class ContactsEntityTableEntry extends PackageLandingEntryB<LandingThemeB>
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
-    return view.ContactsEntityTable(
-      adapter: view.ContactsEntityTableAdapter(),
+    return view.PermitsEntityTable(
+      adapter: view.PermitsEntityTableAdapter(),
     );
   }
 }

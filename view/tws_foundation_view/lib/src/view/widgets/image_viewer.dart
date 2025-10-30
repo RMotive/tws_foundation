@@ -3,7 +3,6 @@ import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_svg/svg.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/data/const/resource_extensions.dart';
-import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Extensions suppoted by [Image] flutter class.

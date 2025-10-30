@@ -28,7 +28,7 @@ dependencies:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: 61-feature-contacts
+      ref: 60-feature-permits
   localstorage: ^6.0.0
 
 dev_dependencies:

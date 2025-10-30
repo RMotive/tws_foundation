@@ -13,9 +13,9 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 /// {adapter} class.
 ///
 /// Implements the [EntityTableAdapterB] for [ContactsEntityTable] {widget}.
-final class ContactsEntityTableAdatper extends FoundationEntityTableAdapterB<Contact> {
-  /// Creates a new [ContactsEntityTableAdatper] instance.
-  ContactsEntityTableAdatper({
+final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Contact> {
+  /// Creates a new [ContactsEntityTableAdapter] instance.
+  ContactsEntityTableAdapter({
     super.authBuilder,
   });
 
@@ -239,7 +239,7 @@ final class ContactsEntityTableAdatper extends FoundationEntityTableAdapterB<Con
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Contact] {entity}, also handles basic available behavior.
-final class ContactsEntityTable extends FoundationEntityTableB<ContactsEntityTableAdatper> {
+final class ContactsEntityTable extends FoundationEntityTableB<ContactsEntityTableAdapter> {
   /// Creates a new [ContactsEntityTable] instance.
   const ContactsEntityTable({
     required super.adapter,
