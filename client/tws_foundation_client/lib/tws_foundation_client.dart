@@ -193,3 +193,7 @@ export 'src/services/security/features/features_service.dart';
 export 'src/services/security/actions/action.dart';
 export 'src/services/security/actions/actions_service.dart';
 
+// --> Exporting [src.services.security.actions]
+export 'src/services/security/profiles/profile.dart';
+export 'src/services/security/profiles/profiles_service.dart';
+
