@@ -1,24 +1,27 @@
+import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
-import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
-import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/tws_list_tile.dart';
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Header state class.
 final class _HeaderState extends ReactorB {}
 
-/// [TwsSelectableList] Display a list of selectable items getted from a [ViewConsumeAdapter] class.
-class TwsSelectableList<T> extends StatefulWidget {
+/// [SelectableList] Display a list of selectable items getted from a [ViewConsumeAdapter] class.
+class SelectableList<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>> extends StatefulWidget {
+  /// [TEntity] builder for conversion.
+  final EntityBuilder<TEntity> entityBuilder;
+  
   /// Section title.
   final String title;
 
   /// Method to get the title from the [T] type object.
-  final String Function(T set) tileTitle;
+  final String Function(TEntity set) tileTitle;
 
   /// List heigth.
   final double? heigth;
@@ -41,30 +44,30 @@ class TwsSelectableList<T> extends StatefulWidget {
   /// Text to show when list content is empty.
   final String emptyContentMessage;
 
-  /// Async data consume adapter.
-  final ViewConsumeAdapter adapter;
-
   /// Preselected list values. This list is compared with consume list result and the coincidenses are marked has selected.
-  final List<T>? initialValues;
+  final List<TEntity>? initialValues;
 
   /// Trigger method on tile selection.
-  final Function(bool selected, T item) onSelect;
+  final Function(bool selected, TEntity item) onSelect;
 
   /// Custom header implementation.
   final Widget? customHeader;
 
   /// Custom comparation for [T] objects in [T] lists. If this field is empty, then the .compare list method will be used.
-  final bool Function(T item1, T item2)? isEqual;
+  final bool Function(TEntity item1, TEntity item2)? isEqual;
 
   /// Interaction status flag.
   final bool enabled;
 
-  const TwsSelectableList({
+  /// Max fetched items. Default is 9999 items.
+  final int maxItems;
+
+  const SelectableList({
     super.key,
     required this.title,
     required this.tileTitle,
-    required this.adapter,
     required this.onSelect,
+    required this.entityBuilder,
     this.heigth,
     this.customHeader,
     this.emptyContentMessage = "Empty content",
@@ -76,15 +79,20 @@ class TwsSelectableList<T> extends StatefulWidget {
     this.initialValues,
     this.isEqual,
     this.enabled = true,
+    this.maxItems = 9999,
   });
 
   @override
-  State<TwsSelectableList<T>> createState() => _TwsSelectableListState<T>();
+  State<SelectableList<TEntity, TService>> createState() => _SelectableListState<TEntity, TService>();
 }
 
-final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
+final class _SelectableListState<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>> extends State<SelectableList<TEntity, TService>> {
+ 
+  /// {dep} [TEntity] based service dependency.
+  final TService service = Injector.get();
+  
   /// Theme Manager injector.
-  late ThemeManager themeManager = ThemeManager.of(context);
+  late FoundationThemeB themeManager = Theming.get(context);
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
@@ -100,10 +108,10 @@ final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   late Color bcolor;
 
   /// Selected items list.
-  late List<T> selectedItems;
+  late List<TEntity> selectedItems;
 
   /// Data result in [AsyncWidget].
-  late List<T> fetchedList;
+  late List<TEntity> fetchedList;
 
   /// Declaration for header state.
   late _HeaderState headerState;
@@ -118,33 +126,54 @@ final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
   /// Waiting status.
   late bool waiting;
 
-  // Theme method handler.
-  void themeUpdateListener(FoundationThemeB theme) {
-    setState(() {
-      primaryColorTheme = theme.control;
-      pageColorTheme = theme.page;
-    });
+  /// {state} current service invokation instance.
+  late Future<ViewOutput<TEntity>> _viewInvok;
+
+   /// Manage the service view data consume to populate the list content.
+  Future<ViewOutput<TEntity>> viewInvokation() async {
+    SessionStorageI sessionStorage = Injector.get();
+
+    FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
+      ViewInput<TEntity>.b(widget.maxItems, 1),
+      sessionStorage.token,
+    );
+
+    ViewOutput<TEntity> result =  resolver.resolveDirect(
+      () => ViewOutput<TEntity>(widget.entityBuilder),
+    );
+
+    return result;
   }
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    themeManager = Theming.get(context);
+    primaryColorTheme = themeManager.control;
+    pageColorTheme = themeManager.page;
+    tcolor = widget.textColor ?? pageColorTheme.fore;
+    bcolor = widget.backgroundColor ?? pageColorTheme.back;  
+  }
+
 
   @override
   void initState() {
     waitingState = TWSFStateHolder();
     waiting = false;
-    selectedItems = widget.initialValues ?? <T>[];
+    selectedItems = widget.initialValues ?? <TEntity>[];
     headerState = _HeaderState();
     headerEffect = () {};
     waitingEffect = () {};
-    tcolor = widget.textColor ?? pageColorTheme.fore;
-    bcolor = widget.backgroundColor ?? pageColorTheme.back;
+    _viewInvok = viewInvokation();
     super.initState();
   }
 
   @override
-  void didUpdateWidget(covariant TwsSelectableList<T> oldWidget) {
+  void didUpdateWidget(covariant SelectableList<TEntity, TService> oldWidget) {
     if (selectedItems != widget.initialValues && widget.enabled) {
       selectedItems = widget.initialValues ?? selectedItems;
     } else if (!widget.enabled) {
-      selectedItems = <T>[];
+      selectedItems = <TEntity>[];
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -157,8 +186,8 @@ final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
             : widget.textColor?.withValues(alpha: 50) ?? pageColorTheme.fore.withAlpha(50);
     return SectionWidget(
       title: widget.title,
-      child: AsyncWidget<List<ViewOutput<dynamic>>>(
-        future: widget.adapter.consume(1, 9999, ""),
+      child: AsyncWidget<ViewOutput<TEntity>>(
+        future: _viewInvok,
         loadingBuilder: (BuildContext ctx) {
           return Center(
             child: CircularProgressIndicator(color: pageColorTheme.fore),
@@ -167,8 +196,8 @@ final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
         errorBuilder: (_, Object? error, _) {
           return const MessageWidget(text: "Something go wrong");
         },
-        successBuilder: (BuildContext ctx, List<ViewOutput<dynamic>> data) {
-          fetchedList = data.first.entities as List<T>;
+        successBuilder: (BuildContext ctx, ViewOutput<TEntity> data) {
+          fetchedList = data.entities;
           return Stack(
             children: <Widget>[
               Column(
@@ -205,7 +234,7 @@ final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                             children: List<Widget>.generate(
                               fetchedList.length,
                               (int index) {
-                                T item = fetchedList[index];
+                                TEntity item = fetchedList[index];
                                 String title = widget.tileTitle(item);
                                 return TwsListTile(
                                   enabled: widget.enabled,
@@ -231,7 +260,7 @@ final class _TwsSelectableListState<T> extends State<TwsSelectableList<T>> {
                                   evaluateSelection: () {
                                     if (widget.isEqual != null) {
                                       bool founded = false;
-                                      for (T selectedItem in selectedItems) {
+                                      for (TEntity selectedItem in selectedItems) {
                                         if (widget.isEqual!(
                                           selectedItem,
                                           item,

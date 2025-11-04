@@ -1,7 +1,7 @@
-part of 'tws_list_viewer.dart';
+part of 'list_viewer.dart';
 
-/// Content widget for [TwsListViewer]. Displays a column with a header and a text list.
-class _TwsListViewerBody<T> extends StatelessWidget {
+/// Content widget for [ListViewer]. Displays a column with a header and a text list.
+class _ListViewerBody<T> extends StatelessWidget {
   final Widget? customHeader;
   final List<T> content;
   final Color tColor;
@@ -13,7 +13,7 @@ class _TwsListViewerBody<T> extends StatelessWidget {
   final String emptyContentMessage;
   final EdgeInsetsGeometry padding;
 
-  const _TwsListViewerBody({
+  const _ListViewerBody({
     required this.content,
     required this.tColor,
     required this.bColor,

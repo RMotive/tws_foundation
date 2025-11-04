@@ -443,8 +443,8 @@ packages:
     dependency: "direct main"
     description:
       path: "client/tws_foundation_client"
-      ref: "60-feature-permits"
-      resolved-ref: "3706175bde04771d87105663269bef331369d478"
+      ref: "59-feature-profiles"
+      resolved-ref: "1d84708dceb44944e4560a86707d89cceedb6a6c"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

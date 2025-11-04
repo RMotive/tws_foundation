@@ -162,6 +162,19 @@ final class FoundationRoutes {
   );
   //! <-- Permits Routes
 
+  //! --> Profiles Routes
+  static const Route profilesPageRoute = Route(
+    'profiles',
+    name: 'Profiles Page',
+  );
+
+  static const Route profilesCreateWhisperRoute = Route(
+    'create-profiles',
+    name: 'Profiles Creation',
+  );
+  //! <-- Profiles Routes
+
+
   
 }
 

@@ -81,6 +81,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/contacts_entit
 /// [Permits Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/permits_entity_table.dart';
 
+/// [Profiles Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/profiles_entity_table.dart';
+
 //! <-- Entity Tables
 
 
@@ -135,6 +138,9 @@ export 'src/view/pages/entity_pages/contacts/contacts_page.dart';
 
 /// [Permits Page]
 export 'src/view/pages/entity_pages/permits/permits_page.dart';
+
+/// [Profiles Page]
+export 'src/view/pages/entity_pages/profiles/profiles_page.dart';
 
 
 //! <-- Entity Pages

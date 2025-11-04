@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
-import 'package:example/entries/entity_category_pages/contacts_category_page_entry.dart';
-import 'package:example/entries/entity_category_pages/permits_category_page_entry.dart';
-import 'package:example/entries/entity_pages/contacts_page_entry.dart';
-import 'package:example/entries/entity_pages/permits_page_entry.dart';
-import 'package:example/entries/entity_tables/contacts_entity_table_entry.dart';
-import 'package:example/entries/entity_tables/permits_entity_table_entry.dart';
+import 'package:example/entries/entity_category_pages/profiles_category_page_entry.dart';
+import 'package:example/entries/entity_pages/profiles_page_entry.dart';
+import 'package:example/entries/entity_tables/profiles_entity_table.entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
@@ -60,7 +57,7 @@ final class _MainAppState extends State<MainApp> {
     Injector.addSingleton<PermitsServiceI>(foundationServer.permitsService);
     Injector.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
     Injector.addSingleton<ActionsServiceI>(foundationServer.actionsService);
-
+    Injector.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
 
     final SessionStorage sessionStorage = SessionStorage();
     await sessionStorage.init();
@@ -136,8 +133,9 @@ final class _MainAppState extends State<MainApp> {
               // // TrucksPageEntry(),
               // // TrailersPageEntry(),
               // LocationsPageEntry(),
-              ContactsPageEntry(),
-              PermitsPageEntry(),
+              // ContactsPageEntry(),
+              // PermitsPageEntry(),
+              ProfilesPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
@@ -148,8 +146,9 @@ final class _MainAppState extends State<MainApp> {
               // TrucksCategoryPageEntry(),
               // TrailersCategoryPageEntry(),
               // LocationsCategoryPageEntry(),
-              ContactsCategoryPageEntry(),
-              PermitsCategoryPageEntry(),
+              // ContactsCategoryPageEntry(),
+              // PermitsCategoryPageEntry(),
+              ProfilesCategoryPageEntry(), 
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
@@ -161,8 +160,10 @@ final class _MainAppState extends State<MainApp> {
               // // TrucksEntityTableEntry(),
               // TrailersEntityTableEntry(),
               // LocationsEntityTableEntry(),
-              ContactsEntityTableEntry(),
-              PermitsEntityTableEntry(),
+              // ContactsEntityTableEntry(),
+              // PermitsEntityTableEntry(),
+              ProfilesEntityTableEntry(),
+
               //! <-- Foundation Entity Tables
             ],
           );

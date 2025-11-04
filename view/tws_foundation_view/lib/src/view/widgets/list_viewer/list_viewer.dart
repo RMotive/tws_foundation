@@ -5,11 +5,11 @@ import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 
-part 'tws_list_viewer_body.dart';
+part 'list_viewer_body.dart';
 
-/// [TwsListViewer] A simple list component to show a section that contains a list with a title and subtitle.
+/// [ListViewer] A simple list component to show a section that contains a list with a title and subtitle.
 /// Ideal for showing simple data collections.
-class TwsListViewer<T> extends StatelessWidget {
+class ListViewer<T> extends StatelessWidget {
   /// Section title.
   final String title;
 
@@ -48,7 +48,7 @@ class TwsListViewer<T> extends StatelessWidget {
   /// Default delay to consumer.
   final Duration delay;
 
-  const TwsListViewer({
+  const ListViewer({
     super.key,
     required this.title,
     required this.tileTitle,
@@ -75,7 +75,7 @@ class TwsListViewer<T> extends StatelessWidget {
         title: title,
         child:
             tilesContent != null
-                ? _TwsListViewerBody<T>(
+                ? _ListViewerBody<T>(
                   content: tilesContent!,
                   tColor: tColor,
                   bColor: bColor,
@@ -97,7 +97,7 @@ class TwsListViewer<T> extends StatelessWidget {
                     );
                   },
                   successBuilder: (BuildContext ctx, ViewOutput<dynamic> data) {
-                    return _TwsListViewerBody<T>(
+                    return _ListViewerBody<T>(
                       content: data.entities as List<T>,
                       tColor: tColor,
                       bColor: bColor,
