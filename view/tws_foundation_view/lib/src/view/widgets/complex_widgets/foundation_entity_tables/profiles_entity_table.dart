@@ -111,6 +111,7 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
               SelectableList<Permit, PermitsServiceI>(
                 title: 'Available Permits',
                 entityBuilder: () => Permit(),
+                initialValues: entity.permits,
                 tileTitle:(Permit permit) => '${permit.solution.name} - ${permit.name}',
                 onSelect:(bool selected, Permit item) {
                   if(selected){

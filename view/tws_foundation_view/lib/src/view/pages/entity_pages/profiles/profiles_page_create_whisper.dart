@@ -102,17 +102,10 @@ final class ProfilesPageCreateWhisper extends PageB {
                       heigth: 500,
                       title: 'Available Permits',
                       entityBuilder: () => Permit(),
+                      initialValues: itemState?.entity.permits,
                       tileTitle:(Permit permit) => '${permit.solution.name} - ${permit.name}',
                       onSelect:(bool selected, Permit item) {
-                        Profile profile = itemState!.entity;
-                        if(selected){
-                          if(profile.permits.contains(item)) return;
-                          profile.permits.add(item);
-                          itemState.react();
-                          return;
-                        }
-                        profile.permits.remove(item);
-                        itemState.react();
+                        itemState?.react();
                       },
                     ),
                   ],
