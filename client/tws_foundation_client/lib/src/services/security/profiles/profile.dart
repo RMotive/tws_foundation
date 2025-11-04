@@ -1,9 +1,6 @@
 
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/security/actions/action.dart';
-import 'package:tws_foundation_client/src/services/security/features/feature.dart';
-import 'package:tws_foundation_client/src/services/security/solutions/solution.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {implementation} class for an [EntityI].

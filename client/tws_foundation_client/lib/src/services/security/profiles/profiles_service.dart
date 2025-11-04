@@ -52,7 +52,7 @@ final class ProfilesService extends ProfilesServiceB {
     super.client,
   }) : super(
           host,
-          'permits',
+          'profiles',
         );
 
   @override
