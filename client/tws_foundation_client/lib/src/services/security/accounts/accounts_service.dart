@@ -4,12 +4,29 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} class.
 ///
 /// Defines a [ServiceI] contract for [Account] operations.
-abstract interface class AccountServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Account> {
+abstract interface class AccountServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Account>, CreateServiceI<Account> {
   /// Creates a new [AccountServiceI] instance.
   AccountServiceI(
     super.host,
     super.servicePath,
   );
+
+  
+  /// Updates a [Account] based on the [Account.Id] pointer.
+  ///
+  ///
+  /// [input] record properties to update at the data storage.
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<UpdateOutput<Account>> update(UpdateInput<Account> input, String auth);
+
+  /// Updates a [Account] based on the [Account.Id] pointer.
+  ///
+  ///
+  /// [entity] record properties to update at the data storage.
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<Account> delete(Account entity, String auth);
 }
 
 /// {abstract} class.
@@ -55,4 +72,38 @@ final class AccountService extends AccountServiceB {
       ),
     );
   }
+
+  @override
+  FoundationFutureResolver<BatchOperationOutput<Account>> create(List<Account> accounts, String authToken) async {
+    return FoundationResponseResolver<BatchOperationOutput<Account>>(
+      await postListSecure<Account>(
+        'create',
+        accounts,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<UpdateOutput<Account>> update(UpdateInput<Account> input, String authToken) async {
+    return FoundationResponseResolver<UpdateOutput<Account>>(
+      await postSecure(
+        'update',
+        input,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<Account> delete(Account entity, String authToken) async {
+    return FoundationResponseResolver<Account>(
+      await postSecure(
+        'delete',
+        entity,
+        authToken: authToken,
+      ),
+    );
+  }
+
 }
