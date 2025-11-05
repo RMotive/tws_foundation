@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database;
+﻿using System.ComponentModel.DataAnnotations;
+
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,8 @@ public class Account
     /// <summary>
     ///     <see cref="Account"/> user identifier.
     /// </summary>
+    [StringLength(50, MinimumLength = 1)]
+
     public string User { get; set; } = string.Empty;
 
     /// <summary>

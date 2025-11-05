@@ -37,16 +37,16 @@ final class Profile extends NamedEntityB<Profile> {
       ).toList();
     }
 
-    List<DataMap> accountsMaps = encode.getList(kAccounts);
-    if (accountsMaps.isNotEmpty) {
-      accounts = accountsMaps.map<Account>(
-        (DataMap e) {
-          Account account = Account();
-          account.decode(e);
-          return account;
-        },
-      ).toList();
-    }
+    // List<DataMap> accountsMaps = encode.getList(kAccounts);
+    // if (accountsMaps.isNotEmpty) {
+    //   accounts = accountsMaps.map<Account>(
+    //     (DataMap e) {
+    //       Account account = Account();
+    //       account.decode(e);
+    //       return account;
+    //     },
+    //   ).toList();
+    // }
   }
 
   @override

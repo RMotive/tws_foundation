@@ -18,11 +18,11 @@ final class Account extends EntityB<Account> {
   /// [Account.wildcard] property key.
   static const String kWildcard = 'wildcard';
 
-  /// [Account.accountPermits] property key.
-  static const String kAccountPermits = 'accountPermits';
+  /// [Account.permits] property key.
+  static const String kPermits = 'permits';
 
-  /// [Account.accountProfiles] property key.
-  static const String kAccountProfiles = 'accountProfiles';
+  /// [Account.profiles] property key.
+  static const String kProfiles = 'profiles';
 
   /// [Contact] information.
   Contact contact = Contact();
@@ -36,6 +36,12 @@ final class Account extends EntityB<Account> {
   /// Wildcard permiss.
   bool wildcard = false;
 
+  /// [Permit]s related to this accounts.
+  List<Permit> permits = <Permit>[];
+  
+  /// [Profile]s related to this accounts.
+  List<Profile> profiles = <Profile>[];
+
   /// Creates a new default [Account] object.
   Account();
 
@@ -46,6 +52,27 @@ final class Account extends EntityB<Account> {
     user = encode.get(kUser);
     wildcard = encode.get(kWildcard);
     password = "";
+    List<DataMap> permitsMaps = encode.getList(kPermits);
+    if (permitsMaps.isNotEmpty) {
+      permits = permitsMaps.map<Permit>(
+        (DataMap e) {
+          Permit permit = Permit();
+          permit.decode(e);
+          return permit;
+        },
+      ).toList();
+    }
+
+    List<DataMap> profilesMaps = encode.getList(kProfiles);
+    if (profilesMaps.isNotEmpty) {
+      profiles = profilesMaps.map<Profile>(
+        (DataMap e) {
+          Profile profile = Profile();
+          profile.decode(e);
+          return profile;
+        },
+      ).toList();
+    }
     
   }
 
@@ -57,6 +84,16 @@ final class Account extends EntityB<Account> {
         kUser: user,
         kPassword: "", // TODO Manage account secrets
         kWildcard: wildcard,
+        kPermits: permits
+          .map(
+            (Permit e) => e.encode(),
+          )
+          .toList(),
+          kProfiles: profiles
+          .map(
+            (Profile e) => e.encode(),
+          )
+          .toList(),
       },
     );
   }
@@ -69,8 +106,8 @@ final class Account extends EntityB<Account> {
         EntityInvalidation<Account>(
           this,
           PropertyInfo(EntityKeys.id, int, id),
-          'Pointer cannot be less than 0',
-          'invalidPointer()',
+          'Pointer: $id, cannot be less than 0.',
+          '$id < 0',
         ),
       );
     }
@@ -81,12 +118,24 @@ final class Account extends EntityB<Account> {
           this,
           PropertyInfo(kUser, String, user),
           'User name length must be between 1 and 50 characters.',
-          'strictLength(50)',
+          '51 > length > 0',
         ),
       );
     }
     
     invalidations.validateDependency(this, contact);
+
+    if (permits.isNotEmpty) {
+      for (Permit permit in permits) {
+        invalidations.validateDependency(this, permit);
+      }
+    }
+
+    if (profiles.isNotEmpty) {
+      for (Profile profile in profiles) {
+        invalidations.validateDependency(this, profile);
+      }
+    }
 
     return invalidations;
   }

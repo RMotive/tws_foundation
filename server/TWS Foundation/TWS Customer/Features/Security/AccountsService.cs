@@ -1,10 +1,14 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+﻿using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Product;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace TWS_Customer.Features.Security;
 
@@ -43,6 +47,13 @@ public interface IAccountsService
 public class AccountsService
     : BService<Account, IAccountsDepot>, IAccountsService {
 
+    private static QueryProcessor<Account> QueryProcessor => (sourceQuery) => {
+        sourceQuery = sourceQuery
+         .Include(e => e.Permits)
+         .Include(e => e.Profiles);
+        return sourceQuery;
+    };
+
     /// <summary>
     ///     Creates a new <see cref="AccountsService"/> instance.
     /// </summary>
@@ -74,5 +85,9 @@ public class AccountsService
 
     public Task<Permit[]> GetPermits(long id) {
         return depot.GetPermits(id);
+    }
+    public async override Task<ViewOutput<Account>> View(QueryInput<Account, ViewInput<Account>> input) {
+        input.PostProcessor = QueryProcessor;
+        return await depot.View(input);
     }
 }
