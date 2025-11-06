@@ -142,7 +142,6 @@ export 'src/view/pages/entity_pages/permits/permits_page.dart';
 /// [Profiles Page]
 export 'src/view/pages/entity_pages/profiles/profiles_page.dart';
 
-
 //! <-- Entity Pages
 
 // [layouts.navigation_layout]

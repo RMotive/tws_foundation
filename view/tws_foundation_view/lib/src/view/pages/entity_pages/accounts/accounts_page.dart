@@ -1,7 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Route, Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/employees/employees_page_create_whisper.dart';
+import 'package:tws_foundation_view/src/view/pages/entity_pages/accounts/create_whisper/accounts_page_create_whisper.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -18,17 +18,17 @@ final class AccountsCategoryPage extends EntityCategoryPageB<AccountsEntityTable
     super.cusRoute,
   }) : super(
          title: 'Accounts',
-         route: FoundationRoutes.employeesPageRoute,
+         route: FoundationRoutes.accountsPageRoute,
        );
 
   @override
   List<RouteB> composeRoutes() {
     return <RouteB>[
       RouteWhisper<Object>(
-        FoundationRoutes.employeesCreateWhisperRoute,
+        FoundationRoutes.accountsCreateWhisperRoute,
         whisperOptions: RouteWhisperOptions(),
         pageBuilder: (BuildContext _, RouteData _) {
-          return EmployeesPageCreateWhisper();
+          return AccountsPageCreateWhisper();
         },
       ),
     ];
@@ -43,13 +43,22 @@ final class AccountsCategoryPage extends EntityCategoryPageB<AccountsEntityTable
 
   @override
   List<ActionsRibbonNodeI> composeRibbonController(AccountsEntityTableAdatper adapter) {
-    return <ActionsRibbonNodeI>[];
+    return <ActionsRibbonNodeI>[
+      ActionsRisbbonRefresh(
+        onRefresh: adapter.refresh,
+      ),
+      ActionsRisbbonCreate(
+        onCreate: () {
+          Injector.get<Router>().go(FoundationRoutes.accountsCreateWhisperRoute);
+        },
+      ),
+    ];
   }
 
   @override
   Widget? composeIcon(Color? recomdColor) {
     return Icon(
-      Icons.departure_board,
+      Icons.account_box,
       color: recomdColor,
     );
   }

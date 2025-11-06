@@ -3,7 +3,7 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/models/coordenates_precisio_formtter.dart';
+import 'package:tws_foundation_view/src/core/models/coordenates_formatter.dart';
 import 'package:tws_foundation_view/src/core/models/text_label.dart';
 import 'package:tws_foundation_view/src/data/const/static_collections.dart';
 import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
