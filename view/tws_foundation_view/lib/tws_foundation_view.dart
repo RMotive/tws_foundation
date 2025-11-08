@@ -86,7 +86,6 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/profiles_entit
 
 //! <-- Entity Tables
 
-
 // [widgets]
 export 'src/view/widgets/dialog_widgets/dialog.dart';
 export 'src/view/widgets/text_input.dart';
@@ -141,6 +140,9 @@ export 'src/view/pages/entity_pages/permits/permits_page.dart';
 
 /// [Profiles Page]
 export 'src/view/pages/entity_pages/profiles/profiles_page.dart';
+
+/// [Solutions Page]
+export 'src/view/pages/entity_pages/solutions/solutions_page.dart';
 
 //! <-- Entity Pages
 

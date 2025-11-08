@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
-import 'package:example/entries/entity_category_pages/accounts_category_page_entry.dart';
-import 'package:example/entries/entity_pages/accounts_page_entry.dart';
-import 'package:example/entries/entity_tables/accounts_entity_table_entry.dart';
+import 'package:example/entries/entity_category_pages/solutions_category_page_entry.dart';
+import 'package:example/entries/entity_pages/solutions_page_entry.dart';
+import 'package:example/entries/entity_tables/solutions_entity_table_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
@@ -136,7 +136,8 @@ final class _MainAppState extends State<MainApp> {
               // ContactsPageEntry(),
               // PermitsPageEntry(),
               // ProfilesPageEntry(),
-              AccountsPageEntry(),
+              // AccountsPageEntry(),
+              SolutionsPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
@@ -150,7 +151,8 @@ final class _MainAppState extends State<MainApp> {
               // ContactsCategoryPageEntry(),
               // PermitsCategoryPageEntry(),
               // ProfilesCategoryPageEntry(), 
-              AccountsCategoryPageEntry(),
+              // AccountsCategoryPageEntry(),
+              SolutionsCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
@@ -165,7 +167,8 @@ final class _MainAppState extends State<MainApp> {
               // ContactsEntityTableEntry(),
               // PermitsEntityTableEntry(),
               // ProfilesEntityTableEntry(),
-              AccountsEntityTableEntry(),
+              //AccountsEntityTableEntry(),
+              SolutionsEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

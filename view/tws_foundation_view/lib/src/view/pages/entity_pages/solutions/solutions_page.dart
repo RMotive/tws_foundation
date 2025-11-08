@@ -3,53 +3,53 @@ import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/locations/create_whisper/locations_page_create_whisper.dart';
+import 'package:tws_foundation_view/src/view/pages/entity_pages/solutions/solutions_page_create_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [LocationsPage] category page implementation
+/// Implements a [CategoryLayoutPageI] defining default behavior for a [SectionsPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTableAdapter> {
-  /// Creates a new [LocationsCategoryPage] instance.
-  LocationsCategoryPage({
+final class SolutionsCategoryPage extends EntityCategoryPageB<SolutionsEntityTableAdapter> {
+  /// Creates a new [SolutionsCategoryPage] instance.
+  SolutionsCategoryPage({
     super.cusRoute,
   }) : super(
-         title: 'Locations',
-         route: FoundationRoutes.locationsPageRoute,
+         title: 'Solutions',
+         route: FoundationRoutes.solutionsPageRoute,
        );
 
   @override
   List<RouteB> composeRoutes() {
     return <RouteB>[
       RouteWhisper<Object>(
-        FoundationRoutes.locationsCreateWhisperRoute,
+        FoundationRoutes.solutionsCreateWhisperRoute,
         whisperOptions: RouteWhisperOptions(),
         pageBuilder: (BuildContext _, RouteData _) {
-          return LocationsPageCreateWhisper();
+          return SolutionsPageCreateWhisper();
         },
       ),
     ];
   }
 
   @override
-  LocationsEntityTableAdapter composeAdapter() {
-    return LocationsEntityTableAdapter(
+  SolutionsEntityTableAdapter composeAdapter() {
+    return SolutionsEntityTableAdapter(
       authBuilder: authBuilder,
     );
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(LocationsEntityTableAdapter adapter) {
+  List<ActionsRibbonNodeI> composeRibbonController(SolutionsEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
       ActionsRisbbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(
         onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.locationsCreateWhisperRoute);
+          Injector.get<Router>().go(FoundationRoutes.solutionsCreateWhisperRoute);
         },
       ),
     ];
@@ -58,14 +58,14 @@ final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTab
   @override
   Widget? composeIcon(Color? recomdColor) {
     return Icon(
-      Icons.location_on_outlined,
+      Icons.account_tree_outlined,
       color: recomdColor,
     );
   }
 
   @override
   PageI composePage(BuildContext buildContext, RouteData routeData) {
-    return LocationsPage(
+    return SolutionsPage(
       adapter: adapter,
     );
   }
@@ -73,16 +73,16 @@ final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTab
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [Location] business entity to interact and manage data related with it.
-final class LocationsPage extends EntityPageB<LocationsEntityTableAdapter> {
-  /// Creates a new [LocationsPage] instance.
-  LocationsPage({
+/// Implements a [PageB], draws a complex {csm} design for the [Solution] business entity to interact and manage data related with it.
+final class SolutionsPage extends EntityPageB<SolutionsEntityTableAdapter> {
+  /// Creates a new [SolutionsPage] instance.
+  SolutionsPage({
     required super.adapter,
   });
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
-    return LocationsEntityTable(
+    return SolutionsEntityTable(
       adapter: adapter,
     );
   }

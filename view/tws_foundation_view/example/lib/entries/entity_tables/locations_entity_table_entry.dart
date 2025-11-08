@@ -25,7 +25,7 @@ final class LocationsEntityTableEntry extends PackageLandingEntryB<LandingThemeB
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return view.LocationsEntityTable(
-      adapter: view.LocationsEntityTableAdatper(),
+      adapter: view.LocationsEntityTableAdapter(),
     );
   }
 }

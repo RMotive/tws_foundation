@@ -12,7 +12,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class SectionsCategoryPage extends EntityCategoryPageB<LocationsEntityTableAdatper> {
+final class SectionsCategoryPage extends EntityCategoryPageB<LocationsEntityTableAdapter> {
   /// Creates a new [SectionsCategoryPage] instance.
   SectionsCategoryPage({
     super.cusRoute,
@@ -35,14 +35,14 @@ final class SectionsCategoryPage extends EntityCategoryPageB<LocationsEntityTabl
   }
 
   @override
-  LocationsEntityTableAdatper composeAdapter() {
-    return LocationsEntityTableAdatper(
+  LocationsEntityTableAdapter composeAdapter() {
+    return LocationsEntityTableAdapter(
       authBuilder: authBuilder,
     );
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(LocationsEntityTableAdatper adapter) {
+  List<ActionsRibbonNodeI> composeRibbonController(LocationsEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
       ActionsRisbbonRefresh(
         onRefresh: adapter.refresh,

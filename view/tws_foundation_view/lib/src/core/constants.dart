@@ -174,6 +174,18 @@ final class FoundationRoutes {
   );
   //! <-- Profiles Routes
 
+  //! --> Solutions Routes
+  static const Route solutionsPageRoute = Route(
+    'solutions',
+    name: 'Solutions Page',
+  );
+
+  static const Route solutionsCreateWhisperRoute = Route(
+    'create-solutions',
+    name: 'Solutions Creation',
+  );
+  //! <-- Solutions Routes
+
 
   
 }

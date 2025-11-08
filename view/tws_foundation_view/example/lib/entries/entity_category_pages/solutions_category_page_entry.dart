@@ -5,26 +5,26 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {entry} class.
 ///
-/// Implements a [PackageLandingEntryB] for [SectionsPage] from {tws_foundation_view} package as part of the package landing playground.
-final class SectionsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB> {
+/// Implements a [PackageLandingEntryB] for [SolutionsPage] from {tws_foundation_view} package as part of the package landing playground.
+final class SolutionsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB> {
   late final CategoryLayoutPageI categoryPage;
 
-  /// Creates a new [SectionsCategoryPageEntry] instance.
-  SectionsCategoryPageEntry({
+  /// Creates a new [SolutionsCategoryPageEntry] instance.
+  SolutionsCategoryPageEntry({
     super.key,
   }) : super(
-         name: 'Sections Category Page',
+         name: 'Solutions Category Page',
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:
-                 'A Sections Category page provides visual interaction with the business entity management operations',
+                 'A Solutions Category page provides visual interaction with the business entity management operations',
              style: TextStyle(
                color: foreColor,
              ),
            );
          },
        ) {
-    categoryPage = SectionsCategoryPage();
+    categoryPage = SolutionsCategoryPage();
   }
 
   @override
@@ -36,7 +36,7 @@ final class SectionsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     RouteData routeData = RouteData(
       route: categoryPage.route,
-      absolutePath: '/sections_category_page',
+      absolutePath: '/Solutions_category_page',
     );
 
     return CategoryLayout(
