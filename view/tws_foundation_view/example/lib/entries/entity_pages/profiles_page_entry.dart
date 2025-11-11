@@ -12,6 +12,7 @@ final class  ProfilesPageEntry extends PackageLandingEntryB<LandingThemeB> {
     super.key,
   }) : super(
          name: 'Profiles Page',
+         image: AssetImage(FoundationAssets.pagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text: 'A Profiles page provides visual interaction with the security entity management operations',

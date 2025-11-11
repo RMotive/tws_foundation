@@ -14,6 +14,7 @@ final class SolutionsCategoryPageEntry extends PackageLandingEntryB<LandingTheme
     super.key,
   }) : super(
          name: 'Solutions Category Page',
+         image: AssetImage(FoundationAssets.categoryPagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

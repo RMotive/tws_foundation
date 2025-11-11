@@ -12,6 +12,7 @@ final class SolutionsPageEntry extends PackageLandingEntryB<LandingThemeB> {
     super.key,
   }) : super(
          name: 'Solutions Page',
+         image:  AssetImage(FoundationAssets.pagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text: 'A Solutions page provides visual interaction with the business entity management operations',

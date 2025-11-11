@@ -14,6 +14,7 @@ final class YardLogsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB
     super.key,
   }) : super(
          name: 'YardLogs Category Page',
+         image: AssetImage(FoundationAssets.categoryPagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

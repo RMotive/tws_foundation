@@ -12,6 +12,7 @@ final class  ContactsPageEntry extends PackageLandingEntryB<LandingThemeB> {
     super.key,
   }) : super(
          name: 'Contacts Page',
+         image: AssetImage(FoundationAssets.pagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text: 'A Contacts page provides visual interaction with the business entity management operations',

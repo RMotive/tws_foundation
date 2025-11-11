@@ -12,6 +12,7 @@ final class YardLogsPageEntry extends PackageLandingEntryB<LandingThemeB> {
     super.key,
   }) : super(
          name: 'Yard Logs Page',
+         image: AssetImage(FoundationAssets.pagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text: 'A Yard Logs page provides visual interaction with the business entity management operations',

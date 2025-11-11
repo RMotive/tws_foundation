@@ -3,6 +3,7 @@ import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 ///
 final class YardLogsEntityTableEntry extends PackageLandingEntryB<LandingThemeB> {
@@ -11,6 +12,7 @@ final class YardLogsEntityTableEntry extends PackageLandingEntryB<LandingThemeB>
     super.key,
   }) : super(
          name: 'Yard Logs Entity Table',
+         image: AssetImage(FoundationAssets.tablePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

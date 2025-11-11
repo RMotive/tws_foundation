@@ -40,4 +40,5 @@ dev_dependencies:
 flutter:
   assets:
     - assets/business/
+    - assets/entries/
     - assets/business/full_logo_white.webp

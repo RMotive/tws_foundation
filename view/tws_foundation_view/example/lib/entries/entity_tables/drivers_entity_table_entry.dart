@@ -4,6 +4,7 @@ import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 ///
 final class DriversEntityTableEntry extends PackageLandingEntryB<LandingThemeB> {
@@ -12,6 +13,7 @@ final class DriversEntityTableEntry extends PackageLandingEntryB<LandingThemeB> 
     super.key,
   }) : super(
          name: 'Drivers Entity Table',
+         image: AssetImage(FoundationAssets.tablePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

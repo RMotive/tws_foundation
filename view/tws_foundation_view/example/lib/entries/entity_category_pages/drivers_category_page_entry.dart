@@ -14,6 +14,7 @@ final class DriversCategoryPageEntry extends PackageLandingEntryB<LandingThemeB>
     super.key,
   }) : super(
          name: 'Drivers Category Page',
+         image: AssetImage(FoundationAssets.categoryPagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

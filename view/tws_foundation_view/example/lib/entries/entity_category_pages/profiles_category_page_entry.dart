@@ -14,6 +14,7 @@ final class ProfilesCategoryPageEntry extends PackageLandingEntryB<LandingThemeB
     super.key,
   }) : super(
          name: 'Profiles Category Page',
+         image: AssetImage(FoundationAssets.categoryPagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

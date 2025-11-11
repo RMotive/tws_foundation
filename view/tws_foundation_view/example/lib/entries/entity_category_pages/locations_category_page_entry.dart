@@ -14,6 +14,7 @@ final class LocationsCategoryPageEntry extends PackageLandingEntryB<LandingTheme
     super.key,
   }) : super(
          name: 'Locations Category Page',
+         image: AssetImage(FoundationAssets.categoryPagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

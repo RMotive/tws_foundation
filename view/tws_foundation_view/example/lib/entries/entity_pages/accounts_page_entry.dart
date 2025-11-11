@@ -12,6 +12,7 @@ final class  AccountsPageEntry extends PackageLandingEntryB<LandingThemeB> {
     super.key,
   }) : super(
          name: 'Accounts Page',
+         image: AssetImage(FoundationAssets.pagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text: 'A Accounts page provides visual interaction with the business entity management operations',

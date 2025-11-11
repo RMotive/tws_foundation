@@ -12,6 +12,7 @@ final class TrailersPageEntry extends PackageLandingEntryB<LandingThemeB> {
     super.key,
   }) : super(
          name: 'Trailers Page',
+         image: AssetImage(FoundationAssets.pagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text: 'A Trailers page provides visual interaction with the business entity management operations',
