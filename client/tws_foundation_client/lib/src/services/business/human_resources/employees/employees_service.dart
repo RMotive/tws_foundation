@@ -19,15 +19,6 @@ abstract class EmployeesServiceB extends FoundationServiceB implements Employees
     super.client,
     super.headers,
   });
-
-
-  /// Updates a [Employee] based on the [Employee.Id] pointer.
-  ///
-  ///
-  /// [input] record properties to update at the data storage.
-  ///
-  /// [auth] server authorization token.
-  FoundationFutureResolver<UpdateOutput<Employee>> update(UpdateInput<Employee> input, String auth);
 }
 
 /// {interface} class.
@@ -45,6 +36,14 @@ abstract interface class EmployeesServiceI extends FoundationServiceB implements
   ///
   /// [authToken] authentication session token.
   FoundationFutureResolver<Employee?> getUserEmployee(String authToken);
+
+  /// Updates a [Employee] based on the [Employee.Id] pointer.
+  ///
+  ///
+  /// [input] record properties to update at the data storage.
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<UpdateOutput<Employee>> update(UpdateInput<Employee> input, String auth);
 }
 
 /// {service} class.
