@@ -174,7 +174,7 @@ final class AccountsPageCreateWhisper extends PageB {
                         ),
                       ],
                       onSelect:(List<bool> selected) {
-                        Account account = itemState!.entity;
+                        Account account = itemState.entity;
                         account.wildcard = selected.isNotEmpty ? selected.first : false;
                         itemState.react();
                       },
@@ -186,10 +186,10 @@ final class AccountsPageCreateWhisper extends PageB {
                       heigth: 500,
                       title: 'Available Profiles',
                       entityBuilder: () => Profile(),
-                      initialValues: itemState?.entity.profiles,
+                      initialValues: itemState.entity.profiles,
                       tileTitle:(Profile profile) => profile.name,
                       onSelect:(bool selected, Profile item) {
-                        itemState?.react();
+                        itemState.react();
                       },
                     ),
 
@@ -197,10 +197,10 @@ final class AccountsPageCreateWhisper extends PageB {
                       heigth: 500,
                       title: 'Available Permits',
                       entityBuilder: () => Permit(),
-                      initialValues: itemState?.entity.permits,
+                      initialValues: itemState.entity.permits,
                       tileTitle:(Permit permit) => '${permit.solution.name} - ${permit.name}',
                       onSelect:(bool selected, Permit item) {
-                        itemState?.react();
+                        itemState.react();
                       },
                     ),
                   ],

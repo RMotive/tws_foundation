@@ -106,7 +106,7 @@ class _CreateWhisperAddressSection extends StatelessWidget {
                 ),
                 onChanged: (String text) {
                   Employee employee = itemState!.entity.internal!.employee;
-                  employee.address = employee.address?.sanitize(state: text) ?? Address().sanitize(state: text);
+                  employee.address = employee.address?.sanitize(street: text) ?? Address().sanitize(street: text);
                   itemState?.react();
                 },
               ),

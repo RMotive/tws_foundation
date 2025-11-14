@@ -1133,7 +1133,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         ),
 
         /// Contact information
-        if(entity.internal?.employee.address != null) ...<TextLabel>[
+        if (entity.internal?.employee.address != null) ...<TextLabel>[
           TextLabel(
             title: 'Email',
             value: entity.internal?.employee.approach?.email ?? "---",
@@ -1151,33 +1151,33 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
             value: entity.internal?.employee.approach?.alternative ?? "---",
           ),
         ],
-      
+
         /// Address information
-        if(entity.internal?.employee.address != null) ...<TextLabel>[
+        if (entity.internal?.employee.address != null) ...<TextLabel>[
           TextLabel(
-          title: 'Country',
-          value: entity.internal?.employee.address?.country ?? "---",
-        ),
-        TextLabel(
-          title: 'City',
-          value: entity.internal?.employee.address?.city ?? "---",
-        ),
-        TextLabel(
-          title: 'Street',
-          value: entity.internal?.employee.address?.street ?? "---",
-        ),
-        TextLabel(
-          title: 'Alt. street',
-          value: entity.internal?.employee.address?.altStreet ?? "---",
-        ),
-        TextLabel(
-          title: 'ZIP',
-          value: entity.internal?.employee.address?.zip ?? "---",
-        ),
-        TextLabel(
-          title: 'Subdivision/Colonia',
-          value: entity.internal?.employee.address?.subdivision ?? "---",
-        ),
+            title: 'Country',
+            value: entity.internal?.employee.address?.country ?? "---",
+          ),
+          TextLabel(
+            title: 'City',
+            value: entity.internal?.employee.address?.city ?? "---",
+          ),
+          TextLabel(
+            title: 'Street',
+            value: entity.internal?.employee.address?.street ?? "---",
+          ),
+          TextLabel(
+            title: 'Alt. street',
+            value: entity.internal?.employee.address?.altStreet ?? "---",
+          ),
+          TextLabel(
+            title: 'ZIP',
+            value: entity.internal?.employee.address?.zip ?? "---",
+          ),
+          TextLabel(
+            title: 'Subdivision/Colonia',
+            value: entity.internal?.employee.address?.subdivision ?? "---",
+          ),
         ],
       ],
     );

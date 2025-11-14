@@ -35,7 +35,7 @@ final class Employee extends EntityB<Employee> {
   /// 18 lenght CURP number.
   String? curp;
 
-  /// 12 lenght RFC number.
+  /// 13 lenght RFC number.
   String? rfc;
 
   /// 11 lenght Mexican Social Asurance Number (NSS).
