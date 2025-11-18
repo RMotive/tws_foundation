@@ -2,10 +2,10 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-/// [TWSIncrementalList] Widget that shows a list of Generic [TModel] items.
+/// [IncrementalList] Widget that shows a list of Generic [TModel] items.
 /// This list has an built-in options to increment or remove items, 
 /// based on the [modelBuilder] property.
-class TWSIncrementalList<TModel> extends StatefulWidget {  
+class IncrementalList<TModel> extends StatefulWidget {  
   /// text in plural to name the record.
   final String title;
 
@@ -36,7 +36,7 @@ class TWSIncrementalList<TModel> extends StatefulWidget {
   /// set the min records available. When the min value is reached, the delete option will be disable.
   final int recordMin;
 
-  const TWSIncrementalList({
+  const IncrementalList({
     super.key,
     required this.recordList,
     required this.modelBuilder,
@@ -51,10 +51,10 @@ class TWSIncrementalList<TModel> extends StatefulWidget {
   }): assert(recordLimit >= 0, "Limit property must be >= 0");
 
   @override
-  State<TWSIncrementalList<TModel>> createState() => _TWSIncrementalListState<TModel>();
+  State<IncrementalList<TModel>> createState() => _IncrementalListState<TModel>();
 }
 
-class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>> {
+class _IncrementalListState<TModel> extends State<IncrementalList<TModel>> {
 
   /// Color pallet for the component.
   late SimpleTheming primaryColorTheme;
@@ -77,7 +77,6 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
     return SizedBox(
       width: widget.width,
       child: Column(
-        spacing: 1,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SizedBox(
@@ -89,7 +88,7 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
                 Text(
                   "${widget.title}: (${widget.recordList.length})",
                   style: TextStyle(
-                    color: primaryColorTheme.accent
+                    color: primaryColorTheme.fore
                   ),
                 ),
                 Row(
@@ -131,13 +130,22 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
               ],
             ),
           ),
+          
           // --> show message when tmodelList is empty.
           Visibility(
             visible: widget.recordList.isEmpty,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: MessageWidget(
-                text: "No ${widget.title} added",
+              child: Column(
+                spacing: 10,
+                children: <Widget>[
+                  Divider(
+                    color: primaryColorTheme.accent,
+                  ),
+                  MessageWidget(
+                    text: "No ${widget.title} added",
+                  ),
+                ],
               ),
             ),
           ),
@@ -151,7 +159,7 @@ class _TWSIncrementalListState<TModel> extends State<TWSIncrementalList<TModel>>
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                prototypeItem: widget.recordBuilder(widget.modelBuilder(), 0),
+                // prototypeItem: widget.recordBuilder(widget.modelBuilder(), 0),
                 itemCount: widget.recordList.length,
                 itemBuilder:(BuildContext context, int index) {
                   return widget.recordBuilder(widget.recordList[index], index);

@@ -54,7 +54,7 @@ final class Contact extends EntityB<Contact> {
   List<EntityInvalidation<Contact>> evaluate() {
     List<EntityInvalidation<Contact>> invalidations = <EntityInvalidation<Contact>>[];
 
-    if (name.length > 100 || name.isEmpty) {
+    if (name.length > 100 || name.trim().isEmpty) {
       invalidations.add(
         EntityInvalidation<Contact>(
           this,
@@ -69,7 +69,7 @@ final class Contact extends EntityB<Contact> {
       );
     }
 
-    if (lastName.length > 100 || lastName.isEmpty) {
+    if (lastName.length > 100 || lastName.trim().isEmpty) {
       invalidations.add(
         EntityInvalidation<Contact>(
           this,
@@ -84,7 +84,7 @@ final class Contact extends EntityB<Contact> {
       );
     }
 
-    if (eMail.length > 100 || eMail.isEmpty) {
+    if (eMail.length > 100 || eMail.trim().isEmpty) {
       invalidations.add(
         EntityInvalidation<Contact>(
           this,
@@ -99,7 +99,7 @@ final class Contact extends EntityB<Contact> {
       );
     }
 
-    if (phone.length > 100 || phone.isEmpty) {
+    if (phone.length > 100 || phone.trim().isEmpty) {
       invalidations.add(
         EntityInvalidation<Contact>(
           this,
@@ -114,6 +114,6 @@ final class Contact extends EntityB<Contact> {
       );
     }
 
-    throw UnimplementedError();
+    return invalidations;
   }
 }

@@ -60,12 +60,32 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/employees_enti
 /// [Drivers Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/drivers_entity_table.dart';
 
+/// [Trucks Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/trucks_entity_table.dart';
+
+/// [Trailers Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/trailers_entity_table.dart';
+
+/// [Location Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/locations_entity_table.dart';
+
+/// [Sections Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/sections_entity_table.dart';
+
+/// [Accounts Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/accounts_entity_table.dart';
+
+/// [Contacts Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/contacts_entity_table.dart';
+
+/// [Permits Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/permits_entity_table.dart';
 
 //! <-- Entity Tables
 
 
 // [widgets]
-export 'src/view/widgets/dialog.dart';
+export 'src/view/widgets/dialog_widgets/dialog.dart';
 export 'src/view/widgets/text_input.dart';
 export 'src/view/widgets/button_flat.dart';
 export 'src/view/widgets/complex_widgets/entity_table/entity_table.dart';
@@ -94,6 +114,28 @@ export 'src/view/pages/entity_pages/employees/employees_page.dart';
 
 /// [Drivers Page]
 export 'src/view/pages/entity_pages/drivers/drivers_page.dart';
+
+/// [Trucks Page]
+export 'src/view/pages/entity_pages/trucks/trucks_page.dart';
+
+/// [Trailers Page]
+export 'src/view/pages/entity_pages/trailers/trailers_page.dart';
+
+/// [Locations Page]
+export 'src/view/pages/entity_pages/locations/locations_page.dart';
+
+/// [Sections Page]
+export 'src/view/pages/entity_pages/sections/sections_page.dart';
+
+/// [Accounts Page]
+export 'src/view/pages/entity_pages/accounts/accounts_page.dart';
+
+/// [Contacts Page]
+export 'src/view/pages/entity_pages/contacts/contacts_page.dart';
+
+/// [Permits Page]
+export 'src/view/pages/entity_pages/permits/permits_page.dart';
+
 
 //! <-- Entity Pages
 

@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
@@ -31,6 +32,21 @@ final class Maintenance extends EntityB<Maintenance> {
   /// Creates a new [Maintenance] instance.
   Maintenance();
 
+  /// Validate nulleable inputs to avoid [Maintenance] entities with empty values.
+  Maintenance? sanitize({
+    DateTime? anual,
+    DateTime? trimestral,
+  }) {
+    this.anual = anual ?? this.anual;
+    this.trimestral = trimestral ?? this.trimestral;
+
+    if(this.anual == DateTime(0) && this.trimestral == DateTime(0)) {
+      return null;
+    } 
+
+    return this;
+  }
+
   @override
   void decode(DataMap encode) {
     anual = encode.get(kAnual);
@@ -45,15 +61,18 @@ final class Maintenance extends EntityB<Maintenance> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
       <String, Object>{
-        kAnual: anual.toIso8601String(),
-        kTrimestral: anual.toIso8601String(),
-        FoundationCommonPropertyKeys.kStatus: status,
+        kAnual: anual.dateOnlyIso,
+        kTrimestral: anual.dateOnlyIso,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
 
   @override
   List<EntityInvalidation<Maintenance>> evaluate() {
-    return <EntityInvalidation<Maintenance>>[];
+    List<EntityInvalidation<Maintenance>> invalidations = <EntityInvalidation<Maintenance>>[];
+    invalidations.validateDependency(this, status);
+    return invalidations;
+
   }
 }

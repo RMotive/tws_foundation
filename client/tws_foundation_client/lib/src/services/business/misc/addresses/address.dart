@@ -1,34 +1,32 @@
 
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Address] default builder.
 Address addressBuilder() => Address();
 
 /// Defines a business entity that stores information about a location [Address] for buildings, employees, etc.
 final class Address extends EntityB<Address> {
-/// [country] property key.
+  /// [Address.country] property key.
   static const String kCountry = "country";
 
-  /// [state] property key.
+  /// [Address.state] property key.
   static const String kState = "state";
 
-  /// [street] property key.
+  /// [Address.street] property key.
   static const String kStreet = "street";
 
-  /// [altStreet] property key.
+  /// [Address.altStreet] property key.
   static const String kAltStreet = "altstreet";
 
-  /// [city] property key.
+  /// [Address.city] property key.
   static const String kCity = "city";
 
-  /// [zip] property key.
+  /// [Address.zip] property key.
   static const String kZip = "zip";
 
-  /// [colonia] proeprty key.
+  /// [Address.subdivision] proeprty key.
   static const String kSubdivision = "subdivision";
-
-  /// [carriers] property key.
-  static const String kCarriers = "Carriers";
 
   /// Country universal code identificator.
   String country = "";
@@ -54,6 +52,37 @@ final class Address extends EntityB<Address> {
   /// Generates a new [Address] instance from mandatory values.
   Address();
   
+  /// Validate nulleable inputs to avoid [Address] entities with empty values.
+  Address? sanitize({
+    String? country,
+    String? state,
+    String? street,
+    String? altStreet,
+    String? city,
+    String? zip,
+    String? subdivision,
+  }){
+    this.country = country.sanitizeOrFallback(this.country) ?? "";
+    this.state = state.sanitizeOrFallback(this.state);
+    this.street = street.sanitizeOrFallback(this.street);
+    this.altStreet = altStreet.sanitizeOrFallback(this.altStreet);
+    this.city = city.sanitizeOrFallback(this.city);
+    this.zip = zip.sanitizeOrFallback(this.zip);
+    this.subdivision = subdivision.sanitizeOrFallback(this.subdivision);
+
+    if (this.country.trim().isEmpty &&
+        this.state == null &&
+        this.street == null &&
+        this.altStreet == null &&
+        this.city == null &&
+        this.zip == null &&
+        this.subdivision == null) {
+      return null;
+    }
+
+    return this;
+  }
+
   @override
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
@@ -64,7 +93,7 @@ final class Address extends EntityB<Address> {
           kCity: city,
           kZip: zip,
           kCountry: country,
-          kSubdivision: kSubdivision
+        kSubdivision: subdivision,
       },
     );
   }
@@ -84,17 +113,91 @@ final class Address extends EntityB<Address> {
   @override
   List<EntityInvalidation<Address>> evaluate() {
     List<EntityInvalidation<Address>> results = <EntityInvalidation<Address>>[];
-    if (id < BigInt.zero) results.add(EntityInvalidation<Address>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
-    if (country.length < 2 || country.length > 3) results.add(EntityInvalidation<Address>(this, PropertyInfo(kCountry, String, country), "Country must be between 2 and 3 length", "strictLength(2,3)"));
-    if (state != null){
-      if (state!.length < 2 || state!.length > 4) results.add(EntityInvalidation<Address>(this, PropertyInfo(kState, String, state), "State length must be between 2 and 4", "strictLength(2,4)"));
-    } 
-    if (street != null && street!.trim().isEmpty || street!.length > 100) results.add(EntityInvalidation<Address>(this, PropertyInfo(kStreet, String, street), "Street must be 100 max length  or be empty",  "strictLength(0, 100)"));
-    if (altStreet != null &&  altStreet!.trim().isEmpty || altStreet!.length > 100) results.add(EntityInvalidation<Address>(this,  PropertyInfo(kAltStreet, String, altStreet), "altStreet must be 100 max length or be empty",  "strictLength(0, 100)"));
-    if (city != null && city!.trim().isEmpty || city!.length > 30) results.add(EntityInvalidation<Address>(this, PropertyInfo(kCity, String, city), "City must be 30 max length or be empty",  "strictLength(0, 30)"));
-    if (zip != null &&  zip!.trim().isEmpty || zip!.length > 5) results.add(EntityInvalidation<Address>(this, PropertyInfo(kZip, String, zip), "ZIP must be 5 length  or be empty ",  "strictLength(5)"));
-    if (subdivision != null && subdivision!.trim().isEmpty || subdivision!.length > 30) results.add(EntityInvalidation<Address>(this, PropertyInfo(kSubdivision, String, subdivision), "Subdivision/Colonia must be 30 max length or be empty",  "strictLength(0, 30)"));
+    if (id < BigInt.zero) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
+    if (country.length < 2 || country.length > 3) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kCountry, String, country),
+          "Country must be between 2 and 3 length",
+          "strictLength(2,3)",
+        ),
+      );
+    }
+    if (state != null) {
+      if (state!.length < 2 || state!.length > 4) {
+        results.add(
+          EntityInvalidation<Address>(
+            this,
+            PropertyInfo(kState, String, state),
+            "State length must be between 2 and 4",
+            "strictLength(2,4)",
+          ),
+        );
+      }
+    }
+    if (street != null && (street!.trim().isEmpty || street!.length > 100)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kStreet, String, street),
+          "Street must be 100 max length  or be empty",
+          "strictLength(0, 100)",
+        ),
+      );
+    }
+    if (altStreet != null &&
+        (altStreet!.trim().isEmpty || altStreet!.length > 100)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kAltStreet, String, altStreet),
+          "altStreet must be 100 max length or be empty",
+          "strictLength(0, 100)",
+        ),
+      );
+    }
+    if (city != null && (city!.trim().isEmpty || city!.length > 30)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kCity, String, city),
+          "City must be 30 max length or be empty",
+          "strictLength(0, 30)",
+        ),
+      );
+    }
+    if (zip != null && (zip!.trim().isEmpty || zip!.length > 5)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kZip, String, zip),
+          "ZIP must be 5 length  or be empty ",
+          "strictLength(5)",
+        ),
+      );
+    }
+    if (subdivision != null &&
+        (subdivision!.trim().isEmpty || subdivision!.length > 30)) {
+      results.add(
+        EntityInvalidation<Address>(
+          this,
+          PropertyInfo(kSubdivision, String, subdivision),
+          "Subdivision/Colonia must be 30 max length or be empty",
+          "strictLength(0, 30)",
+        ),
+      );
+    }
+
     return results;
   }
-
 }

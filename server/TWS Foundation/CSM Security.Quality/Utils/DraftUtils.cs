@@ -5,6 +5,8 @@ using CSM_Foundation.Core.Utils;
 
 using CSM_Security.Entities;
 
+using Action = CSM_Security.Entities.Action;
+
 namespace CSM_Security.Quality.Utils;
 
 
@@ -62,5 +64,101 @@ public static class DraftUtils {
             Phone = Entropy[..10],
             EMail = $"{Entropy}@csm.com"
         };
+    }
+
+    /// <summary>
+    ///     Drafts an <see cref="Entities.Solution"/> entity.
+    /// </summary>
+    /// <param name="ref">
+    ///     Reference data to keep.
+    /// </param>
+    /// <returns>
+    ///     A drafted instance.
+    /// </returns>
+    static public Solution Solution(Solution? @ref = null) {
+        @ref ??= new Solution();
+
+        @ref.Id = 0;
+
+        if (string.IsNullOrWhiteSpace(@ref.Name)) {
+            @ref.Name = $"{Entropy}_name";
+        }
+
+        if (@ref.Sign.Empty()) {
+            @ref.Sign = Entropy[..5];
+        }
+
+        return @ref;
+    }
+
+    /// <summary>
+    ///     Drafts an <see cref="Entities.Feature"/> entity.
+    /// </summary>
+    /// <param name="ref">
+    ///     Reference data to keep.
+    /// </param>
+    /// <returns>
+    ///     A drafted instance.
+    /// </returns>
+    static public Feature Feature(Feature? @ref = null) {
+        @ref ??= new Feature();
+
+        @ref.Id = 0;
+        @ref.Enabled = true;
+        if (string.IsNullOrWhiteSpace(@ref.Name)) {
+            @ref.Name = $"{Entropy}_name";
+        }
+
+        return @ref;
+    }
+
+    /// <summary>
+    ///     Drafts an <see cref="Entities.Feature"/> entity.
+    /// </summary>
+    /// <param name="ref">
+    ///     Reference data to keep.
+    /// </param>
+    /// <returns>
+    ///     A drafted instance.
+    /// </returns>
+    static public Action Action(Action? @ref = null) {
+        @ref ??= new Action();
+
+        @ref.Id = 0;
+        @ref.Enabled = true;
+        if (string.IsNullOrWhiteSpace(@ref.Name)) {
+            @ref.Name = $"{Entropy}_name";
+        }
+
+        return @ref;
+    }
+
+    /// <summary>
+    ///     Drafts an <see cref="Entities.Permit"/> entity.
+    /// </summary>
+    /// <param name="ref">
+    ///     Reference data to keep.
+    /// </param>
+    /// <returns>
+    ///     A drafted instance.
+    /// </returns>
+    static public Permit Permit(Permit? @ref = null) {
+        @ref ??= new Permit();
+
+        @ref.Id = 0;
+        @ref.Enabled = true;
+        @ref.Solution ??= Solution();
+        @ref.Feature ??= Feature();
+        @ref.Action ??= Action();
+
+        if (string.IsNullOrWhiteSpace(@ref.Name)) {
+            @ref.Name = $"{Entropy}_name";
+        }
+
+        if (@ref.Reference.Empty()) {
+            @ref.Reference = Entropy[..8];
+        }
+
+        return @ref;
     }
 }

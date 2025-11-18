@@ -67,7 +67,7 @@ namespace TWS_Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Approach", b =>
@@ -154,7 +154,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Approach_History", (string)null);
+                    b.ToTable("Approach_History");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Drivers.Driver", b =>
@@ -227,7 +227,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("EmployeeShadow")
                         .IsUnique();
 
-                    b.ToTable("Drivers", (string)null);
+                    b.ToTable("Drivers");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Drivers.DriverExternal", b =>
@@ -365,7 +365,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Employees.Employee_Dates", b =>
@@ -393,7 +393,7 @@ namespace TWS_Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employee_Dates", (string)null);
+                    b.ToTable("Employee_Dates");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Identification", b =>
@@ -407,13 +407,17 @@ namespace TWS_Business.Migrations
                     b.Property<DateOnly?>("Birthday")
                         .HasColumnType("date");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("FirstLastname")
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("SecondLastname")
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
@@ -431,7 +435,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("Identifications", (string)null);
+                    b.ToTable("Identifications");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Insurances.Insurance", b =>
@@ -468,7 +472,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("Insurances", (string)null);
+                    b.ToTable("Insurances");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Insurances.Insurance_History", b =>
@@ -510,7 +514,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Insurance_History", (string)null);
+                    b.ToTable("Insurance_History");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Location", b =>
@@ -534,6 +538,10 @@ namespace TWS_Business.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<long?>("ResourceShadow")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Resource");
+
                     b.Property<long>("StatusShadow")
                         .HasColumnType("bigint")
                         .HasColumnName("Status");
@@ -550,10 +558,14 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
+                    b.HasIndex("ResourceShadow")
+                        .IsUnique()
+                        .HasFilter("[Resource] IS NOT NULL");
+
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Maintenances.Maintenance", b =>
@@ -583,7 +595,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("Maintenances", (string)null);
+                    b.ToTable("Maintenances");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Maintenances.Maintenance_History", b =>
@@ -618,7 +630,52 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Maintenance_History", (string)null);
+                    b.ToTable("Maintenance_History");
+                });
+
+            modelBuilder.Entity("TWS_Business.Entities.Resource", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<byte[]>("File")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2(7)")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<long?>("YardLogShadow")
+                        .HasColumnType("bigint")
+                        .HasColumnName("YardLog");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("YardLogShadow");
+
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Section", b =>
@@ -644,6 +701,10 @@ namespace TWS_Business.Migrations
                     b.Property<int>("Ocupancy")
                         .HasColumnType("int");
 
+                    b.Property<long?>("ResourceShadow")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Resource");
+
                     b.Property<long>("StatusShadow")
                         .HasColumnType("bigint")
                         .HasColumnName("Status");
@@ -662,12 +723,16 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
+                    b.HasIndex("ResourceShadow")
+                        .IsUnique()
+                        .HasFilter("[Resource] IS NOT NULL");
+
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
                     b.HasIndex("YardShadow");
 
-                    b.ToTable("Sections", (string)null);
+                    b.ToTable("Sections");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Situation", b =>
@@ -679,13 +744,11 @@ namespace TWS_Business.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -700,13 +763,10 @@ namespace TWS_Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("Reference")
                         .IsUnique();
 
-                    b.ToTable("Situations", (string)null);
+                    b.ToTable("Situations");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Status", b =>
@@ -718,13 +778,11 @@ namespace TWS_Business.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -739,13 +797,10 @@ namespace TWS_Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("Reference")
                         .IsUnique();
 
-                    b.ToTable("Statuses", (string)null);
+                    b.ToTable("Statuses");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.USDOTs.USDOT", b =>
@@ -782,7 +837,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("USDOTs", (string)null);
+                    b.ToTable("USDOTs");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.USDOTs.USDOT_History", b =>
@@ -816,7 +871,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("USDOTId");
 
-                    b.ToTable("USDOT_History", (string)null);
+                    b.ToTable("USDOT_History");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Carrier", b =>
@@ -871,7 +926,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("USDOTShadow");
 
-                    b.ToTable("Carriers", (string)null);
+                    b.ToTable("Carriers");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Carrier_History", b =>
@@ -927,7 +982,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("USDOT_HistoryId");
 
-                    b.ToTable("Carrier_History", (string)null);
+                    b.ToTable("Carrier_History");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.LoadType", b =>
@@ -939,13 +994,11 @@ namespace TWS_Business.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -963,7 +1016,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Reference")
                         .IsUnique();
 
-                    b.ToTable("LoadTypes", (string)null);
+                    b.ToTable("LoadTypes");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Manufacturer", b =>
@@ -993,7 +1046,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Manufacturers", (string)null);
+                    b.ToTable("Manufacturers");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Plate", b =>
@@ -1030,21 +1083,23 @@ namespace TWS_Business.Migrations
                         .HasColumnType("datetime2(7)")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<long?>("TrailerId")
-                        .HasColumnType("bigint");
+                    b.Property<long?>("TrailerShadow")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Trailer");
 
-                    b.Property<long?>("TruckId")
-                        .HasColumnType("bigint");
+                    b.Property<long?>("TruckShadow")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Truck");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StatusShadow");
 
-                    b.HasIndex("TrailerId");
+                    b.HasIndex("TrailerShadow");
 
-                    b.HasIndex("TruckId");
+                    b.HasIndex("TruckShadow");
 
-                    b.ToTable("Plates", (string)null);
+                    b.ToTable("Plates");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Plate_History", b =>
@@ -1089,7 +1144,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Plate_History", (string)null);
+                    b.ToTable("Plate_History");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.SCT", b =>
@@ -1128,7 +1183,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("SCTs", (string)null);
+                    b.ToTable("SCTs");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.SCT_History", b =>
@@ -1167,7 +1222,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("SCTId");
 
-                    b.ToTable("SCT_History", (string)null);
+                    b.ToTable("SCT_History");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trailers.Trailer", b =>
@@ -1216,7 +1271,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("SCTShadow");
 
-                    b.ToTable("Trailers", (string)null);
+                    b.ToTable("Trailers");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trailers.TrailerExternal", b =>
@@ -1228,7 +1283,6 @@ namespace TWS_Business.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Carrier")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -1284,7 +1338,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Trailer_Classes", (string)null);
+                    b.ToTable("Trailer_Classes");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trailers.Trailer_Common", b =>
@@ -1385,8 +1439,9 @@ namespace TWS_Business.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Common");
 
-                    b.Property<long?>("InsuranceId")
-                        .HasColumnType("bigint");
+                    b.Property<long?>("InsuranceShadow")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Insurance");
 
                     b.Property<long?>("MaintenanceShadow")
                         .HasColumnType("bigint")
@@ -1421,7 +1476,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("CommonShadow")
                         .IsUnique();
 
-                    b.HasIndex("InsuranceId");
+                    b.HasIndex("InsuranceShadow");
 
                     b.HasIndex("MaintenanceShadow");
 
@@ -1429,7 +1484,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("SCTShadow");
 
-                    b.ToTable("Trucks", (string)null);
+                    b.ToTable("Trucks");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trucks.TruckExternal", b =>
@@ -1512,7 +1567,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("TrucksCommons", (string)null);
+                    b.ToTable("TrucksCommons");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trucks.Truck_History", b =>
@@ -1570,7 +1625,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("VehiculeModelId");
 
-                    b.ToTable("Truck_History", (string)null);
+                    b.ToTable("Truck_History");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.VehiculeModel", b =>
@@ -1652,7 +1707,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("LocationShadow")
                         .IsUnique();
 
-                    b.ToTable("Waypoints", (string)null);
+                    b.ToTable("Waypoints");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.YardLog", b =>
@@ -1663,19 +1718,12 @@ namespace TWS_Business.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<byte[]>("Damage")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<long>("DriverShadow")
                         .HasColumnType("bigint")
                         .HasColumnName("Driver");
 
                     b.Property<bool>("Entry")
                         .HasColumnType("bit");
-
-                    b.Property<byte[]>("Evidence")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("FromTo")
                         .IsRequired()
@@ -1689,6 +1737,9 @@ namespace TWS_Business.Migrations
                     b.Property<long>("LoadTypeShadow")
                         .HasColumnType("bigint")
                         .HasColumnName("LoadType");
+
+                    b.Property<bool>("Reservation")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Seal")
                         .HasMaxLength(64)
@@ -1908,6 +1959,11 @@ namespace TWS_Business.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("TWS_Business.Entities.Resource", "Resource")
+                        .WithOne()
+                        .HasForeignKey("TWS_Business.Entities.Location", "ResourceShadow")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("TWS_Business.Entities.Status", "Status")
                         .WithOne()
                         .HasForeignKey("TWS_Business.Entities.Location", "StatusShadow")
@@ -1915,6 +1971,8 @@ namespace TWS_Business.Migrations
                         .IsRequired();
 
                     b.Navigation("Address");
+
+                    b.Navigation("Resource");
 
                     b.Navigation("Status");
                 });
@@ -1941,8 +1999,23 @@ namespace TWS_Business.Migrations
                         .HasForeignKey("StatusId");
                 });
 
+            modelBuilder.Entity("TWS_Business.Entities.Resource", b =>
+                {
+                    b.HasOne("TWS_Business.Entities.YardLog", "YardLog")
+                        .WithMany("Resources")
+                        .HasForeignKey("YardLogShadow")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("YardLog");
+                });
+
             modelBuilder.Entity("TWS_Business.Entities.Section", b =>
                 {
+                    b.HasOne("TWS_Business.Entities.Resource", "Resource")
+                        .WithOne()
+                        .HasForeignKey("TWS_Business.Entities.Section", "ResourceShadow")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("TWS_Business.Entities.Status", "Status")
                         .WithOne()
                         .HasForeignKey("TWS_Business.Entities.Section", "StatusShadow")
@@ -1954,6 +2027,8 @@ namespace TWS_Business.Migrations
                         .HasForeignKey("YardShadow")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Resource");
 
                     b.Navigation("Status");
 
@@ -2047,15 +2122,21 @@ namespace TWS_Business.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TWS_Business.Entities.Vehicules.Trailers.Trailer", null)
+                    b.HasOne("TWS_Business.Entities.Vehicules.Trailers.Trailer", "Trailer")
                         .WithMany("Plates")
-                        .HasForeignKey("TrailerId");
+                        .HasForeignKey("TrailerShadow")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TWS_Business.Entities.Vehicules.Trucks.Truck", null)
+                    b.HasOne("TWS_Business.Entities.Vehicules.Trucks.Truck", "Truck")
                         .WithMany("Plates")
-                        .HasForeignKey("TruckId");
+                        .HasForeignKey("TruckShadow")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Status");
+
+                    b.Navigation("Trailer");
+
+                    b.Navigation("Truck");
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Plate_History", b =>
@@ -2203,9 +2284,10 @@ namespace TWS_Business.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TWS_Business.Entities.Insurances.Insurance", null)
+                    b.HasOne("TWS_Business.Entities.Insurances.Insurance", "Insurance")
                         .WithMany("Trucks")
-                        .HasForeignKey("InsuranceId");
+                        .HasForeignKey("InsuranceShadow")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TWS_Business.Entities.Maintenances.Maintenance", "Maintenance")
                         .WithMany("Trucks")
@@ -2226,6 +2308,8 @@ namespace TWS_Business.Migrations
                     b.Navigation("Carrier");
 
                     b.Navigation("Common");
+
+                    b.Navigation("Insurance");
 
                     b.Navigation("Maintenance");
 
@@ -2599,6 +2683,11 @@ namespace TWS_Business.Migrations
                     b.Navigation("Trucks");
 
                     b.Navigation("TrucksHistories");
+                });
+
+            modelBuilder.Entity("TWS_Business.Entities.YardLog", b =>
+                {
+                    b.Navigation("Resources");
                 });
 #pragma warning restore 612, 618
         }

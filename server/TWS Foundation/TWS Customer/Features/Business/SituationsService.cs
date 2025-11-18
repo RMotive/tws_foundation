@@ -1,6 +1,7 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation;
+using CSM_Foundation.Customer;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Product;
 
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
@@ -11,14 +12,14 @@ namespace TWS_Customer.Features.Business;
 ///     [Interface] for <see cref="Situation"/> based [Service] implementations.
 /// </summary>
 public interface ISituationsService
-    : IService<Situation> {
+    : IReferenceService<Situation> {
 }
 
 /// <summary>
 ///     [Service] for <see cref="Situation"/> based operations.
 /// </summary>
 public class SituationsService
-    : BService<Situation, SituationsDepot>, ISituationsService {
+    : BReferenceService<Situation, SituationsDepot>, ISituationsService {
 
     /// <summary>
     ///     Creates a new instance of <see cref="SituationsService"/>.
@@ -34,7 +35,7 @@ public class SituationsService
 
         foreach (Situation entity in Entities) {
             try {
-                Situation attachedEntity = await depot.Store(entity);
+                Situation attachedEntity = await _depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {
                 if (Sync) {

@@ -38,7 +38,7 @@ public class Driver_Common
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
     [Relation]
-    public Situation Situation { get; set; } = default!;
+    public Situation? Situation { get; set; } = default!;
 
     #endregion
 
@@ -64,7 +64,9 @@ public class Driver_Common
             if (ident == null)
                 return null;
 
-            return $"{ident.Name} {ident.LastName}";
+            if(ident.SecondLastname != null) return $"{ident.Name} {ident.FirstLastname} {ident.SecondLastname}";
+
+            return $"{ident.Name} {ident.FirstLastname}";
         }
     }
 

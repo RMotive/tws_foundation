@@ -1,21 +1,12 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
 ///
 /// Contract for [DriversServiceI] implementations that handles service call operations based on [DriverCommon] entity.
-abstract interface class DriversServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<DriverCommon> {
+abstract interface class DriversServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<DriverCommon>, CreateServiceI<DriverCommon> {
   /// Creates a new [DriversServiceI] instance.
   DriversServiceI(super.host, super.servicePath);
-
-  /// Creates a [DriverCommon] collection.
-  ///
-  ///
-  /// [solutions] records to create and store. ([Solution.Id] property must be 0, [Solution.Timestamp] always will be overriden to the exact moment is stored at the data storages).
-  ///
-  /// [auth] server authorization token.
-  FoundationFutureResolver<BatchOperationOutput<DriverCommon>> create(List<DriverCommon> drivers, String auth);
 
   /// Updates a [DriverCommon] based on the [DriverCommon.Id] pointer.
   ///
@@ -28,7 +19,7 @@ abstract interface class DriversServiceI extends FoundationServiceB implements S
   /// Updates a [DriverCommon] based on the [DriverCommon.Id] pointer.
   ///
   ///
-  /// [input] record properties to update at the data storage.
+  /// [entity] record properties to update at the data storage.
   ///
   /// [auth] server authorization token.
   FoundationFutureResolver<DriverCommon> delete(DriverCommon entity, String auth);

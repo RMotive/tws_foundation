@@ -7,6 +7,9 @@ using TWS_Business.Quality.Q_Depots.Bases;
 namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Trailers_Commons : BQ_CommonDepot<Trailer_Common, Trailer, TrailerExternal, TrailersDepot> {
+    protected override IQueryable<Trailer_Common> CustomQueryProcessor(IQueryable<Trailer_Common> sourceQuery) {
+        return sourceQuery;
+    }
 
     protected override Trailer_Common EntityFactory(string Entropy) {
 

@@ -37,6 +37,7 @@ final class _TruckSectionState extends State<_TruckSection> {
 
   @override
   Widget build(BuildContext context) {
+    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
     return SectionWidget(
       title: '*Truck',
       outterPadding: EdgeInsets.zero,
@@ -50,10 +51,35 @@ final class _TruckSectionState extends State<_TruckSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             /// --> Truck selection.
-            EntityFinderSelector<TruckCommon, TrucksServiceI>(
+            EntityRichFinderSelector<TruckCommon, TrucksServiceI>(
               entityBuilder: () => TruckCommon(),
               label: 'Select a Truck...',
               enabled: externalTruck == null,
+              textBuilder: (TruckCommon truck) {
+                return truck.economic;
+              },
+              richTextBuilder: (TruckCommon truck) {
+                return TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: truck.economic,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: theme.page.fore,
+                      ),
+                    ),
+                    TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
+                    TextSpan(text: truck.plates, style: TextStyle(color: theme.warning.accent)),
+                    TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
+                    TextSpan(text: truck.plates, style:  TextStyle(color: theme.page.accent)),
+                    TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
+                    TextSpan(text: truck.carrier, style: TextStyle(color: theme.page.fore) ),
+                  ],
+                );
+              },
+              onSelected:(TruckCommon? truck) {
+                widget.onSelection(truck ?? TruckCommon());
+              },  
             ),
 
             /// --> External Truck Creation.
@@ -86,6 +112,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                         children: <Widget>[
                           /// --> MEX Plate
                           TextInput(
+                            
                             label: 'MEX Plate',
                             width: inputWidth,
                             maxLength: _kPlateMaxLength,
@@ -94,6 +121,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                               if (externalTruck == null) return;
 
                               externalTruck!.external!.mxPlate = text;
+                              widget.onSelection(externalTruck!);
                             },
                           ),
 
@@ -107,6 +135,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                               if (externalTruck == null) return;
 
                               externalTruck!.external!.usaPlate = text;
+                              widget.onSelection(externalTruck!);
                             },
                           ),
                         ],
@@ -121,6 +150,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                           if (externalTruck == null) return;
 
                           externalTruck!.economic = text;
+                          widget.onSelection(externalTruck!);
                         },
                       ),
 
@@ -133,6 +163,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                           if (externalTruck == null) return;
 
                           externalTruck!.external!.carrier = text;
+                          widget.onSelection(externalTruck!);
                         },
                       ),
                     ],

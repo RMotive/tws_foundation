@@ -21,7 +21,7 @@ public class Trailer_Type
     /// <summary>
     ///     Size description.
     /// </summary>
-    [StringLength(16)]
+    [StringLength(16, MinimumLength = 1)]
     public string Size { get; set; } = string.Empty;
 
     #endregion

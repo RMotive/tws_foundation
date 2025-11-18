@@ -1,0 +1,264 @@
+part of '../drivers_page_create_whisper.dart';
+
+class _CreateWhisperDriversSection extends StatelessWidget {
+  final CreateEntityFormRecordReactor<DriverCommon>? itemState;
+
+  final bool isEnabled;
+
+  const _CreateWhisperDriversSection({
+    required this.itemState,
+    required this.isEnabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Column(
+      spacing: 12,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        // --> Employee Information
+        EntityFinderSelector<Employee, EmployeesServiceI>(
+          entityBuilder: () => Employee(),
+          label: '*Assing an employee...',
+          enabled:true,
+          initialValue: itemState?.entity.internal?.employee,
+          textBuilder: (Employee employee) {
+            return employee.fullName;
+          },
+          onSelected: (Employee? employee) {
+            itemState?.entity.internal?.employee = employee ?? Employee();
+            itemState?.react();
+          },
+        ),
+
+        FoldPanelWidget(
+          title: "Create Employee",
+          child: _CreateWhisperEmployeeSection(
+            itemState: itemState,
+            isEnabled: isEnabled,
+          ),
+        ),
+
+        Row(
+          spacing: 10,
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Datepicker(
+                  label: 'License Expiration',
+                  isDisabled: isEnabled,
+                  controller: TextEditingController(text: itemState?.entity.internal?.licenseExpiration?.dateOnly),
+                  firstDate: DateTime(1999), 
+                  lastDate: DateTime(DateTime.now().year),
+                  onChanged: (String? date) {
+                    Driver driver = itemState!.entity.internal!;
+                    if (date == null) {
+                      driver.licenseExpiration = null;
+                      return;
+                    }
+                    driver.licenseExpiration = DateTime.tryParse(date);
+                    itemState?.react();
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: TextInput(
+                width: double.maxFinite,
+                label: 'Driver type',
+                isEnabled: isEnabled,
+                maxLength: 12,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.driverType,
+                ),
+                onChanged: (String text) {
+                  Driver driver = itemState!.entity.internal!;
+                  driver.driverType = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+          ],
+        ),
+        
+        /// --> Driver VISA fields.
+        Row(
+          spacing: 12,
+          children: <Widget>[
+            Expanded(
+              child: TextInput(
+                label: 'Visa',
+                isEnabled: isEnabled,
+                maxLength: 12,
+                isOptional: true,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.visa,
+                ),
+                onChanged: (String text) {
+                  Driver driver = itemState!.entity.internal!;
+                  driver.visa = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Datepicker(
+                  label: 'VISA Expiration',
+                  isDisabled: isEnabled,
+                  controller: TextEditingController(text: itemState?.entity.internal?.visaExpiration?.dateOnly),
+                  firstDate: DateTime(1999), 
+                  lastDate: DateTime(DateTime.now().year),
+                  onChanged: (String? date) {
+                    Driver driver = itemState!.entity.internal!;
+                    if (date == null) {
+                      driver.visaExpiration = null;
+                      return;
+                    }
+                    driver.visaExpiration = DateTime.tryParse(date);
+                    itemState?.react();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        /// --> Driver FAST fields.
+        Row(
+          spacing: 12,
+          children: <Widget>[
+            Expanded(
+              child: TextInput(
+                label: 'Fast',
+                isEnabled: isEnabled,
+                maxLength: 12,
+                isOptional: true,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.fast,
+                ),
+                onChanged: (String text) {
+                  Driver driver = itemState!.entity.internal!;
+                  driver.fast = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Datepicker(
+                  label: 'FAST Expiration',
+                  isDisabled: isEnabled,
+                  controller: TextEditingController(text: itemState?.entity.internal?.fastExpiration?.dateOnly),
+                  firstDate: DateTime(1999), 
+                  lastDate: DateTime(DateTime.now().year),
+                  onChanged: (String? date) {
+                    Driver driver = itemState!.entity.internal!;
+                    if (date == null) {
+                      driver.fastExpiration = null;
+                      return;
+                    }
+                    driver.fastExpiration = DateTime.tryParse(date);
+                    itemState?.react();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        /// --> Driver ANAM fields
+        Row(
+          spacing: 12,
+          children: <Widget>[
+            Expanded(
+              child: TextInput(
+                label: 'ANAM',
+                isEnabled: isEnabled,
+                maxLength: 24,
+                isOptional: true,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.anam,
+                ),
+                onChanged: (String text) {
+                  Driver driver = itemState!.entity.internal!;
+                  driver.anam = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Datepicker(
+                  label: 'ANAM Expiration',
+                  isDisabled: isEnabled,
+                  controller: TextEditingController(text: itemState?.entity.internal?.anamExpiration?.dateOnly),
+                  firstDate: DateTime(1999), 
+                  lastDate: DateTime(DateTime.now().year),
+                  onChanged: (String? date) {
+                    Driver driver = itemState!.entity.internal!;
+                    if (date == null) {
+                      driver.anamExpiration = null;
+                      return;
+                    }
+                    driver.anamExpiration = DateTime.tryParse(date);
+                    itemState?.react();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        /// --> Driver TWIC fields.
+        Row(
+          spacing: 12,
+          children: <Widget>[
+            Expanded(
+              child: TextInput(
+                label: 'Twic',
+                isEnabled: isEnabled,
+                maxLength: 12,
+                isOptional: true,
+                controller: TextEditingController(
+                  text: itemState?.entity.internal?.twic,
+                ),
+                onChanged: (String text) {
+                  Driver driver = itemState!.entity.internal!;
+                  driver.twic = text;
+                  itemState?.react();
+                },
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Datepicker(
+                  label: 'Twic Expiration',
+                  isDisabled: isEnabled,
+                  controller: TextEditingController(text: itemState?.entity.internal?.twicExpiration?.dateOnly),
+                  firstDate: DateTime(1999), 
+                  lastDate: DateTime(DateTime.now().year),
+                  onChanged: (String? date) {
+                    Driver driver = itemState!.entity.internal!;
+                    if (date == null) {
+                      driver.twicExpiration = null;
+                      return;
+                    }
+                    driver.twicExpiration = DateTime.tryParse(date);
+                    itemState?.react();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

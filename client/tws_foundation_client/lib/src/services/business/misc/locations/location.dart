@@ -1,27 +1,61 @@
 import 'package:csm_client/csm_client.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
-import 'package:tws_foundation_client/src/services/business/misc/addresses/address.dart';
-import 'package:tws_foundation_client/src/services/business/misc/waypoints/waypoint.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Location] default builder.
 Location locationBuilder() => Location();
 
 /// Defines a business entity that stores an specific [Address] and [Waypoint] location data for items, vehicules or buildings entities.
 final class Location extends NamedEntityB<Location> {
-  /// [address] Property key.
+  /// [Location.address] Property key.
   static const String kAddress = "address";
 
-  /// [waypoint] Property key.
+  /// [Location.waypoint] Property key.
   static const String kWaypoint = "waypoint";
 
-  /// [Address] navigation set.
+  /// [Location.sections] Property key.
+  static const String kSections = "sections";
+
+  /// [Location.address] navigation set.
   Address address = Address();
 
-  /// [Waypoint] navigation set.
+  /// [Location.status] information.
+  Status status = Status();
+
+  /// [Location.waypoint] navigation set.
   Waypoint? waypoint;
+
+  /// [Location.sections]s information.
+  List<Section> sections = <Section>[];
 
   /// Generates a new [Location] instance from mandatory values.
   Location();
+
+  Location? sanitize({
+    Address? address,
+    Waypoint? waypoint,
+    String? name,
+    String? description,
+  }) {
+    this.address = address ?? this.address;
+    this.waypoint = waypoint ?? this.waypoint;
+    this.name = name.sanitizeOrFallback(this.name) ?? '';
+    this.description = description.sanitizeOrFallback(this.description);
+    
+    if(waypoint != null && waypoint.id < BigInt.zero) {
+      this.waypoint = null;
+    }
+
+    if (this.address.country.isEmpty &&
+        this.name.isEmpty &&
+        this.description == null &&
+        this.waypoint == null &&
+        this.address.id < BigInt.zero) {
+      return null;
+    }
+
+    return this;
+  }
 
   @override
   DataMap encode([DataMap? entityObject]) {
@@ -29,6 +63,12 @@ final class Location extends NamedEntityB<Location> {
       <String, Object?>{
         kAddress: address.encode(),
         kWaypoint: waypoint?.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
+        kSections: sections
+            .map(
+              (Section e) => e.encode(),
+            )
+            .toList(),
       },
     );
   }
@@ -36,10 +76,19 @@ final class Location extends NamedEntityB<Location> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
-
     address = encode.getEntity(() => Address(), kAddress) ?? address;
     waypoint = encode.getEntity(() => Waypoint(), kWaypoint);
-
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? Status();
+    List<DataMap> sectionsMaps = encode.getList(kSections);
+    if (sectionsMaps.isNotEmpty) {
+      sections = sectionsMaps.map<Section>(
+        (DataMap e) {
+          Section section = Section();
+          section.decode(e);
+          return section;
+        },
+      ).toList();
+    }
   }
 
   @override
@@ -51,8 +100,8 @@ final class Location extends NamedEntityB<Location> {
         EntityInvalidation<Location>(
           this,
           PropertyInfo(EntityKeys.id, int, id),
-          'Pointer cannot be less than 0',
-          'invalidPointer()',
+          'Pointer: $id, cannot be less than 0',
+          'id < 0',
         ),
       );
     }
@@ -62,36 +111,24 @@ final class Location extends NamedEntityB<Location> {
         EntityInvalidation<Location>(
           this,
           PropertyInfo(EntityKeys.name, String, name),
-          "Name must be 100 max length",
-          "structLength(100)",
+          "Length: ${name.length}, must be between 1 and 100 characters",
+          "101 > length > 0",
         ),
       );
     }
-    if (description != null) {
-      if (description!.length > 200) {
-        results.add(
-          EntityInvalidation<Location>(
-            this,
-            PropertyInfo(EntityKeys.description, String, description),
-            "Description must be 200 max length",
-            "strictLength(200)",
-          ),
-        );
-      }
-      
-      if (description!.trim().isEmpty) {
-        results.add(
-          EntityInvalidation<Location>(
-            this,
-            PropertyInfo(EntityKeys.description, String, description),
-            "Description is empty but not null.",
-            "notEmpty()",
-          ),
-        );
-      }
+    if (description != null && (description!.trim().isEmpty || description!.length > 200)) {
+      results.add(
+        EntityInvalidation<Location>(
+          this,
+          PropertyInfo(EntityKeys.description, String, description),
+          "Length: ${description!.length}, must be empty or less than 200 characters",
+          "length < 200",
+        ),
+      );
     }
 
     results.validateDependency(this, address);
+    results.validateDependency(this, status);
     if(waypoint != null) results.validateDependency(this, waypoint!);
 
     return results;

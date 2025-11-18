@@ -1,8 +1,13 @@
-﻿using CSM_Foundation.Core.Utils;
+﻿using System.Reflection;
+
+using CSM_Foundation.Core.Utils;
+using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Quality.Disposing;
 using CSM_Foundation.Database.Utilitites;
 
 using Microsoft.EntityFrameworkCore;
+
+using static Azure.Core.HttpHeader;
 
 namespace CSM_Foundation.Database.Quality;
 
@@ -163,6 +168,74 @@ public class BQ_DataHandler
         Disposer.Push([.. entities]);
 
         return [.. entities];
+    }
+
+    /// <summary>
+    /// Stores the specified common entity and its nested entities in the database.
+    /// </summary>
+    /// <remarks>This method processes the specified entity and its nested entities, adding them to the
+    /// database. The method ensures that nested entities are stored in the correct order to maintain referential integrity.</remarks>
+    /// <param name="common">The root entity to be stored. Nested entities within this entity will also be processed and stored.</param>
+    /// <param name="save">A boolean value indicating whether to immediately save changes to the database. <see langword="true"/> to save
+    /// changes after storing the entities; otherwise, <see langword="false"/>.</param>
+    /// <returns>The root entity that was processed and stored.</returns>
+    protected async Task<TCommon> Store<TCommon, TInternal, TExternal>(TCommon common, bool save = false) where TCommon : BCommonEntity<TInternal, TExternal>, new()
+    where TInternal : class, ICommonScopeEntity<TCommon>
+    where TExternal : class, ICommonScopeEntity<TCommon> {
+        bool rootchecked = false;
+        HashSet<IEntity> entitiesToAdd = [];
+        using DbContext database = GetDatabase(new TCommon().Database);
+
+        StoreNestedEntities<TCommon, TInternal, TExternal>(common, common, entitiesToAdd, rootchecked);
+
+        foreach (IEntity entity in entitiesToAdd.Reverse()) {
+            if (entity.Id == 0) {
+                database.Add(entity);
+                Disposer?.Push(entity);
+            }
+        }
+
+        if (save) await database.SaveChangesAsync();
+
+        return common;
+    }
+
+    /// <summary>
+    /// Recurses through the nested entities of a common entity and stores them in a hash set to avoid duplicates.
+    /// </summary>
+    /// <param name="commonRoot"></param>
+    /// <param name="entity">Current entity to process and store.</param>
+    /// <param name="entitiesHash">List of stored entities. The content is verified to avoid duplications. </param>
+    /// <param name="rootChecked">Flag for first recursive run.</param>
+    private void StoreNestedEntities<TCommon, TInternal, TExternal>(TCommon commonRoot, IEntity entity, HashSet<IEntity> entitiesHash, bool rootChecked) where TCommon : BCommonEntity<TInternal, TExternal>
+    where TInternal : class, ICommonScopeEntity<TCommon>
+    where TExternal : class, ICommonScopeEntity<TCommon> {
+
+        if (entity == null || entitiesHash.Contains(entity)) return;
+
+        if (!rootChecked) {
+            rootChecked = true;
+            if (commonRoot.Internal != null) StoreNestedEntities<TCommon,TInternal, TExternal>(commonRoot, commonRoot.Internal, entitiesHash, rootChecked);
+            if (commonRoot.External != null) StoreNestedEntities<TCommon, TInternal, TExternal>(commonRoot, commonRoot.External, entitiesHash, rootChecked);
+            entitiesHash.Add(commonRoot);
+
+        } else {
+            entitiesHash.Add(entity);
+        }
+
+        Type type = entity.GetType();
+        foreach (PropertyInfo prop in type.GetProperties()) {
+            var value = prop.GetValue(entity);
+
+            if (value is IEntity nestedEntity) {
+                StoreNestedEntities<TCommon, TInternal, TExternal>(commonRoot, nestedEntity, entitiesHash, rootChecked);
+            } else if (value is IEnumerable<IEntity> collection) {
+                foreach (var item in collection) {
+                    StoreNestedEntities<TCommon, TInternal, TExternal>(commonRoot, item, entitiesHash, rootChecked);
+                }
+            }
+        }
+
     }
 
     #endregion

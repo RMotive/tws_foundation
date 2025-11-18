@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
@@ -60,12 +61,19 @@ final class TruckExternal extends EntityB<TruckExternal> {
 
   @override
   DataMap encode([DataMap? entityObject]) {
+    TruckCommon common = TruckCommon();
+    Status status = Status();
+    status.reference = 'referdef';
+    common.status = status;
+    common.economic = "economicholder";
+
     return super.encode(
       <String, Object?>{
         kCarrier: carrier,
         kVin: vin,
         kUsaPlate: usaPlate,
         kMxPlate: mxPlate,
+        'common': common.encode(),
       },
     );
   }

@@ -4,7 +4,6 @@ using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Depots.Vehicles;
-using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;
@@ -31,7 +30,7 @@ public class CarriersService
     ///     <see cref="Carrier"/> based [Depot] handler to be used.
     /// </param>
     public CarriersService(CarriersDepot Depot, Database database) : base(Depot) {
-        this._db = database;
+        _db = database;
     }
 
     public async override Task<BatchOperationOutput<Carrier>> Create(Carrier[] Entities, bool Sync = false) {

@@ -1,8 +1,38 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/vehicule_models/vehicule_model_service_b.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
+
+/// {interface} for [VehiculeModelsServiceI].
 ///
+/// Defines base contract for [VehiculeModelsServiceI] implementations that specifies the methods to have providing [VehiculeModel] based operations and management.
+abstract interface class VehiculeModelsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<VehiculeModel> {
+  /// Creates a new [VehiculeModelsServiceI] instance.
+  VehiculeModelsServiceI(
+    super.host,
+    super.servicePath,
+  );
+}
+
+
+/// [VehiculeModel] entity service base
+abstract class VehiculeModelServiceB extends FoundationServiceB implements VehiculeModelsServiceI {
+  /// Creates a new [VehiculeModelServiceB] instance.
+  ///
+  /// [host] server host address.
+  /// [servicePath] service path address.
+  /// [client] custom network [Client] to testing/quality purposes.
+  VehiculeModelServiceB(
+    super.host,
+    super.servicePath, {
+    super.client,
+    super.headers,
+  });
+}
+
+
+/// {service} class.
+///
+/// Implements a [VehiculeModelsServiceI] for [VehiculeModel] based operations, providing final behavior operations.
 final class VehiculeModelService extends VehiculeModelServiceB {
   ///
   VehiculeModelService(

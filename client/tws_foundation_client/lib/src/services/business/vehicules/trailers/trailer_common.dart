@@ -1,14 +1,25 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
-///
-final class TrailerCommon extends EntityB<TrailerCommon> {
+/// Implements a [EntityB] that stores common information for [Trailer] and [TrailerExternal].
+/// Each [TrailerCommon] instance can have [internal] and [external] at the same time can only have one of them.
+final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerExternal> {
+  /// [TrailerCommon.type] property key for [DataMap].
   static const String kType = "type";
+
+  /// [TrailerCommon.location] property key for [DataMap].
   static const String kLocation = "location";
+
+  /// [TrailerCommon.economic] property key for [DataMap].
   static const String kEconomic = "economic";
+
+  /// [TrailerCommon.internal] property key for [DataMap].
   static const String kInternal = "internal";
+
+  /// [TrailerCommon.external] property key for [DataMap].
   static const String kExternal = "external";
 
   //! --> Properties
@@ -35,15 +46,17 @@ final class TrailerCommon extends EntityB<TrailerCommon> {
   /// [Location] informaiton.
   Location? location;
 
-  /// [Trailer] (internal) information.
-  Trailer? internal;
-
-  // [TrailerExternal] information.
-  TrailerExternal? external;
-
   //! <-- Relations
 
   //! --> Getters
+
+  /// Gets the current {trailer} class and size concatenated string.
+  /// 
+  /// Format: {trailer class} - {trailer size}
+  String? get classType {
+    if (type != null) return '${type?.trailerClass.name} - ${type?.size}';
+    return null;
+  }
 
   /// Gets the display value for the current {trailer} plates.
   ///
@@ -113,6 +126,55 @@ final class TrailerCommon extends EntityB<TrailerCommon> {
 
   @override
   List<EntityInvalidation<TrailerCommon>> evaluate() {
-    return <EntityInvalidation<TrailerCommon>>[];
+    final List<EntityInvalidation<TrailerCommon>> invalidations = <EntityInvalidation<TrailerCommon>>[];
+
+    if (id < BigInt.zero) {
+      invalidations.add(
+        EntityInvalidation<TrailerCommon>(
+          this,
+          PropertyInfo(EntityKeys.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
+
+    if (economic.trim().isEmpty || economic.length > 16) {
+      invalidations.add(
+        EntityInvalidation<TrailerCommon>(
+          this,
+          PropertyInfo(kEconomic, String, economic),
+          'Wrong length ${economic.length}',
+          '17 > length > 0',
+        ),
+      );
+    }
+
+    if (internal != null && external != null) {
+      invalidations.add(EntityInvalidation<TrailerCommon>(
+        this,
+        PropertyInfo(kExternal, TruckExternal, external),
+        'Unique violation',
+        'internal and external can\'t be set both',
+      ));
+    }
+
+    invalidations.validateDependency(this, status);
+    if (type != null) invalidations.validateDependency(this, type!);
+    if (situation != null) invalidations.validateDependency(this, situation!);
+    if (location != null) invalidations.validateDependency(this, location!);
+    if (internal != null) invalidations.validateDependency(this, internal!);
+    if (external != null) invalidations.validateDependency(this, external!);
+    return invalidations;
+  }
+  
+  @override
+  TrailerExternal externalFactory() {
+    return TrailerExternal();
+  }
+  
+  @override
+  Trailer internalFactory() {
+    return Trailer();
   }
 }

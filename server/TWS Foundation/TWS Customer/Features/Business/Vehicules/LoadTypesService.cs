@@ -1,6 +1,7 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation;
+using CSM_Foundation.Customer;
+using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Depots.Vehicles;
@@ -13,14 +14,14 @@ namespace TWS_Customer.Features.Business.Vehicules;
 ///     [Interface] for <see cref="LoadType"/> based [Service] implementations.
 /// </summary>
 public interface ILoadTypesService
-    : IService<LoadType> {
+    : IReferenceService<LoadType> {
 }
 
 /// <summary>
 ///     [Service] for <see cref="Address"/> based operations.
 /// </summary>
 public class LoadTypesService
-    : BService<LoadType, LoadTypesDepot>, ILoadTypesService {
+    : BReferenceService<LoadType, LoadTypesDepot>, ILoadTypesService {
 
     private readonly Database _db;
 
@@ -40,7 +41,7 @@ public class LoadTypesService
 
         foreach (LoadType entity in Entities) {
             try {
-                LoadType attachedEntity = await depot.Store(entity);
+                LoadType attachedEntity = await _depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {
                 if (Sync) {

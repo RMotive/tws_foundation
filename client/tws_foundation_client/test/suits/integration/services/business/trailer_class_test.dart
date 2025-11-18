@@ -1,5 +1,4 @@
 import 'package:test/test.dart';
-import 'package:tws_foundation_client/src/services/business/vehicules/trailer_classes/trailer_classes_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 import '../../../../utils/integration_utils.dart';

@@ -6,8 +6,11 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// TODO: Define
 final class Identification extends EntityB<Identification> {
-  /// [Identification.lastName] property key for [DataMap].
-  static const String kLastName = "lastName";
+  /// [Identification.firstLastName] property key for [DataMap].
+  static const String kFirstLastName = "firstLastName";
+
+    /// [Identification.secondLastName] property key for [DataMap].
+  static const String kSecondLastName = "secondLastName";
 
   /// [Identification.birthDay] property key for [DataMap].
   static const String kBirthday = "birthDay";
@@ -15,14 +18,22 @@ final class Identification extends EntityB<Identification> {
   //! --> Properties
 
   /// Physical person name.
-  ///
-  /// For more than one name split with space.
+  /// 
+  /// rules > 
+  /// 33 > Length > 0
   String name = "";
 
-  /// Physical person last name.
-  ///
-  /// For more than one last name split with space.
-  String lastName = "";
+  /// Physical person first last name.
+  /// 
+  /// rules >
+  /// 33 > Length > 0
+  String firstLastName = "";
+  
+  /// Physical person second last name.
+  /// 
+  /// rules >
+  /// 33 > Length
+  String? secondLastName;
 
   /// Persona bith day.
   DateTime? birthDay;
@@ -39,12 +50,16 @@ final class Identification extends EntityB<Identification> {
   /// Creates a new [Identification] instance.
   Identification();
 
+  /// Gets the full name of the identified person.
+  String get fullname => '$name $firstLastName ${secondLastName ?? ""}'.trim();
+
   @override
   void decode(DataMap encode) {
     name = encode.get(EntityKeys.name);
-    lastName = encode.get(kLastName);
+    firstLastName = encode.get(kFirstLastName);
+    secondLastName = encode.get(kSecondLastName);
     birthDay = encode.get(kBirthday);
-
+    status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
     super.decode(encode);
   }
 
@@ -53,8 +68,10 @@ final class Identification extends EntityB<Identification> {
     return super.encode(
       <String, Object?>{
         EntityKeys.name: name,
-        kLastName: lastName,
-        kBirthday: birthDay?.toIso8601String(),
+        kFirstLastName: firstLastName,
+        kSecondLastName: secondLastName,
+        kBirthday: birthDay?.dateOnlyIso,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -64,7 +81,9 @@ final class Identification extends EntityB<Identification> {
     List<EntityInvalidation<Identification>> results = <EntityInvalidation<Identification>>[];
     if (id < BigInt.zero) results.add(EntityInvalidation<Identification>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
     if (name.trim().isEmpty || name.length > 32) results.add(EntityInvalidation<Identification>(this, PropertyInfo(EntityKeys.name, String, name), "Name must be 32 max length", "structLength(32)"));
-    if (lastName.trim().isEmpty || name.length > 32) results.add(EntityInvalidation<Identification>(this, PropertyInfo(kLastName, String, lastName), "Name must be 32 max length", "structLength(32)"));
+    if (firstLastName.trim().isEmpty || name.length > 32) results.add(EntityInvalidation<Identification>(this, PropertyInfo(kFirstLastName, String, firstLastName), "First last name must be 32 max length", "structLength(32)"));
+    if (secondLastName != null && (secondLastName!.trim().isEmpty || name.length > 32)) results.add(EntityInvalidation<Identification>(this, PropertyInfo(kSecondLastName, String, secondLastName), "Second last name must be 32 max length or be empty", "structLength(32)"));
+
     results.validateDependency(this, status);
 
     return results;

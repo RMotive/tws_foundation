@@ -1,9 +1,14 @@
+
+import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/view/widgets/catalog_options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_rich_finder_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/image_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/photo_taker/icon_photo_taker.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -38,15 +43,28 @@ final class _SpacedWrap extends StatelessWidget {
 
 /// {whisper} class.
 final class CreateYardLogsWhisper extends PageB {
+
+  final bool isResevation;
+
   /// Creates a new [CreateYardLogsWhisper] instance.
-  const CreateYardLogsWhisper();
+  const CreateYardLogsWhisper({
+    super.key,
+    this.isResevation = false,
+  });
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+    final CreateEntityFormController creationController = CreateEntityFormController();
     return Whisper(
       title: 'Create YardLog(s)',
-      onPerform: () {},
-      child: (_) => _CreateYardLogsWhisperContent(),
+      onPerform: () {
+        creationController.create();
+      },
+      child:
+          (_) => _CreateYardLogsWhisperContent(
+            isResevation: isResevation,
+            controller: creationController,
+          ),
     );
   }
 }

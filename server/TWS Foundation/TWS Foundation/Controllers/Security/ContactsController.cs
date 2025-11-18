@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 
 using CSM_Security.Entities;
@@ -23,11 +24,6 @@ public class ContactsController
         Service = service;
     }
 
-    [HttpPost(), Action("Create")]
-    public async Task<IActionResult> Create(Contact[] contacts) {
-        return Ok(await Service.Create(contacts));
-    }
-
     [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Contact> options) {
         return Ok(
@@ -37,5 +33,16 @@ public class ContactsController
                         }
                     )
             );
+    }
+
+    [HttpPost(), Action("Create")]
+    public async Task<IActionResult> Create(Contact[] contacts) {
+        return Ok(await Service.Create(contacts));
+    }
+
+    [HttpPost(), Action("Update")]
+    public async Task<IActionResult> Update(UpdateInput<Contact> contact) {
+        UpdateOutput<Contact> Output = await Service.Update(contact);
+        return Ok(Output);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using CSM_Foundation.Database;
+﻿using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -49,6 +47,12 @@ public class Section
     [Relation]
     public Location Yard { get; set; } = default!;
 
+    /// <summary>
+    ///     <see cref="Resource"/> Section image information.
+    /// </summary>
+    [Relation]
+    public Resource? Resource { get; set; }
+
     #endregion
 
     #region Dependats 
@@ -87,5 +91,7 @@ public class Section
                 Required: true,
                 Auto: true
             );
+        etBuilder.Link<Section, Resource>(nameof(Resource));
+
     }
 }

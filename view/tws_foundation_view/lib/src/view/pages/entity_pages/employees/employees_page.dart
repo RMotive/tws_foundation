@@ -43,7 +43,16 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
 
   @override
   List<ActionsRibbonNodeI> composeRibbonController(EmployeesEntityTableAdatper adapter) {
-    return <ActionsRibbonNodeI>[];
+    return <ActionsRibbonNodeI>[
+      ActionsRisbbonRefresh(
+        onRefresh: adapter.refresh,
+      ),
+      ActionsRisbbonCreate(
+        onCreate: () {
+          Injector.get<Router>().go(FoundationRoutes.employeesCreateWhisperRoute);
+        },
+      ),
+    ];
   }
 
   @override
@@ -64,7 +73,7 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [YardLog] business entity to interact and manage data related with it.
+/// Implements a [PageB], draws a complex {csm} design for the [Employee] business entity to interact and manage data related with it.
 final class EmployeesPage extends EntityPageB<EmployeesEntityTableAdatper> {
   /// Creates a new [EmployeesPage] instance.
   EmployeesPage({

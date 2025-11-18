@@ -74,7 +74,7 @@ public class FramingMiddleware
 
                     switch (response.StatusCode) {
                         case 204: {
-                                SuccessFrame<Dictionary<string, object?>?> frame = new SuccessFrame<Dictionary<string, object?>?> {
+                                SuccessFrame<Dictionary<string, object?>?> frame = new() {
                                     Id = Tracer,
                                     Content = null,
                                 };

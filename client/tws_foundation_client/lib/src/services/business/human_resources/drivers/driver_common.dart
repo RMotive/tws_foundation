@@ -25,7 +25,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   Status status = Status();
 
   /// [Situation] information.
-  Situation situation = Situation();
+  Situation? situation = Situation();
 
   //! <-- Relations
 
@@ -43,7 +43,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
 
     if (ident == null) return null;
 
-    return '${ident.name} ${ident.lastName}';
+    return ident.fullname;
   }
 
   //! <-- Getters
@@ -51,11 +51,13 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   /// Creates a new [DriverCommon] instance.
   DriverCommon();
 
+  DriverCommon.a(this.license, this.status, this.situation);
+
   @override
   void decode(DataMap encode) {
     license = encode.get(kLicense);
     status = encode.getEntity(() => Status(), FoundationCommonPropertyKeys.kStatus) ?? status;
-    situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation) ?? situation;
+    situation = encode.getEntity(() => Situation(), FoundationCommonPropertyKeys.kSituation);
 
     super.decode(encode);
   }
@@ -66,8 +68,7 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
       <String, Object?>{
         kLicense: license,
         FoundationCommonPropertyKeys.kStatus: status.encode(),
-        FoundationCommonPropertyKeys.kSituation: situation.encode(),
-
+        FoundationCommonPropertyKeys.kSituation: situation?.encode(),
       },
     );
   }
@@ -92,15 +93,24 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
         EntityInvalidation<DriverCommon>(
           this,
           PropertyInfo(kLicense, String, license),
-          'Wrong length ${license.length}',
-          '13 > length > 9',
+          'Length must be between 8 and 12 characters',
+          '13 > length > 7',
         ),
       );
     }
 
+    if (internal != null && external != null) {
+      invalidations.add(EntityInvalidation<DriverCommon>(
+        this,
+        PropertyInfo(EntityKeys.kExternal, DriverCommon, external),
+        'Unique violation',
+        'internal and external can\'t be set both',
+      ));
+    }
+
     invalidations.validateDependency(this, status);
-    invalidations.validateDependency(this, situation);
     
+    if (situation != null) invalidations.validateDependency(this, situation!);
     if (internal != null) invalidations.validateDependency(this, internal!);   
     if (external != null) invalidations.validateDependency(this, external!);
 

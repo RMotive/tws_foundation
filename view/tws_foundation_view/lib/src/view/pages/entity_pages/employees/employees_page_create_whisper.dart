@@ -6,17 +6,25 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {whisper} class.
 final class EmployeesPageCreateWhisper extends PageB {
+
   /// Creates a new [EmployeesPageCreateWhisper] instance.
   const EmployeesPageCreateWhisper();
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+    final CreateEntityFormController creationController = CreateEntityFormController();
     return Whisper(
       title: 'Create Employee(s)',
-      onPerform: () {},
+      onPerform: () {
+        creationController.create();
+      },
       child: (GlobalKey<FormState> formState) {
-        return CreateEntityForm<Employee>(
+        return CreateEntityForm<Employee, EmployeesServiceI>(
           entityFactory: () => Employee(),
+          controller: creationController,
+          buildEntityTag: (Employee entity) {
+            return 'Employee with name: ${entity.fullName}';
+          },
           recordDesigner: (Employee entity, bool selected, bool valid) {
             return CreateEntityFormRecord(
               selected: selected,
@@ -29,8 +37,13 @@ final class EmployeesPageCreateWhisper extends PageB {
 
                 /// --> Employee Last Name
                 CreateEntityFormRecordField(
-                  label: 'Last Name',
-                  value: entity.identification.lastName,
+                  label: '*First last name',
+                  value: entity.identification.firstLastName,
+                ),
+
+                CreateEntityFormRecordField(
+                  label: 'Second last name',
+                  value: entity.identification.secondLastName,
                 ),
               ],
             );
@@ -53,6 +66,7 @@ final class EmployeesPageCreateWhisper extends PageB {
                         child: TextInput(
                           label: 'Name',
                           isEnabled: formDisabled,
+                          maxLength: 32,
                           controller: TextEditingController(
                             text: itemState?.entity.identification.name,
                           ),
@@ -64,25 +78,44 @@ final class EmployeesPageCreateWhisper extends PageB {
                           },
                         ),
                       ),
-
+                    ],
+                  ),
+                  Row(
+                    spacing: 10,
+                    children: <Widget>[
                       /// --> Property Last Name.
                       Expanded(
                         child: TextInput(
-                          label: 'Last Name',
+                          label: '*First Last Name',
                           isEnabled: formDisabled,
+                          maxLength: 32,
                           controller: TextEditingController(
-                            text: itemState?.entity.identification.lastName,
+                            text: itemState?.entity.identification.firstLastName,
                           ),
                           onChanged: (String text) {
                             Employee employee = itemState!.entity;
-
-                            employee.identification.lastName = text;
+                            employee.identification.firstLastName = text;
+                            itemState.react();
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: TextInput(
+                          label: 'Second Last Name',
+                          isEnabled: formDisabled,
+                          maxLength: 32,
+                          controller: TextEditingController(
+                            text: itemState?.entity.identification.secondLastName,
+                          ),
+                          onChanged: (String text) {
+                            Employee employee = itemState!.entity;
+                            employee.identification.secondLastName = text;
                             itemState.react();
                           },
                         ),
                       ),
                     ],
-                  ),
+                  )
                 ],
               ),
             );

@@ -1,6 +1,12 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Product;
+
+using Microsoft.EntityFrameworkCore;
 
 using TWS_Business;
 using TWS_Business.Depots;
@@ -24,6 +30,11 @@ public class DriversService
 
     private readonly Database _db;
 
+    private static QueryProcessor<Driver_Common> QueryProcessor => (sourceQuery) => {
+        sourceQuery = sourceQuery.Include(e => e.Internal!.Employee.Approach).Include(e => e.Internal!.Employee.Address);
+        return sourceQuery;
+    };
+
     /// <summary>
     ///     Creates a new instance of <see cref="DriversService"/>.
     /// </summary>
@@ -40,6 +51,8 @@ public class DriversService
 
         foreach (Driver_Common entity in Entities) {
             try {
+                entity.Internal?.Common = entity;
+                entity.External?.Common = entity;
                 Driver_Common attachedEntity = await depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {
@@ -57,6 +70,25 @@ public class DriversService
         BatchOperationOutput<Driver_Common> output = new(successes, failures);
 
         return output;
+    }
+
+    public async override Task<ViewOutput<Driver_Common>> View(QueryInput<Driver_Common, ViewInput<Driver_Common>> input) {
+        input.PostProcessor = QueryProcessor;
+        return await depot.View(input);
+    }
+
+    public async override Task<UpdateOutput<Driver_Common>> Update(UpdateInput<Driver_Common> input) {
+        // Replate common placeholder for the main common entity.
+        if (input.Entity.Internal != null) {
+            input.Entity.Internal.Common = input.Entity;
+        } else {
+            input.Entity.External!.Common = input.Entity;
+        }
+        // Apply the include query processor to the input.
+        QueryInput<Driver_Common, UpdateInput<Driver_Common>> queryInput = GetOperationInput(input);
+        queryInput.PostProcessor = QueryProcessor;
+
+        return await depot.Update(queryInput);
     }
 
 

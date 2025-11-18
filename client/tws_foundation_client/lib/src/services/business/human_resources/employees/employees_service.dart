@@ -24,7 +24,7 @@ abstract class EmployeesServiceB extends FoundationServiceB implements Employees
 /// {interface} class.
 ///
 /// Defines a [ServiceI] contract for [Employee] operations.
-abstract interface class EmployeesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Employee> {
+abstract interface class EmployeesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Employee>, CreateServiceI<Employee> {
   /// Creates a new [EmployeesServiceI] instance.
   EmployeesServiceI(
     super.host,
@@ -57,6 +57,17 @@ final class EmployeesService extends EmployeesServiceB {
       await postSecure<ViewInput<Employee>>(
         'view',
         input,
+        authToken: authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<BatchOperationOutput<Employee>> create(List<Employee> employees, String authToken) async {
+    return FoundationResponseResolver<BatchOperationOutput<Employee>>(
+      await postListSecure<Employee>(
+        'create',
+        employees,
         authToken: authToken,
       ),
     );

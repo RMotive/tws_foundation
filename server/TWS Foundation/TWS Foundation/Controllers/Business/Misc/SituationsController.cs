@@ -33,4 +33,9 @@ public class SituationsController
                     )
             );
     }
+
+    [HttpPost, Action("Read")]
+    public async Task<IActionResult> Read(string reference) => Ok(
+            await Service.Read(reference)
+        );
 }

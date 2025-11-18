@@ -1,5 +1,8 @@
-﻿using TWS_Business.Depots.Vehicles;
+﻿using Microsoft.EntityFrameworkCore;
+
+using TWS_Business.Depots.Vehicles;
 using TWS_Business.Entities;
+using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Entities.Vehicules.Trucks;
 using TWS_Business.Quality.Q_Depots.Bases;
@@ -7,16 +10,22 @@ using TWS_Business.Quality.Q_Depots.Bases;
 namespace TWS_Business.Quality.Q_Depots;
 
 public class Q_Trucks : BQ_CommonDepot<Truck_Common, Truck, TruckExternal, TrucksDepot> {
+    protected override IQueryable<Truck_Common> CustomQueryProcessor(IQueryable<Truck_Common> sourceQuery) {
+        sourceQuery = sourceQuery
+         .Include(e => e.Situation)
+         .Include(e => e.Location)
+         .Include(e => e.Internal).ThenInclude(e => e!.Carrier).ThenInclude(e => e!.USDOT)
+         .Include(e => e.Internal).ThenInclude(e => e!.SCT)
+         .Include(e => e.Internal).ThenInclude(e => e!.Maintenance)
+         .Include(e => e.Internal).ThenInclude(e => e!.Model)
+         .Include(e => e.Internal).ThenInclude(e => e!.Insurance).ThenInclude(e => e!.Status);
+
+
+
+        return sourceQuery;
+    }
 
     protected override Truck_Common EntityFactory(string Entropy) {
-
-        Situation situation = Store(
-                new Situation {
-                    Name = Entropy,
-                    Description = Entropy,
-                    Reference = Entropy[..8],
-                }
-            );
 
         Status status = Store(
                 new Status {
@@ -30,7 +39,6 @@ public class Q_Trucks : BQ_CommonDepot<Truck_Common, Truck, TruckExternal, Truck
         Truck_Common common = new() {
             Economic = Entropy,
             Status = status,
-            Situation = situation,
         };
 
         return common;
@@ -54,6 +62,18 @@ public class Q_Trucks : BQ_CommonDepot<Truck_Common, Truck, TruckExternal, Truck
 
         return new Truck() {
             VIN = Entropy,
+            Insurance = Store(
+                    new Insurance() {
+                        Policy = Entropy[..6],
+                        Country = Entropy[..3],
+                        Status = Store(
+                                new Status() {
+                                    Reference = "Ins" + Entropy[..5],
+                                    Name = "Ins" + Entropy,
+                                }
+                            ),
+                    }
+                ),
             Carrier = Store(
                       new Carrier() {
                           Name = Entropy,

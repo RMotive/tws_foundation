@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
+using System.Numerics;
 using System.Reflection;
 
+using CSM_Foundation.Core.Utils;
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Database.Entity.Depot;
@@ -12,6 +14,8 @@ using CSM_Foundation.Database.Entity.Models;
 using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Database.Utilitites;
+
+using CSM_Security.Abstractions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -67,7 +71,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     ///     Method scope query process.
     /// </param>
     /// <returns></returns>
-    protected IQueryable<TCommon> ProcessQuery<TParameters>(QueryInput<TCommon, TParameters> input, Func<IQueryable<TCommon>, IQueryable<TCommon>> process) {
+    public IQueryable<TCommon> ProcessQuery<TParameters>(QueryInput<TCommon, TParameters> input, Func<IQueryable<TCommon>, IQueryable<TCommon>> process) {
         IQueryable<TCommon> query = _dbSet;
 
 
@@ -148,7 +152,6 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         int paginationStart = range * (page - 1);
         int paginationEnd = page == pages ? remainder == 0 ? range : remainder : range;
         query = query
-            .AsNoTracking()
             .Skip(paginationStart)
             .Take(paginationEnd);
 
@@ -221,8 +224,33 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         return tmpDependency is null
             ? throw new Exception($"[{GetType().Name}] entity requires [{typeof(TCommon2)}] dependency")
             : tmpDependency;
+    
+    
     }
 
+    /// <summary>
+    /// Gets an entity from cache or adds it to the cache if not exists.
+    /// Stores the tracked instances for entities to avoid multiple instances of the same entity in memory.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="entity"> Entity to retrieve from cache or add if not exists. </param>
+    /// <param name="cache"> Cache dictionary to store the tracked entities of {TEntity}</param>
+    /// <returns> The cached entity, if id not exists in db, then return the same entity without tracking.</returns>
+    public async Task<TEntity> GetEntityCache<TEntity>(TEntity entity, Dictionary<BigInteger, TEntity> cache) where TEntity : class, IEntity {
+        /// Search for the entity in the cache dictionary.
+        if (cache.TryGetValue(entity.Id, out TEntity? cachedEntity)) {
+            return cachedEntity;
+        }
+
+        /// Try to add the entity to the cache if not exists.
+        TEntity? trackedEntity = await _db.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == entity.Id);
+        if (trackedEntity != null) {
+            cache[entity.Id] = trackedEntity;
+            return trackedEntity;
+        }
+
+        return entity;
+    }
     /// <summary>
     /// Stores the specified common entity and its nested entities in the database.
     /// </summary>
@@ -240,7 +268,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
 
         foreach (IEntity entity in entitiesToAdd.Reverse()) {
             if (entity.Id == 0) {
-                _db.Add(entity);
+                _db.Attach(entity);
                 _disposer?.Push(entity);
             }
         }
@@ -485,7 +513,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                     processedQuery = OrderQuery(query, parameters.Orderings);
                     processedQuery = FilterQuery(processedQuery, parameters.Filters);
 
-                    return processedQuery.AsTracking();
+                    return processedQuery;
                 }
             );
 
@@ -600,18 +628,27 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="original"> Lastest data set stored in db sorce. </param>
+    /// <param name="old"> Lastest data set stored in db sorce. </param>
     /// <param name="overwritten"> Modified set given in update service params. This modifications must be applied to the [current] set in db source. </param>
-    void UpdateHelper(IEntity original, IEntity overwritten) {
-        EntityEntry previousEntry = _db.Entry(original);
-        if (previousEntry.State == EntityState.Unchanged) {
+    void UpdateHelper(IEntity old, IEntity overwritten, HashSet<IEntity>? visited) {
+        visited ??= [];
+
+        // Prevent iterate on duplicated entities.
+        if (visited.Contains(old))
+            return;
+
+        visited.Add(old);
+        ///
+        EntityEntry oldEntry = _db.Entry(old);
+
+        if (oldEntry.State == EntityState.Unchanged) {
             // Update the non-navigation properties.
-            previousEntry.CurrentValues.SetValues(overwritten);
-            foreach (NavigationEntry navigation in previousEntry.Navigations) {
+            oldEntry.CurrentValues.SetValues(overwritten);
+            foreach (NavigationEntry navigation in oldEntry.Navigations) {
                 object? newNavigationValue = _db.Entry(overwritten).Navigation(navigation.Metadata.Name).CurrentValue;
                 // Validate if navigation is a collection.
                 if (navigation.CurrentValue is IEnumerable<object> previousCollection && newNavigationValue is IEnumerable<object> newCollection) {
-                    List<object> previousList = [.. previousCollection];
+                    List<object> oldList = [.. previousCollection];
                     List<object> newList = [.. newCollection];
                     // Perform a search for new items to add in the collection.
                     // NOTE: the followings iterations must be performed in diferent code segments to avoid index length conflicts.
@@ -628,25 +665,31 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                         }
                     }
                     // Find items to modify.
-                    for (int i = 0; i < previousList.Count; i++) {
+                    for (int i = 0; i < oldList.Count; i++) {
                         // For each new item stored in overwritten collection, will search for an ID match and update the overwritten.
                         foreach (object newitem in newList) {
-                            if (previousList[i] is IEntity previousItem && newitem is IEntity newItemSet && previousItem.Id == newItemSet.Id) {
-                                UpdateHelper(previousItem, newItemSet);
+                            if (oldList[i] is IEntity oldItem && newitem is IEntity newItemSet && oldItem.Id == newItemSet.Id) {
+                                UpdateHelper(oldItem, newItemSet, visited);
                             }
                         }
                     }
                 } else if (navigation.CurrentValue == null && newNavigationValue != null) {
                     // Create a new navigation overwritten.
                     // Also update the attached navigators.
-                    //AttachDate(newNavigationValue);
                     EntityEntry newNavigationEntry = _db.Entry(newNavigationValue);
-                    newNavigationEntry.State = EntityState.Added;
+                    if (navigation.CurrentValue is IEntity newValue && newValue.Id == 0) {
+                        newNavigationEntry.State = EntityState.Added;
+                    }
                     navigation.CurrentValue = newNavigationValue;
+
                 } else if (navigation.CurrentValue != null && newNavigationValue != null) {
-                    // Update the existing navigation overwritten
-                    if (navigation.CurrentValue is IEntity currentItemSet && newNavigationValue is IEntity newItemSet) {
-                        UpdateHelper(currentItemSet, newItemSet);
+                    // Update the existing navigation and relationships
+                    if (navigation.CurrentValue is IEntity oldItemSet && newNavigationValue is IEntity newItemSet) {
+                        if (oldItemSet.Id > 0 && oldItemSet.Id != newItemSet.Id) {
+                            oldEntry.Reference(navigation.Metadata.Name).CurrentValue = newItemSet;
+                            return;
+                        }
+                        UpdateHelper(oldItemSet, newItemSet, visited);
                     }
                 }
 
@@ -671,16 +714,20 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// </exception>
     public async Task<UpdateOutput<TCommon>> Update(QueryInput<TCommon, UpdateInput<TCommon>> input) {
         UpdateInput<TCommon> parameters = input.Parameters;
-        IQueryable<TCommon> processedQuery = _dbSet;
 
         TCommon overwritten = parameters.Entity;
+
+        IQueryable<TCommon> processedQuery = ProcessQuery(
+                input,
+                (sourceQuery) => sourceQuery
+            );
+
+        /// --> When the entity is not saved yet.
         if (overwritten.Id == 0) {
-            if (!parameters.Create) {
-                throw new XDepot<TCommon>(XDepotSituations.CreateDisabled);
-            }
+            if (!parameters.Create)
+                throw new XDepot<TCommon>(XDepotSituations.CreateDisabled, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
 
             overwritten = await Create(overwritten);
-
             _db.SaveChanges();
             _disposer?.Push(overwritten);
             return new UpdateOutput<TCommon> {
@@ -690,29 +737,18 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         }
 
         TCommon? original = await processedQuery
-            .Where(r => r.Id == overwritten.Id)
-            .AsNoTracking()
-            .FirstOrDefaultAsync()
-            ?? throw new XDepot<TCommon>(XDepotSituations.Unfound);
-        if (original == null) {
-            if (!parameters.Create)
-                throw new XDepot<TCommon>(XDepotSituations.Unfound, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
+        .Where(r => r.Id == overwritten.Id)
+        .FirstOrDefaultAsync()
+        ?? throw new XDepot<TCommon>(XDepotSituations.Unfound);
+    
+        TCommon oldCopy = original.DeepCopy();
 
-            overwritten = await Create(overwritten);
+        UpdateHelper(original, overwritten, null);
+        await _db.SaveChangesAsync();
 
-            _db.SaveChanges();
-            _disposer?.Push(overwritten);
-            return new UpdateOutput<TCommon> {
-                Original = null,
-                Updated = overwritten,
-            };
-        }
-
-        UpdateHelper(original, overwritten);
-        _db.SaveChanges();
         return new UpdateOutput<TCommon> {
-            Original = original,
-            Updated = overwritten,
+            Original = oldCopy,
+            Updated = original,
         };
     }
 

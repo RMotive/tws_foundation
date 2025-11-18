@@ -1,5 +1,4 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/models/outputs/batch_operation_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {private} {implementation} class for [SolutionsService].

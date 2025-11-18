@@ -175,9 +175,9 @@ class _AutoCompleteFieldState<T> extends State<AutoCompleteField<T>> with Single
   String previousQuery = "";
 
   /// Methoth that verify if the [TWSTextField] component has a valid input selection.
-  bool verifySelection() {
-    if (selectedOption != null) return true;
-    return false;
+  bool validSelection() {
+    if (selectedOption == null && !widget.isOptional) return false;
+    return true;
   }
 
   // Method to perform a local or future search, based on the given parameters.
@@ -355,9 +355,7 @@ class _AutoCompleteFieldState<T> extends State<AutoCompleteField<T>> with Single
 
   @override
   void dispose() {
-    focus.dispose();
     scrollController.dispose();
-    ctrl.dispose();
     super.dispose();
   }
 
@@ -394,7 +392,7 @@ class _AutoCompleteFieldState<T> extends State<AutoCompleteField<T>> with Single
               color: primaryColorTheme.fore,
             ),
             validator: (String? text) {
-              if (verifySelection()) {
+              if (!validSelection()) {
                 return "Not exist an item with this value.";
               }
               if (widget.validator != null) return widget.validator!(text);

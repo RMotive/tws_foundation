@@ -2,19 +2,12 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
-import 'package:example/entries/auth_page_entry.dart';
-import 'package:example/entries/category_layout_entry.dart';
-import 'package:example/entries/entity_category_pages/drivers_category_page_entry.dart';
-import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
-import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
-import 'package:example/entries/entity_pages/drivers_page_entry.dart';
-import 'package:example/entries/entity_pages/employees_page_entry.dart';
-import 'package:example/entries/entity_pages/yard_logs_page_entry.dart';
-import 'package:example/entries/entity_tables/drivers_entity_table_entry.dart';
-import 'package:example/entries/entity_tables/employees_entity_table_entry.dart';
-import 'package:example/entries/entity_tables/solutions_entity_table_entry.dart';
-import 'package:example/entries/entity_tables/yardlogs_entity_table_entry.dart';
-import 'package:example/entries/navigation_layout_entry.dart';
+import 'package:example/entries/entity_category_pages/contacts_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/permits_category_page_entry.dart';
+import 'package:example/entries/entity_pages/contacts_page_entry.dart';
+import 'package:example/entries/entity_pages/permits_page_entry.dart';
+import 'package:example/entries/entity_tables/contacts_entity_table_entry.dart';
+import 'package:example/entries/entity_tables/permits_entity_table_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
@@ -46,12 +39,28 @@ final class _MainAppState extends State<MainApp> {
 
     Injector.addSingleton<FoundationServer>(foundationServer);
     Injector.addSingleton<SecurityServiceI>(foundationServer.securityService);
-    Injector.addSingleton<YardlogsServiceI>(foundationServer.yardlogsService);
+    Injector.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
     Injector.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
     Injector.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
     Injector.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
     Injector.addSingleton<DriversServiceI>(foundationServer.driversService);
     Injector.addSingleton<TrucksServiceI>(foundationServer.trucksService);
+    Injector.addSingleton<SituationsServiceI>(foundationServer.situationsService);
+    Injector.addSingleton<StatusesServiceI>(foundationServer.statusService);
+    Injector.addSingleton<AccountServiceI>(foundationServer.accountService);
+    Injector.addSingleton<LocationsServiceI>(foundationServer.locationsService);
+    Injector.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
+    Injector.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
+    Injector.addSingleton<CarriersServiceI>(foundationServer.carriersService);
+    Injector.addSingleton<TrailersServiceI>(foundationServer.trailersService);
+    Injector.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
+    Injector.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
+    Injector.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
+    Injector.addSingleton<ContactsServiceI>(foundationServer.contactService);
+    Injector.addSingleton<PermitsServiceI>(foundationServer.permitsService);
+    Injector.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
+    Injector.addSingleton<ActionsServiceI>(foundationServer.actionsService);
+
 
     final SessionStorage sessionStorage = SessionStorage();
     await sessionStorage.init();
@@ -113,29 +122,47 @@ final class _MainAppState extends State<MainApp> {
             defaultTheme: LandingThemeDark(),
             themes: themes,
             landingEntries: <PackageLandingEntryI<LandingThemeB>>[
-              AuthPageEntry(),
-              CategoryLayoutEntry(),
-              NavigationLayoutEntry(
-                appThemes: themes,
-              ),
+              // AuthPageEntry(),
+              // CategoryLayoutEntry(),
+              // NavigationLayoutEntry(
+              //   appThemes: themes,
+              // ),
 
               //! --> Entity Pages
-              YardLogsPageEntry(),
-              EmployeesPageEntry(),
-              DriversPageEntry(),
+              // YardLogsPageEntry(),
+              // SectionsPageEntry(),
+              // EmployeesPageEntry(),
+              // // DriversPageEntry(),
+              // // TrucksPageEntry(),
+              // // TrailersPageEntry(),
+              // LocationsPageEntry(),
+              ContactsPageEntry(),
+              PermitsPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
-              EmployeesCategoryPageEntry(),
-              YardLogsCategoryPageEntry(),
-              DriversCategoryPageEntry(),
+              // EmployeesCategoryPageEntry(),
+              // YardLogsCategoryPageEntry(),
+              // SectionsCategoryPageEntry(),
+              // DriversCategoryPageEntry(),
+              // TrucksCategoryPageEntry(),
+              // TrailersCategoryPageEntry(),
+              // LocationsCategoryPageEntry(),
+              ContactsCategoryPageEntry(),
+              PermitsCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
-              YardLogsEntityTableEntry(),
-              SolutionsEntityTableEntry(),
-              EmployeesEntityTableEntry(),
-              DriversEntityTableEntry(),
+              // YardLogsEntityTableEntry(),
+              // SectionsEntityTableEntry(),
+              // // SolutionsEntityTableEntry(),
+              // EmployeesEntityTableEntry(),
+              // DriversEntityTableEntry(),
+              // // TrucksEntityTableEntry(),
+              // TrailersEntityTableEntry(),
+              // LocationsEntityTableEntry(),
+              ContactsEntityTableEntry(),
+              PermitsEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

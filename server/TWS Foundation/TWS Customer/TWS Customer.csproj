@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AppDesignerFolder>Configurations</AppDesignerFolder>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

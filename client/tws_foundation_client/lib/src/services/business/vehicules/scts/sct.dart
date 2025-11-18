@@ -49,6 +49,22 @@ final class SCT extends EntityB<SCT> {
   /// Creates a new [SCT] instance.
   SCT();
 
+  /// Validate nulleable inputs to avoid [SCT] entities with empty values.
+  SCT? sanitize({
+    String? type,
+    String? number,
+    String? configuration,
+  }){
+    this.type = type.sanitizeOrFallback(this.type) ?? '';
+    this.number = number.sanitizeOrFallback(this.number) ?? '';
+    this.configuration = configuration.sanitizeOrFallback(this.configuration) ?? '';
+
+    if (this.type.isEmpty && this.number.isEmpty && this.configuration.isEmpty) {
+      return null;
+    }
+    return this;
+  }
+
   @override
   void decode(DataMap encode) {
     type = encode.get(kType);
@@ -66,7 +82,7 @@ final class SCT extends EntityB<SCT> {
         kType: type,
         kNumber: number,
         kConfiguration: configuration,
-        FoundationCommonPropertyKeys.kStatus: status,
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
       },
     );
   }
@@ -80,7 +96,7 @@ final class SCT extends EntityB<SCT> {
         EntityInvalidation<SCT>(
           this,
           PropertyInfo(kType, String, type),
-          'Wrong legth ${type.length}',
+          'Wrong legth ${type.length}, must be 6.',
           'length == 6',
         ),
       );
@@ -91,7 +107,7 @@ final class SCT extends EntityB<SCT> {
         EntityInvalidation<SCT>(
           this,
           PropertyInfo(kNumber, String, number),
-          'Wrong legth ${number.length}',
+          'Wrong legth ${number.length}, must be 25.',
           'length == 25',
         ),
       );
@@ -102,7 +118,7 @@ final class SCT extends EntityB<SCT> {
         EntityInvalidation<SCT>(
           this,
           PropertyInfo(kConfiguration, String, configuration),
-          'Wring length ${configuration.length}',
+          'Wring length ${configuration.length}, must be between 1 and 10.',
           '11 > length > 0',
         ),
       );

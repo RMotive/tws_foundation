@@ -83,7 +83,7 @@ class _DatepickerState extends State<Datepicker> {
     super.initState();
     ctrl = widget.controller ??
         TextEditingController(
-          text: widget.initialDate?.dateOnlyString,
+          text: widget.initialDate?.dateOnly,
         );
     fNode = widget.focusNode ?? FocusNode();
     _ctrlListener = () => setState(() {});
@@ -269,11 +269,11 @@ class _DatepickerState extends State<Datepicker> {
         date.second,
       );
 
-      String? errorBuilt = widget.validator?.call(date.dateOnlyString);
+      String? errorBuilt = widget.validator?.call(date.dateOnly);
       if (errorBuilt == null) {
         setState(() {
           _error = null;
-          ctrl.text = time != null? date!.fullDateString : date!.dateOnlyString;
+          ctrl.text = time != null? date!.fullDate : date!.dateOnly;
           if (widget.onChanged != null) widget.onChanged!(ctrl.text);
         });
       } else {

@@ -58,6 +58,10 @@ final class FoundationRoutes {
     name: 'YardLogs Creation',
   );
 
+  //! <--- YardLogs Routes
+
+  //! --> Drivers Routes
+
   static const Route driversPageRoute = Route(
     'drivers',
     name: 'Drivers Page',
@@ -68,7 +72,97 @@ final class FoundationRoutes {
     name: 'Drivers Creation',
   );
 
-  //! <--- YardLogs Routes
+  //! <-- Drivers Routes
+
+  //! --> Trucks Routes
+
+  static const Route trucksPageRoute = Route(
+    'trucks',
+    name: 'Trucks Page',
+  );
+
+  static const Route trucksCreateWhisperRoute = Route(
+    'create-trucks',
+    name: 'Trucks Creation',
+  );
+  
+  //! <-- Trucks Routes
+
+  //! --> Trailers Routes
+
+  static const Route trailersPageRoute = Route(
+    'trailers',
+    name: 'Trailers Page',
+  );
+
+  static const Route trailersCreateWhisperRoute = Route(
+    'create-trailers',
+    name: 'Trailers Creation',
+  );
+  
+  //! <-- Trailers Routes
+
+  //! --> Locations Routes
+  static const Route locationsPageRoute = Route(
+    'locations',
+    name: 'Locations Page',
+  );
+
+  static const Route locationsCreateWhisperRoute = Route(
+    'create-locations',
+    name: 'Locations Creation',
+  );
+  //! <-- Locations Routes
+
+  //! --> Sections Routes
+  static const Route sectionsPageRoute = Route(
+    'sections',
+    name: 'Sections Page',
+  );
+
+  static const Route sectionsCreateWhisperRoute = Route(
+    'create-sections',
+    name: 'Sections Creation',
+  );
+  //! <-- Sections Routes
+
+  //! --> Accounts Routes
+  static const Route accountsPageRoute = Route(
+    'accounts',
+    name: 'Accounts Page',
+  );
+
+  static const Route accountsCreateWhisperRoute = Route(
+    'create-accounts',
+    name: 'Accounts Creation',
+  );
+  //! <-- Accounts Routes
+
+  //! --> Contacts Routes
+  static const Route contactsPageRoute = Route(
+    'contacts',
+    name: 'Contacts Page',
+  );
+
+  static const Route contactsCreateWhisperRoute = Route(
+    'create-contacts',
+    name: 'Contacts Creation',
+  );
+  //! <-- Contacts Routes
+
+  //! --> Permits Routes
+  static const Route permitsPageRoute = Route(
+    'permits',
+    name: 'Permits Page',
+  );
+
+  static const Route permitsCreateWhisperRoute = Route(
+    'create-permits',
+    name: 'Permits Creation',
+  );
+  //! <-- Permits Routes
+
+  
 }
 
 /// {constant} class.
@@ -105,6 +199,40 @@ final class FoundationAssets {
 
   ///
   static const String wideLogoWhiteWebp = '$_businessPath/wide_logo_white.webp';
+
+  ///
+  static const String damagedSvg = '$_businessPath/damaged.svg';
+
+  ///
+  static const String exitSvg = '$_businessPath/exit.svg';
+
+  ///
+  static const String trailerBackSvg = '$_businessPath/trailer_back.svg';
+
+  ///
+  static const String trailerLateralSvg = '$_businessPath/trailer_lateral.svg';
+
+  ///
+  static const String truckFrontSvg = '$_businessPath/truck_front.svg';
+
+  ///
+  static const String truckLateralSvg = '$_businessPath/truck_lateral.svg';
+
+  ///
+  static const String truckEmptySvg = '$_businessPath/truck_empty.svg';
+  
+  ///
+  static const String truckBobtailingSvg = '$_businessPath/truck_bobtailing.svg';
+
+  ///
+  static const String truckLoadedSvg = '$_businessPath/truck_loaded.svg';
+
+  ///
+  static const String sealSvg = '$_businessPath/seal.svg';
+
+  ///
+  static const String yardPlaceholderSvg = '$_businessPath/yard_placeholder.svg';
+
 }
 
 /// {constant} class.
