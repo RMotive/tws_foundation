@@ -125,6 +125,19 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                     //   onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
                     // ),
 
+                    // --> Load Type Selection.
+                    EntityFinderSelector<LoadType, LoadTypesServiceI>(
+                      entityBuilder: () => LoadType(),
+                      label: 'Select the load type...',
+                      initialValue: itemState.entity.loadType,
+                      textBuilder: (LoadType loadtype) {
+                        return loadtype.name;
+                      },
+                      onSelected: (LoadType? loadtype) {
+                        itemState.entity.loadType = loadtype ?? LoadType();
+                        itemState.react();
+                      },
+                    ),
                     /// --> Driver selection.
                     _DriversSection(
                       onSelection: (DriverCommon selDriver) => itemState.entity.driver = selDriver,
