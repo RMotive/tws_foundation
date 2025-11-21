@@ -36,6 +36,14 @@ abstract interface class EmployeesServiceI extends FoundationServiceB implements
   ///
   /// [authToken] authentication session token.
   FoundationFutureResolver<Employee?> getUserEmployee(String authToken);
+
+  /// Updates a [Employee] based on the [Employee.Id] pointer.
+  ///
+  ///
+  /// [input] record properties to update at the data storage.
+  ///
+  /// [auth] server authorization token.
+  FoundationFutureResolver<UpdateOutput<Employee>> update(UpdateInput<Employee> input, String auth);
 }
 
 /// {service} class.
@@ -79,6 +87,17 @@ final class EmployeesService extends EmployeesServiceB {
       await getSecure(
         'get',
         authToken,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<UpdateOutput<Employee>> update(UpdateInput<Employee> input, String authToken) async {
+    return FoundationResponseResolver<UpdateOutput<Employee>>(
+      await postSecure(
+        'update',
+        input,
+        authToken: authToken,
       ),
     );
   }

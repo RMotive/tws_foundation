@@ -14,6 +14,7 @@ final class EmployeesCategoryPageEntry extends PackageLandingEntryB<LandingTheme
     super.key,
   }) : super(
          name: 'Employees Category Page',
+         image: AssetImage(FoundationAssets.categoryPagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:

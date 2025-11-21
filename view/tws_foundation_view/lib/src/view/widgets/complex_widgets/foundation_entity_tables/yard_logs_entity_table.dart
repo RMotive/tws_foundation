@@ -373,6 +373,18 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               //   entityBuilder: () => LoadType(),
               //   onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
               // ),
+
+              EntityFinderSelector<LoadType, LoadTypesServiceI>(
+                entityBuilder: () => LoadType(),
+                label: 'Select the load type...',
+                initialValue: entity.loadType,
+                textBuilder: (LoadType loadtype) {
+                  return loadtype.name;
+                },
+                onSelected: (LoadType? loadtype) {
+                  entity.loadType = loadtype ?? LoadType();
+                },
+              ),
               /// --> Driver selection.
               EntityFinderSelector<DriverCommon, DriversServiceI>(
                 entityBuilder: () => DriverCommon(),

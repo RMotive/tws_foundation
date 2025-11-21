@@ -3,6 +3,7 @@ import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 ///
 final class LocationsEntityTableEntry extends PackageLandingEntryB<LandingThemeB> {
@@ -11,6 +12,7 @@ final class LocationsEntityTableEntry extends PackageLandingEntryB<LandingThemeB
     super.key,
   }) : super(
          name: 'Locations Entity Table',
+         image: AssetImage(FoundationAssets.tablePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:
@@ -25,7 +27,7 @@ final class LocationsEntityTableEntry extends PackageLandingEntryB<LandingThemeB
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return view.LocationsEntityTable(
-      adapter: view.LocationsEntityTableAdatper(),
+      adapter: view.LocationsEntityTableAdapter(),
     );
   }
 }

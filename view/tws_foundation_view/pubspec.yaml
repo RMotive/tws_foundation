@@ -28,7 +28,7 @@ dependencies:
     git:
       url: https://github.com/RMotive/tws_foundation
       path: client/tws_foundation_client
-      ref: 60-feature-permits
+      ref: 58-feature-accounts
   localstorage: ^6.0.0
 
 dev_dependencies:
@@ -40,4 +40,5 @@ dev_dependencies:
 flutter:
   assets:
     - assets/business/
+    - assets/entries/
     - assets/business/full_logo_white.webp

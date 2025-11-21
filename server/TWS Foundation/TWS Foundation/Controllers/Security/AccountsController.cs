@@ -1,4 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 
 using CSM_Security.Entities;
@@ -30,5 +31,21 @@ public class AccountsController
                         }
                     )
             );
+    }
+   
+    [HttpPost(), Action("Create")]
+    public async Task<IActionResult> Create(Account[] accounts) {
+        return Ok(await Service.Create(accounts));
+    }
+
+    [HttpPost(), Action("Update")]
+    public async Task<IActionResult> Update(UpdateInput<Account> accounts) {
+        UpdateOutput<Account> Output = await Service.Update(accounts);
+        return Ok(Output);
+    }
+
+    [HttpPost(), Action("Delete")]
+    public async Task<IActionResult> Delete(int Id) {
+        return Ok(await Service.Delete(Id));
     }
 }

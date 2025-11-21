@@ -12,7 +12,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTableAdatper> {
+final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTableAdapter> {
   /// Creates a new [LocationsCategoryPage] instance.
   LocationsCategoryPage({
     super.cusRoute,
@@ -35,14 +35,14 @@ final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTab
   }
 
   @override
-  LocationsEntityTableAdatper composeAdapter() {
-    return LocationsEntityTableAdatper(
+  LocationsEntityTableAdapter composeAdapter() {
+    return LocationsEntityTableAdapter(
       authBuilder: authBuilder,
     );
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(LocationsEntityTableAdatper adapter) {
+  List<ActionsRibbonNodeI> composeRibbonController(LocationsEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
       ActionsRisbbonRefresh(
         onRefresh: adapter.refresh,
@@ -74,7 +74,7 @@ final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTab
 /// {page} class.
 ///
 /// Implements a [PageB], draws a complex {csm} design for the [Location] business entity to interact and manage data related with it.
-final class LocationsPage extends EntityPageB<LocationsEntityTableAdatper> {
+final class LocationsPage extends EntityPageB<LocationsEntityTableAdapter> {
   /// Creates a new [LocationsPage] instance.
   LocationsPage({
     required super.adapter,

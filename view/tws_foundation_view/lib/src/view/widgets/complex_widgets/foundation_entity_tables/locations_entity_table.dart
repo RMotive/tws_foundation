@@ -3,7 +3,7 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/models/coordenates_precisio_formtter.dart';
+import 'package:tws_foundation_view/src/core/models/coordenates_formatter.dart';
 import 'package:tws_foundation_view/src/core/models/text_label.dart';
 import 'package:tws_foundation_view/src/data/const/static_collections.dart';
 import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
@@ -27,9 +27,9 @@ void Function() _addressEffect = () {};
 /// {adapter} class.
 ///
 /// Implements the [EntityTableAdapterB] for [LocationsEntityTable] {widget}.
-final class LocationsEntityTableAdatper extends FoundationEntityTableAdapterB<Location> {
-  /// Creates a new [LocationsEntityTableAdatper] instance.
-  LocationsEntityTableAdatper({
+final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Location> {
+  /// Creates a new [LocationsEntityTableAdapter] instance.
+  LocationsEntityTableAdapter({
     super.authBuilder,
   });
 
@@ -494,7 +494,7 @@ final class LocationsEntityTableAdatper extends FoundationEntityTableAdapterB<Lo
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Location] {entity}, also handles basic available behavior.
-final class LocationsEntityTable extends FoundationEntityTableB<LocationsEntityTableAdatper> {
+final class LocationsEntityTable extends FoundationEntityTableB<LocationsEntityTableAdapter> {
   /// Creates a new [LocationsEntityTable] instance.
   const LocationsEntityTable({
     required super.adapter,

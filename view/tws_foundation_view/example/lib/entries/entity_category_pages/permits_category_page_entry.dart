@@ -14,10 +14,11 @@ final class PermitsCategoryPageEntry extends PackageLandingEntryB<LandingThemeB>
     super.key,
   }) : super(
          name: 'Permits Category Page',
+         image: AssetImage(FoundationAssets.categoryPagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text:
-                 'An Permits Category page provides visual interaction with the business entity management operations',
+                 'A Permits Category page provides visual interaction with the business entity management operations',
              style: TextStyle(
                color: foreColor,
              ),

@@ -191,7 +191,8 @@ public partial class Program {
                 services.AddScoped<IWaypointsDepot, WaypointsDepot>();
                 services.AddScoped<IResourcesDepot, ResourcesDepot>();
                 services.AddScoped<IPermitsDepot, PermitsDepot>();
-                services.AddScoped<IActionsDepot, ActionsDepot>();
+                services.AddScoped<IActionsDepot, ActionsDepot>(); 
+                services.AddScoped<IProfilesDepot, ProfilesDepot>();
 
 
                 // --> [Customer] services.
@@ -218,6 +219,7 @@ public partial class Program {
                 services.AddScoped<IPermitsService, PermitsService>(); 
                 services.AddScoped<IFeaturesService, FeaturesService>();
                 services.AddScoped<IActionsService, ActionsService>();
+                services.AddScoped<IProfilesService, ProfilesService>();
 
             }
 

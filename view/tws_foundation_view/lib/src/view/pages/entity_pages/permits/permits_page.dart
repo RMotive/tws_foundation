@@ -4,7 +4,6 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/permits/permits_page_create_whisper.dart';
-import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/permits_entity_table.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.

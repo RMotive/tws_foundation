@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
-import 'package:example/entries/entity_category_pages/contacts_category_page_entry.dart';
-import 'package:example/entries/entity_category_pages/permits_category_page_entry.dart';
-import 'package:example/entries/entity_pages/contacts_page_entry.dart';
-import 'package:example/entries/entity_pages/permits_page_entry.dart';
-import 'package:example/entries/entity_tables/contacts_entity_table_entry.dart';
-import 'package:example/entries/entity_tables/permits_entity_table_entry.dart';
+import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
+import 'package:example/entries/entity_pages/employees_page_entry.dart';
+import 'package:example/entries/entity_tables/employees_entity_table_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
 import 'package:example/themes/landing_theme_light.dart';
@@ -60,7 +58,7 @@ final class _MainAppState extends State<MainApp> {
     Injector.addSingleton<PermitsServiceI>(foundationServer.permitsService);
     Injector.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
     Injector.addSingleton<ActionsServiceI>(foundationServer.actionsService);
-
+    Injector.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
 
     final SessionStorage sessionStorage = SessionStorage();
     await sessionStorage.init();
@@ -131,38 +129,47 @@ final class _MainAppState extends State<MainApp> {
               //! --> Entity Pages
               // YardLogsPageEntry(),
               // SectionsPageEntry(),
-              // EmployeesPageEntry(),
+              EmployeesPageEntry(),
               // // DriversPageEntry(),
               // // TrucksPageEntry(),
               // // TrailersPageEntry(),
               // LocationsPageEntry(),
-              ContactsPageEntry(),
-              PermitsPageEntry(),
+              // ContactsPageEntry(),
+              // PermitsPageEntry(),
+              // ProfilesPageEntry(),
+              // AccountsPageEntry(),
+              // SolutionsPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
-              // EmployeesCategoryPageEntry(),
-              // YardLogsCategoryPageEntry(),
+              EmployeesCategoryPageEntry(),
+              YardLogsCategoryPageEntry(),
               // SectionsCategoryPageEntry(),
               // DriversCategoryPageEntry(),
               // TrucksCategoryPageEntry(),
               // TrailersCategoryPageEntry(),
               // LocationsCategoryPageEntry(),
-              ContactsCategoryPageEntry(),
-              PermitsCategoryPageEntry(),
+              // ContactsCategoryPageEntry(),
+              // PermitsCategoryPageEntry(),
+              // ProfilesCategoryPageEntry(), 
+              // AccountsCategoryPageEntry(),
+              // SolutionsCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
               // YardLogsEntityTableEntry(),
               // SectionsEntityTableEntry(),
               // // SolutionsEntityTableEntry(),
-              // EmployeesEntityTableEntry(),
+              EmployeesEntityTableEntry(),
               // DriversEntityTableEntry(),
               // // TrucksEntityTableEntry(),
               // TrailersEntityTableEntry(),
               // LocationsEntityTableEntry(),
-              ContactsEntityTableEntry(),
-              PermitsEntityTableEntry(),
+              // ContactsEntityTableEntry(),
+              // PermitsEntityTableEntry(),
+              // ProfilesEntityTableEntry(),
+              //AccountsEntityTableEntry(),
+              // SolutionsEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

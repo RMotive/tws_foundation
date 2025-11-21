@@ -12,6 +12,7 @@ final class LocationsPageEntry extends PackageLandingEntryB<LandingThemeB> {
     super.key,
   }) : super(
          name: 'Locations Page',
+         image: AssetImage(FoundationAssets.pagePreview),
          description: (LandingThemeB theme, Color foreColor) {
            return TextSpan(
              text: 'A Locations page provides visual interaction with the business entity management operations',
@@ -25,7 +26,7 @@ final class LocationsPageEntry extends PackageLandingEntryB<LandingThemeB> {
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return LocationsPage(
-      adapter: LocationsEntityTableAdatper(),
+      adapter: LocationsEntityTableAdapter(),
     );
   }
 }

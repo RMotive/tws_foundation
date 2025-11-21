@@ -77,6 +77,9 @@ final class FoundationServer extends ServerB {
   /// [Action] Entity Service.
   late final ActionsServiceI actionsService;
 
+  /// [Profile] Entity Service.
+  late final ProfilesServiceI profilesService;
+
   /// Creates a new [FoundationServer] instance.
   FoundationServer(
     bool isRelease, {
@@ -105,6 +108,7 @@ final class FoundationServer extends ServerB {
     ServiceImplementationBuilder<PermitsServiceI>? permitsServiceBuilder,
     ServiceImplementationBuilder<FeaturesServiceI>? featuresServiceBuilder,
     ServiceImplementationBuilder<ActionsServiceI>? actionsServiceBuilder,
+    ServiceImplementationBuilder<ProfilesServiceI>? profilesServiceBuilder,
 
   }) : super(
             isRelease: isRelease,
@@ -138,5 +142,6 @@ final class FoundationServer extends ServerB {
     permitsService = permitsServiceBuilder?.call(serverHost, httpClient) ?? PermitsService(serverHost, client: httpClient);
     featuresService = featuresServiceBuilder?.call(serverHost, httpClient) ?? FeaturesService(serverHost, client: httpClient);
     actionsService = actionsServiceBuilder?.call(serverHost, httpClient) ?? ActionsService(serverHost, client: httpClient);
+    profilesService = profilesServiceBuilder?.call(serverHost, httpClient) ?? ProfilesService(serverHost, client: httpClient);
   }
 }

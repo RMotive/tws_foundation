@@ -162,6 +162,31 @@ final class FoundationRoutes {
   );
   //! <-- Permits Routes
 
+  //! --> Profiles Routes
+  static const Route profilesPageRoute = Route(
+    'profiles',
+    name: 'Profiles Page',
+  );
+
+  static const Route profilesCreateWhisperRoute = Route(
+    'create-profiles',
+    name: 'Profiles Creation',
+  );
+  //! <-- Profiles Routes
+
+  //! --> Solutions Routes
+  static const Route solutionsPageRoute = Route(
+    'solutions',
+    name: 'Solutions Page',
+  );
+
+  static const Route solutionsCreateWhisperRoute = Route(
+    'create-solutions',
+    name: 'Solutions Creation',
+  );
+  //! <-- Solutions Routes
+
+
   
 }
 
@@ -172,6 +197,9 @@ final class FoundationAssets {
 
   ///
   static const String _businessPath = '$_packagePath/assets/business';
+
+  ///
+  static const String _entriesPath = '$_packagePath/assets/entries';
 
   ///
   static const String businessIcon = '$_businessPath/business_icon.webp';
@@ -232,6 +260,18 @@ final class FoundationAssets {
 
   ///
   static const String yardPlaceholderSvg = '$_businessPath/yard_placeholder.svg';
+
+  //! --> Preview Assests
+  ///
+  static const String categoryPagePreview = '$_entriesPath/category_page_preview.png';
+
+  ///
+  static const String pagePreview = '$_entriesPath/page_preview.png';
+
+  ///
+  static const String tablePreview = '$_entriesPath/table_preview.png';
+
+  //! <--- Preview Assets
 
 }
 
