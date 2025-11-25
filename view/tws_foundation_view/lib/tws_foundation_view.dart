@@ -7,6 +7,7 @@ library;
 export 'src/core/typedefs.dart';
 export 'src/core/constants.dart';
 export 'src/core/extensions.dart';
+export 'src/core/routes.dart';
 
 /// [Core.Themes]
 export 'src/core/themes/foundation_theme_b.dart';

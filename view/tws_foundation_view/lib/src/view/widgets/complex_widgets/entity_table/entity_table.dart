@@ -140,7 +140,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
   /// {event} triggered when the [EntityTable] pagination options has changed.
   void onPaginationChange(PaginationOptions newOptions) {
-    this.paginationOptions = newOptions;
+    paginationOptions = newOptions;
     refreshView();
   }
 

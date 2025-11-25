@@ -99,7 +99,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                       height: 200,
                       fontSize: 100,
                       title: 'Evento',
-                      preSelected: [itemState!.entity.entry],
+                      preSelected: <bool>[itemState!.entity.entry],
                       options: <OptionsSelectorOption<bool>>[
                         OptionsSelectorOption<bool>(
                           title: 'Entrada',
