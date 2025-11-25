@@ -443,8 +443,8 @@ packages:
     dependency: "direct main"
     description:
       path: "client/tws_foundation_client"
-      ref: "58-feature-accounts"
-      resolved-ref: cdbce3f713d9ff6eee0ac3a0f522e6a048d9a214
+      ref: admin-migration-changes
+      resolved-ref: db6f943eac7a62de6d59f4bd8c25023c7a23bf86
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"
