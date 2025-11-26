@@ -40,6 +40,9 @@ final class SessionStorage implements SessionStorageI {
   /// {int} server session token identifier.
   String? _token;
 
+  /// {contact} local user contact data.
+  Contact? _contact;
+
   /// {int} whether logging is enabled.
   final bool _logsOn;
 
@@ -49,6 +52,9 @@ final class SessionStorage implements SessionStorageI {
   }
 
   //! --> Public Members
+
+  /// Gets the current contact information stored in the session.
+  Contact? get contact => _contact;
 
   /// Gets the [rawToken] stored expiration time mark.
   DateTime? get expiration => _expiration;
@@ -100,6 +106,7 @@ final class SessionStorage implements SessionStorageI {
   void store(SessionData sessionData) {
     _token = sessionData.token;
     _expiration = sessionData.expiration;
+    _contact = sessionData.contact;
 
     if (_token == null || _expiration == null) {
       throw 'Can\'t save [serverSession] if the token or expiration is null';
@@ -115,6 +122,7 @@ final class SessionStorage implements SessionStorageI {
     localStorage.removeItem(_expirationKey);
     _token = null;
     _expiration = null;
+    _contact = null;
   }
 
   //! <-- Public Members
