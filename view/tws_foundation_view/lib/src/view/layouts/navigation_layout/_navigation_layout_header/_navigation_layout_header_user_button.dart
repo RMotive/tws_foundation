@@ -29,8 +29,8 @@ final class _NavigationHeaderUserButtonState extends State<_NavigationHeaderUser
   /// Overlay controller for the User Menu options drawer display.
   final OverlayPortalController _overlayPortalCtrlr = OverlayPortalController();
 
-  /// {dep} Reference to the application [ThemeManagerI].
-  late final FoundationThemeB themeManager = Theming.get<FoundationThemeB>(context);
+  /// {dep} Reference to the application [FoundationThemeB].
+  late FoundationThemeB themeManager = Theming.get(context);
 
   /// {ref} Theming reference for effect subscription / disposition.
   final UniqueKey themeEffectRef = UniqueKey();
@@ -50,11 +50,12 @@ final class _NavigationHeaderUserButtonState extends State<_NavigationHeaderUser
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    navigationLayoutTheming = themeManager.navigationLayout; 
+    @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    themeManager = Theming.get(context);
   }
+
 
   @override
   Widget build(BuildContext context) {
