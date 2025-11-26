@@ -54,6 +54,7 @@ final class _NavigationHeaderUserButtonState extends State<_NavigationHeaderUser
   void didChangeDependencies() {
     super.didChangeDependencies();
     themeManager = Theming.get(context);
+    navigationLayoutTheming = themeManager.navigationLayout;
   }
 
 
