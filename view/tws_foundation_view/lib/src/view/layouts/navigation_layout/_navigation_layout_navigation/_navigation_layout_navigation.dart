@@ -9,10 +9,14 @@ final class _NavigationLayoutNavigation extends StatelessWidget {
   final List<NavigationLayoutEntryI> navigationEntries;
 
   ///
-  const _NavigationLayoutNavigation({required this.currentRoute, required this.navigationEntries});
+  final RouteData routeData;
+
+  ///
+  const _NavigationLayoutNavigation({required this.currentRoute, required this.navigationEntries, required this.routeData});
 
   @override
   Widget build(BuildContext context) {
+    final FoundationThemeB theme  = Theming.get(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 16,
@@ -22,17 +26,13 @@ final class _NavigationLayoutNavigation extends StatelessWidget {
           spacing: 8,
           children: <Widget>[
             for (NavigationLayoutEntryI entry in navigationEntries) ...<Widget>[
-              Padding(
-                padding: EdgeInsetsGeometry.symmetric(
-                  horizontal: 5,
-                ),
-                child: SizedBox(
-                  child: Center(
-                    child: Text(
-                      entry.title,
-                    ),
-                  ),
-                ),
+              _EntryButton(
+                entry: entry,
+                textColor: theme.navigationLayout.fore,
+                onHoverBackgroundColor: theme.navigationLayout.fore,
+                onHoverTextColor: theme.navigationLayout.back,
+                backgroundColor: theme.navigationLayout.back,
+                evaluateSelection: () => entry.route == routeData.route,
               ),
             ],
           ],

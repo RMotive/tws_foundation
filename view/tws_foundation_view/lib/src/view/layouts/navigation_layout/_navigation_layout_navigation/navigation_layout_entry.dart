@@ -11,15 +11,20 @@ abstract interface class NavigationLayoutEntryI {
   /// Navigation button target route.
   final Route route;
 
+  /// Button image builder.
+  final ImageProvider Function(BuildContext context)? imageBuilder;
+
   /// Button icon builder.
-  final ImageProvider Function(BuildContext context) iconBuilder;
+  final IconData? icon;
+  
 
   /// Creates a new [NavigationLayoutEntryI] instance.
   const NavigationLayoutEntryI({
     required this.title,
     required this.route,
-    required this.iconBuilder,
-  });
+    this.icon,
+    this.imageBuilder,
+  }) : assert(icon != null || imageBuilder != null);
 }
 
 /// {model} class.
@@ -30,6 +35,7 @@ final class NavigationLayoutEntry extends NavigationLayoutEntryI {
   const NavigationLayoutEntry({
     required super.title,
     required super.route,
-    required super.iconBuilder,
+    super.imageBuilder,
+    super.icon,
   });
 }

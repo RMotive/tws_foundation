@@ -63,6 +63,7 @@ final class _NavigationLayoutLarge extends _NavigationLayoutB {
                               child: _NavigationLayoutNavigation(
                                 currentRoute: routeData.route,
                                 navigationEntries: navigationEntries,
+                                routeData: routeData,
                               ),
                             ),
                           ),

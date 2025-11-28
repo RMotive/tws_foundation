@@ -60,69 +60,66 @@ final class _NavigationHeaderUserButtonState extends State<_NavigationHeaderUser
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: "User Account Options",
-      child: PointerArea(
-        cursor: SystemMouseCursors.click,
-        onHover: onHover,
-        child: OverlayPortal(
-          controller: _overlayPortalCtrlr,
-          overlayChildBuilder: (_) {
-            RenderBox? renderBox = userButtonKey.currentContext?.findRenderObject() as RenderBox?;
-
-            final Offset buttonOffset = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
-            final Size buttonSize = renderBox?.size ?? Size.zero;
-            final Size globalSize = MediaQuery.sizeOf(context);
-
-            return Positioned(
-              top: (buttonOffset.dy),
-              right: (globalSize.width) - (buttonOffset.dx + buttonSize.width),
-              child: TapRegion(
-                consumeOutsideTaps: false,
-                onTapOutside: (_) {
-                  if (!isHover) {
-                    _overlayPortalCtrlr.hide();
-                  }
-                },
-                child: SizedBox(
-                  width: _userButtonMenuWidth,
-                  child: _NavigationLayoutHeaderUserButtonMenu(widget.user),
-                ),
-              ),
-            );
-          },
-          child: PointerArea(
-            cursor: SystemMouseCursors.click,
-            onHover: (_) => _overlayPortalCtrlr.toggle(),
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints boxConstraints) {
-                Color backgroundColor = navigationLayoutTheming.fore;
-                if (isHover) {
-                  backgroundColor = backgroundColor.withValues(
-                    alpha: .8,
-                  );
+    return PointerArea(
+      cursor: SystemMouseCursors.click,
+      onHover: onHover,
+      child: OverlayPortal(
+        controller: _overlayPortalCtrlr,
+        overlayChildBuilder: (_) {
+          RenderBox? renderBox = userButtonKey.currentContext?.findRenderObject() as RenderBox?;
+    
+          final Offset buttonOffset = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+          final Size buttonSize = renderBox?.size ?? Size.zero;
+          final Size globalSize = MediaQuery.sizeOf(context);
+    
+          return Positioned(
+            top: (renderBox?.size.height),
+            right: (globalSize.width) - (buttonOffset.dx + buttonSize.width),
+            child: TapRegion(
+              consumeOutsideTaps: false,
+              onTapOutside: (_) {
+                if (!isHover) {
+                  _overlayPortalCtrlr.hide();
                 }
-
-                return AnimatedContainer(
-                  key: userButtonKey,
-                  duration: 200.miliseconds,
-                  width: boxConstraints.maxHeight - 14,
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    // Main header user button content.
-                    child: Text(
-                      widget.user.monogram,
-                      style: TextStyle(
-                        color: navigationLayoutTheming.back,
-                      ),
+              },
+              child: SizedBox(
+                width: _userButtonMenuWidth,
+                child: _NavigationLayoutHeaderUserButtonMenu(widget.user),
+              ),
+            ),
+          );
+        },
+        child: PointerArea(
+          cursor: SystemMouseCursors.click,
+          onHover: (_) => _overlayPortalCtrlr.toggle(),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints boxConstraints) {
+              Color backgroundColor = navigationLayoutTheming.fore;
+              if (isHover) {
+                backgroundColor = backgroundColor.withValues(
+                  alpha: .8,
+                );
+              }
+    
+              return AnimatedContainer(
+                key: userButtonKey,
+                duration: 200.miliseconds,
+                width: boxConstraints.maxHeight - 14,
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  // Main header user button content.
+                  child: Text(
+                    widget.user.monogram,
+                    style: TextStyle(
+                      color: navigationLayoutTheming.back,
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),

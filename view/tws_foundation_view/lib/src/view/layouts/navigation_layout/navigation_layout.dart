@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart' hide Router, Route;
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/layouts/navigation_layout/_navigation_layout_header/navigation_layout_header_user.dart';
 import 'package:tws_foundation_view/src/view/layouts/navigation_layout/_navigation_layout_navigation/navigation_layout_entry.dart';
+import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
 
 part '_navigation_layout_b.dart';
 part '_navigation_layout_header/_navigation_layout_header.dart';
@@ -12,6 +15,7 @@ part '_navigation_layout_large,.dart';
 part '_navigation_layout_navigation/_navigation_layout_navigation.dart';
 part '_navigation_layout_navigation/_navigation_layout_navigation_reactor.dart';
 part '_navigation_layout_small.dart';
+part '_navigation_layout_navigation/_entry_button.dart';
 
 /// {LayoutNode} class.
 ///

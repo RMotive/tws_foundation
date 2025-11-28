@@ -33,6 +33,18 @@ final class NavigationLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
       ),
       rootRoute: Route('showcase_root'),
       page: SizedBox(),
+      navigationEntries: <view.NavigationLayoutEntry>[
+        view.NavigationLayoutEntry(
+          title: 'Business',
+          route: Route(''),
+          icon:Icons.business,
+        ),
+        view.NavigationLayoutEntry(
+          title: 'Security',
+          route: Route(''),
+          icon: Icons.security,
+        )
+      ],
     );
   }
 }
