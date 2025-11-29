@@ -13,10 +13,15 @@ final class _NavigationLayoutHeader extends StatelessWidget {
   /// {internal} Reactor reference for [_NavigationLayoutNavigation] state.
   final _NavigationLayourNavigationReactor navReactor;
 
+  /// Header application logo.
+  final ImageProvider? logo;
+  
+
   /// Creates a new [_NavigationLayoutHeader] instance.
   const _NavigationLayoutHeader({
     this.user,
     this.rootRoute,
+    this.logo,
     required this.navReactor,
   });
 
@@ -36,20 +41,38 @@ final class _NavigationLayoutHeader extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              /// --> Navigation Header Menu Drawer Toogle Button
-              Visibility(
-                visible: true,
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: navReactor.toogle,
-                    child: Icon(
-                      Icons.menu,
-                      color: theme.fore,
+              /// --> Header left section
+              Row(
+                spacing: 30,
+                children: <Widget>[
+
+                  /// --> Navigation Header Menu Drawer Toogle Button
+                  Visibility(
+                    visible: true,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: navReactor.toogle,
+                        child: Icon(
+                          Icons.menu,
+                          color: theme.fore,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+
+                  /// --> App Logo
+                  if(logo != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical:  4.0),
+                    child: FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: Image(image: logo!),
+                    ),
+                  )
+                ],
               ),
+              
 
               /// --> Navigation Header Theme Selection
               Row(

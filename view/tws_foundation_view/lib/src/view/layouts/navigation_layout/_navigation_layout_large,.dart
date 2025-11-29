@@ -5,8 +5,12 @@ part of 'navigation_layout.dart';
 /// Draws the [NavigationLayout] when the device is large.
 final class _NavigationLayoutLarge extends _NavigationLayoutB {
 
+  /// Header application logo.
+  final ImageProvider? logo;
+
   const _NavigationLayoutLarge({
     super.rootRoute,
+    this.logo,
     required super.page,
     required super.user,
     required super.pageSize,
@@ -27,6 +31,7 @@ final class _NavigationLayoutLarge extends _NavigationLayoutB {
                 user: user,
                 rootRoute: rootRoute,
                 navReactor: navReactor,
+                logo: logo,
               ),
               Expanded(
                 child: ReactiveWidget<_NavigationLayourNavigationReactor>(

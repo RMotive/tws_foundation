@@ -48,50 +48,59 @@ class __EntryButtonState extends State<_EntryButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: PointerArea(
-        onClick:() {
-          setState(() {
-            selected = widget.evaluateSelection?.call() ?? false;
-            Router.i.go(widget.entry.route);
-          });
-        }, 
-        onHover: (bool hover) {
-          setState(() {
-            onhover = hover;
-          });
-        },
-        child: ColoredBox(
-          color: onhover || selected ? widget.onHoverBackgroundColor : widget.backgroundColor,
-          child: BorderedBox(
-            color: widget.textColor,
-            child: SizedBox(
-              height: 30,
-              width: double.maxFinite,
-              child: Padding(
-                padding: EdgeInsetsGeometry.only(left: 8),
-                child: Row(
-                  spacing: 10,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    if(widget.entry.icon != null)
-                    Icon(
-                      widget.entry.icon,
-                      size: 20,
-                      color: onhover || selected? widget.onHoverTextColor : widget.textColor,
-                    ),
-                    Text(
-                      widget.entry.title,
-                      style: TextStyle(
-                        height: 1.0,
-                        color: onhover || selected ? widget.onHoverTextColor: widget.textColor,
-                      ),
-                    )
-                  ],
+    return PointerArea(
+      cursor: SystemMouseCursors.click,
+      onClick:() {
+        setState(() {
+          selected = widget.evaluateSelection?.call() ?? false;
+          Router.i.go(widget.entry.route);
+        });
+      }, 
+      onHover: (bool hover) {
+        setState(() {
+          onhover = hover;
+        });
+      },
+      child: ColoredBox(
+        color:
+            onhover || selected
+                ? widget.onHoverBackgroundColor.withAlpha(25)
+                : widget.backgroundColor,
+        child: SizedBox(
+          height: 35,
+          width: double.maxFinite,
+          child: Row(
+            spacing: 10,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              /// Selected Entry mark.
+              if(selected)
+              ColoredBox(
+                color: widget.onHoverBackgroundColor,
+                child: SizedBox(
+                  width: 4,
+                  height: double.maxFinite,
                 ),
               ),
-            ),
+
+              /// Adding padding from spacing row property.
+              if(!selected)
+              SizedBox.shrink(),
+              
+              if(widget.entry.icon != null)
+              Icon(
+                widget.entry.icon,
+                size: 20,
+                color: widget.textColor,
+              ),
+              Text(
+                widget.entry.title,
+                style: TextStyle(
+                  height: 1.0,
+                  color: widget.textColor,
+                ),
+              )
+            ],
           ),
         ),
       ),

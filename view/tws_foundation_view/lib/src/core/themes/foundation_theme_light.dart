@@ -9,7 +9,7 @@ class FoundationThemeLight extends FoundationThemeB {
         entityTable: const EntityTableTheming(
           drawerActionBackground: FoundationColors.warmWhite,
         ),
-        businessLogo: FoundationAssets.fullLogoBlackWebp,
+        businessLogo: FoundationAssets.fullLogoWhiteWebp,
         iconBackground: FoundationColors.warmWhite,
         icon: const Icon(Icons.abc),
         navigationLayout: const SimpleTheming(

@@ -21,7 +21,9 @@ final class NavigationLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
+    final view.FoundationThemeB theme = Theming.get(buildContext);
     return view.NavigationLayout(
+      logo: AssetImage(theme.businessLogo),
       user: view.NavigationLayoutHeaderUser(
         name: 'Package',
         email: 'package_landing@csm.com',

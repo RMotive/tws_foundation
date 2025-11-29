@@ -1,11 +1,10 @@
-import 'dart:io';
+import 'dart:math';
 
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart' hide Router, Route;
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/layouts/navigation_layout/_navigation_layout_header/navigation_layout_header_user.dart';
 import 'package:tws_foundation_view/src/view/layouts/navigation_layout/_navigation_layout_navigation/navigation_layout_entry.dart';
-import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
 
 part '_navigation_layout_b.dart';
 part '_navigation_layout_header/_navigation_layout_header.dart';
@@ -59,10 +58,14 @@ final class NavigationLayout extends LayoutB {
 
   final List<NavigationLayoutEntryI> navigationEntries;
 
+  /// Header application logo.
+  final ImageProvider? logo;
+
   ///
   const NavigationLayout({
     this.user,
     this.rootRoute,
+    this.logo,
     required super.page,
     required super.routeData,
     this.navigationEntries = const <NavigationLayoutEntryI>[],
@@ -79,6 +82,7 @@ final class NavigationLayout extends LayoutB {
         rootRoute: rootRoute,
         routeData: routeData,
         navigationEntries: navigationEntries,
+        logo: logo,
       ),
       onSmall: _MasterLayoutSmall(
         user: user,
