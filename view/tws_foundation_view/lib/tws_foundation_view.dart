@@ -147,6 +147,11 @@ export 'src/view/pages/entity_pages/solutions/solutions_page.dart';
 
 //! <-- Entity Pages
 
+//! --> Entity Creation whisper
+
+/// [YardLogs Creation whisper]
+export 'src/view/pages/entity_pages/yardlogs/create_whisper/create_yardlogs_whisper.dart';
+
 // [layouts.navigation_layout]
 export 'src/view/layouts/navigation_layout/navigation_layout.dart';
 export 'src/view/layouts/navigation_layout/_navigation_layout_navigation/navigation_layout_entry.dart';
