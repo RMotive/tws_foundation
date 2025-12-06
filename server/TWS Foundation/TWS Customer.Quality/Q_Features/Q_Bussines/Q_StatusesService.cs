@@ -107,12 +107,11 @@ public class Q_StatusesService
     public async Task Read() {
         // Create a sample to prevent empty read results.
         Status status = Store(BusinessDraftUtils.SampleStatus("tst"));
-        BatchOperationOutput<Status> batchResult = await service.Read(status.Reference);
+        Status? result = await service.Read(status.Reference);
 
         Assert.Multiple(
-            () => Assert.True(batchResult.SuccessesCount > 0),
-            () => Assert.Equal(0, batchResult.FailuresCount),
-            () => Assert.Single(batchResult.Successes)
+           () => Assert.True(status.Reference == result?.Reference),
+           () => Assert.True(result?.Id > 0)
         );
     }
 }

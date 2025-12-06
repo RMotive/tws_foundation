@@ -28,7 +28,8 @@ public class Q_Employees : BQ_Business<Employee, EmployeesDepot> {
         Identification identification = Store(
                  new Identification {
                      Name = Entropy,
-                     LastName = Entropy,
+                     FirstLastname = Entropy,
+                     SecondLastname = Entropy,
                      Status = statusI,
                  }
             );

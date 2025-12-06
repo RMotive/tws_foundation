@@ -1,6 +1,7 @@
 ﻿using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business.Depots.Vehicles;
+using TWS_Business.Entities;
 using TWS_Business.Entities.Vehicules;
 using TWS_Business.Quality.Utils;
 
@@ -30,12 +31,11 @@ public class Q_LoadTypesService
     public async Task Read() {
         // Create a sample to prevent empty read results.
         LoadType load = Store(BusinessDraftUtils.SampleLoadtype());
-        BatchOperationOutput<LoadType> batchResult = await service.Read(load.Reference);
+        LoadType? result = await service.Read(load.Reference);
 
         Assert.Multiple(
-            () => Assert.True(batchResult.SuccessesCount > 0),
-            () => Assert.Equal(0, batchResult.FailuresCount),
-            () => Assert.Single(batchResult.Successes)
+           () => Assert.True(load.Reference == result?.Reference),
+           () => Assert.True(result?.Id > 0)
         );
     }
 }

@@ -1,9 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
-
-using TWS_Business.Depots.Indicators;
+﻿using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;
 using TWS_Business.Quality.Utils;
 
@@ -32,12 +27,11 @@ public class Q_SituationsService
     public async Task Read() {
         // Create a sample to prevent empty read results.
         Situation situation = Store(BusinessDraftUtils.SampleSituation());
-        BatchOperationOutput<Situation> batchResult = await service.Read(situation.Reference);
+        Situation? result = await service.Read(situation.Reference);
 
         Assert.Multiple(
-            () => Assert.True(batchResult.SuccessesCount > 0),
-            () => Assert.Equal(0, batchResult.FailuresCount),
-            () => Assert.Single(batchResult.Successes)
+            () => Assert.True(situation.Reference == result?.Reference),
+            () => Assert.True(result?.Id > 0)
         );
     }
 }

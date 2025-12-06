@@ -4,6 +4,7 @@ using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Product;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
@@ -66,6 +67,48 @@ public class YardLogsService
     public YardLogsService(IYardLogsDepot Depot) : base(Depot) { }
     public async override Task<ViewOutput<YardLog>> View(QueryInput<YardLog, ViewInput<YardLog>> input) {
         input.PostProcessor = QueryProcessor;
+        return await depot.View(input);
+    }
+
+    public async Task<ViewOutput<YardLog>> InventoryTrailerView(QueryInput<YardLog, ViewInput<YardLog>> input) {
+        input.PreProcessor = (query) => {
+            return query
+            .Include(e => e.Guard).ThenInclude(e => e.Approach)
+            .Include(e => e.Guard).ThenInclude(e => e.Address)
+            .Include(e => e.Section).ThenInclude(e => e.Resource)
+            .Include(e => e.LoadType)
+            .Include(e => e.Driver)
+            .Include(e => e.Truck)
+            .Include(e => e.Trailer);
+        };
+
+        input.PostProcessor = (query) => {
+            //return query
+            //.Where(i => i.Trailer != null)
+            //.GroupBy(i => i.Trailer!.Id)
+            //.Select(i => i.OrderByDescending(y => y.Timestamp).First())
+            //.OrderByDescending(i => i.Timestamp)
+            //.AsQueryable();
+
+            // Get the last entry for every trailer in yardlogs.
+            var lastPerTrailer = query
+                .Where(i => i.Trailer != null)
+                .GroupBy(i => i.Trailer!.Id)
+                .Select(g => new { TrailerId = g.Key, MaxTimestamp = g.Max(x => x.Timestamp) });
+
+            // Join the previous trailers results.
+            var lastLogsQuery = from l in lastPerTrailer
+                                join y in query.Where(i => i.Trailer != null)
+                                  on new { TrailerId = l.TrailerId, Timestamp = l.MaxTimestamp }
+                                  equals new { TrailerId = y.Trailer!.Id, Timestamp = y.Timestamp }
+                                select y;
+
+            return lastLogsQuery
+                .OrderByDescending(y => y.Timestamp)
+                .AsQueryable();
+
+        };
+
         return await depot.View(input);
     }
 

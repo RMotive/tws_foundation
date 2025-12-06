@@ -23,7 +23,8 @@ public class Q_YardLogs : BQ_Business<YardLog, YardLogsDepot> {
                 NSS = entropy[..11],
                 Identification = Store(new Identification() {
                     Name = entropy,
-                    LastName = entropy,
+                    FirstLastname = entropy,
+                    SecondLastname = entropy,
                     Status = Store(BusinessDraftUtils.SampleStatus("gis")),
                 }),
                 Status = Store(BusinessDraftUtils.SampleStatus("gi1")),
@@ -46,7 +47,8 @@ public class Q_YardLogs : BQ_Business<YardLog, YardLogsDepot> {
                     External = Store(new DriverExternal() {
                         Identification = Store(new Identification() {
                             Name = "driver_" + entropy,
-                            LastName = "driver" + entropy,
+                            FirstLastname = "driver" + entropy,
+                            SecondLastname = "Second lastname" + entropy,
                             Status = Store(BusinessDraftUtils.SampleStatus("dei"))
                         })
                     })

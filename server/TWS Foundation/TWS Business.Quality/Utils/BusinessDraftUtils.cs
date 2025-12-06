@@ -51,7 +51,8 @@ public static class BusinessDraftUtils {
     public static Identification SampleIdentification(string prefix) {
         return new Identification {
             Name = prefix + Entropy[..10],
-            LastName = Entropy[..10],
+            FirstLastname = Entropy[..10],
+            SecondLastname = Entropy[..10],
             Status = SampleStatus(prefix),
         };
     }
@@ -244,7 +245,8 @@ public static class BusinessDraftUtils {
 
         Identification identification = new() {
             Name = $"ident_employee_{Entropy}",
-            LastName = Entropy,
+            FirstLastname = Entropy,
+            SecondLastname = Entropy,
             Status = SampleStatus("ide"),
         };
 

@@ -21,8 +21,8 @@ namespace TWS_Foundation.Controllers.Business.Gatekeeping;
 public class YardLogsController
     : ControllerBase {
 
-    readonly IYardLogsService Service;
-    public YardLogsController(IYardLogsService Service) {
+    readonly YardLogsService Service;
+    public YardLogsController(YardLogsService Service) {
         this.Service = Service;
     }
 
@@ -51,5 +51,16 @@ public class YardLogsController
     [HttpPost(), Action("Delete")]
     public async Task<IActionResult> Delete(YardLog entity) {
         return Ok(await Service.Delete(entity));
+    }
+
+    [HttpPost(), Action("ViewTrailerInventory")]
+    public async Task<IActionResult> ViewTrailerInventory(ViewInput<YardLog> options) {
+        return Ok(
+            await Service.InventoryTrailerView(
+                new QueryInput<YardLog, ViewInput<YardLog>> {
+                    Parameters = options
+                }
+            )
+        );
     }
 }

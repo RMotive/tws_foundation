@@ -97,4 +97,14 @@ final class YardLogsService extends YardLogsServiceB {
       ),
     );
   }
+
+  FoundationFutureResolver<YardLog> inventoryTrailersView(ViewInput<YardLog> input, String auth) async {
+    return FoundationResponseResolver<YardLog>(
+      await postSecure(
+        'InventoryTrailersView',
+        input,
+        authToken: auth,
+      ),
+    );
+  }
 }

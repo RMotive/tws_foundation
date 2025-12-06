@@ -53,7 +53,8 @@ public class Q_Drivers :
         Identification identification = Store(
                 new Identification {
                     Name = Entropy,
-                    LastName = Entropy,
+                    FirstLastname = Entropy,
+                    SecondLastname = Entropy,
                     Status = statusI,
                 }
              );
@@ -76,7 +77,8 @@ public class Q_Drivers :
         Identification identification = Store(
                 new Identification {
                     Name = Entropy,
-                    LastName = Entropy,
+                    FirstLastname = Entropy,
+                    SecondLastname = Entropy,
                     Status = statusI,
                 }
              );
