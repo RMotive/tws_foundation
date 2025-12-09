@@ -98,8 +98,8 @@ final class YardLogsService extends YardLogsServiceB {
     );
   }
 
-  FoundationFutureResolver<YardLog> inventoryTrailersView(ViewInput<YardLog> input, String auth) async {
-    return FoundationResponseResolver<YardLog>(
+  FoundationFutureResolver<ViewOutput<YardLog>> inventoryTrailersView(ViewInput<YardLog> input, String auth) async {
+    return FoundationResponseResolver<ViewOutput<YardLog>>(
       await postSecure(
         'InventoryTrailersView',
         input,
