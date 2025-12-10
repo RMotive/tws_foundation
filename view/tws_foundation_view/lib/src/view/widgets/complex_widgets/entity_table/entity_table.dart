@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
@@ -49,6 +48,9 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
   /// Column options.
   final List<EntityTableColumnOptions<TEntity>> columns;
 
+  /// Custom view invokation callback, allows to override the default [ViewServiceI.view] service call with a custom implementation.
+  final Future<FoundationResponseResolver<ViewOutput<TEntity>>> Function(ViewInput<TEntity> input, String auth)? customView;
+
   /// Creates a new [EntityTable] instance.
   const EntityTable({
     super.key,
@@ -60,6 +62,7 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
       100,
       200,
     ],
+    this.customView,
     required this.adapter,
     required this.columns,
     required this.entityFactory,
@@ -169,10 +172,20 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
     final String auth = await widget.adapter.composeAuth();
 
-    final FoundationResponseResolver<ViewOutput<TEntity>> viewOutputResolver = await viewService.view(
-      ViewInput<TEntity>.b(paginationOptions.range, paginationOptions.page),
-      auth,
-    );
+    late final FoundationResponseResolver<ViewOutput<TEntity>> viewOutputResolver;
+
+    if(widget.customView != null){
+      viewOutputResolver = await widget.customView!(
+        ViewInput<TEntity>.b(paginationOptions.range, paginationOptions.page),
+        auth,
+      );
+    } else {
+      viewOutputResolver = await viewService.view(
+        ViewInput<TEntity>.b(paginationOptions.range, paginationOptions.page),
+        auth,
+      );
+    }
+    
 
     final ViewOutput<TEntity> viewOutput = viewOutputResolver.resolveDirect(
       () => ViewOutput<TEntity>(widget.entityFactory),

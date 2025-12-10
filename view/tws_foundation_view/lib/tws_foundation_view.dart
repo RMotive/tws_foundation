@@ -85,6 +85,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/permits_entity
 /// [Profiles Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/profiles_entity_table.dart';
 
+/// [Trailer inventory Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/trailers_inventory_entity_table.dart';
+
 //! <-- Entity Tables
 
 // [widgets]
@@ -144,6 +147,9 @@ export 'src/view/pages/entity_pages/profiles/profiles_page.dart';
 
 /// [Solutions Page]
 export 'src/view/pages/entity_pages/solutions/solutions_page.dart';
+
+/// [Trailer inventory Page]
+export 'src/view/pages/entity_pages/inventories/trailer_inventory_page.dart';
 
 //! <-- Entity Pages
 

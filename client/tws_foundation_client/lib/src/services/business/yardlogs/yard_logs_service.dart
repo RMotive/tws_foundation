@@ -24,6 +24,13 @@ abstract interface class YardLogsServiceI extends FoundationServiceB implements 
   ///
   /// [auth] server authorization token.
   FoundationFutureResolver<YardLog> delete(YardLog entity, String auth);
+  
+  /// [InventoryTrailersView] view operation.
+  /// 
+  /// [input] view input parameters.
+  /// 
+  /// [auth] server authorization token.
+  FoundationFutureResolver<ViewOutput<YardLog>> inventoryTrailersView(ViewInput<YardLog> input, String auth);
 }
 
 /// {abstract} class.

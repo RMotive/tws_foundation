@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
 import 'package:example/entries/category_layout_entry.dart';
-import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/trailers_inventory_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
-import 'package:example/entries/entity_pages/employees_page_entry.dart';
-import 'package:example/entries/entity_tables/employees_entity_table_entry.dart';
+import 'package:example/entries/entity_pages/trailer_inventory_page_entry.dart';
+import 'package:example/entries/entity_tables/trailers_inventory_entity_table_entry.dart';
 import 'package:example/entries/navigation_layout_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
@@ -131,7 +131,7 @@ final class _MainAppState extends State<MainApp> {
               //! --> Entity Pages
               // YardLogsPageEntry(),
               // SectionsPageEntry(),
-              EmployeesPageEntry(),
+              // EmployeesPageEntry(),
               // // DriversPageEntry(),
               // // TrucksPageEntry(),
               // // TrailersPageEntry(),
@@ -141,11 +141,13 @@ final class _MainAppState extends State<MainApp> {
               // ProfilesPageEntry(),
               // AccountsPageEntry(),
               // SolutionsPageEntry(),
+              TrailersInventoryPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
-              EmployeesCategoryPageEntry(),
+              // EmployeesCategoryPageEntry(),
               YardLogsCategoryPageEntry(),
+              TrailersInventoryCategoryPageEntry(),
               // SectionsCategoryPageEntry(),
               // DriversCategoryPageEntry(),
               // TrucksCategoryPageEntry(),
@@ -162,7 +164,7 @@ final class _MainAppState extends State<MainApp> {
               // YardLogsEntityTableEntry(),
               // SectionsEntityTableEntry(),
               // // SolutionsEntityTableEntry(),
-              EmployeesEntityTableEntry(),
+              // EmployeesEntityTableEntry(),
               // DriversEntityTableEntry(),
               // // TrucksEntityTableEntry(),
               // TrailersEntityTableEntry(),
@@ -172,6 +174,7 @@ final class _MainAppState extends State<MainApp> {
               // ProfilesEntityTableEntry(),
               //AccountsEntityTableEntry(),
               // SolutionsEntityTableEntry(),
+              TrailerInventoryEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
           );

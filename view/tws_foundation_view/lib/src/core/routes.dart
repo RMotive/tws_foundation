@@ -169,5 +169,13 @@ final class FoundationRoutes {
   //! <-- Solutions Routes
 
 
+  //! --> Trailer Inventory Routes
+  static const Route trailerInventoryPageRoute = Route(
+    'trailers-inventory',
+    name: 'Trailer Inventory Page',
+  );
+
+  //! <-- Trailer Inventory Routes
+
   
 }
