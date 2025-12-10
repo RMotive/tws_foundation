@@ -78,7 +78,7 @@ final class TrailerInventoryEntityTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return EntityTable<YardLog, YardLogsServiceI>(
       adapter: adapter,
-      customView: Injector.get<YardLogsService>().inventoryTrailersView,
+      customView: Injector.get<YardLogsServiceI>().inventoryTrailersView,
       entityFactory: () => YardLog(),
       columns: <EntityTableColumnOptions<YardLog>>[
         EntityTableColumnOptions<YardLog>(
