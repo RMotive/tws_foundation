@@ -17,23 +17,25 @@ namespace TWS_Foundation.Controllers.Business.Vehicules;
 public class LoadTypesController
     : ControllerBase {
 
-    readonly ILoadTypesService service;
+    readonly ILoadTypesService Service;
 
     public LoadTypesController(ILoadTypesService Service) {
-        service = Service;
+        this.Service = Service;
     }
 
-    [HttpPost, Action("View")]
-    public async Task<IActionResult> View(ViewInput<LoadType> options) => Ok(
-        await service.View(
-                new QueryInput<LoadType, ViewInput<LoadType>> {
-                    Parameters = options
-                }
-            )
-        );
+    [HttpPost(), Action("View")]
+    public async Task<IActionResult> View(ViewInput<LoadType> options) {
+        return Ok(
+                await Service.View(
+                        new QueryInput<LoadType, ViewInput<LoadType>> {
+                            Parameters = options
+                        }
+                    )
+            );
+    }
 
-    [HttpPost, Action("Read")]
-    public async Task<IActionResult> View(string reference) => Ok(
-           await service.Read(reference)
+    [HttpPost(), Action("Read")]
+    public async Task<IActionResult> Read(string reference) => Ok(
+           await Service.Read(reference)
        );
 }

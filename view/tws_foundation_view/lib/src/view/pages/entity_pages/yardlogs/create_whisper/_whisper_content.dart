@@ -36,6 +36,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
   /// {state} stores the default entity status.
   late final Status? defStatus;
 
+  /// {state} guard who's creating the yardlog(s).
+  late final Employee? guard;
+
   @override
   void didChangeDependencies() {
     theme = Theming.get<FoundationThemeB>(context);
@@ -56,9 +59,11 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
 
     defStatus = statusResponseResolver.resolveDirect(() => Status());
 
-    return responseResolver.resolveDirect(
+    guard = responseResolver.resolveDirect(
       () => Employee(),
     );
+
+    return guard;
   }
 
   @override
@@ -82,8 +87,12 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
 
         return CreateEntityForm<YardLog, YardLogsServiceI>(
           isMultiple: false,
-          entityFactory: () => YardLog(),
           controller: widget.controller,
+          entityFactory: () {
+            YardLog log = YardLog();
+            log.guard = guard!;
+            return log;
+          },
           buildEntityTag: (YardLog entity) {
             return 'Yardlog with: ${entity.driver.name} and truck ${entity.truck.economic}';
           },
@@ -158,7 +167,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                       maxLength: 100,
                       label: itemState.entity.entry ? '*Origen' : '*Destino',
                       hint: 'Ingresar información de origen/destino',
-                      onChanged: (String value) => itemState.entity.fromTo,
+                      onChanged: (String value) => itemState.entity.fromTo = value,
                       controller: TextEditingController(
                         text: itemState.entity.fromTo,
                       ),
@@ -192,7 +201,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.truckFrontRes;
-                                      resource.extension = photo.path.split('.').last;
+                                      if (photo.mimeType != null) {
+                                        resource.extension = photo.mimeType!.split('/').last; 
+                                      }
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.truckFrontRes);
                                     },
                                   ),
@@ -213,7 +224,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.truckLateralRes;
-                                      resource.extension = photo.path.split('.').last;
+                                      if (photo.mimeType != null) {
+                                        resource.extension = photo.mimeType!.split('/').last; 
+                                      }
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.truckLateralRes);
                                     },
                                   ),
@@ -241,7 +254,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.trailerBackRes;
-                                      resource.extension = photo.path.split('.').last;
+                                       if (photo.mimeType != null) {
+                                        resource.extension = photo.mimeType!.split('/').last; 
+                                      }
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerBackRes);
                                     },
                                   ),
@@ -262,7 +277,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.trailerLateralRes;
-                                      resource.extension = photo.path.split('.').last;
+                                       if (photo.mimeType != null) {
+                                        resource.extension = photo.mimeType!.split('/').last; 
+                                      }
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerLateralRes);
                                     },
                                   ),
@@ -298,7 +315,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                   Resource resource = Resource();
                                   resource.file = await photo.readAsBytes();
                                   resource.name = FoundationReferences.damage1Res;
-                                  resource.extension = photo.path.split('.').last;
+                                   if (photo.mimeType != null) {
+                                    resource.extension = photo.mimeType!.split('/').last;
+                                  }
                                   itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.damage1Res);
                                 },
                               ),
@@ -319,7 +338,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                   Resource resource = Resource();
                                   resource.file = await photo.readAsBytes();
                                   resource.name = FoundationReferences.damage2Res;
-                                  resource.extension = photo.path.split('.').last;
+                                   if (photo.mimeType != null) {
+                                        resource.extension = photo.mimeType!.split('/').last; 
+                                      }
                                   itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.damage2Res);
                                 },
                               ),
@@ -383,7 +404,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.seal1Res;
-                                      resource.extension = photo.path.split('.').last;
+                                      if (photo.mimeType != null) {
+                                        resource.extension = photo.mimeType!.split('/').last; 
+                                      }
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.seal1Res);
                                     },
                                   ),
@@ -402,7 +425,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.seal2Res;
-                                      resource.extension = photo.path.split('.').last;
+                                       if (photo.mimeType != null) {
+                                        resource.extension = photo.mimeType!.split('/').last; 
+                                      }
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.seal2Res);
                                     },
                                   ),

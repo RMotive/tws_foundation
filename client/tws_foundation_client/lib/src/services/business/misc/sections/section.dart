@@ -99,17 +99,6 @@ final class Section extends NamedEntityB<Section> {
           ),
         );
       }
-
-      if (description!.trim().isEmpty) {
-        results.add(
-          EntityInvalidation<Section>(
-            this,
-            PropertyInfo(EntityKeys.description, String, description),
-            "Description is empty but not null.",
-            "value > 0 || value == null",
-          ),
-        );
-      }
     }
 
     if(capacity < 0) {

@@ -1,12 +1,10 @@
 ﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Server;
 
 using Microsoft.AspNetCore.Mvc;
 
 using TWS_Business.Entities;
-using TWS_Business.Entities.Vehicules.Trucks;
 
 using TWS_Customer.Features.Business;
 
@@ -21,8 +19,8 @@ namespace TWS_Foundation.Controllers.Business.Gatekeeping;
 public class YardLogsController
     : ControllerBase {
 
-    readonly YardLogsService Service;
-    public YardLogsController(YardLogsService Service) {
+    readonly IYardLogsService Service;
+    public YardLogsController(IYardLogsService Service) {
         this.Service = Service;
     }
 

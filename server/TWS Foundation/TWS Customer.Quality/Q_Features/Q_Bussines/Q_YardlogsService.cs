@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+﻿using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
 
 using TWS_Business.Depots.Vehicles.Control;
@@ -35,11 +34,8 @@ public class Q_YardlogsService
             }
         });
 
-
         Assert.True(view.Count > 0);
         Assert.True(view.Page > 0);
         Assert.True(view.Entities.Length > 0);
-
-
     }
 }

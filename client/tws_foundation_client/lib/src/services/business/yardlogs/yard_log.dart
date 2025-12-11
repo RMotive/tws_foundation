@@ -59,7 +59,7 @@ final class YardLog extends EntityB<YardLog> {
   ///
   /// Rules >
   ///   1. 65 > length > 9
-  String? sealAlt = "";
+  String? sealAlt;
 
   /// Vehicule origin / destination information.
   ///

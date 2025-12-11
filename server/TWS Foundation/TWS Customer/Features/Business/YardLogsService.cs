@@ -4,11 +4,9 @@ using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Product;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Customer.Features.Business;
 
@@ -17,6 +15,17 @@ namespace TWS_Customer.Features.Business;
 /// </summary>
 public interface IYardLogsService
     : IService<YardLog> {
+
+    /// <summary>
+    ///     Generates a Inventory View of <see cref="YardLog"/>, filtered by trailers.
+    /// </summary>
+    /// <param name="input">
+    ///     <see cref="QueryInput{TEntity, TParameters}"/> data.
+    /// </param>
+    /// <returns>
+    ///     <see cref="ViewOutput{TEntity}"/> data.
+    /// </returns>
+    Task<ViewOutput<YardLog>> InventoryTrailerView(QueryInput<YardLog, ViewInput<YardLog>> input);
 }
 
 /// <summary>
@@ -34,26 +43,26 @@ public class YardLogsService
             .Include(e => e.Driver)
             .Include(e => e.Truck)
             .Include(e => e.Trailer);
-            
 
-            //.Include(e => e.Truck).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
-            //.Include(e => e.Truck).ThenInclude(e => e!.Situation)
-            //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
-            //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
-            //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Insurance)
-            //.Include(e => e.Truck).ThenInclude(e => e!.External)
 
-            //.Include(e => e.Trailer).ThenInclude(e => e!.Type)
-            //.Include(e => e.Trailer).ThenInclude(e => e!.Situation)
-            //.Include(e => e.Trailer).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
-            //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
-            //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Model)
-            //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
-            //.Include(e => e.Trailer).ThenInclude(e => e!.External)
+        //.Include(e => e.Truck).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
+        //.Include(e => e.Truck).ThenInclude(e => e!.Situation)
+        //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
+        //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
+        //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Insurance)
+        //.Include(e => e.Truck).ThenInclude(e => e!.External)
 
-            //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Address)
-            //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Approach)
-            //.Include(e => e.Driver).ThenInclude(e => e!.External);
+        //.Include(e => e.Trailer).ThenInclude(e => e!.Type)
+        //.Include(e => e.Trailer).ThenInclude(e => e!.Situation)
+        //.Include(e => e.Trailer).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
+        //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
+        //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Model)
+        //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
+        //.Include(e => e.Trailer).ThenInclude(e => e!.External)
+
+        //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Address)
+        //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Approach)
+        //.Include(e => e.Driver).ThenInclude(e => e!.External);
 
         return sourceQuery;
     };

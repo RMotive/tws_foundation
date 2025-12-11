@@ -19,11 +19,11 @@ final class _DriversSection extends StatefulWidget {
   ///
   ///
   /// [selDriver] selected driver instance, or created instance when applies.
-  final void Function(DriverCommon selDriver)? onSelection;
+  final void Function(DriverCommon selDriver) onSelection;
 
   /// Creates a new [_DriversSection] instance.
   const _DriversSection({
-    this.onSelection,
+    required this.onSelection,
   });
 
   @override
@@ -66,7 +66,7 @@ final class _DriversSectionState extends State<_DriversSection> {
                 return "${driver.name} - ${driver.license}";
               },
               onSelected:(DriverCommon? driver) {
-                widget.onSelection?.call(driver ?? DriverCommon());
+                widget.onSelection(driver ?? DriverCommon());
               },  
             ),
 
@@ -109,7 +109,7 @@ final class _DriversSectionState extends State<_DriversSection> {
                             if (externalDriver == null) return;
 
                             externalDriver!.license = text;
-                            widget.onSelection?.call(externalDriver!);
+                            widget.onSelection(externalDriver!);
                           },
                         ),
                       ),
@@ -127,7 +127,7 @@ final class _DriversSectionState extends State<_DriversSection> {
                               if (externalDriver == null) return;
 
                               externalDriver!.external!.identification.name = text;
-                              widget.onSelection?.call(externalDriver!);
+                              widget.onSelection(externalDriver!);
                             },
                           ),
 
@@ -141,7 +141,7 @@ final class _DriversSectionState extends State<_DriversSection> {
                               if (externalDriver == null) return;
 
                               externalDriver!.external!.identification.firstLastName = text;
-                              widget.onSelection?.call(externalDriver!);
+                              widget.onSelection(externalDriver!);
                             },
                           ),
                           TextInput(
@@ -153,7 +153,7 @@ final class _DriversSectionState extends State<_DriversSection> {
                               if (externalDriver == null) return;
 
                               externalDriver!.external!.identification.secondLastName = text;
-                              widget.onSelection?.call(externalDriver!);
+                              widget.onSelection(externalDriver!);
                             },
                           ),
                         ],
