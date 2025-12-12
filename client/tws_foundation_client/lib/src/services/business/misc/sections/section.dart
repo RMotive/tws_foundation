@@ -46,6 +46,7 @@ final class Section extends NamedEntityB<Section> {
         kOcupancy: ocupancy,
         kResource: resource?.encode(),
         FoundationCommonPropertyKeys.kSCT: status.encode(),
+        FoundationCommonPropertyKeys.kStatus: status.encode(),
         kYard: yard.encode(),
       },
     );
@@ -54,7 +55,7 @@ final class Section extends NamedEntityB<Section> {
   @override
   void decode(DataMap encode) {
     super.decode(encode);
-    yard = Location();
+    yard = encode.getEntity(() => Location(), kYard) ?? Location();
     capacity = encode.get(kCapacity);
     ocupancy = encode.get(kOcupancy);
     resource = encode.getEntity(() => Resource(), kResource);

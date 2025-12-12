@@ -1,11 +1,17 @@
-﻿using CSM_Foundation.Database.Entity.Models;
+﻿using CSM_Foundation.Database.Entity.Depot;
+using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+using CSM_Foundation.Database.Entity.Models;
+using CSM_Foundation.Database.Entity.Models.Input;
 using CSM_Foundation.Database.Entity.Models.Output;
 using CSM_Foundation.Product;
+
+using Microsoft.EntityFrameworkCore;
 
 using TWS_Business;
 using TWS_Business.Depots.Directories;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Vehicules;
+using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Customer.Features.Business;
 
@@ -34,6 +40,14 @@ public class SectionsService
         this._db = Database;
     }
 
+    private static QueryProcessor<Section> QueryProcessor => (sourceQuery) => {
+        sourceQuery = sourceQuery
+         .Include(e => e.Status)
+         .Include(e => e.Yard)
+         .Include(e => e.Resource);
+        return sourceQuery;
+    };
+
     public async override Task<BatchOperationOutput<Section>> Create(Section[] Entities, bool Sync = false) {
         Section[] successes = [];
         EntityOperationFailure<Section>[] failures = [];
@@ -57,5 +71,10 @@ public class SectionsService
         BatchOperationOutput<Section> output = new(successes, failures);
 
         return output;
+    }
+
+    public async override Task<ViewOutput<Section>> View(QueryInput<Section, ViewInput<Section>> input) {
+        input.PostProcessor = QueryProcessor;
+        return await depot.View(input);
     }
 }
