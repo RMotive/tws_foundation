@@ -244,8 +244,8 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                 if(text.trim().isEmpty && widget.onSelected != null) widget.onSelected!(null);
               },
             ),
-            IgnorePointer(
-              child: Positioned.fill(
+            Positioned.fill(
+              child: IgnorePointer(
                 child: ReactiveWidget<_RichState>(
                   reactor: richState,
                   builder: (BuildContext ctx, _RichState reactor) {
@@ -253,6 +253,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                                 
                     return Visibility(
                       visible: !overlayController.isShowing && currentSelection != null,
+                      replacement: Container(),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: DecoratedBox(

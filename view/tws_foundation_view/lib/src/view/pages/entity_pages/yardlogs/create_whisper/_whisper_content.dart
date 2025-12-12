@@ -201,9 +201,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.truckFrontRes;
-                                      if (photo.mimeType != null) {
-                                        resource.extension = photo.mimeType!.split('/').last; 
-                                      }
+                                      resource.extension = resource.file.resolveImageExtension; 
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.truckFrontRes);
                                     },
                                   ),
@@ -224,9 +222,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.truckLateralRes;
-                                      if (photo.mimeType != null) {
-                                        resource.extension = photo.mimeType!.split('/').last; 
-                                      }
+                                      resource.extension = resource.file.resolveImageExtension; 
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.truckLateralRes);
                                     },
                                   ),
@@ -254,9 +250,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.trailerBackRes;
-                                       if (photo.mimeType != null) {
-                                        resource.extension = photo.mimeType!.split('/').last; 
-                                      }
+                                      resource.extension = resource.file.resolveImageExtension; 
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerBackRes);
                                     },
                                   ),
@@ -277,9 +271,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.trailerLateralRes;
-                                       if (photo.mimeType != null) {
-                                        resource.extension = photo.mimeType!.split('/').last; 
-                                      }
+                                      resource.extension = resource.file.resolveImageExtension; 
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.trailerLateralRes);
                                     },
                                   ),
@@ -338,9 +330,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                   Resource resource = Resource();
                                   resource.file = await photo.readAsBytes();
                                   resource.name = FoundationReferences.damage2Res;
-                                   if (photo.mimeType != null) {
-                                        resource.extension = photo.mimeType!.split('/').last; 
-                                      }
+                                  resource.extension = resource.file.resolveImageExtension; 
                                   itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.damage2Res);
                                 },
                               ),
@@ -404,9 +394,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.seal1Res;
-                                      if (photo.mimeType != null) {
-                                        resource.extension = photo.mimeType!.split('/').last; 
-                                      }
+                                      resource.extension = resource.file.resolveImageExtension; 
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.seal1Res);
                                     },
                                   ),
@@ -425,9 +413,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                                       Resource resource = Resource();
                                       resource.file = await photo.readAsBytes();
                                       resource.name = FoundationReferences.seal2Res;
-                                       if (photo.mimeType != null) {
-                                        resource.extension = photo.mimeType!.split('/').last; 
-                                      }
+                                       resource.extension = resource.file.resolveImageExtension; 
                                       itemState.entity.setResource(resource, replaceOnRef: FoundationReferences.seal2Res);
                                     },
                                   ),

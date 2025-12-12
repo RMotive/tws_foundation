@@ -50,7 +50,7 @@ final class Resource extends NamedEntityB<Resource> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
       <String, Object?>{
-        kFile: file,
+        kFile: base64Encode(file),
         kExtension: extension,
         kYardLog: yardlog?.encode(),
       },
