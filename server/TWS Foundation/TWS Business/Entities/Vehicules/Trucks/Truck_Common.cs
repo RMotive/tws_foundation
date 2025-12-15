@@ -3,6 +3,7 @@
 using CSM_Foundation.Database;
 using CSM_Foundation.Database.Entity;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Bases;
@@ -50,6 +51,15 @@ public class Truck_Common
 
     #endregion
 
+    #region dependants
+
+    /// <summary>
+    ///     <see cref="YardLog"/> dependants from this <see cref="YardLog"/>.
+    /// </summary>
+    public ICollection<YardLog> Yardlogs { get; set; } = [];
+
+    #endregion
+
     #region Dependants 
 
     #endregion
@@ -79,6 +89,8 @@ public class Truck_Common
     #endregion
 
     protected override void DesignCommonEntity(EntityTypeBuilder etBuilder) {
+        //etBuilder.ToTable("Trucks_Commons");
+
         etBuilder.Property(nameof(Economic)).HasMaxLength(16).IsRequired();
 
         etBuilder.Link<Truck_Common, Location>(

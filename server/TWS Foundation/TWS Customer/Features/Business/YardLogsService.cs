@@ -92,24 +92,17 @@ public class YardLogsService
         };
 
         input.PostProcessor = (query) => {
-            //return query
-            //.Where(i => i.Trailer != null)
-            //.GroupBy(i => i.Trailer!.Id)
-            //.Select(i => i.OrderByDescending(y => y.Timestamp).First())
-            //.OrderByDescending(i => i.Timestamp)
-            //.AsQueryable();
-
             // Get the last entry for every trailer in yardlogs.
             var lastPerTrailer = query
                 .Where(i => i.Trailer != null)
                 .GroupBy(i => i.Trailer!.Id)
-                .Select(g => new { TrailerId = g.Key, MaxTimestamp = g.Max(x => x.Timestamp) });
+                .Select(g => new { Trailer = g.Key, MaxTimestamp = g.Max(x => x.Timestamp) });
 
             // Join the previous trailers results.
             var lastLogsQuery = from l in lastPerTrailer
                                 join y in query.Where(i => i.Trailer != null)
-                                  on new { TrailerId = l.TrailerId, Timestamp = l.MaxTimestamp }
-                                  equals new { TrailerId = y.Trailer!.Id, Timestamp = y.Timestamp }
+                                  on new { Trailer = l.Trailer, Timestamp = l.MaxTimestamp }
+                                  equals new { Trailer = y.Trailer!.Id, Timestamp = y.Timestamp }
                                 select y;
 
             return lastLogsQuery

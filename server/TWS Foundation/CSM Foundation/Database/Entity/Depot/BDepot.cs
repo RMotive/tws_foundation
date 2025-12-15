@@ -413,6 +413,7 @@ public abstract class BDepot<TDatabase, TEntity>
                 failures = [.. failures, fail];
             }
         }
+
         _db.SaveChanges();
         return new(attached, failures);
     }

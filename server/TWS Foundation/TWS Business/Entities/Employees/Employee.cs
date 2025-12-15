@@ -104,6 +104,15 @@ public class Employee
 
     #endregion
 
+    #region dependants
+
+    /// <summary>
+    ///     <see cref="YardLog"/> dependants from this <see cref="YardLog"/>.
+    /// </summary>
+    public ICollection<YardLog> Yardlogs { get; set; } = [];
+
+    #endregion
+
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(CURP)).HasMaxLength(18);
         etBuilder.Property(nameof(RFC)).HasMaxLength(13);

@@ -55,6 +55,15 @@ public class Trailer_Common
 
     #endregion
 
+    #region dependants
+
+    /// <summary>
+    ///     <see cref="YardLog"/> dependants from this <see cref="YardLog"/>.
+    /// </summary>
+    public ICollection<YardLog> Yardlogs { get; set; } = [];
+
+    #endregion
+
     #region Custom Getters
 
     /// <summary>
