@@ -18,7 +18,7 @@ class _EntryButton extends StatelessWidget {
   final Color? onHoverTextColor;
 
   /// Optional method to evaluate if the tile is selected.
-  final bool Function() evaluateSelection;
+  final bool Function(Route incomingRoute) evaluateSelection;
 
   /// State instance manager.
   final _EntryReactor reactor;
@@ -39,7 +39,7 @@ class _EntryButton extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       onClick:() {
         Router.i.go(entry.route);
-        reactor.selected = evaluateSelection();
+        reactor.selected = evaluateSelection(entry.route);
         reactor.react();
       }, 
       onHover: (bool hover) {

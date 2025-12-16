@@ -64,8 +64,8 @@ class __NavigationLayoutPageMenuState extends State<__NavigationLayoutPageMenu> 
                     onHoverBackgroundColor: theme.navigationLayout.fore,
                     onHoverTextColor: theme.navigationLayout.back,
                     backgroundColor: theme.navigationLayout.back,
-                    evaluateSelection: () {
-                      bool selected =  widget.navigationEntries[i].route == widget.currentRoute;
+                    evaluateSelection: (Route incomingRoute) {
+                      bool selected =  widget.navigationEntries[i].route == incomingRoute;
                       
                       /// Setting other reactors to unselected when this one is selected.
                       if(selected){
