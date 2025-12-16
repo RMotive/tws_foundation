@@ -8,7 +8,7 @@ import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adap
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/text_input.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_list_tile.dart';
+import 'package:tws_foundation_view/src/view/widgets/list_tile.dart';
 
 part '_autocomplete_future.dart';
 part '_autocomplete_list.dart';

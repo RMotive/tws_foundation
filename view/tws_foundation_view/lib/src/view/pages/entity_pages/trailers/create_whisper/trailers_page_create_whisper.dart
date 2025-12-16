@@ -8,8 +8,8 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_find
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_incremental_list.dart';
+import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
+import 'package:tws_foundation_view/src/view/widgets/incremental_list.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 

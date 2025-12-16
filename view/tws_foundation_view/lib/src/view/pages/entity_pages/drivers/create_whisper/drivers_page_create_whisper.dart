@@ -7,7 +7,7 @@ import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomp
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
+import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 

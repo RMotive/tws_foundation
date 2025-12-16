@@ -3,7 +3,7 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_list_tile.dart';
+import 'package:tws_foundation_view/src/view/widgets/list_tile.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
@@ -338,7 +338,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                               final TEntity entity = data.entities.elementAt(index);
                               final String label = widget.textBuilder(entity);
                               // Build the individual option component.
-                              return TwsListTile(
+                              return CollectionTile(
                                 label: label,
                                 width: double.maxFinite,
                                 textColor: theme.page.fore,

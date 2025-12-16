@@ -1,14 +1,14 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 
-/// [TwsListTile] Simple self-administered statefull list tile.
+/// [CollectionTile] Simple self-administered statefull list tile.
 ///
 /// Shows simple text data and updates it's internal state on mouse events.
 ///
 /// Depends of parents widgets for colors theme.
 ///
 /// Preserve it's own tile selection state.
-class TwsListTile extends StatefulWidget {
+class CollectionTile extends StatefulWidget {
   /// Tile width.
   final double? width;
 
@@ -45,7 +45,7 @@ class TwsListTile extends StatefulWidget {
   /// Flag for tile status.
   final bool enabled;
 
-  const TwsListTile({
+  const CollectionTile({
     super.key,
     required this.label,
     this.width,
@@ -62,10 +62,10 @@ class TwsListTile extends StatefulWidget {
   });
 
   @override
-  State<TwsListTile> createState() => _TwsListTileState();
+  State<CollectionTile> createState() => _CollectionTileState();
 }
 
-class _TwsListTileState extends State<TwsListTile> {
+class _CollectionTileState extends State<CollectionTile> {
   /// Text color.
   late Color tcolor;
 
@@ -89,7 +89,7 @@ class _TwsListTileState extends State<TwsListTile> {
   }
 
   @override
-  void didUpdateWidget(covariant TwsListTile oldWidget) {
+  void didUpdateWidget(covariant CollectionTile oldWidget) {
     /// Evaluate the selected status.
     if (widget.evaluateSelection != null && widget.enabled) {
       selected = widget.evaluateSelection!();

@@ -12,7 +12,7 @@ import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
-import 'package:tws_foundation_view/src/view/widgets/tws_datepicker_field.dart';
+import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Address state class.
