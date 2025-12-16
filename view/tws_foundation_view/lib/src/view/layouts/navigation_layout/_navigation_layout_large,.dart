@@ -65,10 +65,9 @@ final class _NavigationLayoutLarge extends _NavigationLayoutB {
                             child: SizedBox(
                               width: menuWidth,
                               height: pageSize.height,
-                              child: _NavigationLayoutNavigation(
+                              child: __NavigationLayoutPageMenu(
                                 currentRoute: routeData.route,
                                 navigationEntries: navigationEntries,
-                                routeData: routeData,
                               ),
                             ),
                           ),

@@ -123,10 +123,10 @@ final class _MainAppState extends State<MainApp> {
             themes: themes,
             landingEntries: <PackageLandingEntryI<LandingThemeB>>[
               // AuthPageEntry(),
-              // CategoryLayoutEntry(),
-              // NavigationLayoutEntry(
-              //   appThemes: themes,
-              // ),
+              CategoryLayoutEntry(),
+              NavigationLayoutEntry(
+                appThemes: themes,
+              ),
 
               //! --> Entity Pages
               // YardLogsPageEntry(),

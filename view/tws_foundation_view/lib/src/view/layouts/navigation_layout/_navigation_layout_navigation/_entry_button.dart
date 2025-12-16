@@ -1,6 +1,6 @@
 part of '../navigation_layout.dart';
 
-class _EntryButton extends StatefulWidget {
+class _EntryButton extends StatelessWidget {
 
   /// Entry data
   final NavigationLayoutEntryI entry;
@@ -18,7 +18,10 @@ class _EntryButton extends StatefulWidget {
   final Color? onHoverTextColor;
 
   /// Optional method to evaluate if the tile is selected.
-  final bool Function()? evaluateSelection;
+  final bool Function() evaluateSelection;
+
+  /// State instance manager.
+  final _EntryReactor reactor;
 
   const _EntryButton({
     required this.entry,
@@ -27,45 +30,27 @@ class _EntryButton extends StatefulWidget {
     required this.onHoverTextColor,
     required this.backgroundColor,
     required this.evaluateSelection,
+    required this.reactor,
   });
 
-  @override
-  State<_EntryButton> createState() => __EntryButtonState();
-}
-
-class __EntryButtonState extends State<_EntryButton> {
-
-  late bool onhover;
-
-  late bool selected;
-
-  @override
-  void initState() {
-    onhover = false;
-    selected = widget.evaluateSelection?.call() ?? false;
-    super.initState();
-  }
-
-  @override
+@override
   Widget build(BuildContext context) {
     return PointerArea(
       cursor: SystemMouseCursors.click,
       onClick:() {
-        setState(() {
-          selected = widget.evaluateSelection?.call() ?? false;
-          Router.i.go(widget.entry.route);
-        });
+        reactor.selected = evaluateSelection();
+        reactor.react();
+        Router.i.go(entry.route);
       }, 
       onHover: (bool hover) {
-        setState(() {
-          onhover = hover;
-        });
+        reactor.onhover = hover;
+        reactor.react();
       },
       child: ColoredBox(
         color:
-            onhover || selected
-                ? widget.onHoverBackgroundColor.withAlpha(25)
-                : widget.backgroundColor,
+            reactor.onhover || reactor.selected
+                ? onHoverBackgroundColor.withAlpha(25)
+                : backgroundColor,
         child: SizedBox(
           height: 35,
           width: double.maxFinite,
@@ -74,9 +59,9 @@ class __EntryButtonState extends State<_EntryButton> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               /// Selected Entry mark.
-              if(selected)
+              if(reactor.selected)
               ColoredBox(
-                color: widget.onHoverBackgroundColor,
+                color: onHoverBackgroundColor,
                 child: SizedBox(
                   width: 4,
                   height: double.maxFinite,
@@ -84,20 +69,20 @@ class __EntryButtonState extends State<_EntryButton> {
               ),
 
               /// Adding padding from spacing row property.
-              if(!selected)
+              if(!reactor.selected)
               SizedBox.shrink(),
               
-              if(widget.entry.icon != null)
+              if(entry.icon != null)
               Icon(
-                widget.entry.icon,
+                entry.icon,
                 size: 20,
-                color: widget.textColor,
+                color: textColor,
               ),
               Text(
-                widget.entry.title,
+                entry.title,
                 style: TextStyle(
                   height: 1.0,
-                  color: widget.textColor,
+                  color: textColor,
                 ),
               )
             ],

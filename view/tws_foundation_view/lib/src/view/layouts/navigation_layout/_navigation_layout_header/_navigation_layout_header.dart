@@ -10,7 +10,7 @@ final class _NavigationLayoutHeader extends StatelessWidget {
   /// User information, used to draw an User Button to access information and options.
   final NavigationLayoutHeaderUserI? user;
 
-  /// {internal} Reactor reference for [_NavigationLayoutNavigation] state.
+  /// {internal} Reactor reference for [__NavigationLayoutPageMenu] state.
   final _NavigationLayourNavigationReactor navReactor;
 
   /// Header application logo.

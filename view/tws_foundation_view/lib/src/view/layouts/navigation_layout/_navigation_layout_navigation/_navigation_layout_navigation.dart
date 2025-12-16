@@ -1,18 +1,45 @@
 part of '../navigation_layout.dart';
 
-///
-final class _NavigationLayoutNavigation extends StatelessWidget {
-  ///
+/// {reactor} class.
+/// 
+/// Handles the state for each navigation entry button.
+final class _EntryReactor extends ReactorB {
+
+  /// Whether the entry is being hovered.
+  bool onhover = false;
+
+  /// Whether the entry is selected.
+  bool selected = false;
+  
+}
+
+class __NavigationLayoutPageMenu extends StatefulWidget {
+  /// Current active route (Incoming route).
   final Route currentRoute;
 
-  ///
+  /// Navigation entries to display.
   final List<NavigationLayoutEntryI> navigationEntries;
 
-  ///
-  final RouteData routeData;
+  const __NavigationLayoutPageMenu({required this.currentRoute, required this.navigationEntries});
 
-  ///
-  const _NavigationLayoutNavigation({required this.currentRoute, required this.navigationEntries, required this.routeData});
+  @override
+  State<__NavigationLayoutPageMenu> createState() => __NavigationLayoutPageMenuState();
+}
+
+class __NavigationLayoutPageMenuState extends State<__NavigationLayoutPageMenu> {
+  
+  /// {state} reactors for each entry.
+  List<_EntryReactor> entryReactors = <_EntryReactor>[];
+
+  @override
+  void initState() {
+    for(int i = 0; i < widget.navigationEntries.length; i++){
+      entryReactors.add(_EntryReactor());
+    }
+    super.initState();
+  }
+
+  /// 
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +52,34 @@ final class _NavigationLayoutNavigation extends StatelessWidget {
         child: Column(
           spacing: 8,
           children: <Widget>[
-            for (NavigationLayoutEntryI entry in navigationEntries) ...<Widget>[
-              _EntryButton(
-                entry: entry,
-                textColor: theme.navigationLayout.fore,
-                onHoverBackgroundColor: theme.navigationLayout.fore,
-                onHoverTextColor: theme.navigationLayout.back,
-                backgroundColor: theme.navigationLayout.back,
-                evaluateSelection: () => entry.route == routeData.route,
+            for (int i = 0; i < widget.navigationEntries.length; i++) ...<Widget>[
+              ReactiveWidget<_EntryReactor>(
+                reactor: entryReactors[i],
+                builder: (BuildContext ctx, _EntryReactor reactor) {
+                  return _EntryButton(
+                    entry: widget.navigationEntries[i],
+                    textColor: theme.navigationLayout.fore,
+                    onHoverBackgroundColor: theme.navigationLayout.fore,
+                    onHoverTextColor: theme.navigationLayout.back,
+                    backgroundColor: theme.navigationLayout.back,
+                    evaluateSelection: () {
+                      bool selected =  widget.navigationEntries[i].route == widget.currentRoute;
+                      
+                      /// Setting other reactors to unselected when this one is selected.
+                      if(selected){
+                        entryReactors.where((_EntryReactor oldreactor) => oldreactor.selected).forEach(
+                          (_EntryReactor oldreactor) {
+                            oldreactor.selected = false;
+                            oldreactor.react();
+                          },
+                        );
+                      }
+                      reactor.selected = selected;
+                      return selected;
+                    },
+                    reactor: reactor,
+                  );
+                },
               ),
             ],
           ],
