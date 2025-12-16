@@ -10,6 +10,8 @@ final class _EntryReactor extends ReactorB {
 
   /// Whether the entry is selected.
   bool selected = false;
+
+  _EntryReactor(this.selected);
   
 }
 
@@ -34,7 +36,7 @@ class __NavigationLayoutPageMenuState extends State<__NavigationLayoutPageMenu> 
   @override
   void initState() {
     for(int i = 0; i < widget.navigationEntries.length; i++){
-      entryReactors.add(_EntryReactor());
+      entryReactors.add(_EntryReactor(widget.navigationEntries[i].route == widget.currentRoute));
     }
     super.initState();
   }

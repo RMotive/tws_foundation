@@ -38,9 +38,9 @@ class _EntryButton extends StatelessWidget {
     return PointerArea(
       cursor: SystemMouseCursors.click,
       onClick:() {
+        Router.i.go(entry.route);
         reactor.selected = evaluateSelection();
         reactor.react();
-        Router.i.go(entry.route);
       }, 
       onHover: (bool hover) {
         reactor.onhover = hover;
