@@ -21,11 +21,11 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CategoryLayoutPageI? currentEntry = pages.firstWhere(
-      (CategoryLayoutPageI article) => article.route == currentRoute,
+    final CategoryLayoutPageI currentEntry = pages.firstWhere(
+      (CategoryLayoutPageI article) => currentRoute.path.contains(article.route.path),
     );
 
-    List<ActionsRibbonNodeI> actions = currentEntry?.actions ?? <ActionsRibbonNodeI>[];
+    List<ActionsRibbonNodeI> actions = currentEntry.actions ?? <ActionsRibbonNodeI>[];
 
     return Visibility(
       visible: actions.isNotEmpty,
