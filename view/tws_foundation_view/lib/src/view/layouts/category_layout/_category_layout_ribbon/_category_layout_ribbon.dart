@@ -22,7 +22,12 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CategoryLayoutPageI currentEntry = pages.firstWhere(
-      (CategoryLayoutPageI article) => currentRoute.path.contains(article.route.path),
+      (CategoryLayoutPageI article) {
+        Router router = Injector.get<Router>();
+        String articleAbsolutePath = router.getAbsolutePath(article.route);
+        String currentAbsolutePath = router.getAbsolutePath(currentRoute);
+        return currentAbsolutePath.contains(articleAbsolutePath);
+      }
     );
 
     List<ActionsRibbonNodeI> actions = currentEntry.actions ?? <ActionsRibbonNodeI>[];
