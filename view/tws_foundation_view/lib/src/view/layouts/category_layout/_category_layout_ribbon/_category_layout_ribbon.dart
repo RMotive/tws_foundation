@@ -23,6 +23,7 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
   Widget build(BuildContext context) {
     final CategoryLayoutPageI currentEntry = pages.firstWhere(
       (CategoryLayoutPageI article) {
+        if (article.route == currentRoute) return true;
         Router router = Injector.get<Router>();
         String articleAbsolutePath = router.getAbsolutePath(article.route);
         String currentAbsolutePath = router.getAbsolutePath(currentRoute);
@@ -51,11 +52,11 @@ final class _CategoryLayoutRibbon extends StatelessWidget {
               ),
 
             /// --> Category pages navigation.
-            Expanded(
-              child: _CategoryLayoutRibbonWidget(
-                children: <Widget>[],
-              ),
-            ),
+            // Expanded(
+            //   child: _CategoryLayoutRibbonWidget(
+            //     children: <Widget>[],
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -4,8 +4,10 @@ import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
+import 'package:tws_foundation_view/src/core/models/entity_table_filters.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
+import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_table/entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/pagination.dart';
@@ -18,6 +20,7 @@ part '_entity_table_header.dart';
 part '_entity_table_loader.dart';
 part 'entity_table_column_options.dart';
 part 'entity_table_theming.dart';
+part '_entity_table_filter.dart';
 
 /// Default column width.
 const double _kColumnWidth = 200;
@@ -51,6 +54,19 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
   /// Custom view invokation callback, allows to override the default [ViewServiceI.view] service call with a custom implementation.
   final Future<FoundationResponseResolver<ViewOutput<TEntity>>> Function(ViewInput<TEntity> input, String auth)? customView;
 
+  /// Draws a section containing filtering widgets.
+  /// 
+  /// [set] Current filtering set. This value is used to store the filtering data.
+  /// The widgets returned from this method must update the [set] propeties in order to apply the 
+  /// filtering when the search action button is pressed.
+  final Widget Function(TEntity set)? filtersSection;
+
+  /// Current filtering values.
+  /// 
+  /// [set] Current filtering set. This value is used to extract the filtering data, 
+  /// storing the input values in [filtersSection].
+  final EntityTableFilters<TEntity>  Function(TEntity set)? filterValues;
+  
   /// Creates a new [EntityTable] instance.
   const EntityTable({
     super.key,
@@ -66,7 +82,10 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
     required this.adapter,
     required this.columns,
     required this.entityFactory,
-  }) : assert(ranges.length > 0, 'Paging ranges must have at least one configured');
+    this.filtersSection,
+    this.filterValues,
+  }) : assert(ranges.length > 0, 'Paging ranges must have at least one configured'),
+  assert((filtersSection == null && filterValues == null) || (filtersSection != null && filterValues != null), 'Both filtersSection and filterValues must be provided together.');
 
   @override
   State<EntityTable<TEntity, TService>> createState() => _EntityTableState<TEntity, TService>();
@@ -93,6 +112,8 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   /// {state} Current selected index item reference.
   int? selItem;
 
+  late TEntity filterSet;
+
   @override
   void initState() {
     paginationOptions = PaginationOptions(
@@ -113,6 +134,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
     );
 
     widget.adapter.listenRefresh(refreshView);
+    filterSet = widget.entityFactory();
     super.initState();
   }
 
@@ -131,12 +153,12 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   }
 
   ///
-  void refreshView() {
+  void refreshView({bool addFilters = false}) {
     if (mounted) {
       setState(() {
         selItem = null;
         drawerAnimationCtrl.reverse();
-        asyncInvokation = _viewInvokation();
+        asyncInvokation = _viewInvokation(addFilters: addFilters);
       });
     }
   }
@@ -144,7 +166,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   /// {event} triggered when the [EntityTable] pagination options has changed.
   void onPaginationChange(PaginationOptions newOptions) {
     paginationOptions = newOptions;
-    refreshView();
+    refreshView(addFilters: true);
   }
 
   /// {event} triggered when the item selection has changed.
@@ -162,7 +184,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   }
 
   /// Invokes internally [ViewServiceI.view] service call.
-  Future<ViewOutput<TEntity>> _viewInvokation() async {
+  Future<ViewOutput<TEntity>> _viewInvokation({bool addFilters = false}) async {
     setState(() {
       isLoading = true;
       onEntitySelectionChange(null);
@@ -174,14 +196,27 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
     late final FoundationResponseResolver<ViewOutput<TEntity>> viewOutputResolver;
 
+    List<ViewFilterNodeI<TEntity>>? filters;
+
+    /// Filter configurations
+    if(widget.filterValues != null && addFilters){
+      final EntityTableFilters<TEntity> tableFilter = widget.filterValues!(filterSet);
+      if(tableFilter.filters.isNotEmpty){
+        filters = <ViewFilterNodeI<TEntity>>[
+          ViewFilterLogical<TEntity>(1, tableFilter.operator, tableFilter.filters)
+        ];
+      }
+      
+    }
+
     if(widget.customView != null){
       viewOutputResolver = await widget.customView!(
-        ViewInput<TEntity>.b(paginationOptions.range, paginationOptions.page),
+        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filters ?? <ViewFilterNodeI<TEntity>>[]),
         auth,
       );
     } else {
       viewOutputResolver = await viewService.view(
-        ViewInput<TEntity>.b(paginationOptions.range, paginationOptions.page),
+        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filters ?? <ViewFilterNodeI<TEntity>>[]),
         auth,
       );
     }
@@ -236,6 +271,34 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+
+                        /// --> Filters inputs bar
+                        if(widget.filtersSection != null)
+                        ConstrainedBox(
+                          constraints: drawerAnimationConstraint,
+                          child: DecoratedBox(
+                            decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(
+                                BorderSide(width: 1, color: Colors.blueGrey),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: _EntityTableFilter<TEntity>(
+                                filtersSection: widget.filtersSection!,
+                                entityFactory: widget.entityFactory,
+                                onSearch: (TEntity set) => refreshView(addFilters: true),
+                                onClean: (TEntity set) {
+                                  filterSet = widget.entityFactory();
+                                  refreshView();
+                                },
+                              ),
+                              ),
+                          ),
+                        ),
+
                         /// --> Table View
                         Expanded(
                           child: SizedBox(

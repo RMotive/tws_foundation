@@ -28,6 +28,14 @@ final class ViewFilterProperty<T extends EntityI<T>> implements ViewFilterI<T> {
   /// Creates a new [ViewFilterProperty] instance.
   ViewFilterProperty();
 
+
+  /// Creates a new [ViewFilterProperty] instances with required properties for values filtering.
+  ViewFilterProperty.a({
+    required this.property,
+    required this.operator,
+    required this.value,
+  });
+
   @override
   DataMap encode() {
     return <String, dynamic>{

@@ -1,4 +1,5 @@
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Route, Router;
 import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
