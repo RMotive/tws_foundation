@@ -33,7 +33,7 @@ final class ViewFilterProperty<T extends EntityI<T>> implements ViewFilterI<T> {
   ViewFilterProperty.a({
     required this.property,
     required this.operator,
-    required this.value,
+    this.value,
   });
 
   @override
