@@ -44,7 +44,7 @@ final class ViewFilterProperty<T extends EntityI<T>> implements ViewFilterI<T> {
       'property': property,
       'evaluation': operator.index,
       'value': value?.toString(),
-      'operator': operator.name
+      'operator': operator.index,
     };
   }
 }
