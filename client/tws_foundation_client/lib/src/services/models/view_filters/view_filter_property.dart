@@ -57,7 +57,7 @@ enum ViewFilterOperators {
   equal,
 
   /// Whether the [EntityI] property must contains the [ViewFilterProperty.value].
-  contians,
+  contains,
 
   /// Whether the [EntityI] property must be less than the [ViewFilterProperty.value].
   lessThan,
