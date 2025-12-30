@@ -28,6 +28,13 @@ final class ViewFilterDate<T extends EntityI<T>> implements ViewFilterI<T> {
   /// Creates a new [ViewFilterDate] instance.
   ViewFilterDate();
 
+  /// Creates a new [ViewFilterDate] instances with main properties for values filtering.
+  ViewFilterDate.a({
+    required this.property,
+    required this.from,
+    required this.to,
+  });
+
   @override
   DataMap encode() {
     return <String, dynamic>{
