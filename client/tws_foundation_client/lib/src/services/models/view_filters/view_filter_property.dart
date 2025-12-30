@@ -39,7 +39,7 @@ final class ViewFilterProperty<T extends EntityI<T>> implements ViewFilterI<T> {
   @override
   DataMap encode() {
     return <String, dynamic>{
-      EntityKeys.discriminator: discriminator,
+      EntityKeys.discriminator: discriminator.toLowerCase(),
       'order': order,
       'property': property,
       'evaluation': operator.index,

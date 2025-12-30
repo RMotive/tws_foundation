@@ -20,9 +20,9 @@ abstract interface class ViewFilterNodeI<T extends EntityI<T>> implements Encoda
 /// Defines the possible filter node/discriminator values for [ViewFilterNodeI] implementations.
 enum ViewFilterDiscriminator { 
   ///
-  logical,
+  viewFilterLogical,
   /// 
-  property,
+  viewFilterProperty,
   ///  
-  date,
+  viewFilterDate,
 }
