@@ -31,7 +31,7 @@ final class ViewFilterDate<T extends EntityI<T>> implements ViewFilterI<T> {
   @override
   DataMap encode() {
     return <String, dynamic>{
-      EntityKeys.discriminator: discriminator,
+      EntityKeys.discriminator: discriminator.toLowerCase(),
       'property': property,
       'order': order,
       'from': from.toIso8601String(),

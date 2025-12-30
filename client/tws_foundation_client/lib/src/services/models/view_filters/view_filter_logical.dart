@@ -34,7 +34,7 @@ final class ViewFilterLogical<T extends EntityI<T>> implements ViewFilterNodeI<T
         .toList();
 
     return <String, dynamic>{
-      EntityKeys.discriminator: discriminator,
+      EntityKeys.discriminator: discriminator.toLowerCase(),
       'order': order,
       'operator': operator.index,
       'filters': filtersData,
