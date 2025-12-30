@@ -12,11 +12,11 @@ class _EmployeesViewAdapter implements ViewConsumeAdapter {
       // -> filters
       ViewFilterProperty<Employee> employeeNameFilter = ViewFilterProperty<Employee>();
       employeeNameFilter.property = 'Identification.Name';
-      employeeNameFilter.operator = ViewFilterOperators.contians;
+      employeeNameFilter.operator = ViewFilterOperators.contains;
       employeeNameFilter.value = input;
       ViewFilterProperty<Employee> employeeLastnameFilter = ViewFilterProperty<Employee>();
       employeeLastnameFilter.property = 'Identification.Lastname';
-      employeeLastnameFilter.operator = ViewFilterOperators.contians;
+      employeeLastnameFilter.operator = ViewFilterOperators.contains;
       employeeLastnameFilter.value = input;
       
       // -> adding filters

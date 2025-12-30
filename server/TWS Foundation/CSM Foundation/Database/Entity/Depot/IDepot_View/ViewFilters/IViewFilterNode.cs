@@ -81,15 +81,15 @@ public class ISetViewFilterNodeConverter<TSet>
         // Determine the type from the Discriminator property
         string? discriminator;
         try {
-            discriminator = jsonObject.RootElement.GetProperty("Discrimination").GetString();
+            discriminator = jsonObject.RootElement.GetProperty("Discriminator").GetString();
         } catch {
-            discriminator = jsonObject.RootElement.GetProperty("discrimination").GetString();
+            discriminator = jsonObject.RootElement.GetProperty("discriminator").GetString();
         }
 
         return discriminator switch {
-            var _ when discriminator == typeof(ViewFilterLogical<>).Name => JsonSerializer.Deserialize<ViewFilterLogical<TSet>>(json, options),
-            var _ when discriminator == typeof(ViewFilterProperty<>).Name => JsonSerializer.Deserialize<ViewFilterProperty<TSet>>(json, options),
-            var _ when discriminator == typeof(ViewFilterDate<>).Name => JsonSerializer.Deserialize<ViewFilterDate<TSet>>(json, options),
+            var _ when discriminator == nameof(ViewFilterLogical<TSet>) => JsonSerializer.Deserialize<ViewFilterLogical<TSet>>(json, options),
+            var _ when discriminator == nameof(ViewFilterProperty<TSet>) => JsonSerializer.Deserialize<ViewFilterProperty<TSet>>(json, options),
+            var _ when discriminator == nameof(ViewFilterDate<TSet>) => JsonSerializer.Deserialize<ViewFilterDate<TSet>>(json, options),
             _ => throw new UnsupportedContentTypeException($"No discriminator recognized for ({discriminator})"),
         };
     }

@@ -14,3 +14,15 @@ abstract interface class ViewFilterNodeI<T extends EntityI<T>> implements Encoda
   /// Creates a new [ViewFilterNodeI] instance.
   const ViewFilterNodeI(this.discriminator, this.order);
 }
+
+/// {enum} for [ViewFilterNodeI.discriminator] values.
+/// 
+/// Defines the possible filter node/discriminator values for [ViewFilterNodeI] implementations.
+enum ViewFilterDiscriminator { 
+  ///
+  logical,
+  /// 
+  property,
+  ///  
+  date,
+}

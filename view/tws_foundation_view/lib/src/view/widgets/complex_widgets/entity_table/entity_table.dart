@@ -20,7 +20,6 @@ part '_entity_table_header.dart';
 part '_entity_table_loader.dart';
 part 'entity_table_column_options.dart';
 part 'entity_table_theming.dart';
-part '_entity_table_filter.dart';
 
 /// Default column width.
 const double _kColumnWidth = 200;
@@ -65,7 +64,7 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
   /// 
   /// [set] Current filtering set. This value is used to extract the filtering data, 
   /// storing the input values in [filtersSection].
-  final EntityTableFilters<TEntity>  Function(TEntity set)? filterValues;
+  final List<EntityTableFilters<TEntity>>  Function(TEntity set)? filterValues;
   
   /// Creates a new [EntityTable] instance.
   const EntityTable({
@@ -112,8 +111,19 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
   /// {state} Current selected index item reference.
   int? selItem;
 
+  /// {state} Current filtering set.
   late TEntity filterSet;
 
+  /// {state} first date filter value.
+  /// The date when the date range filter starts.
+  /// Default value is DateTime(0), which means no date filter applied.
+  DateTime firstDate = DateTime(0);
+  
+  /// {state} last date filter value.
+  /// The date when the date range filter ends.
+  /// Default value is DateTime(0), which means no date filter applied.
+  DateTime lastDate = DateTime(0);
+ 
   @override
   void initState() {
     paginationOptions = PaginationOptions(
@@ -196,27 +206,42 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
     late final FoundationResponseResolver<ViewOutput<TEntity>> viewOutputResolver;
 
-    List<ViewFilterNodeI<TEntity>>? filters;
+    /// Main filtering node.
+    List<ViewFilterNodeI<TEntity>>? filtersNode;
 
     /// Filter configurations
     if(widget.filterValues != null && addFilters){
       final EntityTableFilters<TEntity> tableFilter = widget.filterValues!(filterSet);
-      if(tableFilter.filters.isNotEmpty){
-        filters = <ViewFilterNodeI<TEntity>>[
-          ViewFilterLogical<TEntity>(1, tableFilter.operator, tableFilter.filters)
-        ];
+      /// Storing valid logical filters.
+      final List<ViewFilterProperty<TEntity>> validLogicalFilterList = <ViewFilterProperty<TEntity>>[];
+
+      /// Remove empty filters to avoid unnecessary processing
+      for(ViewFilterProperty<TEntity> filter in tableFilter.filters){
+          if(filter.value != null){
+            validLogicalFilterList.add(filter);
+          }
       }
       
+      if(validLogicalFilterList.isNotEmpty){
+        ViewFilterLogical<TEntity> logicalFilter = ViewFilterLogical<TEntity>(1, tableFilter.operator, validLogicalFilterList);
+        logicalFilter.discriminator = 'ViewFilterLogical';
+        /// Assigning filters to the main filter node.
+        filtersNode = <ViewFilterNodeI<TEntity>>[
+          logicalFilter,
+        ];
+      }
     }
+    
+    
 
     if(widget.customView != null){
       viewOutputResolver = await widget.customView!(
-        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filters ?? <ViewFilterNodeI<TEntity>>[]),
+        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode ?? <ViewFilterNodeI<TEntity>>[]),
         auth,
       );
     } else {
       viewOutputResolver = await viewService.view(
-        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filters ?? <ViewFilterNodeI<TEntity>>[]),
+        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode ?? <ViewFilterNodeI<TEntity>>[]),
         auth,
       );
     }
@@ -236,6 +261,7 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
     });
 
     return viewOutput;
+    
   }
 
   @override
@@ -273,28 +299,56 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                       children: <Widget>[
 
                         /// --> Filters inputs bar
-                        if(widget.filtersSection != null)
-                        ConstrainedBox(
-                          constraints: drawerAnimationConstraint,
-                          child: DecoratedBox(
-                            decoration: const BoxDecoration(
-                              border: Border.fromBorderSide(
-                                BorderSide(width: 1, color: Colors.blueGrey),
+                        if (widget.filtersSection != null)
+                          ConstrainedBox(
+                            constraints: drawerAnimationConstraint,
+                            child: DecoratedBox(
+                              decoration: const BoxDecoration(
+                                border: Border.fromBorderSide(
+                                  BorderSide(width: 1, color: Colors.blueGrey),
+                                ),
                               ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              child: _EntityTableFilter<TEntity>(
-                                filtersSection: widget.filtersSection!,
-                                entityFactory: widget.entityFactory,
-                                onSearch: (TEntity set) => refreshView(addFilters: true),
-                                onClean: (TEntity set) {
-                                  filterSet = widget.entityFactory();
-                                  refreshView();
-                                },
-                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14.0),
+                                child: Column( /// --> Filtering content
+                                  spacing: 10,
+                                  children: <Widget>[
+                                    /// --> Filtering widgets section
+                                    widget.filtersSection!(filterSet),
+
+                                    /// --> Footer action buttons
+                                    Row(
+                                      spacing: 10,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        ButtonFlat(
+                                          label: 'Clear',
+                                          onClick: () {
+                                            filterSet = widget.entityFactory();
+                                            refreshView();
+                                            // setState(() {
+                                            //   set = widget.entityFactory();
+                                            // });
+                                          },
+                                        ),
+                                        ButtonFlat(
+                                          label: 'Search',
+                                          onClick: () => refreshView(addFilters: true),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              
+                              //  _EntityTableFilter<TEntity>(
+                              //   filtersSection: widget.filtersSection!,
+                              //   entityFactory: widget.entityFactory,
+                              //   onSearch: (TEntity set) => refreshView(addFilters: true),
+                              //   onClean: (TEntity set) {
+                              //     filterSet = widget.entityFactory();
+                              //     refreshView();
+                              //   },
+                              // ),
                               ),
                           ),
                         ),

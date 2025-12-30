@@ -1,6 +1,9 @@
+import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:tws_foundation_view/src/core/models/entity_table_filters.dart';
+import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -106,10 +109,61 @@ final class TrailerInventoryEntityTable extends StatelessWidget {
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.internal?.carrier.name ?? entity.trailer?.external?.carrier ?? '---',
         ),
         EntityTableColumnOptions<YardLog>(
-          title: 'Compañia',
-          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer == null? 'No Trailer': entity.trailer?.internal != null? 'Own' : 'External',
+          title: 'Posesión',
+          factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer == null? 'No Trailer': entity.trailer?.internal != null? 'Propio' : 'Externo',
         ),
       ],
+      filterValues:(YardLog set) {
+        return <EntityTableFilters<YardLog>>[
+          EntityTableFilters<YardLog>(
+            operator: ViewFilterLogicalOperators.and,
+            filters: <ViewFilterProperty<YardLog>>[
+              ViewFilterProperty<YardLog>.a(
+                property: '${YardLog.kTrailer}.${TrailerCommon.kEconomic}',
+                operator: ViewFilterOperators.contains,
+                value: set.trailer?.economic.cleaned,
+              ),
+              ViewFilterProperty<YardLog>.a(
+                property: '${YardLog.kSection}.${EntityKeys.id}',
+                operator: ViewFilterOperators.equal,
+                value: set.section?.id,
+              )
+            ],
+          )
+        ];
+      },
+      filtersSection: (YardLog set) {
+        return Row(
+          spacing: 10,
+          children: <Widget>[
+            Expanded(
+              child: TextInput(
+                label: 'Trailer No.',
+                hint: 'search by trailer number',
+                controller: TextEditingController(text: set.trailer?.economic ?? ''),
+                onChanged: (String? value) {
+                  set.trailer ??= TrailerCommon();
+                  set.trailer?.economic = value ?? '';
+                  print(set.trailer?.economic);
+                },
+              ),
+            ),
+            Expanded(
+              child: EntityFinderSelector<Section, SectionsServiceI>(
+                label: 'Section',
+                entityBuilder: () => Section(),
+                initialValue: set.section,
+                textBuilder: (Section section) {
+                  return section.name;
+                },
+                onSelected: (Section? selSection) {
+                  set.section = selSection;
+                } 
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
