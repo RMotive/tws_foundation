@@ -58,13 +58,13 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
   /// [set] Current filtering set. This value is used to store the filtering data.
   /// The widgets returned from this method must update the [set] propeties in order to apply the 
   /// filtering when the search action button is pressed.
-  final Widget Function(TEntity set)? filtersSection;
+  final List<Widget> Function(TEntity set, ViewFilterDate<TEntity> dateInterval)? filtersSection;
 
   /// Current filtering values.
   /// 
   /// [set] Current filtering set. This value is used to extract the filtering data, 
   /// storing the input values in [filtersSection].
-  final List<EntityTableFilters<TEntity>>  Function(TEntity set)? filterValues;
+  final List<ViewFilterI<TEntity>>  Function(TEntity set, ViewFilterDate<TEntity> dateInterval)? filterValues;
   
   /// Creates a new [EntityTable] instance.
   const EntityTable({
@@ -116,13 +116,8 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
   /// {state} first date filter value.
   /// The date when the date range filter starts.
-  /// Default value is DateTime(0), which means no date filter applied.
-  DateTime firstDate = DateTime(0);
-  
-  /// {state} last date filter value.
-  /// The date when the date range filter ends.
-  /// Default value is DateTime(0), which means no date filter applied.
-  DateTime lastDate = DateTime(0);
+  /// Default value is DateTime(1), which means no date filter applied.
+  late ViewFilterDate<TEntity> dateInterval;
  
   @override
   void initState() {
@@ -145,6 +140,8 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
     widget.adapter.listenRefresh(refreshView);
     filterSet = widget.entityFactory();
+    dateInterval = ViewFilterDate<TEntity>();
+    dateInterval.from = DateTime(1);
     super.initState();
   }
 
@@ -195,10 +192,8 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
 
   /// Invokes internally [ViewServiceI.view] service call.
   Future<ViewOutput<TEntity>> _viewInvokation({bool addFilters = false}) async {
-    setState(() {
-      isLoading = true;
-      onEntitySelectionChange(null);
-    });
+    isLoading = true;
+    onEntitySelectionChange(null);
 
     final TService viewService = Injector.get();
 
@@ -207,41 +202,68 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
     late final FoundationResponseResolver<ViewOutput<TEntity>> viewOutputResolver;
 
     /// Main filtering node.
-    List<ViewFilterNodeI<TEntity>>? filtersNode;
+    List<ViewFilterNodeI<TEntity>> filtersNode = <ViewFilterNodeI<TEntity>>[];
 
     /// Filter configurations
-    if(widget.filterValues != null && addFilters){
-      final EntityTableFilters<TEntity> tableFilter = widget.filterValues!(filterSet);
-      /// Storing valid logical filters.
-      final List<ViewFilterProperty<TEntity>> validLogicalFilterList = <ViewFilterProperty<TEntity>>[];
+    if (addFilters) {
+      final List<ViewFilterI<TEntity>> tableFiltersNodes = widget.filterValues!(filterSet, dateInterval);
 
-      /// Remove empty filters to avoid unnecessary processing
-      for(ViewFilterProperty<TEntity> filter in tableFilter.filters){
-          if(filter.value != null){
-            validLogicalFilterList.add(filter);
-          }
+      final List<EntityTableFilters<TEntity>> filterPropertyNodes = <EntityTableFilters<TEntity>>[];
+      final List<ViewFilterDate<TEntity>> filterDateNodes = <ViewFilterDate<TEntity>>[];
+
+      for(ViewFilterI<TEntity> tableFilter in tableFiltersNodes){
+        if(tableFilter is EntityTableFilters<TEntity>) {
+          filterPropertyNodes.add(tableFilter);
+          continue;
+        }
+        if(tableFilter is ViewFilterDate<TEntity>) filterDateNodes.add(tableFilter);
       }
       
-      if(validLogicalFilterList.isNotEmpty){
-        ViewFilterLogical<TEntity> logicalFilter = ViewFilterLogical<TEntity>(1, tableFilter.operator, validLogicalFilterList);
-        logicalFilter.discriminator = 'ViewFilterLogical';
-        /// Assigning filters to the main filter node.
-        filtersNode = <ViewFilterNodeI<TEntity>>[
-          logicalFilter,
-        ];
+      /// Storing valid filters.
+      final List<ViewFilterProperty<TEntity>> validLogicalFilterList = <ViewFilterProperty<TEntity>>[];
+      
+      if (filterPropertyNodes.isNotEmpty) {
+        for (EntityTableFilters<TEntity> tableNodeFilter in filterPropertyNodes) {
+          /// Remove empty filters to avoid unnecessary processing
+          for (ViewFilterProperty<TEntity> filter in tableNodeFilter.filters){
+            if(filter.value != null) validLogicalFilterList.add(filter);
+          }
+
+          if (validLogicalFilterList.isNotEmpty) {
+          ViewFilterLogical<TEntity> logicalFilter = ViewFilterLogical<TEntity>(
+            1,
+            tableNodeFilter.operator,
+            validLogicalFilterList,
+          );
+
+          logicalFilter.discriminator = tableNodeFilter.discriminator;
+
+          /// Assigning logicals filters to the main filter node.
+          filtersNode.add(logicalFilter);
+      }
+        }
+      } 
+      
+      if(filterDateNodes.isNotEmpty){
+        /// Evaluate for date filters ->
+        for (ViewFilterDate<TEntity> filter in filterDateNodes) {
+          if(dateInterval.from != DateTime(1) || dateInterval.to != null){
+            filter.discriminator = ViewFilterDiscriminator.viewFilterDate.name;
+            filtersNode.add(filter);
+          }
+        }
       }
     }
     
     
-
     if(widget.customView != null){
       viewOutputResolver = await widget.customView!(
-        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode ?? <ViewFilterNodeI<TEntity>>[]),
+        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode),
         auth,
       );
     } else {
       viewOutputResolver = await viewService.view(
-        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode ?? <ViewFilterNodeI<TEntity>>[]),
+        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode),
         auth,
       );
     }
@@ -296,8 +318,8 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                     height: boxSize.height,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 10,
                       children: <Widget>[
-
                         /// --> Filters inputs bar
                         if (widget.filtersSection != null)
                           ConstrainedBox(
@@ -310,48 +332,70 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14.0),
-                                child: Column( /// --> Filtering content
+                                child: Column(
+                                  /// --> Filtering content
                                   spacing: 10,
                                   children: <Widget>[
-                                    /// --> Filtering widgets section
-                                    widget.filtersSection!(filterSet),
-
-                                    /// --> Footer action buttons
+                                    /// --> Header action buttons
                                     Row(
                                       spacing: 10,
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
-                                        ButtonFlat(
-                                          label: 'Clear',
-                                          onClick: () {
-                                            filterSet = widget.entityFactory();
-                                            refreshView();
-                                            // setState(() {
-                                            //   set = widget.entityFactory();
-                                            // });
-                                          },
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                          child: Text(
+                                            'Advanced Search',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
                                         ),
-                                        ButtonFlat(
-                                          label: 'Search',
-                                          onClick: () => refreshView(addFilters: true),
+                                        Row(
+                                          spacing: 10,
+                                          children: <Widget>[
+                                            ButtonFlat(
+                                              width: 100,
+                                              label: 'Clear',
+                                              disabled: isLoading,
+                                              onClick: () {
+                                                filterSet = widget.entityFactory();
+                                                dateInterval.from = DateTime(1);
+                                                dateInterval.to = null;
+                                                refreshView();
+                                              },
+                                            ),
+                                            ButtonFlat(
+                                              width: 170,
+                                              label: 'Search',
+                                              disabled: isLoading,
+                                              onClick: () => refreshView(addFilters: true),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
+
+                                    /// --> Filtering widgets section
+                                    SizedBox(
+                                      width: double.maxFinite,
+                                      child: LayoutBuilder(
+                                        builder: (BuildContext context, BoxConstraints constraints) {
+                                          final bool centerControls = boxConstraints.maxWidth < (448 + 628);
+                                          return Wrap(
+                                            alignment: centerControls ? WrapAlignment.center : WrapAlignment.start,
+                                            spacing: 12,
+                                            runSpacing: 12,
+                                            children: widget.filtersSection!(filterSet, dateInterval),
+                                          );
+                                        },
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              
-                              //  _EntityTableFilter<TEntity>(
-                              //   filtersSection: widget.filtersSection!,
-                              //   entityFactory: widget.entityFactory,
-                              //   onSearch: (TEntity set) => refreshView(addFilters: true),
-                              //   onClean: (TEntity set) {
-                              //     filterSet = widget.entityFactory();
-                              //     refreshView();
-                              //   },
-                              // ),
                               ),
+                            ),
                           ),
-                        ),
 
                         /// --> Table View
                         Expanded(

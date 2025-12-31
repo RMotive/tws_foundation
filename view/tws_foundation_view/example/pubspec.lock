@@ -444,7 +444,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: admin-migration-changes
-      resolved-ref: "31942d5276ac3e4e5a8ad8ec39c1d2669d6dbf64"
+      resolved-ref: ed83ffecce394f4b1c3e9ac322899057667401ab
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"

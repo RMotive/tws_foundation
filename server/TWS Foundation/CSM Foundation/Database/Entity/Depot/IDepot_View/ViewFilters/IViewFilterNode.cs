@@ -87,9 +87,9 @@ public class ISetViewFilterNodeConverter<TSet>
         }
 
         return discriminator switch {
-            var _ when discriminator == nameof(ViewFilterLogical<TSet>) => JsonSerializer.Deserialize<ViewFilterLogical<TSet>>(json, options),
-            var _ when discriminator == nameof(ViewFilterProperty<TSet>) => JsonSerializer.Deserialize<ViewFilterProperty<TSet>>(json, options),
-            var _ when discriminator == nameof(ViewFilterDate<TSet>) => JsonSerializer.Deserialize<ViewFilterDate<TSet>>(json, options),
+            var _ when discriminator == nameof(ViewFilterLogical<TSet>).ToLower() => JsonSerializer.Deserialize<ViewFilterLogical<TSet>>(json, options),
+            var _ when discriminator == nameof(ViewFilterProperty<TSet>).ToLower() => JsonSerializer.Deserialize<ViewFilterProperty<TSet>>(json, options),
+            var _ when discriminator == nameof(ViewFilterDate<TSet>).ToLower() => JsonSerializer.Deserialize<ViewFilterDate<TSet>>(json, options),
             _ => throw new UnsupportedContentTypeException($"No discriminator recognized for ({discriminator})"),
         };
     }

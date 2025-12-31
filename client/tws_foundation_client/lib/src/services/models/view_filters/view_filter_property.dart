@@ -32,7 +32,7 @@ final class ViewFilterProperty<T extends EntityI<T>> implements ViewFilterI<T> {
   /// Creates a new [ViewFilterProperty] instances with required properties for values filtering.
   ViewFilterProperty.a({
     required this.property,
-    required this.operator,
+    this.operator = ViewFilterOperators.equal,
     this.value,
   });
 

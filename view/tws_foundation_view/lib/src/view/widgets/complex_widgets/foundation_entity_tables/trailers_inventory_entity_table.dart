@@ -5,6 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/entity_table_filters.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
+import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -24,7 +25,11 @@ final class TrailersInventoryEntityTableAdapter extends FoundationEntityTableAda
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 12,
       children: <Widget>[
-        /// --> Name property viewer
+        PropertyViewer(
+          label: 'Fecha',
+          value: entity.timestamp.toUtc().toString(),
+        ),
+
         PropertyViewer(
           label: 'Trailer No.',
           value: entity.trailer?.economic ?? '---',
@@ -113,9 +118,18 @@ final class TrailerInventoryEntityTable extends StatelessWidget {
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer == null? 'No Trailer': entity.trailer?.internal != null? 'Propio' : 'Externo',
         ),
       ],
-      filterValues:(YardLog set) {
-        return <EntityTableFilters<YardLog>>[
+      filterValues:(YardLog set, ViewFilterDate<YardLog> dateInterval) {
+        return <ViewFilterI<YardLog>>[
+          /// --> Date filters
+          ViewFilterDate<YardLog>.a(
+            property: EntityKeys.timestamp,
+            from: dateInterval.from,
+            to: dateInterval.to,
+          ),
+
+          /// --> Logical filters
           EntityTableFilters<YardLog>(
+            discriminator: ViewFilterDiscriminator.viewFilterLogical.name,
             operator: ViewFilterLogicalOperators.and,
             filters: <ViewFilterProperty<YardLog>>[
               ViewFilterProperty<YardLog>.a(
@@ -129,40 +143,53 @@ final class TrailerInventoryEntityTable extends StatelessWidget {
                 value: set.section?.id,
               )
             ],
-          )
+          ),
         ];
       },
-      filtersSection: (YardLog set) {
-        return Row(
-          spacing: 10,
-          children: <Widget>[
-            Expanded(
-              child: TextInput(
-                label: 'Trailer No.',
-                hint: 'search by trailer number',
-                controller: TextEditingController(text: set.trailer?.economic ?? ''),
-                onChanged: (String? value) {
-                  set.trailer ??= TrailerCommon();
-                  set.trailer?.economic = value ?? '';
-                  print(set.trailer?.economic);
-                },
-              ),
+      filtersSection: (YardLog set, ViewFilterDate<YardLog> dateInterval) {
+        return <Widget>[
+          EntityFinderSelector<Section, SectionsServiceI>(
+            label: 'Section',
+            entityBuilder: () => Section(),
+            initialValue: set.section,
+            textBuilder: (Section section) {
+              return section.name;
+            },
+            onSelected: (Section? selSection) {
+              set.section = selSection;
+            },
+          ),
+          Datepicker(
+            label: 'From date',
+            controller: TextEditingController(
+              text: dateInterval.from != DateTime(1) ? dateInterval.from.dateOnly : null,
             ),
-            Expanded(
-              child: EntityFinderSelector<Section, SectionsServiceI>(
-                label: 'Section',
-                entityBuilder: () => Section(),
-                initialValue: set.section,
-                textBuilder: (Section section) {
-                  return section.name;
-                },
-                onSelected: (Section? selSection) {
-                  set.section = selSection;
-                } 
-              ),
-            ),
-          ],
-        );
+            firstDate: DateTime(1999),
+            lastDate: DateTime.now().toUtc(),
+            onChanged: (String? date) {
+              dateInterval.from = DateTime.tryParse(date ?? '') ?? DateTime(1);
+            },
+          ),
+          Datepicker(
+            label: 'To date',
+            controller: TextEditingController(text: dateInterval.to?.dateOnly),
+            firstDate: DateTime(1999),
+            lastDate: DateTime.now().toUtc(),
+            onChanged: (String? date) {
+              dateInterval.to = DateTime.tryParse(date ?? '');
+            },
+          ),
+          TextInput(
+            width: 200,
+            label: 'Trailer No.',
+            hint: 'search by trailer number',
+            controller: TextEditingController(text: set.trailer?.economic ?? ''),
+            onChanged: (String? value) {
+              set.trailer ??= TrailerCommon();
+              set.trailer?.economic = value ?? '';
+            },
+          ),
+        ];
       },
     );
   }
