@@ -44,7 +44,7 @@ final class LocationsCategoryPage extends EntityCategoryPageB<LocationsEntityTab
   @override
   List<ActionsRibbonNodeI> composeRibbonController(LocationsEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

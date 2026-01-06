@@ -44,7 +44,7 @@ final class PermitsCategoryPage extends EntityCategoryPageB<PermitsEntityTableAd
   @override
   List<ActionsRibbonNodeI> composeRibbonController(PermitsEntityTableAdapter adapter) {
      return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

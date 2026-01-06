@@ -1,12 +1,18 @@
-﻿using CSM_Foundation.Database.Entity.Depot;
+﻿using ClosedXML.Excel;
+
+using CSM_Foundation.Database.Entity.Depot;
 using CSM_Foundation.Database.Entity.Depot.IDepot_View;
 using CSM_Foundation.Database.Entity.Models.Input;
+using CSM_Foundation.Logging;
 using CSM_Foundation.Product;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
+
+using TWS_Customer.Models.Outs;
 
 namespace TWS_Customer.Features.Business;
 
@@ -26,6 +32,17 @@ public interface IYardLogsService
     ///     <see cref="ViewOutput{TEntity}"/> data.
     /// </returns>
     Task<ViewOutput<YardLog>> InventoryTrailerView(QueryInput<YardLog, ViewInput<YardLog>> input);
+
+    /// <summary>
+    ///     Generates a file View of <see cref="YardLog"/>, based on input parameters.
+    /// </summary>
+    /// <param name="input">
+    ///     <see cref="QueryInput{TEntity, TParameters}"/> data.
+    /// </param>
+    /// <returns>
+    ///     <see cref="ViewOutput{TEntity}"/> data.
+    /// </returns>
+    Task<ExportOut> ExportView(QueryInput<YardLog, ViewInput<YardLog>> input);
 }
 
 /// <summary>
@@ -110,8 +127,80 @@ public class YardLogsService
                 .AsQueryable();
 
         };
-
+        
         return await depot.View(input);
+    }
+
+    public async Task<ExportOut> ExportView(QueryInput<YardLog, ViewInput<YardLog>> input) {
+        input.PostProcessor = QueryProcessor;
+        (string, string, Func<YardLog, string?>)[] exportFields = [
+           ("Trailer NO", "A", (YardLog i) => i.Trailer?.Economic),
+            ("Placa USA", "B", (YardLog i) => i.Trailer?.PlateUSA),
+            ("Placa MEX", "C", (YardLog i) => i.Trailer?.PlateMEX),
+            ("Truck NO.", "D", (YardLog i) => i.Truck.Economic),
+            ("Truck Placa USA", "E", (YardLog i) => i.Truck.PlateUSA),
+            ("Truck Placa MEX", "F", (YardLog i) => i.Truck.PlateMEX),
+            ("Entrada", "G", (YardLog i) => $"{i.Timestamp.ToShortDateString()} {i.Timestamp.ToShortTimeString()} UTC"),
+            ("Sección", "H", (YardLog i) => i.Section.Display),
+            ("Compañía", "I", (YardLog i) => i.Truck.Internal?.Carrier?.Name ?? i.Truck.External?.Carrier),
+            ("Posesión", "J", (YardLog i) => i.Truck.Internal != null ? "Interno" : i.Truck?.External != null ? "Externo" : "No Identificable"),
+        ];
+
+        string tempFileStore = $"{Path.GetTempPath()}yardlog_export_{Guid.NewGuid()}.xlsx";
+
+        using XLWorkbook book = new();
+        using FileStream fileStream = new(tempFileStore, FileMode.OpenOrCreate);
+
+
+        IXLWorksheet bookSheet = book.Worksheets.Add("YardLog Inventory");
+
+        DateTime timestamp = DateTime.UtcNow;
+        IXLCell titleCell = bookSheet.Cell("A1");
+        IXLCell timeCell = bookSheet.Cell("B1");
+
+        titleCell.Value = "YardLog Inventory";
+        titleCell.Style.Fill.BackgroundColor = XLColor.AshGrey;
+
+        timeCell.Value = $"{timestamp.ToShortDateString()} {timestamp.ToShortTimeString()} (UTC)";
+
+        ViewOutput<YardLog> viewOut = await InventoryTrailerView(input);
+        for (int recordPointer = 0; recordPointer < viewOut.Entities.Length; recordPointer++) {
+            YardLog record = viewOut.Entities[recordPointer];
+
+            foreach ((string, string Column, Func<YardLog, string?> ComposeValue) field in exportFields) {
+
+                bookSheet.Cell($"{field.Column}{3 + recordPointer}").Value = field.ComposeValue(record) ?? "";
+            }
+        }
+
+        foreach ((string Name, string Column, Func<YardLog, string?>) field in exportFields) {
+
+            IXLCell fieldCell = bookSheet.Cell($"{field.Column}2");
+
+            fieldCell.Value = field.Name;
+            fieldCell.Style.Fill.BackgroundColor = XLColor.AshGrey;
+            fieldCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+            bookSheet.Column(field.Column).AdjustToContents();
+        }
+
+        book.SaveAs(fileStream);
+        fileStream.Position = 0;
+
+        using BinaryReader reader = new(fileStream);
+        
+        Logger.Success(
+                "Excel file export",
+                new Dictionary<string, object?> {
+                    { "Path", tempFileStore },
+                }
+            );
+
+        return new ExportOut {
+            Content = reader.ReadBytes((int)fileStream.Length),
+            Name = $"YardLog Inventory ({DateTime.UtcNow.ToShortDateString()})",
+            Extension = ExportOutExtensions.XLSX
+        };
     }
 
 }

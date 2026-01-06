@@ -44,7 +44,7 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
   @override
   List<ActionsRibbonNodeI> composeRibbonController(EmployeesEntityTableAdatper adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

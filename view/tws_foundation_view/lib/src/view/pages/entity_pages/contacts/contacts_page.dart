@@ -44,7 +44,7 @@ final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTable
   @override
   List<ActionsRibbonNodeI> composeRibbonController(ContactsEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

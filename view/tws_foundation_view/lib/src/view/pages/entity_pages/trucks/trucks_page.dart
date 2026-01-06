@@ -58,7 +58,7 @@ final class TrucksCategoryPage extends EntityCategoryPageB<TrucksEntityTableAdap
   @override
   List<ActionsRibbonNodeI> composeRibbonController(TrucksEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

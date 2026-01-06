@@ -59,7 +59,7 @@ final class DriversCategoryPage extends EntityCategoryPageB<DriversEntityTableAd
   @override
   List<ActionsRibbonNodeI> composeRibbonController(DriversEntityTableAdatper adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

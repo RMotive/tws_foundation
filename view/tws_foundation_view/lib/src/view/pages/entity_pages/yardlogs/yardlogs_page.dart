@@ -41,7 +41,7 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
   @override
   List<ActionsRibbonNodeI> composeRibbonController(YardLogsEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
 

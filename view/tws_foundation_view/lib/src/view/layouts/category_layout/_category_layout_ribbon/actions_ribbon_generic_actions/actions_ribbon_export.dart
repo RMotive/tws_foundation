@@ -4,25 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Draws a generic {Refresh} action button for [CategoryLayoutPageI] acitons ribbon. 
-final class ActionsRibbonRefresh extends ActionsRibbonActionB {
+final class ActionsRibbonExport extends ActionsRibbonActionB {
   /// Callback invoked when the action is requested.
-  final FutureOr<void> Function() onRefresh;
+  final FutureOr<void> Function() onExport;
 
-  /// Creates a new [ActionsRibbonRefresh] instance.
-  const ActionsRibbonRefresh({
-    required this.onRefresh,
+  /// Creates a new [ActionsRibbonExport] instance.
+  const ActionsRibbonExport({
+    required this.onExport,
   }) : super(
-         title: 'Refresh',
-         description: 'Refreshes the current page data',
+         title: 'Export view',
+         description: 'Download the current page data',
        );
 
   @override
-  FutureOr<void> perform() => onRefresh();
+  FutureOr<void> perform() => onExport();
 
   @override
   Icon composeIcon(Color foreColor) {
     return Icon(
-      Icons.refresh_outlined,
+      Icons.import_export,
       color: foreColor,
     );
   }

@@ -44,7 +44,7 @@ final class AccountsCategoryPage extends EntityCategoryPageB<AccountsEntityTable
   @override
   List<ActionsRibbonNodeI> composeRibbonController(AccountsEntityTableAdatper adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

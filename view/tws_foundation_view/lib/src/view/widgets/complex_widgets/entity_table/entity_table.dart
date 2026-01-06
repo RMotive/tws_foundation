@@ -35,6 +35,7 @@ const double _kDetailsWidth = 400;
 /// this tables are being built based on filtering, ordering and consuming {CSM} business scope services based on {view} generation engine.
 final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewServiceI<TEntity>>
     extends StatefulWidget {
+
   /// Initial paging page selection.
   final int page;
 
@@ -65,6 +66,11 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
   /// [set] Current filtering set. This value is used to extract the filtering data, 
   /// storing the input values in [filtersSection].
   final List<ViewFilterI<TEntity>>  Function(TEntity set, ViewFilterDate<TEntity> dateInterval)? filterValues;
+
+  /// Method triggered after the consume event is finished.
+  /// 
+  /// Return the consumed input as a parameter.
+  final Future<void> Function(ViewOutput<YardLog> consumed)? afterConsume;
   
   /// Creates a new [EntityTable] instance.
   const EntityTable({
@@ -83,6 +89,7 @@ final class EntityTable<TEntity extends EntityB<TEntity>, TService extends ViewS
     required this.entityFactory,
     this.filtersSection,
     this.filterValues,
+    this.afterConsume,
   }) : assert(ranges.length > 0, 'Paging ranges must have at least one configured'),
   assert((filtersSection == null && filterValues == null) || (filtersSection != null && filterValues != null), 'Both filtersSection and filterValues must be provided together.');
 

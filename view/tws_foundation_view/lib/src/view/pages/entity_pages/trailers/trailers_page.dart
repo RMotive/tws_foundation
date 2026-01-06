@@ -58,7 +58,7 @@ final class TrailersCategoryPage extends EntityCategoryPageB<TrailersEntityTable
   @override
   List<ActionsRibbonNodeI> composeRibbonController(TrailersEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

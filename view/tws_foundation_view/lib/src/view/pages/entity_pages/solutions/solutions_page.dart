@@ -44,7 +44,7 @@ final class SolutionsCategoryPage extends EntityCategoryPageB<SolutionsEntityTab
   @override
   List<ActionsRibbonNodeI> composeRibbonController(SolutionsEntityTableAdapter adapter) {
     return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

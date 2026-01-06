@@ -44,7 +44,7 @@ final class ProfilesCategoryPage extends EntityCategoryPageB<ProfilesEntityTable
   @override
   List<ActionsRibbonNodeI> composeRibbonController(ProfilesEntityTableAdapter adapter) {
      return <ActionsRibbonNodeI>[
-      ActionsRisbbonRefresh(
+      ActionsRibbonRefresh(
         onRefresh: adapter.refresh,
       ),
       ActionsRisbbonCreate(

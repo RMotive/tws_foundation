@@ -1,4 +1,5 @@
 import 'package:csm_client/csm_client.dart';
+import 'package:tws_foundation_client/src/services/models/outputs/export_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
@@ -31,6 +32,13 @@ abstract interface class YardLogsServiceI extends FoundationServiceB implements 
   /// 
   /// [auth] server authorization token.
   FoundationFutureResolver<ViewOutput<YardLog>> inventoryTrailersView(ViewInput<YardLog> input, String auth);
+
+  /// [ExportView] export view file operation.
+  /// 
+  /// [input] view input parameters.
+  /// 
+  /// [auth] server authorization token.
+  FoundationFutureResolver<ExportOutput> exportView(ViewInput<YardLog> input, String auth);
 }
 
 /// {abstract} class.
@@ -110,6 +118,17 @@ final class YardLogsService extends YardLogsServiceB {
     return FoundationResponseResolver<ViewOutput<YardLog>>(
       await postSecure(
         'ViewTrailerInventory',
+        input,
+        authToken: auth,
+      ),
+    );
+  }
+
+  @override
+  FoundationFutureResolver<ExportOutput> exportView(ViewInput<YardLog> input, String auth) async {
+    return FoundationResponseResolver<ExportOutput>(
+      await postSecure(
+        'exportview',
         input,
         authToken: auth,
       ),

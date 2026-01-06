@@ -61,4 +61,15 @@ public class YardLogsController
             )
         );
     }
+
+    [HttpPost(), Action("ExportView")]
+    public async Task<IActionResult> ExportView(ViewInput<YardLog> options) {
+        return Ok(
+            await Service.ExportView(
+                new QueryInput<YardLog, ViewInput<YardLog>> {
+                    Parameters = options
+                }
+            )
+        );
+    }
 }
