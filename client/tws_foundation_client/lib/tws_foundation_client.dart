@@ -135,6 +135,7 @@ export 'src/core/extensions.dart';
 // --> Exporting [src.models]
 export 'src/models/exception_info.dart';
 export 'src/services/models/entity_operation_failure.dart';
+export 'src/services/models/outputs/export_output.dart';
 
 // --> Exporting [src.models.frames]
 export 'src/models/frames/failure_frame.dart';
