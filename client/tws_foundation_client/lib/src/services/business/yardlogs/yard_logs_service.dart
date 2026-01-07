@@ -1,12 +1,11 @@
 import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/src/services/models/outputs/export_output.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
 ///
 /// Represents a contract for a [YardLogsServiceI] implementation, wich is responsible to manage operations
 /// related with [YardLog] entity at {Foundation Server}.
-abstract interface class YardLogsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<YardLog>, CreateServiceI<YardLog> {
+abstract interface class YardLogsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<YardLog>, CreateServiceI<YardLog>, ExportServiceI<YardLog> {
   /// Creates a new [YardLogsServiceI] instance.
   YardLogsServiceI(super.host, super.servicePath);
 
@@ -32,13 +31,6 @@ abstract interface class YardLogsServiceI extends FoundationServiceB implements 
   /// 
   /// [auth] server authorization token.
   FoundationFutureResolver<ViewOutput<YardLog>> inventoryTrailersView(ViewInput<YardLog> input, String auth);
-
-  /// [ExportView] export view file operation.
-  /// 
-  /// [input] view input parameters.
-  /// 
-  /// [auth] server authorization token.
-  FoundationFutureResolver<ExportOutput> exportView(ViewInput<YardLog> input, String auth);
 }
 
 /// {abstract} class.
