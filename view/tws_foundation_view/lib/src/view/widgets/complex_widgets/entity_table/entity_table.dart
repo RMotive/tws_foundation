@@ -197,88 +197,87 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
     }
   }
 
+  /// Builds the filtering view nodes.
+  List<ViewFilterNodeI<TEntity>> _filteringView(){
+    /// Main filtering node.
+    List<ViewFilterNodeI<TEntity>> filtersNode = <ViewFilterNodeI<TEntity>>[];
+
+    final List<ViewFilterI<TEntity>> tableFiltersNodes = widget.filterValues!(filterSet, dateInterval);
+
+    final List<EntityTableFilters<TEntity>> filterPropertyNodes = <EntityTableFilters<TEntity>>[];
+    final List<ViewFilterDate<TEntity>> filterDateNodes = <ViewFilterDate<TEntity>>[];
+
+    for(ViewFilterI<TEntity> tableFilter in tableFiltersNodes){
+      if(tableFilter is EntityTableFilters<TEntity>) {
+        filterPropertyNodes.add(tableFilter);
+        continue;
+      }
+      if(tableFilter is ViewFilterDate<TEntity>) filterDateNodes.add(tableFilter);
+    }
+    
+    /// Storing valid filters.
+    final List<ViewFilterProperty<TEntity>> validLogicalFilterList = <ViewFilterProperty<TEntity>>[];
+    
+    if (filterPropertyNodes.isNotEmpty) {
+      for (EntityTableFilters<TEntity> tableNodeFilter in filterPropertyNodes) {
+        /// Remove empty filters to avoid unnecessary processing
+        for (ViewFilterProperty<TEntity> filter in tableNodeFilter.filters){
+          if(filter.value != null) validLogicalFilterList.add(filter);
+        }
+
+        if (validLogicalFilterList.isNotEmpty) {
+        ViewFilterLogical<TEntity> logicalFilter = ViewFilterLogical<TEntity>(
+          1,
+          tableNodeFilter.operator,
+          validLogicalFilterList,
+        );
+
+        logicalFilter.discriminator = tableNodeFilter.discriminator;
+
+        /// Assigning logicals filters to the main filter node.
+        filtersNode.add(logicalFilter);
+    }
+      }
+    } 
+    
+    if(filterDateNodes.isNotEmpty){
+      /// Evaluate for date filters ->
+      for (ViewFilterDate<TEntity> filter in filterDateNodes) {
+        if(dateInterval.from != DateTime(1) || dateInterval.to != null){
+          filter.discriminator = ViewFilterDiscriminator.viewFilterDate.name;
+          filtersNode.add(filter);
+        }
+      }
+    }
+    return filtersNode;
+  }
+
   /// Invokes internally [ViewServiceI.view] service call.
   Future<ViewOutput<TEntity>> _viewInvokation({bool addFilters = false}) async {
     isLoading = true;
     onEntitySelectionChange(null);
-
+    final String auth = await widget.adapter.composeAuth();
     final TService viewService = Injector.get();
 
-    final String auth = await widget.adapter.composeAuth();
-
     late final FoundationResponseResolver<ViewOutput<TEntity>> viewOutputResolver;
-
-    /// Main filtering node.
-    List<ViewFilterNodeI<TEntity>> filtersNode = <ViewFilterNodeI<TEntity>>[];
-
-    /// Filter configurations
-    if (addFilters) {
-      final List<ViewFilterI<TEntity>> tableFiltersNodes = widget.filterValues!(filterSet, dateInterval);
-
-      final List<EntityTableFilters<TEntity>> filterPropertyNodes = <EntityTableFilters<TEntity>>[];
-      final List<ViewFilterDate<TEntity>> filterDateNodes = <ViewFilterDate<TEntity>>[];
-
-      for(ViewFilterI<TEntity> tableFilter in tableFiltersNodes){
-        if(tableFilter is EntityTableFilters<TEntity>) {
-          filterPropertyNodes.add(tableFilter);
-          continue;
-        }
-        if(tableFilter is ViewFilterDate<TEntity>) filterDateNodes.add(tableFilter);
-      }
-      
-      /// Storing valid filters.
-      final List<ViewFilterProperty<TEntity>> validLogicalFilterList = <ViewFilterProperty<TEntity>>[];
-      
-      if (filterPropertyNodes.isNotEmpty) {
-        for (EntityTableFilters<TEntity> tableNodeFilter in filterPropertyNodes) {
-          /// Remove empty filters to avoid unnecessary processing
-          for (ViewFilterProperty<TEntity> filter in tableNodeFilter.filters){
-            if(filter.value != null) validLogicalFilterList.add(filter);
-          }
-
-          if (validLogicalFilterList.isNotEmpty) {
-          ViewFilterLogical<TEntity> logicalFilter = ViewFilterLogical<TEntity>(
-            1,
-            tableNodeFilter.operator,
-            validLogicalFilterList,
-          );
-
-          logicalFilter.discriminator = tableNodeFilter.discriminator;
-
-          /// Assigning logicals filters to the main filter node.
-          filtersNode.add(logicalFilter);
-      }
-        }
-      } 
-      
-      if(filterDateNodes.isNotEmpty){
-        /// Evaluate for date filters ->
-        for (ViewFilterDate<TEntity> filter in filterDateNodes) {
-          if(dateInterval.from != DateTime(1) || dateInterval.to != null){
-            filter.discriminator = ViewFilterDiscriminator.viewFilterDate.name;
-            filtersNode.add(filter);
-          }
-        }
-      }
-    }
+    late final ViewInput<TEntity> viewInput = 
+    widget.customView != null? ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], addFilters ? _filteringView() : <ViewFilterNodeI<TEntity>>[]) 
+    : ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], addFilters ? _filteringView() : <ViewFilterNodeI<TEntity>>[]);
     
-    
-    if(widget.customView != null){
-      viewOutputResolver = await widget.customView!(
-        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode),
-        auth,
-      );
-    } else {
-      viewOutputResolver = await viewService.view(
-        ViewInput<TEntity>.a(paginationOptions.range, paginationOptions.page, <ViewOrdering>[], filtersNode),
-        auth,
-      );
-    }
+    viewOutputResolver =
+        widget.customView != null
+            ? await widget.customView!(viewInput, auth)
+            : await viewService.view(
+              viewInput,
+              auth,
+            );
     
 
     final ViewOutput<TEntity> viewOutput = viewOutputResolver.resolveDirect(
       () => ViewOutput<TEntity>(widget.entityFactory),
     );
+
+    widget.adapter.viewConsumed = viewInput;
 
     setState(() {
       isLoading = false;

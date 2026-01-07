@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:csm_client/csm_client.dart';
 import 'package:flutter/material.dart';
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {implementation} class.
@@ -91,6 +92,9 @@ abstract interface class EntityTableAdapterI {
 abstract class EntityTableAdapterB<TEntity extends EntityI<TEntity>> implements EntityTableAdapterI {
   /// Internal reference for [refresh] notification to listeners.
   final _RefreshNotifier _refreshNotifier = _RefreshNotifier();
+
+  /// Stores the last consumed view input from the inner [EntityTable] instance.
+  ViewInput<TEntity>? viewConsumed;
 
   /// Creates a new [EntityTableAdapterB] instance.
   EntityTableAdapterB();
