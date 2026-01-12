@@ -207,7 +207,7 @@ final class SectionsEntityTableAdatper extends FoundationEntityTableAdapterB<Sec
       onPhotoTaken: (XFile photo) async {
         Resource resource = Resource();
         resource.file = await photo.readAsBytes();
-        resource.name = 'Section_${entity.name}_at_${entity.timestamp}_Resource.${photo.path.split('.').last}';
+        resource.name = 'Section_${entity.name}';
         resource.extension = photo.path.split('.').last;
         entity.resource = resource;
       },

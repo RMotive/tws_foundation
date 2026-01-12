@@ -158,7 +158,7 @@ final class SectionsPageCreateWhisper extends PageB {
                           Section entity = itemState.entity;
                           Resource resource = Resource();
                           resource.file = await photo.readAsBytes();
-                          resource.name = 'Section_${entity.name}_at_${entity.timestamp}_Resource.${photo.path.split('.').last}';
+                          resource.name = 'Section_Resource${entity.name}_at_${entity.timestamp}';
                           resource.extension = photo.path.split('.').last;
                           entity.resource = resource;
                           itemState.react();  

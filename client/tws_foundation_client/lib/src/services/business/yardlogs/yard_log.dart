@@ -116,6 +116,8 @@ final class YardLog extends EntityB<YardLog> {
     // Remove any existing resource with the same reference.
     late int replaceOnIndex;
 
+    resource.name = 'Resource_${resource.name}_at_${DateTime.now()}';
+
     if(replaceOnRef != null){
       resources.removeWhere((Resource e) => e.name.contains(replaceOnRef));
       replaceOnIndex = getIndexResource(replaceOnRef);

@@ -31,6 +31,20 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// Callback called when an [TEntity] item is selected.
   final void Function(TEntity?)? onSelected;
 
+  /// Optional list of attributes paths to filter the selectable entities, based on the user input text.
+  /// 
+  /// If this property is null, no filtering will be applied and the search function will not be excecuted.
+  /// 
+  /// The exact property path must be provided as defined in the [TEntity] model.
+  /// 
+  /// Example for [Yardlog] as [TEntity]: '${YardLog.kSection}.${EntityKeys.name}', 
+  /// this means that the section name property will be used to filter the selectable entities.
+  ///
+  /// To add more more filters, just add more paths to the list.
+  /// 
+  /// The default filter behavior is OR and CONTAINS, so if any of the properties contains the input text, the entity will be included in the results.
+  final List<String>? filterBy;
+
   /// Creates a new [EntityFinderSelector] instance.
   const EntityFinderSelector({
     super.key,
@@ -39,6 +53,7 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
     this.initialValue,
     this.onSelected,
     this.richTextBuilder,
+    this.filterBy,
     required this.entityBuilder,
     required this.textBuilder,
   });
@@ -97,24 +112,63 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   List<TEntity> entitiesList = <TEntity>[];
 
   /// View loading status for lazzy list behavior.
-  bool lazzyLoading = false;
+  bool loadingView = false;
 
-  /// Trigger the view service method for lazzy loadings.
-  void loadLazzyEntities() {
-    if(!lazzyLoading){
+  /// Previous search value to avoid duplicate searches.
+  String previousSearch = '';
+
+  /// Current applied filters in the view service.
+  List<ViewFilterNodeI<TEntity>> currentFilters = <ViewFilterNodeI<TEntity>>[];
+
+  /// Trigger the view service method for lazzy loadings and filters.
+  void reloadEntities(bool isLazzy) {
+    if(!loadingView){
       setState(() {
-        lazzyLoading = true;
-        searchInvok = viewInvokation();
+        loadingView = true;
+        searchInvok = viewInvokation(isLazzy);
       });
     }
   }
 
+  List<ViewFilterNodeI<TEntity>> searchInput(String value){    
+    previousSearch = value;
+    if(widget.filterBy == null) return <ViewFilterNodeI<TEntity>>[];
+
+    currentViewPage = 1;
+    entitiesList.clear();
+    if(value.cleaned == null) return <ViewFilterNodeI<TEntity>>[];
+  
+
+    /// Store logicals filters.
+    final List<ViewFilterProperty<TEntity>> validLogicalFilterList = <ViewFilterProperty<TEntity>>[];
+
+    for (String path in widget.filterBy!) {
+      validLogicalFilterList.add(
+        ViewFilterProperty<TEntity>.a(
+          property: path,
+          operator: ViewFilterOperators.contains,
+          value: value,
+        ),
+      );
+    }
+    ViewFilterLogical<TEntity> filter = ViewFilterLogical<TEntity>(
+      1,
+      ViewFilterLogicalOperators.or,
+      validLogicalFilterList,
+    );
+    filter.discriminator = ViewFilterDiscriminator.viewFilterLogical.name;
+
+    return <ViewFilterNodeI<TEntity>>[filter]; 
+  }
+
   /// Manage the service view data consume to populate the list content.
-  Future<ViewOutput<TEntity>> viewInvokation() async {
+  Future<ViewOutput<TEntity>> viewInvokation(bool isLazzy) async {
     SessionStorageI sessionStorage = Injector.get();
 
+    currentFilters = isLazzy ? currentFilters: searchInput(inputcontroller.text);
+
     FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
-      ViewInput<TEntity>.b(10, currentViewPage),
+      ViewInput<TEntity>.a(10, currentViewPage, <ViewOrdering>[], currentFilters),
       sessionStorage.token,
     );
 
@@ -126,6 +180,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
     entitiesList.addAll(result.entities);
     currentViewPage++;
     result.entities = entitiesList;
+    loadingView = false;
     return result;
   }
 
@@ -148,7 +203,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
     inputFocusNode.addListener(
       () {
         if (inputFocusNode.hasFocus) {
-          if(entitiesList.isEmpty) searchInvok = viewInvokation();
+          if(entitiesList.isEmpty) searchInvok = viewInvokation(false);
           overlayController.show();
         } else {
           overlayController.hide();
@@ -157,8 +212,8 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
     );
 
     scrollController.addListener((){
-      if (scrollController.position.pixels > scrollController.position.maxScrollExtent - 35) {
-        loadLazzyEntities();
+      if ((scrollController.position.pixels > scrollController.position.maxScrollExtent - 35) && viewPagesAvailable >= currentViewPage) {
+        reloadEntities(true);
       }
     });
 
@@ -213,6 +268,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
           errorText: error,
           autofocus: false,
           controller: inputcontroller,
+          deBounce: const Duration(milliseconds: 300),
           suffixIcon: Icon(
             Icons.arrow_drop_down,
             size: 32,
@@ -221,6 +277,8 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
           onChanged: (String text) {
             // --> Clean selected item.
             if(text.trim().isEmpty && widget.onSelected != null) widget.onSelected!(null);
+            if((previousSearch != inputcontroller.text) && !loadingView) reloadEntities(false);
+
           },
         ),
       ),
@@ -238,45 +296,52 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
               color: theme.page.back,
               child: BorderedBox(
                 color: theme.page.accent,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 250,
-                  ),
-                  child: SizedBox(
-                    width: double.maxFinite,
-                    child: AsyncWidget<ViewOutput<TEntity>>(
-                      future: searchInvok,
-                      successBuilder: (BuildContext ctx, ViewOutput<TEntity> data) {
-                        Iterable<TEntity> entities = data.entities;
-
-                        if (entities.isEmpty) {
-                          WidgetsBinding.instance.addPostFrameCallback(
-                            (_) {
-                              setState(() {
-                                error = 'No entities to select';
-                                overlayController.hide();
-                              });
-                            },
-                          );
-
-                          return Center(
-                            child: Text(
-                              'No values to display',
-                              style: TextStyle(
-                                color: theme.page.fore,
-                              ),
+                child: AsyncWidget<ViewOutput<TEntity>>(
+                  future: searchInvok,
+                  errorBuilder: (BuildContext ctx, Object? error, ViewOutput<TEntity>? data) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Center(
+                        child: Text(
+                          'Error Loading Data',
+                          style: TextStyle(
+                            color: theme.warning.fore,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  successBuilder: (BuildContext ctx, ViewOutput<TEntity> data) {
+                    Iterable<TEntity> entities = data.entities;
+                
+                    if (entities.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Center(
+                          child: Text(
+                            'No results to display',
+                            style: TextStyle(
+                              color: theme.control.fore,
                             ),
-                          );
-                        }
-                        /// ---> Move scroll to new content on lazzy loads.
-                        if (lazzyLoading) {
-                          lazzyLoading = false;
-                          WidgetsBinding.instance.addPostFrameCallback(
-                            (_) => scrollController.jumpTo(scrollController.position.maxScrollExtent - 200),
-                          );
-                        }
-
-                        return TextFieldTapRegion(
+                          ),
+                        ),
+                      );
+                    }
+                
+                    /// ---> Move scroll to new content on lazzy loads.
+                    if (loadingView && currentViewPage > 1) {
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => scrollController.jumpTo(scrollController.position.maxScrollExtent - 400),
+                      );
+                    }
+                
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: 250,
+                      ),
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        child: TextFieldTapRegion(
                           child: ListView.builder(
                             shrinkWrap: true,
                             itemExtent: 35,
@@ -294,24 +359,22 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                                 enabled: widget.enabled,
                                 onTap: (bool selected) {
                                   if (selected) {
-                                    inputFocusNode.unfocus();
-                                    overlayController.hide();
-                                    currentSelection = entity;
-                                    inputcontroller.text = widget.textBuilder(entity);
-                                    widget.onSelected?.call(currentSelection);
                                     setState(() {
-                                      
+                                      inputFocusNode.unfocus();
+                                      overlayController.hide();
+                                      currentSelection = entity;
+                                      inputcontroller.text = widget.textBuilder(entity);
+                                      widget.onSelected?.call(currentSelection);
                                     });
-                                    print('selected');
                                   }
                                 },
                               );
                             },
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

@@ -221,22 +221,22 @@ final class _EntityTableState<TEntity extends EntityB<TEntity>, TService extends
     if (filterPropertyNodes.isNotEmpty) {
       for (EntityTableFilters<TEntity> tableNodeFilter in filterPropertyNodes) {
         /// Remove empty filters to avoid unnecessary processing
-        for (ViewFilterProperty<TEntity> filter in tableNodeFilter.filters){
-          if(filter.value != null) validLogicalFilterList.add(filter);
+        for (ViewFilterProperty<TEntity> filter in tableNodeFilter.filters) {
+          if (filter.value != null) validLogicalFilterList.add(filter);
         }
 
         if (validLogicalFilterList.isNotEmpty) {
-        ViewFilterLogical<TEntity> logicalFilter = ViewFilterLogical<TEntity>(
-          1,
-          tableNodeFilter.operator,
-          validLogicalFilterList,
-        );
+          ViewFilterLogical<TEntity> logicalFilter = ViewFilterLogical<TEntity>(
+            1,
+            tableNodeFilter.operator,
+            validLogicalFilterList,
+          );
 
-        logicalFilter.discriminator = tableNodeFilter.discriminator;
+          logicalFilter.discriminator = tableNodeFilter.discriminator;
 
-        /// Assigning logicals filters to the main filter node.
-        filtersNode.add(logicalFilter);
-    }
+          /// Assigning logicals filters to the main filter node.
+          filtersNode.add(logicalFilter);
+        }
       }
     } 
     

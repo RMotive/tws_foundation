@@ -139,6 +139,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                       entityBuilder: () => LoadType(),
                       label: 'Select the load type...',
                       initialValue: itemState.entity.loadType,
+                      filterBy: <String>[
+                        EntityKeys.name,
+                      ],
                       textBuilder: (LoadType loadtype) {
                         return loadtype.name;
                       },
@@ -436,6 +439,9 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                             EntityFinderSelector<Section, SectionsServiceI>(
                               label: 'Sección',
                               entityBuilder: () => Section(),
+                              filterBy: <String>[
+                                '${YardLog.kSection}.${EntityKeys.name}',
+                              ],
                               textBuilder: (Section section) {
                                 return section.name;
                               },

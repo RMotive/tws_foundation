@@ -378,6 +378,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 entityBuilder: () => LoadType(),
                 label: 'Select the load type...',
                 initialValue: entity.loadType,
+                filterBy: <String>[
+                  EntityKeys.name,
+                ],
                 textBuilder: (LoadType loadtype) {
                   return loadtype.name;
                 },
@@ -390,6 +393,11 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 entityBuilder: () => DriverCommon(),
                 label: '*Select a Driver...',
                 initialValue: entity.driver,
+                filterBy: <String>[
+                  '${YardLog.kDriver.toStartUpper}.${DriverCommon.kLicense.toStartUpper}',
+                  '${YardLog.kDriver.toStartUpper}.${EntityKeys.kInternal.toStartUpper}.${Driver.kEmployee.toStartUpper}.${Employee.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
+                  '${YardLog.kDriver.toStartUpper}.${EntityKeys.kExternal.toStartUpper}.${DriverExternal.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
+                ],
                 textBuilder: (DriverCommon driver) {
                   return "${driver.name} - ${driver.license}";
                 },
@@ -412,6 +420,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 entityBuilder: () => TrailerCommon(),
                 label: 'Select a Trailer...',
                 initialValue: entity.trailer,
+                filterBy: <String>[
+                  '${YardLog.kTrailer.toStartUpper}.${TrailerCommon.kEconomic.toStartUpper}',
+                ],
                 textBuilder: (TrailerCommon trailer) {
                   return trailer.economic;
                 },
@@ -710,6 +721,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       label: '*Section',
                       entityBuilder: () => Section(),
                       initialValue: entity.section,
+                      filterBy: <String>[
+                        '${YardLog.kSection}.${EntityKeys.name}',
+                      ],
                       textBuilder: (Section section) {
                         return section.name;
                       },

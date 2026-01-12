@@ -49,6 +49,9 @@ final class _TrailerSectionState extends State<_TrailerSection> {
             /// --> Trailer selection.
             EntityFinderSelector<TrailerCommon, TrailersServiceI>(
               entityBuilder: () => TrailerCommon(),
+              filterBy: <String>[
+                '${YardLog.kTrailer.toStartUpper}.${TrailerCommon.kEconomic.toStartUpper}',
+              ],
               textBuilder: (TrailerCommon trailer) {
                 return trailer.economic;
               },
