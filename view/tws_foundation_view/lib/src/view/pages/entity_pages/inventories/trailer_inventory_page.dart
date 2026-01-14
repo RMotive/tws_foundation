@@ -1,7 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Route, Router, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_export.dart';
+import 'package:tws_foundation_view/src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_export/actions_ribbon_export.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
