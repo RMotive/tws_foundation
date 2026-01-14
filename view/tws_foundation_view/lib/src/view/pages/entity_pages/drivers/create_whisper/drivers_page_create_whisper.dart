@@ -1,17 +1,15 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/data/const/static_collections.dart';
 import 'package:tws_foundation_view/src/view/widgets/autocomplete_field/autocomplete_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
+import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
-import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-part '_adapters.dart';
 part '_create_whisper_drivers_externals_section.dart';
 part 'create_internal_driver/_create_whisper_address_section.dart';
 part 'create_internal_driver/_create_whisper_approach_section.dart';

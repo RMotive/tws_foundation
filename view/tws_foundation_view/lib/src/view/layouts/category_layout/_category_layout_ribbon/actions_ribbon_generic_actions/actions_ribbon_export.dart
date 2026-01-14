@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js_interop';
-import 'dart:typed_data';
 
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
-import 'package:web/web.dart';
+import 'package:web/web.dart' if (dart.library.io) 'src/mobile.dart';
 
 /// Draws a generic {Refresh} action button for [CategoryLayoutPageI] acitons ribbon. 
 final class ActionsRibbonExport<TEntity extends EntityI<TEntity>, TService extends ExportServiceI<TEntity>> extends ActionsRibbonActionB {
@@ -30,29 +30,32 @@ final class ActionsRibbonExport<TEntity extends EntityI<TEntity>, TService exten
        );
 
   Future<void> _export() async {
-    /// Getting services.
-    TService service = Injector.get();
-    SessionStorageI sessionStorage = Injector.get();
-    String token = sessionStorage.token;
 
-    /// Consuming the view to export.
-    FoundationResponseResolver<ExportOutput> resolver = await service.exportView(exportView(), token);
-    ExportOutput exportOutput  = resolver.resolveDirect(
-      () => ExportOutput(),
-    );
+    if(kIsWeb){
+      /// Getting services.
+      TService service = Injector.get();
+      SessionStorageI sessionStorage = Injector.get();
+      String token = sessionStorage.token;
 
-    /// Preparing the download configuration.
-    Uint8List bytes = base64Decode(exportOutput.content);
-    final JSArrayBuffer parts = Uint8List.fromList(bytes).buffer.toJS;
-    final Blob blob = Blob(<JSArrayBuffer>[parts].toJS, BlobPropertyBag(type:'application/xmls'));
-    final String url = URL.createObjectURL(blob);
-    final HTMLAnchorElement anchor = HTMLAnchorElement();
-    anchor.href =  url;
-    anchor.download = '${exportOutput.name}.${exportOutput.extension.name}';
-    // anchor.setAttribute('download', '${exportOut.name}.${exportOut.extension.value}');
-    anchor.click();
+      /// Consuming the view to export.
+      FoundationResponseResolver<ExportOutput> resolver = await service.exportView(exportView(), token);
+      ExportOutput exportOutput  = resolver.resolveDirect(
+        () => ExportOutput(),
+      );
 
-    URL.revokeObjectURL(url);
+      /// Preparing the download configuration.
+      Uint8List bytes = base64Decode(exportOutput.content);
+      final JSArrayBuffer parts = Uint8List.fromList(bytes).buffer.toJS;
+      final Blob blob = Blob(<JSArrayBuffer>[parts].toJS, BlobPropertyBag(type:'application/xmls'));
+      final String url = URL.createObjectURL(blob);
+      final HTMLAnchorElement anchor = HTMLAnchorElement();
+      anchor.href =  url;
+      anchor.download = '${exportOutput.name}.${exportOutput.extension.name}';
+      // anchor.setAttribute('download', '${exportOut.name}.${exportOut.extension.value}');
+      anchor.click();
+
+      URL.revokeObjectURL(url);
+    }
   }
 
   @override
