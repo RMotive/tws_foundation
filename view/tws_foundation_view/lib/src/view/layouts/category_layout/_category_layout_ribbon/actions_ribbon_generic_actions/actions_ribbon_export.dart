@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:js_interop';
+import 'dart:js_interop' if(dart.library.io) '';
 
 import 'package:csm_client/csm_client.dart';
 import 'package:csm_view/csm_view.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
-import 'package:web/web.dart' if (dart.library.io) 'src/mobile.dart';
+import 'package:web/web.dart' if (dart.library.io) '';
 
 /// Draws a generic {Refresh} action button for [CategoryLayoutPageI] acitons ribbon. 
 final class ActionsRibbonExport<TEntity extends EntityI<TEntity>, TService extends ExportServiceI<TEntity>> extends ActionsRibbonActionB {
@@ -17,8 +17,6 @@ final class ActionsRibbonExport<TEntity extends EntityI<TEntity>, TService exten
 
   /// Callback invoked to get the consumed view input to export.
   final ViewInput<TEntity> Function() exportView;
-
-
 
   /// Creates a new [ActionsRibbonExport] instance.
   const ActionsRibbonExport({
