@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:csm_client/csm_client.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_export/_actions_ribbon_export_mobile.dart'
-    if (dart.library.html) 'package:tws_foundation_view/src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_export/_actions_ribbon_export_web.dart';
+import 'package:tws_foundation_view/src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/_actions_ribbon_export_multiplatform/_actions_ribbon_export_mobile.dart'
+    if (dart.library.html) 'package:tws_foundation_view/src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/_actions_ribbon_export_multiplatform/_actions_ribbon_export_web.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
