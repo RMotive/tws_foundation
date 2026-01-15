@@ -30,11 +30,11 @@ export 'src/data/storages/session_storage.dart';
 /// [View.Layouts.CategoryLayout]
 export 'src/view/layouts/category_layout/category_layout.dart';
 export 'src/view/layouts/category_layout/category_layout_page.dart';
-export 'src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_node_i.dart';
-export 'src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_action.dart';
-export 'src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_create.dart';
-export 'src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_refresh.dart';
-export 'src/view/layouts/category_layout/_category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_export/actions_ribbon_export.dart';
+export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_node_i.dart';
+export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_action.dart';
+export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_create.dart';
+export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_refresh.dart';
+export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_export/actions_ribbon_export.dart';
 
 //! <-- [View.Layouts]
 

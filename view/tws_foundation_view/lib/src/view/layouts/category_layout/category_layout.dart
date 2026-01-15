@@ -5,7 +5,7 @@ import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 part '_category_layout_messenger.dart';
-part '_category_layout_ribbon/_category_layout_ribbon.dart';
+part 'category_layout_ribbon/_category_layout_ribbon.dart';
 
 /// Handles the convertion of a [CategoryLayoutNode] to its [RouteNode] representation for a [RouteLayoutI], generating correctly the
 /// [LayoutI], and inner [RouteNodeI]s composition.
