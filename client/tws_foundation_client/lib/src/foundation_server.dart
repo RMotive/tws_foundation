@@ -114,7 +114,7 @@ final class FoundationServer extends ServerB {
             isRelease: isRelease,
             devHost ??
                 Uri(
-                  'localhost',
+                  '192.168.1.74', //TODO Change to testing/production server host
                   '',
                   port: 5195,
                 ),

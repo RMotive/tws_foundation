@@ -58,7 +58,11 @@ final class _TruckSectionState extends State<_TruckSection> {
               textBuilder: (TruckCommon truck) {
                 return truck.economic;
               },
+              filterBy: <String>[
+                TruckCommon.kEconomic,
+              ],
               richTextBuilder: (TruckCommon truck) {
+                List<String> plates = truck.plates?.split(' ') ?? <String>['---', '---'];
                 return TextSpan(
                   children: <TextSpan>[
                     TextSpan(
@@ -69,9 +73,9 @@ final class _TruckSectionState extends State<_TruckSection> {
                       ),
                     ),
                     TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
-                    TextSpan(text: truck.plates, style: TextStyle(color: theme.warning.accent)),
+                    TextSpan(text: plates.first, style: TextStyle(color: theme.warning.accent)),
                     TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
-                    TextSpan(text: truck.plates, style:  TextStyle(color: theme.page.accent)),
+                    TextSpan(text: plates.last, style:  TextStyle(color: theme.page.accent)),
                     TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
                     TextSpan(text: truck.carrier, style: TextStyle(color: theme.page.fore) ),
                   ],

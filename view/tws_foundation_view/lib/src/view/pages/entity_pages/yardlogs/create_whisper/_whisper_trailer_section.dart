@@ -34,6 +34,7 @@ final class _TrailerSectionState extends State<_TrailerSection> {
 
   @override
   Widget build(BuildContext context) {
+    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
     return SectionWidget(
       title: '*Trailer',
       outterPadding: EdgeInsets.zero,
@@ -47,18 +48,34 @@ final class _TrailerSectionState extends State<_TrailerSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             /// --> Trailer selection.
-            EntityFinderSelector<TrailerCommon, TrailersServiceI>(
+            EntityRichFinderSelector<TrailerCommon, TrailersServiceI>(
               entityBuilder: () => TrailerCommon(),
+              label: 'Select a Trailer...',
+              enabled: externalTrailer == null,
               filterBy: <String>[
-                '${YardLog.kTrailer.toStartUpper}.${TrailerCommon.kEconomic.toStartUpper}',
+                TrailerCommon.kEconomic,
               ],
               textBuilder: (TrailerCommon trailer) {
                 return trailer.economic;
               },
-              label: 'Select a Trailer...',
-              enabled: externalTrailer == null,
               onSelected: (TrailerCommon? trailer) {
                 widget.onSelection?.call(trailer ?? TrailerCommon());
+              },
+              richTextBuilder: (TrailerCommon trailer) {
+                String? usaPlate = trailer.plates?.split(' ').first;
+                return TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: trailer.economic,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: theme.page.fore,
+                      ),
+                    ),
+                    TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
+                    TextSpan(text: usaPlate ?? '---', style: TextStyle(color: theme.page.accent)),
+                  ],
+                );
               },
             ),
 

@@ -440,7 +440,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
                               label: 'Sección',
                               entityBuilder: () => Section(),
                               filterBy: <String>[
-                                '${YardLog.kSection}.${EntityKeys.name}',
+                                EntityKeys.name,
                               ],
                               textBuilder: (Section section) {
                                 return section.name;

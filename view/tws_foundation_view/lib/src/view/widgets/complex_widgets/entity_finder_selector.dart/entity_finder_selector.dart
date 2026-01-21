@@ -23,8 +23,6 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// Build a custom label text for the [TEntity] items list.
   final String Function(TEntity) textBuilder;
 
-  final RichText Function(TEntity)? richTextBuilder;
-
   /// Pre-selected value for the widget.
   final TEntity? initialValue;
 
@@ -45,6 +43,10 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// The default filter behavior is OR and CONTAINS, so if any of the properties contains the input text, the entity will be included in the results.
   final List<String>? filterBy;
 
+  /// Callback called when the overlay visibility changes.
+  final void Function(bool isVisible)? overlayStatus;
+
+
   /// Creates a new [EntityFinderSelector] instance.
   const EntityFinderSelector({
     super.key,
@@ -52,8 +54,8 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
     this.enabled = true,
     this.initialValue,
     this.onSelected,
-    this.richTextBuilder,
     this.filterBy,
+    this.overlayStatus,
     required this.entityBuilder,
     required this.textBuilder,
   });
@@ -205,8 +207,10 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
         if (inputFocusNode.hasFocus) {
           if(entitiesList.isEmpty) searchInvok = viewInvokation(false);
           overlayController.show();
+          widget.overlayStatus?.call(true);
         } else {
           overlayController.hide();
+          widget.overlayStatus?.call(false);
         }
       },
     );
@@ -362,6 +366,8 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                                     setState(() {
                                       inputFocusNode.unfocus();
                                       overlayController.hide();
+                                      widget.overlayStatus?.call(false);
+
                                       currentSelection = entity;
                                       inputcontroller.text = widget.textBuilder(entity);
                                       widget.onSelected?.call(currentSelection);

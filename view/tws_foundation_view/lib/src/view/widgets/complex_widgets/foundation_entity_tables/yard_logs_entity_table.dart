@@ -388,15 +388,16 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   entity.loadType = loadtype ?? LoadType();
                 },
               ),
+              
               /// --> Driver selection.
               EntityFinderSelector<DriverCommon, DriversServiceI>(
                 entityBuilder: () => DriverCommon(),
                 label: '*Select a Driver...',
                 initialValue: entity.driver,
                 filterBy: <String>[
-                  '${YardLog.kDriver.toStartUpper}.${DriverCommon.kLicense.toStartUpper}',
-                  '${YardLog.kDriver.toStartUpper}.${EntityKeys.kInternal.toStartUpper}.${Driver.kEmployee.toStartUpper}.${Employee.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
-                  '${YardLog.kDriver.toStartUpper}.${EntityKeys.kExternal.toStartUpper}.${DriverExternal.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
+                  DriverCommon.kLicense.toStartUpper,
+                  '${EntityKeys.kInternal}.${Driver.kEmployee}.${Employee.kIdentification}.${EntityKeys.name}',
+                  '${EntityKeys.kExternal}.${DriverExternal.kIdentification}.${EntityKeys.name}',
                 ],
                 textBuilder: (DriverCommon driver) {
                   return "${driver.name} - ${driver.license}";
@@ -409,6 +410,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 entityBuilder: () => TruckCommon(),
                 label: '*Select a Truck...',
                 initialValue: entity.truck,
+                filterBy: <String>[
+                  TruckCommon.kEconomic,
+                ],
                 textBuilder: (TruckCommon truck) {
                   return truck.economic;
                 },
@@ -421,7 +425,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                 label: 'Select a Trailer...',
                 initialValue: entity.trailer,
                 filterBy: <String>[
-                  '${YardLog.kTrailer.toStartUpper}.${TrailerCommon.kEconomic.toStartUpper}',
+                  TrailerCommon.kEconomic,
                 ],
                 textBuilder: (TrailerCommon trailer) {
                   return trailer.economic;
@@ -722,7 +726,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       entityBuilder: () => Section(),
                       initialValue: entity.section,
                       filterBy: <String>[
-                        '${YardLog.kSection}.${EntityKeys.name}',
+                        EntityKeys.name,
                       ],
                       textBuilder: (Section section) {
                         return section.name;

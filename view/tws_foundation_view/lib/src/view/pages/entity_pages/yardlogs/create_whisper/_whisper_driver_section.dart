@@ -63,9 +63,9 @@ final class _DriversSectionState extends State<_DriversSection> {
               label: 'Select a Driver...',
               enabled: externalDriver == null,
               filterBy: <String>[
-                '${YardLog.kDriver.toStartUpper}.${DriverCommon.kLicense.toStartUpper}',
-                '${YardLog.kDriver.toStartUpper}.${EntityKeys.kInternal.toStartUpper}.${Driver.kEmployee.toStartUpper}.${Employee.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
-                '${YardLog.kDriver.toStartUpper}.${EntityKeys.kExternal.toStartUpper}.${DriverExternal.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
+                DriverCommon.kLicense.toStartUpper,
+                '${EntityKeys.kInternal.toStartUpper}.${Driver.kEmployee.toStartUpper}.${Employee.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
+                '${EntityKeys.kExternal.toStartUpper}.${DriverExternal.kIdentification.toStartUpper}.${EntityKeys.name.toStartUpper}',
               ],
               textBuilder: (DriverCommon driver) {
                 return "${driver.name} - ${driver.license}";
