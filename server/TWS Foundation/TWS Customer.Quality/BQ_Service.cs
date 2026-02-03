@@ -1,6 +1,12 @@
-﻿using CSM_Foundation.Database;
+﻿using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation.Database;
 using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Product;
+
+using CSM_Security;
+
+using TWS_Business;
 
 namespace TWS_Customer.Quality;
 
@@ -31,7 +37,7 @@ public abstract class BQ_Service<TService>
     ///     A new <see cref="CSM_Security.Database"/> instance.
     /// </returns>
     protected static CSM_Security.Database BuildSecurityDb()
-    => DatabaseUtilities.Q_Construct<CSM_Security.Database>(CSM_Security.Database.SIGN);
+    => new();
 
     /// <summary>
     ///     Creates a new <see cref="TWS_Business.Database"/> instance.
@@ -40,7 +46,7 @@ public abstract class BQ_Service<TService>
     ///     A new <see cref="TWS_Business.Database"/> instance.
     /// </returns>
     protected static TWS_Business.Database BuildBusinessDb()
-    => DatabaseUtilities.Q_Construct<TWS_Business.Database>(TWS_Business.Database.SIGN);
+    => new();
 }
 
 /// <summary>
@@ -77,7 +83,7 @@ public abstract class BQ_Service<TService, TEntity>
     ///     A new <see cref="CSM_Security.Database"/> instance.
     /// </returns>
     protected static CSM_Security.Database BuildSecurityDb()
-    => DatabaseUtilities.Q_Construct<CSM_Security.Database>(CSM_Security.Database.SIGN);
+    => new();
 
     /// <summary>
     ///     Creates a new <see cref="TWS_Business.Database"/> instance.
@@ -86,5 +92,5 @@ public abstract class BQ_Service<TService, TEntity>
     ///     A new <see cref="TWS_Business.Database"/> instance.
     /// </returns>
     protected static TWS_Business.Database BuildBusinessDb()
-    => DatabaseUtilities.Q_Construct<TWS_Business.Database>(TWS_Business.Database.SIGN);
+    => new();
 }

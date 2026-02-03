@@ -1,11 +1,8 @@
-﻿using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Product;
+﻿using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Depots;
 using TWS_Business.Entities;
-using TWS_Business.Entities.Vehicules;
 
 namespace TWS_Customer.Features.Business;
 
@@ -30,33 +27,7 @@ public class LocationsService
     /// <param name="Depot">
     ///     <see cref="Location"/> based [Depot] handler to be used.
     /// </param>
-    public LocationsService(LocationsDepot Depot, Database Database) : base(Depot) { 
+    public LocationsService(LocationsDepot Depot, Database Database) : base(Depot) {
         this._db = Database;
     }
-
-    public async override Task<BatchOperationOutput<Location>> Create(Location[] Entities, bool Sync = false) {
-        Location[] successes = [];
-        EntityOperationFailure<Location>[] failures = [];
-
-        foreach (Location entity in Entities) {
-            try {
-                Location attachedEntity = await depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<Location> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<Location> output = new(successes, failures);
-
-        return output;
-    }
-           
 }

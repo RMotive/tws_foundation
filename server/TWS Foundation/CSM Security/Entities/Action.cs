@@ -1,6 +1,6 @@
-﻿using CSM_Foundation.Database.Entity;
+﻿using CSM_Security.Abstractions;
 
-using CSM_Security.Abstractions;
+using CSM_Database_Core.Core.Attributes;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,7 +26,7 @@ public class Action
     /// <summary>
     ///     <see cref="Permit"/> dependats from this <see cref="Action"/>.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion

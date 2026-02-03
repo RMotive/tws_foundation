@@ -1,16 +1,18 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using CSM_Database_Core.Core.Models;
+using CSM_Database_Core.Core.Utils;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Core;
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
-using CSM_Foundation.Database.Models;
-using CSM_Foundation.Database.Utilitites;
 using CSM_Foundation.Logging;
 using CSM_Foundation.Server;
 using CSM_Foundation.Server.Converters.JSON;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -89,19 +91,19 @@ public partial class Program {
                         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
                         options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
-                        options.JsonSerializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
+                        options.JsonSerializerOptions.Converters.Add(new IViewFilterNodeConverterFactory());
                         options.JsonSerializerOptions.Converters.Add(new DateTimeZoneConverter());
 
                         // --> JSON Converter for [IEntity] objects.
-                        options.JsonSerializerOptions.Converters.Add(
-                                new EntityConverter(
-                                    [
-                                        typeof(Driver_Common),
-                                        typeof(YardLog),
-                                        typeof(LoadType),
-                                    ]
-                                )
-                            );
+                        //options.JsonSerializerOptions.Converters.Add(
+                        //        new EntityConverter(
+                        //            [
+                        //                typeof(Driver_Common),
+                        //                typeof(YardLog),
+                        //                typeof(LoadType),
+                        //            ]
+                        //        )
+                        //    );
                     }
                 );
             builder.Services.AddCors(
@@ -144,21 +146,19 @@ public partial class Program {
                 services.AddSingleton<AdvisorMiddleware>();
                 services.AddSingleton<FramingMiddleware>();
                 services.AddSingleton<DispositionMiddleware>();
-                services.AddSingleton<IDisposer, Disposer>();
+                services.AddSingleton<IDisposer<IEntity>, Disposer>();
 
                 // --> [CSM Security]
-                ConnectionOptions securityDbConnectionOptions = DatabaseUtilities.Retrieve(CSM_Security.Database.SIGN);
-                new CSM_Security.Database(securityDbConnectionOptions).ValidateConnection();
+                new CSM_Security.Database().Validate();
 
                 services.AddScoped(
-                        (provider) => new CSM_Security.Database(securityDbConnectionOptions)
+                        (provider) => new CSM_Security.Database()
                     );
 
                 // --> [TWS Business]
-                ConnectionOptions businessDbConnectionOptions = DatabaseUtilities.Retrieve(TWS_Business.Database.SIGN);
-                new TWS_Business.Database(businessDbConnectionOptions).ValidateConnection();
+                new TWS_Business.Database().Validate();
                 services.AddScoped(
-                        (provider) => new TWS_Business.Database(businessDbConnectionOptions)
+                        (provider) => new TWS_Business.Database()
                     );
 
                 services.AddScoped<IAccountsDepot, AccountsDepot>();
@@ -191,7 +191,7 @@ public partial class Program {
                 services.AddScoped<IWaypointsDepot, WaypointsDepot>();
                 services.AddScoped<IResourcesDepot, ResourcesDepot>();
                 services.AddScoped<IPermitsDepot, PermitsDepot>();
-                services.AddScoped<IActionsDepot, ActionsDepot>(); 
+                services.AddScoped<IActionsDepot, ActionsDepot>();
                 services.AddScoped<IProfilesDepot, ProfilesDepot>();
 
 
@@ -216,7 +216,7 @@ public partial class Program {
                 services.AddScoped<ITrucksService, TrucksService>();
                 services.AddScoped<IStatusesService, StatusesService>();
                 services.AddScoped<ITrailersService, TrailersService>();
-                services.AddScoped<IPermitsService, PermitsService>(); 
+                services.AddScoped<IPermitsService, PermitsService>();
                 services.AddScoped<IFeaturesService, FeaturesService>();
                 services.AddScoped<IActionsService, ActionsService>();
                 services.AddScoped<IProfilesService, ProfilesService>();
@@ -237,7 +237,7 @@ public partial class Program {
             app.Lifetime.ApplicationStopping.Register(
                 () => {
                     using (IServiceScope scope = app.Services.CreateScope()) {
-                        IDisposer disposer = scope.ServiceProvider.GetRequiredService<IDisposer>();
+                        IDisposer<IEntity> disposer = scope.ServiceProvider.GetRequiredService<IDisposer<IEntity>>();
                         Dispose(disposer);
                     }
                     ;
@@ -258,7 +258,7 @@ public partial class Program {
         }
     }
 
-    static void Dispose(IDisposer Disposer) {
+    static void Dispose(IDisposer<IEntity> Disposer) {
         Logger.Announce("Disposing quality context records");
         try {
             Disposer.Dispose();

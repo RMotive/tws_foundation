@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+using CSM_Database_Core.Entities.Abstractions.Bases;
+
 
 namespace CSM_Security.Abstractions;
 
@@ -12,7 +14,7 @@ namespace CSM_Security.Abstractions;
 /// 
 
 public class BNamedReferencedEntity
-    : CSM_Foundation.Database.Entity.Bases.BNamedReferencedEntity
+    : CatalogEntityBase
 {
     [JsonIgnore]
     public override Type Database { get; init; } = typeof(Database);

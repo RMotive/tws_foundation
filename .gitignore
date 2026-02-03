@@ -6,3 +6,11 @@
 /server/TWS Admin/Server.Quality/Secrets/Constants.cs
 /server/TWS Foundation/TWS Foundation/Properties/PublishProfiles/FolderProfile.pubxml
 /server/TWS Foundation/developer.runsettings
+/server/TWS Foundation/nuget.config
+/server/TWS Foundation/TWS Business/twsb.dev.connection.json
+/server/TWS Foundation/nuget.config
+/server/TWS Foundation/TWS Business/quality.connection.json
+/server/TWS Foundation/CSM Security/CSMS.Connection/csms.dev.connection.json
+/server/TWS Foundation/CSM Security/CSMS.Connection/security_quality.connection.json
+/server/TWS Foundation/CSM Security/CSMS.Connection/security_quality.connection.json
+/server/TWS Foundation/CSM Security/CSMS.Connection/security_quality.connection.json

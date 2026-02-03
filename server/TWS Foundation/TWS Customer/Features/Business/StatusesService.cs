@@ -1,7 +1,5 @@
 ﻿using CSM_Foundation;
 using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business;
 using TWS_Business.Depots.Indicators;
@@ -33,30 +31,5 @@ public class StatusesService
     /// </param>
     public StatusesService(StatusesDepot Depot, Database Database) : base(Depot) {
         _db = Database;
-    }
-
-    public async override Task<BatchOperationOutput<Status>> Create(Status[] Entities, bool Sync = false) {
-        Status[] successes = [];
-        EntityOperationFailure<Status>[] failures = [];
-
-        foreach (Status entity in Entities) {
-            try {
-                Status attachedEntity = await _depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<Status> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<Status> output = new(successes, failures);
-
-        return output;
     }
 }

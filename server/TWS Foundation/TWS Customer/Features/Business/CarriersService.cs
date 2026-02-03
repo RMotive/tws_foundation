@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Product;
+﻿using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Depots.Vehicles;
@@ -31,30 +29,5 @@ public class CarriersService
     /// </param>
     public CarriersService(CarriersDepot Depot, Database database) : base(Depot) {
         _db = database;
-    }
-
-    public async override Task<BatchOperationOutput<Carrier>> Create(Carrier[] Entities, bool Sync = false) {
-        Carrier[] successes = [];
-        EntityOperationFailure<Carrier>[] failures = [];
-
-        foreach (Carrier entity in Entities) {
-            try {
-                Carrier attachedEntity = await depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<Carrier> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<Carrier> output = new(successes, failures);
-
-        return output;
     }
 }

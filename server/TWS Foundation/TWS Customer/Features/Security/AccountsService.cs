@@ -1,8 +1,6 @@
-﻿using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Product;
 
 using CSM_Security.Depots;
@@ -74,8 +72,11 @@ public class AccountsService
                 }
             );
 
+        if(queryOutput.Failed && queryOutput.Failures[0].Exception == null)
+           throw new Exception("An error occurred, but no exception data is available.");
+
         if (queryOutput.Failed)
-            throw queryOutput.Failures[0].Exception;
+            throw queryOutput.Failures[0].Exception!;
 
         if (queryOutput.SuccessesCount <= 0)
             throw new XRead<Account>(XReadReasons.UNFOUND);

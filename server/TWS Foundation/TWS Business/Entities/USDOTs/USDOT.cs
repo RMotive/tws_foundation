@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
+using CSM_Database_Core.Core.Extensions;
+
 using CSM_Foundation.Database.Entity.Bases;
 
 using Microsoft.EntityFrameworkCore;

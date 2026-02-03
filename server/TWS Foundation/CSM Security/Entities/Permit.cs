@@ -2,8 +2,11 @@
 using CSM_Foundation.Database.Entity;
 using CSM_Security.Abstractions;
 
+using CSM_Database_Core.Core.Attributes;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using CSM_Database_Core.Core.Extensions;
 
 namespace CSM_Security.Entities;
 
@@ -30,7 +33,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Solution Solution { get; set; } = default!;
 
     /// <summary>
@@ -39,7 +42,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Feature Feature { get; set; } = default!;
 
     /// <summary>
@@ -48,7 +51,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Action Action { get; set; } = default!;
 
     #endregion
@@ -58,13 +61,13 @@ public class Permit
     /// <summary>
     ///     <see cref="Profile"/> dependants from this <see cref="Permit"/>.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Profile> Profiles { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Account"/> dependants from this <see cref="Permit"/>.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Account> Accounts { get; set; } = [];
 
     #endregion

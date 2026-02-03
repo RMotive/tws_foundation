@@ -1,13 +1,13 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Entities.Abstractions.Bases;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Product;
 
 namespace CSM_Foundation;
 
 public interface IReferenceService<TEntity>
     : IService<TEntity>
-    where TEntity : BNamedReferencedEntity, IEntity {
+    where TEntity : CatalogEntityBase, IEntity {
 
     /// <summary>
     /// Fetch a <see cref="TEntity"/>  Record based on the provided <paramref name="reference"/> and returns the result of the operation.

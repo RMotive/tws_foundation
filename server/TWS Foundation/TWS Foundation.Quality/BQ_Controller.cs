@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Text;
 
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
 using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -120,7 +120,7 @@ public abstract class BQ_Controller<TEntity>
 /// </typeparam>
 public abstract class BQ_Controller_CommonEntity<TCommonEntity>
     : BQ_Controller
-    where TCommonEntity : ICommonEntity {
+    where TCommonEntity : IPartnerBridgeEntity {
 
     /// <summary>
     ///     Creates a new instance.

@@ -1,5 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using CSM_Security.Entities;
 
@@ -17,11 +20,11 @@ public interface ISolutionsDepot
 ///     representing a depot to handle <see cref="Solution"/> dataDatabases entity mirror.
 /// </summary>
 public class SolutionsDepot
-    : BDepot<Database, Solution>, ISolutionsDepot {
+    : DepotBase<Database, Solution>, ISolutionsDepot {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Solution"/>.
     /// </summary>
-    public SolutionsDepot(Database Databases, IDisposer? Disposer = null)
+    public SolutionsDepot(Database Databases, IDisposer<IEntity>? Disposer = null)
         : base(Databases, Disposer) {
     }
 }

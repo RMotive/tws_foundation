@@ -1,15 +1,6 @@
-﻿using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Server.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-using CSM_Security.Depots;
-using CSM_Security.Entities;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-
-using TWS_Customer.Managers.Session;
-
-namespace TWS_Foundation.Authentication;
+namespace TWS_Customer.Managers.Auth;
 
 /// <summary>
 ///     

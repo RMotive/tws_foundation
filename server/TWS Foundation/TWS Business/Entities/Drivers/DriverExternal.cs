@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -22,12 +22,12 @@ public partial class DriverExternal
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Identification Identification { get; set; } = default!;
 
     #endregion
 
-    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Drivers_Externals");
         etBuilder.Link<DriverExternal, Identification>(
                 nameof(Identification),

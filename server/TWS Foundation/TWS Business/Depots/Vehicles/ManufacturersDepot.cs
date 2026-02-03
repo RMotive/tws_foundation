@@ -1,5 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using TWS_Business.Entities.Vehicules;
 
@@ -17,7 +20,7 @@ public interface IManufacturersDepot
 ///     [Depot] for <see cref="Manufacturer"/> entities.
 /// </summary>
 public class ManufacturersDepot
-    : BDepot<Database, Manufacturer>, IManufacturersDepot {
+    : DepotBase<Database, Manufacturer>, IManufacturersDepot {
 
     /// <summary>
     ///     Creates a new <see cref="ManufacturersDepot"/> instance.
@@ -28,5 +31,5 @@ public class ManufacturersDepot
     /// <param name="Disposer">
     ///     Data disposition handler to be used.
     /// </param>
-    public ManufacturersDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
+    public ManufacturersDepot(Database Database, IDisposer<IEntity>? Disposer) : base(Database, Disposer) { }
 }

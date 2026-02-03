@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
+﻿using CSM_Database_Core.Depots.Models;
 
 using CSM_Security.Entities;
 
@@ -10,6 +8,8 @@ using TWS_Customer.Features.Security;
 
 using TWS_Foundation.Authentication;
 
+using TWS_Customer.Managers.Auth;
+
 namespace TWS_Foundation.Controllers.Security;
 
 [ApiController, Feature("Accounts"), Route("[Controller]/[Action]")]
@@ -17,7 +17,7 @@ public class AccountsController
     : ControllerBase {
 
     readonly IAccountsService Service;
-    
+
     public AccountsController(IAccountsService Service) {
         this.Service = Service;
     }
@@ -32,7 +32,7 @@ public class AccountsController
                     )
             );
     }
-   
+
     [HttpPost(), Action("Create")]
     public async Task<IActionResult> Create(Account[] accounts) {
         return Ok(await Service.Create(accounts));

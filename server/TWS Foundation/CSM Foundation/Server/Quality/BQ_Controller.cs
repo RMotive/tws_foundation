@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+
 using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -54,7 +55,7 @@ public abstract class BQ_Controller<TProgram>
         _serverHost = new(solutionSign, applicationFactory.CreateClient());
 
         _serializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
-        _serializerOptions.Converters.Add(new ISetViewFilterNodeConverterFactory());
+        _serializerOptions.Converters.Add(new IViewFilterNodeConverterFactory());
 
         ConfigureSerializer(_serializerOptions);
     }

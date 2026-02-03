@@ -1,4 +1,7 @@
-﻿namespace CSM_Foundation.Database.Entity.Bases;
+﻿using CSM_Database_Core;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+namespace CSM_Foundation.Database.Entity.Bases;
 
 /// <summary>
 ///     [Abstract] class for [History] [Entity] implementation.
@@ -6,7 +9,7 @@
 ///     A History entity is an entry in te history sequence referencing the main [Entity].
 /// </summary>
 public abstract class BHistory<TEntity>
-    : BEntity, IHistory
+    : EntityBase, IHistory
     where TEntity : class, IEntity {
 
     public abstract override Type Database { get; init; }

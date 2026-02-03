@@ -1,30 +1,31 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Database.Quality;
-using CSM_Foundation.Database.Quality.Disposing;
+using CSM_Database_Core;
+using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Core.Utils;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+using CSM_Database_Core.Depots.ViewFilters;
+using CSM_Database_Core.Entities.Abstractions.Bases;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Database_Testing.Disposing.Abstractions.Bases;
+
 using CSM_Foundation.Database.Utilitites;
 
+using TWS_Business.Bases;
 using TWS_Business.Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots.Bases;
 
 public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot, TDatabase>
     : BQ_CommonDataHandler
-    where TCommon : class, ICommonEntity<TInternalEdge, TExternalEdge>, new()
-    where TInternalEdge : class, ICommonScopeEntity<TCommon>
-    where TExternalEdge : class, ICommonScopeEntity<TCommon>
+    where TCommon : BCommonEntity<TInternalEdge, TExternalEdge>, new()
+    where TInternalEdge : PartnerScopeEntityBase<TCommon>
+    where TExternalEdge : PartnerScopeEntityBase<TCommon>
     where TDepot : BCommonDepot<TDatabase, TInternalEdge, TExternalEdge, TCommon>
-    where TDatabase : BDatabase_SQLServer<TDatabase> {
+    where TDatabase : DatabaseBase<TDatabase> {
 
     /// <summary>
     ///     Depot instance to operate tests.
@@ -58,7 +59,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
             [
                 ..Factories,
                 () => Database?.Invoke() ?? DatabaseUtilities.Q_Construct<TDatabase>(Sign)
-            ]
+            ] 
         ) {
 
         this.Database = (TDatabase)(Database?.Invoke() ?? DatabaseUtilities.Q_Construct<TDatabase>(Sign));
@@ -144,7 +145,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                 Disposer.Push(internalRelation);
                 common.Internal = internalRelation;
                 continue;
-            } 
+            }
 
             Disposer.Push(externalRelation!);
             common.External = externalRelation;
@@ -656,7 +657,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     public virtual async Task UpdateB(bool DefaultEdge) {
         TCommon sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        XDepot<TCommon> depotException = await Assert.ThrowsAsync<XDepot<TCommon>>(
+        DepotError<TCommon> depotException = await Assert.ThrowsAsync<DepotError<TCommon>>(
                 async () => {
                     UpdateOutput<TCommon> updateOutput = await Depot.Update(
                 new QueryInput<TCommon, UpdateInput<TCommon>> {
@@ -669,7 +670,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                 }
             );
 
-        Assert.Equal(XDepotSituations.CreateDisabled, depotException.Reason);
+        Assert.Equal(DepotErrorEvents.CREATE_DISABLED, depotException.Event);
     }
 
     [Theory(DisplayName = $"[Update Entity]: Throws Unfound exception situation")]
@@ -678,7 +679,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         TCommon sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
         sample.Id = await GeneratePointer();
 
-        XDepot<TCommon> depotException = await Assert.ThrowsAsync<XDepot<TCommon>>(
+        DepotError<TCommon> depotException = await Assert.ThrowsAsync<DepotError<TCommon>>(
                 async () => {
                     UpdateOutput<TCommon> updateOutput = await Depot.Update(
                         new QueryInput<TCommon, UpdateInput<TCommon>> {
@@ -689,7 +690,7 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
                     );
                 }
             );
-        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
+        Assert.Equal(DepotErrorEvents.UNFOUND, depotException.Event);
     }
 
     [Theory(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
@@ -740,13 +741,13 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
     public virtual async Task DeleteA() {
         long unexistPointer = await GeneratePointer(true);
 
-        XDepot<TCommon> depotException = await Assert.ThrowsAsync<XDepot<TCommon>>(
+        DepotError<TCommon> depotException = await Assert.ThrowsAsync<DepotError<TCommon>>(
                 async () => {
                     await Depot.Delete(unexistPointer);
                 }
             );
 
-        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
+        Assert.Equal(DepotErrorEvents.UNFOUND, depotException.Event);
     }
 
     [Theory(DisplayName = $"[Delete Entity]: Deletes correctly an Entity with a given Common Entity")]

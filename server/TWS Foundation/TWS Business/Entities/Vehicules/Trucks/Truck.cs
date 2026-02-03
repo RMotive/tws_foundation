@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -41,7 +41,7 @@ public class Truck
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Carrier Carrier { get; set; } = default!;
 
     /// <summary>
@@ -50,31 +50,31 @@ public class Truck
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public VehiculeModel Model { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Vehicules.SCT"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public SCT? SCT { get; set; }
 
     /// <summary>
     ///     <see cref="Maintenances.Maintenance"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Maintenance? Maintenance { get; set; }
 
     /// <summary>
     ///     <see cref="Insurances.Insurance"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Insurance? Insurance { get; set; }
 
     /// <summary>
     ///     <see cref="Plate"/>s referencing this <see cref="Truck"/>.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Plate> Plates { get; set; } = [];
 
     #endregion
@@ -93,7 +93,7 @@ public class Truck
 
     #endregion
 
-    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(Motor)).HasMaxLength(16);
         etBuilder.Property(nameof(VIN)).HasMaxLength(17).IsRequired();
 

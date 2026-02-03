@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -90,12 +90,12 @@ public class Driver
     /// <summary>
     ///     <see cref="Employees.Employee"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Employee Employee { get; set; } = default!;
 
     #endregion
 
-    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Property(nameof(DriverType)).HasMaxLength(12);
         etBuilder.Property(nameof(TWIC)).HasMaxLength(12);
         etBuilder.Property(nameof(VISA)).HasMaxLength(12);

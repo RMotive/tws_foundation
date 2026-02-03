@@ -1,7 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Models;
 
 using TWS_Business.Depots.Indicators;
 using TWS_Business.Entities;

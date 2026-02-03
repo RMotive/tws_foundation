@@ -1,9 +1,6 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
 namespace CSM_Foundation.Product;
 
@@ -65,24 +62,24 @@ public abstract class BService<TEntity, TDepot>
     => depot.Create(entities, sync);
 
 
-    public virtual Task<UpdateOutput<TEntity>> Update(UpdateInput<TEntity> input) 
+    public virtual Task<UpdateOutput<TEntity>> Update(UpdateInput<TEntity> input)
     => depot.Update(GetOperationInput(input));
 
 
     public virtual Task<TEntity> Delete(long id)
     => depot.Delete(id);
 
-    public virtual Task<TEntity> Delete(TEntity entity) 
+    public virtual Task<TEntity> Delete(TEntity entity)
     => depot.Delete(entity);
 
-    public virtual Task<BatchOperationOutput<TEntity>> Delete(long[] ids) 
+    public virtual Task<BatchOperationOutput<TEntity>> Delete(long[] ids)
     => depot.Delete(ids);
 
-    public virtual Task<BatchOperationOutput<TEntity>> Delete(TEntity[] entities) 
+    public virtual Task<BatchOperationOutput<TEntity>> Delete(TEntity[] entities)
     => depot.Delete(entities);
 
 
-    public virtual Task<ViewOutput<TEntity>> View(QueryInput<TEntity, ViewInput<TEntity>> input) 
+    public virtual Task<ViewOutput<TEntity>> View(QueryInput<TEntity, ViewInput<TEntity>> input)
     => depot.View(input);
 
 

@@ -1,13 +1,12 @@
 ﻿using ClosedXML.Excel;
 
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Logging;
 using CSM_Foundation.Product;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Entities;
@@ -127,7 +126,7 @@ public class YardLogsService
                 .AsQueryable();
 
         };
-        
+
         return await depot.View(input);
     }
 
@@ -188,7 +187,7 @@ public class YardLogsService
         fileStream.Position = 0;
 
         using BinaryReader reader = new(fileStream);
-        
+
         Logger.Success(
                 "Excel file export",
                 new Dictionary<string, object?> {

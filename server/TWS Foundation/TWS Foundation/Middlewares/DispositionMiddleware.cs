@@ -1,8 +1,11 @@
 ﻿
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Server.Exceptions;
 
+using CSM_Foundation_Core.Abstractions.Interfaces;
+
 using Microsoft.Extensions.Primitives;
-using CSM_Foundation.Database;
 
 namespace TWS_Foundation.Middlewares;
 
@@ -11,7 +14,7 @@ public class DispositionMiddleware : IMiddleware {
     private const string DISP_HEAD_VALUE = "Quality";
     private readonly Disposer Disposer;
 
-    public DispositionMiddleware(IDisposer Disposer) {
+    public DispositionMiddleware(IDisposer<IEntity> Disposer) {
         this.Disposer = (Disposer)Disposer;
     }
 

@@ -1,5 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using CSM_Security.Entities;
 
@@ -17,7 +20,7 @@ public interface IFeaturesDepot
 ///     [Depot] for <see cref="Feature"/> entity operations.
 /// </summary>
 public class FeaturesDepot
-    : BDepot<Database, Feature>, IFeaturesDepot {
+    : DepotBase<Database, Feature>, IFeaturesDepot {
 
     /// <summary>
     ///     Creates a new <see cref="FeaturesDepot"/> instance.
@@ -28,5 +31,5 @@ public class FeaturesDepot
     /// <param name="Disposer">
     ///     Data disposition handler to be used.
     /// </param>
-    public FeaturesDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
+    public FeaturesDepot(Database Database, IDisposer<IEntity>? Disposer) : base(Database, Disposer) { }
 }

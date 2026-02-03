@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Product;
+﻿using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Depots.Vehicles;
@@ -31,30 +29,5 @@ public class ManufacturersService
     /// </param>
     public ManufacturersService(ManufacturersDepot Depot, Database Database) : base(Depot) {
         this._db = Database;
-    }
-
-    public async override Task<BatchOperationOutput<Manufacturer>> Create(Manufacturer[] Entities, bool Sync = false) {
-        Manufacturer[] successes = [];
-        EntityOperationFailure<Manufacturer>[] failures = [];
-
-        foreach (Manufacturer entity in Entities) {
-            try {
-                Manufacturer attachedEntity = await depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<Manufacturer> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<Manufacturer> output = new(successes, failures);
-
-        return output;
     }
 }

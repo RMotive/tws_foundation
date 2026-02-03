@@ -1,8 +1,11 @@
 ﻿using System.Collections.Concurrent;
 
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Core.Extensions;
-using CSM_Foundation.Database;
 using CSM_Foundation.Logging;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -13,7 +16,7 @@ namespace TWS_Foundation;
 ///     [CSM Implementation] for a basic disposition data manager, handles data to be disposed after the server gets shut down. 
 /// </summary>
 public class Disposer
-    : IDisposer {
+    : IDisposer<IEntity> {
 
     /// <summary>
     ///     Wheter the manager must keep track data or not.

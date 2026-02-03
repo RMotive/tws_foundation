@@ -1,7 +1,8 @@
-﻿using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+
+using CSM_Database_Testing.Disposing.Abstractions.Bases;
+
 using CSM_Foundation.Database.Quality;
-using CSM_Foundation.Database.Quality.Disposing;
 
 using TWS_Business.Bases;
 
@@ -19,7 +20,7 @@ namespace TWS_Business.Quality.Q_Depots.Bases;
 public abstract class BQ_CommonDependence<TCommonDependence, TDepot>
     : BQ_CommonDependenceDepot<TDepot, Database, TCommonDependence>
     where TCommonDependence : BEntity, new()
-    where TDepot : BDepot<Database, TCommonDependence> {
+    where TDepot : DepotBase<Database, TCommonDependence> {
 
     /// <summary>
     ///     Creates a new <see cref="BQ_Business{TEntity, TDepot}"/> instance.

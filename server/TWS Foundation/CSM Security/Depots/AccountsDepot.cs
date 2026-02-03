@@ -1,8 +1,10 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using CSM_Security.Entities;
 
@@ -33,7 +35,7 @@ public interface IAccountsDepot
 ///     [Depot] implementation for <see cref="Account"/> based entity handler.
 /// </summary>
 public class AccountsDepot
-    : BDepot<Database, Account>, IAccountsDepot {
+    : DepotBase<Database, Account>, IAccountsDepot {
 
     /// <summary>
     ///     Generates a new depot handler for <see cref="Account"/>.
@@ -44,7 +46,7 @@ public class AccountsDepot
     /// <param name="Disposer">
     ///     Disposition manager handler to use.
     /// </param>
-    public AccountsDepot(Database database, IDisposer? Disposer = null) : base(database, Disposer) { }
+    public AccountsDepot(Database database, IDisposer<IEntity>? Disposer = null) : base(database, Disposer) { }
 
     public async Task<Permit[]> GetPermits(long id) {
         BatchOperationOutput<Account> readOutput = await Read(
@@ -62,18 +64,18 @@ public class AccountsDepot
                 }
             );
 
-        if (readOutput.Failed)
-            throw readOutput.Failures[0].Exception;
+        if (readOutput.Failed && readOutput.Failures.Length != 0 && readOutput.Failures[0].Exception != null)
+            throw readOutput.Failures[0].Exception!;
 
         if (readOutput.SuccessesCount <= 0)
-            throw new XDepot<Account>(XDepotSituations.Unfound);
+            throw new DepotError<Account>(DepotErrorEvents.UNFOUND);
 
         Account account = readOutput.Successes[0];
 
         List<Permit> effectivePermits = [];
 
         bool VerifyEffective(Permit permit) {
-            return 
+            return
                 permit.Enabled
                 && permit.Feature.Enabled
                 && permit.Action.Enabled
@@ -97,6 +99,6 @@ public class AccountsDepot
             effectivePermits.Add(permit);
         }
 
-        return [..effectivePermits];
+        return [.. effectivePermits];
     }
 }

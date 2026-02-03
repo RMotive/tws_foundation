@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+using CSM_Database_Core;
+
 namespace TWS_Business.Bases;
 
 /// <summary>
@@ -9,7 +11,7 @@ namespace TWS_Business.Bases;
 ///     Usage must be exclusively for { TWS Business } entities.
 /// </remarks>
 public abstract class BEntity
-    : CSM_Foundation.Database.BEntity {
+    : EntityBase {
 
     [JsonIgnore]
     public override Type Database { get; init; } = typeof(Database);

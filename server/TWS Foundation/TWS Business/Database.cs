@@ -1,5 +1,6 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Models;
+﻿using CSM_Database_Core;
+using CSM_Database_Core.Abstractions.Interfaces;
+using CSM_Database_Core.Core.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -23,33 +24,24 @@ public class DesignDatabaseFactory : IDesignTimeDbContextFactory<Database> {
     public Database CreateDbContext(string[] args) {
         return new Database();
     }
-}
 
-/// <summary>
-///     [Interface] for [TWS Business] database implementations.
-/// </summary>
-public interface IDatabase {
-
-    /// <summary>
-    ///     [Employee] [Entity] database Entity.
-    /// </summary>
-    DbSet<Employee> Employees { get; set; }
 }
 
 /// <summary>
 ///     
 /// </summary>
 public class Database
-    : BDatabase_SQLServer<Database>, IDatabase {
+    : DatabaseBase<Database>, IDatabase {
 
-    public const string SIGN = "TWSB";
+
+    public override string Sign => "TWSB";
 
     /// <summary>
     /// /
     /// </summary>
     /// <param name="Options"></param>
     public Database(DbContextOptions<Database> Options)
-        : base(SIGN, Options) {
+        : base(new() { DbContextOptions = Options }) {
     }
 
     /// <summary>
@@ -57,7 +49,7 @@ public class Database
     /// </summary>
     /// <param name="Connection"></param>
     public Database(ConnectionOptions Connection)
-        : base(SIGN, Connection) {
+        : base(new() { ConnectionOptions = Connection }) {
     }
 
     /// <summary>
@@ -66,14 +58,14 @@ public class Database
     /// <param name="Options"></param>
     /// <param name="Connection"></param>
     public Database(DbContextOptions<Database> Options, ConnectionOptions Connection)
-        : base(SIGN, Connection, Options) {
+        : base(new() { ConnectionOptions = Connection, DbContextOptions = Options }) {
     }
 
     /// <summary>
     /// 
     /// </summary>
     public Database()
-        : base(SIGN) {
+        : base(new()) {
     }
 
     #region Drivers

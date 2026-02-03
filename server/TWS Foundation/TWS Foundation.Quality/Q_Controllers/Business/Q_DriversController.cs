@@ -1,6 +1,7 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
+using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Server.Scheming;
 
 using Microsoft.AspNetCore.Mvc.Testing;

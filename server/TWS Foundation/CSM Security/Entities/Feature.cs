@@ -2,6 +2,8 @@
 
 using CSM_Security.Abstractions;
 
+using CSM_Database_Core.Core.Attributes;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities;
@@ -27,7 +29,7 @@ public class Feature
     /// <summary>
     ///     <see cref="Permit"/> dependants from this <see cref="Feature"/>.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion

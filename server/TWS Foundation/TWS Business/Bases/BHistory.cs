@@ -1,4 +1,6 @@
-﻿using CSM_Foundation.Database;
+﻿using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation.Database;
 
 namespace TWS_Business.Bases;
 

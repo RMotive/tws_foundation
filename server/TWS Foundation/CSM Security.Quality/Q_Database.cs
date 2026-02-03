@@ -1,11 +1,11 @@
-﻿using CSM_Foundation.Database.Quality;
+﻿using CSM_Database_Testing.Abstractions.Bases;
 
 namespace CSM_Security.Quality;
 
-public class Q_Database 
-    : BQ_Database<Database> {
+public class Q_Database
+    : TestingDatabaseBase<Database> {
 
-    public Q_Database() 
-        : base(Database.SIGN) {
+    public Q_Database()
+        : base() {
     }
 }

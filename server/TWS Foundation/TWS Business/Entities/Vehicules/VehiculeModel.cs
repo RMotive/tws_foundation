@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -34,7 +34,7 @@ public class VehiculeModel
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -43,7 +43,7 @@ public class VehiculeModel
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Manufacturer Manufacturer { get; set; } = default!;
 
     #endregion

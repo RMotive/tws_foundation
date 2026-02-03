@@ -1,6 +1,9 @@
-﻿using CSM_Foundation.Database;
+﻿using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Database_Testing.Abstractions.Bases;
+using CSM_Database_Testing.Disposing.Abstractions.Bases;
+
 using CSM_Foundation.Database.Quality;
-using CSM_Foundation.Database.Quality.Disposing;
 
 using Xunit;
 
@@ -89,6 +92,6 @@ public abstract class BQ_Service<TService, TEntity>
         TEntity createdEntity = await service.Create(sampleEntity);
 
 
-        Assert.True( createdEntity.Id > 0, $"Created entity Id must be greater than 0" );
+        Assert.True(createdEntity.Id > 0, $"Created entity Id must be greater than 0");
     }
 }

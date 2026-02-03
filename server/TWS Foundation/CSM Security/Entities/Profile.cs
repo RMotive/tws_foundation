@@ -2,6 +2,8 @@
 
 using CSM_Security.Abstractions;
 
+using CSM_Database_Core.Core.Attributes;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities;
@@ -17,13 +19,13 @@ public class Profile
     /// <summary>
     ///     <see cref="Permit"/> related to this <see cref="Profile"/>.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Permit> Permits { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Account"/> related to this <see cref="Profile"/>.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Account> Accounts { get; set; } = default!;
 
     #endregion

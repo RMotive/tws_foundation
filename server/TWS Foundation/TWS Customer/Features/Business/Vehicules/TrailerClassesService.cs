@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Product;
+﻿using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Entities.Trailers;
@@ -33,29 +31,4 @@ public class TrailerClassesService
     public TrailerClassesService(TrailerClassesDepot Depot, Database Database) : base(Depot) {
         this._db = Database;
     }
-    public async override Task<BatchOperationOutput<Trailer_Class>> Create(Trailer_Class[] Entities, bool Sync = false) {
-        Trailer_Class[] successes = [];
-        EntityOperationFailure<Trailer_Class>[] failures = [];
-
-        foreach (Trailer_Class entity in Entities) {
-            try {
-                Trailer_Class attachedEntity = await depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<Trailer_Class> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<Trailer_Class> output = new(successes, failures);
-
-        return output;
-    }
-
 }

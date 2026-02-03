@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -25,7 +25,7 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -34,7 +34,7 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Approach Approach { get; set; } = default!;
 
     /// <summary>
@@ -43,13 +43,13 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Address Address { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="USDOTs.USDOT"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public USDOT? USDOT { get; set; }
 
     #endregion

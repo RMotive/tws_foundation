@@ -1,6 +1,10 @@
-﻿using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
+
 using TWS_Business.Entities;
-using CSM_Foundation.Database;
 
 namespace TWS_Business.Depots;
 
@@ -17,11 +21,11 @@ public interface IWaypointsDepot
 ///     representing a depot to handle <see cref="Waypoint"/> dataDatabases entity mirror.
 /// </summary>
 public class WaypointsDepot
-    : BDepot<Database, Waypoint>, IWaypointsDepot {
+    : DepotBase<Database, Waypoint>, IWaypointsDepot {
     /// <summary>
     ///     Generates a new depot handler for <see cref="Waypoint"/>.
     /// </summary>
-    public WaypointsDepot(Database Databases, IDisposer? Disposer = null)
+    public WaypointsDepot(Database Databases, IDisposer<IEntity>? Disposer = null)
        : base(Databases, Disposer) {
     }
     public WaypointsDepot() : base(new(), null) {

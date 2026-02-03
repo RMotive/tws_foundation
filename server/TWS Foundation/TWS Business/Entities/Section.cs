@@ -1,9 +1,10 @@
 ﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Bases;
+using CSM_Database_Core.Core.Extensions;
 
 namespace TWS_Business.Entities;
 
@@ -35,7 +36,7 @@ public class Section
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -44,13 +45,13 @@ public class Section
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Location Yard { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Resource"/> Section image information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Resource? Resource { get; set; }
 
     #endregion

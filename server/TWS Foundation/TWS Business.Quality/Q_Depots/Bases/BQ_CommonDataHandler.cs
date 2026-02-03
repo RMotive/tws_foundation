@@ -1,11 +1,16 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Quality;
-using CSM_Foundation.Database.Quality.Disposing;
-using CSM_Foundation.Database.Utilitites;
+﻿using CSM_Database_Core.Core.Utils;
+using CSM_Database_Core.Entities.Abstractions.Bases;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Database_Testing.Abstractions.Bases;
+using CSM_Database_Testing.Disposing;
+using CSM_Database_Testing.Disposing.Abstractions.Bases;
+
+using CSM_Foundation.Core.Utils;
 
 using Microsoft.EntityFrameworkCore;
+
+using TWS_Business.Bases;
 
 namespace TWS_Business.Quality.Q_Depots.Bases;
 
@@ -17,12 +22,12 @@ namespace TWS_Business.Quality.Q_Depots.Bases;
 /// </remarks>
 
 public class BQ_CommonDataHandler
-    : IDisposable {
+    : TestingDisposer {
 
     /// <summary>
     ///     Quality disposition data manager, used to store to-remove entries after tests finished.
     /// </summary>
-    protected readonly Q_Disposer Disposer;
+    protected readonly TestingDisposer Disposer;
 
     /// <summary>
     ///     Database factories available for Samples Storing/Disposing.
@@ -43,12 +48,7 @@ public class BQ_CommonDataHandler
             this.Factories.Add(dbType, factory);
         }
 
-        Disposer = new Q_Disposer(Factories);
-    }
-
-    public void Dispose() {
-        Disposer.Dispose();
-        GC.SuppressFinalize(this);
+        Disposer = new TestingDisposer(Factories);
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public class BQ_CommonDataHandler
 
         DbContext database = GetDatabase(Entity.Database);
 
-        Entity = DatabaseUtilities.SanitizeEntity(database, Entity);
+        Entity = DatabaseUtils.SanitizeEntity(database, Entity);
         database.Set<TEntity2>().Add(Entity);
         database.SaveChanges();
         Disposer.Push(Entity);
@@ -117,9 +117,9 @@ public class BQ_CommonDataHandler
     ///     The stored and updated [Entity] object. 
     /// </returns>
     protected async Task<TCommon> Store<TCommon, TInternalEdge, TExternalEdge>(EntityFactory<TCommon> EntityFactory)
-        where TCommon : class, ICommonEntity<TInternalEdge, TExternalEdge>, new()
-        where TInternalEdge : class, ICommonScopeEntity<TCommon>
-        where TExternalEdge : class, ICommonScopeEntity<TCommon> {
+        where TCommon : BCommonEntity<TInternalEdge, TExternalEdge>, new()
+        where TInternalEdge : PartnerScopeEntityBase<TCommon>
+        where TExternalEdge : PartnerScopeEntityBase<TCommon> {
 
         using DbContext database = GetDatabase(new TCommon().Database);
         TCommon toStore = RunEntityFactory(EntityFactory);
@@ -130,15 +130,15 @@ public class BQ_CommonDataHandler
         toStore.Internal = default;
         toStore.External = default;
 
-        toStore = DatabaseUtilities.SanitizeEntity(database, toStore);
+        toStore = DatabaseUtils.SanitizeEntity(database, toStore);
 
         await database.AddAsync(toStore);
         Disposer.Push(toStore);
 
         if (internalRelation != null) {
 
-            internalRelation = DatabaseUtilities.SanitizeEntity(database, internalRelation);
-            internalRelation.Common = toStore;
+            internalRelation = DatabaseUtils.SanitizeEntity(database, internalRelation);
+            internalRelation.Bridge = toStore;
             internalRelation.Timestamp = DateTime.UtcNow;
 
             await database.Set<TInternalEdge>().AddAsync(internalRelation);
@@ -149,9 +149,9 @@ public class BQ_CommonDataHandler
             return toStore;
         }
 
-        externalRelation = DatabaseUtilities.SanitizeEntity(database, externalRelation);
+        externalRelation = DatabaseUtils.SanitizeEntity(database, externalRelation);
         externalRelation!.Timestamp = DateTime.UtcNow;
-        externalRelation.Common = toStore;
+        externalRelation.Bridge = toStore;
 
         await database.Set<TExternalEdge>().AddAsync(externalRelation);
         Disposer.Push(externalRelation);
@@ -165,9 +165,9 @@ public class BQ_CommonDataHandler
 
 
     protected async Task<TCommon[]> Store<TCommon, TInternalEdge, TExternalEdge>(int Quantity, EntityFactory<TCommon> EntityFactory)
-        where TCommon : class, ICommonEntity<TInternalEdge, TExternalEdge>, new()
-        where TInternalEdge : class, ICommonScopeEntity<TCommon>
-        where TExternalEdge : class, ICommonScopeEntity<TCommon> {
+        where TCommon : BCommonEntity<TInternalEdge, TExternalEdge>, new()
+        where TInternalEdge : PartnerScopeEntityBase<TCommon>
+        where TExternalEdge : PartnerScopeEntityBase<TCommon> {
 
         TCommon[] entities = [];
         using DbContext database = GetDatabase(new TCommon().Database);
@@ -180,13 +180,13 @@ public class BQ_CommonDataHandler
             entity.Internal = null;
             entity.External = null;
 
-            entity = DatabaseUtilities.SanitizeEntity(database, entity);
+            entity = DatabaseUtils.SanitizeEntity(database, entity);
             database.Set<TCommon>().Add(entity);
             Disposer.Push(entity);
 
             if (internalRelation != null) {
-                internalRelation = DatabaseUtilities.SanitizeEntity(database, internalRelation);
-                internalRelation.Common = entity;
+                internalRelation = DatabaseUtils.SanitizeEntity(database, internalRelation);
+                internalRelation.Bridge = entity;
                 internalRelation.Timestamp = DateTime.UtcNow;
 
                 database.Set<TInternalEdge>().Add(internalRelation);
@@ -200,9 +200,9 @@ public class BQ_CommonDataHandler
 
             externalRelation!.EvaluateWrite();
 
-            externalRelation = DatabaseUtilities.SanitizeEntity(database, externalRelation);
+            externalRelation = DatabaseUtils.SanitizeEntity(database, externalRelation);
             externalRelation.Timestamp = DateTime.UtcNow;
-            externalRelation.Common = entity;
+            externalRelation.Bridge = entity;
 
             database.Set<TExternalEdge>().Add(externalRelation);
 

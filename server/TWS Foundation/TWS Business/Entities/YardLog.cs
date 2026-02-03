@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -61,26 +61,26 @@ public class YardLog
     /// <summary>
     ///     <see cref="Vehicules.LoadType"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public LoadType LoadType { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Employee"/> guard information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Employee Guard { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Section"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Section Section { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Drivers.Driver_Common"/> information.
     /// </summary>
 
-    [Relation, QualityDriverAdapterAttribute]
+    [EntityRelation, QualityDriverAdapterAttribute]
     public Driver_Common Driver { get; set; } = default!;
 
     /// <summary>
@@ -88,7 +88,7 @@ public class YardLog
     /// </summary>
     /// 
 
-    [Relation, QualityTruckAdapterAttribute]
+    [EntityRelation, QualityTruckAdapterAttribute]
     public Truck_Common Truck { get; set; } = default!;
 
 
@@ -96,7 +96,7 @@ public class YardLog
     ///     <see cref="Vehicules.Trailers.Trailer_Common"/> information.
     /// </summary>
 
-    [Relation, QualityTrailerAdapterAttribute]
+    [EntityRelation, QualityTrailerAdapterAttribute]
     public Trailer_Common? Trailer { get; set; }
 
 
@@ -106,7 +106,7 @@ public class YardLog
     /// <summary>
     /// Collection of images resouces for <see cref="Truck"/>, <see cref="Trailer"/> and damages.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Resource> Resources { get; set; } = [];
 
     #endregion
@@ -121,19 +121,19 @@ public class YardLog
         etBuilder.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
         etBuilder.Link<YardLog, Section>(nameof(Section), Required: true);
         etBuilder.Link<YardLog, Employee>(
-            nameof(Guard), 
+            nameof(Guard),
             Required: true,
             TargetReference: nameof(Employee.Yardlogs)
         );
 
         etBuilder.Link<YardLog, Driver_Common>(
-            nameof(Driver), 
+            nameof(Driver),
             Required: true,
             TargetReference: nameof(Driver_Common.Yardlogs)
         );
 
         etBuilder.Link<YardLog, Truck_Common>(
-            nameof(Truck), 
+            nameof(Truck),
             Required: true,
             TargetReference: nameof(Truck_Common.Yardlogs)
         );

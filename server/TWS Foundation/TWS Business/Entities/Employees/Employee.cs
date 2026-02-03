@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using CSM_Security.Entities;
 
@@ -57,7 +57,7 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Identification Identification { get; set; } = default!;
 
     /// <summary>
@@ -66,7 +66,7 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -75,25 +75,25 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Employee_Dates Dates { get; set; } = default!;
 
     /// <summary>
     ///     Approaching contact information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Approach? Approach { get; set; }
 
     /// <summary>
     ///     Address information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Address? Address { get; set; }
 
     /// <summary>
     ///     <see cref="Drivers.Driver"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Driver? Driver { get; set; }
 
     /// <summary>

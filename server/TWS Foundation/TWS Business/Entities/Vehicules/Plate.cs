@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -53,7 +53,7 @@ public class Plate
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -63,13 +63,13 @@ public class Plate
     /// <summary>
     ///     <see cref="Trucks.Truck"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Truck? Truck { get; set; }
 
     /// <summary>
     ///     <see cref="Trailers.Trailer"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Trailer? Trailer { get; set; }
 
     #endregion
@@ -89,7 +89,7 @@ public class Plate
                 Required: true,
                 Auto: true
             );
-        
+
         etBuilder.Link<Plate, Truck>(nameof(Truck));
         etBuilder.Link<Plate, Trailer>(nameof(Trailer));
 

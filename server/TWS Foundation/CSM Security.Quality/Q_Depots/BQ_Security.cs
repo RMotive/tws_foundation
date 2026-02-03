@@ -1,7 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Quality;
-using CSM_Foundation.Database.Quality.Disposing;
+﻿using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Database_Testing.Abstractions.Bases;
+using CSM_Database_Testing.Disposing.Abstractions.Bases;
 
 namespace CSM_Security.Quality.Q_Depots;
 
@@ -15,7 +16,7 @@ namespace CSM_Security.Quality.Q_Depots;
 ///     Type of the depot based on test.    
 /// </typeparam>
 public abstract class BQ_Security<TEntity, TDepot>
-    : BQ_Depot<TEntity, TDepot, Database>
+    : TestingDepotBase<TEntity, TDepot, Database>
     where TEntity : class, IEntity, new()
     where TDepot : class, IDepot<TEntity> {
 
@@ -28,5 +29,5 @@ public abstract class BQ_Security<TEntity, TDepot>
     /// <param name="Factories">
     ///     Collateral used databases factories to be used.
     /// </param>
-    protected BQ_Security(DatabaseFactory? Database = null, params DatabaseFactory[] Factories) : base("CSMS", Database, Factories) { }
+    protected BQ_Security(DatabaseFactory? Database = null, params DatabaseFactory[] Factories) : base(Database, Factories) { }
 }

@@ -1,5 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using CSM_Security.Entities;
 
@@ -17,7 +20,7 @@ public interface IContactsDepot
 ///     representing a depot to handle <see cref="Contact"/> dataDatabases entity mirror.
 /// </summary>
 public class ContactsDepot
-     : BDepot<Database, Contact>, IContactsDepot {
+     : DepotBase<Database, Contact>, IContactsDepot {
 
     /// <summary>
     ///     Creates a new <see cref="ContactsDepot"/> instance.
@@ -28,5 +31,5 @@ public class ContactsDepot
     /// <param name="Disposer">
     ///     Data disposition manager to be used.
     /// </param>
-    public ContactsDepot(Database Database, IDisposer? Disposer = null) : base(Database, Disposer) { }
+    public ContactsDepot(Database Database, IDisposer<IEntity>? Disposer = null) : base(Database, Disposer) { }
 }

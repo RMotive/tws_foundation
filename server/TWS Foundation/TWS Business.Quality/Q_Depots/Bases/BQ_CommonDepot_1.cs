@@ -1,6 +1,8 @@
-﻿using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Quality.Disposing;
+﻿using CSM_Database_Core.Entities.Abstractions.Bases;
 
+using CSM_Database_Testing.Disposing.Abstractions.Bases;
+
+using TWS_Business.Bases;
 using TWS_Business.Depots.Bases;
 
 namespace TWS_Business.Quality.Q_Depots.Bases;
@@ -16,9 +18,9 @@ namespace TWS_Business.Quality.Q_Depots.Bases;
 /// </typeparam>
 public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot>
     : BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDepot, Database>
-    where TCommon : class, ICommonEntity<TInternalEdge, TExternalEdge>, new()
-    where TInternalEdge : class, ICommonScopeEntity<TCommon>
-    where TExternalEdge : class, ICommonScopeEntity<TCommon>
+    where TCommon : BCommonEntity<TInternalEdge, TExternalEdge>, new()
+    where TInternalEdge : PartnerScopeEntityBase<TCommon>
+    where TExternalEdge : PartnerScopeEntityBase<TCommon>
     where TDepot : BCommonDepot<Database, TInternalEdge, TExternalEdge, TCommon> {
 
     /// <summary>

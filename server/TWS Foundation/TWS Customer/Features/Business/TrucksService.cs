@@ -1,10 +1,9 @@
 ﻿using System.Numerics;
 
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Product;
 
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +59,7 @@ public class TrucksService
 
     public async override Task<BatchOperationOutput<Truck_Common>> Create(Truck_Common[] Entities, bool Sync = false) {
         Truck_Common[] successes = [];
-        EntityOperationFailure<Truck_Common>[] failures = [];
+        EntityError<Truck_Common>[] failures = [];
 
         foreach (Truck_Common entity in Entities) {
             try {
@@ -104,8 +103,8 @@ public class TrucksService
                         }
                     }
                 }
-                entity.Internal?.Common = entity;
-                entity.External?.Common = entity;
+                entity.Internal?.Bridge = entity;
+                entity.External?.Bridge = entity;
 
                 _db.Attach(entity);
                 successes = [.. successes, entity];
@@ -114,7 +113,7 @@ public class TrucksService
                     throw;
                 }
 
-                EntityOperationFailure<Truck_Common> fail = new(entity, excep);
+                EntityError<Truck_Common> fail = new(EntityErrorEvents.CREATE_FAILED, entity, excep);
                 failures = [.. failures, fail];
             }
         }

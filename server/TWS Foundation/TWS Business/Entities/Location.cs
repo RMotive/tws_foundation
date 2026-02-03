@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,7 +23,7 @@ public class Location
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -32,13 +32,13 @@ public class Location
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Address Address { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Resource"/> Location image information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Resource? Resource { get; set; }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class Location
     /// </summary>
     public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
-  
+
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

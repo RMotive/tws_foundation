@@ -1,8 +1,6 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Models;
+
+using CSM_Foundation.Core.Utils;
 
 using TWS_Business.Entities.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
@@ -19,7 +17,7 @@ public class Q_TrailersService
     }
     protected override ITrailersService ServiceFactory() {
         TWS_Business.Database businessDatabase = BuildBusinessDb();
-        TrailersDepot depot = new TrailersDepot(businessDatabase, Disposer);
+        TrailersDepot depot = new(businessDatabase, Disposer);
         return new TrailersService(depot, businessDatabase);
     }
 

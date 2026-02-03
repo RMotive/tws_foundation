@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
+﻿using CSM_Database_Core.Depots.Models;
 
 using CSM_Security.Entities;
 
@@ -10,6 +9,8 @@ using TWS_Business.Entities.Vehicules;
 using TWS_Customer.Features.Business.Vehicules;
 
 using TWS_Foundation.Authentication;
+
+using TWS_Customer.Managers.Auth;
 
 namespace TWS_Foundation.Controllers.Business.Vehicules;
 

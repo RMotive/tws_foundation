@@ -1,6 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Models;
-using CSM_Foundation.Database.Utilitites;
+﻿using CSM_Database_Core;
+using CSM_Database_Core.Abstractions.Interfaces;
+using CSM_Database_Core.Core.Models;
+using CSM_Database_Core.Core.Utils;
+
 using CSM_Foundation.Logging;
 
 using CSM_Security.Entities;
@@ -16,7 +18,7 @@ internal class DatabaseDesignFactory
     public Database CreateDbContext(string[] args) {
         Logger.Warning("Using native [CSM] design time database context factory");
 
-        ConnectionOptions connectionOptions = DatabaseUtilities.Retrieve("CSMS");
+        ConnectionOptions connectionOptions = DatabaseUtils.GetConnectionOptions("CSMS");
 
         return new Database(connectionOptions);
     }
@@ -26,9 +28,9 @@ internal class DatabaseDesignFactory
 ///     [Database Context] implementation for [CSM Security] module. Stores necessary information for security and access control to the registered solutions.
 /// </summary>
 public class Database
-    : BDatabase_SQLServer<Database> {
+    : DatabaseBase<Database>, IDatabase {
 
-    public const string SIGN = "CSMS";
+    public override string Sign => "CSMS";
 
     /// <summary>
     ///     Creates a new <see cref="Database"/> instance.
@@ -37,10 +39,10 @@ public class Database
     ///     Connection parameters information.
     /// </param>
     public Database(ConnectionOptions Connection)
-        : base(SIGN, Connection) {
+        : base(new DatabaseOptions<Database>() { ConnectionOptions = Connection }) {
     }
 
-    /// <summary>
+    /// <summary> 
     ///     Creates a new <see cref="Database"/> instance.
     /// </summary>
     /// <param name="Connection">
@@ -50,7 +52,14 @@ public class Database
     ///     Custom EF Native options.
     /// </param>
     public Database(ConnectionOptions Connection, DbContextOptions<Database> Options)
-        : base(SIGN, Connection, Options) {
+       : base(new DatabaseOptions<Database>() { ConnectionOptions = Connection, DbContextOptions = Options }) {
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public Database()
+        : base(new()) {
     }
 
     /// <summary>

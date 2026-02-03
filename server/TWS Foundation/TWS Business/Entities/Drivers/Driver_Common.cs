@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -31,13 +31,13 @@ public class Driver_Common
     /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Situation? Situation { get; set; } = default!;
 
     #endregion
@@ -73,7 +73,7 @@ public class Driver_Common
             if (ident == null)
                 return null;
 
-            if(ident.SecondLastname != null) return $"{ident.Name} {ident.FirstLastname} {ident.SecondLastname}";
+            if (ident.SecondLastname != null) return $"{ident.Name} {ident.FirstLastname} {ident.SecondLastname}";
 
             return $"{ident.Name} {ident.FirstLastname}";
         }

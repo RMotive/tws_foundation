@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Bases;
@@ -31,13 +30,13 @@ public class Truck_Common
     /// <summary>
     ///     <see cref="Entities.Location"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Location? Location { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Situation? Situation { get; set; }
 
     /// <summary>
@@ -46,7 +45,7 @@ public class Truck_Common
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Status Status { get; set; } = default!;
 
     #endregion

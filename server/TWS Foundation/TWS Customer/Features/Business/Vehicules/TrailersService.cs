@@ -1,10 +1,9 @@
 ﻿using System.Numerics;
 
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Product;
 
 using Microsoft.EntityFrameworkCore;
@@ -64,7 +63,7 @@ public class TrailersService
     }
     public async override Task<BatchOperationOutput<Trailer_Common>> Create(Trailer_Common[] Entities, bool Sync = false) {
         Trailer_Common[] successes = [];
-        EntityOperationFailure<Trailer_Common>[] failures = [];
+        EntityError<Trailer_Common>[] failures = [];
 
         foreach (Trailer_Common entity in Entities) {
             try {
@@ -97,7 +96,7 @@ public class TrailersService
 
                         if (entity.Internal?.Model?.Id > 0) {
                             entity.Internal.Model = await depot.GetEntityCache(entity.Internal.Model, vehiculeCache);
-                        } else if (entity.Internal?.Model != null){
+                        } else if (entity.Internal?.Model != null) {
                             entity.Internal?.Model.Status = activeStatus;
                             entity.Internal?.Model.Manufacturer = await depot.GetEntityCache(entity.Internal.Model.Manufacturer, manufacturerCache);
                         }
@@ -107,8 +106,8 @@ public class TrailersService
                         }
                     }
                 }
-                entity.Internal?.Common = entity;
-                entity.External?.Common = entity;
+                entity.Internal?.Bridge = entity;
+                entity.External?.Bridge = entity;
                 Trailer_Common attachedEntity = await depot.Store(entity);
                 successes = [.. successes, attachedEntity];
             } catch (Exception excep) {
@@ -116,7 +115,7 @@ public class TrailersService
                     throw;
                 }
 
-                EntityOperationFailure<Trailer_Common> fail = new(entity, excep);
+                EntityError<Trailer_Common> fail = new(EntityErrorEvents.CREATE_FAILED, entity, excep);
                 failures = [.. failures, fail];
             }
         }

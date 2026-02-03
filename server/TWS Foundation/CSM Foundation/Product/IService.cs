@@ -1,4 +1,4 @@
-﻿using CSM_Foundation.Database;
+﻿using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
 namespace CSM_Foundation.Product;
 

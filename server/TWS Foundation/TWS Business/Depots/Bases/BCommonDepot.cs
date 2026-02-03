@@ -2,18 +2,17 @@
 using System.Numerics;
 using System.Reflection;
 
+using CSM_Database_Core;
+using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Core.Utils;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+using CSM_Database_Core.Entities.Abstractions.Bases;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
-using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Database.Utilitites;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using CSM_Security.Abstractions;
 
@@ -26,15 +25,15 @@ namespace TWS_Business.Depots.Bases;
 
 public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     : IDepot<TCommon>
-    where TDatabase : BDatabase_SQLServer<TDatabase>
-    where TCommon : class, ICommonEntity<TInternal, TExternal>, new()
-    where TInternal : class, ICommonScopeEntity<TCommon>
-    where TExternal : class, ICommonScopeEntity<TCommon> {
+    where TDatabase : DatabaseBase<TDatabase>
+    where TCommon : class, IPartnerBridgeEntity<TInternal, TExternal>, new()
+    where TInternal : PartnerScopeEntityBase<TCommon>
+    where TExternal : PartnerScopeEntityBase<TCommon> {
 
     /// <summary>
     /// 
     /// </summary>
-    protected readonly IDisposer? _disposer;
+    protected readonly IDisposer<IEntity>? _disposer;
 
     /// <summary>
     ///     Name to handle direct transactions (not-attached)
@@ -52,7 +51,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// <param name="Database">
     ///     The <typeparamref name="TDatabase"/> that stores and handles the transactions for this <see cref="TCommon"/> concept.
     /// </param>
-    public BCommonDepot(TDatabase Database, IDisposer? Disposer) {
+    public BCommonDepot(TDatabase Database, IDisposer<IEntity>? Disposer) {
         _db = Database;
         _disposer = Disposer;
         _dbSet = Database.Set<TCommon>();
@@ -224,8 +223,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         return tmpDependency is null
             ? throw new Exception($"[{GetType().Name}] entity requires [{typeof(TCommon2)}] dependency")
             : tmpDependency;
-    
-    
+
+
     }
 
     /// <summary>
@@ -329,7 +328,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         entity.Internal = default;
         entity.External = default;
 
-        entity = DatabaseUtilities.SanitizeEntity(_db, entity);
+        entity = DatabaseUtils.SanitizeEntity(_db, entity);
 
         await _dbSet.AddAsync(entity);
         _disposer?.Push(entity);
@@ -337,8 +336,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         if (internalRelation != null) {
             internalRelation.EvaluateWrite();
 
-            internalRelation = DatabaseUtilities.SanitizeEntity(_db, internalRelation);
-            internalRelation.Common = entity;
+            internalRelation = DatabaseUtils.SanitizeEntity(_db, internalRelation);
+            internalRelation.Bridge = entity;
             internalRelation.Timestamp = DateTime.UtcNow;
 
             await _db.Set<TInternal>().AddAsync(internalRelation);
@@ -349,9 +348,9 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         } else {
             externalRelation!.EvaluateWrite();
 
-            externalRelation = DatabaseUtilities.SanitizeEntity(_db, externalRelation);
+            externalRelation = DatabaseUtils.SanitizeEntity(_db, externalRelation);
             externalRelation.Timestamp = DateTime.UtcNow;
-            externalRelation.Common = entity;
+            externalRelation.Bridge = entity;
 
             await _db.Set<TExternal>().AddAsync(externalRelation);
 
@@ -385,7 +384,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     /// </returns>
     public virtual async Task<BatchOperationOutput<TCommon>> Create(ICollection<TCommon> entities, bool sync = false) {
         TCommon[] attached = [];
-        EntityOperationFailure<TCommon>[] failures = [];
+        EntityError<TCommon>[] failures = [];
 
         foreach (TCommon entity in entities) {
             try {
@@ -396,7 +395,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                     throw;
                 }
 
-                EntityOperationFailure<TCommon> fail = new(entity, excep);
+                EntityError<TCommon> fail = new(EntityErrorEvents.CREATE_FAILED, entity, excep);
                 failures = [.. failures, fail];
             }
         }
@@ -426,7 +425,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
             .FirstOrDefaultAsync(
                 e => e.Id == id
             )
-            ?? throw new XDepot<TCommon>(XDepotSituations.Unfound, $"{typeof(TCommon).Name}.Id = {id}");
+            ?? throw new DepotError<TCommon>(DepotErrorEvents.UNFOUND, $"{typeof(TCommon).Name}.Id = {id}");
 
         _dbSet.Remove(entity);
         _db.SaveChanges();
@@ -448,7 +447,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
 
     public async Task<BatchOperationOutput<TCommon>> Delete(long[] ids) {
         List<TCommon> successes = [];
-        List<EntityOperationFailure<TCommon>> failures = [];
+        List<EntityError<TCommon>> failures = [];
         foreach (long id in ids) {
 
             try {
@@ -456,7 +455,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 successes.Add(success);
             } catch (Exception ex) {
                 failures.Add(
-                        new EntityOperationFailure<TCommon>(
+                        new EntityError<TCommon>(
+                                EntityErrorEvents.DELETE_FAILED,
                                 new TCommon {
                                     Id = id
                                 },
@@ -482,7 +482,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
             );
 
         List<TCommon> successes = [];
-        List<EntityOperationFailure<TCommon>> failures = [];
+        List<EntityError<TCommon>> failures = [];
 
         TCommon[] entities = await query.ToArrayAsync();
 
@@ -492,7 +492,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 successes.Add(deletedEntity);
             } catch (Exception exception) {
                 failures.Add(
-                        new EntityOperationFailure<TCommon>(entity, exception)
+                        new EntityError<TCommon>(EntityErrorEvents.DELETE_FAILED, entity, exception)
                     );
             }
         }
@@ -547,7 +547,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 e => e.Id == id
             )
             .FirstOrDefaultAsync()
-            ?? throw new XDepot<TCommon>(XDepotSituations.Unfound, $"{nameof(IEntity.Id)} = {id}");
+            ?? throw new DepotError<TCommon>(DepotErrorEvents.UNFOUND, $"{nameof(IEntity.Id)} = {id}");
 
         entity.EvaluateRead();
         return entity;
@@ -556,7 +556,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
     public async Task<BatchOperationOutput<TCommon>> Read(long[] ids) {
 
         List<TCommon> successes = [];
-        List<EntityOperationFailure<TCommon>> failures = [];
+        List<EntityError<TCommon>> failures = [];
         foreach (long id in ids) {
 
             try {
@@ -564,7 +564,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
                 successes.Add(success);
             } catch (Exception ex) {
                 failures.Add(
-                        new EntityOperationFailure<TCommon>(
+                        new EntityError<TCommon>(
+                                EntityErrorEvents.READ_FAILED,
                                 new TCommon {
                                     Id = id
                                 },
@@ -600,19 +601,19 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         };
 
         List<TCommon> successes = [];
-        List<EntityOperationFailure<TCommon>> failures = [];
+        List<EntityError<TCommon>> failures = [];
         foreach (TCommon item in resultItems) {
             try {
                 item.EvaluateRead();
                 successes.Add(item);
             } catch (Exception exception) {
-                EntityOperationFailure<TCommon> failure = new(item, exception);
+                EntityError<TCommon> failure = new(EntityErrorEvents.READ_FAILED, item, exception);
                 failures.Add(failure);
             }
         }
 
         if (parameters.Behavior == FilteringBehaviors.First && failures.Count > 0) {
-            throw failures[0].Exception;
+            throw failures[0].Exception!;
         }
 
         return new BatchOperationOutput<TCommon>(
@@ -725,7 +726,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         /// --> When the entity is not saved yet.
         if (overwritten.Id == 0) {
             if (!parameters.Create)
-                throw new XDepot<TCommon>(XDepotSituations.CreateDisabled, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
+                throw new DepotError<TCommon>(DepotErrorEvents.CREATE_DISABLED, $"{typeof(TCommon).Name}.Id = {overwritten.Id}");
 
             overwritten = await Create(overwritten);
             _db.SaveChanges();
@@ -739,8 +740,8 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         TCommon? original = await processedQuery
         .Where(r => r.Id == overwritten.Id)
         .FirstOrDefaultAsync()
-        ?? throw new XDepot<TCommon>(XDepotSituations.Unfound);
-    
+        ?? throw new DepotError<TCommon>(DepotErrorEvents.UNFOUND);
+
         TCommon oldCopy = original.DeepCopy();
 
         UpdateHelper(original, overwritten, null);

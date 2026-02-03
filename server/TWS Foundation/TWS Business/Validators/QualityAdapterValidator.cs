@@ -1,5 +1,6 @@
-﻿using CSM_Foundation.Database.Entity.Bases;
+﻿using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
+using TWS_Business.Bases;
 using TWS_Business.Entities;
 using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Employees;
@@ -18,9 +19,9 @@ namespace TWS_Business.Quality.Q_Depots.Q_Validators;
 [AttributeUsage(AttributeTargets.Property)]
 public abstract class BAdapterAttribute<TCommon, TInternal, TExternal>
     : Attribute
-    where TCommon : ICommonEntity<TInternal, TExternal>
-    where TInternal : ICommonScopeEntity
-    where TExternal : ICommonScopeEntity {
+    where TCommon : BCommonEntity<TInternal, TExternal>
+    where TInternal : IPartnerScopeEntity
+    where TExternal : IPartnerScopeEntity {
 
     public abstract TCommon CreateInternal(string entropy);
 

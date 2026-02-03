@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
-using CSM_Foundation.Database.Entity.Bases;
+using CSM_Database_Core.Entities.Abstractions.Bases;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
 namespace TWS_Business.Bases;
 
@@ -11,8 +12,8 @@ namespace TWS_Business.Bases;
 ///     Usage must be exclusively for { TWS Business } entities.
 /// </remarks>
 public abstract class BCommonScopeEntity<TCommonEntity>
-    : CSM_Foundation.Database.Entity.Bases.BCommonScopeEntity<TCommonEntity>
-   where TCommonEntity : ICommonEntity {
+    : PartnerScopeEntityBase<TCommonEntity>
+   where TCommonEntity : IPartnerBridgeEntity {
 
     [JsonIgnore]
     public override Type Database { get; init; } = typeof(Database);

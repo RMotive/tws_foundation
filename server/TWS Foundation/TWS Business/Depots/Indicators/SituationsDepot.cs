@@ -1,5 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using TWS_Business.Entities;
 
@@ -16,7 +19,7 @@ public interface ISituationsDepot
 ///     [Depot] that handles <see cref="Situation"/> operations.
 /// </summary>
 public class SituationsDepot
-    : BDepot<Database, Situation>, ISituationsDepot {
+    : DepotBase<Database, Situation>, ISituationsDepot {
 
     /// <summary>
     ///     Creates a new <see cref="SituationsDepot"/> instance.
@@ -27,5 +30,5 @@ public class SituationsDepot
     /// <param name="Disposer">
     ///     Data disposition handler to be used.
     /// </param>
-    public SituationsDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
+    public SituationsDepot(Database Database, IDisposer<IEntity>? Disposer) : base(Database, Disposer) { }
 }

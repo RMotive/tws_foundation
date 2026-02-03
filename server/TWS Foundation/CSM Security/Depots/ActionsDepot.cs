@@ -1,5 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using Action = CSM_Security.Entities.Action;
 
@@ -17,7 +20,7 @@ public interface IActionsDepot
 ///     [Depot] that provides operations for <see cref= Action"/> entity.
 /// </summary>
 public class ActionsDepot
-    : BDepot<Database, Action>, IActionsDepot {
+    : DepotBase<Database, Action>, IActionsDepot {
 
     /// <summary>
     ///     Creates a new <see cref="ActionsDepot"/> instance.
@@ -32,7 +35,7 @@ public class ActionsDepot
     ///     If no <paramref name="Database"/> is provided, a default configured instance will be used. 
     ///     If no <paramref name="Disposer"/> is provided, none will be used.
     /// </remarks>
-    public ActionsDepot(Database Database, IDisposer? Disposer = null)
+    public ActionsDepot(Database Database, IDisposer<IEntity>? Disposer = null)
         : base(Database, Disposer) {
     }
 }

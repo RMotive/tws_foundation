@@ -1,16 +1,17 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CSM_Foundation.Database.Entity;
-using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View.ViewFilters;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
-using CSM_Foundation.Database.Quality.Disposing;
+using CSM_Database_Core;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+using CSM_Database_Core.Depots.ViewFilters;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Database_Testing.Disposing.Abstractions.Bases;
+
 using CSM_Foundation.Database.Utilitites;
 
 using TWS_Business.Quality.Q_Depots.Q_Validators;
@@ -22,8 +23,8 @@ namespace CSM_Foundation.Database.Quality;
 public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
     : BQ_DataHandler
     where TEntity : BEntity, new()
-    where TDepot : BDepot<TDatabase, TEntity>
-    where TDatabase : BDatabase_SQLServer<TDatabase> {
+    where TDepot : DepotBase<TDatabase, TEntity>
+    where TDatabase : DatabaseBase<TDatabase> {
 
     /// <summary>
     ///     Depot instance to operate tests.
@@ -107,7 +108,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
     /// <param name="type"></param>
     /// <param name="genericBase"></param>
     /// <returns></returns>
-    private bool IsDerivedFromGenericBase(Type type, Type genericBase) {
+    static bool IsDerivedFromGenericBase(Type type, Type genericBase) {
         while (type != null && type != typeof(object)) {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == genericBase)
                 return true;
@@ -143,8 +144,8 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
         IEnumerable<PropertyInfo> commonDependencies = typeof(TEntity)
             .GetProperties()
             .Where(pi =>
-                pi.GetCustomAttribute<RelationAttribute>() != null &&
-                IsDerivedFromGenericBase(pi.PropertyType, typeof(ICommonEntity))
+                pi.GetCustomAttribute<EntityRelationAttribute>() != null &&
+                BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>.IsDerivedFromGenericBase(pi.PropertyType, typeof(IPartnerBridgeEntity))
             ).ToList();
 
         if (!commonDependencies.Any()) throw new InvalidOperationException($"No common dependencies found in {typeof(TEntity).Name}. Ensure properties are marked with RelationAttribute and inherit from CommonEntity<,>.");
@@ -152,7 +153,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
         // Generate commonDependencies.
         foreach (PropertyInfo prop in commonDependencies) {
             var attribute = prop.GetCustomAttributes(inherit: true)
-                        .FirstOrDefault(pi => IsDerivedFromGenericBase(pi.GetType(), typeof(BAdapterAttribute<,,>)));
+                        .FirstOrDefault(pi => BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>.IsDerivedFromGenericBase(pi.GetType(), typeof(BAdapterAttribute<,,>)));
 
             if (attribute != null) {
                 MethodInfo createMethod;
@@ -171,7 +172,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
         }
 
     }
-    
+
     /// <summary>
     /// Creates and returns an entity after applying additional composition and loading dependencies.
     /// </summary>
@@ -194,7 +195,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
     protected async Task CommitSampleEntities(ICollection<TEntity> SampleEntities) {
         await Database.SaveChangesAsync();
         foreach (TEntity commonDependent in SampleEntities.Reverse()) {
-            Disposer.Push(commonDependent);
+            Push(commonDependent);
         }
     }
 
@@ -280,7 +281,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
     [Theory(DisplayName = "[View]: Simple view calculation"), CommonFactData]
     public async Task ViewA(bool DefaultEdge) {
         const int viewPage = 1;
-        await Store(30, (entropy) => WrappedFactory(entropy, DefaultEdge));
+        await Store<TEntity>(30, (entropy) => WrappedFactory(entropy, DefaultEdge));
 
         ViewOutput<TEntity> viewOutput = await Depot.View(
                 new QueryInput<TEntity, ViewInput<TEntity>> {
@@ -704,7 +705,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
     public virtual async Task UpdateB(bool DefaultEdge) {
         TEntity sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
 
-        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
+        DepotError<TEntity> depotException = await Assert.ThrowsAsync<DepotError<TEntity>>(
                 async () => {
                     UpdateOutput<TEntity> updateOutput = await Depot.Update(
                 new QueryInput<TEntity, UpdateInput<TEntity>> {
@@ -716,7 +717,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
                 }
             );
 
-        Assert.Equal(XDepotSituations.CreateDisabled, depotException.Reason);
+        Assert.Equal(DepotErrorEvents.CREATE_DISABLED, depotException.Event);
     }
 
     [Theory(DisplayName = $"[Update Entity]: Throws Unfound exception situation")]
@@ -725,7 +726,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
         TEntity sample = RunEntityFactory((entropy) => WrappedFactory(entropy, DefaultEdge));
         sample.Id = await GeneratePointer();
 
-        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
+        DepotError<TEntity> depotException = await Assert.ThrowsAsync<DepotError<TEntity>>(
                 async () => {
                     UpdateOutput<TEntity> updateOutput = await Depot.Update(
                         new QueryInput<TEntity, UpdateInput<TEntity>> {
@@ -736,7 +737,7 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
                     );
                 }
             );
-        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
+        Assert.Equal(DepotErrorEvents.UNFOUND, depotException.Event);
     }
 
     [Theory(DisplayName = $"[Update Entity]: Entity gets updated correctly")]
@@ -782,13 +783,13 @@ public abstract class BQ_CommonDependenceDepot<TDepot, TDatabase, TEntity>
     public virtual async Task DeleteA() {
         long unexistPointer = await GeneratePointer(true);
 
-        XDepot<TEntity> depotException = await Assert.ThrowsAsync<XDepot<TEntity>>(
+        DepotError<TEntity> depotException = await Assert.ThrowsAsync<DepotError<TEntity>>(
                 async () => {
                     await Depot.Delete(unexistPointer);
                 }
             );
 
-        Assert.Equal(XDepotSituations.Unfound, depotException.Reason);
+        Assert.Equal(DepotErrorEvents.UNFOUND, depotException.Event);
     }
 
     [Theory(DisplayName = $"[Delete Entity]: Deletes correctly an Entity with a given Common Entity")]

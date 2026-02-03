@@ -1,17 +1,14 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Bases;
-using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+using CSM_Database_Core.Entities.Abstractions.Bases;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Product;
 
 namespace CSM_Foundation.Customer;
 public abstract class BReferenceService<TEntity, TDepot>
      : IService<TEntity>
-    where TEntity : BNamedReferencedEntity, IEntity
+    where TEntity : CatalogEntityBase, IEntity
     where TDepot : IDepot<TEntity> {
 
     /// <summary>
@@ -67,7 +64,7 @@ public abstract class BReferenceService<TEntity, TDepot>
     }
 
     public virtual async Task<TEntity?> Read(string reference) {
-        QueryInput <TEntity, FilterQueryInput < TEntity >> input = new() {
+        QueryInput<TEntity, FilterQueryInput<TEntity>> input = new() {
             Parameters = new FilterQueryInput<TEntity> {
                 Behavior = FilteringBehaviors.First,
                 Filter = (entity) => entity.Reference == reference
@@ -76,7 +73,7 @@ public abstract class BReferenceService<TEntity, TDepot>
 
         BatchOperationOutput<TEntity> result = await _depot.Read(input);
 
-        return result.Successes.Length > 0? result.Successes.First() : null;
+        return result.Successes.Length > 0 ? result.Successes.First() : null;
     }
 
     public Task<TEntity> Create(TEntity entity) {

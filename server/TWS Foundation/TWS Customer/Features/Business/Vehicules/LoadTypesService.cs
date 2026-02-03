@@ -1,7 +1,5 @@
 ﻿using CSM_Foundation;
 using CSM_Foundation.Customer;
-using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Output;
 
 using TWS_Business;
 using TWS_Business.Depots.Vehicles;
@@ -33,30 +31,5 @@ public class LoadTypesService
     /// </param>
     public LoadTypesService(LoadTypesDepot Depot, Database Database) : base(Depot) {
         this._db = Database;
-    }
-
-    public async override Task<BatchOperationOutput<LoadType>> Create(LoadType[] Entities, bool Sync = false) {
-        LoadType[] successes = [];
-        EntityOperationFailure<LoadType>[] failures = [];
-
-        foreach (LoadType entity in Entities) {
-            try {
-                LoadType attachedEntity = await _depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<LoadType> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<LoadType> output = new(successes, failures);
-
-        return output;
     }
 }

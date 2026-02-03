@@ -1,7 +1,5 @@
-﻿using CSM_Foundation.Database.Entity.Depot.IDepot_Read;
-using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Product;
 
 using TWS_Business.Depots;
@@ -78,29 +76,4 @@ public class EmployeesService
 
         return employeesReadOutput.Successes[0];
     }
-    public async override Task<BatchOperationOutput<Employee>> Create(Employee[] Entities, bool Sync = false) {
-        Employee[] successes = [];
-        EntityOperationFailure<Employee>[] failures = [];
-
-        foreach (Employee entity in Entities) {
-            try {
-                Employee attachedEntity = await depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<Employee> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<Employee> output = new(successes, failures);
-
-        return output;
-    }
-
 }

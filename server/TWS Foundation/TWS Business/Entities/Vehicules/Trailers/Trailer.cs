@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+﻿using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,19 +19,19 @@ public class Trailer
     /// <summary>
     ///     <see cref="Vehicules.SCT"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public SCT? SCT { get; set; }
 
     /// <summary>
     ///     <see cref="VehiculeModel"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public VehiculeModel? Model { get; set; }
 
     /// <summary>
     ///     <see cref="Maintenances.Maintenance"/> information.
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public Maintenance? Maintenance { get; set; }
 
     /// <summary>
@@ -40,13 +40,13 @@ public class Trailer
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Carrier Carrier { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Plate"/>s information. 
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Plate> Plates { get; set; } = [];
 
     #endregion
@@ -60,7 +60,7 @@ public class Trailer
 
     #endregion
 
-    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.Link<Trailer, Carrier>(
                 nameof(Carrier),
                 Required: true,

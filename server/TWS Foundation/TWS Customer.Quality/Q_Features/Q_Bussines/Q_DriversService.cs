@@ -1,8 +1,6 @@
-﻿using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Database.Entity.Depot.IDepot_Update;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Models;
+
+using CSM_Foundation.Core.Utils;
 
 using TWS_Business.Depots;
 using TWS_Business.Entities.Drivers;
@@ -30,6 +28,7 @@ public class Q_DriversService
     public async Task View() {
         // Create a sample to prevent empty view results.
         await Store<Driver_Common, Driver, DriverExternal>(BusinessDraftUtils.SampleDriverCommon(true), true);
+
         ViewOutput<Driver_Common> viewOutput = await service.View(
                 new QueryInput<Driver_Common, ViewInput<Driver_Common>> {
                     Parameters = new() {

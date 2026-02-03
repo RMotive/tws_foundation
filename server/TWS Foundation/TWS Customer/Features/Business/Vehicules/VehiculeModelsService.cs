@@ -1,5 +1,6 @@
-﻿using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Product;
 
 using TWS_Business;
@@ -31,38 +32,6 @@ public class VehiculeModelsService
     /// </param>
     public VehiculeModelsService(VehiculeModelsDepot Depot, Database Database) : base(Depot) {
         this._db = Database;
-    }
-
-    /// <summary>
-    /// Overrides the <see cref="BService{TEntity, TDepot}.Create"/> method to handle batch creation of <see cref="VehiculeModel"/> entities.
-    /// Stores the nested entities to prevent sanitization issues. 
-    /// </summary>
-    /// <param name="Entities"></param>
-    /// <param name="Sync"></param>
-    /// <returns></returns>
-    public async override Task<BatchOperationOutput<VehiculeModel>> Create(VehiculeModel[] Entities, bool Sync = false) {
-        VehiculeModel[] successes = [];
-        EntityOperationFailure<VehiculeModel>[] failures = [];
-
-        foreach (VehiculeModel entity in Entities) {
-            try {
-                VehiculeModel attachedEntity = await depot.Store(entity);
-                successes = [.. successes, attachedEntity];
-            } catch (Exception excep) {
-                if (Sync) {
-                    throw;
-                }
-
-                EntityOperationFailure<VehiculeModel> fail = new(entity, excep);
-                failures = [.. failures, fail];
-            }
-        }
-
-        _db.SaveChanges();
-
-        BatchOperationOutput<VehiculeModel> output = new(successes, failures);
-
-        return output;
     }
 
 }

@@ -1,5 +1,5 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Models.Output;
+﻿using CSM_Database_Core.Depots.Models;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
 namespace CSM_Foundation.Product;
 

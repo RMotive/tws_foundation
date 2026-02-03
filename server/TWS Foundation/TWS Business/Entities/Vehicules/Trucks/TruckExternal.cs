@@ -44,7 +44,7 @@ public class TruckExternal
 
     #endregion
 
-    protected override void DesignCommonScopeEntity(EntityTypeBuilder etBuilder) {
+    protected override void DesignScopeEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("Trucks_Externals");
 
         etBuilder.Property(nameof(Carrier)).HasMaxLength(100).IsRequired();

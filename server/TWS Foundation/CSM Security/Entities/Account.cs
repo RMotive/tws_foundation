@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
+using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -42,19 +42,19 @@ public class Account
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [Relation]
+    [EntityRelation]
     public Contact Contact { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Permit"/> related to this <see cref="Account"/>
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Permit> Permits { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Profile"/> related to this <see cref="Account"/>
     /// </summary>
-    [Relation]
+    [EntityRelation]
     public ICollection<Profile> Profiles { get; set; } = [];
 
     #endregion

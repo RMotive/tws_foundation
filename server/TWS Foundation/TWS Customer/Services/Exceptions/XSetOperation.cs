@@ -1,18 +1,18 @@
 ﻿using System.Net;
 
-using CSM_Foundation.Core.Constants;
+using CSM_Database_Core.Core.Errors;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
 using CSM_Foundation.Core.Bases;
-using CSM_Foundation.Database.Entity.Models;
-using CSM_Foundation.Database;
 
 namespace TWS_Customer.Services.Exceptions;
 public class XSetOperation<TSet>
     : BException<XTransactionSituation>
-    where TSet: IEntity {
-    public XSetOperation(EntityOperationFailure<TSet>[] Failures)
+    where TSet : IEntity {
+    public XSetOperation(EntityError<TSet>[] Failures)
         : base($"Set operation has failed", XTransactionSituation.Failed, HttpStatusCode.InternalServerError, null) {
 
-        Factors = Failures.ToDictionary<EntityOperationFailure<TSet>, string, dynamic>(i => $"{i.Entity.GetType()}({i.Entity.Id})", i => i.Exception.Message);
+        Factors = Failures.ToDictionary<EntityError<TSet>, string, dynamic>(i => $"{i.Entity.GetType()}({i.Entity.Id})", i => i.Exception != null? i.Exception.Message : "No Excepcion message");
         Details = Factors;
     }
 

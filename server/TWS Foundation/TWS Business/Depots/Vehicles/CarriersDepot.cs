@@ -1,5 +1,8 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity.Depot;
+﻿using CSM_Database_Core.Depots.Abstractions.Bases;
+using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Entities.Abstractions.Interfaces;
+
+using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using TWS_Business.Entities.Vehicules;
 
@@ -16,7 +19,7 @@ public interface ICarriersDepot
 ///     [Depot] implementation for <see cref="Carrier"/> based entity operations.
 /// </summary>
 public class CarriersDepot
-    : BDepot<Database, Carrier>, ICarriersDepot {
+    : DepotBase<Database, Carrier>, ICarriersDepot {
 
     /// <summary>
     ///     Creates a new <see cref="CarriersDepot"/> instance.
@@ -27,6 +30,6 @@ public class CarriersDepot
     /// <param name="Disposer">
     ///     Data disposition handler to be used.
     /// </param>
-    public CarriersDepot(Database Database, IDisposer? Disposer) : base(Database, Disposer) { }
+    public CarriersDepot(Database Database, IDisposer<IEntity>? Disposer) : base(Database, Disposer) { }
 
 }

@@ -1,14 +1,12 @@
-﻿using CSM_Foundation.Database.Entity.Depot;
-using CSM_Foundation.Database.Entity.Depot.IDepot_View;
-using CSM_Foundation.Database.Entity.Models.Input;
+﻿using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+
 using CSM_Foundation.Product;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
-
-using TWS_Business.Entities.Vehicules.Trucks;
 
 namespace TWS_Customer.Features.Security;
 
