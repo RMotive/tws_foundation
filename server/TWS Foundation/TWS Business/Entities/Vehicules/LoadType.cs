@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Vehicules.Trailers;
 
-using BNamedReferencedEntity = TWS_Business.Bases.BNamedReferencedEntity;
+using CatalogEntity = TWS_Business.Bases.CatalogEntity;
 
 namespace TWS_Business.Entities.Vehicules;
 
@@ -11,7 +11,7 @@ namespace TWS_Business.Entities.Vehicules;
 ///     [etBuilder] that stores information about a specific type of load for <see cref="Trailer"/> loading information.
 /// </summary>
 public class LoadType
-    : BNamedReferencedEntity {
+    : CatalogEntity {
 
     #region Dependants
 

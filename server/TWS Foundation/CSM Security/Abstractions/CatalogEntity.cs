@@ -13,7 +13,7 @@ namespace CSM_Security.Abstractions;
 /// </remarks>
 /// 
 
-public class BNamedReferencedEntity
+public class CatalogEntity
     : CatalogEntityBase
 {
     [JsonIgnore]

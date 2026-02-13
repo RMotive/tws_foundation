@@ -12,7 +12,7 @@ namespace TWS_Business.Entities;
 ///     [Entity] that stores information about the current situation for a business process entity.
 /// </summary>
 public class Situation
-    : BNamedReferencedEntity {
+    : CatalogEntity {
 
     #region Dependants
 

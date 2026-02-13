@@ -1,7 +1,7 @@
 ﻿using CSM_Foundation.Product;
 
 using TWS_Business;
-using TWS_Business.Entities.Trailers;
+using TWS_Business.Depots.Vehicles.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Customer.Features.Business.Vehicules;

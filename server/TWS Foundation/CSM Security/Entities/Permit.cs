@@ -14,7 +14,7 @@ namespace CSM_Security.Entities;
 ///     [Entity] that stores and handles specific Feature / Solution / Action authorization for Accounts.
 /// </summary>
 public class Permit
-    : BNamedReferencedEntity {
+    : CatalogEntity {
 
     #region Properties
 
@@ -73,10 +73,6 @@ public class Permit
     #endregion
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
-        etBuilder.HasIndex(nameof(Reference)).IsUnique();
-        etBuilder.Property(nameof(Reference)).HasMaxLength(8).IsFixedLength().IsRequired();
-
-        etBuilder.Property(nameof(Enabled)).IsRequired();
 
         etBuilder.Link<Permit, Solution>(
                 nameof(Solution),

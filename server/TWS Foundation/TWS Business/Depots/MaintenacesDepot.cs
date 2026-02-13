@@ -4,7 +4,9 @@ using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
 using CSM_Foundation_Core.Abstractions.Interfaces;
 
-namespace TWS_Business.Entities.Maintenances;
+using TWS_Business.Entities.Maintenances;
+
+namespace TWS_Business.Depots;
 
 /// <summary>
 ///     [Interface] for <see cref="Maintenance"/> based [Depot] implementations.

@@ -6,7 +6,7 @@ using CSM_Foundation_Core.Abstractions.Interfaces;
 using TWS_Business.Depots.Bases;
 using TWS_Business.Entities.Vehicules.Trailers;
 
-namespace TWS_Business.Entities.Trailers;
+namespace TWS_Business.Depots.Vehicles.Trailers;
 
 
 /// <summary>

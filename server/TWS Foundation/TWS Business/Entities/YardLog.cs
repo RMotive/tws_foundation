@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 using CSM_Database_Core.Core.Attributes;
 using CSM_Database_Core.Core.Extensions;
+
+using CSM_Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,6 +19,33 @@ using TWS_Business.Quality.Q_Depots.Q_Validators;
 using BEntity = TWS_Business.Bases.BEntity;
 
 namespace TWS_Business.Entities;
+
+public class YardLogVendor : BEntity {
+    public long VendorId { get; set; }
+    public long YardlogId { get; set; }
+    public YardLog Yardlog { get; set; } = default!;
+
+    /// <summary>
+    ///     Shadow property pointing Vendor column since EF doesn't support cross-database references. With this manually populate <see cref="Vendor"/> 
+    ///     object querying [CSM Security] database.
+    /// </summary>
+    [NotMapped]
+    public Vendor Vendor { get; set; } = default!;
+
+    protected override void DesignEntity(EntityTypeBuilder etBuilder) {
+        etBuilder.ToTable("YardLog_Vendors");
+
+        etBuilder.Property(nameof(VendorId)).IsRequired();
+
+        etBuilder.HasOne(nameof(Yardlog))
+              .WithMany(nameof(YardLog.Vendors))
+              .HasForeignKey(nameof(YardlogId))
+              .OnDelete(DeleteBehavior.Cascade);
+    }
+
+}
+
+
 
 /// <summary>
 ///     [Entity] for <see cref="YardLog"/> entries. A <see cref="YardLog"/> record stores information about an entry or exit from the main business [Yards].
@@ -77,7 +107,7 @@ public class YardLog
     public Section Section { get; set; } = default!;
 
     /// <summary>
-    ///     <see cref="Drivers.Driver_Common"/> information.
+    ///     <see cref="Driver_Common"/> information.
     /// </summary>
 
     [EntityRelation, QualityDriverAdapterAttribute]
@@ -93,12 +123,11 @@ public class YardLog
 
 
     /// <summary>
-    ///     <see cref="Vehicules.Trailers.Trailer_Common"/> information.
+    ///     <see cref="Trailer_Common"/> information.
     /// </summary>
 
     [EntityRelation, QualityTrailerAdapterAttribute]
     public Trailer_Common? Trailer { get; set; }
-
 
     #endregion
 
@@ -108,6 +137,12 @@ public class YardLog
     /// </summary>
     [EntityRelation]
     public ICollection<Resource> Resources { get; set; } = [];
+
+    /// <summary>
+    /// Collection of the vendors id linked to the account that creates this <see cref="YardLog"/>,
+    /// This id belongs to the CSM Security module.
+    /// </summary>
+    public ICollection<YardLogVendor>? Vendors { get; set; }
 
     #endregion
 
@@ -120,6 +155,7 @@ public class YardLog
 
         etBuilder.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
         etBuilder.Link<YardLog, Section>(nameof(Section), Required: true);
+
         etBuilder.Link<YardLog, Employee>(
             nameof(Guard),
             Required: true,

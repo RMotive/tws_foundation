@@ -164,6 +164,8 @@ public class Database
 
     #region Miscellaneous
     public DbSet<Resource> Resources { get; set; } = default!;
+    public DbSet<YardLogVendor> YardLogVendor { get; set; } = default!;
 
     #endregion
+
 }

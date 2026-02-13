@@ -41,5 +41,23 @@ static class Constants {
             /// </summary>
             public const string Profile = "Profile";
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public struct AccountsVendors {
+            /// <summary>
+            /// 
+            /// </summary>
+            public const string Connector = "Accounts_Vendors";
+            /// <summary>
+            /// 
+            /// </summary>
+            public const string Account = "Account";
+            /// <summary>
+            /// 
+            /// </summary>
+            public const string Vendor = "Vendor";
+        }
     }
 }

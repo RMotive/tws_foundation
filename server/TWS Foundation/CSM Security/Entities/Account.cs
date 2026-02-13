@@ -45,6 +45,10 @@ public class Account
     [EntityRelation]
     public Contact Contact { get; set; } = default!;
 
+
+    #endregion
+
+    #region Dependents
     /// <summary>
     ///     <see cref="Permit"/> related to this <see cref="Account"/>
     /// </summary>
@@ -56,6 +60,12 @@ public class Account
     /// </summary>
     [EntityRelation]
     public ICollection<Profile> Profiles { get; set; } = [];
+
+    /// <summary>
+    /// Collection of <see cref="Vendor"/> linked to this <see cref="Account"/>.
+    /// </summary>
+    [EntityRelation]
+    public ICollection<Vendor> Vendors { get; set; } = [];
 
     #endregion
 
@@ -88,6 +98,15 @@ public class Account
                 Constants.Connectors.AccountsProfiles.Connector,
                 con => con.HasOne(typeof(Profile)).WithMany().HasForeignKey(Constants.Connectors.AccountsProfiles.Profile).OnDelete(DeleteBehavior.Cascade),
                 con => con.HasOne(typeof(Account)).WithMany().HasForeignKey(Constants.Connectors.AccountsPermits.Account).OnDelete(DeleteBehavior.Cascade)
+            );
+
+        etBuilder
+            .HasMany(nameof(Vendors))
+            .WithMany(nameof(Vendor.Accounts))
+            .UsingEntity(
+                Constants.Connectors.AccountsVendors.Connector,
+                con => con.HasOne(typeof(Vendor)).WithMany().HasForeignKey(Constants.Connectors.AccountsVendors.Vendor).OnDelete(DeleteBehavior.Cascade),
+                con => con.HasOne(typeof(Account)).WithMany().HasForeignKey(Constants.Connectors.AccountsVendors.Account).OnDelete(DeleteBehavior.Cascade)
             );
     }
 }

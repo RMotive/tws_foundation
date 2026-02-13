@@ -19,7 +19,7 @@ namespace TWS_Business.Entities;
 ///     information about a system status for an specific entity.
 /// </summary>
 public class Status
-    : BNamedReferencedEntity {
+    : CatalogEntity {
 
     #region Dependants
 

@@ -2,7 +2,7 @@
 
 using CSM_Foundation.Core.Utils;
 
-using TWS_Business.Entities.Trailers;
+using TWS_Business.Depots.Vehicles.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 using TWS_Business.Quality.Utils;
 

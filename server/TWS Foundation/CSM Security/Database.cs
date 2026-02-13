@@ -96,4 +96,13 @@ public class Database
     ///     [DbSet] for [<see cref="Action"/>] entities.
     /// </summary>
     public DbSet<Entities.Action> Actions { get; set; } = default!;
+
+    #region Partners
+
+    /// <summary>
+    ///     [DbSet] for [<see cref="Vendor"/>] entities.
+    /// </summary>
+    public DbSet<Vendor> Vendors { get; set; } = default!;
+
+    #endregion
 }

@@ -11,7 +11,7 @@ namespace TWS_Business.Bases;
 /// <remarks>
 ///     Usage must be exclusively for { TWS Business } entities.
 /// </remarks>
-public class BNamedReferencedEntity 
+public class CatalogEntity 
     : CatalogEntityBase {
 
     [JsonIgnore]

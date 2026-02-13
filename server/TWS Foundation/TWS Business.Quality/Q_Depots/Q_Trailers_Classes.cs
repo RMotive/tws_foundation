@@ -1,4 +1,4 @@
-﻿using TWS_Business.Entities.Trailers;
+﻿using TWS_Business.Depots.Vehicles.Trailers;
 using TWS_Business.Entities.Vehicules.Trailers;
 
 namespace TWS_Business.Quality.Q_Depots;
