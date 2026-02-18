@@ -23,6 +23,8 @@ public interface IYardLogsDepot
 public class YardLogsDepot
     : DepotBase<Database, YardLog>, IYardLogsDepot {
 
+    readonly CSM_Security.Database _securityDb;
+
     /// <summary>
     ///     Creates a new <see cref="YardLogsDepot"/> instance.
     /// </summary>
@@ -32,7 +34,11 @@ public class YardLogsDepot
     /// <param name="Disposer">
     ///     Data disposition handler to be used.
     /// </param>
-    public YardLogsDepot(Database Database, IDisposer<IEntity>? Disposer) : base(Database, Disposer) { }
+    /// 
+
+    public YardLogsDepot(Database Database, CSM_Security.Database SecurityDatabase, IDisposer<IEntity>? Disposer) : base(Database, Disposer) { 
+        _securityDb = SecurityDatabase;
+    }
 
     public async override Task<YardLog> Create(YardLog entity) {
         HashSet<IEntity> addEntities = [];
@@ -81,6 +87,4 @@ public class YardLogsDepot
 
         return new(attached, failures);
     }
-
-
 }

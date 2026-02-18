@@ -18,7 +18,9 @@ public class Q_YardlogsService
 
     protected override YardLogsService ServiceFactory() {
         TWS_Business.Database businessDatabase = BuildBusinessDb();
-        YardLogsDepot depot = new(businessDatabase, Disposer);
+        CSM_Security.Database securityDatabase = BuildSecurityDb();
+
+        YardLogsDepot depot = new(businessDatabase, securityDatabase, Disposer);
         return new YardLogsService(depot);
     }
 

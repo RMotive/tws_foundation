@@ -6,6 +6,8 @@ using CSM_Database_Core.Depots.Models;
 using CSM_Foundation.Logging;
 using CSM_Foundation.Product;
 
+using CSM_Security.Entities;
+
 using Microsoft.EntityFrameworkCore;
 
 using TWS_Business.Depots.Vehicles.Control;
@@ -49,7 +51,12 @@ public interface IYardLogsService
 /// </summary>
 public class YardLogsService
     : BService<YardLog, IYardLogsDepot>, IYardLogsService {
-    private static QueryProcessor<YardLog> QueryProcessor => (sourceQuery) => {
+
+    CSM_Security.Database _securityDb;
+    private static QueryProcessor<YardLog> QueryProcessor(CSM_Security.Database securityDb) => (sourceQuery) => {
+        /// Get the vendors in a dictionary to avoid multiple queries when processing the postprocessor.
+        var vendorsDictionary = securityDb.Vendors.ToDictionary(v => v.Id);
+
         sourceQuery = sourceQuery
             .Include(e => e.Resources)
             .Include(e => e.Guard).ThenInclude(e => e.Approach)
@@ -58,27 +65,33 @@ public class YardLogsService
             .Include(e => e.LoadType)
             .Include(e => e.Driver)
             .Include(e => e.Truck)
-            .Include(e => e.Trailer);
-
-
-        //.Include(e => e.Truck).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
-        //.Include(e => e.Truck).ThenInclude(e => e!.Situation)
-        //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
-        //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
-        //.Include(e => e.Truck).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Insurance)
-        //.Include(e => e.Truck).ThenInclude(e => e!.External)
-
-        //.Include(e => e.Trailer).ThenInclude(e => e!.Type)
-        //.Include(e => e.Trailer).ThenInclude(e => e!.Situation)
-        //.Include(e => e.Trailer).ThenInclude(e => e!.Location).ThenInclude(e => e!.Resource)
-        //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.SCT)
-        //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Model)
-        //.Include(e => e.Trailer).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Maintenance)
-        //.Include(e => e.Trailer).ThenInclude(e => e!.External)
-
-        //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Address)
-        //.Include(e => e.Driver).ThenInclude(e => e!.Internal).ThenInclude(e => e!.Employee).ThenInclude(e => e.Approach)
-        //.Include(e => e.Driver).ThenInclude(e => e!.External);
+            .Include(e => e.Trailer)
+            .Include(e => e.Vendors);
+         sourceQuery =
+            from y in sourceQuery
+            select new YardLog {
+                Id = y.Id,
+                Entry = y.Entry,
+                Reservation = y.Reservation,
+                Seal = y.Seal,
+                SealAlt = y.SealAlt,
+                FromTo = y.FromTo,
+                LoadType = y.LoadType,
+                Guard = y.Guard,
+                Section = y.Section,
+                Driver = y.Driver,
+                Truck = y.Truck,
+                Trailer = y.Trailer,
+                Resources = y.Resources,
+                Vendors = (ICollection<YardLogVendor>)y.Vendors.Select(link => new YardLogVendor {
+                    VendorId = link.VendorId,
+                    YardlogId = link.YardlogId,
+                    Yardlog = link.Yardlog,
+                    Vendor = vendorsDictionary.ContainsKey(link.VendorId)
+                        ? vendorsDictionary[link.VendorId]
+                        : null!
+                })
+            };
 
         return sourceQuery;
     };
@@ -89,9 +102,11 @@ public class YardLogsService
     /// <param name="Depot">
     ///     <see cref="YardLog"/> based <see cref="IDepot{TEntity}"/> handler to be used
     /// </param>
-    public YardLogsService(IYardLogsDepot Depot) : base(Depot) { }
+    public YardLogsService(CSM_Security.Database _securityDb, IYardLogsDepot Depot) : base(Depot) { 
+        this._securityDb = _securityDb;
+    }
     public async override Task<ViewOutput<YardLog>> View(QueryInput<YardLog, ViewInput<YardLog>> input) {
-        input.PostProcessor = QueryProcessor;
+        input.PostProcessor = QueryProcessor(_securityDb);
         return await depot.View(input);
     }
 
@@ -131,7 +146,7 @@ public class YardLogsService
     }
 
     public async Task<ExportOut> ExportView(QueryInput<YardLog, ViewInput<YardLog>> input) {
-        input.PostProcessor = QueryProcessor;
+        input.PostProcessor = QueryProcessor(_securityDb);
         (string, string, Func<YardLog, string?>)[] exportFields = [
            ("Trailer NO", "A", (YardLog i) => i.Trailer?.Economic),
             ("Placa USA", "B", (YardLog i) => i.Trailer?.PlateUSA),
@@ -201,5 +216,4 @@ public class YardLogsService
             Extension = ExportOutExtensions.XLSX
         };
     }
-
 }

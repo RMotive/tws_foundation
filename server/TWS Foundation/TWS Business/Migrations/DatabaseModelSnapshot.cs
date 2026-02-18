@@ -67,7 +67,7 @@ namespace TWS_Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Approach", b =>
@@ -154,7 +154,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Approach_History");
+                    b.ToTable("Approach_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Drivers.Driver", b =>
@@ -227,7 +227,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("EmployeeShadow")
                         .IsUnique();
 
-                    b.ToTable("Drivers");
+                    b.ToTable("Drivers", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Drivers.DriverExternal", b =>
@@ -365,7 +365,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Employees.Employee_Dates", b =>
@@ -393,7 +393,7 @@ namespace TWS_Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employee_Dates");
+                    b.ToTable("Employee_Dates", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Identification", b =>
@@ -435,7 +435,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("Identifications");
+                    b.ToTable("Identifications", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Insurances.Insurance", b =>
@@ -472,7 +472,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("Insurances");
+                    b.ToTable("Insurances", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Insurances.Insurance_History", b =>
@@ -514,7 +514,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Insurance_History");
+                    b.ToTable("Insurance_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Location", b =>
@@ -565,7 +565,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Maintenances.Maintenance", b =>
@@ -595,7 +595,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("Maintenances");
+                    b.ToTable("Maintenances", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Maintenances.Maintenance_History", b =>
@@ -630,7 +630,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Maintenance_History");
+                    b.ToTable("Maintenance_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Resource", b =>
@@ -675,7 +675,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("YardLogShadow");
 
-                    b.ToTable("Resources");
+                    b.ToTable("Resources", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Section", b =>
@@ -732,7 +732,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("YardShadow");
 
-                    b.ToTable("Sections");
+                    b.ToTable("Sections", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Situation", b =>
@@ -774,7 +774,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Reference")
                         .IsUnique();
 
-                    b.ToTable("Situations");
+                    b.ToTable("Situations", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Status", b =>
@@ -816,7 +816,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Reference")
                         .IsUnique();
 
-                    b.ToTable("Statuses");
+                    b.ToTable("Statuses", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.USDOTs.USDOT", b =>
@@ -853,7 +853,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("StatusShadow")
                         .IsUnique();
 
-                    b.ToTable("USDOTs");
+                    b.ToTable("USDOTs", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.USDOTs.USDOT_History", b =>
@@ -887,7 +887,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("USDOTId");
 
-                    b.ToTable("USDOT_History");
+                    b.ToTable("USDOT_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Carrier", b =>
@@ -942,7 +942,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("USDOTShadow");
 
-                    b.ToTable("Carriers");
+                    b.ToTable("Carriers", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Carrier_History", b =>
@@ -998,7 +998,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("USDOT_HistoryId");
 
-                    b.ToTable("Carrier_History");
+                    b.ToTable("Carrier_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.LoadType", b =>
@@ -1040,7 +1040,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Reference")
                         .IsUnique();
 
-                    b.ToTable("LoadTypes");
+                    b.ToTable("LoadTypes", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Manufacturer", b =>
@@ -1070,7 +1070,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Manufacturers");
+                    b.ToTable("Manufacturers", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Plate", b =>
@@ -1123,7 +1123,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("TruckShadow");
 
-                    b.ToTable("Plates");
+                    b.ToTable("Plates", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Plate_History", b =>
@@ -1168,7 +1168,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Plate_History");
+                    b.ToTable("Plate_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.SCT", b =>
@@ -1207,7 +1207,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("SCTs");
+                    b.ToTable("SCTs", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.SCT_History", b =>
@@ -1246,7 +1246,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("SCTId");
 
-                    b.ToTable("SCT_History");
+                    b.ToTable("SCT_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trailers.Trailer", b =>
@@ -1295,7 +1295,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("SCTShadow");
 
-                    b.ToTable("Trailers");
+                    b.ToTable("Trailers", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trailers.TrailerExternal", b =>
@@ -1362,7 +1362,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Trailer_Classes");
+                    b.ToTable("Trailer_Classes", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trailers.Trailer_Common", b =>
@@ -1508,7 +1508,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("SCTShadow");
 
-                    b.ToTable("Trucks");
+                    b.ToTable("Trucks", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trucks.TruckExternal", b =>
@@ -1591,7 +1591,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("StatusShadow");
 
-                    b.ToTable("TrucksCommons");
+                    b.ToTable("TrucksCommons", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.Trucks.Truck_History", b =>
@@ -1649,7 +1649,7 @@ namespace TWS_Business.Migrations
 
                     b.HasIndex("VehiculeModelId");
 
-                    b.ToTable("Truck_History");
+                    b.ToTable("Truck_History", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.Vehicules.VehiculeModel", b =>
@@ -1731,7 +1731,7 @@ namespace TWS_Business.Migrations
                     b.HasIndex("LocationShadow")
                         .IsUnique();
 
-                    b.ToTable("Waypoints");
+                    b.ToTable("Waypoints", (string)null);
                 });
 
             modelBuilder.Entity("TWS_Business.Entities.YardLog", b =>

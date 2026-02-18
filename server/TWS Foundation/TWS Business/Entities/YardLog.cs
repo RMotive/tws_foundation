@@ -26,11 +26,11 @@ public class YardLogVendor : BEntity {
     public YardLog Yardlog { get; set; } = default!;
 
     /// <summary>
-    ///     Shadow property pointing Vendor column since EF doesn't support cross-database references. With this manually populate <see cref="Vendor"/> 
+    ///     Shadow property pointing to Vendor entity since EF doesn't support cross-database references. With this manually populate <see cref="Vendor"/>  
     ///     object querying [CSM Security] database.
     /// </summary>
     [NotMapped]
-    public Vendor Vendor { get; set; } = default!;
+    public Vendor? Vendor { get; set; } = default!;
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
         etBuilder.ToTable("YardLog_Vendors");
@@ -142,7 +142,8 @@ public class YardLog
     /// Collection of the vendors id linked to the account that creates this <see cref="YardLog"/>,
     /// This id belongs to the CSM Security module.
     /// </summary>
-    public ICollection<YardLogVendor>? Vendors { get; set; }
+    [EntityRelation]
+    public ICollection<YardLogVendor> Vendors { get; set; } = [];
 
     #endregion
 
