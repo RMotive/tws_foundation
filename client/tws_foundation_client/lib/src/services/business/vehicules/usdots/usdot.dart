@@ -1,9 +1,9 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Usdot] defines a business entity that stores information for a USDOT that operates in vehicule.
-final class Usdot extends EntityB<Usdot>{
+final class Usdot extends EntityBase<Usdot>{
 
   /// [Usdot.mc] property key.
   static const String kMC = "mc";
@@ -58,13 +58,13 @@ final class Usdot extends EntityB<Usdot>{
   }
 
   @override
-  List<EntityInvalidation<Usdot>> evaluate() {
-    List<EntityInvalidation<Usdot>> results = <EntityInvalidation<Usdot>>[];
+  List<EntityErrors<Usdot>> evaluate(List<EntityErrors<Usdot>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Usdot>(
+      errors.add(
+        EntityErrors<Usdot>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'invalidPointer()',
         ),
@@ -72,8 +72,8 @@ final class Usdot extends EntityB<Usdot>{
     }
 
     if (mc.length != 7 || mc.trim().isEmpty) {
-      results.add(
-        EntityInvalidation<Usdot>(
+      errors.add(
+        EntityErrors<Usdot>(
           this,
           PropertyInfo(kMC, String, mc),
           "Length: ${mc.length}, must be exactly 7 characters",
@@ -83,8 +83,8 @@ final class Usdot extends EntityB<Usdot>{
     }
 
     if (scac.length != 4 || scac.trim().isEmpty) {
-      results.add(
-        EntityInvalidation<Usdot>(
+      errors.add(
+        EntityErrors<Usdot>(
           this,
           PropertyInfo(kSCAC, String, scac),
           "Length: ${scac.length}, must be exactly 4 characters",
@@ -93,9 +93,15 @@ final class Usdot extends EntityB<Usdot>{
       );
     }
 
-    results.validateDependency(this, status);
+    errors.validateDependency(this, status);
 
-    return results;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 
   

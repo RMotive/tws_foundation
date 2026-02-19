@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 /// Represents an external driver, wich are commonly third party businesses with alliances.
-final class DriverExternal extends EntityB<DriverExternal> {
+final class DriverExternal extends EntityBase<DriverExternal> {
   /// [DriverExternal.identification] property key for [DataMap].
   static const String kIdentification = "identification";
 
@@ -43,11 +43,26 @@ final class DriverExternal extends EntityB<DriverExternal> {
   }
 
   @override
-  List<EntityInvalidation<DriverExternal>> evaluate() {
-    List<EntityInvalidation<DriverExternal>> results = <EntityInvalidation<DriverExternal>>[];
-    if (id < BigInt.zero) results.add(EntityInvalidation<DriverExternal>(this, PropertyInfo(EntityKeys.id, int, id), 'Pointer cannot be less than 0', 'invalidPointer()'));
-    results.validateDependency(this, identification);
+  List<EntityErrors<DriverExternal>> evaluate(List<EntityErrors<DriverExternal>> errors) {
+    errors = super.evaluate(errors);
+    if (id < BigInt.zero) {
+      errors.add(
+        EntityErrors<DriverExternal>(
+          this,
+          PropertyInfo(CorePropertiesConsts.id, int, id),
+          'Pointer cannot be less than 0',
+          'invalidPointer()',
+        ),
+      );
+    }
+    errors.validateDependency(this, identification);
 
-    return results;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

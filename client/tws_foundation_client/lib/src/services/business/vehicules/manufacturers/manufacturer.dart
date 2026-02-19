@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Manufacturer] default builder.
 Manufacturer manufacturerBuilder() => Manufacturer();
 
 /// Defines a business entity that stores the [Manufacturer] data for [Trucks] entities.
-final class Manufacturer extends NamedEntityB<Manufacturer> {
+final class Manufacturer extends NamedEntityBase<Manufacturer> {
   /// Generates a new [Manufacturer] instance from mandatory values.
   Manufacturer();
 
@@ -31,14 +31,14 @@ final class Manufacturer extends NamedEntityB<Manufacturer> {
   }
 
   @override
-  List<EntityInvalidation<Manufacturer>> evaluate() {
-    List<EntityInvalidation<Manufacturer>> results = <EntityInvalidation<Manufacturer>>[];
+  List<EntityErrors<Manufacturer>> evaluate(List<EntityErrors<Manufacturer>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Manufacturer>(
+      errors.add(
+        EntityErrors<Manufacturer>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id cannot be less than 0',
           'id < 0',
         ),
@@ -46,10 +46,10 @@ final class Manufacturer extends NamedEntityB<Manufacturer> {
     }
 
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<Manufacturer>(
+      errors.add(
+        EntityErrors<Manufacturer>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Length: ${name.length}, must be between 1 and 100 characters",
           "101 > length > 0",
         ),
@@ -57,17 +57,17 @@ final class Manufacturer extends NamedEntityB<Manufacturer> {
     }
     
     if (description != null && (description!.isEmpty  || description!.length > 200)) {
-      results.add(
-        EntityInvalidation<Manufacturer>(
+      errors.add(
+        EntityErrors<Manufacturer>(
           this,
-          PropertyInfo(EntityKeys.description, String, description),
+          PropertyInfo(CorePropertiesConsts.description, String, description),
           "Length: ${description!.length}, must be empty or greater than 200 characters",
           " length < 200",
         ),
       );
     }
 
-    return results;
+    return errors;
   }
 
   @override
@@ -75,5 +75,11 @@ final class Manufacturer extends NamedEntityB<Manufacturer> {
     encode.entries;
 
     super.decode(encode);
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

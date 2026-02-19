@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
-/// Implements a [EntityB] that stores information about maintenance scheduling information.
-final class Maintenance extends EntityB<Maintenance> {
+/// Implements a [EntityBase] that stores information about maintenance scheduling information.
+final class Maintenance extends EntityBase<Maintenance> {
   /// [Maintenance.anual] property key for [DataMap].
   static const String kAnual = "anual";
 
@@ -69,10 +69,16 @@ final class Maintenance extends EntityB<Maintenance> {
   }
 
   @override
-  List<EntityInvalidation<Maintenance>> evaluate() {
-    List<EntityInvalidation<Maintenance>> invalidations = <EntityInvalidation<Maintenance>>[];
-    invalidations.validateDependency(this, status);
-    return invalidations;
+  List<EntityErrors<Maintenance>> evaluate(List<EntityErrors<Maintenance>> errors) {
+    errors = super.evaluate(errors);
+    errors.validateDependency(this, status);
+    return errors;
 
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

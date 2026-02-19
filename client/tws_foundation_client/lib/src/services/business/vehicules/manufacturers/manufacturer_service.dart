@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} for [ManufacturersServiceI].
 ///
 /// Defines base contract for [ManufacturersServiceI] implementations that specifies the methods to have providing [Manufacturer] based operations and management.
-abstract interface class ManufacturersServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Manufacturer> {
+abstract interface class ManufacturersServiceI extends FoundationServiceB implements IService, ViewServiceI<Manufacturer> {
   /// Creates a new [ManufacturersServiceI] instance.
   ManufacturersServiceI(
     super.host,

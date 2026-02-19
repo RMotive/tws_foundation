@@ -1,8 +1,8 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// Defines a contract for {view} operations for [ServiceI] implementations.
-abstract interface class ViewServiceI<TEntity extends EntityI<TEntity>> {
+/// Defines a contract for {view} operations for [IService] implementations.
+abstract interface class ViewServiceI<TEntity extends IEntity<TEntity>> {
   /// Creates a new [ViewServiceI] instance.
   const ViewServiceI();
 

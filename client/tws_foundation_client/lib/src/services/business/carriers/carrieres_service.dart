@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} for [CarriersServiceI].
 ///
 /// Defines base contract for [CarriersServiceI] implementations that specifies the methods to have providing [Carrier] based operations and management.
-abstract interface class CarriersServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Carrier> {
+abstract interface class CarriersServiceI extends FoundationServiceB implements IService, ViewServiceI<Carrier> {
   /// Creates a new [CarriersServiceI] instance.
   CarriersServiceI(
     super.host,
@@ -43,7 +43,8 @@ final class CarrieresService extends CarriersServiceBase {
         );
 
   @override
-  FoundationFutureResolver<ViewOutput<Carrier>> view(ViewInput<Carrier> input, String authToken) async {
+  FoundationFutureResolver<ViewOutput<Carrier>> view(
+      ViewInput<Carrier> input, String authToken) async {
     return FoundationResponseResolver<ViewOutput<Carrier>>(
       await postSecure<ViewInput<Carrier>>(
         'view',
@@ -52,4 +53,5 @@ final class CarrieresService extends CarriersServiceBase {
       ),
     );
   }
+  
 }

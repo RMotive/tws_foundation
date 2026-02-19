@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {model} class for [AuthenticationInput].
 ///
 /// Defines a data model class that represents an {input} object for [SecurityServiceI.authenticate] operation that handles
 /// [FoundationServer] authentication processes.
-final class AuthenticationInput implements EncodableI {
+final class AuthenticationInput implements IEncodable {
   /// Solution context sign
   String sign = '';
 

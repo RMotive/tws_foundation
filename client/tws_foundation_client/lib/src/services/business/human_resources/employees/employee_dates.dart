@@ -1,7 +1,7 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/extensions.dart';
 
-final class EmployeeDates extends EntityB<EmployeeDates> {
+final class EmployeeDates extends EntityBase<EmployeeDates> {
  
   /// [imms] property key.
   static const String kImss = "imss";
@@ -52,9 +52,15 @@ final class EmployeeDates extends EntityB<EmployeeDates> {
   }
 
   @override
-  List<EntityInvalidation<EmployeeDates>> evaluate() {
-    List<EntityInvalidation<EmployeeDates>> results = <EntityInvalidation<EmployeeDates>>[];
-    return results;
+  List<EntityErrors<EmployeeDates>> evaluate(List<EntityErrors<EmployeeDates>> errors) {
+    errors = super.evaluate(errors);
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 
 }

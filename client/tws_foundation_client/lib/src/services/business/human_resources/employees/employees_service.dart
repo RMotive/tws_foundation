@@ -1,9 +1,9 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {abstract} class.
 ///
-/// Implements base shared [EmployeesServiceI] behavior for all [Employee] based [ServiceI].
+/// Implements base shared [EmployeesServiceI] behavior for all [Employee] based [IService].
 abstract class EmployeesServiceB extends FoundationServiceB implements EmployeesServiceI {
   /// Creates a new [EmployeesServiceB] instance.
   ///
@@ -23,8 +23,8 @@ abstract class EmployeesServiceB extends FoundationServiceB implements Employees
 
 /// {interface} class.
 ///
-/// Defines a [ServiceI] contract for [Employee] operations.
-abstract interface class EmployeesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Employee>, CreateServiceI<Employee> {
+/// Defines a [IService] contract for [Employee] operations.
+abstract interface class EmployeesServiceI extends FoundationServiceB implements IService, ViewServiceI<Employee>, CreateServiceI<Employee> {
   /// Creates a new [EmployeesServiceI] instance.
   EmployeesServiceI(
     super.host,
@@ -48,7 +48,7 @@ abstract interface class EmployeesServiceI extends FoundationServiceB implements
 
 /// {service} class.
 ///
-/// Implements a [ServiceI] for [Employee] based operations, providing final behavior operations.
+/// Implements a [IService] for [Employee] based operations, providing final behavior operations.
 final class EmployeesService extends EmployeesServiceB {
   /// Creates a new [EmployeesService] instance.
   EmployeesService(

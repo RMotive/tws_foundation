@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 ///
-final class Trailer extends EntityB<Trailer> {
+final class Trailer extends EntityBase<Trailer> {
   /// [Trailer.model] property key for [DataMap].
   static const String kModel = "model";
 
@@ -85,32 +85,38 @@ final class Trailer extends EntityB<Trailer> {
   }
 
   @override
-  List<EntityInvalidation<Trailer>> evaluate() {
-    List<EntityInvalidation<Trailer>> invalidations = <EntityInvalidation<Trailer>>[];
+  List<EntityErrors<Trailer>> evaluate(List<EntityErrors<Trailer>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      invalidations.add(
-         EntityInvalidation<Trailer>(
+      errors.add(
+         EntityErrors<Trailer>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'id < 0',
         ),
       );
     }
 
-    invalidations.validateDependency(this, carrier);
-    if(sct != null) invalidations.validateDependency(this, sct!);
-    if(model != null) invalidations.validateDependency(this, model!);
-    if(maintenance != null) invalidations.validateDependency(this, maintenance!);
+    errors.validateDependency(this, carrier);
+    if(sct != null) errors.validateDependency(this, sct!);
+    if(model != null) errors.validateDependency(this, model!);
+    if(maintenance != null) errors.validateDependency(this, maintenance!);
     
     if (plates.isNotEmpty) {
       for (Plate plate in plates) {
-        invalidations.validateDependency(this, plate);
+        errors.validateDependency(this, plate);
       }
     }
 
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

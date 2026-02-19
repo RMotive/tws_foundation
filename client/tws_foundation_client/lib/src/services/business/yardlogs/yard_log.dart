@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Entity] that represents a vehicules control entry for a yard logging system where
 /// guards write down an entry/exit journal of vehicles at business locations.
-final class YardLog extends EntityB<YardLog> {
+final class YardLog extends EntityBase<YardLog> {
   /// [YardLog.entry] property key.
   static const String kEntry = 'entry';
 
@@ -206,21 +206,22 @@ final class YardLog extends EntityB<YardLog> {
   }
 
   @override
-  List<EntityInvalidation<YardLog>> evaluate() {
-    List<EntityInvalidation<YardLog>> invalidations = <EntityInvalidation<YardLog>>[];
-     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<YardLog>(
+  List<EntityErrors<YardLog>> evaluate(List<EntityErrors<YardLog>> errors) {
+    errors = super.evaluate(errors);
+
+    if (id < BigInt.zero) {
+      errors.add(
+        EntityErrors<YardLog>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'id < 0',
         ),
       );
     }
     if (fromTo.trim().isEmpty || fromTo.length > 100) {
-      invalidations.add(
-        EntityInvalidation<YardLog>(
+      errors.add(
+        EntityErrors<YardLog>(
           this,
           PropertyInfo(kFromTo, String, fromTo),
           "Debe indicar de donde viene (o a donde va el camión). Maximo 100 caracteres.",
@@ -230,8 +231,8 @@ final class YardLog extends EntityB<YardLog> {
     }
     if (seal != null) {
       if (trailer == null) {
-        invalidations.add(
-          EntityInvalidation<YardLog>(
+        errors.add(
+          EntityErrors<YardLog>(
             this,
             PropertyInfo(kSeal, String, seal),
             "Se ingreso un sello pero no un relmolque, seleccione alguno.",
@@ -241,8 +242,8 @@ final class YardLog extends EntityB<YardLog> {
       }
       // TODO: Check if seal never is null, when trailer is not null.
       if (seal!.trim().isEmpty || seal!.length > 64) {
-        invalidations.add(
-          EntityInvalidation<YardLog>(
+        errors.add(
+          EntityErrors<YardLog>(
             this,
             PropertyInfo(kSeal, String, seal),
             "Longitud de $kSeal invalido: ${seal!.length}. Debe contener entre 10 y 64 caracteres.",
@@ -253,8 +254,8 @@ final class YardLog extends EntityB<YardLog> {
     }
     if (sealAlt != null) {
       if (sealAlt!.trim().isEmpty || sealAlt!.length > 64) {
-        invalidations.add(
-          EntityInvalidation<YardLog>(
+        errors.add(
+          EntityErrors<YardLog>(
             this,
             PropertyInfo(kSealAlt, String, fromTo),
             "Longitud del Sello #2: ${sealAlt!.length} es invalido. Debe contener entre 10 y 64 caracteres o estar vacio.",
@@ -264,8 +265,8 @@ final class YardLog extends EntityB<YardLog> {
       }
     }
     if (loadType.reference != FoundationReferences.loadTypeBotado && trailer == null) {
-      invalidations.add(
-        EntityInvalidation<YardLog>(
+      errors.add(
+        EntityErrors<YardLog>(
           this,
           PropertyInfo(kFromTo, String, fromTo),
           'Tipo de carga: ${loadType.name}. Debe agregar los datos del remolque, de lo contrario seleccione el tipo de carga como Botado',
@@ -275,8 +276,8 @@ final class YardLog extends EntityB<YardLog> {
     }
 
     if (loadType.reference == FoundationReferences.loadTypeBotado && trailer != null) {
-      invalidations.add(
-        EntityInvalidation<YardLog>(
+      errors.add(
+        EntityErrors<YardLog>(
           this,
           PropertyInfo(kFromTo, String, fromTo),
           'Tipo de carga: ${loadType.name}. No puede seleccionar un remolque, si el tipo de carga es Botado',
@@ -285,19 +286,19 @@ final class YardLog extends EntityB<YardLog> {
       );
     }
 
-    invalidations.validateDependency(this, loadType);
-    invalidations.validateDependency(this, guard);
-    if(section != null) invalidations.validateDependency(this, section!);
-    invalidations.validateDependency(this, driver);
-    invalidations.validateDependency(this, truck);
-    if(trailer != null) invalidations.validateDependency(this, trailer!);
+    errors.validateDependency(this, loadType);
+    errors.validateDependency(this, guard);
+    if(section != null) errors.validateDependency(this, section!);
+    errors.validateDependency(this, driver);
+    errors.validateDependency(this, truck);
+    if(trailer != null) errors.validateDependency(this, trailer!);
 
     /// resources validations -> [truckFront, truckLateral, trailerLateral, trailerBack]:
     List<bool> evidenceFlags = <bool>[false, false, false, false];
 
     if (resources.isNotEmpty) {
       for (Resource resource in resources) {
-        invalidations.validateDependency(this, resource);
+        errors.validateDependency(this, resource);
         evidenceFlags[0] = evidenceFlags[0] || resource.name.contains(FoundationReferences.truckFrontRes);
         evidenceFlags[1] = evidenceFlags[1] || resource.name.contains(FoundationReferences.truckLateralRes);
         evidenceFlags[2] = evidenceFlags[2] || resource.name.contains(FoundationReferences.trailerLateralRes);
@@ -306,8 +307,8 @@ final class YardLog extends EntityB<YardLog> {
       if (trailer != null &&
           !evidenceFlags[2] &&
           !evidenceFlags[3]) {
-        invalidations.add(
-          EntityInvalidation<YardLog>(
+        errors.add(
+          EntityErrors<YardLog>(
             this,
             PropertyInfo(kResources, List<Resource>, resources),
             'Debe agregar alguna evidencia del remolque.',
@@ -316,8 +317,8 @@ final class YardLog extends EntityB<YardLog> {
         );
       }
       if(!evidenceFlags[0] && !evidenceFlags[1]){
-        invalidations.add(
-          EntityInvalidation<YardLog>(
+        errors.add(
+          EntityErrors<YardLog>(
             this,
             PropertyInfo(kResources, List<Resource>, resources),
             'Debe agregar la evidencia del camión.',
@@ -330,6 +331,12 @@ final class YardLog extends EntityB<YardLog> {
 
 
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

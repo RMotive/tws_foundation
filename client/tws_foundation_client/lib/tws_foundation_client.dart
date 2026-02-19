@@ -138,8 +138,9 @@ export 'src/services/models/entity_operation_failure.dart';
 export 'src/services/models/outputs/export_output.dart';
 
 // --> Exporting [src.models.frames]
-export 'src/models/frames/failure_frame.dart';
-export 'src/models/frames/success_frame.dart';
+//TODO: Check how to export these ->
+// export 'src/models/frames/failure_frame.dart';
+// export 'src/models/frames/success_frame.dart';
 
 // --> Exporting [src.services]
 export 'src/services/view_service_i.dart';
@@ -149,18 +150,15 @@ export 'src/services/foundation_service_b.dart';
 export 'src/services/foundation_response_resolver.dart';
 
 // --> Exporting [src.services.models.inputs]
-export 'src/services/models/inputs/view_input.dart';
-export 'src/services/models/inputs/update_input.dart';
 
 // --> Exporting [src.services.models.outputs]
-export 'src/services/models/outputs/view_output.dart';
-export 'src/services/models/outputs/update_output.dart';
-export 'src/services/models/outputs/batch_operation_output.dart';
+
 
 // --> Exporting [src.services.models.view_filters]
 export 'src/services/models/view_filters/view_filter_i.dart';
 export 'src/services/models/view_filters/view_filter_node_i.dart';
-export 'src/services/models/view_filters/view_filter_date.dart';
+// TODO: And this one --> 
+// export 'src/services/models/view_filters/view_filter_date.dart';
 export 'src/services/models/view_filters/view_filter_logical.dart';
 export 'src/services/models/view_filters/view_filter_property.dart';
 

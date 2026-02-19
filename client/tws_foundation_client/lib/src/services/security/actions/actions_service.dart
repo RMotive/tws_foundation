@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
 ///
 /// Represents a contract for a [ActionsServiceI] implementation, wich is responsible to manage operations
 /// related with [Action] entity at {Foundation Server}.
-abstract interface class ActionsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Action>{
+abstract interface class ActionsServiceI extends FoundationServiceB implements IService, ViewServiceI<Action>{
   /// Creates a new [ActionsServiceI] instance.
   ActionsServiceI(super.host, super.servicePath);
 }

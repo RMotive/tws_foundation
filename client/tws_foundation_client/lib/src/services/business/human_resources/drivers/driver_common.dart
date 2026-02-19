@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -74,14 +74,14 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   }
 
   @override
-  List<EntityInvalidation<DriverCommon>> evaluate() {
-    final List<EntityInvalidation<DriverCommon>> invalidations = <EntityInvalidation<DriverCommon>>[];
+  List<EntityErrors<DriverCommon>> evaluate(List<EntityErrors<DriverCommon>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<DriverCommon>(
+      errors.add(
+        EntityErrors<DriverCommon>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer cannot be less than 0',
           'invalidPointer()',
         ),
@@ -89,8 +89,8 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
     }
 
     if (license.length > 12 || license.length < 8) {
-      invalidations.add(
-        EntityInvalidation<DriverCommon>(
+      errors.add(
+        EntityErrors<DriverCommon>(
           this,
           PropertyInfo(kLicense, String, license),
           'Length must be between 8 and 12 characters',
@@ -100,21 +100,21 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
     }
 
     if (internal != null && external != null) {
-      invalidations.add(EntityInvalidation<DriverCommon>(
+      errors.add(EntityErrors<DriverCommon>(
         this,
-        PropertyInfo(EntityKeys.kExternal, DriverCommon, external),
+        PropertyInfo(CorePropertiesConsts.name, DriverCommon, external),
         'Unique violation',
         'internal and external can\'t be set both',
       ));
     }
 
-    invalidations.validateDependency(this, status);
+    errors.validateDependency(this, status);
     
-    if (situation != null) invalidations.validateDependency(this, situation!);
-    if (internal != null) invalidations.validateDependency(this, internal!);   
-    if (external != null) invalidations.validateDependency(this, external!);
+    if (situation != null) errors.validateDependency(this, situation!);
+    if (internal != null) errors.validateDependency(this, internal!);   
+    if (external != null) errors.validateDependency(this, external!);
 
-    return invalidations;
+    return errors;
   }
   
   @override
@@ -125,5 +125,11 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   @override
   Driver internalFactory() {
     return Driver();
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

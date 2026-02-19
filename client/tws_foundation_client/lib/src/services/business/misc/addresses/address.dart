@@ -1,12 +1,12 @@
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [Address] default builder.
 Address addressBuilder() => Address();
 
 /// Defines a business entity that stores information about a location [Address] for buildings, employees, etc.
-final class Address extends EntityB<Address> {
+final class Address extends EntityBase<Address> {
   /// [Address.country] property key.
   static const String kCountry = "country";
 
@@ -111,21 +111,21 @@ final class Address extends EntityB<Address> {
   }
 
   @override
-  List<EntityInvalidation<Address>> evaluate() {
-    List<EntityInvalidation<Address>> results = <EntityInvalidation<Address>>[];
+  List<EntityErrors<Address>> evaluate(List<EntityErrors<Address>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Address>(
+      errors.add(
+        EntityErrors<Address>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer cannot be less than 0',
           'invalidPointer()',
         ),
       );
     }
     if (country.length < 2 || country.length > 3) {
-      results.add(
-        EntityInvalidation<Address>(
+      errors.add(
+        EntityErrors<Address>(
           this,
           PropertyInfo(kCountry, String, country),
           "Country must be between 2 and 3 length",
@@ -135,8 +135,8 @@ final class Address extends EntityB<Address> {
     }
     if (state != null) {
       if (state!.length < 2 || state!.length > 4) {
-        results.add(
-          EntityInvalidation<Address>(
+        errors.add(
+          EntityErrors<Address>(
             this,
             PropertyInfo(kState, String, state),
             "State length must be between 2 and 4",
@@ -146,8 +146,8 @@ final class Address extends EntityB<Address> {
       }
     }
     if (street != null && (street!.trim().isEmpty || street!.length > 100)) {
-      results.add(
-        EntityInvalidation<Address>(
+      errors.add(
+        EntityErrors<Address>(
           this,
           PropertyInfo(kStreet, String, street),
           "Street must be 100 max length  or be empty",
@@ -157,8 +157,8 @@ final class Address extends EntityB<Address> {
     }
     if (altStreet != null &&
         (altStreet!.trim().isEmpty || altStreet!.length > 100)) {
-      results.add(
-        EntityInvalidation<Address>(
+      errors.add(
+        EntityErrors<Address>(
           this,
           PropertyInfo(kAltStreet, String, altStreet),
           "altStreet must be 100 max length or be empty",
@@ -167,8 +167,8 @@ final class Address extends EntityB<Address> {
       );
     }
     if (city != null && (city!.trim().isEmpty || city!.length > 30)) {
-      results.add(
-        EntityInvalidation<Address>(
+      errors.add(
+        EntityErrors<Address>(
           this,
           PropertyInfo(kCity, String, city),
           "City must be 30 max length or be empty",
@@ -177,8 +177,8 @@ final class Address extends EntityB<Address> {
       );
     }
     if (zip != null && (zip!.trim().isEmpty || zip!.length > 5)) {
-      results.add(
-        EntityInvalidation<Address>(
+      errors.add(
+        EntityErrors<Address>(
           this,
           PropertyInfo(kZip, String, zip),
           "ZIP must be 5 length  or be empty ",
@@ -188,8 +188,8 @@ final class Address extends EntityB<Address> {
     }
     if (subdivision != null &&
         (subdivision!.trim().isEmpty || subdivision!.length > 30)) {
-      results.add(
-        EntityInvalidation<Address>(
+      errors.add(
+        EntityErrors<Address>(
           this,
           PropertyInfo(kSubdivision, String, subdivision),
           "Subdivision/Colonia must be 30 max length or be empty",
@@ -198,6 +198,12 @@ final class Address extends EntityB<Address> {
       );
     }
 
-    return results;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

@@ -1,9 +1,9 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 
 /// {entity} class.
 ///
 /// Stores information about an {user} contact information.
-final class Contact extends EntityB<Contact> {
+final class Contact extends EntityBase<Contact> {
   /// User name.
   ///
   /// Rules:
@@ -51,12 +51,13 @@ final class Contact extends EntityB<Contact> {
   }
 
   @override
-  List<EntityInvalidation<Contact>> evaluate() {
-    List<EntityInvalidation<Contact>> invalidations = <EntityInvalidation<Contact>>[];
+  List<EntityErrors<Contact>> evaluate(List<EntityErrors<Contact>> errors) {
+    errors = super.evaluate(errors);
+
 
     if (name.length > 100 || name.trim().isEmpty) {
-      invalidations.add(
-        EntityInvalidation<Contact>(
+      errors.add(
+        EntityErrors<Contact>(
           this,
           PropertyInfo(
             'name',
@@ -70,8 +71,8 @@ final class Contact extends EntityB<Contact> {
     }
 
     if (lastName.length > 100 || lastName.trim().isEmpty) {
-      invalidations.add(
-        EntityInvalidation<Contact>(
+      errors.add(
+        EntityErrors<Contact>(
           this,
           PropertyInfo(
             'lastName',
@@ -85,8 +86,8 @@ final class Contact extends EntityB<Contact> {
     }
 
     if (eMail.length > 100 || eMail.trim().isEmpty) {
-      invalidations.add(
-        EntityInvalidation<Contact>(
+      errors.add(
+        EntityErrors<Contact>(
           this,
           PropertyInfo(
             'eMail',
@@ -100,8 +101,8 @@ final class Contact extends EntityB<Contact> {
     }
 
     if (phone.length > 100 || phone.trim().isEmpty) {
-      invalidations.add(
-        EntityInvalidation<Contact>(
+      errors.add(
+        EntityErrors<Contact>(
           this,
           PropertyInfo(
             'phone',
@@ -114,6 +115,12 @@ final class Contact extends EntityB<Contact> {
       );
     }
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

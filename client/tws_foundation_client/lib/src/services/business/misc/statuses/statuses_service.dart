@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/services/read_reference_service_i.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
 ///
-/// Defines a [ServiceI] contract for [Status] operations.
-abstract interface class StatusesServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Status>, ReadReferenceServiceI<Status> {
+/// Defines a [IService] contract for [Status] operations.
+abstract interface class StatusesServiceI extends FoundationServiceB implements IService, ViewServiceI<Status>, ReadReferenceServiceI<Status> {
   /// Creates a new [StatusesServiceI] instance.
   StatusesServiceI(
     super.host,
@@ -15,7 +15,7 @@ abstract interface class StatusesServiceI extends FoundationServiceB implements 
 
 /// {abstract} class.
 ///
-/// Implements base shared [StatusesServiceB] behavior for all [Status] based [ServiceI].
+/// Implements base shared [StatusesServiceB] behavior for all [Status] based [IService].
 abstract class StatusesServiceB extends FoundationServiceB implements StatusesServiceI {
   /// Creates a new [StatusesServiceB] instance.
   ///
@@ -35,7 +35,7 @@ abstract class StatusesServiceB extends FoundationServiceB implements StatusesSe
 
 /// {service} class.
 ///
-/// Implements a [ServiceI] for [Status] based operations, providing final behavior operations.
+/// Implements a [IService] for [Status] based operations, providing final behavior operations.
 final class StatusesService extends StatusesServiceB {
   /// Creates a new [StatusesService] instance.
   StatusesService(

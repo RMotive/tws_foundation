@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/src/services/security/solutions/_solutions_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -6,8 +6,8 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {implementation} class for a [ServerB].
 ///
 ///
-/// Defines the base behavior for a [FoundationServer] that handles the network address to communicate with a [FoundationServer] and its [ServiceI] implementations.
-final class FoundationServer extends ServerB {
+/// Defines the base behavior for a [FoundationServer] that handles the network address to communicate with a [FoundationServer] and its [IService] implementations.
+final class FoundationServer extends ServerBase {
   /// {solution} security Entity service.
   late final SecurityServiceI securityService;
 

@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 
@@ -20,7 +20,7 @@ abstract class AddressesServiceB extends FoundationServiceB implements AddressSe
 /// {interface} for [AddressServiceI].
 ///
 /// Defines base contract for [AddressServiceI] implementations that specifies the methods to have providing [Address] based operations and management.
-abstract interface class AddressServiceI extends FoundationServiceB implements ServiceI {
+abstract interface class AddressServiceI extends FoundationServiceB implements IService {
   /// Creates a new [AddressServiceI] instance.
   AddressServiceI(super.host, super.servicePath);
 

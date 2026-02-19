@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -8,7 +8,7 @@ Employee employeeFactory() => Employee();
 /// {entity} class.
 ///
 /// Represents a business physical human resource employee information.
-final class Employee extends EntityB<Employee> {
+final class Employee extends EntityBase<Employee> {
   /// [Employee.curp] property key.
   static const String kCurp = "curp";
 
@@ -101,14 +101,14 @@ final class Employee extends EntityB<Employee> {
   }
 
   @override
-  List<EntityInvalidation<Employee>> evaluate() {
-    List<EntityInvalidation<Employee>> invalidations = <EntityInvalidation<Employee>>[];
+  List<EntityErrors<Employee>> evaluate(List<EntityErrors<Employee>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<Employee>(
+      errors.add(
+        EntityErrors<Employee>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer cannot be less than 0',
           'invalidPointer()',
         ),
@@ -117,8 +117,8 @@ final class Employee extends EntityB<Employee> {
 
     if (curp != null) {
       if (curp!.length != 18) {
-        invalidations.add(
-          EntityInvalidation<Employee>(
+        errors.add(
+          EntityErrors<Employee>(
             this,
             PropertyInfo(kCurp, String, curp),
             "CURP number must be 18 length",
@@ -130,8 +130,8 @@ final class Employee extends EntityB<Employee> {
 
     if (rfc != null) {
       if (rfc!.length != 13) {
-        invalidations.add(
-          EntityInvalidation<Employee>(
+        errors.add(
+          EntityErrors<Employee>(
             this,
             PropertyInfo(kRfc, String, rfc),
             "RFC number must be 13 length",
@@ -143,8 +143,8 @@ final class Employee extends EntityB<Employee> {
 
     if (nss != null) {
       if (nss!.length != 11) {
-        invalidations.add(
-          EntityInvalidation<Employee>(
+        errors.add(
+          EntityErrors<Employee>(
             this,
             PropertyInfo(kNss, String, nss),
             "The NSS number must be 11 character length",
@@ -154,11 +154,17 @@ final class Employee extends EntityB<Employee> {
       }
     }
 
-    invalidations.validateDependency(this, dates);
-    invalidations.validateDependency(this, identification);
-    if (address != null) invalidations.validateDependency(this, address!);
-    if (approach != null) invalidations.validateDependency(this, approach!);
+    errors.validateDependency(this, dates);
+    errors.validateDependency(this, identification);
+    if (address != null) errors.validateDependency(this, address!);
+    if (approach != null) errors.validateDependency(this, approach!);
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

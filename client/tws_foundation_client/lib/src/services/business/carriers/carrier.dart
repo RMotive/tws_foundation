@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 Carrier carrierBuilder() => Carrier();
 
 /// Defines a business entity that stores information for a [Carrier] that operates in any [Solution] 
-final class Carrier extends NamedEntityB<Carrier> {
+final class Carrier extends NamedEntityBase<Carrier> {
 
   /// [approach] property key.
   static const String kApproach = "approach";
@@ -54,45 +54,51 @@ final class Carrier extends NamedEntityB<Carrier> {
   }
 
   @override
-  List<EntityInvalidation<Carrier>> evaluate() {
-    List<EntityInvalidation<Carrier>> results = <EntityInvalidation<Carrier>>[];
+  List<EntityErrors<Carrier>> evaluate(List<EntityErrors<Carrier>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Carrier>(
+      errors.add(
+        EntityErrors<Carrier>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer cannot be less than 0',
           'invalidPointer()',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<Carrier>(
+      errors.add(
+        EntityErrors<Carrier>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Length: ${name.length}, cannot be empty and must be between 1 and 100 characters",
           "101 > length > 0",
         ),
       );
     }
     if (description != null && (description!.length > 200 || description!.trim().isEmpty)) {
-      results.add(
-        EntityInvalidation<Carrier>(
+      errors.add(
+        EntityErrors<Carrier>(
           this,
-          PropertyInfo(EntityKeys.description, String, description),
+          PropertyInfo(CorePropertiesConsts.description, String, description),
           "Length: ${description!.length}, must be empty or greater than 200 characters",
           "length < 200",
         ),
       );      
     }
 
-    results.validateDependency(this, status);
-    results.validateDependency(this, address);
-    results.validateDependency(this, approach);
-    if(usdot != null) results.validateDependency(this, usdot!);
+    errors.validateDependency(this, status);
+    errors.validateDependency(this, address);
+    errors.validateDependency(this, approach);
+    if(usdot != null) errors.validateDependency(this, usdot!);
 
-    return results;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 
 }

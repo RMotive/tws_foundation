@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 
 /// [TrailerClass] default builder.
 TrailerClass trailerClassBuilder() => TrailerClass();
 
 /// Defines a business entity that stores the trailer type data, 
 /// indicating the suitable load for the [Trailer] in this [TrailerClass].
-final class TrailerClass extends NamedEntityB<TrailerClass> {
+final class TrailerClass extends NamedEntityBase<TrailerClass> {
 
   /// Generates a new [TrailerClass] instance from mandatory values.
   TrailerClass();
@@ -30,23 +30,23 @@ final class TrailerClass extends NamedEntityB<TrailerClass> {
   }
 
   @override
-  List<EntityInvalidation<TrailerClass>> evaluate() {
-    List<EntityInvalidation<TrailerClass>> invalidations = <EntityInvalidation<TrailerClass>>[];
+  List<EntityErrors<TrailerClass>> evaluate(List<EntityErrors<TrailerClass>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<TrailerClass>(
+      errors.add(
+        EntityErrors<TrailerClass>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      invalidations.add(
-        EntityInvalidation<TrailerClass>(
+      errors.add(
+        EntityErrors<TrailerClass>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -54,17 +54,22 @@ final class TrailerClass extends NamedEntityB<TrailerClass> {
     }
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        invalidations.add(
-          EntityInvalidation<TrailerClass>(
+        errors.add(
+          EntityErrors<TrailerClass>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
         );
       }
     }
-    return invalidations;
+    return errors;
   }
-
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
+  }
 }

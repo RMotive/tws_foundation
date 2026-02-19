@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 // TODO: DEFINE
-final class Truck extends EntityB<Truck> {
+final class Truck extends EntityBase<Truck> {
   /// [Truck.motor] property key.
   static const String kMotor = 'motor';
 
@@ -120,21 +120,21 @@ final class Truck extends EntityB<Truck> {
   }
 
   @override
-  List<EntityInvalidation<Truck>> evaluate() {
-    List<EntityInvalidation<Truck>> invalidations = <EntityInvalidation<Truck>>[];
+  List<EntityErrors<Truck>> evaluate(List<EntityErrors<Truck>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      invalidations.add(
-         EntityInvalidation<Truck>(
+      errors.add(
+         EntityErrors<Truck>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'id < 0',
         ),
       );
     }
     if (vin.trim().isEmpty || vin.length > 17) {
-      invalidations.add(
-        EntityInvalidation<Truck>(
+      errors.add(
+        EntityErrors<Truck>(
           this,
           PropertyInfo(kVin, String, vin),
           'Lenght: ${vin.length}, cannot be empty or greater than 17 characters',
@@ -144,8 +144,8 @@ final class Truck extends EntityB<Truck> {
     }
     if (motor != null) {
       if (motor!.length < 15 && motor!.length > 16) {
-        invalidations.add(
-          EntityInvalidation<Truck>(
+        errors.add(
+          EntityErrors<Truck>(
             this,
             PropertyInfo(kMotor, String, motor),
             'Lenght: ${motor!.length}, must be between 15 and 16 characters',
@@ -155,16 +155,22 @@ final class Truck extends EntityB<Truck> {
       }
     }
 
-    invalidations.validateDependency(this, carrier);
-    invalidations.validateDependency(this, model);
-    if (sct != null) invalidations.validateDependency(this, sct!);
-    if (maintenance != null) invalidations.validateDependency(this, maintenance!);
-    if (insurance != null) invalidations.validateDependency(this, insurance!);
+    errors.validateDependency(this, carrier);
+    errors.validateDependency(this, model);
+    if (sct != null) errors.validateDependency(this, sct!);
+    if (maintenance != null) errors.validateDependency(this, maintenance!);
+    if (insurance != null) errors.validateDependency(this, insurance!);
     if (plates.isNotEmpty) {
       for (Plate plate in plates) {
-        invalidations.validateDependency(this, plate);
+        errors.validateDependency(this, plate);
       }
     }
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

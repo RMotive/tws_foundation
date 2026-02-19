@@ -1,6 +1,6 @@
 // ignore_for_file: missing_override_of_must_be_overridden
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/extensions.dart';
 
 /// [Situation] default builder.
@@ -8,6 +8,7 @@ Situation situationBuilder() => Situation();
 
 /// Defines a business entity that stores data for other business entities operating [Situation] status.
 /// Defines if and entity is on the way, stored, parked, out of service, etc.
+// TODO Missing compare method implementation in entity base.
 final class Situation extends NamedReferencedEntityB<Situation> {
 
   /// Generates a new [Situation] instance from mandatory values.
@@ -32,48 +33,48 @@ final class Situation extends NamedReferencedEntityB<Situation> {
 
 
   @override
-  List<EntityInvalidation<Situation>> evaluate() {
-    List<EntityInvalidation<Situation>> results = <EntityInvalidation<Situation>>[];
+  List<EntityErrors<Situation>> evaluate(List<EntityErrors<Situation>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Situation>(
+      errors.add(
+        EntityErrors<Situation>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'id < 0',
         ),
       );
     }
     if (reference.length != 8) {
-      results.add(
-        EntityInvalidation<Situation>(
+      errors.add(
+        EntityErrors<Situation>(
           this,
-          PropertyInfo(EntityKeys.kReference, String, reference),
+          PropertyInfo(CorePropertiesConsts.reference, String, reference),
           'lentgh: ${reference.length}, must be exactly 8 characters',
           'length == 8',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(  
-        EntityInvalidation<Situation>(
+      errors.add(  
+        EntityErrors<Situation>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Length: ${name.length}, must be between 1 and 100 characters",
           "101 > length > 0",
         ),
       );
     }
     if (description != null && (description!.trim().isEmpty || description!.length > 200)) {
-      results.add(
-        EntityInvalidation<Situation>(
+      errors.add(
+        EntityErrors<Situation>(
           this,
-          PropertyInfo(EntityKeys.description, String, description),
+          PropertyInfo(CorePropertiesConsts.description, String, description),
           "Description must be 200 max length",
           "strictLength(200)",
         ),
       );
     }
-    return results;
+    return errors;
   }
 }

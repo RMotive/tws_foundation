@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -15,7 +15,7 @@ void main() {
       viewOutputMock.pages = 1;
 
       final MockClient mockClient = TestUtils.createMockClient(
-        <String, EncodableI>{
+        <String, IEncodable>{
           'view': viewOutputMock,
         },
       );

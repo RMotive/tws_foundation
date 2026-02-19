@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// (private) {implementation} class for [SecurityService].
@@ -17,7 +17,7 @@ final class SecurityService extends SecurityServiceB {
 
   @override
   FoundationFutureResolver<SessionData> authenticate(AuthenticationInput input) async {
-    final ResponseControllerI controller = await postSecure('authenticate', input);
+    final ResponseController controller = await postSecure('authenticate', input);
     return FoundationResponseResolver<SessionData>(controller);
   }
 }

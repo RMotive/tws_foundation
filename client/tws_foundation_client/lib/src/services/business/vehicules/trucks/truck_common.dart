@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
-/// Implements a [EntityB] that stores common information for [Truck] and [TruckExternal].
+/// Implements a [EntityBase] that stores common information for [Truck] and [TruckExternal].
 /// Each [TruckCommon] instance can have [internal] and [external] at the same time can only have one of them.
 final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal> {
   /// [TruckCommon.economic] property key for [DataMap].
@@ -113,14 +113,14 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
   }
 
   @override
-  List<EntityInvalidation<TruckCommon>> evaluate() {
-    final List<EntityInvalidation<TruckCommon>> invalidations = <EntityInvalidation<TruckCommon>>[];
+  List<EntityErrors<TruckCommon>> evaluate(List<EntityErrors<TruckCommon>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<TruckCommon>(
+      errors.add(
+        EntityErrors<TruckCommon>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer cannot be less than 0',
           'invalidPointer()',
         ),
@@ -128,8 +128,8 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
     }
 
     if (economic.trim().isEmpty || economic.length > 16) {
-      invalidations.add(
-        EntityInvalidation<TruckCommon>(
+      errors.add(
+        EntityErrors<TruckCommon>(
           this,
           PropertyInfo(kEconomic, String, economic),
           'Wrong length ${economic.length}',
@@ -139,7 +139,7 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
     }
 
     if (internal != null && external != null) {
-      invalidations.add(EntityInvalidation<TruckCommon>(
+      errors.add(EntityErrors<TruckCommon>(
         this,
         PropertyInfo(kExternal, TruckExternal, external),
         'Unique violation',
@@ -147,13 +147,13 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
       ));
     }
     
-    invalidations.validateDependency(this, status);
-    if (situation != null) invalidations.validateDependency(this, situation!);
-    if (location != null) invalidations.validateDependency(this, location!);
-    if (internal != null) invalidations.validateDependency(this, internal!);
-    if (external != null) invalidations.validateDependency(this, external!);
+    errors.validateDependency(this, status);
+    if (situation != null) errors.validateDependency(this, situation!);
+    if (location != null) errors.validateDependency(this, location!);
+    if (internal != null) errors.validateDependency(this, internal!);
+    if (external != null) errors.validateDependency(this, external!);
 
-    return invalidations;
+    return errors;
   }
 
   @override
@@ -164,5 +164,11 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
   @override
   Truck internalFactory() {
     return Truck();
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

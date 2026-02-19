@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 /// Represents an external business truck usually from partners that needs to be loaded into own systems
 /// for entry control or movement calulations.
-final class TruckExternal extends EntityB<TruckExternal> {
+final class TruckExternal extends EntityBase<TruckExternal> {
   /// [TruckExternal.carrier] property key for [DataMap].
   static const String kCarrier = "carrier";
 
@@ -79,12 +79,12 @@ final class TruckExternal extends EntityB<TruckExternal> {
   }
 
   @override
-  List<EntityInvalidation<TruckExternal>> evaluate() {
-    final List<EntityInvalidation<TruckExternal>> invs = <EntityInvalidation<TruckExternal>>[];
+  List<EntityErrors<TruckExternal>> evaluate(List<EntityErrors<TruckExternal>> errors) {
+    errors = super.evaluate(errors);
 
     if (carrier.length > 100 || carrier.isEmpty) {
-      invs.add(
-        EntityInvalidation<TruckExternal>(
+      errors.add(
+        EntityErrors<TruckExternal>(
           this,
           PropertyInfo(
             kCarrier,
@@ -98,8 +98,8 @@ final class TruckExternal extends EntityB<TruckExternal> {
     }
 
     if ((vin != null) && (vin!.length > 17 || vin!.isEmpty)) {
-      invs.add(
-        EntityInvalidation<TruckExternal>(
+      errors.add(
+        EntityErrors<TruckExternal>(
           this,
           PropertyInfo(
             kVin,
@@ -113,8 +113,8 @@ final class TruckExternal extends EntityB<TruckExternal> {
     }
 
     if ((usaPlate != null) && (usaPlate!.length > 7 || usaPlate!.length < 6)) {
-      invs.add(
-        EntityInvalidation<TruckExternal>(
+      errors.add(
+        EntityErrors<TruckExternal>(
           this,
           PropertyInfo(
             kUsaPlate,
@@ -128,8 +128,8 @@ final class TruckExternal extends EntityB<TruckExternal> {
     }
 
     if ((mxPlate != null) && (mxPlate!.length != 7)) {
-      invs.add(
-        EntityInvalidation<TruckExternal>(
+      errors.add(
+        EntityErrors<TruckExternal>(
           this,
           PropertyInfo(
             kMxPlate,
@@ -142,6 +142,12 @@ final class TruckExternal extends EntityB<TruckExternal> {
       );
     }
 
-    return invs;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

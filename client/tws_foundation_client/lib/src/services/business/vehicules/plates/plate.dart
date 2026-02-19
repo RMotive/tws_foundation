@@ -1,8 +1,8 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
-final class Plate extends EntityB<Plate> {
+final class Plate extends EntityBase<Plate> {
   /// [Plate.identifier] property key for [DataMap].
   static const String kIdentifier = "identifier";
 
@@ -73,14 +73,14 @@ final class Plate extends EntityB<Plate> {
   }
 
   @override
-  List<EntityInvalidation<Plate>> evaluate() {
-    List<EntityInvalidation<Plate>> results = <EntityInvalidation<Plate>>[];
+  List<EntityErrors<Plate>> evaluate(List<EntityErrors<Plate>> errors) {
+    errors = super.evaluate(errors);
 
      if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Plate>(
+      errors.add(
+        EntityErrors<Plate>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id cannot be less than 0',
           'id < 0',
         ),
@@ -88,8 +88,8 @@ final class Plate extends EntityB<Plate> {
     }
 
     if (identifier.trim().isEmpty || identifier.length > 12) {
-      results.add(
-        EntityInvalidation<Plate>(
+      errors.add(
+        EntityErrors<Plate>(
           this,
           PropertyInfo(kIdentifier, String, identifier),
           'Length: ${identifier.length}, cannot be empty and greatest than 12.',
@@ -99,8 +99,8 @@ final class Plate extends EntityB<Plate> {
     }
 
     if (country.trim().isEmpty || country.length > 3) {
-      results.add(
-        EntityInvalidation<Plate>(
+      errors.add(
+        EntityErrors<Plate>(
           this,
           PropertyInfo(kCountry, String, country),
           'Length: ${country.length}, cannot be empty and greatest than 3.',
@@ -110,8 +110,8 @@ final class Plate extends EntityB<Plate> {
     }
 
     if (state != null && (state!.trim().isEmpty || state!.length > 3)) {
-      results.add(
-        EntityInvalidation<Plate>(
+      errors.add(
+        EntityErrors<Plate>(
           this,
           PropertyInfo(kState, String, state),
           'Length: ${state!.length}, cannot be empty and greatest than 3.',
@@ -121,6 +121,12 @@ final class Plate extends EntityB<Plate> {
     }
 
 
-    return results;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

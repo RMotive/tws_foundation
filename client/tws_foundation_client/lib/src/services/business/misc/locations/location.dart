@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 Location locationBuilder() => Location();
 
 /// Defines a business entity that stores an specific [Address] and [Waypoint] location data for items, vehicules or buildings entities.
-final class Location extends NamedEntityB<Location> {
+final class Location extends NamedEntityBase<Location> {
   /// [Location.address] Property key.
   static const String kAddress = "address";
 
@@ -92,14 +92,14 @@ final class Location extends NamedEntityB<Location> {
   }
 
   @override
-  List<EntityInvalidation<Location>> evaluate() {
-    List<EntityInvalidation<Location>> results =  <EntityInvalidation<Location>>[];
+  List<EntityErrors<Location>> evaluate(List<EntityErrors<Location>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Location>(
+      errors.add(
+        EntityErrors<Location>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'id < 0',
         ),
@@ -107,30 +107,38 @@ final class Location extends NamedEntityB<Location> {
     }
 
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<Location>(
+      errors.add(
+        EntityErrors<Location>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Length: ${name.length}, must be between 1 and 100 characters",
           "101 > length > 0",
         ),
       );
     }
     if (description != null && (description!.trim().isEmpty || description!.length > 200)) {
-      results.add(
-        EntityInvalidation<Location>(
+      errors.add(
+        EntityErrors<Location>(
           this,
-          PropertyInfo(EntityKeys.description, String, description),
+          PropertyInfo(CorePropertiesConsts.description, String, description),
           "Length: ${description!.length}, must be empty or less than 200 characters",
           "length < 200",
         ),
       );
     }
 
-    results.validateDependency(this, address);
-    results.validateDependency(this, status);
-    if(waypoint != null) results.validateDependency(this, waypoint!);
+    errors.validateDependency(this, address);
+    errors.validateDependency(this, status);
+    if(waypoint != null) errors.validateDependency(this, waypoint!);
 
-    return results;
+    return errors;
   }
+  
+  @override
+  List<ObjectDifference> compare(Location ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+    aggregated.add()
+
+  }
+  
 }

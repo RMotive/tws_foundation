@@ -1,6 +1,6 @@
 // ignore_for_file: missing_override_of_must_be_overridden
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// [LoadType] default builder.
@@ -13,23 +13,23 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
   LoadType();
   
   @override
-  List<EntityInvalidation<LoadType>> evaluate() {
-    List<EntityInvalidation<LoadType>> results = <EntityInvalidation<LoadType>>[];
+  List<EntityErrors<LoadType>> evaluate(List<EntityErrors<LoadType>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<LoadType>(
+      errors.add(
+        EntityErrors<LoadType>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<LoadType>(
+      errors.add(
+        EntityErrors<LoadType>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -37,10 +37,10 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
     }
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        results.add(
-          EntityInvalidation<LoadType>(
+        errors.add(
+          EntityErrors<LoadType>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
@@ -48,16 +48,16 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
       }
     }
     if (reference.length != 8) {
-      results.add(
-        EntityInvalidation<LoadType>(
+      errors.add(
+        EntityErrors<LoadType>(
           this,
-          PropertyInfo(EntityKeys.kReference, String, reference),
+          PropertyInfo(CorePropertiesConsts.reference, String, reference),
           "Reference value must contain 8 characters",
           "strictLength(8)",
         ),
       );
     }
-    return results;
+    return errors;
   }
 
 }

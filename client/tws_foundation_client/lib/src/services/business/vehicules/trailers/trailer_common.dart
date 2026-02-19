@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
-/// Implements a [EntityB] that stores common information for [Trailer] and [TrailerExternal].
+/// Implements a [EntityBase] that stores common information for [Trailer] and [TrailerExternal].
 /// Each [TrailerCommon] instance can have [internal] and [external] at the same time can only have one of them.
 final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerExternal> {
   /// [TrailerCommon.type] property key for [DataMap].
@@ -125,14 +125,14 @@ final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerE
   }
 
   @override
-  List<EntityInvalidation<TrailerCommon>> evaluate() {
-    final List<EntityInvalidation<TrailerCommon>> invalidations = <EntityInvalidation<TrailerCommon>>[];
+  List<EntityErrors<TrailerCommon>> evaluate(List<EntityErrors<TrailerCommon>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<TrailerCommon>(
+      errors.add(
+        EntityErrors<TrailerCommon>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer cannot be less than 0',
           'invalidPointer()',
         ),
@@ -140,8 +140,8 @@ final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerE
     }
 
     if (economic.trim().isEmpty || economic.length > 16) {
-      invalidations.add(
-        EntityInvalidation<TrailerCommon>(
+      errors.add(
+        EntityErrors<TrailerCommon>(
           this,
           PropertyInfo(kEconomic, String, economic),
           'Wrong length ${economic.length}',
@@ -151,7 +151,7 @@ final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerE
     }
 
     if (internal != null && external != null) {
-      invalidations.add(EntityInvalidation<TrailerCommon>(
+      errors.add(EntityErrors<TrailerCommon>(
         this,
         PropertyInfo(kExternal, TruckExternal, external),
         'Unique violation',
@@ -159,13 +159,13 @@ final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerE
       ));
     }
 
-    invalidations.validateDependency(this, status);
-    if (type != null) invalidations.validateDependency(this, type!);
-    if (situation != null) invalidations.validateDependency(this, situation!);
-    if (location != null) invalidations.validateDependency(this, location!);
-    if (internal != null) invalidations.validateDependency(this, internal!);
-    if (external != null) invalidations.validateDependency(this, external!);
-    return invalidations;
+    errors.validateDependency(this, status);
+    if (type != null) errors.validateDependency(this, type!);
+    if (situation != null) errors.validateDependency(this, situation!);
+    if (location != null) errors.validateDependency(this, location!);
+    if (internal != null) errors.validateDependency(this, internal!);
+    if (external != null) errors.validateDependency(this, external!);
+    return errors;
   }
   
   @override
@@ -176,5 +176,11 @@ final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerE
   @override
   Trailer internalFactory() {
     return Trailer();
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

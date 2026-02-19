@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
 ///
-/// Defines a [ServiceI] contract for [Account] operations.
-abstract interface class AccountServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<Account>, CreateServiceI<Account> {
+/// Defines a [IService] contract for [Account] operations.
+abstract interface class AccountServiceI extends FoundationServiceB implements IService, ViewServiceI<Account>, CreateServiceI<Account> {
   /// Creates a new [AccountServiceI] instance.
   AccountServiceI(
     super.host,
@@ -31,7 +31,7 @@ abstract interface class AccountServiceI extends FoundationServiceB implements S
 
 /// {abstract} class.
 ///
-/// Implements base shared [EmployeesServiceI] behavior for all [Account] based [ServiceI].
+/// Implements base shared [EmployeesServiceI] behavior for all [Account] based [IService].
 abstract class AccountServiceB extends FoundationServiceB implements AccountServiceI {
   /// Creates a new [AccountServiceB] instance.
   ///
@@ -51,7 +51,7 @@ abstract class AccountServiceB extends FoundationServiceB implements AccountServ
 
 /// {service} class.
 ///
-/// Implements a [ServiceI] for [Account] based operations, providing final behavior operations.
+/// Implements a [IService] for [Account] based operations, providing final behavior operations.
 final class AccountService extends AccountServiceB {
   /// Creates a new [AccountService] instance.
   AccountService(

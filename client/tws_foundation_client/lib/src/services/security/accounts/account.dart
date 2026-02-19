@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 /// Account information set, handles all data related to an account object stored in security database.
-final class Account extends EntityB<Account> {
+final class Account extends EntityBase<Account> {
   /// [Account.user] property key.
   static const String kUser = "user";
 
@@ -99,13 +99,13 @@ final class Account extends EntityB<Account> {
   }
 
   @override
-  List<EntityInvalidation<Account>> evaluate() {
-    List<EntityInvalidation<Account>> invalidations = <EntityInvalidation<Account>>[];
+   List<EntityErrors<Account>> evaluate(List<EntityErrors<Account>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<Account>(
+      errors.add(
+        EntityErrors<Account>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
@@ -113,8 +113,8 @@ final class Account extends EntityB<Account> {
     }
 
     if (user.trim().isEmpty || user.length > 50) {
-      invalidations.add(
-        EntityInvalidation<Account>(
+      errors.add(
+        EntityErrors<Account>(
           this,
           PropertyInfo(kUser, String, user),
           'User name length must be between 1 and 50 characters.',
@@ -123,20 +123,26 @@ final class Account extends EntityB<Account> {
       );
     }
     
-    invalidations.validateDependency(this, contact);
+    errors.validateDependency(this, contact);
 
     if (permits.isNotEmpty) {
       for (Permit permit in permits) {
-        invalidations.validateDependency(this, permit);
+        errors.validateDependency(this, permit);
       }
     }
 
     if (profiles.isNotEmpty) {
       for (Profile profile in profiles) {
-        invalidations.validateDependency(this, profile);
+        errors.validateDependency(this, profile);
       }
     }
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

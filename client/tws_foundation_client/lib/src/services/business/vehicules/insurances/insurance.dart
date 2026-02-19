@@ -1,8 +1,8 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-final class Insurance  extends EntityB<Insurance> {
+final class Insurance  extends EntityBase<Insurance> {
   /// [policy] property key.
   static const String kPolicy = "policy";
 
@@ -69,13 +69,13 @@ final class Insurance  extends EntityB<Insurance> {
   }
   
   @override
-  List<EntityInvalidation<Insurance>> evaluate() {
-    List<EntityInvalidation<Insurance>> invalidations = <EntityInvalidation<Insurance>>[];
+  List<EntityErrors<Insurance>> evaluate(List<EntityErrors<Insurance>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<Insurance>(
+      errors.add(
+        EntityErrors<Insurance>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'id < 0',
         ),
@@ -83,8 +83,8 @@ final class Insurance  extends EntityB<Insurance> {
     }
 
     if (policy.trim().isEmpty || policy.length > 20) {
-      invalidations.add(
-        EntityInvalidation<Insurance>(
+      errors.add(
+        EntityErrors<Insurance>(
           this,
           PropertyInfo(kPolicy, String, policy),
           'Length: ${policy.length}, cannot be empty or greater than 20 characters',
@@ -94,8 +94,8 @@ final class Insurance  extends EntityB<Insurance> {
     }
 
     if(country.trim().isEmpty || country.length > 3) {
-      invalidations.add(
-        EntityInvalidation<Insurance>(
+      errors.add(
+        EntityErrors<Insurance>(
           this,
           PropertyInfo(kCountry, String, country),
           'lenght: ${country.length}, cannot be empty or greater than 3 characters',
@@ -104,8 +104,14 @@ final class Insurance  extends EntityB<Insurance> {
       );
     }
 
-    invalidations.validateDependency(this, status);
-    return invalidations;
+    errors.validateDependency(this, status);
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
   
 

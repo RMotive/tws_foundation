@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
 ///
-final class Driver extends EntityB<Driver> {
+final class Driver extends EntityBase<Driver> {
   /// [Driver.employee] property key for [DataMap].
   static const String kEmployee = "employee";
 
@@ -154,13 +154,13 @@ final class Driver extends EntityB<Driver> {
   }
 
   @override
-  List<EntityInvalidation<Driver>> evaluate() {
-    List<EntityInvalidation<Driver>> invalidations = <EntityInvalidation<Driver>>[];
+  List<EntityErrors<Driver>> evaluate(List<EntityErrors<Driver>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0',
           'id < 0',
         ),
@@ -168,8 +168,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if (fast != null && (fast!.trim().isEmpty || fast!.length != 12)) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kFast, String, fast),
           'Length: ${fast!.length}, must be empty or equal to 12 characters',
@@ -179,8 +179,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if (twic != null && (twic!.trim().isEmpty || twic!.length != 12)) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kTwic, String, twic),
           'Length: ${twic!.length}, must be empty or equal to 12 characters',
@@ -190,8 +190,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if (visa != null && (visa!.trim().isEmpty || visa!.length != 12)) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kVisa, String, visa),
           'Length: ${visa!.length}, must be empty or equal to 12 characters',
@@ -201,8 +201,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if (anam != null && (anam!.trim().isEmpty || anam!.length != 24)) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kAnam, String, anam),
           'Length: ${anam!.length}, must be empty or equal to 24 characters',
@@ -212,8 +212,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if (driverType != null && (driverType!.trim().isEmpty || driverType!.length != 12)) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kDriverType, String, driverType),
           'Length: ${driverType!.length}, must be empty or equal to 12 characters',
@@ -222,8 +222,8 @@ final class Driver extends EntityB<Driver> {
       );
     }
     if(twicExpiration != null && twic == null) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kTwicExpiration, DateTime, twicExpiration),
           'Twic expiration date cannot be set if TWIC is not set',
@@ -233,8 +233,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if(visaExpiration != null && visa == null) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kVisaExpiration, DateTime, visaExpiration),
           'Visa expiration date cannot be set if VISA is not set',
@@ -244,8 +244,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if(fastExpiration != null && fast == null) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kFastExpiration, DateTime, fastExpiration),
           'Fast expiration date cannot be set if FAST is not set',
@@ -255,8 +255,8 @@ final class Driver extends EntityB<Driver> {
     }
 
     if(anamExpiration != null && anam == null) {
-      invalidations.add(
-        EntityInvalidation<Driver>(
+      errors.add(
+        EntityErrors<Driver>(
           this,
           PropertyInfo(kAnamExpiration, DateTime, anamExpiration),
           'Anam expiration date cannot be set if ANAM is not set',
@@ -265,8 +265,14 @@ final class Driver extends EntityB<Driver> {
       );
     }
 
-    invalidations.validateDependency(this, employee);
+    errors.validateDependency(this, employee);
 
-   return invalidations;
+   return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

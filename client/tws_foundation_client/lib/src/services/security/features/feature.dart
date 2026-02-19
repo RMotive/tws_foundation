@@ -1,12 +1,12 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/services/security/permits/permit.dart';
 
-/// {implementation} class for an [EntityI].
+/// {implementation} class for an [IEntity].
 ///
 /// [Entity] that represents a complex Feature storing different actions, this to determine Feature Scoped permits.
 /// only for authorization purposes.
-final class Feature extends NamedEntityB<Feature> { 
+final class Feature extends NamedEntityBase<Feature> { 
 
   /// [Feature.permits] property key.
   static const String kPermits = 'Permits';
@@ -51,23 +51,24 @@ final class Feature extends NamedEntityB<Feature> {
   }
 
   @override
-  List<EntityInvalidation<Feature>> evaluate() {
-    List<EntityInvalidation<Feature>> results = <EntityInvalidation<Feature>>[];
+  List<EntityErrors<Feature>> evaluate(List<EntityErrors<Feature>> errors) {
+    errors = super.evaluate(errors);
+    
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Feature>(
+      errors.add(
+        EntityErrors<Feature>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<Feature>(
+      errors.add(
+        EntityErrors<Feature>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -75,10 +76,10 @@ final class Feature extends NamedEntityB<Feature> {
     }
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        results.add(
-          EntityInvalidation<Feature>(
+        errors.add(
+          EntityErrors<Feature>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
@@ -88,10 +89,15 @@ final class Feature extends NamedEntityB<Feature> {
 
     if (permits.isNotEmpty) {
       for (Permit plate in permits) {
-        results.validateDependency(this, plate);
+        errors.validateDependency(this, plate);
       }
     }
-    return results;
+    return errors;
   }
-
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
+  }
 }

@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -7,7 +7,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// [VehiculeModel] default builder.
 VehiculeModel vehiculemodelBuilder() => VehiculeModel();
 
-final class VehiculeModel extends NamedEntityB<VehiculeModel> {
+final class VehiculeModel extends NamedEntityBase<VehiculeModel> {
 
   /// [year] property key.
   static const String kYear = 'year';
@@ -65,23 +65,23 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
   }
 
   @override
-  List<EntityInvalidation<VehiculeModel>> evaluate() {
-    List<EntityInvalidation<VehiculeModel>> results = <EntityInvalidation<VehiculeModel>>[];
+  List<EntityErrors<VehiculeModel>> evaluate(List<EntityErrors<VehiculeModel>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<VehiculeModel>(
+      errors.add(
+        EntityErrors<VehiculeModel>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<VehiculeModel>(
+      errors.add(
+        EntityErrors<VehiculeModel>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -89,10 +89,10 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
     }
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        results.add(
-          EntityInvalidation<VehiculeModel>(
+        errors.add(
+          EntityErrors<VehiculeModel>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
@@ -100,9 +100,14 @@ final class VehiculeModel extends NamedEntityB<VehiculeModel> {
       }
     }
 
-    results.validateDependency(this, manufacturer);
-    results.validateDependency(this, status);
-    return results;
+    errors.validateDependency(this, manufacturer);
+    errors.validateDependency(this, status);
+    return errors;
   }
-
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
+  }
 }

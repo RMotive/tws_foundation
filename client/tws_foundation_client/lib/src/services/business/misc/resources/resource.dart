@@ -2,11 +2,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Defines a business entity that stores any binary content for files or images representations.
-final class Resource extends NamedEntityB<Resource> {
+final class Resource extends NamedEntityBase<Resource> {
   /// [Resource.file] property key.
   static const String kFile = 'file';
 
@@ -58,23 +58,23 @@ final class Resource extends NamedEntityB<Resource> {
   }
 
   @override
-  List<EntityInvalidation<Resource>> evaluate() {
-    List<EntityInvalidation<Resource>> results = <EntityInvalidation<Resource>>[];
+ List<EntityErrors<Resource>> evaluate(List<EntityErrors<Resource>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Resource>(
+      errors.add(
+        EntityErrors<Resource>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<Resource>(
+      errors.add(
+        EntityErrors<Resource>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -82,10 +82,10 @@ final class Resource extends NamedEntityB<Resource> {
     }
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        results.add(
-          EntityInvalidation<Resource>(
+        errors.add(
+          EntityErrors<Resource>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
@@ -94,8 +94,8 @@ final class Resource extends NamedEntityB<Resource> {
     }
 
     if (file.isEmpty) {
-      results.add(
-        EntityInvalidation<Resource>(
+      errors.add(
+        EntityErrors<Resource>(
           this,
           PropertyInfo(kFile, Uint8List, file),
           "$kFile content cannot be empty.",
@@ -105,8 +105,8 @@ final class Resource extends NamedEntityB<Resource> {
     }
     
     if(extension.trim().isEmpty || extension.length > 6) {
-      results.add(
-        EntityInvalidation<Resource>(
+      errors.add(
+        EntityErrors<Resource>(
           this,
           PropertyInfo(kExtension, String, extension),
           "Lenght: ${extension.length}, must be between 1 and 6 characters.",
@@ -115,6 +115,12 @@ final class Resource extends NamedEntityB<Resource> {
       );
     }
 
-    return results;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

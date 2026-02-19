@@ -1,8 +1,8 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
-final class TrailerExternal extends EntityB<TrailerExternal> {
+final class TrailerExternal extends EntityBase<TrailerExternal> {
   /// [TrailerExternal.carrier] property key for [DataMap].
   static const String kCarrier = "carrier";
 
@@ -64,14 +64,14 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
   }
 
   @override
-  List<EntityInvalidation<TrailerExternal>> evaluate() {
-    List<EntityInvalidation<TrailerExternal>> invalidations = <EntityInvalidation<TrailerExternal>>[];
+  List<EntityErrors<TrailerExternal>> evaluate(List<EntityErrors<TrailerExternal>> errors) {
+    errors = super.evaluate(errors);
     
     if (id < BigInt.zero) {
-      invalidations.add(
-         EntityInvalidation<TrailerExternal>(
+      errors.add(
+         EntityErrors<TrailerExternal>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           'id < 0',
         ),
@@ -79,8 +79,8 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
     }
 
     if (carrier != null && carrier!.length > 100 || carrier!.isEmpty) {
-      invalidations.add(
-        EntityInvalidation<TrailerExternal>(
+      errors.add(
+        EntityErrors<TrailerExternal>(
           this,
           PropertyInfo(
             kCarrier,
@@ -94,8 +94,8 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
     }
 
     if ((usaPlate != null) && (usaPlate!.length > 7 || usaPlate!.length < 6)) {
-      invalidations.add(
-        EntityInvalidation<TrailerExternal>(
+      errors.add(
+        EntityErrors<TrailerExternal>(
           this,
           PropertyInfo(
             kUsaPlate,
@@ -109,8 +109,8 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
     }
 
     if ((mxPlate != null) && (mxPlate!.length != 7)) {
-      invalidations.add(
-        EntityInvalidation<TrailerExternal>(
+      errors.add(
+        EntityErrors<TrailerExternal>(
           this,
           PropertyInfo(
             kMxPlate,
@@ -123,6 +123,12 @@ final class TrailerExternal extends EntityB<TrailerExternal> {
       );
     }
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

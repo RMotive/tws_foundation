@@ -1,16 +1,16 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/services/security/permits/permit.dart';
 
-/// {implementation} class for an [EntityI].
+/// {implementation} class for an [IEntity].
 ///
-/// [Entity] that represents the information for certain actions/operations to be performed to the Solutions.
-final class Action extends NamedEntityB<Action> { 
+/// [EntityBase] that represents the information for certain actions/operations to be performed to the Solutions.
+final class Action extends NamedEntityBase<Action> { 
 
-  /// [Feature.permits] property key.
+  /// [Action.permits] property key.
   static const String kPermits = 'Permits';
 
-  /// [Feature.enabled] property key.
+  /// [Action.enabled] property key.
   static const String kEnabled = 'enabled';
 
   /// Enabled status.
@@ -50,23 +50,23 @@ final class Action extends NamedEntityB<Action> {
   }
 
   @override
-  List<EntityInvalidation<Action>> evaluate() {
-    List<EntityInvalidation<Action>> results = <EntityInvalidation<Action>>[];
+  List<EntityErrors<Action>> evaluate(List<EntityErrors<Action>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Action>(
+      errors.add(
+        EntityErrors<Action>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
       );
     }
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<Action>(
+      errors.add(
+        EntityErrors<Action>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -74,10 +74,10 @@ final class Action extends NamedEntityB<Action> {
     }
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        results.add(
-          EntityInvalidation<Action>(
+        errors.add(
+          EntityErrors<Action>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
@@ -87,10 +87,15 @@ final class Action extends NamedEntityB<Action> {
 
     if (permits.isNotEmpty) {
       for (Permit plate in permits) {
-        results.validateDependency(this, plate);
+        errors.validateDependency(this, plate);
       }
     }
-    return results;
+    return errors;
   }
-
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
+  }
 }

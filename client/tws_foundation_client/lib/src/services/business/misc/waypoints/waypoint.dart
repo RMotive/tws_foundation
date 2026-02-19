@@ -1,7 +1,7 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/services/business/misc/locations/location.dart';
 
-final class Waypoint extends EntityB<Waypoint> {
+final class Waypoint extends EntityBase<Waypoint> {
 
   /// [longitude] property key.
   static const String kLongitude = "longitude";
@@ -75,12 +75,12 @@ final class Waypoint extends EntityB<Waypoint> {
   }
 
   @override
-  List<EntityInvalidation<Waypoint>> evaluate() {
-    List<EntityInvalidation<Waypoint>> invalidations = <EntityInvalidation<Waypoint>>[];
+  List<EntityErrors<Waypoint>> evaluate(List<EntityErrors<Waypoint>> errors) {
+    errors = super.evaluate(errors);
     
     if(longitude == 0  || longitude > _kMaxCoordinateValue || longitude < -_kMaxCoordinateValue){
-      invalidations.add(
-        EntityInvalidation<Waypoint>(
+      errors.add(
+        EntityErrors<Waypoint>(
           this,
           PropertyInfo(kLongitude, double, longitude),
           'Must provide a valid longitude value',
@@ -89,8 +89,8 @@ final class Waypoint extends EntityB<Waypoint> {
       );
     }
     if(latitude == 0 || latitude > _kMaxCoordinateValue || latitude < -_kMaxCoordinateValue){
-      invalidations.add(
-        EntityInvalidation<Waypoint>(
+      errors.add(
+        EntityErrors<Waypoint>(
           this,
           PropertyInfo(klatitude, double, latitude),
           'Must provide a valid latitude value',
@@ -100,8 +100,8 @@ final class Waypoint extends EntityB<Waypoint> {
     }
 
     if(altitude != null && (altitude == 0 || altitude! > _kMaxCoordinateValue || altitude! < -_kMaxCoordinateValue)){
-      invalidations.add(
-        EntityInvalidation<Waypoint>(
+      errors.add(
+        EntityErrors<Waypoint>(
           this,
           PropertyInfo(kAltitude, double, altitude),
           'Must provide a valid altitude value or be empty',
@@ -110,7 +110,13 @@ final class Waypoint extends EntityB<Waypoint> {
       );
     }
     
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 
 }

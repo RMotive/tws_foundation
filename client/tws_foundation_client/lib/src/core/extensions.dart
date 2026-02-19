@@ -1,8 +1,8 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-extension ViewFilterNodesCollection<T extends EntityI<T>> on List<ViewFilterNodeI<T>> {
+extension ViewFilterNodesCollection<T extends IEntity<T>> on List<ViewFilterNodeI<T>> {
   ///
   List<DataMap> encode() {
     return map(
@@ -22,7 +22,7 @@ extension ViewOrderingCollection on List<ViewOrdering> {
 }
 
 ///
-extension EntityCollection<T extends EntityI<T>> on List<T> {
+extension EntityCollection<T extends IEntity<T>> on List<T> {
   ///
   List<DataMap> encode() {
     return map((T el) => el.encode()).toList();
@@ -30,7 +30,7 @@ extension EntityCollection<T extends EntityI<T>> on List<T> {
 }
 
 ///
-extension EntityOperationFailureCollection<T extends EntityI<T>> on List<EntityOperationFailure<T>> {
+extension EntityOperationFailureCollection<T extends IEntity<T>> on List<EntityOperationFailure<T>> {
   ///
   List<DataMap> encode() {
     return map(

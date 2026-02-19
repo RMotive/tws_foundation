@@ -1,19 +1,20 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {implementation} class from a [ResponseResolverB].
 ///
 ///
-/// Defines final behavior for a [FoundationResponseResolver] wich handles [ServiceI] requests implementations from a [FoundationServer] and [FoundationServiceB], resolving
+/// Defines final behavior for a [FoundationResponseResolver] wich handles [IService] requests implementations from a [FoundationServer] and [FoundationServiceB], resolving
 /// as a {Foundation} package scope the [ServerI] implementation responses as needed.
-final class FoundationResponseResolver<T extends DecodableI?> extends ResponseResolverB<T> {
+final class FoundationResponseResolver<T extends IDecodable?> extends ResponseResolverBase<T> {
   /// Creates a new [FoundationResponseResolver] instance.
   const FoundationResponseResolver(super.controller);
 
   /// Resolves the [ResponseController] directly with no callback handlers.
   ///
   ///
-  /// [objectBuilder] building callback for the [T] object creation in order to call [DecodableI.decode] method from [DecodableI] interface.
+  /// [objectBuilder] building callback for the [T] object creation in order to call [IDecodable.decode] method from [IDecodable] interface.
+  @override
   T resolveDirect(T Function() objectBuilder) {
     T? result;
     responseController.resolve(
@@ -27,7 +28,7 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
         final FailureFrame failureFrame = FailureFrame();
         failureFrame.decode(data);
         throw TracedException(
-            'FailureException: server act resulted in failure $statusCode with (${failureFrame.content.system})',
+            'FailureException: server act resulted in failure $statusCode with (${failureFrame.content.advise})',
             StackTrace.current);
       },
       (TracedException exception) {
@@ -45,7 +46,7 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
   /// Resolves the [ResponseController] with the given callback handlers.
   ///
   ///
-  /// [objectBuilder] building callback for the [T] object creation in order to call [DecodableI.decode] method from [DecodableI] interface.
+  /// [factory] building callback for the [T] object creation in order to call [IDecodable.decode] method from [IDecodable] interface.
   ///
   /// [onSuccess] callback invoked when the [ResponseController] resulted in a success.
   ///
@@ -56,8 +57,9 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
   /// [onConnectionFailure] callback invoked when the [ResponseController] resulted in an exception related with connection failure.
   ///
   /// [onFinally] callback invoked after any [ResponseController] result and callback invokation.
+  @override
   void resolve({
-    required T Function() objectBuilder,
+    required T Function() factory,
     required void Function(SuccessFrame<T> success) onSuccess,
     required void Function(FailureFrame failure, int status) onFailure,
     required void Function(TracedException exception) onException,
@@ -66,7 +68,7 @@ final class FoundationResponseResolver<T extends DecodableI?> extends ResponseRe
   }) {
     responseController.resolve(
       (DataMap data) {
-        final SuccessFrame<T> successFrame = SuccessFrame<T>(objectBuilder);
+        final SuccessFrame<T> successFrame = SuccessFrame<T>(factory);
         successFrame.decode(data);
         onSuccess(successFrame);
       },

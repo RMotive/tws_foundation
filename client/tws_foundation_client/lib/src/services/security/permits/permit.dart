@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/services/security/actions/action.dart';
 import 'package:tws_foundation_client/src/services/security/features/feature.dart';
 import 'package:tws_foundation_client/src/services/security/solutions/solution.dart';
 
-/// {implementation} class for an [EntityI].
+/// {implementation} class for an [IEntity].
 ///
 /// [Entity] that stores and handles specific Feature / Solution / Action authorization for Accounts.
 final class Permit extends NamedReferencedEntityB<Permit> {
@@ -58,13 +58,14 @@ final class Permit extends NamedReferencedEntityB<Permit> {
   }
 
   @override
-  List<EntityInvalidation<Permit>> evaluate() {
-    List<EntityInvalidation<Permit>> invalidations = <EntityInvalidation<Permit>>[];
+  List<EntityErrors<Permit>> evaluate(List<EntityErrors<Permit>> errors) {
+    errors = super.evaluate(errors);
+
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<Permit>(
+      errors.add(
+        EntityErrors<Permit>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
@@ -72,10 +73,10 @@ final class Permit extends NamedReferencedEntityB<Permit> {
     }
     
     if (name.trim().isEmpty || name.length > 100) {
-      invalidations.add(
-        EntityInvalidation<Permit>(
+      errors.add(
+        EntityErrors<Permit>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -84,10 +85,10 @@ final class Permit extends NamedReferencedEntityB<Permit> {
 
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        invalidations.add(
-          EntityInvalidation<Permit>(
+        errors.add(
+          EntityErrors<Permit>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
@@ -96,20 +97,26 @@ final class Permit extends NamedReferencedEntityB<Permit> {
     }
 
     if (reference.length != 8) {
-        invalidations.add(
-          EntityInvalidation<Permit>(
+        errors.add(
+          EntityErrors<Permit>(
             this,
-            PropertyInfo(EntityKeys.kReference, String, reference),
+            PropertyInfo(CorePropertiesConsts.reference, String, reference),
             'lentgh: ${reference.length}, must be exactly 8 characters',
             'length == 8',
           ),
         );
       }
 
-    invalidations.validateDependency(this, solution);
-    invalidations.validateDependency(this, feature);
-    invalidations.validateDependency(this, action);
+    errors.validateDependency(this, solution);
+    errors.validateDependency(this, feature);
+    errors.validateDependency(this, action);
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

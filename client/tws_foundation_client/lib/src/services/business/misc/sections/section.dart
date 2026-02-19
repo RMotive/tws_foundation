@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
@@ -7,7 +7,7 @@ Section sectionBuilder() => Section();
 
 /// Defines a business entity that stores a [Section] data in a yard [Location], 
 /// where [Trailer] and [Truck] entities are stored, arrived and depart as part of its operations.
-final class Section extends NamedEntityB<Section> {
+final class Section extends NamedEntityBase<Section> {
   /// [Section.yard] property key.
   static const String kYard = "yard";
 
@@ -64,14 +64,14 @@ final class Section extends NamedEntityB<Section> {
   }
 
   @override
-  List<EntityInvalidation<Section>> evaluate() {
-    List<EntityInvalidation<Section>> results = <EntityInvalidation<Section>>[];
+    List<EntityErrors<Section>> evaluate(List<EntityErrors<Section>> errors) {
+    errors = super.evaluate(errors);
 
     if (id < BigInt.zero) {
-      results.add(
-        EntityInvalidation<Section>(
+      errors.add(
+        EntityErrors<Section>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer cannot be less than 0',
           'id < 0',
         ),
@@ -79,10 +79,10 @@ final class Section extends NamedEntityB<Section> {
     }
     
     if (name.trim().isEmpty || name.length > 100) {
-      results.add(
-        EntityInvalidation<Section>(
+      errors.add(
+        EntityErrors<Section>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Name: ${name.length}, must be 100 max length",
           "101 > length > 0",
         ),
@@ -91,10 +91,10 @@ final class Section extends NamedEntityB<Section> {
 
     if (description != null) {
       if (description!.length > 200) {
-        results.add(
-          EntityInvalidation<Section>(
+        errors.add(
+          EntityErrors<Section>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Description: ${description!.length}, must be 200 max length",
             "201 > length",
           ),
@@ -103,8 +103,8 @@ final class Section extends NamedEntityB<Section> {
     }
 
     if(capacity < 0) {
-      results.add(
-        EntityInvalidation<Section>(
+      errors.add(
+        EntityErrors<Section>(
           this,
           PropertyInfo(kCapacity, int, capacity),
           "Capacity: $capacity, cannot be less than 0",
@@ -113,10 +113,16 @@ final class Section extends NamedEntityB<Section> {
       );
     }
 
-    results.validateDependency(this, yard);
-    results.validateDependency(this, status);
-    if(resource != null) results.validateDependency(this, resource!);
+    errors.validateDependency(this, yard);
+    errors.validateDependency(this, status);
+    if(resource != null) errors.validateDependency(this, resource!);
 
-    return results;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

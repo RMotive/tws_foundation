@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {implementation} class for a [EntityOperationFailure].
 ///
-/// Defines an object that stores information about an [EntityI] operation failure result at a [FoundationServer] service request.
-final class EntityOperationFailure<T extends EntityI<T>> implements DecodableI, EncodableI {
+/// Defines an object that stores information about an [IEntity] operation failure result at a [FoundationServer] service request.
+final class EntityOperationFailure<T extends IEntity<T>> implements IDecodable, IEncodable {
   /// Key binding for [entity] property..
   static const String kEntity = 'entity';
 

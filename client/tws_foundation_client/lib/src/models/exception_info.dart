@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// Data {class} implementation for an [ExceptionInfo].
 ///
 ///
 /// Defines a data constract for a [FoundationServer] implementation exception, storing diagnosticable exception information.
-final class ExceptionInfo implements DecodableI {
+final class ExceptionInfo implements IDecodable {
   /// Where the exception got thrown ([ServerI] side).
   String trace = '';
 

@@ -1,8 +1,8 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// Defines a contract for {read} operations for [ServiceI] implementations, filtering by reference property.
-abstract interface class ReadReferenceServiceI<TEntity extends EntityI<TEntity>> {
+/// Defines a contract for {read} operations for [IService] implementations, filtering by reference property.
+abstract interface class ReadReferenceServiceI<TEntity extends IEntity<TEntity>> {
   /// Creates a new [ReadReferenceServiceI] instance.
   const ReadReferenceServiceI();
 

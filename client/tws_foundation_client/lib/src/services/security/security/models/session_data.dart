@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {model} class for [SessionData].
 ///
 /// Defines a data model implementation that represents a [FoundationServer] {session} computated and managed by the server.
-final class SessionData implements DecodableI, EncodableI {
+final class SessionData implements IDecodable, IEncodable {
   /// Privileges wildcard, means can access everything.
   bool wildcard = false;
 

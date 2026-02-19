@@ -1,12 +1,12 @@
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// {implementation} class for an [EntityI].
+/// {implementation} class for an [IEntity].
 ///
 ///  [Entity] that stores a relation between a collection of [Permit] with an [Account].
-final class Profile extends NamedEntityB<Profile> {
+final class Profile extends NamedEntityBase<Profile> {
   
   /// [Profile.permits] property key.
   static const String kPermits = 'permits';
@@ -68,13 +68,14 @@ final class Profile extends NamedEntityB<Profile> {
   }
 
   @override
-  List<EntityInvalidation<Profile>> evaluate() {
-    List<EntityInvalidation<Profile>> invalidations = <EntityInvalidation<Profile>>[];
+  List<EntityErrors<Profile>> evaluate(List<EntityErrors<Profile>> errors) {
+    errors = super.evaluate(errors);
+    
     if (id < BigInt.zero) {
-      invalidations.add(
-        EntityInvalidation<Profile>(
+      errors.add(
+        EntityErrors<Profile>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           '$id < 0',
         ),
@@ -82,10 +83,10 @@ final class Profile extends NamedEntityB<Profile> {
     }
     
     if (name.trim().isEmpty || name.length > 100) {
-      invalidations.add(
-        EntityInvalidation<Profile>(
+      errors.add(
+        EntityErrors<Profile>(
           this,
-          PropertyInfo(EntityKeys.name, String, name),
+          PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
           "101 > length > 0",
         ),
@@ -94,10 +95,10 @@ final class Profile extends NamedEntityB<Profile> {
 
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
-        invalidations.add(
-          EntityInvalidation<Profile>(
+        errors.add(
+          EntityErrors<Profile>(
             this,
-            PropertyInfo(EntityKeys.description, String, description),
+            PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
             "201 > length",
           ),
@@ -107,16 +108,22 @@ final class Profile extends NamedEntityB<Profile> {
 
     if (permits.isNotEmpty) {
       for (Permit permit in permits) {
-        invalidations.validateDependency(this, permit);
+        errors.validateDependency(this, permit);
       }
     }
 
     if (accounts.isNotEmpty) {
       for (Account account in accounts) {
-        invalidations.validateDependency(this, account);
+        errors.validateDependency(this, account);
       }
     }
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {interface} class.
 ///
 /// Contract for [DriversServiceI] implementations that handles service call operations based on [DriverCommon] entity.
-abstract interface class DriversServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<DriverCommon>, CreateServiceI<DriverCommon> {
+abstract interface class DriversServiceI extends FoundationServiceB implements IService, ViewServiceI<DriverCommon>, CreateServiceI<DriverCommon> {
   /// Creates a new [DriversServiceI] instance.
   DriversServiceI(super.host, super.servicePath);
 

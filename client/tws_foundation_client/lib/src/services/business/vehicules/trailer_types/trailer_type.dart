@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/src/core/constants.dart';
 import 'package:tws_foundation_client/src/core/entity_utilities.dart';
 import 'package:tws_foundation_client/src/core/extensions.dart';
@@ -9,7 +9,7 @@ import 'package:tws_foundation_client/src/services/business/vehicules/trailer_cl
 TrailerType trailertypeBuilder() => TrailerType();
 
 /// Defines a business entity that stores relevant data for a trailer operation, like [size] or [TrailerClass]. 
-final class TrailerType extends EntityB<TrailerType> {
+final class TrailerType extends EntityBase<TrailerType> {
   /// [TrailerType.size] property key.
   static const String kSize = "size";
 
@@ -63,13 +63,13 @@ final class TrailerType extends EntityB<TrailerType> {
   }
 
   @override
-  List<EntityInvalidation<TrailerType>> evaluate() {
-    List<EntityInvalidation<TrailerType>> invalidations = <EntityInvalidation<TrailerType>>[];
+  List<EntityErrors<TrailerType>> evaluate(List<EntityErrors<TrailerType>> errors) {
+    errors = super.evaluate(errors);
     if (id < BigInt.zero) {
-      invalidations.add(
-         EntityInvalidation<TrailerType>(
+      errors.add(
+         EntityErrors<TrailerType>(
           this,
-          PropertyInfo(EntityKeys.id, int, id),
+          PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
           'id < 0',
         ),
@@ -77,8 +77,8 @@ final class TrailerType extends EntityB<TrailerType> {
     }
 
     if (size.trim().isEmpty || size.length > 16) {
-      invalidations.add(
-        EntityInvalidation<TrailerType>(
+      errors.add(
+        EntityErrors<TrailerType>(
           this,
           PropertyInfo(kSize, String, size),
           'Length: $size, can\'t be empty or longer than 16.',
@@ -87,9 +87,15 @@ final class TrailerType extends EntityB<TrailerType> {
       );
     }
 
-    invalidations.validateDependency(this, trailerClass);
-    invalidations.validateDependency(this, status);
+    errors.validateDependency(this, trailerClass);
+    errors.validateDependency(this, status);
 
-    return invalidations;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

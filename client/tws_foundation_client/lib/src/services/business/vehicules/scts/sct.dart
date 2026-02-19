@@ -1,10 +1,10 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 /// {entity} class.
 ///
-/// Implements a [EntityB] ... TODO: Define purpose.
-final class SCT extends EntityB<SCT> {
+/// Implements a [EntityBase] ... TODO: Define purpose.
+final class SCT extends EntityBase<SCT> {
   /// [SCT.type] property key for [DataMap].
   static const String kType = "type";
 
@@ -88,12 +88,12 @@ final class SCT extends EntityB<SCT> {
   }
 
   @override
-  List<EntityInvalidation<SCT>> evaluate() {
-    final List<EntityInvalidation<SCT>> invs = <EntityInvalidation<SCT>>[];
+  List<EntityErrors<SCT>> evaluate(List<EntityErrors<SCT>> errors) {
+    errors = super.evaluate(errors);
 
     if (type.length != 6) {
-      invs.add(
-        EntityInvalidation<SCT>(
+      errors.add(
+        EntityErrors<SCT>(
           this,
           PropertyInfo(kType, String, type),
           'Wrong legth ${type.length}, must be 6.',
@@ -103,8 +103,8 @@ final class SCT extends EntityB<SCT> {
     }
 
     if (number.length != 25) {
-      invs.add(
-        EntityInvalidation<SCT>(
+      errors.add(
+        EntityErrors<SCT>(
           this,
           PropertyInfo(kNumber, String, number),
           'Wrong legth ${number.length}, must be 25.',
@@ -114,8 +114,8 @@ final class SCT extends EntityB<SCT> {
     }
 
     if (configuration.isEmpty || configuration.length > 10) {
-      invs.add(
-        EntityInvalidation<SCT>(
+      errors.add(
+        EntityErrors<SCT>(
           this,
           PropertyInfo(kConfiguration, String, configuration),
           'Wring length ${configuration.length}, must be between 1 and 10.',
@@ -124,6 +124,12 @@ final class SCT extends EntityB<SCT> {
       );
     }
 
-    return invs;
+    return errors;
+  }
+  
+  @override
+  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+    // TODO: implement compare
+    throw UnimplementedError();
   }
 }

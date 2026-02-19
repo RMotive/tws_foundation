@@ -25,8 +25,8 @@
 
     4. Refactored [csm_client] implementations:
         - [JObject] changed to [DataMap]
-        - [CSMSetInterface] changed to [EntityB]
-        - [CSMEncodeInterface] changed to [EncodableI]
+        - [CSMSetInterface] changed to [EntityBase]
+        - [CSMEncodeInterface] changed to [IEncodable]
         - [CSMUri] changed to [Uri]
         - [CSMActEffect] changed to [ResponseController]
         - [CSMServiceResolverBase] changed to [ResponseResolverB]

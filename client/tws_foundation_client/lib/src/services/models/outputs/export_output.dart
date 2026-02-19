@@ -1,9 +1,9 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 
 /// {model} class for [ExportOutput].
 ///
 /// Defines a data model object that represents a {View} operation {input} object.
-final class ExportOutput implements EncodableI, DecodableI {
+final class ExportOutput implements IEncodable, IDecodable {
 
   /// [ExportOutput.content] property key.
   static const String kContent = 'content';

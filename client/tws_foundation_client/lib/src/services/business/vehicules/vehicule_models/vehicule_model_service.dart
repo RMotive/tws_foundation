@@ -1,11 +1,11 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 
 /// {interface} for [VehiculeModelsServiceI].
 ///
 /// Defines base contract for [VehiculeModelsServiceI] implementations that specifies the methods to have providing [VehiculeModel] based operations and management.
-abstract interface class VehiculeModelsServiceI extends FoundationServiceB implements ServiceI, ViewServiceI<VehiculeModel> {
+abstract interface class VehiculeModelsServiceI extends FoundationServiceB implements IService, ViewServiceI<VehiculeModel> {
   /// Creates a new [VehiculeModelsServiceI] instance.
   VehiculeModelsServiceI(
     super.host,

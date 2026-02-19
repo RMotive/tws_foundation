@@ -8,9 +8,10 @@ environment:
 
 dependencies:
 
-  csm_client:
+  csm_client_core:
     git:
       url: https://github.com/RMotive/csm_client
+      path: csm_client_core
       ref: main
 
 dev_dependencies:
