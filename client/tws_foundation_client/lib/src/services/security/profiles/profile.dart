@@ -122,8 +122,41 @@ final class Profile extends NamedEntityBase<Profile> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Profile ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    for(Permit permit in permits){
+      Permit? refPermit = ref.permits.firstWhere((Permit e) => e.id == permit.id, orElse: () => Permit());
+      List<ObjectDifference> permitDiff = permit.compare(refPermit);
+
+      if (permitDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kPermits, Permit, permit),
+            permit,
+            refPermit,
+            permitDiff,
+          ),
+        );
+      }
+    }
+
+    for(Account account in accounts){
+      Account? refAccount = ref.accounts.firstWhere((Account e) => e.id == account.id, orElse: () => Account());
+      List<ObjectDifference> accountDiff = account.compare(refAccount);
+
+      if (accountDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kAccounts, Account, account),
+            account,
+            refAccount,
+            accountDiff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
   }
 }

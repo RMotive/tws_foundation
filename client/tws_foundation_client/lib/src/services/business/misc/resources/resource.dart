@@ -143,16 +143,20 @@ final class Resource extends NamedEntityBase<Resource> {
         ),
       );
     }
-    // TODO complete comparison for yardlog
-    if (yardlog != ref.yardlog) {
-      aggregated.add(
-        ObjectDifference(
-          PropertyInfo(kYardLog, YardLog, yardlog),
-          yardlog,
-          ref.yardlog,
-          null,
-        ),
-      );
+    
+    if (ref.yardlog != null){
+      List<ObjectDifference> yardlogDiff = yardlog?.compare(ref.yardlog!) ?? <ObjectDifference>[];
+
+      if (yardlogDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference( 
+            PropertyInfo(kYardLog, YardLog, yardlog),
+            yardlog,
+            ref.yardlog,
+            yardlogDiff,
+          ),
+        );
+      }
     }
     
     return aggregated;

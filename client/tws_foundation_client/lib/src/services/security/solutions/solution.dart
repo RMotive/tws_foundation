@@ -41,8 +41,20 @@ final class Solution extends NamedEntityBase<Solution> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Solution ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (sign != ref.sign) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo('sign', String, sign),
+          sign,
+          ref.sign,
+          null,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

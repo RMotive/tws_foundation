@@ -96,8 +96,36 @@ final class Feature extends NamedEntityBase<Feature> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Feature ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (enabled != ref.enabled) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEnabled, bool, enabled),
+          enabled,
+          ref.enabled,
+          null,
+        ),
+      );
+    }
+
+    for(Permit permit in permits){
+      Permit? refPermit = ref.permits.firstWhere((Permit e) => e.id == permit.id, orElse: () => Permit());
+      List<ObjectDifference> permitDiff = permit.compare(refPermit);
+
+      if (permitDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kPermits, Permit, permit),
+            permit,
+            refPermit,
+            permitDiff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
   }
 }

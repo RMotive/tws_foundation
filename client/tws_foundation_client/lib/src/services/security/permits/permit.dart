@@ -115,8 +115,58 @@ final class Permit extends NamedReferencedEntityB<Permit> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Permit ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> actionDiff = action.compare(ref.action);
+    List<ObjectDifference> solutionDiff = solution.compare(ref.solution);
+    List<ObjectDifference> featureDiff = feature.compare(ref.feature);
+
+
+    if (enabled != ref.enabled) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEnabled, bool, enabled),
+          enabled,
+          ref.enabled,
+          null,
+        ),
+      );
+    }
+
+    if (solutionDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kSolution, Solution, solution),
+          solution,
+          ref.solution,
+          solutionDiff,
+        ),
+      );
+    }
+
+    if (featureDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kFeature, Feature, feature),
+          feature,
+          ref.feature,
+          featureDiff,
+        ),
+      );
+    }
+
+    if (actionDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAction, Action, action),
+          action,
+          ref.action,
+          actionDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

@@ -119,8 +119,53 @@ final class Contact extends EntityBase<Contact> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Contact ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (name != ref.name) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo('name', String, name),
+          name,
+          ref.name,
+          null,
+        ),
+      );
+    }
+
+    if (lastName != ref.lastName) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo('lastName', String, lastName),
+          lastName,
+          ref.lastName,
+          null,
+        ),
+      );
+    }
+
+    if (eMail != ref.eMail) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo('eMail', String, eMail),
+          eMail,
+          ref.eMail,
+          null,
+        ),
+      );
+    }
+
+    if (phone != ref.phone) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo('phone', String, phone),
+          phone,
+          ref.phone,
+          null,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

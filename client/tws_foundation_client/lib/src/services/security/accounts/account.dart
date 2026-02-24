@@ -141,8 +141,77 @@ final class Account extends EntityBase<Account> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Account ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> contactDiff = contact.compare(ref.contact);
+
+
+    if (user != ref.user) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kUser, String, user),
+          user,
+          ref.user,
+          null,
+        ),
+      );
+    }
+
+    if (wildcard != ref.wildcard) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kWildcard, bool, wildcard),
+          wildcard,
+          ref.wildcard,
+          null,
+        ),
+      );
+    }
+    
+    if (contactDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kContact, Contact, contact),
+          contact,
+          ref.contact,
+          contactDiff,
+        ),
+      );
+    }
+
+    for(Permit permit in permits){
+      Permit? refPermit = ref.permits.firstWhere((Permit e) => e.id == permit.id, orElse: () => Permit());
+      List<ObjectDifference> permitDiff = permit.compare(refPermit);
+
+      if (permitDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kPermits, Permit, permit),
+            permit,
+            refPermit,
+            permitDiff,
+          ),
+        );
+      }
+    }
+
+    for(Profile profile in profiles){
+      Profile? refProfile = ref.profiles.firstWhere((Profile e) => e.id == profile.id, orElse: () => Profile());
+      List<ObjectDifference> profilediff = profile.compare(refProfile);
+
+      if (profilediff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kProfiles, Profile, profile),
+            profile,
+            refProfile,
+            profilediff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
   }
 }
