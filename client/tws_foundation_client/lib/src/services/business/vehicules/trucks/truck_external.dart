@@ -146,8 +146,53 @@ final class TruckExternal extends EntityBase<TruckExternal> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(TruckExternal ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (carrier != ref.carrier) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCarrier, String, carrier),
+          carrier,
+          ref.carrier,
+          null,
+        ),
+      );
+    }
+
+    if (vin != ref.vin) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kVin, String, vin),
+          vin,
+          ref.vin,
+          null,
+        ),
+      );
+    }
+
+    if (usaPlate != ref.usaPlate) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kUsaPlate, String, usaPlate),
+          usaPlate,
+          ref.usaPlate,
+          null,
+        ),
+      );
+    }
+
+    if (mxPlate != ref.mxPlate) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kMxPlate, String, mxPlate),
+          mxPlate,
+          ref.mxPlate,
+          null,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

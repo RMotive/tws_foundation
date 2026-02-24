@@ -114,9 +114,43 @@ final class Waypoint extends EntityBase<Waypoint> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Waypoint ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (longitude != ref.longitude) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kLongitude, double, longitude),
+          longitude,
+          ref.longitude,
+          null,
+        ),
+      );
+    }
+
+    if (latitude != ref.latitude) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(klatitude, double, latitude),
+          latitude,
+          ref.latitude,
+          null,
+        ),
+      );
+    }
+
+    if (altitude != ref.altitude) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAltitude, double, altitude),
+          altitude,
+          ref.altitude,
+          null,
+        ),
+      );
+    }
+    
+    return aggregated;
   }
 
 }

@@ -128,8 +128,48 @@ final class DriverCommon extends CommonEntityB<DriverCommon, Driver, DriverExter
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(DriverCommon ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if (license != ref.license) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kLicense, String, license),
+          license,
+          ref.license,
+          null,
+        ),
+      );
+    }
+
+    if (statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+       );
+    }
+    
+    if(ref.situation != null){
+      List<ObjectDifference> situationDiff = situation?.compare(ref.situation!) ?? <ObjectDifference>[];
+
+      if (situationDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(FoundationCommonPropertyKeys.kSituation, Situation, situation),
+            situation,
+            ref.situation,
+            situationDiff,
+          ),
+        );
+      }
+    }
+    
+    return aggregated;
   }
 }

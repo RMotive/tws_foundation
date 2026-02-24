@@ -119,8 +119,42 @@ final class Resource extends NamedEntityBase<Resource> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Resource ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (file != ref.file) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kFile, Uint8List, file),
+          file,
+          ref.file,
+          null,
+        ),
+      );
+    }
+
+    if (extension != ref.extension) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kExtension, String, extension),
+          extension,
+          ref.extension,
+          null,
+        ),
+      );
+    }
+    // TODO complete comparison for yardlog
+    if (yardlog != ref.yardlog) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kYardLog, YardLog, yardlog),
+          yardlog,
+          ref.yardlog,
+          null,
+        ),
+      );
+    }
+    
+    return aggregated;
   }
 }

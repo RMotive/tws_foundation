@@ -202,8 +202,87 @@ final class Address extends EntityBase<Address> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Address ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (country != ref.country) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCountry, String, country),
+          country,
+          ref.country,
+          null,
+        ),
+      );
+    }
+
+    if (state != ref.state) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kState, String, state),
+          state,
+          ref.state,
+          null,
+        ),
+      );
+    }
+
+    if (street != ref.street) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kStreet, String, street),
+          street,
+          ref.street,
+          null,
+        ),
+      );
+    }
+
+    if (altStreet != ref.altStreet) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAltStreet, String, altStreet),
+          altStreet,
+          ref.altStreet,
+          null,
+        ),
+      );
+    }
+
+    if (city != ref.city) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCity, String, city),
+          city,
+          ref.city,
+          null,
+        ),
+      );
+    }
+
+    if (zip != ref.zip) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kZip, String, zip),
+          zip,
+          ref.zip,
+          null,
+        ),
+      );
+    }
+
+    if (subdivision != ref.subdivision) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kSubdivision, String, subdivision),
+          subdivision,
+          ref.subdivision,
+          null,
+        ),
+      );
+    }
+    
+    return aggregated;
   }
+  
 }

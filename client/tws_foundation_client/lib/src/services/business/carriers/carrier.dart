@@ -96,9 +96,63 @@ final class Carrier extends NamedEntityBase<Carrier> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Carrier ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> addressDiff = address.compare(ref.address);
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+    List<ObjectDifference> approachDiff = approach.compare(ref.approach);
+
+    if(addressDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAddress, Address, address),
+          address,
+          ref.address,
+          addressDiff,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    if(approachDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kApproach, Approach, approach),
+          approach,
+          ref.approach,
+          approachDiff,
+        ),
+      );
+    }
+    // TODO: What if Ref.usdot is null?
+    if(ref.usdot != null){
+      List<ObjectDifference> usdotDiff = usdot?.compare(ref.usdot!) ?? <ObjectDifference>[];
+
+      if(usdotDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kUsdot, Usdot, usdot),
+            usdot,
+            ref.usdot,
+            usdotDiff,
+          ),
+        );
+      }
+    }
+    
+    
+    return aggregated;
   }
 
 }

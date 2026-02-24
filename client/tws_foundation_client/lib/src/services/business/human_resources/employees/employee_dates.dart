@@ -58,9 +58,54 @@ final class EmployeeDates extends EntityBase<EmployeeDates> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(EmployeeDates ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+    
+    if (imss != ref.imss) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kImss, DateTime, imss),
+          imss,
+          ref.imss,
+          null,
+        ),
+      );
+    }
+
+    if (hire != ref.hire) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kHire, DateTime, hire),
+          hire,
+          ref.hire,
+          null,
+        ),
+      );
+    }
+
+    if (termination != ref.termination) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kTermination, DateTime, termination),
+          termination,
+          ref.termination,
+          null,
+        ),
+      );
+    }
+
+    if (cnap != ref.cnap) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCnap, DateTime, cnap),
+          cnap,
+          ref.cnap,
+          null,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 
 }

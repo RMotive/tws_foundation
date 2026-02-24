@@ -179,8 +179,108 @@ final class TrailerCommon extends CommonEntityB<TrailerCommon, Trailer, TrailerE
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(TrailerCommon ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if (economic != ref.economic) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEconomic, String, economic),
+          economic,
+          ref.economic,
+          null,
+        ),
+      );
+    }
+    
+    if (statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    if (ref.type != null) {
+      List<ObjectDifference> typeDiff = type?.compare(ref.type!) ?? <ObjectDifference>[];
+      if (typeDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kType, TrailerType, type),
+            type,
+            ref.type,
+            typeDiff,
+          ),
+        );
+      }
+    }
+    
+    if (ref.situation != null){
+      List<ObjectDifference> situationDiff = situation?.compare(ref.situation!) ?? <ObjectDifference>[];
+
+      if (situationDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(FoundationCommonPropertyKeys.kSituation, Situation, situation),
+            situation,
+            ref.situation,
+            situationDiff,
+          ),
+        );
+      }
+    }
+    
+    if(ref.location != null){
+      List<ObjectDifference> locationDiff = location?.compare(ref.location!) ?? <ObjectDifference>[];
+ 
+      if (locationDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kLocation, Location, location),
+            location,
+            ref.location,
+            locationDiff,
+          ),
+        );
+      }
+    }
+    
+    if(ref.internal != null){
+      List<ObjectDifference> internalDiff = internal?.compare(ref.internal!) ?? <ObjectDifference>[];
+
+      if (internalDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kInternal, Trailer, internal),
+            internal,
+            ref.internal,
+            internalDiff,
+          ),
+        );
+      }
+    }
+
+    
+    if(ref.internal != null){
+      List<ObjectDifference> externalDiff = external?.compare(ref.external!) ?? <ObjectDifference>[];
+
+      if (externalDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kExternal, TrailerExternal, external),
+            external,
+            ref.external,
+            externalDiff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
   }
 }

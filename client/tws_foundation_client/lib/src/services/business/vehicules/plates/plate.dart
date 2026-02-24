@@ -125,8 +125,66 @@ final class Plate extends EntityBase<Plate> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Plate ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if (identifier != ref.identifier) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kIdentifier, String, identifier),
+          identifier,
+          ref.identifier,
+          null,
+        ),
+      );
+    }
+
+    if (country != ref.country) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCountry, String, country),
+          country,
+          ref.country,
+          null,
+        ),
+      );
+    }
+
+    if (state != ref.state) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kState, String, state),
+          state,
+          ref.state,
+          null,
+        ),
+      );
+    }
+
+    if (expiration != ref.expiration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kExpiration, DateTime, expiration),
+          expiration,
+          ref.expiration,
+          null,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

@@ -94,8 +94,45 @@ final class TrailerType extends EntityBase<TrailerType> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(TrailerType ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> trailerClassDiff = trailerClass.compare(ref.trailerClass);
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if(size != ref.size){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kSize, String, size),
+          size,
+          ref.size,
+          null,
+        ),
+      );
+    }
+
+    if(trailerClassDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(ktrailerClass, TrailerClass, trailerClass),
+          trailerClass,
+          ref.trailerClass,
+          trailerClassDiff,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

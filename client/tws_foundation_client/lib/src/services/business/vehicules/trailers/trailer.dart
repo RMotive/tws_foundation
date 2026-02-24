@@ -115,8 +115,84 @@ final class Trailer extends EntityBase<Trailer> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Trailer ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> carrierDiff = carrier.compare(ref.carrier);
+
+    if (carrierDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCarrier, Carrier, carrier),
+          carrier,
+          ref.carrier,
+          carrierDiff,
+        ),
+      );
+    }
+    
+    
+    if(ref.sct != null){
+      List<ObjectDifference> sctDiff = sct?.compare(ref.sct!) ?? <ObjectDifference>[];
+
+      if (sctDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(FoundationCommonPropertyKeys.kSCT, SCT, sct),
+            sct,
+            ref.sct,
+            sctDiff,
+          ),
+        );
+      }
+    }
+   
+    if(ref.model != null){
+      List<ObjectDifference> modelDiff = model?.compare(ref.model!) ?? <ObjectDifference>[];
+
+      if (modelDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kModel, VehiculeModel, model),
+            model,
+            ref.model,
+            modelDiff,
+          ),
+        );
+      }
+    }
+
+    if(ref.maintenance != null){
+      List<ObjectDifference> maintenanceDiff = maintenance?.compare(ref.maintenance!) ?? <ObjectDifference>[];
+
+      if (maintenanceDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kMaintenance, Maintenance, maintenance),
+            maintenance,
+            ref.maintenance,
+            maintenanceDiff,
+          ),
+        );
+      }
+    }
+
+    for(Plate plate in plates){
+      Plate? refPlate = ref.plates.firstWhere((Plate e) => e.id == plate.id, orElse: () => Plate());
+      List<ObjectDifference> plateDiff = plate.compare(refPlate);
+
+      if (plateDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kPlates, Plate, plate),
+            plate,
+            refPlate,
+            plateDiff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
   }
 }

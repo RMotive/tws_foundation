@@ -164,7 +164,106 @@ final class Employee extends EntityBase<Employee> {
   
   @override
   List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> identificationDiff = identification.compare(ref.identification);
+    List<ObjectDifference> datesDiff = dates.compare(ref.dates);
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+    
+    if (curp != ref.curp) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCurp, String, curp),
+          curp,
+          ref.curp,
+          null,
+        ),
+      );
+    }
+
+    if (rfc != ref.rfc) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kRfc, String, rfc),
+          rfc,
+          ref.rfc,
+          null,
+        ),
+      );
+    }
+
+    if (nss != ref.nss) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kNss, String, nss),
+          nss,
+          ref.nss,
+          null,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    if(identificationDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kIdentification, Identification, identification),
+          identification,
+          ref.identification,
+          identificationDiff,
+        ),
+      );
+    }
+
+    if(datesDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEmployeeDates, EmployeeDates, dates),
+          dates,
+          ref.dates,
+          datesDiff,
+        ),
+      );
+    }
+
+    if(ref.address != null){
+      List<ObjectDifference> addressDiff = address?.compare(ref.address!) ?? <ObjectDifference>[];
+      if(addressDiff.isNotEmpty){
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kAddress, Address, address),
+            address,
+            ref.address,
+            addressDiff,
+          ),
+        );
+      }
+    }
+
+    if(ref.approach != null){
+      List<ObjectDifference> approachDiff = approach?.compare(ref.approach!) ?? <ObjectDifference>[];
+      if(approachDiff.isNotEmpty){
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kApproach, Approach, approach),
+            approach,
+            ref.approach,
+            approachDiff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
   }
 }

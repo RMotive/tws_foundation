@@ -271,8 +271,154 @@ final class Driver extends EntityBase<Driver> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Driver ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> employeeDiff = employee.compare(ref.employee);
+
+    if (fast != ref.fast) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kFast, String, fast),
+          fast,
+          ref.fast,
+          null,
+        ),
+      );
+    }
+
+    if (anam != ref.anam) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAnam, String, anam),
+          anam,
+          ref.anam,
+          null,
+        ),
+      );
+    }
+
+    if (visa != ref.visa) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kVisa, String, visa),
+          visa,
+          ref.visa,
+          null,
+        ),
+      );
+    }
+
+    if (twic != ref.twic) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kTwic, String, twic),
+          twic,
+          ref.twic,
+          null,
+        ),
+      );
+    }
+
+    if (driverType != ref.driverType) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kDriverType, String, driverType),
+          driverType,
+          ref.driverType,
+          null,
+        )
+      );
+    }
+
+    if (employeeDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEmployee, Employee, employee),
+          employee,
+          ref.employee,
+          employeeDiff,
+        ),
+      );
+    }
+
+    if(anamExpiration != ref.anamExpiration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAnamExpiration, DateTime, anamExpiration),
+          anamExpiration,
+          ref.anamExpiration,
+          null,
+        ),
+      );
+    }
+
+    if(fastExpiration != ref.fastExpiration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kFastExpiration, DateTime, fastExpiration),
+          fastExpiration,
+          ref.fastExpiration,
+          null,
+        ),
+      );
+    }
+
+    if(visaExpiration != ref.visaExpiration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kVisaExpiration, DateTime, visaExpiration),
+          visaExpiration,
+          ref.visaExpiration,
+          null,
+        ),
+      );
+    }
+
+    if(twicExpiration != ref.twicExpiration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kTwicExpiration, DateTime, twicExpiration),
+          twicExpiration,
+          ref.twicExpiration,
+          null,
+        ),
+      );
+    }
+
+    if (licenseExpiration != ref.licenseExpiration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kLicenseExpiration, DateTime, licenseExpiration),
+          licenseExpiration,
+          ref.licenseExpiration,
+          null,
+        ),
+      );
+    }
+
+    if (drugAlcRegistrationDate != ref.drugAlcRegistrationDate) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kDrugalcRegistrationDate, DateTime, drugAlcRegistrationDate),
+          drugAlcRegistrationDate,
+          ref.drugAlcRegistrationDate,
+          null,
+        ),
+      );
+    }
+
+    if (pullNoticeRegistrationDate != ref.pullNoticeRegistrationDate) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kPullnoticeRegistrationDate, DateTime, pullNoticeRegistrationDate),
+          pullNoticeRegistrationDate,
+          ref.pullNoticeRegistrationDate,
+          null,
+        ),
+       );
+    }
+
+    return aggregated;
   }
 }

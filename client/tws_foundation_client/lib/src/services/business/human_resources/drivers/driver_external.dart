@@ -61,8 +61,22 @@ final class DriverExternal extends EntityBase<DriverExternal> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(DriverExternal ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> identificationDiff = identification.compare(ref.identification);
+
+    if(identificationDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kIdentification, Identification, identification),
+          identification,
+          ref.identification,
+          identificationDiff,
+        )
+      );
+    }
+
+    return aggregated;
   }
 }

@@ -78,8 +78,8 @@ final class Manufacturer extends NamedEntityBase<Manufacturer> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  // ignore: unnecessary_overrides
+  List<ObjectDifference> compare(Manufacturer ref, [List<ObjectDifference>? aggregated]) {
+    return super.compare(ref, aggregated);
   }
 }

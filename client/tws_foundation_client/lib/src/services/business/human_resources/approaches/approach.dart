@@ -189,5 +189,64 @@ final class Approach extends EntityBase<Approach> {
 
     return errors;
   }
+  
+  @override
+  List<ObjectDifference> compare(Approach ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+    
+    if (email != ref.email) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEmail, String, email),
+          email,
+          ref.email,
+          null,
+        ),
+      );
+    }
+    if (enterprise != ref.enterprise) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEnterprise, String, enterprise),
+          enterprise,
+          ref.enterprise,
+          null,
+        ),
+      );
+    }
+    if (personal != ref.personal) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kPersonal, String, personal),
+          personal,
+          ref.personal,
+          null,
+        ),
+      );
+    }
+    if (alternative != ref.alternative) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAlternative, String, alternative),
+          alternative,
+          ref.alternative,
+          null,
+        ),
+      );
+    }
+    if (statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+       );
+    }
+    return aggregated;
+  }
       
 }

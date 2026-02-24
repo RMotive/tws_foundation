@@ -109,9 +109,56 @@ final class Insurance  extends EntityBase<Insurance> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Insurance ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if (policy != ref.policy) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kPolicy, String, policy),
+          policy,
+          ref.policy,
+          null,
+        ),
+      );
+    }
+
+    if (country != ref.country) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCountry, String, country),
+          country,
+          ref.country,
+          null,
+        ),
+      );
+    }
+
+    if (expiration != ref.expiration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kExpiration, DateTime, expiration),
+          expiration,
+          ref.expiration,
+          null,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
   
 

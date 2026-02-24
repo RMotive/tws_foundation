@@ -137,8 +137,59 @@ final class Location extends NamedEntityBase<Location> {
   @override
   List<ObjectDifference> compare(Location ref, [List<ObjectDifference>? aggregated]) {
     aggregated = super.compare(ref, aggregated);
-    aggregated.add()
+    List <ObjectDifference> addressDiff = address.compare(ref.address);
+    List <ObjectDifference> waypointDiff = waypoint?.compare(ref.waypoint ?? Waypoint()) ?? [];
+    List <ObjectDifference> statusDiff = status.compare(ref.status);
+    // List <ObjectDifference> sectionsDiff = section.compare(sections, ref.sections);
 
+    if(addressDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAddress, Address, address),
+          address,
+          ref.address,
+          addressDiff,
+        ),
+      );
+    }
+    if (waypointDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kWaypoint, Waypoint, waypoint),
+          waypoint,
+          ref.waypoint,
+          waypointDiff,
+        ),
+      );
+    }
+    if(statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          null,
+        ),
+      );
+    }
+
+    for(Section section in sections){
+      Section? refSection = ref.sections.firstWhere((Section e) => e.id == section.id, orElse: () => Section());
+      List<ObjectDifference> sectionDiff = section.compare(refSection);
+
+      if (sectionDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kSections, Section, section),
+            section,
+            refSection,
+            sectionDiff,
+          ),
+        );
+      }
+    }
+   
+   return aggregated;
   }
   
 }

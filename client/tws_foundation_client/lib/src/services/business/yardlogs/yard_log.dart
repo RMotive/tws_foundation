@@ -335,8 +335,156 @@ final class YardLog extends EntityBase<YardLog> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(YardLog ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+    List<ObjectDifference> guardDiff = guard.compare(ref.guard);
+    List<ObjectDifference> driverDiff = driver.compare(ref.driver);
+    List<ObjectDifference> truckDiff = truck.compare(ref.truck);
+    List<ObjectDifference> loadTypeDiff = loadType.compare(ref.loadType);
+
+    if (entry != ref.entry) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEntry, bool, entry),
+          entry,
+          ref.entry,
+          null,
+        ),
+      );
+    }
+
+    if (reservation != ref.reservation) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kReservation, bool, reservation),
+          reservation,
+          ref.reservation,
+          null,
+        ),
+      );
+    }
+
+    if (seal != ref.seal) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kSeal, String, seal),
+          seal,
+          ref.seal,
+          null,
+        ),
+      );
+    }
+
+    if (sealAlt != ref.sealAlt) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kSealAlt, String, sealAlt),
+          sealAlt,
+          ref.sealAlt,
+          null,
+        ),
+      );
+    }
+
+    if (fromTo != ref.fromTo) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kFromTo, String, fromTo),
+          fromTo,
+          ref.fromTo,
+          null,
+        ),
+      );
+    }
+
+    if (guardDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kGuard, Employee, guard),
+          guard,
+          ref.guard,
+          guardDiff,
+        ),
+      );
+    }
+
+    if (driverDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kDriver, DriverCommon, driver),
+          driver,
+          ref.driver,
+          driverDiff,
+        ),
+      );
+    }
+
+    if (truckDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kTruck, TruckCommon, truck),
+          truck,
+          ref.truck,
+          truckDiff,
+        ),
+      );
+    }
+
+    if (loadTypeDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kLoadType, LoadType, loadType),
+          loadType,
+          ref.loadType,
+          loadTypeDiff,
+        ),
+      );
+    }
+
+    if (ref.trailer != null) {
+      List<ObjectDifference> trailerDiff = trailer!.compare(ref.trailer!);
+      if (trailerDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kTrailer, TrailerCommon, trailer),
+            trailer,
+            ref.trailer,
+            trailerDiff,
+          ),
+        );
+      }
+    }
+
+    if (ref.section != null) {
+      List<ObjectDifference> sectionDiff = section!.compare(ref.section!);
+      if (sectionDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kSection, Section, section),
+            section,
+            ref.section,
+            sectionDiff,
+          ),
+        );
+      }
+    }
+
+    for(Resource resource in resources){
+      Resource refResource = ref.resources.firstWhere((Resource e) => e.id == resource.id, orElse: () => Resource());
+      List<ObjectDifference> resourceDiff = resource.compare(refResource);
+
+      if (resourceDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kResources, Resource, resource),
+            resource,
+            refResource,
+            resourceDiff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
   }
 }

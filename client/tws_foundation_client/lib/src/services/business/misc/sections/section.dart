@@ -121,8 +121,66 @@ final class Section extends NamedEntityBase<Section> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Section ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+    List<ObjectDifference> yardDiff = yard.compare(ref.yard);
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+    List<ObjectDifference> resourceDiff = resource?.compare(ref.resource ?? Resource()) ?? <ObjectDifference>[];
+    
+    if(capacity != ref.capacity) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCapacity, int, capacity),
+          capacity,
+          ref.capacity,
+          null,
+        ),
+      );
+    }
+
+    if(ocupancy != ref.ocupancy) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kOcupancy, int, ocupancy),
+          ocupancy,
+          ref.ocupancy,
+          null,
+        ),
+      );
+    }
+
+    if(yardDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kYard, YardLog, yard),
+          yard,
+          ref.yard,
+          yardDiff,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+    
+    if(resourceDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kResource, Resource, resource),
+          resource,
+          ref.resource,
+          resourceDiff,
+        ),
+      );
+    }
+    return aggregated;
   }
 }

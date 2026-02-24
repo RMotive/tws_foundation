@@ -90,8 +90,66 @@ final class Identification extends EntityBase<Identification> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Identification ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if (name != ref.name) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(CorePropertiesConsts.name, String, name),
+          name,
+          ref.name,
+          null,
+        ),
+      );
+    }
+
+    if (firstLastName != ref.firstLastName) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kFirstLastName, String, firstLastName),
+          firstLastName,
+          ref.firstLastName,
+          null,
+        ),
+      );
+    }
+
+    if (secondLastName != ref.secondLastName) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kSecondLastName, String, secondLastName),
+          secondLastName,
+          ref.secondLastName,
+          null,
+        ),
+      );
+    }
+
+    if (birthDay != ref.birthDay) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kBirthday, DateTime, birthDay),
+          birthDay,
+          ref.birthDay,
+          null,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

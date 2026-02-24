@@ -167,8 +167,62 @@ final class TruckCommon extends CommonEntityB<TruckCommon, Truck, TruckExternal>
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(TruckCommon ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if(economic != ref.economic){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kEconomic, String, economic),
+          economic,
+          ref.economic,
+          null,
+        ),
+      );
+    }
+
+    if (statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    if (ref.situation != null) {
+      List<ObjectDifference> situationDiff = situation?.compare(ref.situation!) ?? <ObjectDifference>[];
+      if (situationDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(FoundationCommonPropertyKeys.kSituation, Situation, situation),
+            situation,
+            ref.situation,
+            situationDiff,
+          ),
+        );
+      }
+    } 
+
+    if (ref.location != null) {
+      List<ObjectDifference> locationDiff = location?.compare(ref.location!) ?? <ObjectDifference>[];
+      if (locationDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kLocation, Location, location),
+            location,
+            ref.location,
+            locationDiff,
+          ),
+        );
+      }
+    }
+
+    return aggregated;
+
   }
 }

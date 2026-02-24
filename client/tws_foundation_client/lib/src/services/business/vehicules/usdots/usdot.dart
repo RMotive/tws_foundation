@@ -99,9 +99,45 @@ final class Usdot extends EntityBase<Usdot>{
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Usdot ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if (mc != ref.mc) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kMC, String, mc),
+          mc,
+          ref.mc,
+          null
+        ),
+      );
+    }
+
+    if (scac != ref.scac) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kSCAC, String, scac),
+          scac,
+          ref.scac,
+          null
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 
   

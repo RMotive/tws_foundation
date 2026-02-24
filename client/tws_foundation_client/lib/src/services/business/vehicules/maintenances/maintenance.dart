@@ -77,8 +77,43 @@ final class Maintenance extends EntityBase<Maintenance> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(Maintenance ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if (anual != ref.anual) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kAnual, DateTime, anual),
+          anual,
+          ref.anual,
+          null,
+        ),
+      );
+    }
+    if (trimestral != ref.trimestral) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kTrimestral, DateTime, trimestral),
+          trimestral,
+          ref.trimestral,
+          null,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

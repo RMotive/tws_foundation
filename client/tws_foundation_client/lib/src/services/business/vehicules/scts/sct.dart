@@ -128,8 +128,57 @@ final class SCT extends EntityBase<SCT> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(SCT ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+
+    if (type != ref.type) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kType, String, type),
+          type,
+          ref.type,
+          null,
+        ),
+      );
+    }
+
+    if (number != ref.number) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kNumber, String, number),
+          number,
+          ref.number,
+          null,
+        ),
+      );
+    }
+
+    if (configuration != ref.configuration) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kConfiguration, String, configuration),
+          configuration,
+          ref.configuration,
+          null,
+        ),
+      );
+    }
+
+
+     if(statusDiff.isNotEmpty){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+    
+    return aggregated;
   }
 }

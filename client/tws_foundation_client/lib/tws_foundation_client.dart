@@ -137,11 +137,6 @@ export 'src/models/exception_info.dart';
 export 'src/services/models/entity_operation_failure.dart';
 export 'src/services/models/outputs/export_output.dart';
 
-// --> Exporting [src.models.frames]
-//TODO: Check how to export these ->
-// export 'src/models/frames/failure_frame.dart';
-// export 'src/models/frames/success_frame.dart';
-
 // --> Exporting [src.services]
 export 'src/services/view_service_i.dart';
 export 'src/services/create_service_i.dart';
@@ -152,15 +147,6 @@ export 'src/services/foundation_response_resolver.dart';
 // --> Exporting [src.services.models.inputs]
 
 // --> Exporting [src.services.models.outputs]
-
-
-// --> Exporting [src.services.models.view_filters]
-export 'src/services/models/view_filters/view_filter_i.dart';
-export 'src/services/models/view_filters/view_filter_node_i.dart';
-// TODO: And this one --> 
-// export 'src/services/models/view_filters/view_filter_date.dart';
-export 'src/services/models/view_filters/view_filter_logical.dart';
-export 'src/services/models/view_filters/view_filter_property.dart';
 
 // --> Exporting [src.services.security.security]
 export 'src/services/security/security/security_service_i.dart';

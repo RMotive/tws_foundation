@@ -68,8 +68,8 @@ final class TrailerClass extends NamedEntityBase<TrailerClass> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  // ignore: unnecessary_overrides
+  List<ObjectDifference> compare(TrailerClass ref, [List<ObjectDifference>? aggregated]) {
+    return super.compare(ref, aggregated);
   }
 }

@@ -106,8 +106,44 @@ final class VehiculeModel extends NamedEntityBase<VehiculeModel> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(VehiculeModel ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+    List<ObjectDifference> manufacturerDiff = manufacturer.compare(ref.manufacturer);
+    List<ObjectDifference> statusDiff = status.compare(ref.status);
+
+    if(year != ref.year) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kYear, DateTime, year),
+          year,
+          ref.year,
+          null,
+        ),
+      );
+    }
+
+    if(statusDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(FoundationCommonPropertyKeys.kStatus, Status, status),
+          status,
+          ref.status,
+          statusDiff,
+        ),
+      );
+    }
+
+    if(manufacturerDiff.isNotEmpty) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kManufacturer, Manufacturer, manufacturer),
+          manufacturer,
+          ref.manufacturer,
+          manufacturerDiff,
+        ),
+      );
+    }
+
+    return aggregated;
   }
 }

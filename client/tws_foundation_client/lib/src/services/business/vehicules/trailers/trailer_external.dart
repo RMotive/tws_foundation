@@ -127,8 +127,42 @@ final class TrailerExternal extends EntityBase<TrailerExternal> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
-    // TODO: implement compare
-    throw UnimplementedError();
+  List<ObjectDifference> compare(TrailerExternal ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if (carrier != ref.carrier) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kCarrier, String, carrier),
+          carrier,
+          ref.carrier,
+          null,
+        ),
+      );
+    }
+
+    if (mxPlate != ref.mxPlate) {
+      aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kMxPlate, String, mxPlate),
+            mxPlate,
+            ref.mxPlate,
+            null,
+          ),
+        );
+    }
+
+    if (usaPlate != ref.usaPlate) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kUsaPlate, String, usaPlate),
+          usaPlate,
+          ref.usaPlate,
+          null,
+        ),
+      );
+    }
+    
+    return aggregated;
   }
 }
