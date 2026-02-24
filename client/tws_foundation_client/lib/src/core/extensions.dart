@@ -2,16 +2,6 @@ import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
 ///
-extension ViewFilterNodesCollection<T extends IEntity<T>> on List<ViewFilterNodeI<T>> {
-  ///
-  List<DataMap> encode() {
-    return map(
-      (ViewFilterNodeI<T> el) => el.encode(),
-    ).toList();
-  }
-}
-
-///
 extension ViewOrderingCollection on List<ViewOrdering> {
   ///
   List<DataMap> encode() {

@@ -1,3 +1,4 @@
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 

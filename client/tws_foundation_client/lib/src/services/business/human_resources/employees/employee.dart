@@ -163,7 +163,7 @@ final class Employee extends EntityBase<Employee> {
   }
   
   @override
-  List<ObjectDifference> compare(ref, [List<ObjectDifference>? aggregated]) {
+  List<ObjectDifference> compare(Employee ref, [List<ObjectDifference>? aggregated]) {
     aggregated = super.compare(ref, aggregated);
 
     List<ObjectDifference> identificationDiff = identification.compare(ref.identification);

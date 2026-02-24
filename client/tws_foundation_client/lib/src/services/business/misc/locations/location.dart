@@ -138,7 +138,7 @@ final class Location extends NamedEntityBase<Location> {
   List<ObjectDifference> compare(Location ref, [List<ObjectDifference>? aggregated]) {
     aggregated = super.compare(ref, aggregated);
     List <ObjectDifference> addressDiff = address.compare(ref.address);
-    List <ObjectDifference> waypointDiff = waypoint?.compare(ref.waypoint ?? Waypoint()) ?? [];
+    List <ObjectDifference> waypointDiff = waypoint?.compare(ref.waypoint ?? Waypoint()) ?? <ObjectDifference>[];
     List <ObjectDifference> statusDiff = status.compare(ref.status);
     // List <ObjectDifference> sectionsDiff = section.compare(sections, ref.sections);
 

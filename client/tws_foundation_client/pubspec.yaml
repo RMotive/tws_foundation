@@ -8,11 +8,19 @@ environment:
 
 dependencies:
 
+  csm_client_testing:
+      git:
+        url: https://github.com/Cosmos-CSM/csm_client
+        path: csm_client_testing
+        ref: HEAD
+
   csm_client_core:
     git:
-      url: https://github.com/RMotive/csm_client
+      url: https://github.com/Cosmos-CSM/csm_client
       path: csm_client_core
-      ref: main
+      ref: HEAD
+
+
 
 dev_dependencies:
   test: ^1.24.0

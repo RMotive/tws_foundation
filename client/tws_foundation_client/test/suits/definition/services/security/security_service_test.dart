@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:core' hide Uri;
 
-import 'package:csm_client/csm_client.dart' show Client, DataMap, MockClient, Request, Response, StringExtension, Uri;
+import 'package:csm_client_core/csm_client_core.dart';
+import 'package:csm_client_testing/csm_client_testing.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/src/services/security/security/_security_service.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../../../../utils/test_utils.dart';
 
 void main() {
   late SecurityServiceI serviceMock;
@@ -29,7 +29,7 @@ void main() {
       final Client clientMock = MockClient(
         (Request request) async {
           DataMap dataMap = switch (request.url.pathSegments.last) {
-            'authenticate' => TestUtils.createSuccessFrameDataMap(sessionDataMock.encode()),
+            'authenticate' => TestingFrameUtils.buildGenericFrame(sessionDataMock.encode()),
             _ => throw UnimplementedError(),
           };
 

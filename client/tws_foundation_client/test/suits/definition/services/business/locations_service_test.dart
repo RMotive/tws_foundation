@@ -1,8 +1,7 @@
 import 'package:csm_client_core/csm_client_core.dart';
+import 'package:csm_client_testing/csm_client_testing.dart';
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-
-import '../../../../utils/test_utils.dart';
 
 void main() {
   final ViewOutput<Location> viewOutputMock = ViewOutput<Location>(locationBuilder);
@@ -16,11 +15,11 @@ void main() {
       viewOutputMock.page = 1;
       viewOutputMock.pages = 1;
 
-      final MockClient mockClient = TestUtils.createMockClient(
+      final MockClient mockClient = TestingClientUtils.createMockClient(
         <String, IEncodable>{
           'view': viewOutputMock,
-          'create': createBatchOutputMock,
-          'update': updateOutputMock,
+          // 'create': createBatchOutputMock,
+          // 'update': updateOutputMock,
         },
       );
 
