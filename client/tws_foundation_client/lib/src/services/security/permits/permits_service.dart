@@ -5,7 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Represents a contract for a [PermitsServiceI] implementation, wich is responsible to manage operations
 /// related with [Permit] entity at {Foundation Server}.
-abstract interface class PermitsServiceI extends FoundationServiceB implements IService, ViewServiceI<Permit>, CreateServiceI<Permit> {
+abstract interface class PermitsServiceI extends FoundationServiceB implements IService, IViewService<Permit, ResponseResolverBase<ViewOutput<Permit>>>, CreateServiceI<Permit> {
   /// Creates a new [PermitsServiceI] instance.
   PermitsServiceI(super.host, super.servicePath);
 

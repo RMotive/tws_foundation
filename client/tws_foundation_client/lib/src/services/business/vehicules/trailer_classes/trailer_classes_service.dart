@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [TrailerClassesServiceI].
 ///
 /// Defines base contract for [TrailerClassesServiceI] implementations that specifies the methods to have providing [TrailerClass] based operations and management.
-abstract interface class TrailerClassesServiceI extends FoundationServiceB implements IService, ViewServiceI<TrailerClass> {
+abstract interface class TrailerClassesServiceI extends FoundationServiceB implements IService, IViewService<TrailerClass, ResponseResolverBase<ViewOutput<TrailerClass>>> {
   /// Creates a new [TrailerClassesServiceI] instance.
   TrailerClassesServiceI(super.host, super.servicePath);
 }

@@ -24,7 +24,7 @@ abstract class EmployeesServiceB extends FoundationServiceB implements Employees
 /// {interface} class.
 ///
 /// Defines a [IService] contract for [Employee] operations.
-abstract interface class EmployeesServiceI extends FoundationServiceB implements IService, ViewServiceI<Employee>, CreateServiceI<Employee> {
+abstract interface class EmployeesServiceI extends FoundationServiceB implements IService, IViewService<Employee, ResponseResolverBase<ViewOutput<Employee>>>, CreateServiceI<Employee> {
   /// Creates a new [EmployeesServiceI] instance.
   EmployeesServiceI(
     super.host,

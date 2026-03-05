@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [CarriersServiceI].
 ///
 /// Defines base contract for [CarriersServiceI] implementations that specifies the methods to have providing [Carrier] based operations and management.
-abstract interface class CarriersServiceI extends FoundationServiceB implements IService, ViewServiceI<Carrier> {
+abstract interface class CarriersServiceI extends FoundationServiceB implements IService, IViewService<Carrier, ResponseResolverBase<ViewOutput<Carrier>>> {
   /// Creates a new [CarriersServiceI] instance.
   CarriersServiceI(
     super.host,
