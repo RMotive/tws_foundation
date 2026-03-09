@@ -138,7 +138,6 @@ export 'src/services/models/entity_operation_failure.dart';
 export 'src/services/models/outputs/export_output.dart';
 
 // --> Exporting [src.services]
-export 'src/services/create_service_i.dart';
 export 'src/services/export_service_i.dart';
 export 'src/services/foundation_service_b.dart';
 export 'src/services/foundation_response_resolver.dart';

@@ -5,7 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Represents a contract for a [TrucksServiceI] implementation, wich is responsible to manage operations
 /// related with [TruckCommon] entity at {Foundation Server}.
-abstract interface class TrucksServiceI extends FoundationServiceB implements IService, IViewService<TruckCommon, FoundationResponseResolver<ViewOutput<TruckCommon>>>, CreateServiceI<TruckCommon> {
+abstract interface class TrucksServiceI extends FoundationServiceB implements IService, IViewService<TruckCommon, FoundationResponseResolver<ViewOutput<TruckCommon>>>, ICreateService<TruckCommon, FoundationResponseResolver<BatchOperationOutput<TruckCommon>>> {
   /// Creates a new [TrucksServiceI] instance.
   TrucksServiceI(super.host, super.servicePath);
 

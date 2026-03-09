@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} class.
 ///
 /// Contract for [DriversServiceI] implementations that handles service call operations based on [DriverCommon] entity.
-abstract interface class DriversServiceI extends FoundationServiceB implements IService, IViewService<DriverCommon, FoundationResponseResolver<ViewOutput<DriverCommon>>>, CreateServiceI<DriverCommon> {
+abstract interface class DriversServiceI extends FoundationServiceB implements IService, IViewService<DriverCommon, FoundationResponseResolver<ViewOutput<DriverCommon>>>, ICreateService<DriverCommon, FoundationResponseResolver<BatchOperationOutput<DriverCommon>>> {
   /// Creates a new [DriversServiceI] instance.
   DriversServiceI(super.host, super.servicePath);
 

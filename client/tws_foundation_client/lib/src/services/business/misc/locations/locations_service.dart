@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [LocationsServiceI].
 ///
 /// Defines base contract for [LocationsServiceI] implementations that specifies the methods to have providing [Location] based operations and management.
-abstract interface class LocationsServiceI extends FoundationServiceB implements IService, IViewService<Location, FoundationResponseResolver<ViewOutput<Location>>>, CreateServiceI<Location> {
+abstract interface class LocationsServiceI extends FoundationServiceB implements IService, IViewService<Location, FoundationResponseResolver<ViewOutput<Location>>>, ICreateService<Location, FoundationResponseResolver<BatchOperationOutput<Location>>> {
   /// Creates a new [LocationsServiceI] instance.
   LocationsServiceI(super.host, super.servicePath);
 
