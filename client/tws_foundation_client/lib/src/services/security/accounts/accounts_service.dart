@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} class.
 ///
 /// Defines a [IService] contract for [Account] operations.
-abstract interface class AccountServiceI extends FoundationServiceB implements IService, IViewService<Account, ResponseResolverBase<ViewOutput<Account>>>, CreateServiceI<Account> {
+abstract interface class AccountServiceI extends FoundationServiceB implements IService, IViewService<Account, FoundationResponseResolver<ViewOutput<Account>>>, CreateServiceI<Account> {
   /// Creates a new [AccountServiceI] instance.
   AccountServiceI(
     super.host,

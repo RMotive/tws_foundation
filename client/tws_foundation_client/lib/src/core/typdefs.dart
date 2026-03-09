@@ -1,8 +1,8 @@
 import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-typedef Effect<TEstela extends IDecodable?> = Future<ResponseResolverBase<TEstela>>;
-typedef MResolver<TEstela extends IDecodable?> = ResponseResolverBase<TEstela>;
+typedef Effect<TEstela extends IDecodable?> = Future<FoundationResponseResolver<TEstela>>;
+typedef MResolver<TEstela extends IDecodable?> = FoundationResponseResolver<TEstela>;
 
 /// {private} type definition for the [FoundationServer] custom [IResponseResolver] implementation.
 ///

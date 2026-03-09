@@ -5,7 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Represents a contract for a [FeaturesServiceI] implementation, wich is responsible to manage operations
 /// related with [Feature] entity at {Foundation Server}.
-abstract interface class FeaturesServiceI extends FoundationServiceB implements IService, IViewService<Feature, ResponseResolverBase<ViewOutput<Feature>>>, CreateServiceI<Feature> {
+abstract interface class FeaturesServiceI extends FoundationServiceB implements IService, IViewService<Feature, FoundationResponseResolver<ViewOutput<Feature>>>, CreateServiceI<Feature> {
   /// Creates a new [FeaturesServiceI] instance.
   FeaturesServiceI(super.host, super.servicePath);
 

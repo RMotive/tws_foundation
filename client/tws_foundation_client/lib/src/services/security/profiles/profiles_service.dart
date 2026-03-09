@@ -6,7 +6,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Represents a contract for a [ProfilesServiceI] implementation, wich is responsible to manage operations
 /// related with [Profile] entity at {Foundation Server}.
-abstract interface class ProfilesServiceI extends FoundationServiceB implements IService, IViewService<Profile, ResponseResolverBase<ViewOutput<Profile>>>, CreateServiceI<Profile> {
+abstract interface class ProfilesServiceI extends FoundationServiceB implements IService, IViewService<Profile, FoundationResponseResolver<ViewOutput<Profile>>>, CreateServiceI<Profile> {
   /// Creates a new [ProfilesServiceI] instance.
   ProfilesServiceI(super.host, super.servicePath);
 

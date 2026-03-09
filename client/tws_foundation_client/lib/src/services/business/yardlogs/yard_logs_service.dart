@@ -5,7 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 ///
 /// Represents a contract for a [YardLogsServiceI] implementation, wich is responsible to manage operations
 /// related with [YardLog] entity at {Foundation Server}.
-abstract interface class YardLogsServiceI extends FoundationServiceB implements IService, IViewService<YardLog, ResponseResolverBase<ViewOutput<YardLog>>>, CreateServiceI<YardLog>, ExportServiceI<YardLog> {
+abstract interface class YardLogsServiceI extends FoundationServiceB implements IService, IViewService<YardLog, FoundationResponseResolver<ViewOutput<YardLog>>>, CreateServiceI<YardLog>, ExportServiceI<YardLog> {
   /// Creates a new [YardLogsServiceI] instance.
   YardLogsServiceI(super.host, super.servicePath);
 

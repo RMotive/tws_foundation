@@ -4,7 +4,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} for [SituationsServiceI].
 ///
 /// Defines base contract for [SituationsServiceI] implementations that specifies the methods to have providing [Situation] based operations and management.
-abstract interface class SituationsServiceI extends FoundationServiceB implements IService, IViewService<Situation, ResponseResolverBase<ViewOutput<Situation>>> {
+abstract interface class SituationsServiceI extends FoundationServiceB implements IService, IViewService<Situation, FoundationResponseResolver<ViewOutput<Situation>>> {
   /// Creates a new [SituationsServiceI] instance.
   SituationsServiceI(
     super.host,

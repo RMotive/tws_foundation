@@ -5,7 +5,7 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// {interface} class.
 ///
 /// Defines a [IService] contract for [Status] operations.
-abstract interface class StatusesServiceI extends FoundationServiceB implements IService, IViewService<Status, ResponseResolverBase<ViewOutput<Status>>>, ReadReferenceServiceI<Status> {
+abstract interface class StatusesServiceI extends FoundationServiceB implements IService, IViewService<Status, FoundationResponseResolver<ViewOutput<Status>>>, ReadReferenceServiceI<Status> {
   /// Creates a new [StatusesServiceI] instance.
   StatusesServiceI(
     super.host,
