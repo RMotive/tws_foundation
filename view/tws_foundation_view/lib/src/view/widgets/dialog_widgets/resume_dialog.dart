@@ -87,10 +87,10 @@ class ResumeDialog extends StatelessWidget {
           )
         )
       ),
-      theming: Theming.get<FoundationThemeB>(context).error,
+      theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
       onAccept: () async {
         await onAccept?.call();
-        router.pop();
+        Navigator.of(context).pop();
       },
     );
   }

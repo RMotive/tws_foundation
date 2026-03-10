@@ -11,7 +11,7 @@ import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {whisper} class.
-final class SectionsPageCreateWhisper extends PageB {
+final class SectionsPageCreateWhisper extends ViewPageBase {
 
   /// Creates a new [SectionsPageCreateWhisper] instance.
   const SectionsPageCreateWhisper();
@@ -26,43 +26,44 @@ final class SectionsPageCreateWhisper extends PageB {
       },
       child: (GlobalKey<FormState> formState) {
         return CreateEntityForm<Section, SectionsServiceI>(
-          entityFactory: () => Section(),
+          factory: () => Section(),
           controller: creationController,
-          buildEntityTag: (Section entity) {
-            return 'Section with name: ${entity.name}';
+          authFactory: (BuildContext context) {
+            SessionStorage sessionStorage = InjectorUtils.get();
+            return sessionStorage.token;
           },
           recordDesigner: (Section entity, bool selected, bool valid) {
             return CreateEntityFormRecord(
               selected: selected,
-              fields: <CreateEntityFormRecordField>[
-                CreateEntityFormRecordField(
+              fields: <CreateEntityFormRecordField<Object>>[
+                CreateEntityFormRecordField<String>(
                   label: 'Name',
                   value: entity.name,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Description',
-                  value: entity.description ?? '---',
+                  value: entity.description,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Status',
-                  value: entity.status.name.cleaned ?? '---',
+                  value: entity.status.name.cleaned,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Yard',
-                  value: entity.yard.name.cleaned ?? '---',
+                  value: entity.yard.name.cleaned,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Capacity',
                   value: entity.capacity.toString(),
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Resource',
                   value: entity.resource != null? 'Yes' : 'No',
                 ),
               ],
             );
           },
-          formDesigner: (CreateEntityFormRecordReactor<Section>? itemState) {
+          formDesigner: (CreateEntityFormRecordReactor<Section>? itemState, _) {
             final bool formDisabled = !(itemState == null);
 
             return Padding(

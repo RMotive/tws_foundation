@@ -4,22 +4,22 @@ import 'package:csm_view/csm_view.dart';
 ///
 /// Stores {foundation} handled routes for {foundation view} configurations.
 final class FoundationRoutes {
-  /// (Login Page) Default [FoundationSecureView] route where the user must authenticate.
-  static const Route authRoute = Route(
+  /// (Login Page) Default [FoundationSecureView] RouteData where the user must authenticate.
+  static const RouteData authRoute = RouteData(
     '',
     name: 'Login Page',
   );
 
   //! --> Employee Routes
 
-  /// (Employees Entity Page) route.
-  static const Route employeesPageRoute = Route(
+  /// (Employees Entity Page) RouteData.
+  static const RouteData employeesPageRoute = RouteData(
     'employees',
     name: 'Employees Page',
   );
 
-  /// (Employees Create Whisper) route.
-  static const Route employeesCreateWhisperRoute = Route(
+  /// (Employees Create Whisper) RouteData.
+  static const RouteData employeesCreateWhisperRoute = RouteData(
     'create-employees',
     name: 'Employees Creation',
   );
@@ -28,14 +28,14 @@ final class FoundationRoutes {
 
   //! --> YardLogs Routes
 
-  /// (YardLogs Entity Page) route.
-  static const Route yardlogsPageRoute = Route(
+  /// (YardLogs Entity Page) RouteData.
+  static const RouteData yardlogsPageRoute = RouteData(
     'yardlogs',
     name: 'YardLogs Page',
   );
 
-  /// (YardLogs Create Whisper) route.
-  static const Route yardlogsCreateWhisperRoute = Route(
+  /// (YardLogs Create Whisper) RouteData.
+  static const RouteData yardlogsCreateWhisperRoute = RouteData(
     'create-yardlogs',
     name: 'YardLogs Creation',
   );
@@ -44,12 +44,12 @@ final class FoundationRoutes {
 
   //! --> Drivers Routes
 
-  static const Route driversPageRoute = Route(
+  static const RouteData driversPageRoute = RouteData(
     'drivers',
     name: 'Drivers Page',
   );
 
-  static const Route driversCreateWhisperRoute = Route(
+  static const RouteData driversCreateWhisperRoute = RouteData(
     'create-drivers',
     name: 'Drivers Creation',
   );
@@ -58,12 +58,12 @@ final class FoundationRoutes {
 
   //! --> Trucks Routes
 
-  static const Route trucksPageRoute = Route(
+  static const RouteData trucksPageRoute = RouteData(
     'trucks',
     name: 'Trucks Page',
   );
 
-  static const Route trucksCreateWhisperRoute = Route(
+  static const RouteData trucksCreateWhisperRoute = RouteData(
     'create-trucks',
     name: 'Trucks Creation',
   );
@@ -72,12 +72,12 @@ final class FoundationRoutes {
 
   //! --> Trailers Routes
 
-  static const Route trailersPageRoute = Route(
+  static const RouteData trailersPageRoute = RouteData(
     'trailers',
     name: 'Trailers Page',
   );
 
-  static const Route trailersCreateWhisperRoute = Route(
+  static const RouteData trailersCreateWhisperRoute = RouteData(
     'create-trailers',
     name: 'Trailers Creation',
   );
@@ -85,84 +85,84 @@ final class FoundationRoutes {
   //! <-- Trailers Routes
 
   //! --> Locations Routes
-  static const Route locationsPageRoute = Route(
+  static const RouteData locationsPageRoute = RouteData(
     'locations',
     name: 'Locations Page',
   );
 
-  static const Route locationsCreateWhisperRoute = Route(
+  static const RouteData locationsCreateWhisperRoute = RouteData(
     'create-locations',
     name: 'Locations Creation',
   );
   //! <-- Locations Routes
 
   //! --> Sections Routes
-  static const Route sectionsPageRoute = Route(
+  static const RouteData sectionsPageRoute = RouteData(
     'sections',
     name: 'Sections Page',
   );
 
-  static const Route sectionsCreateWhisperRoute = Route(
+  static const RouteData sectionsCreateWhisperRoute = RouteData(
     'create-sections',
     name: 'Sections Creation',
   );
   //! <-- Sections Routes
 
   //! --> Accounts Routes
-  static const Route accountsPageRoute = Route(
+  static const RouteData accountsPageRoute = RouteData(
     'accounts',
     name: 'Accounts Page',
   );
 
-  static const Route accountsCreateWhisperRoute = Route(
+  static const RouteData accountsCreateWhisperRoute = RouteData(
     'create-accounts',
     name: 'Accounts Creation',
   );
   //! <-- Accounts Routes
 
   //! --> Contacts Routes
-  static const Route contactsPageRoute = Route(
+  static const RouteData contactsPageRoute = RouteData(
     'contacts',
     name: 'Contacts Page',
   );
 
-  static const Route contactsCreateWhisperRoute = Route(
+  static const RouteData contactsCreateWhisperRoute = RouteData(
     'create-contacts',
     name: 'Contacts Creation',
   );
   //! <-- Contacts Routes
 
   //! --> Permits Routes
-  static const Route permitsPageRoute = Route(
+  static const RouteData permitsPageRoute = RouteData(
     'permits',
     name: 'Permits Page',
   );
 
-  static const Route permitsCreateWhisperRoute = Route(
+  static const RouteData permitsCreateWhisperRoute = RouteData(
     'create-permits',
     name: 'Permits Creation',
   );
   //! <-- Permits Routes
 
   //! --> Profiles Routes
-  static const Route profilesPageRoute = Route(
+  static const RouteData profilesPageRoute = RouteData(
     'profiles',
     name: 'Profiles Page',
   );
 
-  static const Route profilesCreateWhisperRoute = Route(
+  static const RouteData profilesCreateWhisperRoute = RouteData(
     'create-profiles',
     name: 'Profiles Creation',
   );
   //! <-- Profiles Routes
 
   //! --> Solutions Routes
-  static const Route solutionsPageRoute = Route(
+  static const RouteData solutionsPageRoute = RouteData(
     'solutions',
     name: 'Solutions Page',
   );
 
-  static const Route solutionsCreateWhisperRoute = Route(
+  static const RouteData solutionsCreateWhisperRoute = RouteData(
     'create-solutions',
     name: 'Solutions Creation',
   );
@@ -170,7 +170,7 @@ final class FoundationRoutes {
 
 
   //! --> Trailer Inventory Routes
-  static const Route trailerInventoryPageRoute = Route(
+  static const RouteData trailerInventoryPageRoute = RouteData(
     'trailers-inventory',
     name: 'Trailer Inventory Page',
   );

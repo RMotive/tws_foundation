@@ -1,4 +1,4 @@
-import 'package:csm_view/csm_view.dart' hide LandingThemeB; 
+import 'package:csm_view/csm_view.dart'; 
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -11,32 +11,30 @@ final class LandingThemeLight extends PackageLandingThemeLight
   LandingThemeLight();
 
   @override
-  SimpleTheming get page => _foundation.page;
+  ThemingData get page => _foundation.page;
   
   @override
   String get businessLogo => _foundation.businessLogo;
 
   @override
-  SimpleTheming get error => _foundation.error;
+  ThemingData get controlError => _foundation.controlError;
 
   @override
-  SimpleTheming get warning => _foundation.warning;
+  ThemingData get controlWarning => _foundation.controlWarning;
 
   @override
-  SimpleTheming get success => _foundation.success;
+  ThemingData get controlSuccess => _foundation.controlSuccess;
 
   @override
-  SimpleTheming get control => _foundation.control;
+  ThemingData get control => _foundation.control;
 
   @override
-  SimpleTheming get disabled => _foundation.disabled;
+  ThemingData get controlDisabled => _foundation.controlDisabled;
 
   @override
-  SimpleTheming get navigationLayout => _foundation.navigationLayout;
+  ThemingData get navigationLayout => _foundation.navigationLayout;
 
   @override
-  EntityTableTheming get entityTable => _foundation.entityTable;
-
-  @override
-  StateTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
+  StateControlTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
 }
+  

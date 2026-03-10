@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Route;
+import 'package:flutter/material.dart';
 
 /// {constant} class.
 ///

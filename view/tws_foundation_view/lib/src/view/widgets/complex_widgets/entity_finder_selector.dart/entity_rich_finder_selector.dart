@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -7,13 +7,13 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
 /// State class manager for richtext behavior
-final class _RichState extends ReactorB { }
+final class _RichState extends ReactorBase { }
 
 
 /// {widget} class.
 ///
-/// Draws a complex [Widget] that allows to find [EntityI] items and select them.
-final class EntityRichFinderSelector<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+/// Draws a complex [Widget] that allows to find [IEntity] items and select them.
+final class EntityRichFinderSelector<TEntity extends IEntity<TEntity>, TService extends IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>>
     extends StatefulWidget {
    /// [TEntity] builder for conversion.
   final EntityBuilder<TEntity> entityBuilder;
@@ -42,7 +42,7 @@ final class EntityRichFinderSelector<TEntity extends EntityI<TEntity>, TService 
   /// 
   /// The exact property path must be provided as defined in the [TEntity] model.
   /// 
-  /// Example for [Yardlog] as [TEntity]: '${YardLog.kSection}.${EntityKeys.name}', 
+  /// Example for [Yardlog] as [TEntity]: '${YardLog.kSection}.${CorePropertiesConsts.name}', 
   /// this means that the section name property will be used to filter the selectable entities.
   ///
   /// To add more more filters, just add more paths to the list.
@@ -70,11 +70,11 @@ final class EntityRichFinderSelector<TEntity extends EntityI<TEntity>, TService 
 /// {state} class.
 ///
 /// Handles [State] for [EntityRichFinderSelector].
-final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+final class _EntityFinderSelectorState<TEntity extends IEntity<TEntity>, TService extends  IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>>
     extends State<EntityRichFinderSelector<TEntity, TService>> {
 
   /// {state} current application theme data.
-  late FoundationThemeB theme = Theming.get(context);
+  late FoundationThemeB theme = ThemingUtils.get(context);
 
   /// Rich text state overlay.
   late _RichState richState;
@@ -96,7 +96,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    theme = Theming.get(context);
+    theme = ThemingUtils.get(context);
   }
 
   @override

@@ -1,10 +1,9 @@
-import 'package:csm_view/csm_view.dart' hide LandingThemeB;
+import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
-import 'package:flutter/material.dart' hide Route;
-import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
+import 'package:flutter/material.dart';
 
 ///
-final class CategoryLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
+final class CategoryLayoutEntry extends PackageLandingEntryBase<LandingThemeB> {
   ///
   CategoryLayoutEntry({
     super.key,
@@ -23,25 +22,26 @@ final class CategoryLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
-    final Route entryRoute = Route('landing_page');
+    final RouteData entryRoute = RouteData('landing_page');
 
-    return view.CategoryLayout(
-      pages: <view.CategoryLayoutPageI>[
-        view.CategoryLayoutPage(
-          route: entryRoute,
+    return CategoryLayout(
+      pages: <CategoryLayoutPage>[
+        CategoryLayoutPage(
+          routeData: entryRoute,
           title: 'Landing Overview',
-          pageBuilder: (BuildContext ctx, RouteData routeData) => _EntryPage(),
-          actions: <view.ActionsRibbonNodeI>[],
-          iconBuilder: (Color? foreColor) {
+          actions: <IActionsRibbonNode>[],
+          pageBuilder: (BuildContext ctx, RoutingData routeData) => _EntryPage(),
+          iconBuilder: (_, Color? foreColor) {
             return Icon(
               Icons.ac_unit_sharp,
               color: foreColor,
             );
           },
+
         ),
       ],
-      routeData: RouteData(
-        route: entryRoute,
+      routingData: RoutingData(
+        targetRoute: entryRoute,
         absolutePath: '',
       ),
       page: _EntryPage(),
@@ -49,7 +49,7 @@ final class CategoryLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
   }
 }
 
-final class _EntryPage extends PageB {
+final class _EntryPage extends ViewPageBase {
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
     return Center(

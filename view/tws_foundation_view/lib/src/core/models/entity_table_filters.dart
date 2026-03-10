@@ -1,17 +1,28 @@
-import 'package:csm_client/csm_client.dart';
-import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
+
+/// {enum} for [IViewFilterNode.discriminator] values.
+/// 
+/// Defines the possible filter node/discriminator values for [IViewFilterNode] implementations.
+enum ViewFilterDiscriminator { 
+  ///
+  viewLogicalFilter, // TODO changed to lowercase, check if it affects other implementations
+  /// 
+  viewPropertyFilter,
+  ///  
+  viewDateFilter,
+}
 
 /// {implementation} class for [EntityTableFilters]. 
 /// Stores filtering configuration for an [EntityTable].
-final class EntityTableFilters<TEntity extends EntityB<TEntity>> implements ViewFilterI<TEntity> {
-  /// Collection of [ViewFilterProperty] to apply the filter calculation based on the [operator].
-  final List<ViewFilterProperty<TEntity>> filters;
+final class EntityTableFilters<TEntity extends EntityBase<TEntity>> implements IViewFilter<TEntity> {
+  /// Collection of [ViewPropertyFilter] to apply the filter calculation based on the [operator].
+  final List<ViewPropertyFilter<TEntity>> filters;
 
   /// Logical operator instruction to apply to this group of [filters].
   final ViewFilterLogicalOperators operator;
 
   @override
-  String discriminator = ViewFilterDiscriminator.viewFilterLogical.name;
+  String discriminator = ViewFilterDiscriminator.viewLogicalFilter.name;
 
   @override
   String property = '';

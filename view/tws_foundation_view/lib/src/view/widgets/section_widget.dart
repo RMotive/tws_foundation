@@ -40,7 +40,7 @@ final class SectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SimpleTheming pageTheming = Theming.get<FoundationThemeB>(context).page;
+    final ThemingData pageTheming = ThemingUtils.get<FoundationThemeB>(context).page;
 
     final Color bColor =
         isOptional

@@ -1,14 +1,12 @@
 import 'dart:async';
 
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/constants.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/list_tile.dart';
-import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
-import 'package:tws_foundation_view/src/view/widgets/text_input.dart';
 
 part '_autocomplete_future.dart';
 part '_autocomplete_list.dart';
@@ -16,7 +14,7 @@ part '_autocomplete_local.dart';
 part '_autocomplete_not_found.dart';
 
 /// State for future consume.
-final class _TWSAutoCompleteFieldFutureState<T> extends ReactorB {
+final class _TWSAutoCompleteFieldFutureState<T> extends ReactorBase {
   List<T> preloadedItems = <T>[];
 }
 
@@ -132,8 +130,8 @@ class _AutoCompleteFieldState<T> extends State<AutoCompleteField<T>> with Single
   late final ScrollController scrollController;
 
   /// Color pallet for the component.
-  late SimpleTheming primaryColorTheme;
-  late SimpleTheming pageColorTheme;
+  late ThemingData primaryColorTheme;
+  late ThemingData pageColorTheme;
 
   /// focus Node declaration.
   late final FocusNode focus;
@@ -287,7 +285,7 @@ class _AutoCompleteFieldState<T> extends State<AutoCompleteField<T>> with Single
   }
 
   void initializeThemes() {
-    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
     primaryColorTheme = theme.control;
     pageColorTheme = theme.page;
   }

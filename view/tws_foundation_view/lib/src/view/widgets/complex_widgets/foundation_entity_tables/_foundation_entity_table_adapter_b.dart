@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -8,7 +8,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 ///
 /// Implements and defines base behavior for {foundation} specific [EntityTableAdapterB] implementations to simplify the shared
 /// properties and behaviors along {foundation} entity tables adaters.
-abstract class FoundationEntityTableAdapterB<TEntity extends EntityI<TEntity>> extends EntityTableAdapterB<TEntity> {
+abstract class FoundationEntityTableAdapterB<TEntity extends IEntity<TEntity>> extends EntityTableAdapterBase<TEntity> {
   /// Callback to get authentication token due to some operations handled by the inner [EntityTable] requires authenticated service calls.
   final FutureOr<String> Function()? authBuilder;
 
@@ -17,10 +17,13 @@ abstract class FoundationEntityTableAdapterB<TEntity extends EntityI<TEntity>> e
     required this.authBuilder,
   });
 
+  /// Stores the last consumed view input from the inner [EntityTable] instance.
+  ViewInput<TEntity>? viewConsumed;
+
   @override
   FutureOr<String> composeAuth() {
     if (authBuilder != null) return authBuilder!();
 
-    return Injector.get<SessionStorageI>().token;
+    return InjectorUtils.get<SessionStorageI>().token;
   }
 }

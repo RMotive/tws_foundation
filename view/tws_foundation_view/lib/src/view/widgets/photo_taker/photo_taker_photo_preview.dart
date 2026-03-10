@@ -46,7 +46,7 @@ final class PhotoTakerPhotoPreview extends StatelessWidget {
                       label: 'Close',
                       width: cts.maxWidth * .1,
                       onClick: () {
-                        Injector.get<Router>().pop();
+                        Navigator.of(context).pop();
                       },
                     ),
                   );

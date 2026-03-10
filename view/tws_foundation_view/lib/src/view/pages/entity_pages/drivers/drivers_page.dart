@@ -1,35 +1,32 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/drivers/create_whisper/drivers_page_create_whisper.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [DriversPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [DriversPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class DriversCategoryPage extends EntityCategoryPageB<DriversEntityTableAdatper> {
+final class DriversCategoryPage extends EntityCategoryPageB<DriverCommon, DriversEntityTableAdatper> {
   /// Creates a new [DriversCategoryPage] instance.
   DriversCategoryPage({
     super.cusRoute,
   }) : super(
          title: 'Drivers',
-         route: FoundationRoutes.driversPageRoute,
+         routeData: FoundationRoutes.driversPageRoute,
        );
 
   @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.driversCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext _, RouteData _) {
-          return DriversPageCreateWhisper();
-        },
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => DriversPageCreateWhisper(),
       ),
     ];
   }
@@ -42,29 +39,29 @@ final class DriversCategoryPage extends EntityCategoryPageB<DriversEntityTableAd
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(_, Color? fgColor) {
     return Icon(
       Icons.departure_board,
-      color: recomdColor,
+      color: fgColor,
     );
   }
 
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return DriversPage(
       adapter: adapter,
     );
   }
   
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(DriversEntityTableAdatper adapter) {
-    return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(DriversEntityTableAdatper adapter) {
+    return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
       ActionsRisbbonCreate(
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.driversCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.driversCreateWhisperRoute);
         },
       ),
     ];
@@ -73,8 +70,8 @@ final class DriversCategoryPage extends EntityCategoryPageB<DriversEntityTableAd
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [DriverCommon] business entity to interact and manage data related with it.
-final class DriversPage extends EntityPageB<DriversEntityTableAdatper> {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [DriverCommon] business entity to interact and manage data related with it.
+final class DriversPage extends EntityViewPageBase<DriverCommon, DriversEntityTableAdatper> {
   /// Creates a new [DriversPage] instance.
   DriversPage({
     required super.adapter,

@@ -31,7 +31,7 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
   final GlobalKey<FormState> _formStateKey = GlobalKey();
 
   /// Security service dependency access.
-  final SecurityServiceI securityService = Injector.get();
+  final SecurityServiceI securityService = InjectorUtils.get();
 
   /// Whether the widget is in loading mode, fetching data from services.
   bool isLoading = false;
@@ -94,7 +94,7 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
     );
 
     authResolver.resolve(
-      objectBuilder: () => SessionData(),
+      factory: () => SessionData(),
       onSuccess: (SuccessFrame<SessionData> success) => widget.onAuthSuccess(success.content),
       onFailure: (FailureFrame failure, int status) {
         if (status != 401) {
@@ -102,8 +102,8 @@ final class _AuthPageFormState extends State<_AuthPageForm> {
           return;
         }
 
-        final ExceptionInfo exInfo = failure.content;
-        switch (exInfo.situation) {
+        final ErrorInfo exInfo = failure.content;
+        switch (exInfo.event) {
           case 0:
             usrErrorMsg = exInfo.advise;
           case 1:

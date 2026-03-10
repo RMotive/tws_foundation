@@ -34,7 +34,7 @@ final class _TrailerSectionState extends State<_TrailerSection> {
 
   @override
   Widget build(BuildContext context) {
-    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
     return SectionWidget(
       title: '*Trailer',
       outterPadding: EdgeInsets.zero,

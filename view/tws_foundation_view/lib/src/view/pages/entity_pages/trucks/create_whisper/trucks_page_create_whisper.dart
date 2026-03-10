@@ -21,7 +21,7 @@ part 'create_internal_truck/_create_whisper_sct_section.dart';
 part 'create_internal_truck/_create_whisper_trucks_internal_section.dart';
 
 /// Driver section state class.
-final class _TruckSectionState extends ReactorB {}
+final class _TruckSectionState extends ReactorBase {}
 final _TruckSectionState _truckSectionState = _TruckSectionState();
 void Function() _truckSectionStateReact = (){};
 
@@ -34,8 +34,8 @@ const List<String> _statesUSA = FoundationCollections.kUStateCodes;
 const List<String> _statesMX = FoundationCollections.kMXStateCodes;
 
 Future<Status?> getDefaultStatus() async {
-  SessionStorageI sessionStorage = Injector.get();
-  StatusesServiceI statusesService = Injector.get();
+  SessionStorageI sessionStorage = InjectorUtils.get();
+  StatusesServiceI statusesService = InjectorUtils.get();
 
   String token = sessionStorage.token;
 
@@ -55,7 +55,7 @@ Future<Status?> getDefaultStatus() async {
 final Future<Status?> getUserStatusInstance = getDefaultStatus();
 
 /// {whisper} class.
-final class TrucksPageCreateWhisper extends PageB {
+final class TrucksPageCreateWhisper extends ViewPageBase {
   /// Creates a new [TrucksPageCreateWhisper] instance.
   const TrucksPageCreateWhisper();
 
@@ -90,41 +90,42 @@ final class TrucksPageCreateWhisper extends PageB {
             }
 
             return CreateEntityForm<TruckCommon, TrucksServiceI>(
-              entityFactory: () => TruckCommon(),
+              factory: () => TruckCommon(),
               controller: creationController,
-              buildEntityTag: (TruckCommon entity) {
-                return 'Truck with number: ${entity.economic}';
+              authFactory: (BuildContext context) {
+                SessionStorage sessionStorage = InjectorUtils.get();
+                return sessionStorage.token;
               },
               recordDesigner: (TruckCommon entity, bool selected, bool valid) {
-                List<CreateEntityFormRecordField> commonFields = <CreateEntityFormRecordField>[
+                List<CreateEntityFormRecordField<Object>> commonFields = <CreateEntityFormRecordField<Object>>[
                   /// --> Truck ownership type
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Ownership',
                     value: entity.internal != null ? 'Own' : 'Internal',
                   ),
 
                   /// --> Truck ownership type.
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*Economic',
-                    value: entity.economic.cleaned ?? '---',
+                    value: entity.economic.cleaned,
                   ),
 
                   /// --> Truck Status
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*Status',
-                    value: entity.status.name.cleaned ?? '---',
+                    value: entity.status.name.cleaned,
                   ),
 
                   /// --> Truck Situation
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Situation',
-                    value: entity.situation?.name ?? "---",
+                    value: entity.situation?.name,
                   ),
 
                   /// --> Truck location
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Location',
-                    value: entity.location?.name ?? "---",
+                    value: entity.location?.name,
                   ),
                 ];
 
@@ -132,31 +133,31 @@ final class TrucksPageCreateWhisper extends PageB {
                   return CreateEntityFormRecord(
                     selected: selected,
                     valid: valid,
-                    fields: <CreateEntityFormRecordField>[
+                    fields: <CreateEntityFormRecordField<Object>>[
                       /// --> Adding common fields.
                       ...commonFields,
 
                       /// --> Truck Motor number.
-                      CreateEntityFormRecordField(
+                      CreateEntityFormRecordField<String>(
                         label: '*Vin #',
-                        value: entity.internal!.vin.cleaned ?? '---',
+                        value: entity.internal!.vin.cleaned,
                       ),
 
                       /// --> Truck Motor number.
-                      CreateEntityFormRecordField(
+                      CreateEntityFormRecordField<String>(
                         label: 'Motor #',
-                        value: entity.internal!.motor ?? '---',
+                        value: entity.internal!.motor,
                       ),
 
                       /// --> Truck carrier name.
-                      CreateEntityFormRecordField(
+                      CreateEntityFormRecordField<String>(
                         label: '*Carrier',
-                        value: entity.internal!.carrier.name.cleaned ?? "---",
+                        value: entity.internal!.carrier.name.cleaned,
                       ),
 
                       /// --> Truck Plates.
-                      for (int i = 0; i < entity.internal!.plates.length; i++) ...<CreateEntityFormRecordField>[
-                        CreateEntityFormRecordField(
+                      for (int i = 0; i < entity.internal!.plates.length; i++) ...<CreateEntityFormRecordField<String>>[
+                        CreateEntityFormRecordField<String>(
                           label: 'Plate ${i + 1}',
                           minWidth: 150,
                           value:
@@ -164,71 +165,71 @@ final class TrucksPageCreateWhisper extends PageB {
                         ),
                       ],
 
-                      if (entity.internal?.model != null) ...<CreateEntityFormRecordField>[
+                      if (entity.internal?.model != null) ...<CreateEntityFormRecordField<String>>[
                         /// --> Truck manufacturer name.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*Manufacturer',
-                          value: entity.internal!.model.manufacturer.name.cleaned ?? "---",
+                          value: entity.internal!.model.manufacturer.name.cleaned,
                         ),
 
                         /// --> Truck model name.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*Model',
-                          value: entity.internal!.model.name.cleaned ?? '---',
+                          value: entity.internal!.model.name.cleaned,
                         ),
                       ],
 
-                      if (entity.internal?.sct != null) ...<CreateEntityFormRecordField>[
+                      if (entity.internal?.sct != null) ...<CreateEntityFormRecordField<String>>[
                         /// --> Truck SCT type.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*SCT Type',
-                          value: entity.internal!.sct?.type.cleaned ?? '---',
+                          value: entity.internal!.sct?.type.cleaned,
                         ),
 
                         /// --> Truck SCT number.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*SCT number',
-                          value: entity.internal!.sct?.number.cleaned ?? '---',
+                          value: entity.internal!.sct?.number.cleaned,
                         ),
 
                         /// --> Truck SCT type.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*SCT configuration',
-                          value: entity.internal!.sct?.configuration.cleaned ?? '---',
+                          value: entity.internal!.sct?.configuration.cleaned,
                         ),
                       ],
 
-                      if (entity.internal?.maintenance != null) ...<CreateEntityFormRecordField>[
+                      if (entity.internal?.maintenance != null) ...<CreateEntityFormRecordField<String>>[
                         /// --> Truck maintenance anual.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*Anual maintenance',
-                          value: entity.internal!.maintenance?.anual.dateOnly ?? '---',
+                          value: entity.internal!.maintenance?.anual.dateOnly,
                         ),
 
                         /// --> Truck maintenance trimestral.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*Trimestral maintenance',
-                          value: entity.internal!.maintenance?.trimestral.dateOnly ?? '---',
+                          value: entity.internal!.maintenance?.trimestral.dateOnly,
                         ),
                       ],
 
-                      if (entity.internal?.insurance != null) ...<CreateEntityFormRecordField>[
+                      if (entity.internal?.insurance != null) ...<CreateEntityFormRecordField<String>>[
                         /// --> Truck insurance policy.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*Insurance Policy',
-                          value: entity.internal!.insurance?.policy ?? '---',
+                          value: entity.internal!.insurance?.policy,
                         ),
 
                         /// --> Truck insurance country.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*Insurance country',
-                          value: entity.internal!.insurance?.country ?? '---',
+                          value: entity.internal!.insurance?.country,
                         ),
 
                         /// --> Truck insurance expiration.
-                        CreateEntityFormRecordField(
+                        CreateEntityFormRecordField<String>(
                           label: '*Insurance expiration',
-                          value: entity.internal!.insurance?.expiration.dateOnly ?? '---',
+                          value: entity.internal!.insurance?.expiration.dateOnly,
                         ),
                       ],
                     ],
@@ -238,184 +239,182 @@ final class TrucksPageCreateWhisper extends PageB {
                 return CreateEntityFormRecord(
                   selected: selected,
                   valid: valid,
-                  fields: <CreateEntityFormRecordField>[
+                  fields: <CreateEntityFormRecordField<Object>>[
                     /// --> Adding common fields.
                     ...commonFields,
 
                     /// --> Driver carrier name.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*Carrier',
-                      value: entity.external!.carrier.cleaned ?? '---',
+                      value: entity.external!.carrier.cleaned,
                     ),
 
                     /// --> Driver vin numbger.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: 'Vin #',
-                      value: entity.external!.vin ?? '---',
+                      value: entity.external!.vin,
                     ),
 
                     /// --> Driver USA plate.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: 'USA Plate',
-                      value: entity.external!.usaPlate ?? '---',
+                      value: entity.external!.usaPlate,
                     ),
 
                     /// --> Driver MX plate.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: 'MX Plate',
-                      value: entity.external!.mxPlate ?? '---',
+                      value: entity.external!.mxPlate,
                     ),
                   ],
                 );
               },
-              formDesigner: (CreateEntityFormRecordReactor<TruckCommon>? itemState) {
+              formDesigner: (CreateEntityFormRecordReactor<TruckCommon>? itemState, _) {
                 final bool formDisabled = !(itemState == null);
                 if (formDisabled && itemState.entity.internal == null && itemState.entity.external == null) {
                   itemState.entity.internal = Truck();
                 }
                 return Padding(
                   padding: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      spacing: 12,
-                      children: <Widget>[
-                        /// --> Ownership Type
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: OptionsSelector<bool>(
-                            title: 'Ownership',
-                            preSelected: <bool>[
-                              itemState?.entity.external != null ? false : true,
-                            ],
-                            options: <OptionsSelectorOption<bool>>[
-                              OptionsSelectorOption<bool>(
-                                title: 'Own',
-                                value: true,
-                              ),
-                              OptionsSelectorOption<bool>(
-                                title: 'External',
-                                value: false,
-                              ),
-                            ],
-                            onSelect: (List<bool> selected) {
-                              TruckCommon common = itemState!.entity;
-                              if (selected.isNotEmpty && selected.first) {
-                                common.internal = Truck();
-                                common.external = null;
-                              } else {
-                                common.internal = null;
-                                common.external = TruckExternal();
-                              }
-                              _truckSectionStateReact();
-                              itemState.react();
-                            },
-                          ),
-                        ),
-                        Row(
-                          spacing: 10,
-                          children: <Widget>[
-                            Expanded(
-                              child: TextInput(
-                                label: '*Economic',
-                                isEnabled: formDisabled,
-                                maxLength: 16,
-                                controller: TextEditingController(
-                                  text: itemState?.entity.economic,
-                                ),
-                                onChanged: (String text) {
-                                  itemState!.entity.economic = text;
-                                  itemState.react();
-                                },
-                              ),
+                  child: Column(
+                    spacing: 12,
+                    children: <Widget>[
+                      /// --> Ownership Type
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: OptionsSelector<bool>(
+                          title: 'Ownership',
+                          preSelected: <bool>[
+                            itemState?.entity.external != null ? false : true,
+                          ],
+                          options: <OptionsSelectorOption<bool>>[
+                            OptionsSelectorOption<bool>(
+                              title: 'Own',
+                              value: true,
                             ),
-                            Expanded(
-                              child: EntityFinderSelector<Status, StatusesServiceI>(
-                                entityBuilder: () => Status(),
-                                label: '*Assing an status...',
-                                enabled: true,
-                                initialValue: itemState?.entity.status,
-                                textBuilder: (Status status) {
-                                  return status.name;
-                                },
-                                onSelected: (Status? status) {
-                                  _defaultStatus = status ?? Status();
-                                  Truck? internal = itemState?.entity.internal;
-                                  itemState?.entity.status = _defaultStatus;
-                                  // Setting default status values
-
-                                  if (internal != null) {
-                                    internal.sct?.status = _activeStatus!;
-                                    internal.insurance?.status = _activeStatus!;
-                                    internal.maintenance?.status = _activeStatus!;
-                                    if (internal.model.id == BigInt.zero) internal.model.status = _activeStatus!;
-
-                                    for (Plate plate in itemState!.entity.internal!.plates) {
-                                      plate.status = _activeStatus!;
-                                    }
-                                  }
-
-                                  itemState?.react();
-                                },
-                              ),
+                            OptionsSelectorOption<bool>(
+                              title: 'External',
+                              value: false,
                             ),
                           ],
-                        ),
-                        Row(
-                          spacing: 10,
-                          children: <Expanded>[
-                            Expanded(
-                              child: EntityFinderSelector<Location, LocationsServiceI>(
-                                entityBuilder: () => Location(),
-                                label: 'Assing a location...',
-                                enabled: true,
-                                initialValue: itemState?.entity.location,
-                                textBuilder: (Location location) {
-                                  return location.name.cleaned ?? '---';
-                                },
-                                onSelected: (Location? location) {
-                                  itemState?.entity.location = location;
-                                  itemState?.react();
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              child: EntityFinderSelector<Situation, SituationsServiceI>(
-                                entityBuilder: () => Situation(),
-                                label: 'Assing a situation...',
-                                enabled: true,
-                                initialValue: itemState?.entity.situation,
-                                textBuilder: (Situation situation) {
-                                  return situation.name.cleaned ?? '---';
-                                },
-                                onSelected: (Situation? situation) {
-                                  itemState?.entity.situation = situation;
-                                  itemState?.react();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SectionDivider(
-                          text: '*Truck Information',
-                        ),
-                        // --> Driver edge Section
-                        ReactiveWidget<_TruckSectionState>(
-                          reactor: _truckSectionState,
-                          builder: (BuildContext ctx, _TruckSectionState reactor) {
-                            _truckSectionStateReact = reactor.react;
-                            return itemState?.entity.internal != null
-                                ? _CreateWhisperTrucksSection(
-                                  itemState: itemState,
-                                  isEnabled: formDisabled,
-                                )
-                                : _CreateWhisperTrucksExternalSection(
-                                  itemState: itemState,
-                                  isEnabled: formDisabled,
-                                );
+                          onSelect: (List<bool> selected) {
+                            TruckCommon common = itemState!.entity;
+                            if (selected.isNotEmpty && selected.first) {
+                              common.internal = Truck();
+                              common.external = null;
+                            } else {
+                              common.internal = null;
+                              common.external = TruckExternal();
+                            }
+                            _truckSectionStateReact();
+                            itemState.react();
                           },
                         ),
-                      ],
-                    ),
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: <Widget>[
+                          Expanded(
+                            child: TextInput(
+                              label: '*Economic',
+                              isEnabled: formDisabled,
+                              maxLength: 16,
+                              controller: TextEditingController(
+                                text: itemState?.entity.economic,
+                              ),
+                              onChanged: (String text) {
+                                itemState!.entity.economic = text;
+                                itemState.react();
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: EntityFinderSelector<Status, StatusesServiceI>(
+                              entityBuilder: () => Status(),
+                              label: '*Assing an status...',
+                              enabled: true,
+                              initialValue: itemState?.entity.status,
+                              textBuilder: (Status status) {
+                                return status.name;
+                              },
+                              onSelected: (Status? status) {
+                                _defaultStatus = status ?? Status();
+                                Truck? internal = itemState?.entity.internal;
+                                itemState?.entity.status = _defaultStatus;
+                                // Setting default status values
+                  
+                                if (internal != null) {
+                                  internal.sct?.status = _activeStatus!;
+                                  internal.insurance?.status = _activeStatus!;
+                                  internal.maintenance?.status = _activeStatus!;
+                                  if (internal.model.id == BigInt.zero) internal.model.status = _activeStatus!;
+                  
+                                  for (Plate plate in itemState!.entity.internal!.plates) {
+                                    plate.status = _activeStatus!;
+                                  }
+                                }
+                  
+                                itemState?.react();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        spacing: 10,
+                        children: <Expanded>[
+                          Expanded(
+                            child: EntityFinderSelector<Location, LocationsServiceI>(
+                              entityBuilder: () => Location(),
+                              label: 'Assing a location...',
+                              enabled: true,
+                              initialValue: itemState?.entity.location,
+                              textBuilder: (Location location) {
+                                return location.name.cleaned ?? '---';
+                              },
+                              onSelected: (Location? location) {
+                                itemState?.entity.location = location;
+                                itemState?.react();
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: EntityFinderSelector<Situation, SituationsServiceI>(
+                              entityBuilder: () => Situation(),
+                              label: 'Assing a situation...',
+                              enabled: true,
+                              initialValue: itemState?.entity.situation,
+                              textBuilder: (Situation situation) {
+                                return situation.name.cleaned ?? '---';
+                              },
+                              onSelected: (Situation? situation) {
+                                itemState?.entity.situation = situation;
+                                itemState?.react();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SectionDivider(
+                        text: '*Truck Information',
+                      ),
+                      // --> Driver edge Section
+                      ReactiveWidget<_TruckSectionState>(
+                        reactor: _truckSectionState,
+                        builder: (BuildContext ctx, _TruckSectionState reactor) {
+                          _truckSectionStateReact = reactor.react;
+                          return itemState?.entity.internal != null
+                              ? _CreateWhisperTrucksSection(
+                                itemState: itemState,
+                                isEnabled: formDisabled,
+                              )
+                              : _CreateWhisperTrucksExternalSection(
+                                itemState: itemState,
+                                isEnabled: formDisabled,
+                              );
+                        },
+                      ),
+                    ],
                   ),
                 );
               },

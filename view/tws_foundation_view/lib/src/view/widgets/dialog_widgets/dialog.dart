@@ -3,7 +3,6 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
-import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
 
 /// {widget} class.
 ///
@@ -32,8 +31,8 @@ final class Dialog extends StatefulWidget {
   /// Trigger on accept dialog.
   final FutureOr<void> Function()? onAccept;
 
-  /// Custom theming information.
-  final SimpleTheming? theming;
+  /// Custom ThemingUtils information.
+  final ThemingData? theming;
 
   const Dialog({
     super.key,
@@ -55,11 +54,11 @@ final class Dialog extends StatefulWidget {
 ///
 /// Handles [State] for [Dialog] {widget}.
 final class _DialogState extends State<Dialog> {
-  /// {state} [Widget] control error theming options.
-  late SimpleTheming errTheming;
+  /// {state} [Widget] control error ThemingUtils options.
+  late ThemingData errTheming;
 
-  /// {state} [Widget] control theming options.
-  late SimpleTheming theming;
+  /// {state} [Widget] control ThemingUtils options.
+  late ThemingData theming;
 
   /// {state} whether the {accept} action button is loading.
   bool isLoading = false;
@@ -75,8 +74,8 @@ final class _DialogState extends State<Dialog> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    errTheming = Theming.get<FoundationThemeB>(context).error;
-    theming = Theming.get<FoundationThemeB>(context).control;
+    errTheming = ThemingUtils.get<FoundationThemeB>(context).controlError;
+    theming = ThemingUtils.get<FoundationThemeB>(context).control;
   }
 
   /// Handles a callback for [ServicesBinding] to listen when {keyboard} keys-up on {esc} key button, to close the dialog.

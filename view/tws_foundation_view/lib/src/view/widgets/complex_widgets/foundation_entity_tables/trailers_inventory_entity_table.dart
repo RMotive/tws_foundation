@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -6,7 +6,6 @@ import 'package:tws_foundation_view/src/core/models/entity_table_filters.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/entity_finder_selector.dart/entity_finder_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {adapter} class.
@@ -25,42 +24,42 @@ final class TrailersInventoryEntityTableAdapter extends FoundationEntityTableAda
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 12,
       children: <Widget>[
-        PropertyViewer(
+        PropertyViewer<DateTime>(
           label: 'Fecha',
-          value: entity.timestamp.toUtc().toString(),
+          value: entity.timestamp.toUtc(),
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Trailer No.',
-          value: entity.trailer?.economic ?? '---',
+          value: entity.trailer?.economic,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Placas',
-          value: entity.trailer?.plates ?? '---',
+          value: entity.trailer?.plates,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Truck No.',
           value: entity.truck.economic,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Entrada',
           value: entity.timestamp.toLocal().fullDate,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Sección',
           value: entity.section?.name,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Compañia',
           value: entity.trailer?.internal?.carrier.name ?? entity.trailer?.external?.carrier ?? '---',
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Posesión',
           value: entity.trailer == null? 'No Trailer': entity.trailer?.internal != null? 'Own' : 'External',
         ),
@@ -84,61 +83,61 @@ final class TrailerInventoryEntityTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<YardLog, YardLogsServiceI>(
+    return EntityTable<YardLog, ResponseResolverBase<ViewOutput<YardLog>>, YardLogsServiceI>(
       adapter: adapter,
-      customView: Injector.get<YardLogsServiceI>().inventoryTrailersView,
-      entityFactory: () => YardLog(),
-      columns: <EntityTableColumnOptions<YardLog>>[
-        EntityTableColumnOptions<YardLog>(
+      callView: InjectorUtils.get<YardLogsServiceI>().inventoryTrailersView,
+      factory: () => YardLog(),
+      columns: <EntityTableColumnData<YardLog>>[
+        EntityTableColumnData<YardLog>(
           title: 'Trailer No.',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.economic ?? '---',
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Placas',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.plates ?? '---',
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Truck No.',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.truck.economic,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Entrada',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.timestamp.toLocal().fullDate,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Sección',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.section?.name ?? '---',
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Compañia',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.internal?.carrier.name ?? entity.trailer?.external?.carrier ?? '---',
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Posesión',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer == null? 'No Trailer': entity.trailer?.internal != null? 'Propio' : 'Externo',
         ),
       ],
-      filterValues:(YardLog set, ViewFilterDate<YardLog> dateInterval) {
-        return <ViewFilterI<YardLog>>[
+      composeFilterDatas:(YardLog set, ViewDateFilter<YardLog> dateInterval) {
+        return <IViewFilter<YardLog>>[
           /// --> Date filters
-          ViewFilterDate<YardLog>.a(
-            property: EntityKeys.timestamp,
+          ViewDateFilter<YardLog>.a(
+            property: CorePropertiesConsts.timestamp,
             from: dateInterval.from,
             to: dateInterval.to,
           ),
 
           /// --> Logical filters
           EntityTableFilters<YardLog>(
-            discriminator: ViewFilterDiscriminator.viewFilterLogical.name,
+            discriminator: ViewFilterDiscriminator.viewLogicalFilter.name,
             operator: ViewFilterLogicalOperators.and,
-            filters: <ViewFilterProperty<YardLog>>[
-              ViewFilterProperty<YardLog>.a(
+            filters: <ViewPropertyFilter<YardLog>>[
+              ViewPropertyFilter<YardLog>.a(
                 property: '${YardLog.kTrailer}.${TrailerCommon.kEconomic}',
                 operator: ViewFilterOperators.contains,
                 value: set.trailer?.economic.cleaned,
               ),
-              ViewFilterProperty<YardLog>.a(
-                property: '${YardLog.kSection}.${EntityKeys.id}',
+              ViewPropertyFilter<YardLog>.a(
+                property: '${YardLog.kSection}.${CorePropertiesConsts.id}',
                 operator: ViewFilterOperators.equal,
                 value: set.section?.id,
               )
@@ -146,7 +145,7 @@ final class TrailerInventoryEntityTable extends StatelessWidget {
           ),
         ];
       },
-      filtersSection: (YardLog set, ViewFilterDate<YardLog> dateInterval) {
+      composeFiltersView: (YardLog set, ViewDateFilter<YardLog> dateInterval) {
         return <Widget>[
           EntityFinderSelector<Section, SectionsServiceI>(
             label: 'Section',

@@ -13,9 +13,6 @@ import 'package:tws_foundation_view/src/view/widgets/photo_taker/photo_taker.dar
 /// Initialize an [CameraPlatform] object to access to the device camera functions.
 final CameraPlatform _cameraPlatform = CameraPlatform.instance;
 
-/// Logs advisor intializing.
-const Console _advisor = Console('IconPhotoTaker');
-
 /// [PhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
 ///
 /// This widget can:
@@ -80,8 +77,8 @@ final class IconPhotoTaker extends StatefulWidget {
   State<IconPhotoTaker> createState() => _PhotoTakerState();
 }
 
-class _PhotoTakerState extends State<IconPhotoTaker> {
-  /// Instance of the current theming.
+class _PhotoTakerState extends State<IconPhotoTaker> with ConsoleMixin {
+  /// Instance of the current ThemingUtils.
   late FoundationThemeB theme;
 
   XFile? _photo;
@@ -117,7 +114,7 @@ class _PhotoTakerState extends State<IconPhotoTaker> {
         });
       },
       onError: (Object ex, StackTrace t) {
-        _advisor.exception('Camera Exception', Exception(ex), t);
+        exceptionLog('IconPhotoTaker - Camera Exception', Exception(ex), t);
         setState(() {
           _cameras = <CameraDescription>[];
         });
@@ -126,7 +123,7 @@ class _PhotoTakerState extends State<IconPhotoTaker> {
   }
   @override
   void didChangeDependencies() {
-    theme = Theming.get<FoundationThemeB>(context);
+    theme = ThemingUtils.get<FoundationThemeB>(context);
     super.didChangeDependencies();
   }
   @override

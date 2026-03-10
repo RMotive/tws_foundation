@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -10,10 +10,10 @@ import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Header state class.
-final class _HeaderState extends ReactorB {}
+final class _HeaderState extends ReactorBase {}
 
 /// [SelectableList] Display a list of selectable items getted from a [ViewConsumeAdapter] class.
-class SelectableList<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>> extends StatefulWidget {
+class SelectableList<TEntity extends IEntity<TEntity>, TService extends IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>> extends StatefulWidget {
   /// [TEntity] builder for conversion.
   final EntityBuilder<TEntity> entityBuilder;
   
@@ -86,20 +86,20 @@ class SelectableList<TEntity extends EntityI<TEntity>, TService extends ViewServ
   State<SelectableList<TEntity, TService>> createState() => _SelectableListState<TEntity, TService>();
 }
 
-final class _SelectableListState<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>> extends State<SelectableList<TEntity, TService>> {
+final class _SelectableListState<TEntity extends IEntity<TEntity>, TService extends IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>> extends State<SelectableList<TEntity, TService>> {
  
   /// {dep} [TEntity] based service dependency.
-  final TService service = Injector.get();
+  final TService service = InjectorUtils.get();
   
-  /// Theme Manager injector.
-  late FoundationThemeB themeManager = Theming.get(context);
+  /// Theme Manager InjectorUtils.
+  late FoundationThemeB themeManager = ThemingUtils.get(context);
 
   /// Theme reference key.
   final UniqueKey ref = UniqueKey();
 
   /// Color pallet for the component.
-  late SimpleTheming primaryColorTheme;
-  late SimpleTheming pageColorTheme;
+  late ThemingData primaryColorTheme;
+  late ThemingData pageColorTheme;
 
   /// Text color.
   late Color tcolor;
@@ -131,7 +131,7 @@ final class _SelectableListState<TEntity extends EntityI<TEntity>, TService exte
 
    /// Manage the service view data consume to populate the list content.
   Future<ViewOutput<TEntity>> viewInvokation() async {
-    SessionStorageI sessionStorage = Injector.get();
+    SessionStorageI sessionStorage = InjectorUtils.get();
 
     FoundationResponseResolver<ViewOutput<TEntity>> resolver = await service.view(
       ViewInput<TEntity>.b(widget.maxItems, 1),
@@ -148,7 +148,7 @@ final class _SelectableListState<TEntity extends EntityI<TEntity>, TService exte
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    themeManager = Theming.get(context);
+    themeManager = ThemingUtils.get(context);
     primaryColorTheme = themeManager.control;
     pageColorTheme = themeManager.page;
     tcolor = widget.textColor ?? pageColorTheme.fore;

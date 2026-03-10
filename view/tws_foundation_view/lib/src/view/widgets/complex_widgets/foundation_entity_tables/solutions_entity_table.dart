@@ -1,9 +1,8 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_adapter_b.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {adapter} class.
@@ -23,22 +22,22 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
       spacing: 12,
       children: <Widget>[
         /// --> Name property viewer
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Sign',
           value: entity.sign,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.name,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Description',
           value: entity.description,
         ),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Timestamp',
           value: entity.timestamp.fullDate,
         ),
@@ -49,11 +48,10 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
   @override
   EntityTableAdapterEditor<Solution>? composeEditor() {
     return EntityTableAdapterEditor<Solution>(
-      onUpdate: (BuildContext buildContext, Solution entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<Solution> data) {
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
           builder: (BuildContext context) {
@@ -65,7 +63,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
                   text: 'Are you sure you want to update solution ',
                   children: <InlineSpan>[
                     TextSpan(
-                      text: '(${entity.sign}):',
+                      text: '(${data.entity.sign}):',
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                       ),
@@ -86,25 +84,25 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                         ),
-                        child: Text('\n${entity.description}'),
+                        child: Text('\n${data.entity.description}'),
                       ),
                     ),
                   ],
                 ),
               ),
               onAccept: () async {
-                SolutionsServiceI solutionsService = Injector.get();
+                SolutionsServiceI solutionsService = InjectorUtils.get();
 
                 String authToken = await composeAuth();
 
                 FoundationResponseResolver<UpdateOutput<Solution>> resResolver = await solutionsService.update(
-                  UpdateInput<Solution>(entity),
+                  UpdateInput<Solution>(data.entity),
                   authToken,
                 );
 
                 String? errMessage;
                 resResolver.resolve(
-                  objectBuilder:
+                  factory:
                       () => UpdateOutput<Solution>(
                         () => Solution(),
                       ),
@@ -121,11 +119,11 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
                     errMessage = FoundationMessages.connectionError;
                   },
                   onFinally: () {
-                    router.pop();
+                    Navigator.of(context).pop();
                     if (errMessage == null) return;
 
                     showDialog(
-                      context: buildContext,
+                      context: data.context,
                       useRootNavigator: true,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
@@ -138,9 +136,9 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
                               fontSize: 16,
                             ),
                           ),
-                          theming: Theming.get<FoundationThemeB>(context).error,
+                          theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
                           onAccept: () {
-                            router.pop();
+                            Navigator.of(context).pop();
                           },
                         );
                       },
@@ -152,7 +150,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
           },
         );
       },
-      formBuilder: (BuildContext buildContext, Solution entity) {
+      formBuilder: (EntityTableAdapterEditorData<Solution> data) {
         return Column(
           spacing: 18,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +161,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
               isEnabled: false,
               maxLength: 5,
               controller: TextEditingController(
-                text: entity.sign,
+                text: data.entity.sign,
               ),
             ),
 
@@ -172,7 +170,7 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
               label: 'Name',
               isEnabled: false,
               controller: TextEditingController(
-                text: entity.name,
+                text: data.entity.name,
               ),
             ),
 
@@ -180,15 +178,15 @@ final class SolutionsEntityTableAdapter extends FoundationEntityTableAdapterB<So
             TextInput(
               label: 'Description',
               controller: TextEditingController(
-                text: entity.description,
+                text: data.entity.description,
               ),
-              onChanged: (String newDescription) => entity.description = newDescription,
+              onChanged: (String newDescription) => data.entity.description = newDescription,
             ),
 
             /// --> Timestamp Property Input
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Timestamp',
-              value: entity.timestamp.fullDate,
+              value: data.entity.timestamp.fullDate,
             ),
           ],
         );
@@ -212,19 +210,19 @@ final class SolutionsEntityTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Solution, SolutionsServiceI>(
+    return EntityTable<Solution, ResponseResolverBase<ViewOutput<Solution>>, SolutionsServiceI>(
       adapter: adapter,
-      entityFactory: () => Solution(),
-      columns: <EntityTableColumnOptions<Solution>>[
-        EntityTableColumnOptions<Solution>(
+      factory: () => Solution(),
+      columns: <EntityTableColumnData<Solution>>[
+        EntityTableColumnData<Solution>(
           title: 'Sign',
           factory: (Solution entity, int index, BuildContext buildContext) => entity.sign,
         ),
-        EntityTableColumnOptions<Solution>(
+        EntityTableColumnData<Solution>(
           title: 'Name',
           factory: (Solution entity, int index, BuildContext buildContext) => entity.name,
         ),
-        EntityTableColumnOptions<Solution>(
+        EntityTableColumnData<Solution>(
           title: 'Description',
           factory: (Solution entity, int index, BuildContext buildContext) => entity.description,
         ),

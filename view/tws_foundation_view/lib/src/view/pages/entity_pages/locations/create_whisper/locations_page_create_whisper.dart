@@ -15,7 +15,7 @@ part '_create_whisper_address.dart';
 part '_create_whisper_waypoint.dart';
 
 /// {whisper} class.
-final class LocationsPageCreateWhisper extends PageB {
+final class LocationsPageCreateWhisper extends ViewPageBase {
 
   /// Creates a new [LocationsPageCreateWhisper] instance.
   const LocationsPageCreateWhisper();
@@ -30,71 +30,72 @@ final class LocationsPageCreateWhisper extends PageB {
       },
       child: (GlobalKey<FormState> formState) {
         return CreateEntityForm<Location, LocationsServiceI>(
-          entityFactory: () => Location(),
+          factory: () => Location(),
           controller: creationController,
-          buildEntityTag: (Location entity) {
-            return 'Location with name: ${entity.name}';
+          authFactory: (BuildContext context) {
+            SessionStorage sessionStorage = InjectorUtils.get();
+            return sessionStorage.token;
           },
           recordDesigner: (Location entity, bool selected, bool valid) {
             return CreateEntityFormRecord(
               selected: selected,
-              fields: <CreateEntityFormRecordField>[
-                CreateEntityFormRecordField(
+              fields: <CreateEntityFormRecordField<Object>>[
+                CreateEntityFormRecordField<String>(
                   label: 'Name',
                   value: entity.name,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Description',
-                  value: entity.description ?? '---',
+                  value: entity.description,
                 ),
-                 CreateEntityFormRecordField(
+                 CreateEntityFormRecordField<String>(
                   label: 'Status',
-                  value: entity.status.name.cleaned ?? '---',
+                  value: entity.status.name.cleaned,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Country',
                   value: entity.address.country,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'State',
-                  value: entity.address.state ?? '---',
+                  value: entity.address.state,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'City',
-                  value: entity.address.city ?? '---',
+                  value: entity.address.city,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Street',
-                  value: entity.address.street ?? '---',
+                  value: entity.address.street,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Alt. Street',
-                  value: entity.address.altStreet ?? '---',
+                  value: entity.address.altStreet,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'ZIP',
-                  value: entity.address.zip ?? '---',
+                  value: entity.address.zip,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Subdivision/Colonia',
-                  value: entity.address.subdivision ?? '---',
+                  value: entity.address.subdivision,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Longitude',
-                  value: entity.waypoint?.longitude.toString() ?? '---',
+                  value: entity.waypoint?.longitude.toString(),
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Latitude',
-                  value: entity.waypoint?.latitude.toString() ?? '---',
+                  value: entity.waypoint?.latitude.toString(),
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Altitude',
-                  value:entity.waypoint?.altitude != null? entity.waypoint?.altitude.toString() ?? '---' : "---",
+                  value:entity.waypoint?.altitude.toString(),
                 ),
               ],
             );
           },
-          formDesigner: (CreateEntityFormRecordReactor<Location>? itemState) {
+          formDesigner: (CreateEntityFormRecordReactor<Location>? itemState, ScrollController scrollController) {
             final bool formDisabled = !(itemState == null);
 
             return Padding(

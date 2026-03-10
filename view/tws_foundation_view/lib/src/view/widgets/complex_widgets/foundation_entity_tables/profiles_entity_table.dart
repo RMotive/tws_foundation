@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -8,7 +8,6 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/list_viewer/list_viewer.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/selectable_list.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -28,19 +27,19 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
       children: <Widget>[
 
         /// --> Timestamp
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Timestamp',
           value: entity.timestamp.fullDate,
         ),
 
         /// --> Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.name,
         ),
 
         /// --> Description
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Description',
           value: entity.description ?? '---',
         ),
@@ -60,18 +59,18 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
   EntityTableAdapterEditor<Profile>? composeEditor() {
 
     return EntityTableAdapterEditor<Profile>(
-      onUpdate: (BuildContext buildContext, Profile entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<Profile> data) {
+        final Router router = InjectorUtils.get();
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
-          builder: (BuildContext context) => _buildUpdateDialog(entity, router, context),
+          builder: (BuildContext context) => _buildUpdateDialog(data.entity, router, context),
         );
       },
 
-      formBuilder:(BuildContext buildContext, Profile entity) {
+      formBuilder:(EntityTableAdapterEditorData<Profile> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -83,7 +82,7 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
                 label: 'Timestamp',
                 isEnabled: false,
                 controller: TextEditingController(
-                  text: entity.timestamp.fullDate,
+                  text: data.entity.timestamp.fullDate,
                 ),
               ),
               TextInput(
@@ -91,10 +90,10 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
                 label: '*Name',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.name,
+                  text: data.entity.name,
                 ),
                 onChanged: (String text) {
-                  entity.name = text;
+                  data.entity.name = text;
                 },
               ),
               TextInput(
@@ -102,24 +101,24 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
                 label: 'Description',
                 maxLength: 200,
                 controller: TextEditingController(
-                  text: entity.description,
+                  text: data.entity.description,
                 ),
                 onChanged: (String text) {
-                  entity.description = text.cleaned;
+                  data.entity.description = text.cleaned;
                 },
               ),
               SelectableList<Permit, PermitsServiceI>(
                 title: 'Available Permits',
                 entityBuilder: () => Permit(),
-                initialValues: entity.permits,
+                initialValues: data.entity.permits,
                 tileTitle:(Permit permit) => '${permit.solution.name} - ${permit.name}',
                 onSelect:(bool selected, Permit item) {
                   if(selected){
-                    if(entity.permits.contains(item)) return;
-                    entity.permits.add(item);
+                    if(data.entity.permits.contains(item)) return;
+                    data.entity.permits.add(item);
                     return;
                   }
-                  entity.permits.remove(item);
+                  data.entity.permits.remove(item);
                 },
               ),
             ],
@@ -129,9 +128,9 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
     );
   }
   void _onUpdate(Profile entity, Router router, BuildContext context) async {
-    ProfilesServiceI profilesService = Injector.get();
+    ProfilesServiceI profilesService = InjectorUtils.get();
 
-    List<EntityInvalidation<Profile>> invalidations = entity.evaluate();
+    List<EntityErrors<Profile>> invalidations = entity.evaluate(<EntityErrors<Profile>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -159,7 +158,7 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<Profile>(
             () => Profile(),
           ),
@@ -176,7 +175,7 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -193,9 +192,9 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -237,7 +236,7 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Profile] {entity}, also handles basic available behavior.
-final class ProfilesEntityTable extends FoundationEntityTableB<ProfilesEntityTableAdapter> {
+final class ProfilesEntityTable extends FoundationEntityTableB<Profile, ProfilesEntityTableAdapter> {
   /// Creates a new [ProfilesEntityTable] instance.
   const ProfilesEntityTable({
     required super.adapter,
@@ -245,24 +244,24 @@ final class ProfilesEntityTable extends FoundationEntityTableB<ProfilesEntityTab
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Profile, ProfilesServiceI>(
-      entityFactory: () => Profile(),
+    return EntityTable<Profile, ResponseResolverBase<ViewOutput<Profile>>, ProfilesServiceI>(
+      factory: () => Profile(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<Profile>>[
+      columns: <EntityTableColumnData<Profile>>[
         /// --> Name
-        EntityTableColumnOptions<Profile>(
+        EntityTableColumnData<Profile>(
           title: 'Name',
           factory: (Profile entity, int index, BuildContext buildContext) => entity.name,
         ),
 
         /// --> Description
-        EntityTableColumnOptions<Profile>(
+        EntityTableColumnData<Profile>(
           title: 'Description',
           factory: (Profile entity, int index, BuildContext buildContext) => entity.description ?? '---',
         ),
 
         /// --> Associated permits
-        EntityTableColumnOptions<Profile>(
+        EntityTableColumnData<Profile>(
           title: 'associated permits',
           factory: (Profile entity, int index, BuildContext buildContext) => entity.permits.length.toString(),
         ),

@@ -37,7 +37,7 @@ final class _TruckSectionState extends State<_TruckSection> {
 
   @override
   Widget build(BuildContext context) {
-    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
     return SectionWidget(
       title: '*Truck',
       outterPadding: EdgeInsets.zero,
@@ -73,7 +73,7 @@ final class _TruckSectionState extends State<_TruckSection> {
                       ),
                     ),
                     TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
-                    TextSpan(text: plates.first, style: TextStyle(color: theme.warning.accent)),
+                    TextSpan(text: plates.first, style: TextStyle(color: theme.controlWarning.accent)),
                     TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),
                     TextSpan(text: plates.last, style:  TextStyle(color: theme.page.accent)),
                     TextSpan(text: ' - ', style: TextStyle(color: theme.page.fore)),

@@ -1,34 +1,32 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Router;
+import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/trailers/create_whisper/trailers_page_create_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [TrailersPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [TrailersPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class TrailersCategoryPage extends EntityCategoryPageB<TrailersEntityTableAdapter> {
+final class TrailersCategoryPage extends EntityCategoryPageB<TrailerCommon, TrailersEntityTableAdapter> {
   /// Creates a new [TrailersCategoryPage] instance.
   TrailersCategoryPage({
     super.cusRoute,
   }) : super(
          title: 'Trailers',
-         route: FoundationRoutes.trailersPageRoute,
+         routeData: FoundationRoutes.trailersPageRoute,
        );
 
   @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.trailersCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext _, RouteData _) {
-          return TrailersPageCreateWhisper();
-        },
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => TrailersPageCreateWhisper(),
       ),
     ];
   }
@@ -41,7 +39,7 @@ final class TrailersCategoryPage extends EntityCategoryPageB<TrailersEntityTable
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(_, Color? recomdColor) {
     return Icon(
       Icons.local_shipping,
       color: recomdColor,
@@ -49,21 +47,21 @@ final class TrailersCategoryPage extends EntityCategoryPageB<TrailersEntityTable
   }
 
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return TrailersPage(
       adapter: adapter,
     );
   }
   
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(TrailersEntityTableAdapter adapter) {
-    return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(TrailersEntityTableAdapter adapter) {
+    return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
       ActionsRisbbonCreate(
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.trailersCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.trailersCreateWhisperRoute);
         },
       ),
     ];
@@ -72,8 +70,8 @@ final class TrailersCategoryPage extends EntityCategoryPageB<TrailersEntityTable
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [TrailersPage] business entity to interact and manage data related with it.
-final class TrailersPage extends EntityPageB<TrailersEntityTableAdapter> {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [TrailersPage] business entity to interact and manage data related with it.
+final class TrailersPage extends EntityViewPageBase<TrailerCommon, TrailersEntityTableAdapter> {
   /// Creates a new [TrailersPage] instance.
   TrailersPage({
     required super.adapter,

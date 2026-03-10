@@ -4,7 +4,7 @@ class _TWSAutocompleteFuture<T> extends StatelessWidget {
   final Future<List<ViewOutput<dynamic>>> Function() consume;
   final ScrollController controller;
   final double tileHeigth;
-  final SimpleTheming theme;
+  final ThemingData theme;
   final String Function(T?) displayLabel;
   final String Function(T?)? suffixLabel;
   final void Function(String label, T? item) onTap;

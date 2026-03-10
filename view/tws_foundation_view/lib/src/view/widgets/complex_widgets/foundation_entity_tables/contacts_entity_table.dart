@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -7,7 +7,6 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {adapter} class.
@@ -24,25 +23,25 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
     return EntityTableViewer(
       children: <Widget>[
         /// --> Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.name,
         ),
 
         /// --> Lastname
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Lastname',
           value: entity.lastName,
         ),
 
         /// --> Email
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Email',
           value: entity.eMail,
         ),
 
         /// --> Phone number
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Phone number',
           value: entity.phone,
         ),
@@ -54,18 +53,18 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
   EntityTableAdapterEditor<Contact>? composeEditor() {
 
     return EntityTableAdapterEditor<Contact>(
-      onUpdate: (BuildContext buildContext, Contact entity) {
-        final Router router = Injector.get();
-
+      onUpdate: (EntityTableAdapterEditorData<Contact> data) {
+        final Router router = InjectorUtils.get();
+ 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
-          builder: (BuildContext context) => _buildUpdateDialog(entity, router, context),
+          builder: (BuildContext context) => _buildUpdateDialog(data.entity, router, context),
         );
       },
 
-      formBuilder:(BuildContext buildContext, Contact entity) {
+      formBuilder:(EntityTableAdapterEditorData<Contact> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -76,7 +75,7 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
                 label: 'Timestamp',
                 isEnabled: false,
                 controller: TextEditingController(
-                  text: entity.timestamp.fullDate,
+                  text: data.entity.timestamp.fullDate,
                 ),
               ),
               TextInput(
@@ -84,10 +83,10 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
                 label: '*Name',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.name,
+                  text: data.entity.name,
                 ),
                 onChanged: (String text) {
-                  entity.name = text;
+                  data.entity.name = text;
                 },
               ),
               TextInput(
@@ -95,10 +94,10 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
                 label: '*Lastname',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.lastName,
+                  text: data.entity.lastName,
                 ),
                 onChanged: (String text) {
-                  entity.lastName = text;
+                  data.entity.lastName = text;
                 },
               ),
 
@@ -107,10 +106,10 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
                 label: '*Email',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.eMail,
+                  text: data.entity.eMail,
                 ),
                 onChanged: (String text) {
-                  entity.eMail = text;
+                  data.entity.eMail = text;
                 },
               ),
 
@@ -119,10 +118,10 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
                 label: '*Phone',
                 maxLength: 14,
                 controller: TextEditingController(
-                  text: entity.phone,
+                  text: data.entity.phone,
                 ),
                 onChanged: (String text) {
-                  entity.phone = text;
+                  data.entity.phone = text;
                 },
               ),
             ],
@@ -132,9 +131,9 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
     );
   }
   void _onUpdate(Contact entity, Router router, BuildContext context) async {
-    ContactsServiceI contactsService = Injector.get();
+    ContactsServiceI contactsService = InjectorUtils.get();
 
-    List<EntityInvalidation<Contact>> invalidations = entity.evaluate();
+    List<EntityErrors<Contact>> invalidations = entity.evaluate(<EntityErrors<Contact>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -162,7 +161,7 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<Contact>(
             () => Contact(),
           ),
@@ -179,7 +178,7 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -196,9 +195,9 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -239,7 +238,7 @@ final class ContactsEntityTableAdapter extends FoundationEntityTableAdapterB<Con
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Contact] {entity}, also handles basic available behavior.
-final class ContactsEntityTable extends FoundationEntityTableB<ContactsEntityTableAdapter> {
+final class ContactsEntityTable extends FoundationEntityTableB<Contact, ContactsEntityTableAdapter> {
   /// Creates a new [ContactsEntityTable] instance.
   const ContactsEntityTable({
     required super.adapter,
@@ -247,30 +246,30 @@ final class ContactsEntityTable extends FoundationEntityTableB<ContactsEntityTab
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Contact, ContactsServiceI>(
-      entityFactory: () => Contact(),
+    return EntityTable<Contact, FoundationResponseResolver<ViewOutput<Contact>>, ContactsServiceI>(
+      factory: () => Contact(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<Contact>>[
+      columns: <EntityTableColumnData<Contact>>[
         /// --> Name
-        EntityTableColumnOptions<Contact>(
+        EntityTableColumnData<Contact>(
           title: 'Name',
           factory: (Contact entity, int index, BuildContext buildContext) => entity.name,
         ),
 
         /// --> Lastname
-        EntityTableColumnOptions<Contact>(
+        EntityTableColumnData<Contact>(
           title: 'Lastname',
           factory: (Contact entity, int index, BuildContext buildContext) => entity.lastName,
         ),
 
         /// --> Email
-        EntityTableColumnOptions<Contact>(
+        EntityTableColumnData<Contact>(
           title: 'Email',
           factory: (Contact entity, int index, BuildContext buildContext) => entity.eMail,
         ),
 
         /// --> Phone number
-        EntityTableColumnOptions<Contact>(
+        EntityTableColumnData<Contact>(
           title: 'Phone number',
           factory: (Contact entity, int index, BuildContext buildContext) => entity.phone,
         ),

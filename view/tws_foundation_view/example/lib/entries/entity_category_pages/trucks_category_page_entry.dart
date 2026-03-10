@@ -1,13 +1,13 @@
-import 'package:csm_view/csm_view.dart' hide LandingThemeB;
+import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
-import 'package:flutter/material.dart' hide Route;
+import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {entry} class.
 ///
-/// Implements a [PackageLandingEntryB] for [TrucksPage] from {tws_foundation_view} package as part of the package landing playground.
-final class TrucksCategoryPageEntry extends PackageLandingEntryB<LandingThemeB> {
-  late final CategoryLayoutPageI categoryPage;
+/// Implements a [PackageLandingEntryBase] for [TrucksPage] from {tws_foundation_view} package as part of the package landing playground.
+final class TrucksCategoryPageEntry extends PackageLandingEntryBase<LandingThemeB> {
+  late final ICategoryLayoutPage categoryPage;
 
   /// Creates a new [TrucksCategoryPageEntry] instance.
   TrucksCategoryPageEntry({
@@ -29,22 +29,22 @@ final class TrucksCategoryPageEntry extends PackageLandingEntryB<LandingThemeB> 
   }
 
   @override
-  List<RouteB> composeRoutes(_, _) {
+  List<IRoutingGraphData> composeRoutes(_, _) {
     return categoryPage.composeRoutes();
   }
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
-    RouteData routeData = RouteData(
-      route: categoryPage.route,
+    RoutingData routeData = RoutingData(
+      targetRoute: categoryPage.routeData,
       absolutePath: '/trucks_category_page',
     );
 
     return CategoryLayout(
-      pages: <CategoryLayoutPageI>[
+      pages: <ICategoryLayoutPage>[
         categoryPage,
       ],
-      routeData: routeData,
+      routingData: routeData,
       page: categoryPage.composePage(buildContext, routeData),
     );
   }

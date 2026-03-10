@@ -74,7 +74,7 @@ class ImageViewer extends StatelessWidget {
     Color? backgroundColor;
     final bool isImage = _imageExtensions.contains(resource.extension.toLowerCase());
     final bool isSVG = resource.extension.toLowerCase() == FoundationExtension.svg;
-    if(isSVG && svgColor == null) backgroundColor = Theming.get<FoundationThemeB>(context).page.back;
+    if(isSVG && svgColor == null) backgroundColor = ThemingUtils.get<FoundationThemeB>(context).page.back;
 
     void imageViewDialog() {
       showDialog(
@@ -99,7 +99,7 @@ class ImageViewer extends StatelessWidget {
                         ),
                         PointerArea(
                           cursor: SystemMouseCursors.click,
-                          onClick: () => Injector.get<Router>().pop(),
+                          onClick: () => InjectorUtils.get<Router>(),
                           child: const Icon(
                             Icons.cancel,
                             color: Colors.red,

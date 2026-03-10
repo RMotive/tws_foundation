@@ -1,35 +1,32 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/contacts/contacts_page_create_whisper.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [ContactsPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [ContactsPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTableAdapter> {
+final class ContactsCategoryPage extends EntityCategoryPageB<Contact, ContactsEntityTableAdapter> {
   /// Creates a new [ContactsCategoryPage] instance.
   ContactsCategoryPage({
     super.cusRoute,
   }) : super(
          title: 'Contacts',
-         route: FoundationRoutes.contactsPageRoute,
+         routeData: FoundationRoutes.contactsPageRoute,
        );
 
   @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.contactsCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext _, RouteData _) {
-          return ContactsPageCreateWhisper();
-        },
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => ContactsPageCreateWhisper(),
       ),
     ];
   }
@@ -42,29 +39,29 @@ final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTable
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(ContactsEntityTableAdapter adapter) {
-    return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(ContactsEntityTableAdapter adapter) {
+    return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
       ActionsRisbbonCreate(
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.contactsCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.contactsCreateWhisperRoute);
         },
       ),
     ];
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(BuildContext context, Color? fgColor) {
     return Icon(
       Icons.contacts_rounded,
-      color: recomdColor,
+      color: fgColor,
     );
   }
 
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return ContactsPage(
       adapter: adapter,
     );
@@ -73,8 +70,8 @@ final class ContactsCategoryPage extends EntityCategoryPageB<ContactsEntityTable
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [Contact] business entity to interact and manage data related with it.
-final class ContactsPage extends EntityPageB<ContactsEntityTableAdapter> {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [Contact] business entity to interact and manage data related with it.
+final class ContactsPage extends EntityViewPageBase<Contact, ContactsEntityTableAdapter> {
   /// Creates a new [ContactsPage] instance.
   ContactsPage({
     required super.adapter,

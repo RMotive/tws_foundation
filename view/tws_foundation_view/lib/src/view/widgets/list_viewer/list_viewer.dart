@@ -1,8 +1,7 @@
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
-import 'package:tws_foundation_view/src/view/widgets/message_widgets/message_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 
 part 'list_viewer_body.dart';
@@ -67,7 +66,7 @@ class ListViewer<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeManager themeManager = ThemeManager.of(context);
-    SimpleTheming pageColorTheme = themeManager.castData<FoundationThemeB>().page;
+    ThemingData pageColorTheme = themeManager.castData<FoundationThemeB>().page;
     Color tColor = textColor ?? pageColorTheme.fore;
     Color bColor = backgroundColor ?? pageColorTheme.back;
     return SizedBox(

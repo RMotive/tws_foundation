@@ -7,7 +7,7 @@ import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {whisper} class.
-final class PermitsPageCreateWhisper extends PageB {
+final class PermitsPageCreateWhisper extends ViewPageBase {
 
   /// Creates a new [PermitsPageCreateWhisper] instance.
   const PermitsPageCreateWhisper();
@@ -22,207 +22,206 @@ final class PermitsPageCreateWhisper extends PageB {
       },
       child: (GlobalKey<FormState> formState) {
         return CreateEntityForm<Permit, PermitsServiceI>(
-          entityFactory: () => Permit(),
+          factory: () => Permit(),
           controller: creationController,
-          buildEntityTag: (Permit entity) {
-            return 'Permit with name: ${entity.name}';
+          authFactory: (BuildContext context) {
+            SessionStorage sessionStorage = InjectorUtils.get();
+            return sessionStorage.token;
           },
           recordDesigner: (Permit entity, bool selected, bool valid) {
             return CreateEntityFormRecord(
               selected: selected,
-              fields: <CreateEntityFormRecordField>[
+              fields: <CreateEntityFormRecordField<Object>>[
 
                 /// --> Permit name.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*Reference code',
-                  value: entity.reference.cleaned ?? '---',
+                  value: entity.reference.cleaned,
                 ),
 
                 /// --> Permit name.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*Name',
                   value: entity.name,
                 ),
 
                 /// --> Permit description.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Description',
-                  value: entity.description.cleaned ?? '---',
+                  value: entity.description.cleaned,
                 ),
                 
                 /// --> Permit enabled status.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*Enabled',
                   value: entity.enabled? 'Yes' : 'No',
                 ),
 
                 /// --> Solution.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Solution',
-                  value: entity.solution.name.cleaned ?? '---',
+                  value: entity.solution.name.cleaned,
                 ),
 
                 /// --> Feature.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Feature',
-                  value: entity.feature.name.cleaned ?? '---',
+                  value: entity.feature.name.cleaned ,
                 ),
 
                 /// --> Action.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Action',
-                  value: entity.action.name.cleaned ?? '---',
+                  value: entity.action.name.cleaned,
                 ),
                 
               ],
             );
           },
-          formDesigner: (CreateEntityFormRecordReactor<Permit>? itemState) {
+          formDesigner: (CreateEntityFormRecordReactor<Permit>? itemState, ScrollController scrollController) {
             final bool formDisabled = !(itemState == null);
 
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  spacing: 12,
-                  children: <Widget>[
-                    /// --> Permits enabled status
-                    OptionsSelector<bool>(
-                      height: 100,
-                      title: 'Enabled',
-                      preSelected: <bool>[itemState!.entity.enabled],
-                      options: <OptionsSelectorOption<bool>>[
-                        OptionsSelectorOption<bool>(
-                          title: 'Enabled',
-                          value: true,
-                        ),
-                        OptionsSelectorOption<bool>(
-                          title: 'Disabled',
-                          value: false,
-                        ),
-                      ],
-                      onSelect: (List<bool> selected) {
-                        itemState.entity.enabled = selected.first;
-                      },
-                    ),
-                    Row(
-                      spacing: 12,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        /// --> Reference code
-                        Expanded(
-                          child: TextInput(
-                            label: '*Reference code',
-                            isEnabled: formDisabled,
-                            maxLength: 8,
-                            isFixedLength: true,
-                            controller: TextEditingController(
-                              text: itemState.entity.reference,
-                            ),
-                            onChanged: (String text) {
-                              Permit permit = itemState.entity;
-                              permit.reference = text;
-                              itemState.react();
-                            },
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                spacing: 12,
+                children: <Widget>[
+                  /// --> Permits enabled status
+                  OptionsSelector<bool>(
+                    height: 100,
+                    title: 'Enabled',
+                    preSelected: <bool>[itemState!.entity.enabled],
+                    options: <OptionsSelectorOption<bool>>[
+                      OptionsSelectorOption<bool>(
+                        title: 'Enabled',
+                        value: true,
+                      ),
+                      OptionsSelectorOption<bool>(
+                        title: 'Disabled',
+                        value: false,
+                      ),
+                    ],
+                    onSelect: (List<bool> selected) {
+                      itemState.entity.enabled = selected.first;
+                    },
+                  ),
+                  Row(
+                    spacing: 12,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      /// --> Reference code
+                      Expanded(
+                        child: TextInput(
+                          label: '*Reference code',
+                          isEnabled: formDisabled,
+                          maxLength: 8,
+                          isFixedLength: true,
+                          controller: TextEditingController(
+                            text: itemState.entity.reference,
                           ),
+                          onChanged: (String text) {
+                            Permit permit = itemState.entity;
+                            permit.reference = text;
+                            itemState.react();
+                          },
                         ),
-
-                        /// --> Contact Name
-                        Expanded(
-                          child: TextInput(
-                            label: '*Name',
-                            isEnabled: formDisabled,
-                            maxLength: 100,
-                            controller: TextEditingController(
-                              text: itemState.entity.name,
-                            ),
-                            onChanged: (String text) {
-                              Permit permit = itemState.entity;
-                              permit.name = text;
-                              itemState.react();
-                            },
+                      ),
+            
+                      /// --> Contact Name
+                      Expanded(
+                        child: TextInput(
+                          label: '*Name',
+                          isEnabled: formDisabled,
+                          maxLength: 100,
+                          controller: TextEditingController(
+                            text: itemState.entity.name,
                           ),
+                          onChanged: (String text) {
+                            Permit permit = itemState.entity;
+                            permit.name = text;
+                            itemState.react();
+                          },
                         ),
-                      ],
-                    ),
-
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-
-                        /// --> Description
-                        Expanded(
-                          child: TextInput(
-                            label: 'Description',
-                            isEnabled: formDisabled,
-                            maxLength: 200,
-                            controller: TextEditingController(
-                              text: itemState.entity.description,
-                            ),
-                            onChanged: (String text) {
-                              Permit permit = itemState.entity;
-                              permit.description = text.cleaned;
-                              itemState.react();
-                            },
+                      ),
+                    ],
+                  ),
+            
+                  Row(
+                    spacing: 10,
+                    children: <Widget>[
+            
+                      /// --> Description
+                      Expanded(
+                        child: TextInput(
+                          label: 'Description',
+                          isEnabled: formDisabled,
+                          maxLength: 200,
+                          controller: TextEditingController(
+                            text: itemState.entity.description,
                           ),
+                          onChanged: (String text) {
+                            Permit permit = itemState.entity;
+                            permit.description = text.cleaned;
+                            itemState.react();
+                          },
                         ),
-
-                        /// --> Solution
-                        Expanded(
-                          child: EntityFinderSelector<Solution, SolutionsServiceI>(
-                            entityBuilder: () => Solution(),
-                            label: 'Select a Solution...',
-                            initialValue: itemState.entity.solution,
-                            textBuilder: (Solution solution) {
-                              return solution.name;
-                            },
-                            onSelected: (Solution? solution) {
-                              itemState.entity.solution = solution ?? Solution();
-                              itemState.react();
-                            },
-                          ),
+                      ),
+            
+                      /// --> Solution
+                      Expanded(
+                        child: EntityFinderSelector<Solution, SolutionsServiceI>(
+                          entityBuilder: () => Solution(),
+                          label: 'Select a Solution...',
+                          initialValue: itemState.entity.solution,
+                          textBuilder: (Solution solution) {
+                            return solution.name;
+                          },
+                          onSelected: (Solution? solution) {
+                            itemState.entity.solution = solution ?? Solution();
+                            itemState.react();
+                          },
                         ),
-                      ],
-                    ),
-
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        /// --> Feature
-                        Expanded(
-                          child: EntityFinderSelector<Feature, FeaturesServiceI>(
-                            entityBuilder: () => Feature(),
-                            label: 'Select a Feature...',
-                            initialValue: itemState.entity.feature,
-                            textBuilder: (Feature feature) {
-                              return feature.name;
-                            },
-                            onSelected: (Feature? feature) {
-                              itemState.entity.feature = feature ?? Feature();
-                              itemState.react();
-                            },
-                          ),
+                      ),
+                    ],
+                  ),
+            
+                  Row(
+                    spacing: 10,
+                    children: <Widget>[
+                      /// --> Feature
+                      Expanded(
+                        child: EntityFinderSelector<Feature, FeaturesServiceI>(
+                          entityBuilder: () => Feature(),
+                          label: 'Select a Feature...',
+                          initialValue: itemState.entity.feature,
+                          textBuilder: (Feature feature) {
+                            return feature.name;
+                          },
+                          onSelected: (Feature? feature) {
+                            itemState.entity.feature = feature ?? Feature();
+                            itemState.react();
+                          },
                         ),
-                        /// --> Feature
-                        Expanded(
-                          child: EntityFinderSelector<Action, ActionsServiceI>(
-                            entityBuilder: () => Action(),
-                            label: 'Select an Action...',
-                            initialValue: itemState.entity.action,
-                            textBuilder: (Action action) {
-                              return action.name;
-                            },
-                            onSelected: (Action? action) {
-                              itemState.entity.action = action ?? Action();
-                              itemState.react();
-                            },
-                          ),
+                      ),
+                      /// --> Feature
+                      Expanded(
+                        child: EntityFinderSelector<Action, ActionsServiceI>(
+                          entityBuilder: () => Action(),
+                          label: 'Select an Action...',
+                          initialValue: itemState.entity.action,
+                          textBuilder: (Action action) {
+                            return action.name;
+                          },
+                          onSelected: (Action? action) {
+                            itemState.entity.action = action ?? Action();
+                            itemState.react();
+                          },
                         ),
-                      ],
-                    ),
-                  
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                
+                ],
               ),
             );
           },

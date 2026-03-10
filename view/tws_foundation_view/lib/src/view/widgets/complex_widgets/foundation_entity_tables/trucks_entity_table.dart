@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -12,13 +12,12 @@ import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/incremental_list.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
 /// Address state class.
-class _PlateState extends ReactorB {}
+class _PlateState extends ReactorBase {}
 
 _PlateState _addressState = _PlateState();
 // ignore: unused_element
@@ -38,86 +37,86 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
     if (entity.internal != null){
       scopeColumn = <Widget>[
         const SectionDivider(text: 'Truck details'),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Motor',
-          value: entity.internal?.motor ?? '---',
+          value: entity.internal?.motor,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Vin',
           value: entity.internal?.vin,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'SCT',
-          value: entity.internal?.sct?.number ?? '---',
+          value: entity.internal?.sct?.number,
         ),
 
         const SectionDivider(text: 'Carrier details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Carrier',
-          value: entity.internal?.carrier.name ?? '---',
+          value: entity.internal?.carrier.name,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Carrier USDOT / MC',
-          value: entity.internal?.carrier.usdot?.mc ?? '---',
+          value: entity.internal?.  carrier.usdot?.mc,
         ),
-         PropertyViewer(
+         PropertyViewer<String>(
           label: 'Carrier USDOT / SCAC',
-          value: entity.internal?.carrier.usdot?.scac ?? '---',
+          value: entity.internal?.carrier.usdot?.scac,
         ),
 
         const SectionDivider(text: 'Maintenance details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Anual Maintenance',
-          value: entity.internal?.maintenance?.anual.dateOnly ?? '---',
+          value: entity.internal?.maintenance?.anual.dateOnly,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Trimestral Maintenance',
-          value: entity.internal?.maintenance?.trimestral.dateOnly ?? '---',
+          value: entity.internal?.maintenance?.trimestral.dateOnly,
         ),
 
         const SectionDivider(text: 'Model details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Model',
-          value: entity.internal?.model.name ?? '---',
+          value: entity.internal?.model.name,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Manufacturer',
-          value: entity.internal?.model.manufacturer.name ?? '---',
+          value: entity.internal?.model.manufacturer.name,
         ),
 
         const SectionDivider(text: 'Insurance details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Insurance policy',
-          value: entity.internal?.insurance?.policy ?? '---',
+          value: entity.internal?.insurance?.policy,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Insurance country',
-          value: entity.internal?.insurance?.country ?? '---',
+          value: entity.internal?.insurance?.country,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Insurance expiration',
-          value: entity.internal?.insurance?.expiration.dateOnly ?? '---',
+          value: entity.internal?.insurance?.expiration.dateOnly,
         ),
         for(int i = 0; i < entity.internal!.plates.length; i++)
           ...<Widget>[
           SectionDivider(
             text: '${i + 1} - ${entity.internal?.plates[i].country} Plate',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Identifier',
-            value: entity.internal?.plates[i].identifier ?? '---',
+            value: entity.internal?.plates[i].identifier,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Expiration',
-            value: entity.internal?.plates[i].expiration?.dateOnly ?? '---',
+            value: entity.internal?.plates[i].expiration?.dateOnly,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'State',
-            value: entity.internal?.plates[i].state ?? '---',
+            value: entity.internal?.plates[i].state,
           ),
         ],
       ];
@@ -125,21 +124,21 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
 
     if(entity.external != null){
       scopeColumn = <Widget>[
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Vin',
-          value: entity.external?.vin ?? '---',
+          value: entity.external?.vin,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Carrier',
           value: entity.external?.carrier,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'USA Plate',
-          value: entity.external?.usaPlate ?? '---',
+          value: entity.external?.usaPlate,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'MX Plate',
-          value: entity.external?.mxPlate ?? '---',
+          value: entity.external?.mxPlate,
         ),
       ];
     }
@@ -148,27 +147,27 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
       child: EntityTableViewer(
         children: <Widget>[
           const SectionDivider(text: 'Common details'),
-          PropertyViewer(
+          PropertyViewer<DateTime>(
             label: 'Timestamp',
-            value: entity.timestamp.toString(),
+            value: entity.timestamp,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Ownership',
             value: entity.internal != null ? 'Own' : entity.external != null ? 'External' : '---',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Economic',
             value: entity.economic,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Status',
             value: entity.status.name,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Situation',
             value: entity.situation?.name ?? '---',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Location',
             value: entity.location?.name ?? '---',
           ),
@@ -182,20 +181,20 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
   @override
   EntityTableAdapterEditor<TruckCommon>? composeEditor() {
     return EntityTableAdapterEditor<TruckCommon>(
-      onUpdate: (BuildContext buildContext, TruckCommon entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<TruckCommon> data) {
+        final Router router = InjectorUtils.get();
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            if (entity.internal != null) return _buildInternalDialog(entity, router, context);
-            return _buildExternalDialog(entity, router, context);
+            if (data.entity.internal != null) return _buildInternalDialog(data.entity, router, context);
+            return _buildExternalDialog(data.entity, router, context);
           },
         );
       },
-      formBuilder:(BuildContext buildContext, TruckCommon entity) {
+      formBuilder:(EntityTableAdapterEditorData<TruckCommon> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -206,22 +205,22 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
               TextInput(
                 label: "TimeStamp",
                 controller: TextEditingController(
-                  text: entity.timestamp.toString()
+                  text: data.entity.timestamp.toString()
                 ),
                 isEnabled: false,
               ),
               TextInput(
                 label: "*Economic",
                 maxLength: 16,
-                controller: TextEditingController(text: entity.economic),
-                onChanged: (String value) => entity.economic = value,
+                controller: TextEditingController(text: data.entity.economic),
+                onChanged: (String value) => data.entity.economic = value,
               ),
               
               const SectionDivider(text: 'Truck details'),
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: entity.internal != null? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
+                child: data.entity.internal != null? _internalEditorFormBuilder(data.entity) : _externalEditorFormBuilder(data.entity),
               )
               
             ],
@@ -231,9 +230,9 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
     );
   }
   void _onUpdate(TruckCommon entity, Router router, BuildContext context) async {
-    TrucksServiceI trucksService = Injector.get();
+    TrucksServiceI trucksService = InjectorUtils.get();
 
-    List<EntityInvalidation<TruckCommon>> invalidations = entity.evaluate();
+    List<EntityErrors<TruckCommon>> invalidations = entity.evaluate(<EntityErrors<TruckCommon>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -261,7 +260,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<TruckCommon>(
             () => TruckCommon(),
           ),
@@ -278,7 +277,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -295,9 +294,9 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -876,7 +875,7 @@ final class TrucksEntityTableAdapter extends FoundationEntityTableAdapterB<Truck
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [TruckCommon] {entity}, also handles basic available behavior.
-final class TrucksEntityTable extends FoundationEntityTableB<TrucksEntityTableAdapter> {
+final class TrucksEntityTable extends FoundationEntityTableB<TruckCommon, TrucksEntityTableAdapter> {
   /// Creates a new [TrucksEntityTable] instance.
   const TrucksEntityTable({
     required super.adapter,
@@ -884,38 +883,36 @@ final class TrucksEntityTable extends FoundationEntityTableB<TrucksEntityTableAd
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<TruckCommon, TrucksServiceI>(
-      entityFactory: () => TruckCommon(),
+    return EntityTable<TruckCommon, ResponseResolverBase<ViewOutput<TruckCommon>>, TrucksServiceI>(
+      factory: () => TruckCommon(),
       ranges: <int>[3],
       adapter: adapter,
-      columns: <EntityTableColumnOptions<TruckCommon>>[
+      columns: <EntityTableColumnData<TruckCommon>>[
         /// --> Economic column
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnData<TruckCommon>(
           title: 'Economic',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.economic,
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnData<TruckCommon>(
           title: 'Ownership',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.internal != null? 'Own' : 'External',
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnData<TruckCommon>(
           title: 'Status',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.status.name,
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnData<TruckCommon>(
           title: 'Situation',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.situation?.name ?? '---',
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnData<TruckCommon>(
           title: 'Location',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.location?.name ?? '---',
         ),
-        EntityTableColumnOptions<TruckCommon>(
+        EntityTableColumnData<TruckCommon>(
           title: 'Plates',
           factory: (TruckCommon entity, int index, BuildContext buildContext) => entity.plates,
         ),
-        
-        
       ],
     );
   }

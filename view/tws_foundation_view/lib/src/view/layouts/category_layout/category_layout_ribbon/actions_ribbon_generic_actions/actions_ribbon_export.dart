@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
+import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/_actions_ribbon_export_mobile.dart'
     if (dart.library.html) 'package:tws_foundation_view/src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/_actions_ribbon_export_web.dart';
-import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
-/// Draws a generic {Refresh} action button for [CategoryLayoutPageI] acitons ribbon. 
-final class ActionsRibbonExport<TEntity extends EntityI<TEntity>, TService extends ExportServiceI<TEntity>> extends ActionsRibbonActionB {
+/// Draws a generic {Refresh} action button for [ICategoryLayoutPage] acitons ribbon. 
+final class ActionsRibbonExport<TEntity extends IEntity<TEntity>, TService extends ExportServiceI<TEntity>> extends ActionsRibbonActionBase {
   /// Callback invoked when the action is requested.
   final FutureOr<void> Function()? onExport;
 
@@ -30,17 +30,16 @@ final class ActionsRibbonExport<TEntity extends EntityI<TEntity>, TService exten
   }
 
   @override
-  FutureOr<void> perform() {
-    onExport?.call();
-    _export();
-    
-  }
-
-  @override
-  Icon composeIcon(Color foreColor) {
+  Icon composeIcon(Color fgColor) {
     return Icon(
       Icons.import_export,
-      color: foreColor,
+      color: fgColor,
     );
+  }
+  
+  @override
+  FutureOr<void> perform(BuildContext context) {
+    onExport?.call();
+    _export();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:camera_platform_interface/camera_platform_interface.dart';
+import 'package:csm_view/csm_view.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
 
 /// [FileSelector] Widget that shows a dialog (web or mobile) to select one or multiple specified extension files.
 class FileSelector extends StatefulWidget {

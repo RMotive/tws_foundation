@@ -1,7 +1,7 @@
 part of 'locations_page_create_whisper.dart';
 
 /// Address state class.
-class _AddresState extends ReactorB {}
+class _AddresState extends ReactorBase {}
 
 _AddresState _addresState = _AddresState();
 // ignore: unused_element

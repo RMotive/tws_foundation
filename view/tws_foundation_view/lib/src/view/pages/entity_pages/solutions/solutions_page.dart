@@ -2,34 +2,31 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/solutions/solutions_page_create_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [SectionsPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [SectionsPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class SolutionsCategoryPage extends EntityCategoryPageB<SolutionsEntityTableAdapter> {
+final class SolutionsCategoryPage extends EntityCategoryPageB<Solution, SolutionsEntityTableAdapter> {
   /// Creates a new [SolutionsCategoryPage] instance.
   SolutionsCategoryPage({
     super.cusRoute,
   }) : super(
          title: 'Solutions',
-         route: FoundationRoutes.solutionsPageRoute,
+         routeData: FoundationRoutes.solutionsPageRoute,
        );
 
   @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.solutionsCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext _, RouteData _) {
-          return SolutionsPageCreateWhisper();
-        },
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => SolutionsPageCreateWhisper(),
       ),
     ];
   }
@@ -42,21 +39,21 @@ final class SolutionsCategoryPage extends EntityCategoryPageB<SolutionsEntityTab
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(SolutionsEntityTableAdapter adapter) {
-    return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(SolutionsEntityTableAdapter adapter) {
+    return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
       ActionsRisbbonCreate(
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.solutionsCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.solutionsCreateWhisperRoute);
         },
       ),
     ];
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(_, Color? recomdColor) {
     return Icon(
       Icons.account_tree_outlined,
       color: recomdColor,
@@ -64,7 +61,7 @@ final class SolutionsCategoryPage extends EntityCategoryPageB<SolutionsEntityTab
   }
 
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return SolutionsPage(
       adapter: adapter,
     );
@@ -73,8 +70,8 @@ final class SolutionsCategoryPage extends EntityCategoryPageB<SolutionsEntityTab
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [Solution] business entity to interact and manage data related with it.
-final class SolutionsPage extends EntityPageB<SolutionsEntityTableAdapter> {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [Solution] business entity to interact and manage data related with it.
+final class SolutionsPage extends EntityViewPageBase<Solution, SolutionsEntityTableAdapter> {
   /// Creates a new [SolutionsPage] instance.
   SolutionsPage({
     required super.adapter,

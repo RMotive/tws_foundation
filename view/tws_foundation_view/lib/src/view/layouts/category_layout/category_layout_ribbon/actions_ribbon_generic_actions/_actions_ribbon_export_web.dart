@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:typed_data';
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -15,12 +15,12 @@ typedef ActionsRibbonExportAction = ActionsRibbonExportWeb;
 /// 
 /// Handles the web specific export logic for [ActionsRibbonExport].
 class ActionsRibbonExportWeb {
-  void export<TEntity extends EntityI<TEntity>, TService extends ExportServiceI<TEntity>>(
+  void export<TEntity extends IEntity<TEntity>, TService extends ExportServiceI<TEntity>>(
     ViewInput<TEntity> Function() exportView,
   ) async {
     /// Getting services.
-    TService service = Injector.get();
-    SessionStorageI sessionStorage = Injector.get();
+    TService service = InjectorUtils.get();
+    SessionStorageI sessionStorage = InjectorUtils.get();
     String token = sessionStorage.token;
 
     /// Consuming the view to export.

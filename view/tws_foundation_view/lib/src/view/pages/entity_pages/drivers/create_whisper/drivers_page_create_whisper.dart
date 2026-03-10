@@ -17,14 +17,14 @@ part 'create_internal_driver/_create_whisper_drivers_section.dart';
 part 'create_internal_driver/_create_whisper_employee_section.dart';
 
 /// Driver section state class.
-final class _DriverSectionState extends ReactorB {}
+final class _DriverSectionState extends ReactorBase {}
 final _DriverSectionState _driverSectionState = _DriverSectionState();
 void Function() _driverSectionStateReact = (){};
 
 Status _defaultStatus = Status();
 
 /// {whisper} class.
-final class DriversPageCreateWhisper extends PageB {
+final class DriversPageCreateWhisper extends ViewPageBase {
 
   /// Creates a new [DriversPageCreateWhisper] instance.
   const DriversPageCreateWhisper();
@@ -40,250 +40,251 @@ final class DriversPageCreateWhisper extends PageB {
       },
       child:(GlobalKey<FormState> formState) {
         return CreateEntityForm<DriverCommon, DriversServiceI>(
-          entityFactory: () => DriverCommon(),
+          factory: () => DriverCommon(),
           controller: creationController,
-          buildEntityTag:(DriverCommon entity) {
-            return ' Driver with license: ${entity.license}';
+          authFactory: (BuildContext context) {
+            SessionStorage sessionStorage = InjectorUtils.get();
+            return sessionStorage.token;
           },
           recordDesigner: (DriverCommon entity, bool selected, bool valid) {
-            List<CreateEntityFormRecordField> commonFields = <CreateEntityFormRecordField>[
+            List<CreateEntityFormRecordField<Object>> commonFields = <CreateEntityFormRecordField<Object>>[
               /// --> Driver ownership type
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: 'Ownership',
                 value: entity.internal != null ? 'Own' : 'External',
               ),
 
               /// --> Driver License
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: '*License',
                 value: entity.license,
               ),
 
               /// --> Driver Situation
               if(entity.situation != null)
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: '*Situation',
-                value: entity.situation!.name.isEmpty ? "---" : entity.situation!.name,
+                value: entity.situation?.name ,
               ),
 
               /// --> Driver Status
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: '*Status',
-                value: entity.status.name.isEmpty ? "---" : entity.status.name,
+                value: entity.status.name,
               ),
             ];
 
             if(entity.internal != null) {
               return CreateEntityFormRecord(
                 selected: selected,
-                fields: <CreateEntityFormRecordField>[
+                fields: <CreateEntityFormRecordField<Object>>[
                   /// --> Adding common fields.
                   ...commonFields,
 
                   /// --> Driver name
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*Name',
-                    value: entity.internal?.employee.identification.name ?? "---",
+                    value: entity.internal?.employee.identification.name,
                   ),
 
                   /// --> Driver lastname
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*First lastname',
-                    value: entity.internal?.employee.identification.firstLastName ?? "---",
+                    value: entity.internal?.employee.identification.firstLastName,
                   ),
 
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Second lastname',
-                    value: entity.internal?.employee.identification.secondLastName ?? "---",
+                    value: entity.internal?.employee.identification.secondLastName,
                   ),
 
                   /// --> Driver Type
                   if(entity.internal?.driverType != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Type',
-                    value: entity.internal!.driverType.cleaned ?? '---',
+                    value: entity.internal?.driverType.cleaned,
                   ),
 
                   /// --> License expiration date
                   if(entity.internal?.licenseExpiration != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'License Expiration',
-                    value: entity.internal?.licenseExpiration?.dateOnly ?? '---',
+                    value: entity.internal?.licenseExpiration?.dateOnly,
                   ),
 
                   /// --> Driver VISA number
                   if(entity.internal?.visa != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'VISA',
-                    value: entity.internal!.visa ?? '---',
+                    value: entity.internal?.visa,
                   ),
 
                   /// --> Driver VISA expiration date
                   if(entity.internal?.visaExpiration != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'VISA Expiration',
-                    value: entity.internal?.visaExpiration?.dateOnly ?? '---',
+                    value: entity.internal?.visaExpiration?.dateOnly,
                     ),
 
                   /// --> Driver FAST number
                    if(entity.internal?.fast != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'FAST',
-                    value: entity.internal!.fast ?? '---',
+                    value: entity.internal?.fast,
                   ),
 
                   /// --> Driver FAST expiration date
                   if(entity.internal?.fastExpiration != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'FAST Expiration',
-                    value: entity.internal?.fastExpiration?.dateOnly ?? '---',
+                    value: entity.internal?.fastExpiration?.dateOnly,
                   ),
 
                   /// --> Driver ANAM number
                   if(entity.internal?.anam != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'ANAM',
-                    value: entity.internal!.anam.cleaned ?? '---',
+                    value: entity.internal?.anam.cleaned,
                   ),
 
                   /// --> Driver ANAM expiration date
                   if(entity.internal?.anamExpiration != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'ANAM Expiration',
-                    value: entity.internal?.anamExpiration?.dateOnly ?? '---',
+                    value: entity.internal?.anamExpiration?.dateOnly,
                   ),
 
                   /// --> Driver TWIC number
                   if(entity.internal?.twic != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'TWIC',
-                    value: entity.internal!.twic.cleaned ?? '---',
+                    value: entity.internal?.twic.cleaned,
                   ),
 
                   /// --> Driver TWIC expiration date
                   if(entity.internal?.twicExpiration != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'TWIC Expiration',
-                    value: entity.internal?.twicExpiration?.dateOnly ?? '---',
+                    value: entity.internal?.twicExpiration?.dateOnly,
                   ),
 
                   /// --> Driver pull notice registration date
                   if (entity.internal?.pullNoticeRegistrationDate != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Pull notice reg.',
-                    value: entity.internal?.pullNoticeRegistrationDate?.dateOnly ?? '---',
+                    value: entity.internal?.pullNoticeRegistrationDate?.dateOnly,
                   ),
 
                   /// --> Driver pull notice registration date
                   if (entity.internal?.drugAlcRegistrationDate != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Drug. Alc. reg.',
-                    value: entity.internal?.drugAlcRegistrationDate?.dateOnly ?? '---',
+                    value: entity.internal?.drugAlcRegistrationDate?.dateOnly,
                   ),
 
                   /// --> Driver CNAP date
                   if (entity.internal?.employee.dates.cnap != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'CNAP dates',
-                    value: entity.internal?.employee.dates.cnap?.dateOnly ?? '---',
+                    value: entity.internal?.employee.dates.cnap?.dateOnly,
                   ),
 
                   /// --> Driver hire date
                   if (entity.internal?.employee.dates.hire != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Hire date',
-                    value: entity.internal?.employee.dates.hire?.dateOnly ?? '---',
+                    value: entity.internal?.employee.dates.hire?.dateOnly,
                   ),
 
                   /// --> Driver imss date
                   if (entity.internal?.employee.dates.imss != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'imss reg. date',
-                    value: entity.internal?.employee.dates.imss?.dateOnly ?? '---',
+                    value: entity.internal?.employee.dates.imss?.dateOnly,
                   ),
 
                   /// --> Driver imss date
                   if (entity.internal?.employee.dates.termination != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'termination date',
-                    value: entity.internal?.employee.dates.termination?.dateOnly ?? '---',
+                    value: entity.internal?.employee.dates.termination?.dateOnly,
                   ),
 
                   /// --> Driver Email
                   if(entity.internal?.employee.approach?.email != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*Email',
-                    value: entity.internal!.employee.approach!.email.cleaned ?? '---',
+                    value: entity.internal?.employee.approach?.email.cleaned,
                   ),
 
                   /// --> Driver enterprise phone number
                   if(entity.internal?.employee.approach?.enterprise != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Enterprise phone',
-                    value: entity.internal!.employee.approach!.enterprise.cleaned ?? '---',
+                    value: entity.internal?.employee.approach?.enterprise.cleaned,
                   ),
 
                   /// --> Driver personal phone number
                   if(entity.internal?.employee.approach?.personal != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Personal number',
-                    value: entity.internal!.employee.approach!.personal.cleaned ?? '---',
+                    value: entity.internal?.employee.approach?.personal.cleaned,
                   ),
 
                   /// --> Driver alternative contact.
                   if(entity.internal?.employee.approach?.alternative != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Alternative contact',
-                    value: entity.internal!.employee.approach!.alternative.cleaned ?? '---',
+                    value: entity.internal?.employee.approach?.alternative.cleaned,
                   ),
 
                   /// --> Driver address.
                   if(entity.internal?.employee.address?.country != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*Country',
-                    value: entity.internal!.employee.address!.country.cleaned ?? '---',
+                    value: entity.internal?.employee.address?.country.cleaned,
                   ),
 
                   /// --> State address.
                   if(entity.internal?.employee.address?.state != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'State',
-                    value: entity.internal!.employee.address!.state.cleaned ?? '---', 
+                    value: entity.internal?.employee.address?.state.cleaned, 
                   ),
 
                   /// --> Street address.
                   if(entity.internal?.employee.address?.street != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Street',
-                    value: entity.internal!.employee.address!.street.cleaned ?? '---',
+                    value: entity.internal?.employee.address?.street.cleaned,
                   ),
 
                   /// --> Alternative Street.
                   if(entity.internal?.employee.address?.altStreet != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Alt. Street',
-                    value: entity.internal!.employee.address!.altStreet ?? '---',
+                    value: entity.internal?.employee.address?.altStreet,
                   ),
 
                   /// --> Driver City.
                   if(entity.internal?.employee.address?.city != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'City',
-                    value: entity.internal!.employee.address!.city.cleaned ?? '---',
+                    value: entity.internal?.employee.address?.city.cleaned,
                   ),
 
                   /// --> ZIP.
                   if(entity.internal?.employee.address?.zip != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'ZIP',
-                    value: entity.internal!.employee.address!.zip.cleaned ?? '---',
+                    value: entity.internal?.employee.address?.zip.cleaned,
                   ),
 
                   /// --> Subdivision.
                   if(entity.internal?.employee.address?.subdivision != null)
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Subdivision',
-                    value: entity.internal!.employee.address!.subdivision ?? '---',
+                    value: entity.internal?.employee.address?.subdivision.cleaned,
                   ),
                 ],
               );
@@ -291,162 +292,157 @@ final class DriversPageCreateWhisper extends PageB {
 
             return CreateEntityFormRecord(
               selected: selected,
-              fields: <CreateEntityFormRecordField>[
+              fields: <CreateEntityFormRecordField<Object>>[
                 
                 ...commonFields,
 
                 /// --> Driver License
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*License',
-                  value: entity.license,
+                  value: entity.license.cleaned,
                 ),
                 
                 /// --> Driver name
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*Name',
-                  value: entity.external?.identification.name ?? "---",
+                  value: entity.external?.identification.name.cleaned,
                 ),
 
                 /// --> Driver lastname
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*First lastname',
-                  value: entity.external?.identification.firstLastName ?? "---",
+                  value: entity.external?.identification.firstLastName.cleaned,
                 ),
 
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Second lastname',
-                  value: entity.external?.identification.secondLastName ?? "---",
+                  value: entity.external?.identification.secondLastName.cleaned,
                 ),
 
                 /// --> Driver Birthday
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Birthday',
-                  value: entity.external?.identification.birthDay?.dateOnly ?? "---",
+                  value: entity.external?.identification.birthDay?.dateOnly,
                 ),
 
               ],
             );
             
           },
-          formDesigner: (CreateEntityFormRecordReactor<DriverCommon>? itemState) {
+          formDesigner: (CreateEntityFormRecordReactor<DriverCommon>? itemState, ScrollController scrollController) {
             final bool formDisabled = !(itemState == null);
             if(formDisabled && itemState.entity.internal == null && itemState.entity.external == null) {
               itemState.entity.internal = Driver();
             }
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: SingleChildScrollView(
-                child: Column(
-                  spacing: 12,
-                  children: <Widget>[
-                    /// --> Ownership Type
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: OptionsSelector<bool>(
-                        title: 'Ownership',
-                        preSelected: <bool>[
-                          itemState?.entity.external != null ? false : true,
-                        ],
-                        options: <OptionsSelectorOption<bool>>[
-                          OptionsSelectorOption<bool>(
-                            title: 'Own',
-                            value: true,
-                          ),
-                          OptionsSelectorOption<bool>(
-                            title: 'External',
-                            value: false,
-                          ),
-                        ],
-                        onSelect: (List<bool> selected) {
-                          DriverCommon common = itemState!.entity;
-                          if (selected.isNotEmpty && selected.first) {
-                            common.internal = Driver();
-                            common.external = null;
-                          } else {
-                            common.internal = null;
-                            common.external = DriverExternal();
-                          }
-                          _driverSectionStateReact();
-                          itemState.react();
-                        },
+            return Column(
+              spacing: 12,
+              children: <Widget>[
+                /// --> Ownership Type
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: OptionsSelector<bool>(
+                    title: 'Ownership',
+                    preSelected: <bool>[
+                      itemState?.entity.external != null ? false : true,
+                    ],
+                    options: <OptionsSelectorOption<bool>>[
+                      OptionsSelectorOption<bool>(
+                        title: 'Own',
+                        value: true,
                       ),
-                    ),
-                    TextInput(
-                      width: double.maxFinite,
-                      label: '*License',
-                      isEnabled: formDisabled,
-                      maxLength: 12,
-                      controller: TextEditingController(
-                        text: itemState?.entity.license,
+                      OptionsSelectorOption<bool>(
+                        title: 'External',
+                        value: false,
                       ),
-                      onChanged: (String text) {
-                        DriverCommon common = itemState!.entity;
-                        common.license = text;
-                        itemState.react();
-                      },
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Expanded>[
-                        Expanded(
-                          child: EntityFinderSelector<Situation, SituationsServiceI>(
-                            entityBuilder: () => Situation(),
-                            label: '*Assing a situation...',
-                            enabled:true,
-                            initialValue: itemState?.entity.situation,
-                            textBuilder: (Situation situation) {
-                              return situation.name.cleaned ?? '---';
-                            },
-                            onSelected: (Situation? situation) {
-                              itemState?.entity.situation = situation ?? Situation();
-                              itemState?.react();
-                            },
-                          ), 
-                        ),
-                        Expanded(
-                          child: EntityFinderSelector<Status, StatusesServiceI>(
-                            entityBuilder: () => Status(),
-                            label: '*Assing an status...',
-                            enabled:true,
-                            initialValue: itemState?.entity.status,
-                            textBuilder: (Status status) {
-                              return status.name;
-                            },
-                            onSelected: (Status? status) {
-                              itemState?.entity.status = status ?? Status();
-                              // Setting default status values
-                              _defaultStatus = status ?? Status();
-                              itemState?.entity.internal?.employee.status = status ?? Status();
-                              itemState?.entity.internal?.employee.approach?.status = status ?? Status();
-                              itemState?.react();
-                            },
-                          ), 
-                        ),
-                      ],
-                    ),
-                    const SectionDivider(
-                      text: 'Driver Information',
-                    ),
-                    // --> Driver edge Section
-                    ReactiveWidget<_DriverSectionState>(
-                      reactor: _driverSectionState,
-                      builder: (BuildContext ctx, _DriverSectionState reactor) {
-                        _driverSectionStateReact = reactor.react;
-                        return itemState?.entity.external != null? 
-                          _CreateWhisperDriversExternalsSection(
-                            itemState: itemState,
-                            isDisabled: formDisabled,
-                          ) : _CreateWhisperDriversSection(
-                            itemState: itemState,
-                            isEnabled: formDisabled,
-                          );
-                      },
-                    )
-                  ],
-                  
-
+                    ],
+                    onSelect: (List<bool> selected) {
+                      DriverCommon common = itemState!.entity;
+                      if (selected.isNotEmpty && selected.first) {
+                        common.internal = Driver();
+                        common.external = null;
+                      } else {
+                        common.internal = null;
+                        common.external = DriverExternal();
+                      }
+                      _driverSectionStateReact();
+                      itemState.react();
+                    },
+                  ),
                 ),
-              ),
+                TextInput(
+                  width: double.maxFinite,
+                  label: '*License',
+                  isEnabled: formDisabled,
+                  maxLength: 12,
+                  controller: TextEditingController(
+                    text: itemState?.entity.license,
+                  ),
+                  onChanged: (String text) {
+                    DriverCommon common = itemState!.entity;
+                    common.license = text;
+                    itemState.react();
+                  },
+                ),
+                Row(
+                  spacing: 10,
+                  children: <Expanded>[
+                    Expanded(
+                      child: EntityFinderSelector<Situation, SituationsServiceI>(
+                        entityBuilder: () => Situation(),
+                        label: '*Assing a situation...',
+                        enabled:true,
+                        initialValue: itemState?.entity.situation,
+                        textBuilder: (Situation situation) {
+                          return situation.name.cleaned ?? '---';
+                        },
+                        onSelected: (Situation? situation) {
+                          itemState?.entity.situation = situation ?? Situation();
+                          itemState?.react();
+                        },
+                      ), 
+                    ),
+                    Expanded(
+                      child: EntityFinderSelector<Status, StatusesServiceI>(
+                        entityBuilder: () => Status(),
+                        label: '*Assing an status...',
+                        enabled:true,
+                        initialValue: itemState?.entity.status,
+                        textBuilder: (Status status) {
+                          return status.name;
+                        },
+                        onSelected: (Status? status) {
+                          itemState?.entity.status = status ?? Status();
+                          // Setting default status values
+                          _defaultStatus = status ?? Status();
+                          itemState?.entity.internal?.employee.status = status ?? Status();
+                          itemState?.entity.internal?.employee.approach?.status = status ?? Status();
+                          itemState?.react();
+                        },
+                      ), 
+                    ),
+                  ],
+                ),
+                const SectionDivider(
+                  text: 'Driver Information',
+                ),
+                // --> Driver edge Section
+                ReactiveWidget<_DriverSectionState>(
+                  reactor: _driverSectionState,
+                  builder: (BuildContext ctx, _DriverSectionState reactor) {
+                    _driverSectionStateReact = reactor.react;
+                    return itemState?.entity.external != null? 
+                      _CreateWhisperDriversExternalsSection(
+                        itemState: itemState,
+                        isDisabled: formDisabled,
+                      ) : _CreateWhisperDriversSection(
+                        itemState: itemState,
+                        isEnabled: formDisabled,
+                      );
+                  },
+                )
+              ],
+              
+                        
             );
           },
         );

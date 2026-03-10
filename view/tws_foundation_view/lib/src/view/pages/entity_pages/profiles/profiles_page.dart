@@ -1,35 +1,33 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/profiles/profiles_page_create_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [ProfilesPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [ProfilesPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class ProfilesCategoryPage extends EntityCategoryPageB<ProfilesEntityTableAdapter> {
+final class ProfilesCategoryPage extends EntityCategoryPageB<Profile, ProfilesEntityTableAdapter> {
   /// Creates a new [ProfilesCategoryPage] instance.
   ProfilesCategoryPage({
     super.cusRoute,
   }) : super(
          title: 'Profiles',
-         route: FoundationRoutes.profilesPageRoute,
+         routeData: FoundationRoutes.profilesPageRoute,
        );
 
   @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.profilesCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext _, RouteData _) {
-          return ProfilesPageCreateWhisper();
-        },
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => ProfilesPageCreateWhisper(),
+
       ),
     ];
   }
@@ -42,21 +40,21 @@ final class ProfilesCategoryPage extends EntityCategoryPageB<ProfilesEntityTable
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(ProfilesEntityTableAdapter adapter) {
-     return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(ProfilesEntityTableAdapter adapter) {
+     return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
       ActionsRisbbonCreate(
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.profilesCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.profilesCreateWhisperRoute);
         },
       ),
     ];
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(_, Color? recomdColor) {
     return Icon(
       Icons.switch_account,
       color: recomdColor,
@@ -64,7 +62,7 @@ final class ProfilesCategoryPage extends EntityCategoryPageB<ProfilesEntityTable
   }
 
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return ProfilesPage(
       adapter: adapter,
     );
@@ -73,8 +71,8 @@ final class ProfilesCategoryPage extends EntityCategoryPageB<ProfilesEntityTable
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [Profile] business entity to interact and manage data related with it.
-final class ProfilesPage extends EntityPageB<ProfilesEntityTableAdapter> {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [Profile] business entity to interact and manage data related with it.
+final class ProfilesPage extends EntityViewPageBase<Profile, ProfilesEntityTableAdapter> {
   /// Creates a new [ProfilesPage] instance.
   ProfilesPage({
     required super.adapter,

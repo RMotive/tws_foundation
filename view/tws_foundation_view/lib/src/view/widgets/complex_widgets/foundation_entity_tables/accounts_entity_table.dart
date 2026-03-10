@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -9,7 +9,6 @@ import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/list_viewer/list_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/selectable_list.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -28,22 +27,22 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
     return EntityTableViewer(
       children: <Widget>[
         /// --> User
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Timestamp',
           value: entity.timestamp.dateOnly,
         ),
         /// --> User
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'User',
           value: entity.user,
         ),
         /// --> Password
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Password',
           value: entity.password,
         ),
         /// --> Password
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Wildcard',
           value: entity.wildcard? 'Yes' : 'No',
         ),
@@ -53,22 +52,22 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
         ),
 
         /// --> Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.contact.name,
         ),
          /// --> Lastname
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Lastname',
           value: entity.contact.lastName,
         ),
         /// --> Email
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Email',
           value: entity.contact.eMail,
         ),
         /// --> Phone
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Phone',
           value: entity.contact.phone,
         ),
@@ -100,18 +99,18 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
   EntityTableAdapterEditor<Account>? composeEditor() {
 
     return EntityTableAdapterEditor<Account>(
-      onUpdate: (BuildContext buildContext, Account entity) {
-        final Router router = Injector.get();
-
+      onUpdate: (EntityTableAdapterEditorData<Account> data) {
+        final Router router = InjectorUtils.get();
+ 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
-          builder: (BuildContext context) => _buildUpdateDialog(entity, router, context),
+          builder: (BuildContext context) => _buildUpdateDialog(data.entity, router, context),
         );
       },
 
-      formBuilder: (BuildContext buildContext, Account entity) {
+      formBuilder: (EntityTableAdapterEditorData<Account> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -126,7 +125,7 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 label: 'Timestamp',
                 isEnabled: false,
                 controller: TextEditingController(
-                  text: entity.timestamp.fullDate,
+                  text: data.entity.timestamp.fullDate,
                 ),
               ),
 
@@ -135,10 +134,10 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 label: '*Username',
                 maxLength: 50,
                 controller: TextEditingController(
-                  text: entity.user,
+                  text: data.entity.user,
                 ),
                 onChanged: (String text) {
-                  entity.user = text;
+                  data.entity.user = text;
                 },
               ),
 
@@ -146,16 +145,16 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 width: double.infinity,
                 label: '*Password',
                 controller: TextEditingController(
-                  text: entity.password,
+                  text: data.entity.password,
                 ),
                 onChanged: (String text) {
-                  entity.password = text;
+                  data.entity.password = text;
                 },
               ),
 
               OptionsSelector<bool>(
                 title: 'Wildcard',
-                preSelected: <bool>[entity.wildcard],
+                preSelected: <bool>[data.entity.wildcard],
                 options: <OptionsSelectorOption<bool>>[
                   OptionsSelectorOption<bool>(
                     title: 'Yes',
@@ -167,7 +166,7 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                   ),
                 ],
                 onSelect:(List<bool> selected) {
-                  entity.wildcard = selected.isNotEmpty ? selected.first : false;
+                  data.entity.wildcard = selected.isNotEmpty ? selected.first : false;
                 },
               ),
 
@@ -181,10 +180,10 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 label: '*Name',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.contact.name,
+                  text: data.entity.contact.name,
                 ),
                 onChanged: (String text) {
-                  entity.contact.name = text;
+                  data.entity.contact.name = text;
                 },
               ),
 
@@ -193,10 +192,10 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 label: '*Lastname',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.contact.lastName,
+                  text: data.entity.contact.lastName,
                 ),
                 onChanged: (String text) {
-                  entity.contact.lastName = text;
+                  data.entity.contact.lastName = text;
                 },
               ),
 
@@ -205,10 +204,10 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 label: '*Email',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.contact.eMail,
+                  text: data.entity.contact.eMail,
                 ),
                 onChanged: (String text) {
-                  entity.contact.eMail = text;
+                  data.entity.contact.eMail = text;
                 },
               ),
 
@@ -217,10 +216,10 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 label: '*Phone',
                 maxLength: 14,
                 controller: TextEditingController(
-                  text: entity.contact.phone,
+                  text: data.entity.contact.phone,
                 ),
                 onChanged: (String text) {
-                  entity.contact.phone = text;
+                  data.entity.contact.phone = text;
                 },
               ),
               /// --> Security access level
@@ -232,7 +231,7 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 heigth: 350,
                 title: 'Available Profiles',
                 entityBuilder: () => Profile(),
-                initialValues: entity.profiles,
+                initialValues: data.entity.profiles,
                 tileTitle: (Profile profile) => profile.name, 
                 onSelect: (bool selected, Profile item) {  },
               ),
@@ -241,7 +240,7 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 heigth: 350,
                 title: 'Available Permits',
                 entityBuilder: () => Permit(),
-                initialValues: entity.permits,
+                initialValues: data.entity.permits,
                 tileTitle: (Permit permit) => '${permit.solution.name} - ${permit.name}', 
                 onSelect: (bool selected, Permit item) {  },
               ),
@@ -252,9 +251,9 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
     );
   }
   void _onUpdate(Account entity, Router router, BuildContext context) async {
-    AccountServiceI accountsService = Injector.get();
+    AccountServiceI accountsService = InjectorUtils.get();
 
-    List<EntityInvalidation<Account>> invalidations = entity.evaluate();
+    List<EntityErrors<Account>> invalidations = entity.evaluate(<EntityErrors<Account>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -282,7 +281,7 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<Account>(
             () => Account(),
           ),
@@ -299,7 +298,7 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -316,9 +315,9 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -383,7 +382,7 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Account] {entity}, also handles basic available behavior.
-final class AccountsEntityTable extends FoundationEntityTableB<AccountsEntityTableAdatper> {
+final class AccountsEntityTable extends FoundationEntityTableB<Account, AccountsEntityTableAdatper> {
   /// Creates a new [AccountsEntityTable] instance.
   const AccountsEntityTable({
     required super.adapter,
@@ -391,42 +390,42 @@ final class AccountsEntityTable extends FoundationEntityTableB<AccountsEntityTab
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Account, AccountServiceI>(
-      entityFactory: () => Account(),
+    return EntityTable<Account, FoundationResponseResolver<ViewOutput<Account>>, AccountServiceI>(
+      factory: () => Account(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<Account>>[
+      columns: <EntityTableColumnData<Account>>[
         /// --> User
-        EntityTableColumnOptions<Account>(
+        EntityTableColumnData<Account>(
           title: 'User',
           factory: (Account entity, int index, BuildContext buildContext) => entity.user,
         ),
          /// --> Wildcard
-        EntityTableColumnOptions<Account>(
+        EntityTableColumnData<Account>(
           title: 'Wildcard',
           factory: (Account entity, int index, BuildContext buildContext) => entity.wildcard? 'Yes' : 'No',
         ),
         /// --> Name
-        EntityTableColumnOptions<Account>(
+        EntityTableColumnData<Account>(
           title: 'Name',
           factory: (Account entity, int index, BuildContext buildContext) => entity.contact.name,
         ),
         /// --> lastname
-        EntityTableColumnOptions<Account>(
+        EntityTableColumnData<Account>(
           title: 'Lastname',
           factory: (Account entity, int index, BuildContext buildContext) => entity.contact.lastName,
         ),
         /// --> Email
-        EntityTableColumnOptions<Account>(
+        EntityTableColumnData<Account>(
           title: 'Email',
           factory: (Account entity, int index, BuildContext buildContext) => entity.contact.eMail,
         ),
         /// --> Profiles
-        EntityTableColumnOptions<Account>(
+        EntityTableColumnData<Account>(
           title: 'Profiles',
           factory: (Account entity, int index, BuildContext buildContext) => entity.profiles.length.toString(),
         ),
         /// --> Permits
-        EntityTableColumnOptions<Account>(
+        EntityTableColumnData<Account>(
           title: 'Permits',
           factory: (Account entity, int index, BuildContext buildContext) => entity.permits.length.toString(),
         ),

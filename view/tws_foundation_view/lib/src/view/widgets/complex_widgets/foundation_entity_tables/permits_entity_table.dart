@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -9,7 +9,6 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -28,37 +27,37 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
       children: <Widget>[
 
         /// --> Timestamp
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Timestamp',
           value: entity.timestamp.fullDate,
         ),
 
         /// --> Reference
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Reference code',
           value: entity.reference,
         ),
 
         /// --> Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.name,
         ),
 
         /// --> Description
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Description',
           value: entity.description ?? '---',
         ),
 
         /// --> Email
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Enabled',
           value: entity.enabled? 'Yes' : 'No',
         ),
 
         /// --> Solution 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Solution',
           value: entity.solution.name,
         ),
@@ -66,13 +65,13 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
         SectionDivider(text: 'Feature details'),
 
         /// --> Feature name 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Feature',
           value: entity.feature.name,
         ),
 
         /// --> Feature enabled status
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Feature enabled',
           value: entity.feature.enabled? 'Yes' : 'No',
         ),
@@ -80,13 +79,13 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
         SectionDivider(text: 'Action details'),
 
         /// --> Action name 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Action',
           value: entity.action.name,
         ),
 
         /// --> Action enabled status
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Action enabled',
           value: entity.action.enabled? 'Yes' : 'No',
         ),
@@ -98,18 +97,18 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
   EntityTableAdapterEditor<Permit>? composeEditor() {
 
     return EntityTableAdapterEditor<Permit>(
-      onUpdate: (BuildContext buildContext, Permit entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<Permit> data) {
+        final Router router = InjectorUtils.get();
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
-          builder: (BuildContext context) => _buildUpdateDialog(entity, router, context),
+          builder: (BuildContext context) => _buildUpdateDialog(data.entity, router, context),
         );
       },
 
-      formBuilder:(BuildContext buildContext, Permit entity) {
+      formBuilder:(EntityTableAdapterEditorData<Permit> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -121,12 +120,12 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
                 label: 'Timestamp',
                 isEnabled: false,
                 controller: TextEditingController(
-                  text: entity.timestamp.fullDate,
+                  text: data.entity.timestamp.fullDate,
                 ),
               ),
               OptionsSelector<bool>(
                 title: 'Enabled',
-                preSelected: <bool>[entity.enabled],
+                preSelected: <bool>[data.entity.enabled],
                 options:  <OptionsSelectorOption<bool>>[
                   OptionsSelectorOption<bool>(
                     title: 'Yes',
@@ -138,7 +137,7 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
                   ),
                 ],
                 onSelect: (List<bool> selected) {
-                  entity.enabled = selected.firstOrNull ?? false;
+                  data.entity.enabled = selected.firstOrNull ?? false;
                 },
               ),
               TextInput(
@@ -147,10 +146,10 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
                 maxLength: 8,
                 isFixedLength: true,
                 controller: TextEditingController(
-                  text: entity.reference,
+                  text: data.entity.reference,
                 ),
                 onChanged: (String text) {
-                  entity.reference = text;
+                  data.entity.reference = text;
                 },
               ),
               TextInput(
@@ -158,10 +157,10 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
                 label: '*Name',
                 maxLength: 100,
                 controller: TextEditingController(
-                  text: entity.name,
+                  text: data.entity.name,
                 ),
                 onChanged: (String text) {
-                  entity.name = text;
+                  data.entity.name = text;
                 },
               ),
               TextInput(
@@ -169,43 +168,43 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
                 label: 'Description',
                 maxLength: 200,
                 controller: TextEditingController(
-                  text: entity.description,
+                  text: data.entity.description,
                 ),
                 onChanged: (String text) {
-                  entity.description = text.cleaned;
+                  data.entity.description = text.cleaned;
                 },
               ),
               EntityFinderSelector<Solution, SolutionsServiceI>(
                 entityBuilder: () => Solution(),
                 label: '*Select a Solution...',
-                initialValue: entity.solution,
+                initialValue: data.entity.solution,
                 textBuilder: (Solution solution) {
                   return solution.name;
                 },
                 onSelected: (Solution? solution) {
-                  entity.solution = solution ?? Solution();
+                  data.entity.solution = solution ?? Solution();
                 },
               ),
               EntityFinderSelector<Feature, FeaturesServiceI>(
                 entityBuilder: () => Feature(),
                 label: '*Select a Feature...',
-                initialValue: entity.feature,
+                initialValue: data.entity.feature,
                 textBuilder: (Feature feature) {
                   return feature.name;
                 },
                 onSelected: (Feature? feature) {
-                  entity.feature = feature ?? Feature();
+                  data.entity.feature = feature ?? Feature();
                 },
               ),
               EntityFinderSelector<Action, ActionsServiceI>(
                 entityBuilder: () => Action(),
                 label: '*Select an Action...',
-                initialValue: entity.action,
+                initialValue: data.entity.action,
                 textBuilder: (Action action) {
                   return action.name;
                 },
                 onSelected: (Action? action) {
-                  entity.action = action ?? Action();
+                  data.entity.action = action ?? Action();
                 },
               ),
             ],
@@ -215,9 +214,9 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
     );
   }
   void _onUpdate(Permit entity, Router router, BuildContext context) async {
-    PermitsServiceI permitsService = Injector.get();
+    PermitsServiceI permitsService = InjectorUtils.get();
 
-    List<EntityInvalidation<Permit>> invalidations = entity.evaluate();
+    List<EntityErrors<Permit>> invalidations = entity.evaluate(<EntityErrors<Permit>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -245,7 +244,7 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<Permit>(
             () => Permit(),
           ),
@@ -262,7 +261,7 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -279,9 +278,9 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -334,7 +333,7 @@ final class PermitsEntityTableAdapter extends FoundationEntityTableAdapterB<Perm
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Permit] {entity}, also handles basic available behavior.
-final class PermitsEntityTable extends FoundationEntityTableB<PermitsEntityTableAdapter> {
+final class PermitsEntityTable extends FoundationEntityTableB<Permit, PermitsEntityTableAdapter> {
   /// Creates a new [PermitsEntityTable] instance.
   const PermitsEntityTable({
     required super.adapter,
@@ -342,32 +341,32 @@ final class PermitsEntityTable extends FoundationEntityTableB<PermitsEntityTable
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Permit, PermitsServiceI>(
-      entityFactory: () => Permit(),
+    return EntityTable<Permit, FoundationResponseResolver<ViewOutput<Permit>>, PermitsServiceI>(
+      factory: () => Permit(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<Permit>>[
+      columns: <EntityTableColumnData<Permit>>[
         /// --> Name
-        EntityTableColumnOptions<Permit>(
+        EntityTableColumnData<Permit>(
           title: 'Name',
           factory: (Permit entity, int index, BuildContext buildContext) => entity.name,
         ),
          /// --> Enabled
-        EntityTableColumnOptions<Permit>(
+        EntityTableColumnData<Permit>(
           title: 'Enabled',
           factory: (Permit entity, int index, BuildContext buildContext) => entity.enabled? 'Yes' : 'No',
         ),
          /// --> Solution
-        EntityTableColumnOptions<Permit>(
+        EntityTableColumnData<Permit>(
           title: 'Solution',
           factory: (Permit entity, int index, BuildContext buildContext) => entity.solution.name,
         ),
          /// --> Feature
-        EntityTableColumnOptions<Permit>(
+        EntityTableColumnData<Permit>(
           title: 'Feature',
           factory: (Permit entity, int index, BuildContext buildContext) => entity.feature.name,
         ),
          /// --> Action
-        EntityTableColumnOptions<Permit>(
+        EntityTableColumnData<Permit>(
           title: 'Action',
           factory: (Permit entity, int index, BuildContext buildContext) => entity.action.name,
         ),

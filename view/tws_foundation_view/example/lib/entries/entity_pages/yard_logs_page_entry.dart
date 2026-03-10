@@ -1,12 +1,12 @@
-import 'package:csm_view/csm_view.dart' hide LandingThemeB;
+import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {entry} class.
 ///
-/// Implements a [PackageLandingEntryB] for [YardLogsPage] from {tws_foundation_view} package as part of the package landing playground.
-final class YardLogsPageEntry extends PackageLandingEntryB<LandingThemeB> {
+/// Implements a [PackageLandingEntryBase] for [YardLogsPage] from {tws_foundation_view} package as part of the package landing playground.
+final class YardLogsPageEntry extends PackageLandingEntryBase<LandingThemeB> {
   /// Creates a new [YardLogsPageEntry] instance.
   YardLogsPageEntry({
     super.key,
@@ -27,7 +27,7 @@ final class YardLogsPageEntry extends PackageLandingEntryB<LandingThemeB> {
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     return YardLogsPage(
       adapter: YardLogsEntityTableAdapter(
-        authBuilder: () => Injector.get<SessionStorageI>().token,
+        authBuilder: () => InjectorUtils.get<SessionStorageI>().token,
       ),
     );
   }

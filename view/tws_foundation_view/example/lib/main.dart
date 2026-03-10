@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:csm_view/csm_view.dart';
 
-import 'package:csm_view/csm_view.dart' hide LandingThemeB;
 import 'package:example/core/landing_utils.dart';
 import 'package:example/entries/category_layout_entry.dart';
 import 'package:example/entries/entity_category_pages/trailers_inventory_category_page_entry.dart';
@@ -14,118 +14,34 @@ import 'package:example/themes/landing_theme_light.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/tws_foundation_view.dart' hide NavigationLayoutEntry;
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-const Console _console = Console('Foundation View');
 
 void main() {
-  runApp(const MainApp());
+  runApp(ViewPackageLanding());
 }
 
-final class MainApp extends StatefulWidget {
-  const MainApp({
-    super.key,
-  });
-
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-final class _MainAppState extends State<MainApp> {
-  ///
-  Future<void> initDependencies() async {
-    _console.message('Initializing dependencies');
-    final FoundationServer foundationServer = FoundationServer(kReleaseMode);
-
-    Injector.addSingleton<FoundationServer>(foundationServer);
-    Injector.addSingleton<SecurityServiceI>(foundationServer.securityService);
-    Injector.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
-    Injector.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
-    Injector.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
-    Injector.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
-    Injector.addSingleton<DriversServiceI>(foundationServer.driversService);
-    Injector.addSingleton<TrucksServiceI>(foundationServer.trucksService);
-    Injector.addSingleton<SituationsServiceI>(foundationServer.situationsService);
-    Injector.addSingleton<StatusesServiceI>(foundationServer.statusService);
-    Injector.addSingleton<AccountServiceI>(foundationServer.accountService);
-    Injector.addSingleton<LocationsServiceI>(foundationServer.locationsService);
-    Injector.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
-    Injector.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
-    Injector.addSingleton<CarriersServiceI>(foundationServer.carriersService);
-    Injector.addSingleton<TrailersServiceI>(foundationServer.trailersService);
-    Injector.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
-    Injector.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
-    Injector.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
-    Injector.addSingleton<ContactsServiceI>(foundationServer.contactService);
-    Injector.addSingleton<PermitsServiceI>(foundationServer.permitsService);
-    Injector.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
-    Injector.addSingleton<ActionsServiceI>(foundationServer.actionsService);
-    Injector.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
-
-    final SessionStorage sessionStorage = SessionStorage();
-    await sessionStorage.init();
-    SessionData sessionData = await LandingUtils.authBuilder();
-
-    sessionStorage.store(sessionData);
-
-    Injector.addSingleton<SessionStorage>(sessionStorage);
-    Injector.addSingleton<SessionStorageI>(sessionStorage);
-    _console.success(
-      'Dependencies initialized',
-      info: <String, Object?>{
-        'isAuth': sessionStorage,
-      },
-    );
-  }
-
-  late Future<void> _initInv = initDependencies();
-
-  bool hasError = false;
-
-  @override
-  void didUpdateWidget(covariant MainApp oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (hasError) {
-      hasError = false;
-      _initInv = initDependencies();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<LandingThemeB> themes = <LandingThemeB>[
-      LandingThemeDark(),
-      LandingThemeLight(),
-    ];
-
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: AsyncWidget<void>(
-        isVoid: true,
-        future: _initInv,
-        errorBuilder: (BuildContext ctx, Object? error, void data) {
-          hasError = true;
-          return ErrorWidget(error ?? 'Unknown error');
-        },
-        successBuilder: (BuildContext ctx, void data) {
-          return PackageLanding<LandingThemeB>(
-            name: "TWS Foundation View",
-            description: (_, Color foreColor) {
-              return TextSpan(
-                text: 'This package provides a wide widget collection for UI implementations in TWS solutions.',
-                style: TextStyle(
-                  color: foreColor,
-                  fontSize: 16,
-                ),
-              );
-            },
-            defaultTheme: LandingThemeDark(),
-            themes: themes,
-            landingEntries: <PackageLandingEntryI<LandingThemeB>>[
+final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> with ConsoleMixin {
+  /// Creates a new [ViewPackageLanding] instance.
+  ViewPackageLanding({super.key}): super(
+    name: "TWS Foundation View",
+    description: (_, Color foreColor) {
+      return TextSpan(
+        text: 'This package provides a wide widget collection for UI implementations in TWS solutions.',
+        style: TextStyle(
+          color: foreColor,
+          fontSize: 16,
+        ),
+      );
+    },
+    packageEntries: <IPackageLandingEntry<LandingThemeB>>[
               // AuthPageEntry(),
               CategoryLayoutEntry(),
               NavigationLayoutEntry(
-                appThemes: themes,
+                appThemes: <LandingThemeB>[
+                  LandingThemeDark(),
+                  LandingThemeLight(),
+                ],
               ),
 
               //! --> Entity Pages
@@ -177,9 +93,59 @@ final class _MainAppState extends State<MainApp> {
               TrailerInventoryEntityTableEntry(),
               //! <-- Foundation Entity Tables
             ],
-          );
+  );
+  
+  @override
+  FutureOr<void> initView(BuildContext context) async {
+    messageLog('Initializing dependencies');
+    final FoundationServer foundationServer = FoundationServer(kReleaseMode);
+
+    InjectorUtils.addSingleton<FoundationServer>(foundationServer);
+    InjectorUtils.addSingleton<SecurityServiceI>(foundationServer.securityService);
+    InjectorUtils.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
+    InjectorUtils.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
+    InjectorUtils.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
+    InjectorUtils.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
+    InjectorUtils.addSingleton<DriversServiceI>(foundationServer.driversService);
+    InjectorUtils.addSingleton<TrucksServiceI>(foundationServer.trucksService);
+    InjectorUtils.addSingleton<SituationsServiceI>(foundationServer.situationsService);
+    InjectorUtils.addSingleton<StatusesServiceI>(foundationServer.statusService);
+    InjectorUtils.addSingleton<AccountServiceI>(foundationServer.accountService);
+    InjectorUtils.addSingleton<LocationsServiceI>(foundationServer.locationsService);
+    InjectorUtils.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
+    InjectorUtils.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
+    InjectorUtils.addSingleton<CarriersServiceI>(foundationServer.carriersService);
+    InjectorUtils.addSingleton<TrailersServiceI>(foundationServer.trailersService);
+    InjectorUtils.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
+    InjectorUtils.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
+    InjectorUtils.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
+    InjectorUtils.addSingleton<ContactsServiceI>(foundationServer.contactService);
+    InjectorUtils.addSingleton<PermitsServiceI>(foundationServer.permitsService);
+    InjectorUtils.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
+    InjectorUtils.addSingleton<ActionsServiceI>(foundationServer.actionsService);
+    InjectorUtils.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
+
+    final SessionStorage sessionStorage = SessionStorage();
+    await sessionStorage.init();
+    SessionData sessionData = await LandingUtils.authBuilder();
+
+    sessionStorage.store(sessionData);
+
+    InjectorUtils.addSingleton<SessionStorage>(sessionStorage);
+    InjectorUtils.addSingleton<SessionStorageI>(sessionStorage);
+      successLog(
+        'Dependencies initialized',
+        info: <String, Object?>{
+          'isAuth': sessionStorage,
         },
-      ),
-    );
+      );
+  }
+  
+  @override
+  List<LandingThemeB> bootstrapTheming() {
+    return <LandingThemeB>[
+      LandingThemeDark(),
+      LandingThemeLight(),
+    ];
   }
 }

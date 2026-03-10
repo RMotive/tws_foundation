@@ -1,5 +1,5 @@
 import 'package:camera_platform_interface/camera_platform_interface.dart';
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
@@ -13,45 +13,44 @@ import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialo
 import 'package:tws_foundation_view/src/view/widgets/file_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/image_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Damage state class.
-class _Damage1State extends ReactorB {}
+class _Damage1State extends ReactorBase {}
 _Damage1State _damage1State = _Damage1State();
 void Function() _damage1React = () {};
 
-class _Damage2State extends ReactorB {}
+class _Damage2State extends ReactorBase {}
 _Damage2State _damage2State = _Damage2State();
 void Function() _damage2React = () {};
 
-class _TruckFrontState extends ReactorB {}
+class _TruckFrontState extends ReactorBase {}
 _TruckFrontState _truckFrontState = _TruckFrontState();
 void Function() _truckFrontReact = () {};
 
-class _TruckLateralState extends ReactorB {}
+class _TruckLateralState extends ReactorBase {}
 _TruckLateralState _truckLateralState = _TruckLateralState();
 void Function() _truckLateralReact = () {};
 
-class _TrailerBackState extends ReactorB {}
+class _TrailerBackState extends ReactorBase {}
 _TrailerBackState _trailerBackState = _TrailerBackState();
 void Function() _trailerBackReact = () {};
 
-class _TrailerLateralState extends ReactorB {}
+class _TrailerLateralState extends ReactorBase {}
 _TrailerLateralState _trailerLateralState = _TrailerLateralState();
 void Function() _trailerLateralReact = () {};
 
-class _Seal1State extends ReactorB {}
+class _Seal1State extends ReactorBase {}
 _Seal1State _seal1State = _Seal1State();
 void Function() _seal1React = () {};
 
-class _Seal2State extends ReactorB {}
+class _Seal2State extends ReactorBase {}
 _Seal2State _seal2State = _Seal2State();
 void Function() _seal2React = () {};
 
-class _SectionState extends ReactorB {}
+class _SectionState extends ReactorBase {}
 _SectionState _sectionState = _SectionState();
 void Function() _sectionReact = () {};
 
@@ -63,7 +62,7 @@ class _BlendedSVG extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
     return SvgPicture.asset(
       route,
       colorFilter: ColorFilter.mode(
@@ -108,42 +107,42 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
           children: <Widget>[
             SectionDivider(text: 'Yardlog details'),
             /// --> Creation date property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Timestamp',
               value: entity.timestamp.fullDate,
             ),
 
             /// --> Reservation property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Reservation', 
               value: entity.reservation? 'Yes' : 'No',
             ),
 
             /// --> Event property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Event',
               value: entity.entry ? 'In' : 'Out',
             ),
 
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Guard', 
               value: entity.guard.fullName,
             ),
 
             /// --> Load Type property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Load Type',
               value: entity.loadType.name,
             ),
 
             /// --> From/To property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: entity.entry? 'From' : 'To',
               value: entity.fromTo,
             ),
             
             /// --> Section property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Section',
               value: entity.section != null? '${entity.section!.yard.name} - ${entity.section!.name}' : '---',
             ),
@@ -151,32 +150,32 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
             /// --> Driver section
             const SectionDivider(text: 'Driver'),
             /// --> Driver name property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Name',
               value: entity.driver.name,
             ),
 
             /// --> Driver licence property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Licence',
               value: entity.driver.license,
             ),
             /// --> Truck section
             const SectionDivider(text: 'Truck'),
             /// --> Truck economic property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Economic',
               value: entity.truck.economic,
             ),
 
             /// --> Truck plates property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Plates',
               value: entity.truck.plates,
             ),
 
             /// --> Truck carrier property view.
-            PropertyViewer(
+            PropertyViewer<String>(
               label: 'Carrier',
               value: entity.truck.carrier,
             ),
@@ -185,19 +184,19 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
             ...<Widget>[
               const SectionDivider(text: 'Trailer'),
               /// --> Trailer economic property view.
-              PropertyViewer(
+              PropertyViewer<String>(
                 label: 'Economic',
                 value: entity.trailer!.economic,
               ),
 
               /// --> Trailer plates property view.
-              PropertyViewer(
+              PropertyViewer<String>(
                 label: 'Plates',
                 value: entity.trailer!.plates,
               ),
 
               /// --> Trailer type property view.
-              PropertyViewer(
+              PropertyViewer<String>(
                 label: 'Type',
                 value: entity.trailer!.classType,
               ),
@@ -215,7 +214,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                     spacing: 10,
                     children: <Widget>[
                       /// --> First seal property view.
-                      PropertyViewer(
+                      PropertyViewer<String>(
                         label: 'Seal #1',
                         value: entity.seal,
                       ),
@@ -226,7 +225,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       ),
                   
                       /// --> Second seal property view.
-                      PropertyViewer(
+                      PropertyViewer<String>(
                         label: 'Seal #2',
                         value: entity.sealAlt,
                       ),
@@ -333,17 +332,17 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
   @override
   EntityTableAdapterEditor<YardLog>? composeEditor() {
     return EntityTableAdapterEditor<YardLog>(
-      onUpdate: (BuildContext buildContext, YardLog entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<YardLog> data) {
+        final Router router = InjectorUtils.get();
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
-          builder: (BuildContext context) => _buildUpdateDialog(entity, router, context),
+          builder: (BuildContext context) => _buildUpdateDialog(data.entity, router, context),
         );
       }, 
-      formBuilder:(BuildContext buildContext, YardLog entity) {
+      formBuilder:(EntityTableAdapterEditorData<YardLog> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -352,7 +351,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               const SectionDivider(text: 'Yardlog details'),
               OptionsSelector<bool>(
                 title: 'Event',
-                preSelected: <bool>[entity.entry],
+                preSelected: <bool>[data.entity.entry],
                 options:  <OptionsSelectorOption<bool>>[
                   OptionsSelectorOption<bool>(
                     title: 'In',
@@ -364,7 +363,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   ),
                 ],
                 onSelect: (List<bool> selected) {
-                  entity.entry = selected.firstOrNull ?? false;
+                  data.entity.entry = selected.firstOrNull ?? false;
                 },
               ),
               // --> Load Type Selection.
@@ -377,15 +376,15 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               EntityFinderSelector<LoadType, LoadTypesServiceI>(
                 entityBuilder: () => LoadType(),
                 label: 'Select the load type...',
-                initialValue: entity.loadType,
+                initialValue: data.entity.loadType,
                 filterBy: <String>[
-                  EntityKeys.name,
+                  CorePropertiesConsts.name,
                 ],
                 textBuilder: (LoadType loadtype) {
                   return loadtype.name;
                 },
                 onSelected: (LoadType? loadtype) {
-                  entity.loadType = loadtype ?? LoadType();
+                  data.entity.loadType = loadtype ?? LoadType();
                 },
               ),
               
@@ -393,23 +392,23 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               EntityFinderSelector<DriverCommon, DriversServiceI>(
                 entityBuilder: () => DriverCommon(),
                 label: '*Select a Driver...',
-                initialValue: entity.driver,
+                initialValue: data.entity.driver,
                 filterBy: <String>[
                   DriverCommon.kLicense.toStartUpper,
-                  '${EntityKeys.kInternal}.${Driver.kEmployee}.${Employee.kIdentification}.${EntityKeys.name}',
-                  '${EntityKeys.kExternal}.${DriverExternal.kIdentification}.${EntityKeys.name}',
+                  '${CorePropertiesConsts.internal}.${Driver.kEmployee}.${Employee.kIdentification}.${CorePropertiesConsts.name}',
+                  '${CorePropertiesConsts.external}.${DriverExternal.kIdentification}.${CorePropertiesConsts.name}',
                 ],
                 textBuilder: (DriverCommon driver) {
                   return "${driver.name} - ${driver.license}";
                 },
                 onSelected: (DriverCommon? driver) {
-                  entity.driver = driver ?? DriverCommon();
+                  data.entity.driver = driver ?? DriverCommon();
                 },
               ),
               EntityFinderSelector<TruckCommon, TrucksServiceI>(
                 entityBuilder: () => TruckCommon(),
                 label: '*Select a Truck...',
-                initialValue: entity.truck,
+                initialValue: data.entity.truck,
                 filterBy: <String>[
                   TruckCommon.kEconomic,
                 ],
@@ -417,13 +416,13 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   return truck.economic;
                 },
                 onSelected: (TruckCommon? truck) {
-                  entity.truck = truck ?? TruckCommon();
+                  data.entity.truck = truck ?? TruckCommon();
                 },
               ),
               EntityFinderSelector<TrailerCommon, TrailersServiceI>(
                 entityBuilder: () => TrailerCommon(),
                 label: 'Select a Trailer...',
-                initialValue: entity.trailer,
+                initialValue: data.entity.trailer,
                 filterBy: <String>[
                   TrailerCommon.kEconomic,
                 ],
@@ -431,18 +430,18 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   return trailer.economic;
                 },
                 onSelected: (TrailerCommon? trailer) {
-                  entity.trailer = trailer;
+                  data.entity.trailer = trailer;
                 },
               ),
 
               TextInput(
                 width: double.maxFinite,
                 maxLength: 100,
-                label: entity.entry ? '*From' : '*To',
+                label: data.entity.entry ? '*From' : '*To',
                 hint: 'Enter the From/To information',
-                onChanged: (String value) => entity.fromTo = value,
+                onChanged: (String value) => data.entity.fromTo = value,
                 controller: TextEditingController(
-                  text: entity.fromTo,
+                  text: data.entity.fromTo,
                 ),
               ),
 
@@ -455,9 +454,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   children: <Widget>[
                     ReactiveWidget<_TruckFrontState>(
                       reactor: _truckFrontState,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _truckFrontReact = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.truckFrontRes);
+                        Resource? resource = data.entity.getResource(FoundationReferences.truckFrontRes);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -470,20 +469,20 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.truckFrontRes));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.truckFrontRes));
                         _truckFrontReact();
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.truckFrontRes, entity);
+                        _setResource(xFiles, FoundationReferences.truckFrontRes, data.entity);
                         _truckFrontReact();
                       },  
                     ),
 
                     ReactiveWidget<_TruckLateralState>(
                       reactor: _truckLateralState,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _truckLateralReact = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.truckLateralRes);
+                        Resource? resource = data.entity.getResource(FoundationReferences.truckLateralRes);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -496,11 +495,11 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.truckLateralRes));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.truckLateralRes));
                         _truckLateralReact(); 
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.truckLateralRes, entity);
+                        _setResource(xFiles, FoundationReferences.truckLateralRes, data.entity);
                         _truckLateralReact(); 
                       },  
                     ),
@@ -517,9 +516,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   children: <Widget>[
                     ReactiveWidget<_TrailerBackState>(
                       reactor: _trailerBackState,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _trailerBackReact = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.trailerBackRes);
+                        Resource? resource = data.entity.getResource(FoundationReferences.trailerBackRes);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -532,20 +531,20 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.trailerBackRes));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.trailerBackRes));
                         _trailerBackReact();
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.trailerBackRes, entity);
+                        _setResource(xFiles, FoundationReferences.trailerBackRes, data.entity);
                         _trailerBackReact();
                       },  
                     ),
                     
                     ReactiveWidget<_TrailerLateralState>(
                       reactor: _trailerLateralState,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _trailerLateralReact = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.trailerLateralRes);
+                        Resource? resource = data.entity.getResource(FoundationReferences.trailerLateralRes);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -558,11 +557,11 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.trailerLateralRes));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.trailerLateralRes));
                         _trailerLateralReact(); 
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.trailerLateralRes, entity);
+                        _setResource(xFiles, FoundationReferences.trailerLateralRes, data.entity);
                         _trailerLateralReact(); 
                       },  
                     ),
@@ -579,9 +578,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   children: <Widget>[
                     ReactiveWidget<_Damage1State>(
                       reactor: _damage1State,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _damage1React = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.damage1Res);
+                        Resource? resource = data.entity.getResource(FoundationReferences.damage1Res);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -594,19 +593,19 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.damage1Res));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.damage1Res));
                         _damage1React();
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.damage1Res, entity);
+                        _setResource(xFiles, FoundationReferences.damage1Res, data.entity);
                         _damage1React();
                       },  
                     ),
                     ReactiveWidget<_Damage2State>(
                       reactor: _damage2State,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _damage2React = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.damage2Res);
+                        Resource? resource = data.entity.getResource(FoundationReferences.damage2Res);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -619,11 +618,11 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.damage2Res));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.damage2Res));
                         _damage2React(); 
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.damage2Res, entity);
+                        _setResource(xFiles, FoundationReferences.damage2Res, data.entity);
                         _damage2React(); 
                       },  
                     ),
@@ -644,16 +643,16 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       maxLength: 64,
                       label: 'Seal #1',
                       hint: 'Seal number',
-                      onChanged: (String value) => entity.sanitize(seal: value),
+                      onChanged: (String value) => data.entity.sanitize(seal: value),
                       controller: TextEditingController(
-                        text: entity.seal,
+                        text: data.entity.seal,
                       ),
                     ),
                     ReactiveWidget<_Seal1State>(
                       reactor: _seal1State,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _seal1React = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.seal1Res);
+                        Resource? resource = data.entity.getResource(FoundationReferences.seal1Res);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -666,11 +665,11 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.seal1Res));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.seal1Res));
                         _seal1React();
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.seal1Res, entity);
+                        _setResource(xFiles, FoundationReferences.seal1Res, data.entity);
                         _seal1React();
                       },  
                     ),
@@ -681,16 +680,16 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       maxLength: 64,
                       label: 'Seal #2',
                       hint: 'Seal number',
-                      onChanged: (String value) => entity.sanitize(sealAlt: value),
+                      onChanged: (String value) => data.entity.sanitize(sealAlt: value),
                       controller: TextEditingController(
-                        text: entity.sealAlt,
+                        text: data.entity.sealAlt,
                       ),
                     ),
                     ReactiveWidget<_Seal2State>(
                       reactor: _seal2State,
-                      builder: (BuildContext ctx, ReactorI reactor) {
+                      builder: (BuildContext ctx, IReactor reactor) {
                         _seal2React = reactor.react;
-                        Resource? resource = entity.getResource(FoundationReferences.seal2Res);
+                        Resource? resource = data.entity.getResource(FoundationReferences.seal2Res);
                         if(resource != null) {
                           return ImageViewer(
                             resource: resource,
@@ -703,11 +702,11 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       dialogTitle: 'Select a damage image',
                       fileType: FileType.image,
                       onRemove:() {
-                        entity.resources.removeAt(entity.getIndexResource(FoundationReferences.seal2Res));
+                        data.entity.resources.removeAt(data.entity.getIndexResource(FoundationReferences.seal2Res));
                         _seal2React(); 
                       },
                       onSelect:(List<XFile> xFiles, _) async {
-                        _setResource(xFiles, FoundationReferences.seal2Res, entity);
+                        _setResource(xFiles, FoundationReferences.seal2Res, data.entity);
                         _seal2React(); 
                       },  
                     ),
@@ -724,15 +723,15 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                     EntityFinderSelector<Section, SectionsServiceI>(
                       label: '*Section',
                       entityBuilder: () => Section(),
-                      initialValue: entity.section,
+                      initialValue: data.entity.section,
                       filterBy: <String>[
-                        EntityKeys.name,
+                        CorePropertiesConsts.name,
                       ],
                       textBuilder: (Section section) {
                         return section.name;
                       },
                       onSelected: (Section? selSection) {
-                        entity.section = selSection ?? Section();
+                        data.entity.section = selSection ?? Section();
                         _sectionReact();
                       } 
                     ),
@@ -740,13 +739,13 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                       reactor: _sectionState,
                       builder: (BuildContext ctx, _SectionState reactor) {
                         _sectionReact = reactor.react;
-                        if (entity.section != null && (entity.section!.id > BigInt.zero && entity.section!.resource != null)){
+                        if (data.entity.section != null && (data.entity.section!.id > BigInt.zero && data.entity.section!.resource != null)){
                           return  ImageViewer(
-                            resource: entity.section!.resource!,
+                            resource: data.entity.section!.resource!,
                           );
                         }
 
-                        if (entity.section != null && (entity.section!.id > BigInt.zero && entity.section!.resource == null)) {
+                        if (data.entity.section != null && (data.entity.section!.id > BigInt.zero && data.entity.section!.resource == null)) {
                           return  const Center(
                             child: MessageWidget(
                               text: 'Not section image to show.',
@@ -770,9 +769,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
   }
 
   void _onUpdate(YardLog entity, Router router, BuildContext context) async {
-    YardLogsServiceI yardLogsService = Injector.get();
+    YardLogsServiceI yardLogsService = InjectorUtils.get();
 
-    List<EntityInvalidation<YardLog>> invalidations = entity.evaluate();
+    List<EntityErrors<YardLog>> invalidations = entity.evaluate(<EntityErrors<YardLog>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -800,7 +799,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<YardLog>(
             () => YardLog(),
           ),
@@ -817,7 +816,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -834,9 +833,9 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -947,11 +946,11 @@ final class YardLogsEntityTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<YardLog, YardLogsServiceI>(
+    return EntityTable<YardLog, ResponseResolverBase<ViewOutput<YardLog>>, YardLogsServiceI>(
       adapter: adapter,
-      entityFactory: () => YardLog(),
-      columns: <EntityTableColumnOptions<YardLog>>[
-        EntityTableColumnOptions<YardLog>(
+      factory: () => YardLog(),
+      columns: <EntityTableColumnData<YardLog>>[
+        EntityTableColumnData<YardLog>(
           title: 'Entry',
           customFactory: (YardLog entity, int index, BuildContext buildContext) {
             return Icon(
@@ -959,51 +958,51 @@ final class YardLogsEntityTable extends StatelessWidget {
             );
           },
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Date',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.timestamp.toIso8601String(),
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Load Type',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.loadType.name,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Drivers License',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.driver.license,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Driver',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.driver.name,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Truck Number',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.truck.economic,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Truck Plate',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.truck.plates,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Trailer Number',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.economic ?? '---',
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Trailer Plate',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.trailer?.plates ?? '---',
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Seal',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.seal,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Seal #2',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.sealAlt,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Origin - Destination',
           factory: (YardLog entity, int index, BuildContext buildContext) => entity.fromTo,
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Damaged',
           customFactory: (YardLog entity, int index, BuildContext buildContext) {
             return Icon(
@@ -1011,11 +1010,11 @@ final class YardLogsEntityTable extends StatelessWidget {
             );
           },
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Section',
           factory: (YardLog entity, int index, BuildContext buildContext) =>  entity.section?.name ?? '---',
         ),
-        EntityTableColumnOptions<YardLog>(
+        EntityTableColumnData<YardLog>(
           title: 'Guard',
           factory: (YardLog entity, int index, BuildContext buildContext) {
             return entity.guard.identification.fullname;

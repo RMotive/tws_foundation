@@ -21,7 +21,7 @@ class SectionDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? mainColor = color; 
     if(color == null){
-      mainColor = Theming.get<FoundationThemeB>(context).control.fore;
+      mainColor = ThemingUtils.get<FoundationThemeB>(context).control.fore;
     }
     if (text != null) {
       return Padding(

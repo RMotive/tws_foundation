@@ -1,4 +1,4 @@
-import 'package:tws_foundation_client/tws_foundation_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 
 /// [ViewConsumeAdapter] Consume adapter for sets view.
 abstract interface class ViewConsumeAdapter {

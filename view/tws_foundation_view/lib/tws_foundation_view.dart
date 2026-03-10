@@ -28,12 +28,6 @@ export 'src/data/storages/session_storage.dart';
 //! --> [View.Layouts]
 
 /// [View.Layouts.CategoryLayout]
-export 'src/view/layouts/category_layout/category_layout.dart';
-export 'src/view/layouts/category_layout/category_layout_page.dart';
-export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_node_i.dart';
-export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_action.dart';
-export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_create.dart';
-export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_refresh.dart';
 export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_generic_actions/actions_ribbon_export.dart';
 //! <-- [View.Layouts]
 
@@ -44,8 +38,6 @@ export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_g
 
 export 'src/view/widgets/text_button.dart';
 export 'src/view/widgets/fold_panel_widget.dart';
-export 'src/view/widgets/message_widgets/message_widget.dart';
-export 'src/view/widgets/message_widgets/error_message_widget.dart';
 
 //! --> Entity Tables
 
@@ -92,16 +84,6 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/trailers_inven
 
 // [widgets]
 export 'src/view/widgets/dialog_widgets/dialog.dart';
-export 'src/view/widgets/text_input.dart';
-export 'src/view/widgets/button_flat.dart';
-export 'src/view/widgets/complex_widgets/entity_table/entity_table.dart';
-export 'src/view/widgets/complex_widgets/entity_table/entity_table_viewer.dart';
-export 'src/view/widgets/complex_widgets/entity_table/entity_table_adapter_b.dart';
-export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form.dart';
-export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_controller.dart';
-export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_record.dart';
-export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_record_reactor.dart';
-export 'src/view/widgets/complex_widgets/create_entity_form.dart/create_entity_form_record_field.dart';
  
 //! <-- [Widgets] 
 
@@ -152,10 +134,4 @@ export 'src/view/pages/entity_pages/solutions/solutions_page.dart';
 export 'src/view/pages/entity_pages/inventories/trailer_inventory_page.dart';
 
 //! <-- Entity Pages
-
-// [layouts.navigation_layout]
-export 'src/view/layouts/navigation_layout/navigation_layout.dart';
-export 'src/view/layouts/navigation_layout/_navigation_layout_navigation/navigation_layout_entry.dart';
-export 'src/view/layouts/navigation_layout/_navigation_layout_header/navigation_layout_header_user.dart';
-
 

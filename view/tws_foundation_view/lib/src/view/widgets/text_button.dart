@@ -28,7 +28,7 @@ class _TextButtonState extends State<TextButton> {
   final TapGestureRecognizer gestureRecognizer = TapGestureRecognizer()..onTap;
 
   /// {state} current application theme data.
-  late FoundationThemeB theme = Theming.get(context);
+  late FoundationThemeB theme = ThemingUtils.get(context);
 
   /// {state} whether the component is being hovered.
   bool hovered = false;
@@ -44,7 +44,7 @@ class _TextButtonState extends State<TextButton> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    theme = Theming.get(context);
+    theme = ThemingUtils.get(context);
   }
 
   @override

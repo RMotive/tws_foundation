@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
-import 'package:flutter/material.dart' hide Router, Route;
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {constant} value for [Whisper] action buttons width.
@@ -52,12 +52,12 @@ final class _WhisperState extends State<Whisper> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    theme = Theming.get(context);
+    theme = ThemingUtils.get(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final SimpleTheming pageTheming = theme.page;
+    final ThemingData pageTheming = theme.page;
 
     return LayoutBuilder(
       builder: (_, BoxConstraints boxConstraints) {
@@ -134,9 +134,9 @@ final class _WhisperState extends State<Whisper> {
                             ButtonFlat(
                               label: 'Close',
                               width: _actionsWidth,
-                              theming: theme.error,
+                              theming: theme.controlError,
                               onClick: () {
-                                Injector.get<Router>().pop();
+                                Navigator.of(context).pop();
                                 widget.onClose?.call();
                               },
                             ),

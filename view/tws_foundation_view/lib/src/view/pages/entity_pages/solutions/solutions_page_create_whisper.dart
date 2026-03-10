@@ -5,7 +5,7 @@ import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {whisper} class.
-final class SolutionsPageCreateWhisper extends PageB {
+final class SolutionsPageCreateWhisper extends ViewPageBase {
 
   /// Creates a new [SolutionsPageCreateWhisper] instance.
   const SolutionsPageCreateWhisper();
@@ -20,31 +20,32 @@ final class SolutionsPageCreateWhisper extends PageB {
       },
       child: (GlobalKey<FormState> formState) {
         return CreateEntityForm<Solution, SolutionsServiceI>(
-          entityFactory: () => Solution(),
+          factory: () => Solution(),
           controller: creationController,
-          buildEntityTag: (Solution entity) {
-            return 'Solution with name: ${entity.name}';
+          authFactory: (BuildContext context) {
+            SessionStorage sessionStorage = InjectorUtils.get();
+            return sessionStorage.token;
           },
           recordDesigner: (Solution entity, bool selected, bool valid) {
             return CreateEntityFormRecord(
               selected: selected,
-              fields: <CreateEntityFormRecordField>[
-                CreateEntityFormRecordField(
+              fields: <CreateEntityFormRecordField<Object>>[
+                CreateEntityFormRecordField<String>(
                   label: 'Name',
                   value: entity.name,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Description',
-                  value: entity.description ?? '---',
+                  value: entity.description,
                 ),
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Sign',
-                  value: entity.sign.cleaned ?? '---',
+                  value: entity.sign.cleaned,
                 ), 
               ],
             );
           },
-          formDesigner: (CreateEntityFormRecordReactor<Solution>? itemState) {
+          formDesigner: (CreateEntityFormRecordReactor<Solution>? itemState, _) {
             final bool formDisabled = !(itemState == null);
 
             return Padding(
@@ -73,7 +74,7 @@ final class SolutionsPageCreateWhisper extends PageB {
                         ),
                       ),
 
-                      /// --> Section Description
+                      /// --> Solution Description
                       Expanded(
                         child: TextInput(
                           label: 'Description',

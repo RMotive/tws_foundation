@@ -6,60 +6,63 @@ class FoundationThemeLight extends FoundationThemeB {
   const FoundationThemeLight()
     : super(
         'foundation-light-flat-theme',
-        entityTable: const EntityTableTheming(
-          drawerActionBackground: FoundationColors.warmWhite,
-        ),
         businessLogo: FoundationAssets.fullLogoWhiteWebp,
         iconBackground: FoundationColors.warmWhite,
         icon: const Icon(Icons.abc),
-        navigationLayout: const SimpleTheming(
+        navigationLayout: const ThemingData(
           back: FoundationColors.oceanBlue,
           fore: FoundationColors.warmWhite,
           accent: Colors.transparent,
         ),
-        page: const SimpleTheming(
+        page: const ThemingData(
           back: FoundationColors.warmWhite,
           fore: FoundationColors.lightDark,
           accent: FoundationColors.oceanBlue,
           foreAlt: FoundationColors.warmWhite,
         ),
-        error: const SimpleTheming(
+        controlError: const ThemingData(
           back: FoundationColors.warmWhite,
           fore: Color.fromARGB(255, 255, 21, 0),
           accent: FoundationColors.deepWine,
           foreAlt: FoundationColors.warmWhite,
           accentAlt: FoundationColors.oceanBlue,
         ),
-        warning: const SimpleTheming(
+        controlWarning: const ThemingData(
           back: FoundationColors.lightDark,
           fore: Color.fromARGB(255, 255, 21, 0),
           accent: Color.fromARGB(255, 245, 127, 23),
           foreAlt: FoundationColors.warmWhite,
           accentAlt: FoundationColors.oceanBlue,
         ),
-        success: const SimpleTheming(
+        controlSuccess: const ThemingData(
           back: FoundationColors.lightDark,
           fore: Color.fromARGB(255, 0, 117, 4),
           accent: Color.fromARGB(255, 0, 117, 4),
         ),
-        control: const SimpleTheming(
+        control: const ThemingData(
           back: FoundationColors.warmWhite,
           fore: FoundationColors.lightDark,
           accent: FoundationColors.oceanBlue,
           foreAlt: FoundationColors.warmWhite,
         ),
-        disabled: const SimpleTheming(
+        controlDisabled: const ThemingData(
           back: FoundationColors.ligthGrey,
           fore: FoundationColors.warmWhite,
           accent: FoundationColors.oceanBlue,
         ),
-        categoryLayoutRibbonButton: const StateTheming(
-          main: ComplexTheming(
+        dialog: const ThemingData(
+          back: FoundationColors.warmWhite,
+          fore: FoundationColors.lightDark,
+          accent: FoundationColors.oceanBlue,
+          foreAlt: FoundationColors.warmWhite,
+        ),
+        categoryLayoutRibbonButton: const StateControlTheming(
+          main: InputControlTheming(
             background: FoundationColors.oceanBlue,
             foreground: FoundationColors.warmWhite,
           ),
-          hoverStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
-          selectStruct: ComplexTheming(background: FoundationColors.oceanBlueH),
+          hoverStruct: InputControlTheming(background: FoundationColors.oceanBlueH),
+          selectStruct: InputControlTheming(background: FoundationColors.oceanBlueH),
         ),
       );
 }

@@ -1,35 +1,36 @@
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router, Action;
+import 'package:flutter/material.dart' hide Router, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/models/user_feedback.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/create_whisper/create_yardlogs_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [YardLogsPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [YardLogsPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
-final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTableAdapter> {
+final class YardLogsCategoryPage extends EntityCategoryPageB<YardLog, YardLogsEntityTableAdapter> {
   /// Creates a new [YardLogsCategoryPage] instance.
   YardLogsCategoryPage({
     super.cusRoute,
     super.authBuilder,
   }) : super(
          title: 'Yard Logs',
-         route: FoundationRoutes.yardlogsPageRoute,
+         routeData: FoundationRoutes.yardlogsPageRoute,
        );
 
-  @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+        @override
+  List<IRoutingGraphData> composeRoutes() {
+   return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.yardlogsCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext ctx, RouteData routeData) => CreateYardLogsWhisper(),
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => CreateYardLogsWhisper(),
       ),
     ];
   }
+
 
   @override
   YardLogsEntityTableAdapter composeAdapter() {
@@ -39,18 +40,18 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(YardLogsEntityTableAdapter adapter) {
-    return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(YardLogsEntityTableAdapter adapter) {
+    return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
 
       ActionsRisbbonCreate(
         onCanExecute: () async {
-          final List<UserFeedback> feedback = <UserFeedback>[];
+          final List<UserFeedback> feedbacks = <UserFeedback>[];
 
-          SessionStorageI sessionStorage = Injector.get();
-          EmployeesServiceI employeesService = Injector.get();
+          SessionStorageI sessionStorage = InjectorUtils.get();
+          EmployeesServiceI employeesService = InjectorUtils.get();
 
           String token = sessionStorage.token;
 
@@ -61,33 +62,31 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
           );
 
           if (userEmployee == null) {
-            feedback.add(
-              UserFeedback(
-                type: UserFeedbackType.error,
-                message: 'You need an Employee assigned to create a Yard Log.',
-              ),
-            );
+            UserFeedback feedback = UserFeedback();
+            feedback.severity = UserFeedbackSeverities.error;
+            feedback.message = 'You need to be assigned to an Employee to create a Yard Log.';
+            feedbacks.add(feedback);
           }
 
-          return feedback;
+          return feedbacks;
         },
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.yardlogsCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.yardlogsCreateWhisperRoute);
         },
       ),
     ];
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(_, Color? recomdColor) {
     return Icon(
       Icons.yard,
       color: recomdColor,
     );
   }
-
+  
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return YardLogsPage(
       adapter: adapter,
     );
@@ -96,8 +95,8 @@ final class YardLogsCategoryPage extends EntityCategoryPageB<YardLogsEntityTable
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [YardLog] business entity to interact and manage data related with it.
-final class YardLogsPage extends PageB {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [YardLog] business entity to interact and manage data related with it.
+final class YardLogsPage extends ViewPageBase {
   /// Inner [EntityTable] adapter.
   final YardLogsEntityTableAdapter adapter;
 

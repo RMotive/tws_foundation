@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -30,7 +28,7 @@ final class OptionsSelectorOption<TValue> {
   /// Option value.
   final TValue value;
 
-  /// SVG resorce icon route.
+  /// SVG resorce icon RouteData.
   final String? resource;
 
   /// Icon rotation ratio: 1 = 90º, 2 = 180º, etc.
@@ -119,7 +117,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
   late List<TValue> selection = widget.preSelected ?? <TValue>[];
 
   /// {state} current application theme data.
-  late FoundationThemeB theme = Theming.get(context);
+  late FoundationThemeB theme = ThemingUtils.get(context);
 
   @override
   void didUpdateWidget(covariant OptionsSelector<TValue> oldWidget) {
@@ -134,7 +132,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    theme = Theming.get(context);
+    theme = ThemingUtils.get(context);
   }
 
   /// {event} triggered when the option items selection changes.
@@ -184,7 +182,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
       builder: (FormFieldState<List<TValue>> fieldState) {
         return SectionWidget(
           title: '${widget.optional ? '' : '*'}${widget.title}',
-          borderColor: fieldState.hasError ? theme.error.accent : null,
+          borderColor: fieldState.hasError ? theme.controlError.accent : null,
           outterPadding: EdgeInsets.zero,
           child: Padding(
             padding: EdgeInsetsGeometry.only(
@@ -202,7 +200,7 @@ final class _OptionsSelectorState<TValue> extends State<OptionsSelector<TValue>>
                     fieldState.errorText ?? '---',
                     style: TextStyle(
                       fontSize: 14,
-                      color: theme.error.fore,
+                      color: theme.controlError.fore,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -283,7 +281,7 @@ final class _OptionsSelectorItem extends StatefulWidget {
   /// Whether the current item is selected.
   final bool selected;
 
-  /// SVG resource icon route.
+  /// SVG resource icon RouteData.
   final String? resource;
 
   /// Color to apply to the icon.
@@ -320,13 +318,13 @@ final class _OptionsSelectorItemState extends State<_OptionsSelectorItem> {
   bool hovered = false;
 
   /// {state} current theme data.
-  late FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+  late FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    theme = Theming.get<FoundationThemeB>(context);
+    theme = ThemingUtils.get<FoundationThemeB>(context);
   }
 
   @override

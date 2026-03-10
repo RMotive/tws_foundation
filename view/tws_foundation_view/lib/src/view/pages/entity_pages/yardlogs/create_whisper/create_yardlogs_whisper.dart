@@ -1,6 +1,6 @@
 
 import 'package:camera_platform_interface/camera_platform_interface.dart';
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,7 +43,7 @@ final class _SpacedWrap extends StatelessWidget {
 }
 
 /// {whisper} class.
-final class CreateYardLogsWhisper extends PageB {
+final class CreateYardLogsWhisper extends ViewPageBase {
 
   final bool isResevation;
 

@@ -1,7 +1,6 @@
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
-import 'package:tws_foundation_view/src/view/widgets/drop_up.dart';
 
 /// {model} class.
 ///
@@ -86,8 +85,8 @@ final class _PaginationState extends State<Pagination> {
   /// Theme effect reference key.
   final UniqueKey themingRef = UniqueKey();
 
-  /// {state} {theming} Theming options for application page.
-  late SimpleTheming pageTheming;
+  /// {state} {ThemingUtils} ThemingUtils options for application page.
+  late ThemingData pageTheming;
 
   /// {state} Current pagination options calculations.
   late PaginationOptions options;
@@ -100,7 +99,7 @@ final class _PaginationState extends State<Pagination> {
 
   @override
   void didChangeDependencies() {
-    pageTheming = Theming.get<FoundationThemeB>(context).page;
+    pageTheming = ThemingUtils.get<FoundationThemeB>(context).page;
     super.didChangeDependencies();
   }
 

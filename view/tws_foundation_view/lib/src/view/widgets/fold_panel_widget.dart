@@ -37,7 +37,7 @@ final class FoldPanelWidget extends StatefulWidget {
 /// Handles [State] for [FoldPanelWidget].
 final class _FoldPanelWidgetState extends State<FoldPanelWidget> {
   /// {state} current application theme data.
-  late FoundationThemeB theme = Theming.get(context);
+  late FoundationThemeB theme = ThemingUtils.get(context);
 
   /// {state} whether the component is opened.
   late bool shown = widget.visible;
@@ -55,7 +55,7 @@ final class _FoldPanelWidgetState extends State<FoldPanelWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    theme = Theming.get(context);
+    theme = ThemingUtils.get(context);
   }
 
   @override

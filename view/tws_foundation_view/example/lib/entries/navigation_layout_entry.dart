@@ -1,12 +1,12 @@
-import 'package:csm_view/csm_view.dart' hide LandingThemeB;
+import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
-import 'package:flutter/material.dart' hide Route;
+import 'package:flutter/material.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 
 ///
-final class NavigationLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
-  ///
-  final List<ThemeDataI> appThemes;
+  final class NavigationLayoutEntry extends PackageLandingEntryBase<LandingThemeB> {
+    ///
+  final List<IThemeData> appThemes;
 
   /// Creates a new [NavigationLayoutEntry] instance.
   NavigationLayoutEntry({
@@ -21,29 +21,29 @@ final class NavigationLayoutEntry extends PackageLandingEntryB<LandingThemeB> {
 
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
-    final view.FoundationThemeB theme = Theming.get(buildContext);
-    return view.NavigationLayout(
-      logo: AssetImage(theme.businessLogo),
-      user: view.NavigationLayoutHeaderUser(
+    final view.FoundationThemeB theme = ThemingUtils.get(buildContext);
+    return NavigationLayout(
+      appLogo: AssetImage(theme.businessLogo),
+      userData: NavigationLayoutHeaderUserData(
         name: 'Package',
         email: 'package_landing@csm.com',
         lastName: 'Landing',
       ),
-      routeData: RouteData(
-        route: Route(''),
+      routingData: RoutingData(
+        targetRoute: RouteData(''),
         absolutePath: '',
       ),
-      rootRoute: Route('showcase_root'),
+      homeRouteData: RouteData('showcase_root'),
       page: SizedBox(),
-      navigationEntries: <view.NavigationLayoutEntry>[
-        view.NavigationLayoutEntry(
+      navigationNodes: <NavigationLayoutNode>[
+        NavigationLayoutNode(
           title: 'Business',
-          route: Route(''),
+          routeData: RouteData(''),
           icon:Icons.business,
         ),
-        view.NavigationLayoutEntry(
+        NavigationLayoutNode(
           title: 'Security',
-          route: Route(''),
+          routeData: RouteData(''),
           icon: Icons.security,
         )
       ],

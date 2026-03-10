@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -7,7 +7,7 @@ import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {widget} {business} class.
-final class CatalogOptionsSelector<TEntity extends NamedEntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+final class CatalogOptionsSelector<TEntity extends INamedEntity<TEntity>, TService extends  IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>>
     extends StatefulWidget {
   /// Entity builder for construction.
   final EntityBuilder<TEntity> entityBuilder;
@@ -41,16 +41,16 @@ final class CatalogOptionsSelector<TEntity extends NamedEntityI<TEntity>, TServi
 /// {state} class.
 ///
 /// Handles [State] for [CatalogOptionsSelector].
-final class _CatalogOptionsSelectorState<TEntity extends NamedEntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+final class _CatalogOptionsSelectorState<TEntity extends INamedEntity<TEntity>, TService extends  IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>>
     extends State<CatalogOptionsSelector<TEntity, TService>> {
   /// {dep} entity service instance dependency.
-  final TService entityService = Injector.get();
+  final TService entityService = InjectorUtils.get();
 
   /// {state} current service invokation instance.
   late Future<ViewOutput<TEntity>> _viewInvok;
 
   /// {state} current application theme data.
-  late FoundationThemeB fountTheming = Theming.get(context);
+  late FoundationThemeB fountTheming = ThemingUtils.get(context);
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ final class _CatalogOptionsSelectorState<TEntity extends NamedEntityI<TEntity>, 
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    fountTheming = Theming.get(context);
+    fountTheming = ThemingUtils.get(context);
   }
 
   /// Generates a new [Future] instance to handle along state persistive data for the [ViewOutput] of the catalog options
@@ -74,7 +74,7 @@ final class _CatalogOptionsSelectorState<TEntity extends NamedEntityI<TEntity>, 
     if (widget.authBuilder != null) {
       auth = await widget.authBuilder!();
     } else {
-      SessionStorage sessionStorage = Injector.get();
+      SessionStorage sessionStorage = InjectorUtils.get();
       auth = sessionStorage.token;
     }
 

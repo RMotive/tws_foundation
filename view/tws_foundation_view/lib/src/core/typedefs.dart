@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 
 ///
 typedef AuthBuilder = FutureOr<String> Function();
 
 ///
-typedef EntityBuilder<TEntity extends EntityI<TEntity>> = TEntity Function();
+typedef EntityBuilder<TEntity extends IEntity<TEntity>> = TEntity Function();

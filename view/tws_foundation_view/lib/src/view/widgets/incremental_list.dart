@@ -57,13 +57,13 @@ class IncrementalList<TModel> extends StatefulWidget {
 class _IncrementalListState<TModel> extends State<IncrementalList<TModel>> {
 
   /// Color pallet for the component.
-  late SimpleTheming primaryColorTheme;
-  late SimpleTheming criticalColorTheme;
+  late ThemingData primaryColorTheme;
+  late ThemingData criticalColorTheme;
 
   void initializeThemes() {
-    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
     primaryColorTheme = theme.control;
-    criticalColorTheme = theme.error;
+    criticalColorTheme = theme.controlError;
   }
 
   @override

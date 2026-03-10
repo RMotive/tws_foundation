@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:flutter/services.dart' hide TextInput;
@@ -12,13 +12,12 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_
 import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_entity_tables/_foundation_entity_table_b.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
 /// Address state class.
-class _AddresState extends ReactorB {}
+class _AddresState extends ReactorBase {}
 
 _AddresState _addresState = _AddresState();
 // ignore: unused_element
@@ -39,19 +38,19 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
       children: <Widget>[
 
         /// --> TimeStamp
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Timestamp',
           value: entity.timestamp.fullDate,
         ),
 
         /// --> Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.name,
         ),
 
         /// --> Last Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Description',
           value: entity.description,
         ),
@@ -62,45 +61,45 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
         ),
 
         /// --> Country
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Country',
           value: entity.address.country,
         ),
 
        /// --> State 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'State',
-          value: entity.address.state ?? '---',
+          value: entity.address.state,
         ),
 
         /// --> City
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'City',
-          value: entity.address.city ?? '---',
+          value: entity.address.city,
         ),
 
         /// --> Street
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Street',
-          value: entity.address.street ?? '---',
+          value: entity.address.street,
         ),
 
         /// --> Alternative street
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Country',
           value: entity.address.country,
         ),
 
         /// --> Zip number
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Zip',
-          value: entity.address.zip ?? '---',
+          value: entity.address.zip,
         ),
 
         /// --> Subdivision
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Subdivision',
-          value: entity.address.subdivision ?? '---',
+          value: entity.address.subdivision,
         ),
 
         /// --> Waypoint section
@@ -109,21 +108,21 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
         ),
 
         /// --> Longitude
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Longitude',
-          value: entity.waypoint?.longitude.toString() ?? '---',
+          value: entity.waypoint?.longitude.toString(),
         ),
 
         /// --> Latitude
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Latitude',
-          value: entity.waypoint?.latitude.toString() ?? '---',
+          value: entity.waypoint?.latitude.toString(),
         ),
 
         /// --> Altitude
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'altitude',
-          value: entity.waypoint?.altitude?.toString() ?? '---',
+          value: entity.waypoint?.altitude?.toString(),
         ),
 
     
@@ -134,17 +133,17 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
   EntityTableAdapterEditor<Location>? composeEditor() {
 
     return EntityTableAdapterEditor<Location>(
-      onUpdate: (BuildContext buildContext, Location entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<Location> data) {
+        final Router router = InjectorUtils.get();
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
-          builder: (BuildContext context) => _buildUpdateDialog(entity, router, context),
+          builder: (BuildContext context) => _buildUpdateDialog(data.entity, router, context),
         );
       },
-      formBuilder:(BuildContext buildContext, Location entity) {
+      formBuilder:(EntityTableAdapterEditorData<Location> data) {
         const List<String> countries = FoundationCollections.kCountryList;
         const List<String> statesUSA = FoundationCollections.kUStateCodes;
         const List<String> statesMX = FoundationCollections.kMXStateCodes;
@@ -159,7 +158,7 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 label: 'Timestamp',
                 isEnabled: false,
                 controller: TextEditingController(
-                  text: entity.timestamp.fullDate,
+                  text: data.entity.timestamp.fullDate,
                 ),
               ),
               TextInput(
@@ -167,10 +166,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 label: '*Name',
                 maxLength: 32,
                 controller: TextEditingController(
-                  text: entity.name,
+                  text: data.entity.name,
                 ),
                 onChanged: (String text) {
-                  entity.name = text;
+                  data.entity.name = text;
                 },
               ),
               TextInput(
@@ -178,21 +177,21 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 label: 'Description',
                 maxLength: 32,
                 controller: TextEditingController(
-                  text: entity.description,
+                  text: data.entity.description,
                 ),
                 onChanged: (String text) {
-                  entity.description = text.cleaned;
+                  data.entity.description = text.cleaned;
                 },
               ),
               EntityFinderSelector<Status, StatusesServiceI>(
                 entityBuilder:() => Status(),
                 label: 'Select Status',
-                initialValue: entity.status,
+                initialValue: data.entity.status,
                 textBuilder: (Status status) {
                   return status.name;
                 },
                 onSelected: (Status? status) {
-                  entity.status = status ?? Status();
+                  data.entity.status = status ?? Status();
                 },
               ),
 
@@ -204,30 +203,30 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
               AutoCompleteField<String>(
                 width: double.maxFinite,
                 nativeList: countries,
-                initialValue: entity.address.country == "" ? null :  entity.address.country,
+                initialValue: data.entity.address.country == "" ? null :  data.entity.address.country,
                 displayValue:(String? item) => item ?? "Not valid data",
                 label: 'Country',
                 onChanged: (String? text) {
-                  entity.address =
-                      entity.address.sanitize(country: text ?? "") ?? Address().sanitize(country: text) ?? Address();
+                  data.entity.address =
+                      data.entity.address.sanitize(country: text ?? "") ?? Address().sanitize(country: text) ?? Address();
                   _addresState.react();
                 },
               ),
               ReactiveWidget<_AddresState>(
                 reactor: _addresState,
                 builder: (BuildContext ctx, _AddresState state) {
-                  final String currentCountry = entity.address.country;
+                  final String currentCountry = data.entity.address.country;
                   _addressEffect = state.react;
                   return AutoCompleteField<String>(
                     width: double.maxFinite,
                     isEnabled: currentCountry.trim().isNotEmpty,
                     nativeList: currentCountry == countries[0] ? statesUSA : statesMX,
-                    initialValue: entity.address.state == "" ? null : entity.address.state,
+                    initialValue: data.entity.address.state == "" ? null : data.entity.address.state,
                     displayValue:(String? item) => item ?? "Not valid data",
                     label: '$currentCountry State',
                     isOptional: true,
                     onChanged: (String? text) {
-                      entity.address = entity.address.sanitize(state: text ?? "") ?? Address().sanitize(state: text) ?? Address();
+                      data.entity.address = data.entity.address.sanitize(state: text ?? "") ?? Address().sanitize(state: text) ?? Address();
                     },
                   );
                 },
@@ -240,10 +239,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 maxLength: 30,
                 isOptional: true,
                 controller: TextEditingController(
-                  text: entity.address.city,
+                  text: data.entity.address.city,
                 ),
                 onChanged: (String text) {
-                  entity.address = entity.address.sanitize(city: text) ?? Address().sanitize(city: text) ?? Address();
+                  data.entity.address = data.entity.address.sanitize(city: text) ?? Address().sanitize(city: text) ?? Address();
                 },
               ),
               TextInput(
@@ -252,10 +251,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 maxLength: 100,
                 isOptional: true,
                 controller: TextEditingController(
-                  text: entity.address.street,
+                  text: data.entity.address.street,
                 ),
                 onChanged: (String text) {
-                  entity.address = entity.address.sanitize(state: text) ?? Address().sanitize(state: text) ?? Address();
+                  data.entity.address = data.entity.address.sanitize(state: text) ?? Address().sanitize(state: text) ?? Address();
                 },
               ),
 
@@ -265,10 +264,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 maxLength: 100,
                 isOptional: true,
                 controller: TextEditingController(
-                  text: entity.address.altStreet,
+                  text: data.entity.address.altStreet,
                 ),
                 onChanged: (String text) {
-                  entity.address = entity.address.sanitize(altStreet: text) ?? Address().sanitize(altStreet: text) ?? Address();
+                  data.entity.address = data.entity.address.sanitize(altStreet: text) ?? Address().sanitize(altStreet: text) ?? Address();
                 },
               ),
 
@@ -278,10 +277,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 maxLength: 5,
                 isOptional: true,
                 controller: TextEditingController(
-                  text: entity.address.zip,
+                  text: data.entity.address.zip,
                 ),
                 onChanged: (String text) {
-                  entity.address = entity.address.sanitize(zip: text) ?? Address().sanitize(zip: text) ?? Address();
+                  data.entity.address = data.entity.address.sanitize(zip: text) ?? Address().sanitize(zip: text) ?? Address();
                 },
               ),
 
@@ -291,10 +290,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 maxLength: 30,
                 isOptional: true,
                 controller: TextEditingController(
-                  text: entity.address.subdivision,
+                  text: data.entity.address.subdivision,
                 ),
                 onChanged: (String text) {
-                  entity.address = entity.address.sanitize(subdivision: text) ?? Address().sanitize(subdivision: text) ?? Address();
+                  data.entity.address = data.entity.address.sanitize(subdivision: text) ?? Address().sanitize(subdivision: text) ?? Address();
                 },
               ),
               const SectionDivider(
@@ -310,10 +309,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                 ],
                 controller: TextEditingController(
 
-                  text: entity.waypoint?.longitude.toString(),
+                  text: data.entity.waypoint?.longitude.toString(),
                 ),
                 onChanged: (String text) {
-                  entity.waypoint = entity.waypoint?.sanitize(longitude: double.tryParse(text) ?? 0) ?? Waypoint().sanitize(longitude: double.tryParse(text) ?? 0);
+                  data.entity.waypoint = data.entity.waypoint?.sanitize(longitude: double.tryParse(text) ?? 0) ?? Waypoint().sanitize(longitude: double.tryParse(text) ?? 0);
                 },
               ),
 
@@ -326,10 +325,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                   CoordenatesPrecisionFormtter(),
                 ],
                 controller: TextEditingController(
-                  text: entity.waypoint?.latitude.toString(),
+                  text: data.entity.waypoint?.latitude.toString(),
                 ),
                 onChanged: (String text) {
-                  entity.waypoint = entity.waypoint?.sanitize(latitude: double.tryParse(text) ?? 0) ?? Waypoint().sanitize(latitude: double.tryParse(text) ?? 0);
+                  data.entity.waypoint = data.entity.waypoint?.sanitize(latitude: double.tryParse(text) ?? 0) ?? Waypoint().sanitize(latitude: double.tryParse(text) ?? 0);
                 },
               ),
 
@@ -342,10 +341,10 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                   CoordenatesPrecisionFormtter(),
                 ],
                 controller: TextEditingController(
-                  text: entity.waypoint?.altitude.toString(),
+                  text: data.entity.waypoint?.altitude.toString(),
                 ),
                 onChanged: (String text) {
-                  entity.waypoint = entity.waypoint?.sanitize(altitude: double.tryParse(text) ?? 0) ?? Waypoint().sanitize(altitude: double.tryParse(text) ?? 0);
+                  data.entity.waypoint = data.entity.waypoint?.sanitize(altitude: double.tryParse(text) ?? 0) ?? Waypoint().sanitize(altitude: double.tryParse(text) ?? 0);
                 },
               ),
             ],
@@ -356,9 +355,9 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
   }
   
   void _onUpdate(Location entity, Router router, BuildContext context) async {
-    LocationsServiceI locationsService = Injector.get();
+    LocationsServiceI locationsService = InjectorUtils.get();
 
-    List<EntityInvalidation<Location>> invalidations = entity.evaluate();
+    List<EntityErrors<Location>> invalidations = entity.evaluate(<EntityErrors<Location>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -386,7 +385,7 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<Location>(
             () => Location(),
           ),
@@ -403,7 +402,7 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -420,9 +419,9 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -494,7 +493,7 @@ final class LocationsEntityTableAdapter extends FoundationEntityTableAdapterB<Lo
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Location] {entity}, also handles basic available behavior.
-final class LocationsEntityTable extends FoundationEntityTableB<LocationsEntityTableAdapter> {
+final class LocationsEntityTable extends FoundationEntityTableB<Location, LocationsEntityTableAdapter> {
   /// Creates a new [LocationsEntityTable] instance.
   const LocationsEntityTable({
     required super.adapter,
@@ -502,47 +501,47 @@ final class LocationsEntityTable extends FoundationEntityTableB<LocationsEntityT
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Location, LocationsServiceI>(
-      entityFactory: () => Location(),
+    return EntityTable<Location, FoundationResponseResolver<ViewOutput<Location>>, LocationsServiceI>(
+      factory: () => Location(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<Location>>[
+      columns: <EntityTableColumnData<Location>>[
         /// --> Name
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: 'Name',
           factory: (Location entity, int index, BuildContext buildContext) => entity.name,
         ),
         /// --> Country
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: "Country",
           factory: (Location entity, int index, BuildContext buildContext) => entity.address.country,
         ),
         /// --> State
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: "State",
           factory: (Location entity, int index, BuildContext buildContext) => entity.address.state ?? '---',
         ),
         /// --> City
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: "City",
           factory: (Location entity, int index, BuildContext buildContext) => entity.address.city ?? '---',
         ),
         /// --> Street
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: "Street",
           factory: (Location entity, int index, BuildContext buildContext) => entity.address.street ?? '---',
         ),
         /// --> Alternative Street
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: "Alt. Street",
           factory: (Location entity, int index, BuildContext buildContext) => entity.address.altStreet ?? '---',
         ),
         /// --> Zip number
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: "ZIP",
           factory: (Location entity, int index, BuildContext buildContext) => entity.address.zip ?? '---',
         ),
         /// --> Subdivision/Colonia
-        EntityTableColumnOptions<Location>(
+        EntityTableColumnData<Location>(
           title: "Subdivision",
           factory: (Location entity, int index, BuildContext buildContext) => entity.address.subdivision ?? '---',
         ),        

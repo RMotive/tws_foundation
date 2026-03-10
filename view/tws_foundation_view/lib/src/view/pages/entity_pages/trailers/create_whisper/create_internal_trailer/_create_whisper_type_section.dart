@@ -1,7 +1,7 @@
 part of '../trailers_page_create_whisper.dart';
 
 /// Trailer type state class.
-class _TypeState extends ReactorB {}
+class _TypeState extends ReactorBase {}
 
 _TypeState _typeState = _TypeState();
 // ignore: unused_element

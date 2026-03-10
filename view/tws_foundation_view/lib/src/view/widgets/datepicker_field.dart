@@ -65,16 +65,16 @@ class _DatepickerState extends State<Datepicker> {
   late TextEditingController ctrl;
   late final FocusNode fNode;
 
-  late SimpleTheming colorStruct;
-  late SimpleTheming disabledColorStruct;
-  late SimpleTheming errorColorStruct;
-  late SimpleTheming pageColorStruct;
+  late ThemingData colorStruct;
+  late ThemingData disabledColorStruct;
+  late ThemingData errorColorStruct;
+  late ThemingData pageColorStruct;
 
   void initializeThemes() {
-    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
     colorStruct = theme.control;
-    disabledColorStruct = theme.warning;
-    errorColorStruct = theme.error;
+    disabledColorStruct = theme.controlWarning;
+    errorColorStruct = theme.controlError;
     pageColorStruct = theme.page;
   }
 

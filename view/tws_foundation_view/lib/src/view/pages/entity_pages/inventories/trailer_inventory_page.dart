@@ -1,22 +1,33 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router, Action;
+import 'package:flutter/material.dart' hide Router, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [TrailersInventoryPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [TrailersInventoryPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
-final class TrailersInventoryCategoryPage extends EntityCategoryPageB<TrailersInventoryEntityTableAdapter> {
+final class TrailersInventoryCategoryPage extends EntityCategoryPageB<YardLog, TrailersInventoryEntityTableAdapter> {
   /// Creates a new [TrailersInventoryCategoryPage] instance.
   TrailersInventoryCategoryPage({
     super.cusRoute,
     super.authBuilder,
   }) : super(
          title: 'Trailer Inventory',
-         route: FoundationRoutes.trailerInventoryPageRoute,
+         routeData: FoundationRoutes.trailerInventoryPageRoute,
        );
+
+       @override
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
+        FoundationRoutes.trailerInventoryPageRoute,
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => TrailersInventoryPage(adapter: adapter),
+      ),
+    ];
+  }
 
   @override
   TrailersInventoryEntityTableAdapter composeAdapter() {
@@ -26,10 +37,10 @@ final class TrailersInventoryCategoryPage extends EntityCategoryPageB<TrailersIn
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(TrailersInventoryEntityTableAdapter adapter) {
-    return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(TrailersInventoryEntityTableAdapter adapter) {
+    return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh(),
       ),
       ActionsRibbonExport<YardLog, YardLogsServiceI>(
         exportView:() => adapter.viewConsumed!, 
@@ -38,25 +49,25 @@ final class TrailersInventoryCategoryPage extends EntityCategoryPageB<TrailersIn
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
-    return Icon(
-      Icons.inventory,
-      color: recomdColor,
-    );
-  }
-
-  @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return TrailersInventoryPage(
       adapter: adapter,
+    );
+  }
+  
+  @override
+  Widget? composeIcon(BuildContext context, Color? fgColor) {
+    return Icon(
+      Icons.inventory,
+      color: fgColor,
     );
   }
 }
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [YardLog] business entity to interact and manage data related with it.
-final class TrailersInventoryPage extends PageB {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [YardLog] business entity to interact and manage data related with it.
+final class TrailersInventoryPage extends ViewPageBase {
   /// Inner [EntityTable] adapter.
   final TrailersInventoryEntityTableAdapter adapter;
 

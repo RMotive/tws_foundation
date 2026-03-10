@@ -3,6 +3,42 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
+
+abstract class _ViewRoot extends ViewModuleBase with ConsoleMixin {
+  /// Creates a new [_ViewRoot] instance.
+  const _ViewRoot({
+    super.key,
+    required this.routerConfig,
+  });
+
+  /// Router configuration for the view.
+  final RoutingGraphBase routerConfig;
+
+  @override
+  List<IThemeData> bootstrapTheming() {
+    final List<FoundationThemeB> themes = <FoundationThemeB>[
+      FoundationThemeDark(),
+      FoundationThemeLight(),
+    ];
+
+    return themes;
+  }
+
+}
+
+final class _SecurityViewRoot extends _ViewRoot {
+  /// Creates a new [_SecurityViewRoot] instance.
+  const _SecurityViewRoot({
+    required super.routerConfig,
+  });
+
+  @override
+  List<IRoutingGraphData> bootstrapRouting() {
+    return routerConfig.routes;
+  }
+
+}
+
 /// {application} class.
 ///
 /// Handles the default behavior and configurations for a {csm foundation} view solution that requires authentication
@@ -11,14 +47,14 @@ final class FoundationSecureView extends StatefulWidget {
   /// Solution sign identifier.
   final String sign;
 
-  /// Application route tree.
-  final List<RouteB> routes;
+  /// Application RouteData tree.
+  final List<RoutingGraphNode> routes;
 
   /// Creates a new [FoundationSecureView] instance.
   const FoundationSecureView({
     super.key,
     required this.sign,
-    this.routes = const <RouteB>[],
+    this.routes = const <RoutingGraphNode>[],
   });
 
   @override
@@ -31,7 +67,8 @@ final class FoundationSecureView extends StatefulWidget {
 final class _FoundationSecureViewState extends State<FoundationSecureView> {
   @override
   Widget build(BuildContext context) {
-    return ViewRoot(
+    
+    return _SecurityViewRoot(
       routerConfig: _FoundationSecureViewRouteTree(
         solutionSign: widget.sign,
         routes: widget.routes,
@@ -41,23 +78,23 @@ final class _FoundationSecureViewState extends State<FoundationSecureView> {
 }
 
 /// {router tree} class.
-final class _FoundationSecureViewRouteTree extends RouterTreeB {
+final class _FoundationSecureViewRouteTree extends RoutingGraphBase {
   /// Creates a new [_FoundationSecureViewRouteTree] instance.
   _FoundationSecureViewRouteTree({
     required String solutionSign,
-    List<RouteB> routes = const <RouteB>[],
+    List<RoutingGraphNode> routes = const <RoutingGraphNode>[],
   }) : super(
-         routes: <RouteB>[
-           RouteNode(
-             FoundationRoutes.authRoute,
-             pageBuilder: (BuildContext ctx, RouteData routeData) {
-               return AuthPage(
-                 solutionSign: solutionSign,
-                 onAuthSuccess: (SessionData serverSession) {},
-               );
-             },
-           ),
-           ...routes,
+         routes: <RoutingGraphDataBase>[
+          RoutingGraphNode(
+            FoundationRoutes.authRoute,
+            pageBuilder: (BuildContext ctx, RoutingData routeData) {
+              return AuthPage(
+                solutionSign: solutionSign,
+                onAuthSuccess: (SessionData serverSession) {},
+              );
+            },
+          ),
+          ...routes,
          ],
        );
 }

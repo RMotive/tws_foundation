@@ -14,7 +14,7 @@ part '_create_whisper_approach_section.dart';
 
 Status _defaultStatus = Status();
 /// {whisper} class.
-final class EmployeesPageCreateWhisper extends PageB {
+final class EmployeesPageCreateWhisper extends ViewPageBase {
 
   /// Creates a new [EmployeesPageCreateWhisper] instance.
   const EmployeesPageCreateWhisper();
@@ -29,142 +29,143 @@ final class EmployeesPageCreateWhisper extends PageB {
       },
       child: (GlobalKey<FormState> formState) {
         return CreateEntityForm<Employee, EmployeesServiceI>(
-          entityFactory: () => Employee(),
+          factory: () => Employee(),
           controller: creationController,
-          buildEntityTag: (Employee entity) {
-            return 'Employee with name: ${entity.fullName}';
+          authFactory: (BuildContext context) {
+            SessionStorage sessionStorage = InjectorUtils.get();
+            return sessionStorage.token;
           },
           recordDesigner: (Employee entity, bool selected, bool valid) {
             return CreateEntityFormRecord(
               selected: selected,
-              fields: <CreateEntityFormRecordField>[
+              fields: <CreateEntityFormRecordField<Object>>[
 
                 /// --> Status
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Status',
-                  value: entity.status.name.cleaned ?? '---',
+                  value: entity.status.name.cleaned,
                 ),
                 
                 /// --> Employee Name
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Name',
                   value: entity.identification.name,
                 ),
 
                 /// --> Employee Last Name
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*First last name',
                   value: entity.identification.firstLastName,
                 ),
 
                 /// --> Employee Birthday
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Birthday',
-                  value: entity.identification.birthDay?.dateOnly ?? '---',
+                  value: entity.identification.birthDay?.dateOnly,
                 ),
 
                 /// --> Employee Second Last Name
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Second last name',
                   value: entity.identification.secondLastName,
                 ),
 
                 /// --> Employee CURP number
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'CURP number',
                   value: entity.curp,
                 ),
 
                 /// --> Employee RFC number
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'RFC number',
                   value: entity.rfc,
                 ),
 
                 /// --> Employee NSS number
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'NSS number',
                   value: entity.nss,
                 ),
 
                 /// --> Employee IMSS registration date
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'IMSS reg. Date',
-                  value: entity.dates.imss?.dateOnly ?? '---',
+                  value: entity.dates.imss?.dateOnly,
                 ),
 
                 /// --> Employee CNAP date
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'CNAP Date',
-                  value: entity.dates.cnap?.dateOnly ?? '---',
+                  value: entity.dates.cnap?.dateOnly,
                 ),
 
                 /// --> Employee Hiring date
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Hiring date',
-                  value: entity.dates.hire?.dateOnly ?? '---',
+                  value: entity.dates.hire?.dateOnly,
                 ),
 
                 /// --> Employee Termination date
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Termination date',
-                  value: entity.dates.termination?.dateOnly ?? '---',
+                  value: entity.dates.termination?.dateOnly,
                 ),
 
-                if(entity.approach != null) ...<CreateEntityFormRecordField>[
+                if(entity.approach != null) ...<CreateEntityFormRecordField<Object>>[
                   /// --> Employee Email
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*Email',
-                    value: entity.approach?.email ?? '---',
+                    value: entity.approach?.email,
                   ),
 
                   /// --> Employee Personal phone
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Personal phone',
-                    value: entity.approach?.personal ?? '---',
+                    value: entity.approach?.personal,
                   ),
 
                   /// --> Employee Enterprise phone
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Enterprise phone',
-                    value: entity.approach?.enterprise ?? '---',
+                    value: entity.approach?.enterprise,
                   ),
 
                   /// --> Employee alternative contact
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Alternative contact',
-                    value: entity.approach?.alternative ?? '---',
+                    value: entity.approach?.alternative,
                   ),
                 ],
 
-                if(entity.address != null) ...<CreateEntityFormRecordField>[
-                  CreateEntityFormRecordField(
+                if(entity.address != null) ...<CreateEntityFormRecordField<String>>[
+                  CreateEntityFormRecordField<String>(
                     label: 'Country',
                     value: entity.address?.country,
                   ),
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'State',
-                    value: entity.address?.state ?? '---',
+                    value: entity.address?.state,
                   ),
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'City',
-                    value: entity.address?.city ?? '---',
+                    value: entity.address?.city,
                   ),
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Street',
-                    value: entity.address?.street ?? '---',
+                    value: entity.address?.street,
                   ),
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Alt. Street',
-                    value: entity.address?.altStreet ?? '---',
+                    value: entity.address?.altStreet,
                   ),
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'ZIP',
-                    value: entity.address?.zip ?? '---',
+                    value: entity.address?.zip,
                   ),
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: 'Subdivision/Colonia',
-                    value: entity.address?.subdivision ?? '---',
+                    value: entity.address?.subdivision,
                   ),
                 ]
 
@@ -174,7 +175,7 @@ final class EmployeesPageCreateWhisper extends PageB {
               ],
             );
           },
-          formDesigner: (CreateEntityFormRecordReactor<Employee>? itemState) {
+          formDesigner: (CreateEntityFormRecordReactor<Employee>? itemState, ScrollController scrollController) {
             final bool formDisabled = !(itemState == null);
 
             return SingleChildScrollView(

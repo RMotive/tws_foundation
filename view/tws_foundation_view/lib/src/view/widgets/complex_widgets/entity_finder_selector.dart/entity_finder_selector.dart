@@ -1,15 +1,15 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/view/widgets/bordered_box.dart';
+import 'package:tws_foundation_view/src/core/models/entity_table_filters.dart';
 import 'package:tws_foundation_view/src/view/widgets/list_tile.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {widget} class.
 ///
-/// Draws a complex [Widget] that allows to find [EntityI] items and select them.
-final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+/// Draws a complex [Widget] that allows to find [IEntity] items and select them.
+final class EntityFinderSelector<TEntity extends IEntity<TEntity>, TService extends  IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>>
     extends StatefulWidget {
   /// [TEntity] builder for conversion.
   final EntityBuilder<TEntity> entityBuilder;
@@ -35,7 +35,7 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
   /// 
   /// The exact property path must be provided as defined in the [TEntity] model.
   /// 
-  /// Example for [Yardlog] as [TEntity]: '${YardLog.kSection}.${EntityKeys.name}', 
+  /// Example for [Yardlog] as [TEntity]: '${YardLog.kSection}.${CorePropertiesConsts.name}', 
   /// this means that the section name property will be used to filter the selectable entities.
   ///
   /// To add more more filters, just add more paths to the list.
@@ -67,10 +67,10 @@ final class EntityFinderSelector<TEntity extends EntityI<TEntity>, TService exte
 /// {state} class.
 ///
 /// Handles [State] for [EntityFinderSelector].
-final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TService extends ViewServiceI<TEntity>>
+final class _EntityFinderSelectorState<TEntity extends IEntity<TEntity>, TService extends  IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>>
     extends State<EntityFinderSelector<TEntity, TService>> {
   /// {dep} [TEntity] based service dependency.
-  final TService service = Injector.get();
+  final TService service = InjectorUtils.get();
 
   /// Inner [TextInput] focus node controller.
   final FocusNode inputFocusNode = FocusNode();
@@ -82,7 +82,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   final OverlayPortalController overlayController = OverlayPortalController();
 
   /// {state} current application theme data.
-  late FoundationThemeB theme = Theming.get(context);
+  late FoundationThemeB theme = ThemingUtils.get(context);
 
   /// {state} current [Future] instance for the data gathering search invokation.
   late Future<ViewOutput<TEntity>> searchInvok;
@@ -120,7 +120,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   String previousSearch = '';
 
   /// Current applied filters in the view service.
-  List<ViewFilterNodeI<TEntity>> currentFilters = <ViewFilterNodeI<TEntity>>[];
+  List<IViewFilterNode<TEntity>> currentFilters = <IViewFilterNode<TEntity>>[];
 
   /// Trigger the view service method for lazzy loadings and filters.
   void reloadEntities(bool isLazzy) {
@@ -132,40 +132,40 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
     }
   }
 
-  List<ViewFilterNodeI<TEntity>> searchInput(String value){    
+  List<IViewFilterNode<TEntity>> searchInput(String value){    
     previousSearch = value;
-    if(widget.filterBy == null) return <ViewFilterNodeI<TEntity>>[];
+    if(widget.filterBy == null) return <IViewFilterNode<TEntity>>[];
 
     currentViewPage = 1;
     entitiesList.clear();
-    if(value.cleaned == null) return <ViewFilterNodeI<TEntity>>[];
+    if(value.cleaned == null) return <IViewFilterNode<TEntity>>[];
   
 
     /// Store logicals filters.
-    final List<ViewFilterProperty<TEntity>> validLogicalFilterList = <ViewFilterProperty<TEntity>>[];
+    final List<ViewPropertyFilter<TEntity>> validLogicalFilterList = <ViewPropertyFilter<TEntity>>[];
 
     for (String path in widget.filterBy!) {
       validLogicalFilterList.add(
-        ViewFilterProperty<TEntity>.a(
+        ViewPropertyFilter<TEntity>.a(
           property: path,
           operator: ViewFilterOperators.contains,
           value: value,
         ),
       );
     }
-    ViewFilterLogical<TEntity> filter = ViewFilterLogical<TEntity>(
+    ViewLogicalFilter<TEntity> filter = ViewLogicalFilter<TEntity>(
       1,
       ViewFilterLogicalOperators.or,
       validLogicalFilterList,
     );
-    filter.discriminator = ViewFilterDiscriminator.viewFilterLogical.name;
+    filter.discriminator = ViewFilterDiscriminator.viewLogicalFilter.name;
 
-    return <ViewFilterNodeI<TEntity>>[filter]; 
+    return <IViewFilterNode<TEntity>>[filter]; 
   }
 
   /// Manage the service view data consume to populate the list content.
   Future<ViewOutput<TEntity>> viewInvokation(bool isLazzy) async {
-    SessionStorageI sessionStorage = Injector.get();
+    SessionStorageI sessionStorage = InjectorUtils.get();
 
     currentFilters = isLazzy ? currentFilters: searchInput(inputcontroller.text);
 
@@ -226,7 +226,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    theme = Theming.get(context);
+    theme = ThemingUtils.get(context);
   }
 
   @override
@@ -309,7 +309,7 @@ final class _EntityFinderSelectorState<TEntity extends EntityI<TEntity>, TServic
                         child: Text(
                           'Error Loading Data',
                           style: TextStyle(
-                            color: theme.warning.fore,
+                            color: theme.controlWarning.fore,
                           ),
                         ),
                       ),

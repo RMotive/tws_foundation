@@ -24,9 +24,7 @@ abstract interface class SessionStorageI {
 }
 
 /// Storage implementation that provides authentication and solution authentication user context information operations.
-final class SessionStorage implements SessionStorageI {
-  /// Console handler object for logging prints.
-  static const Console _console = Console('session_storage');
+final class SessionStorage with ConsoleMixin implements SessionStorageI {
 
   /// Token value storage access key.
   static const String _tokenKey = 'twsg_session_token';
@@ -68,9 +66,9 @@ final class SessionStorage implements SessionStorageI {
   @override
   String get token {
     if (_token == null || !isActive) {
-      final Router router = Injector.get();
+      final Router router = InjectorUtils.get();
 
-      router.go(FoundationRoutes.authRoute);
+      //router.go(FoundationRoutes.authRoute); // TODO ---> Get context 
       throw 'Invalid token or has expired, removing session and redirecting to authenticate';
     }
 
@@ -79,7 +77,7 @@ final class SessionStorage implements SessionStorageI {
 
   @override
   Future<void> init() async {
-    if (_logsOn) _console.message('Initializing [SessionStorage @($hashCode)]');
+    if (_logsOn) messageLog('Initializing [SessionStorage @($hashCode)]');
     await initLocalStorage();
 
     String? tokenValue = localStorage.getItem(_tokenKey);
@@ -92,7 +90,7 @@ final class SessionStorage implements SessionStorageI {
     _expiration = DateTime.parse(expirationValue).toLocal();
 
     if (_logsOn) {
-      _console.success(
+      successLog(
         '[SessionStorage @($hashCode)] ready.',
         info: <String, dynamic>{
           '_token': _token,

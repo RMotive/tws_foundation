@@ -51,7 +51,7 @@ class CascadeSection extends StatefulWidget {
 class _CascadeSectionState extends State<CascadeSection> {
 
   /// Color pallet for the component.
-  late SimpleTheming colorStruct;
+  late ThemingData colorStruct;
 
   /// Cascade visibility flag.
   bool show = false;
@@ -67,7 +67,7 @@ class _CascadeSectionState extends State<CascadeSection> {
   late Widget content;
 
   void initializeThemes() {
-    FoundationThemeB theme = Theming.get<FoundationThemeB>(context);
+    FoundationThemeB theme = ThemingUtils.get<FoundationThemeB>(context);
     colorStruct = theme.control;
   }
 

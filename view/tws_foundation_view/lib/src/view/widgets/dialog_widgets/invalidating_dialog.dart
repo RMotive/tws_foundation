@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Dialog, Router;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
@@ -12,7 +12,7 @@ class InvalidatingDialog extends StatelessWidget {
   final String? header;
 
   /// Invalidation list.
-  final List<EntityInvalidation<Object>> invalidations;
+  final List<EntityErrors<Object>> invalidations;
 
   /// Routing funtionality handler.
   final Router router;
@@ -53,9 +53,9 @@ class InvalidatingDialog extends StatelessWidget {
           )
         )
       ),
-      theming: Theming.get<FoundationThemeB>(context).error,
+      theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
       onAccept: () {
-        router.pop();
+        Navigator.of(context).pop();
       },
     );
   }

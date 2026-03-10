@@ -1,35 +1,32 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/permits/permits_page_create_whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [PermitsPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [PermitsPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class PermitsCategoryPage extends EntityCategoryPageB<PermitsEntityTableAdapter> {
+final class PermitsCategoryPage extends EntityCategoryPageB<Permit, PermitsEntityTableAdapter> {
   /// Creates a new [PermitsCategoryPage] instance.
   PermitsCategoryPage({
     super.cusRoute,
   }) : super(
          title: 'Permits',
-         route: FoundationRoutes.permitsPageRoute,
+         routeData: FoundationRoutes.permitsPageRoute,
        );
 
   @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.permitsCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext _, RouteData _) {
-          return PermitsPageCreateWhisper();
-        },
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => PermitsPageCreateWhisper(),
       ),
     ];
   }
@@ -42,21 +39,21 @@ final class PermitsCategoryPage extends EntityCategoryPageB<PermitsEntityTableAd
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(PermitsEntityTableAdapter adapter) {
-     return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(PermitsEntityTableAdapter adapter) {
+     return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
       ActionsRisbbonCreate(
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.permitsCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.permitsCreateWhisperRoute);
         },
       ),
     ];
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(_, Color? recomdColor) {
     return Icon(
       Icons.workspace_premium_outlined,
       color: recomdColor,
@@ -64,7 +61,7 @@ final class PermitsCategoryPage extends EntityCategoryPageB<PermitsEntityTableAd
   }
 
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return PermitsPage(
       adapter: adapter,
     );
@@ -73,8 +70,8 @@ final class PermitsCategoryPage extends EntityCategoryPageB<PermitsEntityTableAd
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [Permit] business entity to interact and manage data related with it.
-final class PermitsPage extends EntityPageB<PermitsEntityTableAdapter> {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [Permit] business entity to interact and manage data related with it.
+final class PermitsPage extends EntityViewPageBase<Permit, PermitsEntityTableAdapter> {
   /// Creates a new [PermitsPage] instance.
   PermitsPage({
     required super.adapter,

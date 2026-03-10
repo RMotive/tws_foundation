@@ -3,7 +3,7 @@ part of 'autocomplete_field.dart';
 class _TWSAutocompleteList<T> extends StatelessWidget {
   final ScrollController controller;
   final List<T> list;
-  final SimpleTheming theme;
+  final ThemingData theme;
   final String Function(T?) displayLabel;
   final String Function(T?)? suffixLabel;
   final void Function(String label, T? item) onTap;

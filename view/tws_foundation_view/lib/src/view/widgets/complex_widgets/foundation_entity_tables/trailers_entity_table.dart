@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -12,19 +12,18 @@ import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/incremental_list.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Address state class.
-class _PlateState extends ReactorB {}
+class _PlateState extends ReactorBase {}
 
 _PlateState _addressState = _PlateState();
 // ignore: unused_element
 void Function() _addressEffect = () {};
 
 /// Trailer type state class.
-class _TypeState extends ReactorB {}
+class _TypeState extends ReactorBase {}
 
 _TypeState _typeState = _TypeState();
 // ignore: unused_element
@@ -45,71 +44,71 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
       scopeColumn = <Widget>[
         const SectionDivider(text: 'Carrier details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Carrier',
-          value: entity.internal?.carrier.name ?? '---',
+          value: entity.internal?.carrier.name,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Carrier USDOT / MC',
-          value: entity.internal?.carrier.usdot?.mc ?? '---',
+          value: entity.internal?.carrier.usdot?.mc,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Carrier USDOT / SCAC',
-          value: entity.internal?.carrier.usdot?.scac ?? '---',
+          value: entity.internal?.carrier.usdot?.scac,
         ),
 
         const SectionDivider(text: 'Maintenance details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Anual Maintenance',
-          value: entity.internal?.maintenance?.anual.dateOnly ?? '---',
+          value: entity.internal?.maintenance?.anual.dateOnly,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Trimestral Maintenance',
-          value: entity.internal?.maintenance?.trimestral.dateOnly ?? '---',
+          value: entity.internal?.maintenance?.trimestral.dateOnly,
         ),
 
         const SectionDivider(text: 'Model details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Model',
-          value: entity.internal?.model?.name ?? '---',
+          value: entity.internal?.model?.name,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Manufacturer',
-          value: entity.internal?.model?.manufacturer.name ?? '---',
+          value: entity.internal?.model?.manufacturer.name,
         ),
 
         const SectionDivider(text: 'SCT details'),
 
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'SCT type',
-          value: entity.internal?.sct?.type ?? '---',
+          value: entity.internal?.sct?.type,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'SCT number',
-          value: entity.internal?.sct?.number ?? '---',
+          value: entity.internal?.sct?.number,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'SCT configuration',
-          value: entity.internal?.sct?.configuration ?? '---',
+          value: entity.internal?.sct?.configuration,
         ),
 
         for (int i = 0; i < entity.internal!.plates.length; i++) ...<Widget>[
           SectionDivider(
             text: '${i + 1} - ${entity.internal?.plates[i].country} Plate',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Identifier',
-            value: entity.internal?.plates[i].identifier ?? '---',
+            value: entity.internal?.plates[i].identifier,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Expiration',
-            value: entity.internal?.plates[i].expiration?.dateOnly ?? '---',
+            value: entity.internal?.plates[i].expiration?.dateOnly,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'State',
-            value: entity.internal?.plates[i].state ?? '---',
+            value: entity.internal?.plates[i].state,
           ),
         ],
       ];
@@ -117,17 +116,17 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
 
     if (entity.external != null) {
       scopeColumn = <Widget>[
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Carrier',
           value: entity.external?.carrier,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'USA Plate',
-          value: entity.external?.usaPlate ?? '---',
+          value: entity.external?.usaPlate,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'MX Plate',
-          value: entity.external?.mxPlate ?? '---',
+          value: entity.external?.mxPlate,
         ),
       ];
     }
@@ -136,11 +135,11 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
       child: EntityTableViewer(
         children: <Widget>[
           const SectionDivider(text: 'Common details'),
-          PropertyViewer(
+          PropertyViewer<DateTime>(
             label: 'Timestamp',
-            value: entity.timestamp.toString(),
+            value: entity.timestamp,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Ownership',
             value:
                 entity.internal != null
@@ -149,25 +148,25 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                     ? 'External'
                     : '---',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Economic',
             value: entity.economic,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Status',
             value: entity.status.name,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Type',
-            value: entity.classType ?? '---',
+            value: entity.classType
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Situation',
-            value: entity.situation?.name ?? '---',
+            value: entity.situation?.name,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Location',
-            value: entity.location?.name ?? '---',
+            value: entity.location?.name,
           ),
 
           ...scopeColumn,
@@ -179,20 +178,20 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
   @override
   EntityTableAdapterEditor<TrailerCommon>? composeEditor() {
     return EntityTableAdapterEditor<TrailerCommon>(
-      onUpdate: (BuildContext buildContext, TrailerCommon entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<TrailerCommon> data) {
+        final Router router = InjectorUtils.get();
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            if (entity.internal != null) return _buildInternalDialog(entity, router, context);
-            return _buildExternalDialog(entity, router, context);
+            if (data.entity.internal != null) return _buildInternalDialog(data.entity, router, context);
+            return _buildExternalDialog(data.entity, router, context);
           },
         );
       },
-      formBuilder: (BuildContext buildContext, TrailerCommon entity) {
+      formBuilder: (EntityTableAdapterEditorData<TrailerCommon> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -202,14 +201,14 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
 
               TextInput(
                 label: "TimeStamp",
-                controller: TextEditingController(text: entity.timestamp.toString()),
+                controller: TextEditingController(text: data.entity.timestamp.toString()),
                 isEnabled: false,
               ),
               TextInput(
                 label: "*Economic",
                 maxLength: 16,
-                controller: TextEditingController(text: entity.economic),
-                onChanged: (String value) => entity.economic = value,
+                controller: TextEditingController(text: data.entity.economic),
+                onChanged: (String value) => data.entity.economic = value,
               ),
 
               const SectionDivider(text: 'Trailer details'),
@@ -217,7 +216,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child:
-                    entity.internal != null ? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
+                    data.entity.internal != null ? _internalEditorFormBuilder(data.entity) : _externalEditorFormBuilder(data.entity),
               ),
             ],
           ),
@@ -227,9 +226,9 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
   }
 
   void _onUpdate(TrailerCommon entity, Router router, BuildContext context) async {
-    TrailersServiceI trailersService = Injector.get();
+    TrailersServiceI trailersService = InjectorUtils.get();
 
-    List<EntityInvalidation<TrailerCommon>> invalidations = entity.evaluate();
+    List<EntityErrors<TrailerCommon>> invalidations = entity.evaluate(<EntityErrors<TrailerCommon>>[]);
 
     if (invalidations.isNotEmpty) {
       await showDialog(
@@ -257,7 +256,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<TrailerCommon>(
             () => TrailerCommon(),
           ),
@@ -274,7 +273,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -291,9 +290,9 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -828,7 +827,7 @@ final class TrailersEntityTableAdapter extends FoundationEntityTableAdapterB<Tra
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [TrailerCommon] {entity}, also handles basic available behavior.
-final class TrailersEntityTable extends FoundationEntityTableB<TrailersEntityTableAdapter> {
+final class TrailersEntityTable extends FoundationEntityTableB<TrailerCommon, TrailersEntityTableAdapter> {
   /// Creates a new [TrailersEntityTable] instance.
   const TrailersEntityTable({
     required super.adapter,
@@ -836,38 +835,38 @@ final class TrailersEntityTable extends FoundationEntityTableB<TrailersEntityTab
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<TrailerCommon, TrailersServiceI>(
-      entityFactory: () => TrailerCommon(),
+    return EntityTable<TrailerCommon, ResponseResolverBase<ViewOutput<TrailerCommon>> ,TrailersServiceI>(
+      factory: () => TrailerCommon(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<TrailerCommon>>[
+      columns: <EntityTableColumnData<TrailerCommon>>[
         /// --> Economic column
-        EntityTableColumnOptions<TrailerCommon>(
+        EntityTableColumnData<TrailerCommon>(
           title: 'Economic',
           factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.economic,
         ),
-        EntityTableColumnOptions<TrailerCommon>(
+        EntityTableColumnData<TrailerCommon>(
           title: 'Ownership',
           factory:
               (TrailerCommon entity, int index, BuildContext buildContext) =>
                   entity.internal != null ? 'Own' : 'External',
         ),
-        EntityTableColumnOptions<TrailerCommon>(
+        EntityTableColumnData<TrailerCommon>(
           title: 'Type',
           factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.classType ?? '---',
         ),
-        EntityTableColumnOptions<TrailerCommon>(
+        EntityTableColumnData<TrailerCommon>(
           title: 'Status',
           factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.status.name,
         ),
-        EntityTableColumnOptions<TrailerCommon>(
+        EntityTableColumnData<TrailerCommon>(
           title: 'Situation',
           factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.situation?.name ?? '---',
         ),
-        EntityTableColumnOptions<TrailerCommon>(
+        EntityTableColumnData<TrailerCommon>(
           title: 'Location',
           factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.location?.name ?? '---',
         ),
-        EntityTableColumnOptions<TrailerCommon>(
+        EntityTableColumnData<TrailerCommon>(
           title: 'Plates USA/MX',
           factory: (TrailerCommon entity, int index, BuildContext buildContext) => entity.plates,
         ),

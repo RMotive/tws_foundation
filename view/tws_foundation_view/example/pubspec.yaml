@@ -21,12 +21,13 @@ dependencies:
   csm_view:
     git:
       url: https://github.com/RMotive/csm_view
-      ref: main
+      ref: org_refactor_break
 
-  csm_client:
+  csm_client_core:
     git:
-      url: https://github.com/RMotive/csm_client
-      ref: main
+      url: https://github.com/Cosmos-CSM/csm_client
+      path: csm_client_core
+      ref: HEAD
 
   tws_foundation_client:
     git:

@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -11,12 +11,11 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_
 import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Address state class.
-class _AddresState extends ReactorB {}
+class _AddresState extends ReactorBase {}
 
 _AddresState _addressState = _AddresState();
 // ignore: unused_element
@@ -38,81 +37,81 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
     if (entity.internal != null) {
       scopeColumns = <Widget>[
         const SectionDivider(text: 'Employee Identity'),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.internal?.employee.identification.name,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'First last name',
           value: entity.internal?.employee.identification.firstLastName,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Second last name',
           value: entity.internal?.employee.identification.secondLastName,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Birthday',
           value: entity.internal?.employee.identification.birthDay?.dateOnly,
         ),
         const SectionDivider(text: 'Driver Information'),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'License Expiration',
           value: entity.internal?.licenseExpiration?.dateOnly,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Driver Type',
           value: entity.internal?.driverType,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Visa',
           value: entity.internal?.visa,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'ANAM',
           value: entity.internal?.anam,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Twic',
           value: entity.internal?.twic,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Fast',
           value: entity.internal?.fast,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Drug. Alc. date',
           value: entity.internal?.drugAlcRegistrationDate?.dateOnly,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Pull notice date',
           value: entity.internal?.pullNoticeRegistrationDate?.dateOnly,
         ),
         const SectionDivider(text: 'Employee documents'),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'CURP',
           value: entity.internal?.employee.curp,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'RFC',
           value: entity.internal?.employee.rfc,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'NSS',
           value: entity.internal?.employee.nss,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Imss registration',
           value: entity.internal?.employee.dates.imss?.dateOnly,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Hire date',
           value: entity.internal?.employee.dates.hire?.dateOnly,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Termination date',
           value: entity.internal?.employee.dates.termination?.dateOnly,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Cnap date',
           value: entity.internal?.employee.dates.cnap?.dateOnly,
         ),
@@ -121,19 +120,19 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           const SectionDivider(
             text: 'Contact',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Email',
             value: entity.internal?.employee.approach?.email,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Personal phone',
             value: entity.internal?.employee.approach?.personal,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Enterprise phone',
             value: entity.internal?.employee.approach?.enterprise,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Alternative contact',
             value: entity.internal?.employee.approach?.alternative,
           ),
@@ -143,27 +142,27 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           const SectionDivider(
             text: 'Address',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Country',
             value: entity.internal?.employee.address?.country,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'City',
             value: entity.internal?.employee.address?.city,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Street',
             value: entity.internal?.employee.address?.street,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Alt. Street',
             value: entity.internal?.employee.address?.altStreet,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Zip',
             value: entity.internal?.employee.address?.zip,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Subdivision/Colonia',
             value: entity.internal?.employee.address?.subdivision,
           ),
@@ -176,15 +175,15 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         const SectionDivider(
           text: 'Employee identity',
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.external?.identification.name,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'First Last name',
           value: entity.external?.identification.firstLastName,
         ),
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Second Last name',
           value: entity.external?.identification.secondLastName,
         ),
@@ -197,23 +196,23 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
           const SectionDivider(
             text: 'Common information',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Timestamp',
             value: entity.timestamp.toString(),
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'License',
             value: entity.license,
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Ownership',
             value: entity.internal != null ? "Own" : 'External',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Situation',
             value:  entity.situation?.name ?? '--- ',
           ),
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Status',
             value: entity.status.name,
           ),
@@ -226,20 +225,20 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
   @override
   EntityTableAdapterEditor<DriverCommon>? composeEditor() {
     return EntityTableAdapterEditor<DriverCommon>(
-      onUpdate: (BuildContext buildContext, DriverCommon entity) {
-        final Router router = Injector.get();
+      onUpdate: (EntityTableAdapterEditorData<DriverCommon> data) {
+        final Router router = InjectorUtils.get();
 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            if (entity.internal != null) return _buildInternalDialog(entity, router, context);
-            return _buildExternalDialog(entity, router, context);
+            if (data.entity.internal != null) return _buildInternalDialog(data.entity, router, context);
+            return _buildExternalDialog(data.entity, router, context);
           },
         );
       },
-      formBuilder: (BuildContext buildContext, DriverCommon entity) {
+      formBuilder: (EntityTableAdapterEditorData<DriverCommon> data) {
         
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -250,7 +249,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
               TextInput(
                 label: "TimeStamp",
                 controller: TextEditingController(
-                  text: entity.timestamp.toString()
+                  text: data.entity.timestamp.toString()
                 ),
                 isEnabled: false,
               ),
@@ -259,41 +258,41 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                 hint: "Enter a License number",
                 maxLength: 12,
                 controller: TextEditingController(
-                  text: entity.license,
+                  text: data.entity.license,
                 ),
                 onChanged: (String text) {
-                  entity.license = text;
+                  data.entity.license = text;
                 },
               ),
               EntityFinderSelector<Status, StatusesServiceI>(
                 label: "*Status",
-                initialValue: entity.status,
+                initialValue: data.entity.status,
                 entityBuilder: () => Status(),
                 textBuilder: (Status entity) {
                   return entity.name.cleaned ?? "---";
                 },
                 onSelected: (Status? selectedItem) {
-                  entity.status = selectedItem ?? Status();
+                  data.entity.status = selectedItem ?? Status();
 
-                  if (entity.internal != null){
-                    entity.internal?.employee.status = selectedItem ?? Status();
-                    entity.internal?.employee.approach?.status = selectedItem ?? Status();
+                  if (data.entity.internal != null){
+                    data.entity.internal?.employee.status = selectedItem ?? Status();
+                    data.entity.internal?.employee.approach?.status = selectedItem ?? Status();
                   }
                 },
               ),
               EntityFinderSelector<Situation, SituationsServiceI>(
                 label: "Situation",
-                initialValue: entity.situation,
+                initialValue: data.entity.situation,
                 entityBuilder: () => Situation(),
                 textBuilder: (Situation entity) {
                   return entity.name.cleaned ?? "---";
                 },
                 onSelected: (Situation? selectedItem) {
-                  entity.situation = selectedItem ?? Situation();
+                  data.entity.situation = selectedItem ?? Situation();
                 },
               ),
           
-              entity.internal != null? _internalEditorFormBuilder(entity) : _externalEditorFormBuilder(entity),
+              data.entity.internal != null? _internalEditorFormBuilder(data.entity) : _externalEditorFormBuilder(data.entity),
             ],
           ),
         );
@@ -944,9 +943,9 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
   }
 
   void _onUpdate(DriverCommon entity, Router router, BuildContext context) async {
-    DriversServiceI driversService = Injector.get();
+    DriversServiceI driversService = InjectorUtils.get();
 
-    List<EntityInvalidation<DriverCommon>> invalidations = entity.evaluate();
+    List<EntityErrors<DriverCommon>> invalidations = entity.evaluate(<EntityErrors<DriverCommon>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -974,7 +973,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<DriverCommon>(
             () => DriverCommon(),
           ),
@@ -991,7 +990,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -1008,9 +1007,9 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -1187,7 +1186,7 @@ final class DriversEntityTableAdatper extends FoundationEntityTableAdapterB<Driv
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [DriverCommon] {entity}, also handles basic available behavior.
-final class DriversEntityTable extends FoundationEntityTableB<DriversEntityTableAdatper> {
+final class DriversEntityTable extends FoundationEntityTableB<DriverCommon, DriversEntityTableAdatper> {
   /// Creates a new [DriversEntityTable] instance.
   const DriversEntityTable({
     required super.adapter,
@@ -1195,24 +1194,24 @@ final class DriversEntityTable extends FoundationEntityTableB<DriversEntityTable
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<DriverCommon, DriversServiceI>(
-      entityFactory: () => DriverCommon(),
+    return EntityTable<DriverCommon, FoundationResponseResolver<ViewOutput<DriverCommon>>,DriversServiceI>(
+      factory: () => DriverCommon(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<DriverCommon>>[
+      columns: <EntityTableColumnData<DriverCommon>>[
         /// --> Name
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'Name',
           factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.name,
         ),
 
         /// --> License
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'License',
           factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.license,
         ),
 
         /// --> Onwership
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'Ownership',
           factory:
               (DriverCommon entity, int index, BuildContext buildContext) =>
@@ -1220,34 +1219,34 @@ final class DriversEntityTable extends FoundationEntityTableB<DriversEntityTable
         ),
 
         /// --> Onwership
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'Driver Type',
           factory: (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.driverType ?? '---',
         ),
 
         /// --> CURP
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'CURP',
           factory:
               (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.curp ?? '---',
         ),
 
         /// --> RFC
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'RFC',
           factory:
               (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.rfc ?? '---',
         ),
 
         /// --> NSS
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'NSS',
           factory:
               (DriverCommon entity, int index, BuildContext buildContext) => entity.internal?.employee.nss ?? '---',
         ),
 
         /// --> Hiring Date
-        EntityTableColumnOptions<DriverCommon>(
+        EntityTableColumnData<DriverCommon>(
           title: 'Hiring Date',
           factory:
               (DriverCommon entity, int index, BuildContext buildContext) =>

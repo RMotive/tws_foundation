@@ -1,4 +1,4 @@
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router, Dialog;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -11,12 +11,11 @@ import 'package:tws_foundation_view/src/view/widgets/complex_widgets/foundation_
 import 'package:tws_foundation_view/src/view/widgets/datepicker_field.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
-import 'package:tws_foundation_view/src/view/widgets/property_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// Address state class.
-class _AddresState extends ReactorB {}
+class _AddresState extends ReactorBase {}
 
 _AddresState _addressState = _AddresState();
 // ignore: unused_element
@@ -38,90 +37,90 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
         const SectionDivider(text: 'Employee Information'),
 
         /// --> Timestamp
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Timestamp',
           value: entity.timestamp.fullDate,
         ),
 
         /// --> Status
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Status',
           value: entity.status.name,
         ),
 
         /// --> Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Name',
           value: entity.identification.fullname,
         ),
 
         /// --> Last Name
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Birth Day',
           value: entity.identification.birthDay?.toIso8601String(),
         ),
 
         /// --> CURP
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'CURP',
           value: entity.curp,
         ),
 
         /// --> RFC
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'RFC',
           value: entity.rfc,
         ),
 
         /// --> NSS
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'NSS',
           value: entity.nss,
         ),
 
         /// --> Imss date
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'IMSS date',
-          value: entity.dates.imss?.dateOnly ?? '---',
+          value: entity.dates.imss?.dateOnly,
         ),
 
         /// --> CNAP date
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'CNAP date',
-          value: entity.dates.cnap?.dateOnly ?? '---',
+          value: entity.dates.cnap?.dateOnly,
         ),
 
         /// --> Hiring date
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Hiring date',
-          value: entity.dates.hire?.dateOnly ?? '---',
+          value: entity.dates.hire?.dateOnly,
         ),
 
         /// --> Imss date
-        PropertyViewer(
+        PropertyViewer<String>(
           label: 'Termination date',
-          value: entity.dates.termination?.dateOnly ?? '---',
+          value: entity.dates.termination?.dateOnly,
         ),
 
         if(entity.approach != null) ...<Widget>[
           const SectionDivider(text: 'Contact Information'),
           /// --> Email
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Email',
             value: entity.approach?.email.cleaned ?? '---',
           ),
           /// --> Personal phone
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Personal phone',
             value: entity.approach?.personal.cleaned ?? '---',
           ),
           /// --> Enterprise phone
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Enterprise phone',
             value: entity.approach?.enterprise.cleaned ?? '---',
           ),
           /// --> Alternative Contact
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Alternative contact',
             value: entity.approach?.alternative.cleaned ?? '---',
           ),
@@ -131,32 +130,32 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
         if(entity.address != null) ...<Widget>[
           const SectionDivider(text: 'Address Information'),
           /// --> Country
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Country',
             value: entity.address?.country,
           ),
           /// --> State
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'State',
             value: entity.address?.state,
           ),
           /// --> City
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'City',
             value: entity.address?.city,
           ),
           /// --> Street
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Street',
             value: entity.address?.street,
           ),
           /// --> alt. street
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'Alt. street',
             value: entity.address?.altStreet,
           ),
           /// --> Subdivision / Colonia
-          PropertyViewer(
+          PropertyViewer<String>(
             label: 'subdivision/Colonia',
             value: entity.address?.subdivision,
           ),
@@ -169,18 +168,18 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
   @override
   EntityTableAdapterEditor<Employee>? composeEditor() {    
     return EntityTableAdapterEditor<Employee>(
-      onUpdate: (BuildContext buildContext, Employee entity) {
-        final Router router = Injector.get();
-
+      onUpdate: (EntityTableAdapterEditorData<Employee> data) {
+        final Router router = InjectorUtils.get();
+ 
         showDialog(
-          context: buildContext,
+          context: data.context,
           useRootNavigator: true,
           barrierDismissible: false,
-          builder: (BuildContext context) => _buildUpdateDialog(entity, router, context),
+          builder: (BuildContext context) => _buildUpdateDialog(data.entity, router, context),
         );
       },
 
-      formBuilder:(BuildContext buildContext, Employee entity) {
+      formBuilder:(EntityTableAdapterEditorData<Employee> data) {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -192,18 +191,18 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                 label: 'Timestamp',
                 isEnabled: false,
                 controller: TextEditingController(
-                  text: entity.timestamp.fullDate,
+                  text: data.entity.timestamp.fullDate,
                 ),
               ),
               EntityFinderSelector<Status, StatusesServiceI>(
                 entityBuilder: () => Status(),
                 label: '*Select a Status...',
-                initialValue: entity.status,
+                initialValue: data.entity.status,
                 textBuilder: (Status status) {
                   return status.name;
                 },
                 onSelected: (Status? status) {
-                  entity.status = status ?? Status();
+                  data.entity.status = status ?? Status();
                 },
               ),
               TextInput(
@@ -212,10 +211,10 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                 maxLength: 18,
                 isFixedLength: true,
                 controller: TextEditingController(
-                  text: entity.curp,
+                  text: data.entity.curp,
                 ),
                 onChanged: (String text) {
-                  entity.curp = text.cleaned;
+                  data.entity.curp = text.cleaned;
                 },
               ),
               TextInput(
@@ -223,10 +222,10 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                 label: 'RFC',
                 maxLength: 13,
                 controller: TextEditingController(
-                  text: entity.rfc,
+                  text: data.entity.rfc,
                 ),
                 onChanged: (String text) {
-                  entity.rfc = text.cleaned;
+                  data.entity.rfc = text.cleaned;
                 },
               ),
               TextInput(
@@ -234,54 +233,54 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                 label: 'NSS',
                 maxLength: 11,
                 controller: TextEditingController(
-                  text: entity.nss,
+                  text: data.entity.nss,
                 ),
                 onChanged: (String text) {
-                  entity.nss = text.cleaned;
+                  data.entity.nss = text.cleaned;
                 },
               ),
 
               Datepicker(
                 width: double.maxFinite,
                 label: 'IMSS registration date',
-                controller: TextEditingController(text: entity.dates.imss?.dateOnly),
+                controller: TextEditingController(text: data.entity.dates.imss?.dateOnly),
                 firstDate: DateTime(1950), 
                 lastDate: DateTime(DateTime.now().year),
                 onChanged: (String? date) {
-                  entity.dates.imss = DateTime.tryParse(date ?? '');
+                  data.entity.dates.imss = DateTime.tryParse(date ?? '');
                 },
               ),
 
               Datepicker(
                 width: double.maxFinite,
                 label: 'CNAP date',
-                controller: TextEditingController(text: entity.dates.cnap?.dateOnly),
+                controller: TextEditingController(text: data.entity.dates.cnap?.dateOnly),
                 firstDate: DateTime(1950), 
                 lastDate: DateTime(DateTime.now().year),
                 onChanged: (String? date) {
-                  entity.dates.cnap = DateTime.tryParse(date ?? '');
+                  data.entity.dates.cnap = DateTime.tryParse(date ?? '');
                 },
               ),
 
               Datepicker(
                 width: double.maxFinite,
                 label: 'Employee hiring date',
-                controller: TextEditingController(text: entity.dates.hire?.dateOnly),
+                controller: TextEditingController(text: data.entity.dates.hire?.dateOnly),
                 firstDate: DateTime(1950), 
                 lastDate: DateTime(DateTime.now().year),
                 onChanged: (String? date) {
-                  entity.dates.hire = DateTime.tryParse(date ?? '');
+                  data.entity.dates.hire = DateTime.tryParse(date ?? '');
                 },
               ),
 
               Datepicker(
                 width: double.maxFinite,
                 label: 'Termination date',
-                controller: TextEditingController(text: entity.dates.termination?.dateOnly),
+                controller: TextEditingController(text: data.entity.dates.termination?.dateOnly),
                 firstDate: DateTime(1950), 
                 lastDate: DateTime(DateTime.now().year),
                 onChanged: (String? date) {
-                  entity.dates.termination = DateTime.tryParse(date ?? '');
+                  data.entity.dates.termination = DateTime.tryParse(date ?? '');
                 },
               ),
 
@@ -291,10 +290,10 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                 label: '*Name',
                 maxLength: 32,
                 controller: TextEditingController(
-                  text: entity.identification.name,
+                  text: data.entity.identification.name,
                 ),
                 onChanged: (String text) {
-                  entity.identification.name = text;
+                  data.entity.identification.name = text;
                 },
               ),
               TextInput(
@@ -302,10 +301,10 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                 label: '*First lastname',
                 maxLength: 32,
                 controller: TextEditingController(
-                  text: entity.identification.firstLastName,
+                  text: data.entity.identification.firstLastName,
                 ),
                 onChanged: (String text) {
-                  entity.identification.firstLastName = text;
+                  data.entity.identification.firstLastName = text;
                 },
               ),
               TextInput(
@@ -313,51 +312,51 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                 label: 'Second Lastname',
                 maxLength: 32,
                 controller: TextEditingController(
-                  text: entity.identification.secondLastName,
+                  text: data.entity.identification.secondLastName,
                 ),
                 onChanged: (String text) {
-                  entity.identification.secondLastName = text.cleaned;
+                  data.entity.identification.secondLastName = text.cleaned;
                 },
               ),
               Datepicker(
                 width: double.maxFinite,
                 label: 'Birthday',
-                controller: TextEditingController(text: entity.identification.birthDay?.dateOnly),
+                controller: TextEditingController(text: data.entity.identification.birthDay?.dateOnly),
                 firstDate: DateTime(1950), 
                 lastDate: DateTime(DateTime.now().year),
                 onChanged: (String? date) {
-                  entity.identification.birthDay = DateTime.tryParse(date ?? '');
+                  data.entity.identification.birthDay = DateTime.tryParse(date ?? '');
                 },
               ),
 
-              if (entity.address != null)
+              if (data.entity.address != null)
                 Column(
                   spacing: 10,
                   children: <Widget>[
                     SectionDivider(text: 'Address'),
-                    _addressSection(entity, false),
+                    _addressSection(data.entity, false),
                   ],
                 ),
 
-              if (entity.address == null)
+              if (data.entity.address == null)
                 FoldPanelWidget(
                   title: "Add Address Information",
-                  child: _addressSection(entity,  true),
+                  child: _addressSection(data.entity,  true),
                 ),
 
-                if (entity.address != null)
+                if (data.entity.address != null)
                 Column(
                   spacing: 10,
                   children: <Widget>[
                     SectionDivider(text: 'Contact'),
-                    _approachSection(entity, false),
+                    _approachSection(data.entity, false),
                   ],
                 ),
 
-              if (entity.address == null)
+              if (data.entity.address == null)
                 FoldPanelWidget(
                   title: "Add Contact Information",
-                  child: _approachSection(entity,  true),
+                  child: _approachSection(data.entity,  true),
                 ),
 
 
@@ -601,9 +600,9 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
   }
 
   void _onUpdate(Employee entity, Router router, BuildContext context) async {
-    EmployeesServiceI employeesService = Injector.get();
+    EmployeesServiceI employeesService = InjectorUtils.get();
 
-    List<EntityInvalidation<Employee>> invalidations = entity.evaluate();
+    List<EntityErrors<Employee>> invalidations = entity.evaluate(<EntityErrors<Employee>>[]);
 
     if(invalidations.isNotEmpty){
       await showDialog(
@@ -631,7 +630,7 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
 
     String? errMessage;
     resResolver.resolve(
-      objectBuilder:
+      factory:
           () => UpdateOutput<Employee>(
             () => Employee(),
           ),
@@ -648,7 +647,7 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
         errMessage = FoundationMessages.connectionError;
       },
       onFinally: () {
-        router.pop();
+        Navigator.of(context).pop();
         if (errMessage == null) return;
 
         showDialog(
@@ -665,9 +664,9 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
                   fontSize: 16,
                 ),
               ),
-              theming: Theming.get<FoundationThemeB>(context).error,
+              theming: ThemingUtils.get<FoundationThemeB>(context).controlError,
               onAccept: () {
-                router.pop();
+                Navigator.of(context).pop();
               },
             );
           },
@@ -788,7 +787,7 @@ final class EmployeesEntityTableAdatper extends FoundationEntityTableAdapterB<Em
 /// {widget} class.
 ///
 /// Draws a {foundation} complex [EntityTable] based on [Employee] {entity}, also handles basic available behavior.
-final class EmployeesEntityTable extends FoundationEntityTableB<EmployeesEntityTableAdatper> {
+final class EmployeesEntityTable extends FoundationEntityTableB<Employee, EmployeesEntityTableAdatper> {
   /// Creates a new [EmployeesEntityTable] instance.
   const EmployeesEntityTable({
     required super.adapter,
@@ -796,36 +795,36 @@ final class EmployeesEntityTable extends FoundationEntityTableB<EmployeesEntityT
 
   @override
   Widget build(BuildContext context) {
-    return EntityTable<Employee, EmployeesServiceI>(
-      entityFactory: () => Employee(),
+    return EntityTable<Employee, FoundationResponseResolver<ViewOutput<Employee>>, EmployeesServiceI>(
+      factory: () => Employee(),
       adapter: adapter,
-      columns: <EntityTableColumnOptions<Employee>>[
+      columns: <EntityTableColumnData<Employee>>[
         /// --> Name
-        EntityTableColumnOptions<Employee>(
+        EntityTableColumnData<Employee>(
           title: 'Name',
           factory: (Employee entity, int index, BuildContext buildContext) => entity.fullName,
         ),
 
         /// --> CURP
-        EntityTableColumnOptions<Employee>(
+        EntityTableColumnData<Employee>(
           title: 'CURP',
           factory: (Employee entity, int index, BuildContext buildContext) => entity.curp,
         ),
 
         /// --> RFC
-        EntityTableColumnOptions<Employee>(
+        EntityTableColumnData<Employee>(
           title: 'RFC',
           factory: (Employee entity, int index, BuildContext buildContext) => entity.rfc,
         ),
 
         /// --> NSS
-        EntityTableColumnOptions<Employee>(
+        EntityTableColumnData<Employee>(
           title: 'NSS',
           factory: (Employee entity, int index, BuildContext buildContext) => entity.nss,
         ),
 
         /// --> Hiring Date
-        EntityTableColumnOptions<Employee>(
+        EntityTableColumnData<Employee>(
           title: 'Hiring Date',
           factory: (Employee entity, int index, BuildContext buildContext) => entity.dates.hire?.toIso8601String(),
         ),

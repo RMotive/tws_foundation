@@ -1,35 +1,32 @@
 import 'package:csm_view/csm_view.dart';
-import 'package:flutter/material.dart' hide Route, Router;
+import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/employees/create_whisper/employees_page_create_whisper.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
-import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_page_b.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
 ///
-/// Implements a [CategoryLayoutPageI] defining default behavior for a [EmployeesPage] category page implementation
+/// Implements a [ICategoryLayoutPage] defining default behavior for a [EmployeesPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
 ///
 /// (@category Entity Pages)
-final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTableAdatper> {
+final class EmployeesCategoryPage extends EntityCategoryPageB<Employee, EmployeesEntityTableAdatper> {
   /// Creates a new [EmployeesCategoryPage] instance.
   EmployeesCategoryPage({
     super.cusRoute,
   }) : super(
          title: 'Employees',
-         route: FoundationRoutes.employeesPageRoute,
+         routeData: FoundationRoutes.employeesPageRoute,
        );
 
   @override
-  List<RouteB> composeRoutes() {
-    return <RouteB>[
-      RouteWhisper<Object>(
+  List<IRoutingGraphData> composeRoutes() {
+    return <IRoutingGraphData>[
+      RoutingGraphWhisperData<Object>(
         FoundationRoutes.employeesCreateWhisperRoute,
-        whisperOptions: RouteWhisperOptions(),
-        pageBuilder: (BuildContext _, RouteData _) {
-          return EmployeesPageCreateWhisper();
-        },
+        whisperOptions: WhisperOptions(),
+        pageBuilder: (BuildContext ctx, RoutingData routeData) => EmployeesPageCreateWhisper(),
       ),
     ];
   }
@@ -42,21 +39,21 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
   }
 
   @override
-  List<ActionsRibbonNodeI> composeRibbonController(EmployeesEntityTableAdatper adapter) {
-    return <ActionsRibbonNodeI>[
-      ActionsRibbonRefresh(
-        onRefresh: adapter.refresh,
+  List<IActionsRibbonNode> composeRibbonController(EmployeesEntityTableAdatper adapter) {
+    return <IActionsRibbonNode>[
+      ActionsRisbbonRefresh(
+        onRefresh:(_) => adapter.refresh,
       ),
       ActionsRisbbonCreate(
-        onCreate: () {
-          Injector.get<Router>().go(FoundationRoutes.employeesCreateWhisperRoute);
+        onCreate: (BuildContext context) {
+          InjectorUtils.get<Router>().go(context, FoundationRoutes.employeesCreateWhisperRoute);
         },
       ),
     ];
   }
 
   @override
-  Widget? composeIcon(Color? recomdColor) {
+  Widget? composeIcon(BuildContext context, Color? recomdColor) {
     return Icon(
       Icons.departure_board,
       color: recomdColor,
@@ -64,7 +61,7 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
   }
 
   @override
-  PageI composePage(BuildContext buildContext, RouteData routeData) {
+  IViewPage composePage(BuildContext buildContext, RoutingData routeData) {
     return EmployeesPage(
       adapter: adapter,
     );
@@ -73,8 +70,8 @@ final class EmployeesCategoryPage extends EntityCategoryPageB<EmployeesEntityTab
 
 /// {page} class.
 ///
-/// Implements a [PageB], draws a complex {csm} design for the [Employee] business entity to interact and manage data related with it.
-final class EmployeesPage extends EntityPageB<EmployeesEntityTableAdatper> {
+/// Implements a [ViewPageBase], draws a complex {csm} design for the [Employee] business entity to interact and manage data related with it.
+final class EmployeesPage extends EntityViewPageBase<Employee, EmployeesEntityTableAdatper> {
   /// Creates a new [EmployeesPage] instance.
   EmployeesPage({
     required super.adapter,

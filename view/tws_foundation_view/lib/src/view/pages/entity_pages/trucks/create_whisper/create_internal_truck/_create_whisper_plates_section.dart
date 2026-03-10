@@ -1,7 +1,7 @@
 part of '../trucks_page_create_whisper.dart';
 
 /// Address state class.
-class _PlateState extends ReactorB {}
+class _PlateState extends ReactorBase {}
 
 _PlateState _plateState = _PlateState();
 void Function() _plateEffect = () {};

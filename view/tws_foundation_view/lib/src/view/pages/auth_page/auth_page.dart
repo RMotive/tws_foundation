@@ -1,6 +1,6 @@
 import 'dart:async' show FutureOr;
 
-import 'package:csm_client/csm_client.dart';
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -12,7 +12,7 @@ part '_auth_page_business_logo.dart';
 /// {page} implementation.
 ///
 /// Defines an authentication entry point for {TWS} view solutions.
-final class AuthPage extends PageB {
+final class AuthPage extends ViewPageBase {
   /// Solution authentication scope sign identification.
   final String solutionSign;
 

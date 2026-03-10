@@ -20,8 +20,8 @@ final class PhotoTakerPhotoCamera extends StatefulWidget {
       _PhotoTakerPhotoCameraState();
 }
 
-class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> {
-  /// Instance of the current theming.
+class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> with ConsoleMixin {
+  /// Instance of the current ThemingUtils.
   late FoundationThemeB theme;
 
   ///
@@ -45,7 +45,7 @@ class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> {
   
   @override
   void didChangeDependencies() {
-    theme = Theming.get<FoundationThemeB>(context);
+    theme = ThemingUtils.get<FoundationThemeB>(context);
     super.didChangeDependencies();
   }
 
@@ -67,7 +67,7 @@ class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> {
                   });
                 })
                 .onError((Exception ex, StackTrace st) {
-                  _advisor.exception('Unable to initialize camera', ex, st);
+                  exceptionLog('TWSPhotoTaker - Unable to initialize camera', ex, st);
                   setState(() {
                     _camera = null;
                     initingCamera = false;
@@ -75,7 +75,7 @@ class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> {
                 });
           })
           .onError((Exception ex, StackTrace st) {
-            _advisor.exception('Unable to create camera', ex, st);
+            exceptionLog('TWSPhotoTaker - Unable to create camera', ex, st);
             setState(() {
               _camera = null;
               initingCamera = false;
@@ -128,11 +128,11 @@ class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> {
                 child: IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: theme.error.fore,
+                    color: theme.controlError.fore,
                     size: 32,
                   ),
                   onPressed: () {
-                    Injector.get<Router>().pop();
+                    Navigator.of(context).pop();
                   },
                 ),
               ),
@@ -153,7 +153,7 @@ class _PhotoTakerPhotoCameraState extends State<PhotoTakerPhotoCamera> {
                             label: 'Guardar',
                             onClick: () {
                               widget.onSave(_photo!);
-                              Injector.get<Router>().pop();
+                              Navigator.of(context).pop();
                             },
                           ),
                           ButtonFlat(

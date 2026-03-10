@@ -5,16 +5,12 @@ import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:tws_foundation_view/src/core/themes/foundation_theme_b.dart';
-import 'package:tws_foundation_view/src/view/widgets/button_flat.dart';
 import 'package:tws_foundation_view/src/view/widgets/file_selector.dart';
 part 'photo_taker_photo_preview.dart';
 part 'photo_taker_camera.dart';
 
 /// Initialize an [CameraPlatform] object to access to the device camera functions.
 final CameraPlatform _cameraPlatform = CameraPlatform.instance;
-
-/// Logs advisor intializing.
-const Console _advisor = Console('TWSPhotoTaker');
 
 /// [PhotoTaker] This component can access to the device camera and picture storage to take photos or select stores images.
 ///
@@ -70,8 +66,8 @@ final class PhotoTaker extends StatefulWidget {
   State<PhotoTaker> createState() => _PhotoTakerState();
 }
 
-class _PhotoTakerState extends State<PhotoTaker> {
-  /// Instance of the current theming.
+class _PhotoTakerState extends State<PhotoTaker> with ConsoleMixin {
+  /// Instance of the current ThemingUtils.
   late FoundationThemeB theme;
 
   bool _loadingCamera = true;
@@ -110,7 +106,7 @@ class _PhotoTakerState extends State<PhotoTaker> {
         });
       },
       onError: (Object ex, StackTrace t) {
-        _advisor.exception('Camera Exception', Exception(ex), t);
+        exceptionLog('TWSPhotoTaker - Camera Exception', Exception(ex), t);
         setState(() {
           _cameras = <CameraDescription>[];
           _loadingCamera = false;
@@ -120,7 +116,7 @@ class _PhotoTakerState extends State<PhotoTaker> {
   }
   @override
   void didChangeDependencies() {
-    theme = Theming.get<FoundationThemeB>(context);
+    theme = ThemingUtils.get<FoundationThemeB>(context);
     super.didChangeDependencies();
   }
   @override

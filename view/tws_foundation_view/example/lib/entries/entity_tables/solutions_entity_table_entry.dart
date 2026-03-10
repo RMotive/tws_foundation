@@ -1,4 +1,4 @@
-import 'package:csm_view/csm_view.dart' hide LandingThemeB;
+import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +6,7 @@ import 'package:tws_foundation_view/tws_foundation_view.dart' as view;
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 ///
-final class SolutionsEntityTableEntry extends PackageLandingEntryB<LandingThemeB> {
+final class SolutionsEntityTableEntry extends PackageLandingEntryBase<LandingThemeB> {
   /// Creates a new [SolutionsEntityTableEntry] instance.
   SolutionsEntityTableEntry({
     super.key,

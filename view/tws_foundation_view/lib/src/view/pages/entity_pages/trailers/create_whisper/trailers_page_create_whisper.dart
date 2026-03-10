@@ -22,7 +22,7 @@ part 'create_internal_trailer/_create_whisper_trailers_section.dart';
 part 'create_internal_trailer/_create_whisper_type_section.dart';
 
 /// Driver section state class.
-final class _TrailerSectionState extends ReactorB {}
+final class _TrailerSectionState extends ReactorBase {}
 final _TrailerSectionState _trailerSectionState = _TrailerSectionState();
 void Function() _trailerSectionStateReact = (){};
 
@@ -34,7 +34,7 @@ const List<String> _statesUSA = FoundationCollections.kUStateCodes;
 const List<String> _statesMX = FoundationCollections.kMXStateCodes;
 
 /// {whisper} class.
-final class TrailersPageCreateWhisper extends PageB {
+final class TrailersPageCreateWhisper extends ViewPageBase {
   /// Creates a new [TrailersPageCreateWhisper] instance.
   const TrailersPageCreateWhisper();
 
@@ -49,66 +49,67 @@ final class TrailersPageCreateWhisper extends PageB {
       },
       child:(GlobalKey<FormState> formState) {
         return CreateEntityForm<TrailerCommon, TrailersServiceI>(
-          entityFactory: () => TrailerCommon(),
+          factory: () => TrailerCommon(),
           controller: creationController,
-          buildEntityTag: (TrailerCommon entity) {
-            return 'Trailer with number: ${entity.economic}';
+          authFactory: (BuildContext context) {
+            SessionStorage sessionStorage = InjectorUtils.get();
+            return sessionStorage.token;
           },
           recordDesigner: (TrailerCommon entity, bool selected, bool valid) {
-            List<CreateEntityFormRecordField> commonFields = <CreateEntityFormRecordField>[
+            List<CreateEntityFormRecordField<Object>> commonFields = <CreateEntityFormRecordField<Object>>[
               /// --> Trailer ownership type
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: 'Ownership',
                 value: entity.internal != null? 'Own' : 'Internal',
               ),
 
               /// --> Trailer Economic type.
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: '*Economic',
-                value: entity.economic.cleaned ?? '---',
+                value: entity.economic.cleaned,
               ),
 
               /// --> Truck Status
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: '*Status',
-                value: entity.status.name.cleaned ?? '---',
+                value: entity.status.name.cleaned,
               ),
 
               /// --> Truck Situation
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String> (
                 label: 'Situation',
-                value: entity.situation?.name ?? "---",
+                value: entity.situation?.name,
               ),
 
                 /// --> Truck location
-              CreateEntityFormRecordField(
+              CreateEntityFormRecordField<String>(
                 label: 'Location',
-                value: entity.location?.name ?? "---",
+                value: entity.location?.name,
               ),
 
               /// --> Trailer type and size.
               if (entity.type != null)
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'Type',
-                  value: entity.classType ?? '---',
+                  value: entity.classType,
                 ),
             ];
 
             if(entity.internal != null) {
               return CreateEntityFormRecord(
                 selected: selected,
-                fields: <CreateEntityFormRecordField>[
+                fields: <CreateEntityFormRecordField<Object>>[
                   /// --> Adding common fields.
                   ...commonFields,
                   /// --> Truck carrier name.
-                  CreateEntityFormRecordField(
+                  CreateEntityFormRecordField<String>(
                     label: '*Carrier',
-                    value: entity.internal!.carrier.name.cleaned ?? "---",
+                    value: entity.internal!.carrier.name.cleaned,
                   ),
 
                   /// --> Truck Plates.
-                  for (int i = 0; i < entity.internal!.plates.length; i++) ...<CreateEntityFormRecordField>[
-                    CreateEntityFormRecordField(
+                  for (int i = 0; i < entity.internal!.plates.length; i++) ...<CreateEntityFormRecordField<Object>>[
+                    CreateEntityFormRecordField<String>(
                       label: 'Plate ${i + 1}',
                       minWidth: 150,
                       value:
@@ -116,51 +117,51 @@ final class TrailersPageCreateWhisper extends PageB {
                     ),
                   ],
 
-                  if(entity.internal?.model != null) ...<CreateEntityFormRecordField>[
+                  if(entity.internal?.model != null) ...<CreateEntityFormRecordField<Object>>[
                     /// --> Truck manufacturer name.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*Manufacturer',
-                      value: entity.internal!.model?.manufacturer.name.cleaned ?? "---",
+                      value: entity.internal!.model?.manufacturer.name.cleaned,
                     ),
 
                     /// --> Truck model name.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*Model',
-                      value: entity.internal!.model?.name.cleaned ?? '---',
+                      value: entity.internal!.model?.name.cleaned,
                     ),
                   ],
 
-                  if(entity.internal?.sct != null) ...<CreateEntityFormRecordField>[ 
+                  if(entity.internal?.sct != null) ...<CreateEntityFormRecordField<Object>>[ 
                     /// --> Truck SCT type.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*SCT Type',
-                      value: entity.internal!.sct?.type.cleaned ?? '---',
+                      value: entity.internal!.sct?.type.cleaned,
                     ),
 
                     /// --> Truck SCT number.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*SCT number',
-                      value: entity.internal!.sct?.number.cleaned ?? '---',
+                      value: entity.internal!.sct?.number.cleaned,
                     ),
                     
                     /// --> Truck SCT type.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*SCT configuration',
-                      value: entity.internal!.sct?.configuration.cleaned ?? '---',
+                      value: entity.internal!.sct?.configuration.cleaned,
                     ),
                   ],
 
-                  if(entity.internal?.maintenance != null) ...<CreateEntityFormRecordField>[
+                  if(entity.internal?.maintenance != null) ...<CreateEntityFormRecordField<Object>>[
                     /// --> Truck maintenance anual.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*Anual maintenance',
-                      value: entity.internal!.maintenance?.anual.dateOnly ?? '---',
+                      value: entity.internal!.maintenance?.anual.dateOnly,
                     ),
 
                     /// --> Truck maintenance trimestral.
-                    CreateEntityFormRecordField(
+                    CreateEntityFormRecordField<String>(
                       label: '*Trimestral maintenance',
-                      value: entity.internal!.maintenance?.trimestral.dateOnly ?? '---',
+                      value: entity.internal!.maintenance?.trimestral.dateOnly,
                     ),
                   ],
                 ],
@@ -169,24 +170,24 @@ final class TrailersPageCreateWhisper extends PageB {
 
             return CreateEntityFormRecord(
               selected: selected,
-              fields: <CreateEntityFormRecordField>[
+              fields: <CreateEntityFormRecordField<Object>>[
                 /// --> Adding common fields.
                 ...commonFields,
 
                 /// --> Driver carrier name.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: '*Carrier',
                   value: entity.external!.carrier.cleaned ?? '---',
                 ),
 
                 /// --> Driver USA plate.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'USA Plate',
                   value: entity.external!.usaPlate ?? '---',
                 ),
 
                 /// --> Driver MX plate.
-                CreateEntityFormRecordField(
+                CreateEntityFormRecordField<String>(
                   label: 'MX Plate',
                   value: entity.external!.mxPlate ?? '---',
                 ),
@@ -194,151 +195,149 @@ final class TrailersPageCreateWhisper extends PageB {
             );
             
           },
-          formDesigner: (CreateEntityFormRecordReactor<TrailerCommon>? itemState) {
+          formDesigner: (CreateEntityFormRecordReactor<TrailerCommon>? itemState, _) {
             final bool formDisabled = !(itemState == null);
             if(formDisabled && itemState.entity.internal == null && itemState.entity.external == null) {
               itemState.entity.internal = Trailer();
             }
             return Padding(
               padding: const EdgeInsets.all(20),
-              child: SingleChildScrollView(
-                child: Column(
-                  spacing: 12,
-                  children: <Widget>[
-                    /// --> Ownership Type
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: OptionsSelector<bool>(
-                        title: 'Ownership',
-                        preSelected: <bool>[
-                          itemState?.entity.external != null ? false : true,
-                        ],
-                        options: <OptionsSelectorOption<bool>>[
-                          OptionsSelectorOption<bool>(
-                            title: 'Own',
-                            value: true,
-                          ),
-                          OptionsSelectorOption<bool>(
-                            title: 'External',
-                            value: false,
-                          ),
-                        ],
-                        onSelect: (List<bool> selected) {
-                          TrailerCommon common = itemState!.entity;
-                          if (selected.isNotEmpty && selected.first) {
-                            common.internal = Trailer();
-                            common.external = null;
-                          } else {
-                            common.internal = null;
-                            common.external = TrailerExternal();
-                          }
-                          _trailerSectionStateReact();
-                          itemState.react();
-                        },
-                      ),
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Widget>[
-                        Expanded(
-                          child: TextInput(
-                            label: '*Economic',
-                            isEnabled: formDisabled,
-                            maxLength: 16,
-                            controller: TextEditingController(
-                              text: itemState?.entity.economic,
-                            ),
-                            onChanged: (String text) {
-                              itemState!.entity.economic = text;
-                              itemState.react();
-                            },
-                          ),
+              child: Column(
+                spacing: 12,
+                children: <Widget>[
+                  /// --> Ownership Type
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: OptionsSelector<bool>(
+                      title: 'Ownership',
+                      preSelected: <bool>[
+                        itemState?.entity.external != null ? false : true,
+                      ],
+                      options: <OptionsSelectorOption<bool>>[
+                        OptionsSelectorOption<bool>(
+                          title: 'Own',
+                          value: true,
                         ),
-                        Expanded(
-                          child: EntityFinderSelector<Status, StatusesServiceI>(
-                            entityBuilder: () => Status(),
-                            label: '*Assing an status...',
-                            enabled:true,
-                            initialValue: itemState?.entity.status,
-                            textBuilder: (Status status) {
-                              return status.name;
-                            },
-                            onSelected: (Status? status) {
-                              // TODO check correct status assignment on other properties selections.
-                              _defaultStatus = status ?? Status();
-                              Trailer? internal = itemState?.entity.internal;
-                              // Setting default status values, only for unique entities.
-                              itemState?.entity.status = _defaultStatus;
-                              internal?.sct?.status = _defaultStatus;
-                              internal?.maintenance?.status = _defaultStatus;
-                              if(itemState?.entity.type?.id == BigInt.zero) itemState?.entity.type?.status = _defaultStatus;
-
-                              for (Plate plate in itemState!.entity.internal!.plates) {
-                                plate.status = _defaultStatus;
-                              }
-                              itemState.react();
-                            },
-                          ), 
+                        OptionsSelectorOption<bool>(
+                          title: 'External',
+                          value: false,
                         ),
                       ],
-                    ),
-                    Row(
-                      spacing: 10,
-                      children: <Expanded>[
-                        Expanded(
-                          child: EntityFinderSelector<Location, LocationsServiceI>(
-                            entityBuilder: () => Location(),
-                            label: 'Assing a location...',
-                            enabled:true,
-                            initialValue: itemState?.entity.location,
-                            textBuilder: (Location location) {
-                              return location.name.cleaned ?? '---';
-                            },
-                            onSelected: (Location? location) {
-                              itemState?.entity.location = location;
-                              itemState?.react();
-                            },
-                          ), 
-                        ),
-                        Expanded(
-                          child: EntityFinderSelector<Situation, SituationsServiceI>(
-                            entityBuilder: () => Situation(),
-                            label: 'Assing a situation...',
-                            enabled:true,
-                            initialValue: itemState?.entity.situation,
-                            textBuilder: (Situation situation) {
-                              return situation.name.cleaned ?? '---';
-                            },
-                            onSelected: (Situation? situation) {
-                              itemState?.entity.situation = situation;
-                              itemState?.react();
-                            },
-                          ), 
-                        ),
-                      ],
-                    ),
-                    const SectionDivider(
-                      text: '*Trailer Information',
-                    ),
-                    //--> Driver edge Section
-                    ReactiveWidget<_TrailerSectionState>(
-                      reactor: _trailerSectionState,
-                      builder: (BuildContext ctx, _TrailerSectionState reactor) {
-                        _trailerSectionStateReact = reactor.react;
-                        return itemState?.entity.internal != null? 
-                          _CreateWhisperTrailersSection(
-                            itemState: itemState,
-                            isEnabled: formDisabled,
-                          ) : _CreateWhisperTrailersExternalSection(
-                            itemState: itemState,
-                            isEnabled: formDisabled,
-                          );
+                      onSelect: (List<bool> selected) {
+                        TrailerCommon common = itemState!.entity;
+                        if (selected.isNotEmpty && selected.first) {
+                          common.internal = Trailer();
+                          common.external = null;
+                        } else {
+                          common.internal = null;
+                          common.external = TrailerExternal();
+                        }
+                        _trailerSectionStateReact();
+                        itemState.react();
                       },
                     ),
-                  ],
-                  
-
-                ),
+                  ),
+                  Row(
+                    spacing: 10,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextInput(
+                          label: '*Economic',
+                          isEnabled: formDisabled,
+                          maxLength: 16,
+                          controller: TextEditingController(
+                            text: itemState?.entity.economic,
+                          ),
+                          onChanged: (String text) {
+                            itemState!.entity.economic = text;
+                            itemState.react();
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: EntityFinderSelector<Status, StatusesServiceI>(
+                          entityBuilder: () => Status(),
+                          label: '*Assign a status...',
+                          enabled:true,
+                          initialValue: itemState?.entity.status,
+                          textBuilder: (Status status) {
+                            return status.name;
+                          },
+                          onSelected: (Status? status) {
+                            // TODO check correct status assignment on other properties selections.
+                            _defaultStatus = status ?? Status();
+                            Trailer? internal = itemState?.entity.internal;
+                            // Setting default status values, only for unique entities.
+                            itemState?.entity.status = _defaultStatus;
+                            internal?.sct?.status = _defaultStatus;
+                            internal?.maintenance?.status = _defaultStatus;
+                            if(itemState?.entity.type?.id == BigInt.zero) itemState?.entity.type?.status = _defaultStatus;
+              
+                            for (Plate plate in itemState!.entity.internal!.plates) {
+                              plate.status = _defaultStatus;
+                            }
+                            itemState.react();
+                          },
+                        ), 
+                      ),
+                    ],
+                  ),
+                  Row(
+                    spacing: 10,
+                    children: <Expanded>[
+                      Expanded(
+                        child: EntityFinderSelector<Location, LocationsServiceI>(
+                          entityBuilder: () => Location(),
+                          label: 'Assign a location...',
+                          enabled:true,
+                          initialValue: itemState?.entity.location,
+                          textBuilder: (Location location) {
+                            return location.name.cleaned ?? '---';
+                          },
+                          onSelected: (Location? location) {
+                            itemState?.entity.location = location;
+                            itemState?.react();
+                          },
+                        ), 
+                      ),
+                      Expanded(
+                        child: EntityFinderSelector<Situation, SituationsServiceI>(
+                          entityBuilder: () => Situation(),
+                          label: 'Assign a situation...',
+                          enabled:true,
+                          initialValue: itemState?.entity.situation,
+                          textBuilder: (Situation situation) {
+                            return situation.name.cleaned ?? '---';
+                          },
+                          onSelected: (Situation? situation) {
+                            itemState?.entity.situation = situation;
+                            itemState?.react();
+                          },
+                        ), 
+                      ),
+                    ],
+                  ),
+                  const SectionDivider(
+                    text: '*Trailer Information',
+                  ),
+                  //--> Driver edge Section
+                  ReactiveWidget<_TrailerSectionState>(
+                    reactor: _trailerSectionState,
+                    builder: (BuildContext ctx, _TrailerSectionState reactor) {
+                      _trailerSectionStateReact = reactor.react;
+                      return itemState?.entity.internal != null? 
+                        _CreateWhisperTrailersSection(
+                          itemState: itemState,
+                          isEnabled: formDisabled,
+                        ) : _CreateWhisperTrailersExternalSection(
+                          itemState: itemState,
+                          isEnabled: formDisabled,
+                        );
+                    },
+                  ),
+                ],
+                
+              
               ),
             );
           },
