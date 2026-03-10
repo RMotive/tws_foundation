@@ -14,3 +14,8 @@
 /server/TWS Foundation/CSM Security/CSMS.Connection/security_quality.connection.json
 /server/TWS Foundation/CSM Security/CSMS.Connection/security_quality.connection.json
 /server/TWS Foundation/CSM Security/CSMS.Connection/security_quality.connection.json
+client/tws_foundation_client/.env
+client/tws_foundation_client/test_configs.dart
+server/developer.runsettings
+server/nuget.config
+server/TWS Foundation/TWS Business/csms.dev.connection.json
