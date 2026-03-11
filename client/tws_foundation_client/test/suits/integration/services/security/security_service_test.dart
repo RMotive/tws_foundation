@@ -3,7 +3,7 @@ import 'dart:core' hide Uri;
 import 'package:test/test.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-import '../../../../test_configs.dart' show TestConfigs;
+import '../../../../../test_configs.dart';
 
 void main() {
   late SecurityServiceI serviceMock;
@@ -17,7 +17,7 @@ void main() {
   group(
     '[Integration] Security Service Tests',
     () {
-      final AuthenticationInput input = TestConfigs.localUser;
+      final AuthenticationInput input = TestConfigs.qualityAuth;
 
       test(
         '[authenticate]: correctly gets {ServerSession} object',

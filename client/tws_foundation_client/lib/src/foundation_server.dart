@@ -114,7 +114,7 @@ final class FoundationServer extends ServerBase {
             isRelease: isRelease,
             devHost ??
                 Uri(
-                  '192.168.1.74', //TODO Change to testing/production server host
+                  'localhost', //TODO Change to testing/production server host
                   '',
                   port: 5195,
                 ),
