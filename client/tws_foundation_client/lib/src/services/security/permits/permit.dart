@@ -122,6 +122,39 @@ final class Permit extends NamedReferencedEntityB<Permit> {
     List<ObjectDifference> solutionDiff = solution.compare(ref.solution);
     List<ObjectDifference> featureDiff = feature.compare(ref.feature);
 
+    if(name != ref.name) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(CorePropertiesConsts.name, String, name),
+          name,
+          ref.name,
+          null,
+        ),
+      );
+    }
+
+     if(description != ref.description) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(CorePropertiesConsts.description, String, description),
+          description,
+          ref.description,
+          null,
+        ),
+      );
+    }
+
+     if(reference != ref.reference) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(CorePropertiesConsts.reference, String, reference),
+          reference,
+          ref.reference,
+          null,
+        ),
+      );
+    }
+
 
     if (enabled != ref.enabled) {
       aggregated.add(

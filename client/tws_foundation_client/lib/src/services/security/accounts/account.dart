@@ -24,6 +24,9 @@ final class Account extends EntityBase<Account> {
   /// [Account.profiles] property key.
   static const String kProfiles = 'profiles';
 
+  /// [Account.vendors] property key.
+  static const String kVendors = 'vendors';
+
   /// [Contact] information.
   Contact contact = Contact();
 
@@ -41,6 +44,9 @@ final class Account extends EntityBase<Account> {
   
   /// [Profile]s related to this accounts.
   List<Profile> profiles = <Profile>[];
+
+  /// [Vendor]s related to this accounts.
+  List<Vendor> vendors = <Vendor>[];
 
   /// Creates a new default [Account] object.
   Account();
@@ -73,6 +79,17 @@ final class Account extends EntityBase<Account> {
         },
       ).toList();
     }
+
+    List<DataMap> vendorsMaps = encode.getList(kVendors);
+    if (vendorsMaps.isNotEmpty) {
+      vendors = vendorsMaps.map<Vendor>(
+        (DataMap e) {
+          Vendor vendor = Vendor();
+          vendor.decode(e);
+          return vendor;
+        },
+      ).toList();
+    }
     
   }
 
@@ -92,6 +109,11 @@ final class Account extends EntityBase<Account> {
           kProfiles: profiles
           .map(
             (Profile e) => e.encode(),
+          )
+          .toList(),
+          kVendors: vendors
+          .map(
+            (Vendor e) => e.encode(),
           )
           .toList(),
       },
@@ -134,6 +156,12 @@ final class Account extends EntityBase<Account> {
     if (profiles.isNotEmpty) {
       for (Profile profile in profiles) {
         errors.validateDependency(this, profile);
+      }
+    }
+
+    if (vendors.isNotEmpty) {
+      for (Vendor vendor in vendors) {
+        errors.validateDependency(this, vendor);
       }
     }
 
@@ -207,6 +235,22 @@ final class Account extends EntityBase<Account> {
             profile,
             refProfile,
             profilediff,
+          ),
+        );
+      }
+    }
+  
+    for (Vendor vendor in vendors) {
+      Vendor? refVendor = ref.vendors.firstWhere((Vendor e) => e.id == vendor.id, orElse: () => Vendor());
+      List<ObjectDifference> vendorDiff = vendor.compare(refVendor);
+
+      if (vendorDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kVendors, Vendor, vendor),
+            vendor,
+            refVendor,
+            vendorDiff,
           ),
         );
       }

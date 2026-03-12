@@ -27,4 +27,45 @@ final class Status extends NamedReferencedEntityB<Status> {
     return errors;
 
   }
+
+   @override
+  List<ObjectDifference> compare(Status ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
+
+    if(name != ref.name) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(CorePropertiesConsts.name, String, name),
+          name,
+          ref.name,
+          null,
+        ),
+      );
+    }
+
+    if(description != ref.description) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(CorePropertiesConsts.description, String, description),
+          description,
+          ref.description,
+          null,
+        ),
+      );
+    }
+
+    if(reference != ref.reference) {
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(CorePropertiesConsts.reference, String, reference),
+          reference,
+          ref.reference,
+          null,
+        ),
+      );
+    }
+
+    return aggregated;
+  }
+  
 }

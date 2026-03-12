@@ -9,9 +9,12 @@ library;
 
 //* --> [Services.Business]
 
-/// [Services.Business.Yardlogs]
-export 'src/services/business/yardlogs/yard_log.dart';
-export 'src/services/business/yardlogs/yard_logs_service.dart';
+/// [Services.Business.GateKeeping.Yardlogs]
+export 'src/services/business/gate_keeping/yardlogs/yard_log.dart';
+export 'src/services/business/gate_keeping/yardlogs/yard_logs_service.dart';
+
+/// [Services.Business.GateKeeping.YardlogVendors]
+export 'src/services/business/gate_keeping/yardlog_vendor/yardlog_vendor.dart';
 
 /// [Services.Business.Carriers]
 export 'src/services/business/carriers/carrier.dart';
@@ -95,6 +98,8 @@ export 'src/services/business/vehicules/trailers/trailer.dart';
 export 'src/services/business/vehicules/trailers/trailer_common.dart';
 export 'src/services/business/vehicules/trailers/trailer_external.dart';
 export 'src/services/business/vehicules/trailers/trailer_service.dart';
+
+
 
 //* <-- [Services.Business.Vehicules]
 
@@ -180,4 +185,8 @@ export 'src/services/security/actions/actions_service.dart';
 // --> Exporting [src.services.security.actions]
 export 'src/services/security/profiles/profile.dart';
 export 'src/services/security/profiles/profiles_service.dart';
+
+// --> Exporting [src.services.security.vendors]
+export 'src/services/security/vendors/vendor.dart';
+
 

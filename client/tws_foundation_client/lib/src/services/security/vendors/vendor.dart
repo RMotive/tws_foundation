@@ -1,23 +1,62 @@
-// ignore_for_file: missing_override_of_must_be_overridden
 
 import 'package:csm_client_core/csm_client_core.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 
-/// [LoadType] default builder.
-LoadType loadtypeBuilder() => LoadType();
 
-/// Defines a business entity that stores the data for load types that can be asigned to [Trailer] entities.
-final class LoadType extends NamedReferencedEntityB<LoadType> {
+/// Types of vendors available in the system.
+enum VendorType {
+  owner,
+  supplier,
+  contractor,
+  subcontractor,
+  serviceProvider,
+  consultant,
+  partner,
+  subtenent,
+}
+
+/// Defines a security entity that stores the data for vendors.
+final class Vendor extends NamedReferencedEntityB<Vendor> {
+
+  /// [Vendor.accounts] property key for [DataMap].
+  static const String kAccounts = 'accounts';
+
+  /// [Account]s collection related to this vendor.
+  List<Account> accounts = <Account>[];
   
-  /// Generates a new [LoadType] instance from mandatory values.
-  LoadType();
+  /// Generates a new [Vendor] instance from mandatory values.
+  Vendor();
+
+  @override
+  void decode(DataMap encode) {
+    super.decode(encode);
+    List<DataMap> accountsMaps = encode.getList(kAccounts);
+    if (accountsMaps.isNotEmpty) {
+      accounts = accountsMaps.map<Account>(
+        (DataMap e) {
+          Account account = Account();
+          account.decode(e);
+          return account;
+        },
+      ).toList();
+    }
+  }
   
   @override
-  List<EntityErrors<LoadType>> evaluate(List<EntityErrors<LoadType>> errors) {
+  DataMap encode([DataMap? entityObject]) {
+    return super.encode(
+      <String, Object?>{
+        Account.kVendors: accounts.map((Account e) => e.encode()).toList(),
+      },
+    );
+  }
+  
+  @override
+  List<EntityErrors<Vendor>> evaluate(List<EntityErrors<Vendor>> errors) {
     errors = super.evaluate(errors);
     if (id < BigInt.zero) {
       errors.add(
-        EntityErrors<LoadType>(
+        EntityErrors<Vendor>(
           this,
           PropertyInfo(CorePropertiesConsts.id, int, id),
           'Pointer: $id, cannot be less than 0.',
@@ -27,7 +66,7 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
     }
     if (name.trim().isEmpty || name.length > 100) {
       errors.add(
-        EntityErrors<LoadType>(
+        EntityErrors<Vendor>(
           this,
           PropertyInfo(CorePropertiesConsts.name, String, name),
           "Lenght: ${name.length}, must be between 1 and 100 characters.",
@@ -38,7 +77,7 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
     if (description != null) {
       if (description!.trim().isEmpty || description!.length > 200) {
         errors.add(
-          EntityErrors<LoadType>(
+          EntityErrors<Vendor>(
             this,
             PropertyInfo(CorePropertiesConsts.description, String, description),
             "Lenght: ${description!.length}, less than 200 characters or empty.",
@@ -49,7 +88,7 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
     }
     if (reference.length != 8) {
       errors.add(
-        EntityErrors<LoadType>(
+        EntityErrors<Vendor>(
           this,
           PropertyInfo(CorePropertiesConsts.reference, String, reference),
           "Reference value must contain 8 characters",
@@ -59,10 +98,10 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
     }
     return errors;
   }
-
+  
   @override
-  List<ObjectDifference> compare(LoadType ref, [List<ObjectDifference>? aggregated]) {
-     aggregated = super.compare(ref, aggregated);
+  List<ObjectDifference> compare(Vendor ref, [List<ObjectDifference>? aggregated]) {
+    aggregated = super.compare(ref, aggregated);
 
      if(name != ref.name) {
       aggregated.add(
@@ -99,6 +138,5 @@ final class LoadType extends NamedReferencedEntityB<LoadType> {
 
     return aggregated;
   }
-  
 
 }
