@@ -5,8 +5,8 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// [Entity] that represents a vehicules control entry for a yard logging system where
 /// guards write down an entry/exit journal of vehicles at business locations.
 final class YardLog extends EntityBase<YardLog> {
-  /// [YardLog.event] property key.
-  static const String kEvent = 'event';
+  /// [YardLog.entry] property key.
+  static const String kEntry = 'entry';
 
   /// [YardLog.seal] property key.
   static const String kSeal = 'seal';
@@ -44,7 +44,7 @@ final class YardLog extends EntityBase<YardLog> {
   //! --> Properties
 
   /// Wheter the record is an event or exit event.
-  bool event = false;
+  bool entry = false;
 
   /// Wheter the records is a reservation or not.
   bool reservation = false;
@@ -157,7 +157,7 @@ final class YardLog extends EntityBase<YardLog> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
       <String, Object?>{
-        kEvent: event,
+        kEntry: entry,
         kSeal: seal,
         kSealAlt: sealAlt,
         kFromTo: fromTo,
@@ -179,7 +179,7 @@ final class YardLog extends EntityBase<YardLog> {
 
   @override
   void decode(DataMap encode) {
-    event = encode.get(kEvent);
+    entry = encode.get(kEntry);
     seal = encode.get(kSeal);
     sealAlt = encode.get(kSealAlt);
     fromTo = encode.get(kFromTo);
@@ -342,12 +342,12 @@ final class YardLog extends EntityBase<YardLog> {
     List<ObjectDifference> truckDiff = truck.compare(ref.truck);
     List<ObjectDifference> loadTypeDiff = loadType.compare(ref.loadType);
 
-    if (event != ref.event) {
+    if (entry != ref.entry) {
       aggregated.add(
         ObjectDifference(
-          PropertyInfo(kEvent, bool, event),
-          event,
-          ref.event,
+          PropertyInfo(kEntry, bool, entry),
+          entry,
+          ref.entry,
           null,
         ),
       );
