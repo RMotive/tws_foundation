@@ -6,7 +6,19 @@ import 'package:example/entries/auth_page_entry.dart';
 import 'package:example/entries/category_layout_entry.dart';
 import 'package:example/entries/entity_category_pages/trailers_inventory_category_page_entry.dart';
 import 'package:example/entries/entity_category_pages/yardlogs_category_page_entry.dart';
+import 'package:example/entries/entity_pages/accounts_page_entry.dart';
+import 'package:example/entries/entity_pages/contacts_page_entry.dart';
+import 'package:example/entries/entity_pages/drivers_page_entry.dart';
+import 'package:example/entries/entity_pages/employees_page_entry.dart';
+import 'package:example/entries/entity_pages/locations_page_entry.dart';
+import 'package:example/entries/entity_pages/permits_page_entry.dart';
+import 'package:example/entries/entity_pages/profiles_page_entry.dart';
+import 'package:example/entries/entity_pages/sections_page_entry.dart';
+import 'package:example/entries/entity_pages/solutions_page_entry.dart';
 import 'package:example/entries/entity_pages/trailer_inventory_page_entry.dart';
+import 'package:example/entries/entity_pages/trailers_page_entry.dart';
+import 'package:example/entries/entity_pages/trucks_page_entry.dart';
+import 'package:example/entries/entity_pages/yard_logs_page_entry.dart';
 import 'package:example/entries/entity_tables/trailers_inventory_entity_table_entry.dart';
 import 'package:example/entries/navigation_layout_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
@@ -36,29 +48,29 @@ final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> wit
       );
     },
     packageEntries: <IPackageLandingEntry<LandingThemeB>>[
-              // AuthPageEntry(),
+              AuthPageEntry(),
               CategoryLayoutEntry(),
-              // NavigationLayoutEntry(
-              //   appThemes: <LandingThemeB>[
-              //     LandingThemeDark(),
-              //     LandingThemeLight(),
-              //   ],
-              // ),
+              NavigationLayoutEntry(
+                appThemes: <LandingThemeB>[
+                  LandingThemeDark(),
+                  LandingThemeLight(),
+                ],
+              ),
 
               //! --> Entity Pages
-              // YardLogsPageEntry(),
-              // SectionsPageEntry(),
-              // EmployeesPageEntry(),
-              // // DriversPageEntry(),
-              // // TrucksPageEntry(),
-              // // TrailersPageEntry(),
-              // LocationsPageEntry(),
-              // ContactsPageEntry(),
-              // PermitsPageEntry(),
-              // ProfilesPageEntry(),
-              // AccountsPageEntry(),
-              // SolutionsPageEntry(),
-              // TrailersInventoryPageEntry(),
+              YardLogsPageEntry(),
+              SectionsPageEntry(),
+              EmployeesPageEntry(),
+              DriversPageEntry(),
+              TrucksPageEntry(),
+              TrailersPageEntry(),
+              LocationsPageEntry(),
+              ContactsPageEntry(),
+              PermitsPageEntry(),
+              ProfilesPageEntry(),
+              AccountsPageEntry(),
+              SolutionsPageEntry(),
+              TrailersInventoryPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
@@ -80,16 +92,16 @@ final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> wit
               //! --> Foundation Entity Tables
               // YardLogsEntityTableEntry(),
               // SectionsEntityTableEntry(),
-              // // SolutionsEntityTableEntry(),
+              // SolutionsEntityTableEntry(),
               // EmployeesEntityTableEntry(),
               // DriversEntityTableEntry(),
-              // // TrucksEntityTableEntry(),
+              // TrucksEntityTableEntry(),
               // TrailersEntityTableEntry(),
               // LocationsEntityTableEntry(),
               // ContactsEntityTableEntry(),
               // PermitsEntityTableEntry(),
               // ProfilesEntityTableEntry(),
-              //AccountsEntityTableEntry(),
+              // AccountsEntityTableEntry(),
               // SolutionsEntityTableEntry(),
               // TrailerInventoryEntityTableEntry(),
               //! <-- Foundation Entity Tables
@@ -103,28 +115,28 @@ final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> wit
 
     InjectorUtils.addSingleton<FoundationServer>(foundationServer);
     InjectorUtils.addSingleton<SecurityServiceI>(foundationServer.securityService);
-    // InjectorUtils.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
-    // InjectorUtils.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
-    // InjectorUtils.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
-    // InjectorUtils.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
-    // InjectorUtils.addSingleton<DriversServiceI>(foundationServer.driversService);
-    // InjectorUtils.addSingleton<TrucksServiceI>(foundationServer.trucksService);
-    // InjectorUtils.addSingleton<SituationsServiceI>(foundationServer.situationsService);
-    // InjectorUtils.addSingleton<StatusesServiceI>(foundationServer.statusService);
-    // InjectorUtils.addSingleton<AccountServiceI>(foundationServer.accountService);
-    // InjectorUtils.addSingleton<LocationsServiceI>(foundationServer.locationsService);
-    // InjectorUtils.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
-    // InjectorUtils.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
-    // InjectorUtils.addSingleton<CarriersServiceI>(foundationServer.carriersService);
-    // InjectorUtils.addSingleton<TrailersServiceI>(foundationServer.trailersService);
-    // InjectorUtils.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
-    // InjectorUtils.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
-    // InjectorUtils.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
-    // InjectorUtils.addSingleton<ContactsServiceI>(foundationServer.contactService);
-    // InjectorUtils.addSingleton<PermitsServiceI>(foundationServer.permitsService);
-    // InjectorUtils.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
-    // InjectorUtils.addSingleton<ActionsServiceI>(foundationServer.actionsService);
-    // InjectorUtils.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
+    InjectorUtils.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
+    InjectorUtils.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
+    InjectorUtils.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
+    InjectorUtils.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
+    InjectorUtils.addSingleton<DriversServiceI>(foundationServer.driversService);
+    InjectorUtils.addSingleton<TrucksServiceI>(foundationServer.trucksService);
+    InjectorUtils.addSingleton<SituationsServiceI>(foundationServer.situationsService);
+    InjectorUtils.addSingleton<StatusesServiceI>(foundationServer.statusService);
+    InjectorUtils.addSingleton<AccountServiceI>(foundationServer.accountService);
+    InjectorUtils.addSingleton<LocationsServiceI>(foundationServer.locationsService);
+    InjectorUtils.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
+    InjectorUtils.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
+    InjectorUtils.addSingleton<CarriersServiceI>(foundationServer.carriersService);
+    InjectorUtils.addSingleton<TrailersServiceI>(foundationServer.trailersService);
+    InjectorUtils.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
+    InjectorUtils.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
+    InjectorUtils.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
+    InjectorUtils.addSingleton<ContactsServiceI>(foundationServer.contactService);
+    InjectorUtils.addSingleton<PermitsServiceI>(foundationServer.permitsService);
+    InjectorUtils.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
+    InjectorUtils.addSingleton<ActionsServiceI>(foundationServer.actionsService);
+    InjectorUtils.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
 
     final SessionStorage sessionStorage = SessionStorage();
     await sessionStorage.init();

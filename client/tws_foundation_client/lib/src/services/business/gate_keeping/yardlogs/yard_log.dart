@@ -5,8 +5,8 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 /// [Entity] that represents a vehicules control entry for a yard logging system where
 /// guards write down an entry/exit journal of vehicles at business locations.
 final class YardLog extends EntityBase<YardLog> {
-  /// [YardLog.entry] property key.
-  static const String kEntry = 'entry';
+  /// [YardLog.event] property key.
+  static const String kEvent = 'event';
 
   /// [YardLog.seal] property key.
   static const String kSeal = 'seal';
@@ -43,8 +43,8 @@ final class YardLog extends EntityBase<YardLog> {
 
   //! --> Properties
 
-  /// Wheter the record is an entry or exit entry.
-  bool entry = false;
+  /// Wheter the record is an event or exit event.
+  bool event = false;
 
   /// Wheter the records is a reservation or not.
   bool reservation = false;
@@ -89,7 +89,7 @@ final class YardLog extends EntityBase<YardLog> {
   /// [Section] information.
   Section? section;
 
-  /// [Resource] content attached to the entry.
+  /// [Resource] content attached to the event.
   /// 
   /// In this list the truck and trailer, and any damage evidence photos are stored.
   List<Resource> resources = <Resource>[];
@@ -157,7 +157,7 @@ final class YardLog extends EntityBase<YardLog> {
   DataMap encode([DataMap? entityObject]) {
     return super.encode(
       <String, Object?>{
-        kEntry: entry,
+        kEvent: event,
         kSeal: seal,
         kSealAlt: sealAlt,
         kFromTo: fromTo,
@@ -179,7 +179,7 @@ final class YardLog extends EntityBase<YardLog> {
 
   @override
   void decode(DataMap encode) {
-    entry = encode.get(kEntry);
+    event = encode.get(kEvent);
     seal = encode.get(kSeal);
     sealAlt = encode.get(kSealAlt);
     fromTo = encode.get(kFromTo);
@@ -342,12 +342,12 @@ final class YardLog extends EntityBase<YardLog> {
     List<ObjectDifference> truckDiff = truck.compare(ref.truck);
     List<ObjectDifference> loadTypeDiff = loadType.compare(ref.loadType);
 
-    if (entry != ref.entry) {
+    if (event != ref.event) {
       aggregated.add(
         ObjectDifference(
-          PropertyInfo(kEntry, bool, entry),
-          entry,
-          ref.entry,
+          PropertyInfo(kEvent, bool, event),
+          event,
+          ref.event,
           null,
         ),
       );

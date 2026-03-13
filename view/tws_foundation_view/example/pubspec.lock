@@ -517,7 +517,7 @@ packages:
     description:
       path: "client/tws_foundation_client"
       ref: admin-migration-changes
-      resolved-ref: c5df2becb3ba2089038658d0379e4719f416935c
+      resolved-ref: "213b1b488f171e0d6b4076ed60e3660f828e130b"
       url: "https://github.com/RMotive/tws_foundation"
     source: git
     version: "6.1.1"
