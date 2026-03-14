@@ -89,8 +89,6 @@ public partial class Program {
                         options.JsonSerializerOptions.PropertyNamingPolicy = null;
                         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-                        options.JsonSerializerOptions.Converters.Add(new ISetViewFilterConverterFactory());
-                        options.JsonSerializerOptions.Converters.Add(new IViewFilterNodeConverterFactory());
                         options.JsonSerializerOptions.Converters.Add(new DateTimeZoneConverter());
 
                         // --> JSON Converter for [IEntity] objects.

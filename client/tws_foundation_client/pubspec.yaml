@@ -12,13 +12,13 @@ dependencies:
       git:
         url: https://github.com/Cosmos-CSM/csm_client
         path: csm_client_testing
-        ref: HEAD
+        ref: dart_fixes
 
   csm_client_core:
     git:
       url: https://github.com/Cosmos-CSM/csm_client
       path: csm_client_core
-      ref: HEAD
+      ref: dart_fixes
 
 
 
