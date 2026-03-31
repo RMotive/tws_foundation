@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -70,11 +72,15 @@ public class Address
     /// <summary>
     ///     <see cref="Employee"/> dependants from this <see cref="Address"/>.
     /// </summary>
+    [EntityRelation]
+
     public ICollection<Employee> Employees { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Location"/> dependants from this <see cref="Address"/>.
     /// </summary>
+    [EntityRelation]
+
     public ICollection<Location> Locations { get; set; } = [];
 
     /// <summary>

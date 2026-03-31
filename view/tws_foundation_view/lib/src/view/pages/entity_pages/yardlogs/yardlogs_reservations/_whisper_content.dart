@@ -1,28 +1,27 @@
-part of 'create_yardlogs_whisper.dart';
-
-/// State manager for Section fields.
-class _SectionState extends ReactorBase {}
-_SectionState _sectionState = _SectionState();
-void Function() _sectionReact = () {};
+part of 'create_yardlogs_reservations_whisper.dart';
 
 /// Draws and handles the content for [CreateYardLogsWhisper], drawing each necessary
 /// section and gathering required information to correctly create [YardLog] entities.
-final class _CreateYardLogsWhisperContent extends StatefulWidget {
-  
+final class _CreateYardLogsReservationsWhisperContent extends StatefulWidget {
+
   /// Creation {event} controller.
   final CreateEntityFormController controller;
+  
+  /// Inner [YardLogsEntityTableAdapter] instance.
+  final YardLogsEntityTableAdapter adapter;
 
-  /// Create a new [_CreateYardLogsWhisperContent] instance.
-  const _CreateYardLogsWhisperContent({
+  /// Create a new [_CreateYardLogsReservationsWhisperContent] instance.
+  const _CreateYardLogsReservationsWhisperContent({
     required this.controller,
+    required this.adapter,
   });
 
   @override
-  State<_CreateYardLogsWhisperContent> createState() => _CreateYardLogsWhisperContentState();
+  State<_CreateYardLogsReservationsWhisperContent> createState() => _CreateYardLogsReservationsWhisperContentState();
 }
 
-/// Handles [State] for [_CreateYardLogsWhisperContent].
-final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhisperContent> {
+/// Handles [State] for [_CreateYardLogsReservationsWhisperContent].
+final class _CreateYardLogsReservationsWhisperContentState extends State<_CreateYardLogsReservationsWhisperContent> {
 
   /// {state} Instance of the current ThemingUtils.
   late FoundationThemeB theme;
@@ -68,6 +67,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
     return AsyncWidget<Employee?>(
       future: _getUserEmployeeInstance,
       successBuilder: (BuildContext buildContext, Employee? data) {
+        // TODO: define beheavior to show the "Only reservation" view.
         if (data == null) {
           return Align(
             alignment: Alignment.topCenter,
@@ -86,7 +86,11 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
           isMultiple: false,
           controller: widget.controller,
           factory: () {
-            YardLog log = YardLog();
+            // When creating a yardlog from a reservation, preload the reservation data at the form, otherwise create an empty yardlog.
+            
+            // TODO: add vendors here.
+            // TODO: maybe add a pending status for yardlogs created from reservations?
+            YardLog log = widget.adapter.selectedReservation ?? YardLog();
             log.guard = guard!;
             return log;
           },
@@ -98,7 +102,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
             return YardlogWhisperFormDesigner(
               theme: theme,
               itemState: itemState,
-              isReservation: false,
+              isReservation: true,
             );
           },
         );

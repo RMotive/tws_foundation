@@ -67,6 +67,12 @@ public class YardLog
     public bool Reservation { get; set; }
 
     /// <summary>
+    ///     Indicates if the reservation is still pending (has not been finished yet).
+    ///     When reservation = false; Pending should be false as well since the record is not a reservation, but an actual entry/exit.
+    /// </summary>
+    public bool Pending { get; set; }
+
+    /// <summary>
     ///     <see cref="YardLog"/> record load seal.
     /// </summary>
     [StringLength(64, MinimumLength = 10)]
@@ -98,13 +104,13 @@ public class YardLog
     ///     <see cref="Employee"/> guard information.
     /// </summary>
     [EntityRelation]
-    public Employee Guard { get; set; } = default!;
+    public Employee? Guard { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Section"/> information.
     /// </summary>
     [EntityRelation]
-    public Section Section { get; set; } = default!;
+    public Section? Section { get; set; }
 
     /// <summary>
     ///     <see cref="Driver_Common"/> information.
@@ -153,13 +159,15 @@ public class YardLog
         etBuilder.Property(nameof(Seal)).HasMaxLength(64);
         etBuilder.Property(nameof(SealAlt)).HasMaxLength(64);
         etBuilder.Property(nameof(FromTo)).HasMaxLength(100).IsRequired();
+        etBuilder.Property(nameof(Pending)).HasDefaultValue(false);
+
 
         etBuilder.Link<YardLog, LoadType>(nameof(LoadType), Required: true);
-        etBuilder.Link<YardLog, Section>(nameof(Section), Required: true);
+        etBuilder.Link<YardLog, Section>(nameof(Section), Required: false);
 
         etBuilder.Link<YardLog, Employee>(
             nameof(Guard),
-            Required: true,
+            Required: false,
             TargetReference: nameof(Employee.Yardlogs)
         );
 

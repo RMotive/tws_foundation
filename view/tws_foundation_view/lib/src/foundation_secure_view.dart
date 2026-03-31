@@ -7,7 +7,6 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 abstract class _ViewRoot extends ViewModuleBase with ConsoleMixin {
   /// Creates a new [_ViewRoot] instance.
   const _ViewRoot({
-    super.key,
     required this.routerConfig,
   });
 

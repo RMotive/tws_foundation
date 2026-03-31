@@ -10,6 +10,8 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 ///
 /// Implements a [ICategoryLayoutPage] defining default behavior for a [YardLogsPage] category page implementation
 /// providing direct configruation to use it at a [CategoryLayout] instance.
+/// 
+/// Gatekeepers and vendors can access this page to create a new yardlog or reservations.
 final class YardLogsCategoryPage extends EntityCategoryPageB<YardLog, YardLogsEntityTableAdapter> {
   /// Creates a new [YardLogsCategoryPage] instance.
   YardLogsCategoryPage({

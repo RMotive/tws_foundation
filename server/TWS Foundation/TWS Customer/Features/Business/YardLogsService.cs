@@ -62,6 +62,7 @@ public class YardLogsService
             .Include(e => e.Guard).ThenInclude(e => e.Approach)
             .Include(e => e.Guard).ThenInclude(e => e.Address)
             .Include(e => e.Section).ThenInclude(e => e.Resource)
+            .Include(e => e.Section).ThenInclude(e => e.Yard)
             .Include(e => e.LoadType)
             .Include(e => e.Driver)
             .Include(e => e.Truck)

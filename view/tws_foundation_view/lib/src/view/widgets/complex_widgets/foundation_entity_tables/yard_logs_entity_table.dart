@@ -78,9 +78,17 @@ class _BlendedSVG extends StatelessWidget {
 /// Implements a custom [EntityTableAdapterB] for a [Solution] based [EntityTable] providing a foundation
 /// {csm} data handling table for [Solution].
 final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<YardLog> {
+
+  /// Stores the reservation yardlog only for the reservations view.
+  YardLog? selectedReservation;
+
+  /// Indicates if the table is being used for reservations management, this is used to show/hide some properties at the viewer and editor.
+  bool isResevation;
+
   /// Creates a new [YardLogsEntityTableAdapter] instance.
   YardLogsEntityTableAdapter({
     super.authBuilder,
+    this.isResevation = false,
   });
 
   @override

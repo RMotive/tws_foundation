@@ -41,6 +41,12 @@ final class YardLog extends EntityBase<YardLog> {
   /// [YardLog.reservation] property key.
   static const String kReservation = 'reservation';
 
+  /// [YardLog.vendors] property key.
+  static const String kVendors = 'vendors';
+
+  /// [YardLog.pending] property key.
+  static const String kPending = 'pending';
+
   //! --> Properties
 
   /// Wheter the record is an event or exit event.
@@ -49,11 +55,15 @@ final class YardLog extends EntityBase<YardLog> {
   /// Wheter the records is a reservation or not.
   bool reservation = false;
 
+  /// Indicates if the reservation is still pending (has not been finished yet).
+  /// When reservation = false; Pending should be false as well since the record is not a reservation, but an actual entry/exit.
+  bool pending = false;
+
   /// Trailer seal information.
   ///
   /// Rules >
   ///   1. 65 > length > 9
-  String? seal = "";
+  String? seal;
 
   /// Trailer alternative seal information.
   ///
@@ -72,7 +82,7 @@ final class YardLog extends EntityBase<YardLog> {
   //! --> Relations
 
   /// [Employee] information.
-  Employee guard = Employee();
+  Employee? guard;
 
   /// [DriverCommon] information.
   DriverCommon driver = DriverCommon();
@@ -93,6 +103,12 @@ final class YardLog extends EntityBase<YardLog> {
   /// 
   /// In this list the truck and trailer, and any damage evidence photos are stored.
   List<Resource> resources = <Resource>[];
+
+
+  /// [YardlogVendor] vendors attached to the log.
+  /// 
+  /// Any vendor related to the yardlog event can be stored here.
+  List<YardlogVendor> vendors = <YardlogVendor>[];
 
   //! <-- Relations
 
@@ -162,8 +178,9 @@ final class YardLog extends EntityBase<YardLog> {
         kSealAlt: sealAlt,
         kFromTo: fromTo,
         kReservation: reservation,
+        kPending: pending,
         kLoadType: loadType.encode(),
-        kGuard: guard.encode(),
+        kGuard: guard?.encode(),
         kSection: section?.encode(),
         kDriver: driver.encode(),
         kTruck: truck.encode(),
@@ -184,6 +201,7 @@ final class YardLog extends EntityBase<YardLog> {
     sealAlt = encode.get(kSealAlt);
     fromTo = encode.get(kFromTo);
     reservation = encode.get(kReservation);
+    pending = encode.get(kPending);
     loadType = encode.getEntity(() => LoadType(), kLoadType) ?? LoadType();
     guard = encode.getEntity(() => Employee(), kGuard) ?? guard;
     section = encode.getEntity(() => Section(), kSection);
@@ -198,6 +216,17 @@ final class YardLog extends EntityBase<YardLog> {
           Resource resource = Resource();
           resource.decode(e);
           return resource;
+        },
+      ).toList();
+    }
+
+    List<DataMap> vendorMaps = encode.getList(kVendors);
+    if (vendorMaps.isNotEmpty) {
+      vendors = vendorMaps.map<YardlogVendor>(
+        (DataMap e) {
+          YardlogVendor vendor = YardlogVendor();
+          vendor.decode(e);
+          return vendor;
         },
       ).toList();
     }
@@ -219,6 +248,40 @@ final class YardLog extends EntityBase<YardLog> {
         ),
       );
     }
+
+    if (pending == true && reservation == false) {
+      errors.add(
+        EntityErrors<YardLog>(
+          this,
+          PropertyInfo(kPending, bool, pending),
+          'Un registro no puede estar pendiente si no es una reservación.',
+          'pending == true => reservation == true',
+        ),
+      );
+    }
+
+    if(pending && guard != null){
+      errors.add(
+        EntityErrors<YardLog>(
+          this,
+          PropertyInfo(kPending, bool, pending),
+          'Un registro no puede estar pendiente si ya tiene un guardia asignado, revise los datos ingresados.',
+          'pending == true => guard == null',
+        ),
+      );
+    }
+
+    if(pending && section != null){
+      errors.add(
+        EntityErrors<YardLog>(
+          this,
+          PropertyInfo(kPending, bool, pending),
+          'Un registro no puede estar pendiente si ya tiene una sección asignada, revise los datos ingresados.',
+          'pending == true => section == null',
+        ),
+      );
+    }
+
     if (fromTo.trim().isEmpty || fromTo.length > 100) {
       errors.add(
         EntityErrors<YardLog>(
@@ -287,7 +350,7 @@ final class YardLog extends EntityBase<YardLog> {
     }
 
     errors.validateDependency(this, loadType);
-    errors.validateDependency(this, guard);
+    if(guard != null) errors.validateDependency(this, guard!);
     if(section != null) errors.validateDependency(this, section!);
     errors.validateDependency(this, driver);
     errors.validateDependency(this, truck);
@@ -328,16 +391,16 @@ final class YardLog extends EntityBase<YardLog> {
       }
     }
 
-
-
-
+    for(YardlogVendor vendor in vendors){
+      errors.validateDependency(this, vendor);
+    }
+    
     return errors;
   }
   
   @override
   List<ObjectDifference> compare(YardLog ref, [List<ObjectDifference>? aggregated]) {
     aggregated = super.compare(ref, aggregated);
-    List<ObjectDifference> guardDiff = guard.compare(ref.guard);
     List<ObjectDifference> driverDiff = driver.compare(ref.driver);
     List<ObjectDifference> truckDiff = truck.compare(ref.truck);
     List<ObjectDifference> loadTypeDiff = loadType.compare(ref.loadType);
@@ -359,6 +422,17 @@ final class YardLog extends EntityBase<YardLog> {
           PropertyInfo(kReservation, bool, reservation),
           reservation,
           ref.reservation,
+          null,
+        ),
+      );
+    }
+
+    if(pending != ref.pending){
+      aggregated.add(
+        ObjectDifference(
+          PropertyInfo(kPending, bool, pending),
+          pending,
+          ref.pending,
           null,
         ),
       );
@@ -397,16 +471,21 @@ final class YardLog extends EntityBase<YardLog> {
       );
     }
 
-    if (guardDiff.isNotEmpty) {
-      aggregated.add(
-        ObjectDifference(
-          PropertyInfo(kGuard, Employee, guard),
-          guard,
-          ref.guard,
-          guardDiff,
-        ),
-      );
+    if(ref.guard != null && guard != null){
+      List<ObjectDifference> guardDiff = guard!.compare(ref.guard!);
+      if (guardDiff.isNotEmpty) {
+        aggregated.add(
+          ObjectDifference(
+            PropertyInfo(kGuard, Employee, guard),
+            guard,
+            ref.guard,
+            guardDiff,
+          ),
+        );
+      }
     }
+
+    
 
     if (driverDiff.isNotEmpty) {
       aggregated.add(

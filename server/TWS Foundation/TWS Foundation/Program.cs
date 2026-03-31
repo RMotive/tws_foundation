@@ -1,9 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using CSM_Database_Core.Core.Models;
-using CSM_Database_Core.Core.Utils;
-using CSM_Database_Core.Depots.Abstractions.Interfaces;
 using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
 using CSM_Foundation.Core;
@@ -25,10 +22,7 @@ using TWS_Business.Depots.Indicators;
 using TWS_Business.Depots.Vehicles;
 using TWS_Business.Depots.Vehicles.Control;
 using TWS_Business.Depots.Vehicles.Trailers;
-using TWS_Business.Entities;
-using TWS_Business.Entities.Drivers;
 using TWS_Business.Entities.Insurances;
-using TWS_Business.Entities.Vehicules;
 
 using TWS_Customer.Features.Business;
 using TWS_Customer.Features.Business.Vehicules;
@@ -88,7 +82,7 @@ public partial class Program {
                         options.JsonSerializerOptions.IncludeFields = true;
                         options.JsonSerializerOptions.PropertyNamingPolicy = null;
                         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-
+                        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                         options.JsonSerializerOptions.Converters.Add(new DateTimeZoneConverter());
 
                         // --> JSON Converter for [IEntity] objects.

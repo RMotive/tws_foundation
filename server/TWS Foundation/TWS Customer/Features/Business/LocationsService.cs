@@ -1,4 +1,7 @@
-﻿using CSM_Foundation.Product;
+﻿using CSM_Database_Core.Depots.Abstractions.Interfaces;
+using CSM_Database_Core.Depots.Models;
+
+using CSM_Foundation.Product;
 
 using TWS_Business;
 using TWS_Business.Depots;
@@ -19,15 +22,16 @@ public interface ILocationsService
 public class LocationsService
     : BService<Location, LocationsDepot>, ILocationsService {
 
-    private readonly Database _db;
-
     /// <summary>
     ///     Creates a new instance of <see cref="LocationsService"/>.
     /// </summary>
     /// <param name="Depot">
     ///     <see cref="Location"/> based [Depot] handler to be used.
     /// </param>
-    public LocationsService(LocationsDepot Depot, Database Database) : base(Depot) {
-        this._db = Database;
+    public LocationsService(LocationsDepot Depot, Database Database) : base(Depot) { }
+
+    public async override Task<ViewOutput<Location>> View(QueryInput<Location, ViewInput<Location>> input) {
+        ViewOutput<Location>  output = await base.View(input);
+        return output;
     }
 }

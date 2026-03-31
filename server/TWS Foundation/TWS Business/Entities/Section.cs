@@ -61,6 +61,7 @@ public class Section
     /// <summary>
     ///     <see cref="YardLog"/> dependants from this <see cref="Section"/>
     /// </summary>
+   
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
     #endregion

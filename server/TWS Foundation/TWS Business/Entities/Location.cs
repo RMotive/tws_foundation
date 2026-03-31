@@ -54,16 +54,22 @@ public class Location
     /// <summary>
     ///     <see cref="Section"/>s referencing this <see cref="Location"/>
     /// </summary>
+    [EntityRelation]
+
     public ICollection<Section> Sections { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck_Common"/>s referencing this <see cref="Location"/>
     /// </summary>
+    [EntityRelation]
+
     public ICollection<Truck_Common> Trucks { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Trailer_Common"/>s referencing this <see cref="Location"/>
     /// </summary>
+    [EntityRelation]
+
     public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
 

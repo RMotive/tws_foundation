@@ -34,10 +34,22 @@ final class FoundationRoutes {
     name: 'YardLogs Page',
   );
 
+   /// (YardLogs Reservations Entity Page) RouteData.
+  static const RouteData yardlogsReservationsPageRoute = RouteData(
+    'yardlogs-reservations',
+    name: 'YardLogs Reservations Page',
+  );
+
   /// (YardLogs Create Whisper) RouteData.
   static const RouteData yardlogsCreateWhisperRoute = RouteData(
     'create-yardlogs',
     name: 'YardLogs Creation',
+  );
+
+   /// (YardLogs Create Whisper) RouteData.
+  static const RouteData yardlogsReservationsCreateWhisperRoute = RouteData(
+    'create-yardlogs-reservations',
+    name: 'YardLogs Reservations Creation',
   );
 
   //! <--- YardLogs Routes

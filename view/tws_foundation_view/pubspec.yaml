@@ -27,7 +27,7 @@ dependencies:
     git:
       url: https://github.com/Cosmos-CSM/csm_client
       path: csm_client_core
-      ref: HEAD
+      ref: dart_fixes
 
   tws_foundation_client:
     git:
