@@ -22,6 +22,10 @@ public class AccountsController
         this.Service = Service;
     }
 
+    [HttpGet, Action("GetVendors")]
+    public async Task<IActionResult> GetVendors(long id) => Ok(await Service.GetVendors());
+
+
     [HttpPost(), Action("View")]
     public async Task<IActionResult> View(ViewInput<Account> options) {
         return Ok(
@@ -48,4 +52,6 @@ public class AccountsController
     public async Task<IActionResult> Delete(int Id) {
         return Ok(await Service.Delete(Id));
     }
+
+
 }

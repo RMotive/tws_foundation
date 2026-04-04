@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide Router, Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/entity_category_page_b.dart';
 import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/yardlogs_reservations/create_yardlogs_reservations_whisper.dart';
+import 'package:tws_foundation_view/src/view/pages/entity_pages/yardlogs/yardlogs_reservations/yardlogs_reservations_entity_table.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {category page} class.
@@ -81,7 +82,7 @@ final class YardLogsReservationsPage extends ViewPageBase {
 
   @override
   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
-    return YardLogsEntityTable(
+    return YardLogsReservationsEntityTable(
       adapter: adapter,
     );
   }

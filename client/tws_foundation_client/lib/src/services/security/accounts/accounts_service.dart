@@ -27,6 +27,14 @@ abstract interface class AccountServiceI extends FoundationServiceB implements I
   ///
   /// [auth] server authorization token.
   FoundationFutureResolver<Account> delete(Account entity, String auth);
+
+
+/// Retrieves the [Vendor]s associated with the account. If the account has the wildcard property set to true, 
+/// it will return all the enabled vendors in the system.
+/// 
+/// [auth] authentication session token.
+FoundationFutureResolver<ViewOutput<Vendor>> getVendors(String auth);
+
 }
 
 /// {abstract} class.
@@ -61,6 +69,16 @@ final class AccountService extends AccountServiceB {
           host,
           'accounts',
         );
+
+ @override
+  FoundationFutureResolver<ViewOutput<Vendor>> getVendors(String authToken) async {
+    return FoundationResponseResolver<ViewOutput<Vendor>>(
+      await getSecure(
+        'GetVendors',
+        authToken,
+      ),
+    );
+  }
 
   @override
   FoundationFutureResolver<ViewOutput<Account>> view(ViewInput<Account> input, String authToken) async {

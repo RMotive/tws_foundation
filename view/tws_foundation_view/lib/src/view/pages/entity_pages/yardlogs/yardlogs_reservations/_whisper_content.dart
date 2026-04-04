@@ -86,11 +86,10 @@ final class _CreateYardLogsReservationsWhisperContentState extends State<_Create
           isMultiple: false,
           controller: widget.controller,
           factory: () {
-            // When creating a yardlog from a reservation, preload the reservation data at the form, otherwise create an empty yardlog.
-            
-            // TODO: add vendors here.
-            // TODO: maybe add a pending status for yardlogs created from reservations?
+            // When creating a yardlog from a reservation, preload the reservation data at the form, otherwise create an empty yardlog.            
             YardLog log = widget.adapter.selectedReservation ?? YardLog();
+            log.vendors = log.vendors.add(); // TODO: Add vendors
+            log.pending = false;
             log.guard = guard!;
             return log;
           },

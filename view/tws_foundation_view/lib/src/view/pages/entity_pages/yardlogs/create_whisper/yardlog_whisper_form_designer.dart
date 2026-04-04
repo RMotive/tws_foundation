@@ -95,6 +95,7 @@ class YardlogWhisperFormDesigner extends StatelessWidget {
             ),
           ),
 
+          if(!isReservation)
           SectionWidget(
             title: "Fotos del camión y remolque",
             outterPadding: EdgeInsets.zero,
@@ -208,6 +209,7 @@ class YardlogWhisperFormDesigner extends StatelessWidget {
             ),
           ),
 
+          if(!isReservation)
           SectionWidget(
             title: "Daños",
             outterPadding: EdgeInsets.zero,
@@ -302,6 +304,7 @@ class YardlogWhisperFormDesigner extends StatelessWidget {
                     ],
                   ),
 
+                  if(!isReservation)
                   Row(
                     spacing: 10,
                     children: <Widget>[
@@ -349,7 +352,8 @@ class YardlogWhisperFormDesigner extends StatelessWidget {
               ),
             ),
           ),
-
+          
+          if(!isReservation)
           SectionWidget(
             title: 'Sección',
             outterPadding: EdgeInsets.zero,

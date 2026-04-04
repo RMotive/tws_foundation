@@ -29,6 +29,7 @@ public interface IAccountsDepot
     ///     Effective <see cref="Permit"/> collection for the given <see cref="Account"/>.
     /// </returns>
     Task<Permit[]> GetPermits(long id);
+
 }
 
 /// <summary>
@@ -46,7 +47,11 @@ public class AccountsDepot
     /// <param name="Disposer">
     ///     Disposition manager handler to use.
     /// </param>
-    public AccountsDepot(Database database, IDisposer<IEntity>? Disposer = null) : base(database, Disposer) { }
+    public AccountsDepot(Database database, IDisposer<IEntity>? Disposer = null) : base(database, Disposer) {
+    }
+
+
+
 
     public async Task<Permit[]> GetPermits(long id) {
         BatchOperationOutput<Account> readOutput = await Read(

@@ -134,7 +134,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
 
             PropertyViewer<String>(
               label: 'Guard', 
-              value: entity.guard.fullName,
+              value: entity.guard?.fullName,
             ),
 
             /// --> Load Type property view.
@@ -194,19 +194,19 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
               /// --> Trailer economic property view.
               PropertyViewer<String>(
                 label: 'Economic',
-                value: entity.trailer!.economic,
+                value: entity.trailer?.economic,
               ),
 
               /// --> Trailer plates property view.
               PropertyViewer<String>(
                 label: 'Plates',
-                value: entity.trailer!.plates,
+                value: entity.trailer?.plates,
               ),
 
               /// --> Trailer type property view.
               PropertyViewer<String>(
                 label: 'Type',
-                value: entity.trailer!.classType,
+                value: entity.trailer?.classType,
               ),
             ],
 
@@ -869,7 +869,7 @@ final class YardLogsEntityTableAdapter extends FoundationEntityTableAdapterB<Yar
         ),
         TextLabel(
           title: 'Guard',
-          value: entity.guard.fullName,
+          value: entity.guard?.fullName ?? '---',
         ),
         TextLabel(
           title: 'Driver name',
@@ -1025,7 +1025,7 @@ final class YardLogsEntityTable extends StatelessWidget {
         EntityTableColumnData<YardLog>(
           title: 'Guard',
           factory: (YardLog entity, int index, BuildContext buildContext) {
-            return entity.guard.identification.fullname;
+            return entity.guard?.identification.fullname ?? '---';
           },
         ),
       ],

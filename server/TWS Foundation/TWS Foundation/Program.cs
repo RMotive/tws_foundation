@@ -183,7 +183,8 @@ public partial class Program {
                 services.AddScoped<IResourcesDepot, ResourcesDepot>();
                 services.AddScoped<IPermitsDepot, PermitsDepot>();
                 services.AddScoped<IActionsDepot, ActionsDepot>();
-                services.AddScoped<IProfilesDepot, ProfilesDepot>();
+                services.AddScoped<IProfilesDepot, ProfilesDepot>(); 
+                services.AddScoped<IVendorsDepot, VendorsDepot>();
 
 
                 // --> [Customer] services.

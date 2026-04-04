@@ -8,12 +8,12 @@ import 'package:tws_foundation_view/tws_foundation_view.dart';
 /// {widget} class.
 ///
 /// Draws a {CSM} foundation [Solution] based [EntityTable], providing default interactions and management for [Solution] entity.
-final class YardLogsEntityTable extends StatelessWidget {
+final class YardLogsReservationsEntityTable extends StatelessWidget {
   /// Table adapter handler.
   final YardLogsEntityTableAdapter adapter;
 
-  /// Creates a new [YardLogsEntityTable] instance.
-  const YardLogsEntityTable({
+  /// Creates a new [YardLogsReservationsEntityTable] instance.
+  const YardLogsReservationsEntityTable({
     super.key,
     required this.adapter,
   });
@@ -96,7 +96,7 @@ final class YardLogsEntityTable extends StatelessWidget {
         EntityTableColumnData<YardLog>(
           title: 'Guard',
           factory: (YardLog entity, int index, BuildContext buildContext) {
-            return entity.guard.identification.fullname;
+            return entity.guard?.identification.fullname ?? '---';
           },
         ),
       ],
