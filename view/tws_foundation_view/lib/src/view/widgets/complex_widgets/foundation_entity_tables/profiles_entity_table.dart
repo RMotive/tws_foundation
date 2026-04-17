@@ -9,7 +9,7 @@ import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/invalidating
 import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialog.dart';
 import 'package:tws_foundation_view/src/view/widgets/list_viewer/list_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
-import 'package:tws_foundation_view/src/view/widgets/selectable_list.dart';
+import 'package:tws_foundation_view/src/view/widgets/selectable_list/selectable_list_async.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {adapter} class.
@@ -107,7 +107,7 @@ final class ProfilesEntityTableAdapter extends FoundationEntityTableAdapterB<Pro
                   data.entity.description = text.cleaned;
                 },
               ),
-              SelectableList<Permit, PermitsServiceI>(
+              SelectableListAsync<Permit, PermitsServiceI>(
                 title: 'Available Permits',
                 entityBuilder: () => Permit(),
                 initialValues: data.entity.permits,

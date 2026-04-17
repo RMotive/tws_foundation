@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/src/core/models/interfaces/view_consume_adapter.dart';
 import 'package:tws_foundation_view/src/core/models/tws_state_holder.dart';
-import 'package:tws_foundation_view/src/view/widgets/list_tile.dart';
 import 'package:tws_foundation_view/src/view/widgets/loading_widget.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_widget.dart';
+import 'package:tws_foundation_view/src/view/widgets/selectable_list/selectable_list.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
-/// Header state class.
-final class _HeaderState extends ReactorBase {}
-
-/// [SelectableList] Display a list of selectable items getted from a [ViewConsumeAdapter] class.
-class SelectableList<TEntity extends IEntity<TEntity>, TService extends IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>> extends StatefulWidget {
+/// [SelectableListAsync] Display a list of selectable items getted from a [ViewConsumeAdapter] class.
+class SelectableListAsync<TEntity extends IEntity<TEntity>, TService extends IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>> extends StatefulWidget {
   /// [TEntity] builder for conversion.
   final EntityBuilder<TEntity> entityBuilder;
   
@@ -23,8 +20,8 @@ class SelectableList<TEntity extends IEntity<TEntity>, TService extends IViewSer
   /// Method to get the title from the [T] type object.
   final String Function(TEntity set) tileTitle;
 
-  /// List heigth.
-  final double? heigth;
+  /// List height.
+  final double? height;
 
   /// Items padding
   final EdgeInsetsGeometry padding;
@@ -62,13 +59,13 @@ class SelectableList<TEntity extends IEntity<TEntity>, TService extends IViewSer
   /// Max fetched items. Default is 9999 items.
   final int maxItems;
 
-  const SelectableList({
+  const SelectableListAsync({
     super.key,
     required this.title,
     required this.tileTitle,
     required this.onSelect,
     required this.entityBuilder,
-    this.heigth,
+    this.height,
     this.customHeader,
     this.emptyContentMessage = "Empty content",
     this.padding = const EdgeInsets.all(5),
@@ -83,19 +80,16 @@ class SelectableList<TEntity extends IEntity<TEntity>, TService extends IViewSer
   });
 
   @override
-  State<SelectableList<TEntity, TService>> createState() => _SelectableListState<TEntity, TService>();
+  State<SelectableListAsync<TEntity, TService>> createState() => _SelectableListAsyncState<TEntity, TService>();
 }
 
-final class _SelectableListState<TEntity extends IEntity<TEntity>, TService extends IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>> extends State<SelectableList<TEntity, TService>> {
+final class _SelectableListAsyncState<TEntity extends IEntity<TEntity>, TService extends IViewService<TEntity, FoundationResponseResolver<ViewOutput<TEntity>>>> extends State<SelectableListAsync<TEntity, TService>> {
  
   /// {dep} [TEntity] based service dependency.
   final TService service = InjectorUtils.get();
   
   /// Theme Manager InjectorUtils.
   late FoundationThemeB themeManager = ThemingUtils.get(context);
-
-  /// Theme reference key.
-  final UniqueKey ref = UniqueKey();
 
   /// Color pallet for the component.
   late ThemingData primaryColorTheme;
@@ -112,12 +106,6 @@ final class _SelectableListState<TEntity extends IEntity<TEntity>, TService exte
 
   /// Data result in [AsyncWidget].
   late List<TEntity> fetchedList;
-
-  /// Declaration for header state.
-  late _HeaderState headerState;
-
-  /// Header state effect holder for use outside the [CSMDynamicWidget].
-  late void Function() headerEffect;
 
   /// Waiting widget state.
   late TWSFStateHolder waitingState;
@@ -161,15 +149,13 @@ final class _SelectableListState<TEntity extends IEntity<TEntity>, TService exte
     waitingState = TWSFStateHolder();
     waiting = false;
     selectedItems = widget.initialValues ?? <TEntity>[];
-    headerState = _HeaderState();
-    headerEffect = () {};
     waitingEffect = () {};
     _viewInvok = viewInvokation();
     super.initState();
   }
 
   @override
-  void didUpdateWidget(covariant SelectableList<TEntity, TService> oldWidget) {
+  void didUpdateWidget(covariant SelectableListAsync<TEntity, TService> oldWidget) {
     if (selectedItems != widget.initialValues && widget.enabled) {
       selectedItems = widget.initialValues ?? selectedItems;
     } else if (!widget.enabled) {
@@ -200,87 +186,32 @@ final class _SelectableListState<TEntity extends IEntity<TEntity>, TService exte
           fetchedList = data.entities;
           return Stack(
             children: <Widget>[
-              Column(
-                spacing: 5,
-                children: <Widget>[
-                  widget.customHeader != null
-                      ? widget.customHeader!
-                      : ReactiveWidget<_HeaderState>(
-                        reactor: headerState,
-                        builder: (BuildContext ctx, _HeaderState state) {
-                          headerEffect = state.react;
-                          return Row(
-                            spacing: 10,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Selected: ${selectedItems.length}",
-                                style: TextStyle(color: tcolor),
-                              ),
-                              Text(
-                                "${widget.title}: ${fetchedList.length.toString()}",
-                                style: TextStyle(color: tcolor),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                  const Divider(),
-                  fetchedList.isNotEmpty
-                      ? SizedBox(
-                        height: widget.heigth,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: List<Widget>.generate(
-                              fetchedList.length,
-                              (int index) {
-                                TEntity item = fetchedList[index];
-                                String title = widget.tileTitle(item);
-                                return CollectionTile(
-                                  enabled: widget.enabled,
-                                  width: double.maxFinite,
-                                  label: title,
-                                  textColor: tcolor,
-                                  onHoverColor: pageColorTheme.accent,
-                                  onHoverTextColor: pageColorTheme.accentAlt ?? pageColorTheme.fore,
-                                  onTap: (bool selected) async {
-                                    waiting = true;
-                                    waitingEffect();
+              SelectableList<TEntity>(
+                title: widget.title,
+                tileTitle: widget.tileTitle,
+                content: fetchedList,
+                maxItems: widget.maxItems,
+                enabled: widget.enabled,
+                textColor: widget.textColor,
+                backgroundColor: widget.backgroundColor,
+                titleAlignment: widget.titleAlignment,
+                subtitleAlignment: widget.subtitleAlignment,
+                emptyContentMessage: widget.emptyContentMessage,
+                customHeader: widget.customHeader,
+                padding: widget.padding,
+                selectedValues: widget.initialValues,
+                height: widget.height,
+                isEqual: widget.isEqual,
+                onSelect: (bool selected, TEntity item) async {
+                  waiting = true;
+                  waitingEffect();
 
-                                    if (selected) {
-                                      selectedItems.add(item);
-                                    } else {
-                                      selectedItems.remove(item);
-                                    }
-                                    await widget.onSelect(selected, item);
-                                    waiting = false;
-                                    waitingEffect();
-                                    headerEffect();
-                                  },
-                                  evaluateSelection: () {
-                                    if (widget.isEqual != null) {
-                                      bool founded = false;
-                                      for (TEntity selectedItem in selectedItems) {
-                                        if (widget.isEqual!(
-                                          selectedItem,
-                                          item,
-                                        )) {
-                                          founded = true;
-                                          break;
-                                        }
-                                      }
-                                      return founded;
-                                    }
-                                    return selectedItems.contains(item);
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      )
-                      : MessageWidget(text: widget.emptyContentMessage),
-                ],
+                  await widget.onSelect(selected, item);
+                  
+                  waiting = false;
+                  waitingEffect();
+                },
+
               ),
               ReactiveWidget<TWSFStateHolder>(
                 reactor: waitingState,

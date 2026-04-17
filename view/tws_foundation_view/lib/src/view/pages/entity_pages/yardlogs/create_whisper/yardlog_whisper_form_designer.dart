@@ -6,12 +6,14 @@ class YardlogWhisperFormDesigner extends StatelessWidget {
   final FoundationThemeB theme;
   final CreateEntityFormRecordReactor<YardLog>? itemState;
   final bool isReservation;
+  final List<Vendor> availableVendors;
 
   const YardlogWhisperFormDesigner({
     super.key,
     required this.theme,
     required this.itemState,
     required this.isReservation,
+    required this.availableVendors,
   });
 
   @override
@@ -51,6 +53,23 @@ class YardlogWhisperFormDesigner extends StatelessWidget {
           //   entityBuilder: () => LoadType(),
           //   onSelect: (List<LoadType> selection) => entity.loadType = selection[0],
           // ),
+
+          if(isReservation)
+          SelectableList<Vendor>(
+            title: '*Add vendors...',
+            tileTitle: (Vendor vendor) => vendor.name,
+            content: availableVendors,
+            onSelect: (bool selected, Vendor item) {
+              if (selected) {
+                YardlogVendor vendor = YardlogVendor();
+                vendor.vendorId = item.id;
+                itemState?.entity.vendors.add(vendor);
+                } else {
+                itemState?.entity.vendors.removeWhere((YardlogVendor v) => v.vendorId == item.id);
+              }
+              itemState?.react();
+            }
+          ),
 
           // --> Load Type Selection.
           EntityFinderSelector<LoadType, LoadTypesServiceI>(

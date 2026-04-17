@@ -1,4 +1,5 @@
 
+import 'package:csm_client_core/csm_client_core.dart';
 import 'package:csm_view/csm_view.dart' hide LayoutBuilder;
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -7,29 +8,6 @@ import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 part '_whisper_content.dart';
-
-/// {constant} default spacing between elements.
-const double _kDefSpacing = 10;
-
-/// Simplifies [Wrap] draw giving default spacing values.
-final class _SpacedWrap extends StatelessWidget {
-  /// Inner [Wrap.children] proxy value.
-  final List<Widget> children;
-
-  /// Creates a new [_SpacedWrap] instance.
-  const _SpacedWrap({
-    required this.children,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: _kDefSpacing,
-      runSpacing: _kDefSpacing,
-      children: children,
-    );
-  }
-}
 
 /// {whisper} class.
 final class CreateYardLogsReservationsWhisper extends ViewPageBase {

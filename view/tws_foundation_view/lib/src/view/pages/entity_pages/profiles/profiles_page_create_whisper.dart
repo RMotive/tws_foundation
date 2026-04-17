@@ -1,7 +1,7 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/view/widgets/selectable_list.dart';
+import 'package:tws_foundation_view/src/view/widgets/selectable_list/selectable_list_async.dart';
 import 'package:tws_foundation_view/src/view/widgets/whisper.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
@@ -98,8 +98,8 @@ final class ProfilesPageCreateWhisper extends ViewPageBase {
                       ),
                     ],
                   ),
-                  SelectableList<Permit, PermitsServiceI>(
-                    heigth: 500,
+                  SelectableListAsync<Permit, PermitsServiceI>(
+                    height: 500,
                     title: 'Available Permits',
                     entityBuilder: () => Permit(),
                     initialValues: itemState?.entity.permits,

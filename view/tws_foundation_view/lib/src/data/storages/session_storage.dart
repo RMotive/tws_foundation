@@ -2,7 +2,6 @@ import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:localstorage/localstorage.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
-import 'package:tws_foundation_view/src/core/routes.dart';
 
 /// Represents a view solution session persistance and management storage object, provides several
 /// operations to handle, communicate and interact with user authentication information contexts.

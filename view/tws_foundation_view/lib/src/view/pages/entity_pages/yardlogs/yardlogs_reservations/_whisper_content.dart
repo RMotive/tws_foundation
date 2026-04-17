@@ -26,14 +26,14 @@ final class _CreateYardLogsReservationsWhisperContentState extends State<_Create
   /// {state} Instance of the current ThemingUtils.
   late FoundationThemeB theme;
 
-  /// {state} stores the last [_getUserData] invokation.
-  late final Future<Employee?> _getUserEmployeeInstance = _getUserData();
+  /// {state} stores the last [_getVendorsData] invokation.
+  late final Future<ViewOutput<Vendor>> _getVendorInstance = _getVendorsData();
   
   /// {state} stores the default entity status.
   late final Status? defStatus;
 
   /// {state} guard who's creating the yardlog(s).
-  late final Employee? guard;
+  late final ViewOutput<Vendor> vendors;
 
   @override
   void didChangeDependencies() {
@@ -42,33 +42,34 @@ final class _CreateYardLogsReservationsWhisperContentState extends State<_Create
   }
 
   /// Gets the current user [Employee] data (if there's) as required to generate a [YardLog].
-  Future<Employee?> _getUserData() async {
+  Future<ViewOutput<Vendor>> _getVendorsData() async {
     SessionStorageI sessionStorage = InjectorUtils.get();
-    EmployeesServiceI employeesService = InjectorUtils.get();
+    AccountServiceI accountsService = InjectorUtils.get();
     StatusesServiceI statusService = InjectorUtils.get();
 
     String token = sessionStorage.token;
 
-    FoundationResponseResolver<Employee?> responseResolver = await employeesService.getUserEmployee(token);
+    FoundationResponseResolver<ViewOutput<Vendor>> responseResolver = await accountsService.getVendors(token);
 
     FoundationResponseResolver<Status?> statusResponseResolver = await statusService.read(FoundationReferences.statusActive,token);
 
     defStatus = statusResponseResolver.resolveDirect(() => Status());
 
-    guard = responseResolver.resolveDirect(
-      () => Employee(),
+    vendors = responseResolver.resolveDirect(
+      () => ViewOutput<Vendor>(Vendor.new),
     );
 
-    return guard;
+    return vendors;
   }
 
   @override
   Widget build(BuildContext context) {
-    return AsyncWidget<Employee?>(
-      future: _getUserEmployeeInstance,
-      successBuilder: (BuildContext buildContext, Employee? data) {
+    return AsyncWidget<ViewOutput<Vendor>>(
+      future: _getVendorInstance,
+      successBuilder: (BuildContext buildContext, ViewOutput<Vendor> data) {
+        vendors = data;
         // TODO: define beheavior to show the "Only reservation" view.
-        if (data == null) {
+        if (data.entities.isEmpty) {
           return Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -76,7 +77,7 @@ final class _CreateYardLogsReservationsWhisperContentState extends State<_Create
                 top: 20,
               ),
               child: ErrorMessageWidget(
-                message: 'You need to be an Employee to create YardLog(s)',
+                message: 'No vendors associated to the user, which is required to create a yardlog reservation.',
               ),
             ),
           );
@@ -88,9 +89,7 @@ final class _CreateYardLogsReservationsWhisperContentState extends State<_Create
           factory: () {
             // When creating a yardlog from a reservation, preload the reservation data at the form, otherwise create an empty yardlog.            
             YardLog log = widget.adapter.selectedReservation ?? YardLog();
-            log.vendors = log.vendors.add(); // TODO: Add vendors
             log.pending = false;
-            log.guard = guard!;
             return log;
           },
           authFactory: (BuildContext context) {
@@ -102,6 +101,7 @@ final class _CreateYardLogsReservationsWhisperContentState extends State<_Create
               theme: theme,
               itemState: itemState,
               isReservation: true,
+              availableVendors: vendors.entities,
             );
           },
         );

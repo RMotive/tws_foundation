@@ -10,7 +10,7 @@ import 'package:tws_foundation_view/src/view/widgets/dialog_widgets/resume_dialo
 import 'package:tws_foundation_view/src/view/widgets/list_viewer/list_viewer.dart';
 import 'package:tws_foundation_view/src/view/widgets/options_selector.dart';
 import 'package:tws_foundation_view/src/view/widgets/section_divider.dart';
-import 'package:tws_foundation_view/src/view/widgets/selectable_list.dart';
+import 'package:tws_foundation_view/src/view/widgets/selectable_list/selectable_list_async.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 /// {adapter} class.
@@ -227,8 +227,8 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 text: 'Security access details',
               ),
 
-              SelectableList<Profile, ProfilesServiceI>(
-                heigth: 350,
+              SelectableListAsync<Profile, ProfilesServiceI>(
+                height: 350,
                 title: 'Available Profiles',
                 entityBuilder: () => Profile(),
                 initialValues: data.entity.profiles,
@@ -236,8 +236,8 @@ final class AccountsEntityTableAdatper extends FoundationEntityTableAdapterB<Acc
                 onSelect: (bool selected, Profile item) {  },
               ),
 
-              SelectableList<Permit, PermitsServiceI>(
-                heigth: 350,
+              SelectableListAsync<Permit, PermitsServiceI>(
+                height: 350,
                 title: 'Available Permits',
                 entityBuilder: () => Permit(),
                 initialValues: data.entity.permits,

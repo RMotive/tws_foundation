@@ -99,6 +99,7 @@ final class _CreateYardLogsWhisperContentState extends State<_CreateYardLogsWhis
               theme: theme,
               itemState: itemState,
               isReservation: false,
+              availableVendors: <Vendor>[],
             );
           },
         );
