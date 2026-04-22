@@ -56,7 +56,7 @@ class FoundationThemeLight extends FoundationThemeB {
           accent: FoundationColors.oceanBlue,
           foreAlt: FoundationColors.warmWhite,
         ),
-        categoryLayoutRibbonButton: const StateControlTheming(
+        categoryLayoutRibbonActionButton: const StateControlTheming(
           main: InputControlTheming(
             background: FoundationColors.oceanBlue,
             foreground: FoundationColors.warmWhite,

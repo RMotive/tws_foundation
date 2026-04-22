@@ -35,6 +35,6 @@ final class LandingThemeLight extends PackageLandingThemeLight
   ThemingData get navigationLayout => _foundation.navigationLayout;
 
   @override
-  StateControlTheming get categoryLayoutRibbonButton => _foundation.categoryLayoutRibbonButton;
+  StateControlTheming get categoryLayoutRibbonActionButton => _foundation.categoryLayoutRibbonActionButton;
 }
   

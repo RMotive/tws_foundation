@@ -1,14 +1,15 @@
 import 'package:csm_view/csm_view.dart';
 
 /// Defines the theme data base contract for {Foundation View} solution.
-abstract class FoundationThemeB extends ThemeDataBase implements INavigationLayoutThemeData {
+abstract class FoundationThemeB extends ThemeDataBase implements INavigationLayoutThemeData, ICategoryLayoutThemeData {
   //! --> [Asset]s access.
 
   /// Business main logo asset access.
   final String businessLogo;
 
-  /// [CategoryLayout] ribbon buttons theme data.
-  final StateControlTheming categoryLayoutRibbonButton;
+  /// [CategoryLayout] ribbon action buttons theme data.
+  @override
+  final StateControlTheming categoryLayoutRibbonActionButton;
 
   /// {controlWarning} scenarios theme data.
   final ThemingData controlWarning;
@@ -32,7 +33,7 @@ abstract class FoundationThemeB extends ThemeDataBase implements INavigationLayo
     required super.controlDisabled,
     required this.businessLogo,
     required this.navigationLayout,
-    required this.categoryLayoutRibbonButton,
+    required this.categoryLayoutRibbonActionButton,
     required this.controlWarning,
   });
 }
