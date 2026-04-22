@@ -21,11 +21,7 @@ final class TrailersInventoryCategoryPage extends EntityCategoryPageB<YardLog, T
        @override
   List<IRoutingGraphData> composeRoutes() {
     return <IRoutingGraphData>[
-      RoutingGraphWhisperData<Object>(
-        FoundationRoutes.trailerInventoryPageRoute,
-        whisperOptions: WhisperOptions(),
-        pageBuilder: (BuildContext ctx, RoutingData routeData) => TrailersInventoryPage(adapter: adapter),
-      ),
+      
     ];
   }
 
