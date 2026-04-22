@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csm_view/csm_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tws_foundation_client/tws_foundation_client.dart';
@@ -8,10 +10,14 @@ abstract class _ViewRoot extends ViewModuleBase with ConsoleMixin {
   /// Creates a new [_ViewRoot] instance.
   const _ViewRoot({
     required this.routerConfig,
+    required this.onInitView,
   });
 
   /// Router configuration for the view.
   final RoutingGraphBase routerConfig;
+
+  /// View initialization callback.
+  final FutureOr<void> Function(BuildContext context) onInitView;
 
   @override
   List<IThemeData> bootstrapTheming() {
@@ -29,11 +35,17 @@ final class _SecurityViewRoot extends _ViewRoot {
   /// Creates a new [_SecurityViewRoot] instance.
   const _SecurityViewRoot({
     required super.routerConfig,
+    required super.onInitView,
   });
 
   @override
   List<IRoutingGraphData> bootstrapRouting() {
     return routerConfig.routes;
+  }
+
+  @override
+  FutureOr<void> initView(BuildContext context) {
+    return onInitView(context);
   }
 
 }
@@ -49,11 +61,16 @@ final class FoundationSecureView extends StatefulWidget {
   /// Application RouteData tree.
   final List<RoutingGraphNode> routes;
 
+    /// View initialization callback.
+  final FutureOr<void> Function(BuildContext context) onInitView;
+
   /// Creates a new [FoundationSecureView] instance.
   const FoundationSecureView({
     super.key,
     required this.sign,
+    required this.onInitView,
     this.routes = const <RoutingGraphNode>[],
+
   });
 
   @override
@@ -68,6 +85,7 @@ final class _FoundationSecureViewState extends State<FoundationSecureView> {
   Widget build(BuildContext context) {
     
     return _SecurityViewRoot(
+      onInitView: widget.onInitView,
       routerConfig: _FoundationSecureViewRouteTree(
         solutionSign: widget.sign,
         routes: widget.routes,

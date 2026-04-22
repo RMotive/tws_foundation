@@ -25,6 +25,8 @@ export 'src/data/storages/session_storage.dart';
 
 //! --> [View]
 
+export 'src/foundation_secure_view.dart';
+
 //! --> [View.Layouts]
 
 /// [View.Layouts.CategoryLayout]
