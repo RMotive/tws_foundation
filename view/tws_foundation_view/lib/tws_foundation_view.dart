@@ -82,6 +82,9 @@ export 'src/view/widgets/complex_widgets/foundation_entity_tables/profiles_entit
 /// [Trailer inventory Entity Table]
 export 'src/view/widgets/complex_widgets/foundation_entity_tables/trailers_inventory_entity_table.dart';
 
+/// [YardLogs Reservations Entity Table]
+export 'src/view/widgets/complex_widgets/foundation_entity_tables/yardlogs_reservations_entity_table.dart';
+
 //! <-- Entity Tables
 
 // [widgets]
@@ -98,6 +101,9 @@ export 'src/view/pages/auth_page/auth_page.dart';
 
 /// [YardLogs Page]
 export 'src/view/pages/entity_pages/yardlogs/yardlogs_page.dart';
+
+/// [YardLogs Reservations Page]
+export 'src/view/pages/entity_pages/yardlogs/yardlogs_reservations/yardlogs_reservations_page.dart';
 
 /// [Employees Page]
 export 'src/view/pages/entity_pages/employees/employees_page.dart';

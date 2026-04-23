@@ -38,9 +38,6 @@ final class TrailersInventoryCategoryPage extends EntityCategoryPageB<YardLog, T
       ActionsRisbbonRefresh(
         onRefresh:(_) => adapter.refresh(),
       ),
-      ActionsRibbonExport<YardLog, YardLogsServiceI>(
-        exportView:() => adapter.viewConsumed!, 
-      )
     ];
   }
 
