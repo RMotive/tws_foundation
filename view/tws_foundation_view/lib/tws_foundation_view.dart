@@ -22,6 +22,13 @@ export 'src/data/storages/session_storage.dart';
 
 //! <-- [Data]
 
+//! --> [Utils]
+
+export 'src/core/utils/routing_utils.dart';
+export 'src/core/utils/development_utils.dart';
+
+//! <-- [Utils]
+
 
 //! --> [View]
 
