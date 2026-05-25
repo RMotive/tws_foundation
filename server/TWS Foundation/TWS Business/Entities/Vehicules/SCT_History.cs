@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
 using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -44,6 +45,7 @@ public class SCT_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -53,6 +55,7 @@ public class SCT_History
     /// <summary>
     ///     <see cref="Carrier_History"/> dependants from this <see cref="SCT_History"/>.
     /// </summary>
+    [EntityDependency("CarriersH", typeof(Carrier_History), isCollection:true)]
     public ICollection<Carrier_History> CarriersH { get; set; } = [];
 
     #endregion
@@ -64,8 +67,8 @@ public class SCT_History
 
         etBuilder.Link<SCT, Status>(
                 nameof(Status),
-                Required: true,
-                Auto: true
+                isRequired: true,
+                isAutoLoaded: true
             );
     }
 }

@@ -1,5 +1,4 @@
-﻿using CSM_Foundation.Product;
-
+﻿
 using CSM_Security.Depots;
 
 using Action = CSM_Security.Entities.Action;

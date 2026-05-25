@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
 using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ public class USDOT_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -49,6 +51,7 @@ public class USDOT_History
     /// <summary>
     ///     <see cref="Carrier_History"/> dependants from this <see cref="USDOT_History"/>.
     /// </summary>
+    [EntityDependency("CarriersHistories", typeof(Carrier_History), isCollection:true)]
     public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     #endregion

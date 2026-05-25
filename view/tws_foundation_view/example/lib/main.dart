@@ -1,22 +1,11 @@
-import 'dart:async';
 import 'package:csm_view/csm_view.dart';
 
 import 'package:example/core/landing_utils.dart';
 import 'package:example/entries/auth_page_entry.dart';
 import 'package:example/entries/category_layout_entry.dart';
-import 'package:example/entries/entity_pages/accounts_page_entry.dart';
-import 'package:example/entries/entity_pages/contacts_page_entry.dart';
-import 'package:example/entries/entity_pages/drivers_page_entry.dart';
-import 'package:example/entries/entity_pages/employees_page_entry.dart';
-import 'package:example/entries/entity_pages/locations_page_entry.dart';
-import 'package:example/entries/entity_pages/permits_page_entry.dart';
-import 'package:example/entries/entity_pages/profiles_page_entry.dart';
-import 'package:example/entries/entity_pages/sections_page_entry.dart';
-import 'package:example/entries/entity_pages/solutions_page_entry.dart';
-import 'package:example/entries/entity_pages/trailer_inventory_page_entry.dart';
-import 'package:example/entries/entity_pages/trailers_page_entry.dart';
-import 'package:example/entries/entity_pages/trucks_page_entry.dart';
-import 'package:example/entries/entity_pages/yard_logs_page_entry.dart';
+import 'package:example/entries/entity_category_pages/employees_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/solutions_category_page_entry.dart';
+import 'package:example/entries/entity_category_pages/trailers_inventory_category_page_entry.dart';
 import 'package:example/entries/navigation_layout_entry.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:example/themes/landing_theme_dark.dart';
@@ -27,9 +16,66 @@ import 'package:tws_foundation_client/tws_foundation_client.dart';
 import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 
-void main() {
+class Logger with ConsoleMixin {}
+
+void main() async {
+  initDependencies();
   runApp(ViewPackageLanding());
 }
+
+void initDependencies() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    Logger logger = Logger();
+    logger.messageLog('Initializing storage');
+
+    final FoundationServer foundationServer = FoundationServer(kReleaseMode);
+    InjectorUtils.addSingleton<FoundationServer>(foundationServer);
+    InjectorUtils.addSingleton<SecurityServiceI>(foundationServer.securityService);
+    
+    final SessionStorage sessionStorage = SessionStorage();
+
+    InjectorUtils.addSingleton<SessionStorage>(sessionStorage);
+    InjectorUtils.addSingleton<SessionStorageI>(sessionStorage);
+    
+    await sessionStorage.init();
+
+    SessionData sessionData = await LandingUtils.authBuilder();
+    sessionStorage.store(sessionData);
+
+    logger.messageLog('Initializing dependencies');
+
+    InjectorUtils.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
+    InjectorUtils.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
+    InjectorUtils.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
+    InjectorUtils.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
+    InjectorUtils.addSingleton<DriversServiceI>(foundationServer.driversService);
+    InjectorUtils.addSingleton<TrucksServiceI>(foundationServer.trucksService);
+    InjectorUtils.addSingleton<SituationsServiceI>(foundationServer.situationsService);
+    InjectorUtils.addSingleton<StatusesServiceI>(foundationServer.statusService);
+    InjectorUtils.addSingleton<AccountServiceI>(foundationServer.accountService);
+    InjectorUtils.addSingleton<LocationsServiceI>(foundationServer.locationsService);
+    InjectorUtils.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
+    InjectorUtils.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
+    InjectorUtils.addSingleton<CarriersServiceI>(foundationServer.carriersService);
+    InjectorUtils.addSingleton<TrailersServiceI>(foundationServer.trailersService);
+    InjectorUtils.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
+    InjectorUtils.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
+    InjectorUtils.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
+    InjectorUtils.addSingleton<ContactsServiceI>(foundationServer.contactService);
+    InjectorUtils.addSingleton<PermitsServiceI>(foundationServer.permitsService);
+    InjectorUtils.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
+    InjectorUtils.addSingleton<ActionsServiceI>(foundationServer.actionsService);
+    InjectorUtils.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
+  
+    logger.successLog(
+      'Dependencies initialized',
+      info: <String, Object?>{
+        'isAuth': InjectorUtils.get<SessionStorage>(),
+      },
+    );
+  }
+
 
 final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> with ConsoleMixin {
   /// Creates a new [ViewPackageLanding] instance.
@@ -54,26 +100,29 @@ final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> wit
                 ],
               ),
 
+              //! --> Category Layouts
+              // SecurityCategoryLayoutEntry(),
+
               //! --> Entity Pages
-              YardLogsPageEntry(),
-              SectionsPageEntry(),
-              EmployeesPageEntry(),
-              DriversPageEntry(),
-              TrucksPageEntry(),
-              TrailersPageEntry(),
-              LocationsPageEntry(),
-              ContactsPageEntry(),
-              PermitsPageEntry(),
-              ProfilesPageEntry(),
-              AccountsPageEntry(),
-              SolutionsPageEntry(),
-              TrailersInventoryPageEntry(),
+              // YardLogsPageEntry(),
+              // SectionsPageEntry(),
+              // EmployeesPageEntry(),
+              // DriversPageEntry(),
+              // TrucksPageEntry(),
+              // TrailersPageEntry(),
+              // LocationsPageEntry(),
+              // ContactsPageEntry(),
+              // PermitsPageEntry(),
+              // ProfilesPageEntry(),
+              // AccountsPageEntry(),
+              // SolutionsPageEntry(),
+              // TrailersInventoryPageEntry(),
               //! <-- Entity Pages
 
               //! --> Entity Category Pages
-              // EmployeesCategoryPageEntry(),
+              EmployeesCategoryPageEntry(),
               // YardLogsCategoryPageEntry(),
-              // TrailersInventoryCategoryPageEntry(),
+              TrailersInventoryCategoryPageEntry(),
               // SectionsCategoryPageEntry(),
               // DriversCategoryPageEntry(),
               // TrucksCategoryPageEntry(),
@@ -83,7 +132,7 @@ final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> wit
               // PermitsCategoryPageEntry(),
               // ProfilesCategoryPageEntry(), 
               // AccountsCategoryPageEntry(),
-              // SolutionsCategoryPageEntry(),
+              SolutionsCategoryPageEntry(),
               //! <-- Entity Category Pages
 
               //! --> Foundation Entity Tables
@@ -104,52 +153,6 @@ final class ViewPackageLanding extends PackageLandingViewBase<LandingThemeB> wit
               //! <-- Foundation Entity Tables
             ],
   );
-  
-  @override
-  FutureOr<void> initView(BuildContext context) async {
-    messageLog('Initializing dependencies');
-    final FoundationServer foundationServer = FoundationServer(kReleaseMode);
-
-    InjectorUtils.addSingleton<FoundationServer>(foundationServer);
-    InjectorUtils.addSingleton<SecurityServiceI>(foundationServer.securityService);
-    InjectorUtils.addSingleton<YardLogsServiceI>(foundationServer.yardlogsService);
-    InjectorUtils.addSingleton<LoadTypesServiceI>(foundationServer.loadtypeService);
-    InjectorUtils.addSingleton<SolutionsServiceI>(foundationServer.solutionsService);
-    InjectorUtils.addSingleton<EmployeesServiceI>(foundationServer.employeesService);
-    InjectorUtils.addSingleton<DriversServiceI>(foundationServer.driversService);
-    InjectorUtils.addSingleton<TrucksServiceI>(foundationServer.trucksService);
-    InjectorUtils.addSingleton<SituationsServiceI>(foundationServer.situationsService);
-    InjectorUtils.addSingleton<StatusesServiceI>(foundationServer.statusService);
-    InjectorUtils.addSingleton<AccountServiceI>(foundationServer.accountService);
-    InjectorUtils.addSingleton<LocationsServiceI>(foundationServer.locationsService);
-    InjectorUtils.addSingleton<ManufacturersServiceI>(foundationServer.manufacturerService);
-    InjectorUtils.addSingleton<VehiculeModelsServiceI>(foundationServer.vehiculeModelsService);
-    InjectorUtils.addSingleton<CarriersServiceI>(foundationServer.carriersService);
-    InjectorUtils.addSingleton<TrailersServiceI>(foundationServer.trailersService);
-    InjectorUtils.addSingleton<TrailerTypesServiceI>(foundationServer.trailerTypesService);
-    InjectorUtils.addSingleton<TrailerClassesServiceI>(foundationServer.trailerClassesService);
-    InjectorUtils.addSingleton<SectionsServiceI>(foundationServer.sectionsService);
-    InjectorUtils.addSingleton<ContactsServiceI>(foundationServer.contactService);
-    InjectorUtils.addSingleton<PermitsServiceI>(foundationServer.permitsService);
-    InjectorUtils.addSingleton<FeaturesServiceI>(foundationServer.featuresService);
-    InjectorUtils.addSingleton<ActionsServiceI>(foundationServer.actionsService);
-    InjectorUtils.addSingleton<ProfilesServiceI>(foundationServer.profilesService);
-
-    final SessionStorage sessionStorage = SessionStorage();
-    await sessionStorage.init();
-    SessionData sessionData = await LandingUtils.authBuilder();
-
-    sessionStorage.store(sessionData);
-
-    InjectorUtils.addSingleton<SessionStorage>(sessionStorage);
-    InjectorUtils.addSingleton<SessionStorageI>(sessionStorage);
-      successLog(
-        'Dependencies initialized',
-        info: <String, Object?>{
-          'isAuth': sessionStorage,
-        },
-      );
-  }
   
   @override
   List<LandingThemeB> bootstrapTheming() {

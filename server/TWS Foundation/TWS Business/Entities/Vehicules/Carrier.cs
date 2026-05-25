@@ -25,7 +25,7 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -34,7 +34,7 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Approach", typeof(Approach))]
     public Approach Approach { get; set; } = default!;
 
     /// <summary>
@@ -43,13 +43,13 @@ public class Carrier
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Address", typeof(Address))]
     public Address Address { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="USDOTs.USDOT"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("USDOT", typeof(USDOT))]
     public USDOT? USDOT { get; set; }
 
     #endregion
@@ -59,15 +59,18 @@ public class Carrier
     /// <summary>
     ///     <see cref="Truck"/>s referencing this <see cref="Carrier"/>
     /// </summary>
+    [EntityDependency("Trucks", typeof(Truck), isCollection:true)]
     public ICollection<Truck> Trucks { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Trailer"/>s referencing this <see cref="Carrier"/>. 
     /// </summary>
+    [EntityDependency("Trailers", typeof(Trailer), isCollection:true)]
     public ICollection<Trailer> Trailers { get; set; } = [];
 
     #endregion
 
+    [EntityDependency("History", typeof(Carrier_History), isCollection:true)]
     public ICollection<Carrier_History> History { get; set; } = [];
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

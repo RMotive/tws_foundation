@@ -48,6 +48,15 @@ export 'src/view/layouts/category_layout/category_layout_ribbon/actions_ribbon_g
 export 'src/view/widgets/text_button.dart';
 export 'src/view/widgets/fold_panel_widget.dart';
 
+//! <-- [Widgets]
+
+//! --> [Category Layouts]
+
+/// [Security Category Layout]
+export 'src/view/layouts/category_layout/security_category_layout.dart';
+
+//! <-- [Category Layouts]
+
 //! --> Entity Tables
 
 /// [Solutions Entity Table]

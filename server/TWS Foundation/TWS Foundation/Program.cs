@@ -3,13 +3,8 @@ using System.Text.Json.Serialization;
 
 using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
-using CSM_Foundation.Core;
-using CSM_Foundation.Core.Utils;
-using CSM_Foundation.Logging;
-using CSM_Foundation.Server;
-using CSM_Foundation.Server.Converters.JSON;
-
 using CSM_Foundation_Core.Abstractions.Interfaces;
+using CSM_Foundation_Core.Core.Utils;
 
 using CSM_Security.Depots;
 using CSM_Security.Entities;
@@ -33,8 +28,7 @@ using TWS_Foundation.Middlewares;
 
 namespace TWS_Foundation;
 
-public class Settings
-    : ILoggingObject {
+public class Settings {
     public required string Tenant { get; init; }
     public required Solution Solution { get; init; }
     public required string Host { get; init; }
@@ -60,13 +54,13 @@ public partial class Program {
     static Settings? Settings_;
 
     static void Main(string[] args) {
-        Logger.Announce("Running [CSM] server engine...");
+        ConsoleUtils.Announce("Running [CSM] server engine...");
 
         try {
             Settings s = Settings;
             Console.Title = $"{s.Solution.Name} | {s.Host}";
 
-            Logger.Success("Server settings loaded", s);
+            ConsoleUtils.Success("Server settings loaded", s);
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             // Add services and overriding options to the container.
@@ -110,7 +104,7 @@ public partial class Program {
 
                                     bool isCorsAllowed = corsPolicies.Contains(parsedUrl.Host);
                                     if (!isCorsAllowed) {
-                                        Logger.Warning(
+                                        ConsoleUtils.Warning(
                                             CORS_BLOCK_MESSAGE,
                                             new() {
                                                 {nameof(isCorsAllowed), isCorsAllowed},
@@ -237,13 +231,13 @@ public partial class Program {
             );
             app.UseCors();
 
-            Logger.Announce($"Server set up ^_____^");
+            ConsoleUtils.Announce($"Server set up ^_____^");
             app.Run();
         } catch (Exception X) when (X is ILoggingException AX) {
-            Logger.Exception(AX);
+            ConsoleUtils.Exception(AX);
             throw;
         } catch (Exception X) {
-            Logger.Exception(new XSystem($"Engine start exception", X));
+            ConsoleUtils.Exception(new XSystem($"Engine start exception", X));
         } finally {
             Console.WriteLine($"Press any key to close...");
             Console.ReadKey();
@@ -251,18 +245,18 @@ public partial class Program {
     }
 
     static void Dispose(IDisposer<IEntity> Disposer) {
-        Logger.Announce("Disposing quality context records");
+        ConsoleUtils.Announce("Disposing quality context records");
         try {
             Disposer.Dispose();
         } catch (Exception X) {
-            Logger.Exception(new XSystem("", X));
+            ConsoleUtils.Exception(new XSystem("", X));
         }
     }
 
     static Settings GetSettings() {
         string ws = Directory.GetCurrentDirectory();
         string fp = SETTINGS_LOCATION;
-        switch (ServerUtils.Environment) {
+        switch (SystemUtils.Environment) {
             case ServerEnvironments.production:
                 fp = fp.Split(".json")[0] + ".production.json";
                 break;
@@ -270,8 +264,8 @@ public partial class Program {
                 break;
         }
 
-        string sl = FileUtils.FormatLocation(fp);
-        Logger.Note(
+        string sl = FileUtils.FormatPath(fp);
+        ConsoleUtils.Note(
             "Retrieving Server settings",
             new Dictionary<string, object?> {
                 {"Workspace", ws },

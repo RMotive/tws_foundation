@@ -1,4 +1,5 @@
-﻿using CSM_Database_Core.Core.Extensions;
+﻿using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -28,6 +29,7 @@ public class Carrier_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -36,6 +38,7 @@ public class Carrier_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Address", typeof(Address))]
     public Address Address { get; set; } = default!;
 
     /// <summary>
@@ -44,11 +47,13 @@ public class Carrier_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("ApproachHistory", typeof(Approach_History))]
     public Approach_History ApproachHistory { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="USDOT_History"/> information.
     /// </summary>
+    [EntityDependant("USDOTHistory", typeof(USDOT_History))]
     public USDOT_History? USDOTHistory { get; set; }
 
     #endregion
@@ -58,21 +63,21 @@ public class Carrier_History
 
         etBuilder.Link<Carrier_History, Status>(
                 nameof(Status),
-                TargetReference: nameof(Status.CarriersHistories),
-                Required: true,
-                Auto: true
+                targetRef: nameof(Status.CarriersHistories),
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.Link<Carrier_History, Approach_History>(
                 nameof(ApproachHistory),
-                TargetReference: nameof(Approach_History.CarriersHistories),
-                Required: true,
-                Auto: true
+                targetRef: nameof(Approach_History.CarriersHistories),
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.Link<Carrier_History, Address>(
                 nameof(Address),
-                TargetReference: nameof(Address.CarriersHistories),
-                Required: true,
-                Auto: true
+                targetRef: nameof(Address.CarriersHistories),
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.Link<Carrier_History, USDOT_History>(nameof(USDOTHistory), nameof(USDOT_History.CarriersHistories));
     }

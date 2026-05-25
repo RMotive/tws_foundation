@@ -10,6 +10,14 @@ final class FoundationRoutes {
     name: 'Login Page',
   );
 
+  //! --> Category Layout Routes
+    /// (Security category layout) RouteData.
+    static const RouteData securityCategoryRoute = RouteData(
+      'security_category',
+      name: 'Security Category Page',
+    );
+  //! <-- Category Layout Routes
+
   //! --> Employee Routes
 
   /// (Employees Entity Page) RouteData.

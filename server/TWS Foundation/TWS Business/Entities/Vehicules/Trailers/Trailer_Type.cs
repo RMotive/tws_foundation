@@ -34,7 +34,7 @@ public class Trailer_Type
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -43,7 +43,7 @@ public class Trailer_Type
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Class", typeof(Trailer_Class))]
     public Trailer_Class Class { get; set; } = default!;
 
     #endregion
@@ -53,6 +53,7 @@ public class Trailer_Type
     /// <summary>
     ///     <see cref="Trailer_Common"/> dependants from this <see cref="Trailer_Type"/>
     /// </summary>
+    [EntityDependency("Trailers", typeof(Trailer_Common), isCollection:true)]
     public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
     #endregion

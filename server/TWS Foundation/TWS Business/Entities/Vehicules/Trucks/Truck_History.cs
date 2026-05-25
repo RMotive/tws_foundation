@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
+
 using TWS_Business.Bases;
 using TWS_Business.Entities.Insurances;
 using TWS_Business.Entities.Maintenances;
@@ -42,6 +44,7 @@ public class Truck_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -50,26 +53,31 @@ public class Truck_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Manufacturer", typeof(Manufacturer))]
     public Manufacturer Manufacturer { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Carrier_History"/> Carrier history entry.
     /// </summary>
+    [EntityDependant("CarrierH", typeof(Carrier_History))]
     public Carrier_History? CarrierH { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
+    [EntityDependant("Situation", typeof(Situation))]
     public Situation? Situation { get; set; }
 
     /// <summary>
     ///     <see cref="Maintenance_History"/> history information.
     /// </summary>
+    [EntityDependant("MaintenanceH", typeof(Maintenance_History))]
     public Maintenance_History? MaintenanceH { get; set; }
 
     /// <summary>
     ///     <see cref="Insurance_History"/> history information
     /// </summary>
+    [EntityDependant("InsuranceH", typeof(Insurance_History))]
     public Insurance_History? InsuranceH { get; set; }
 
     #endregion

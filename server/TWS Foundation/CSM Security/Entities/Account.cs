@@ -42,7 +42,7 @@ public class Account
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Contact", typeof(Contact))]
     public Contact Contact { get; set; } = default!;
 
 
@@ -52,19 +52,19 @@ public class Account
     /// <summary>
     ///     <see cref="Permit"/> related to this <see cref="Account"/>
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Permits", typeof(Permit), isCollection:true)]
     public ICollection<Permit> Permits { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Profile"/> related to this <see cref="Account"/>
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Profiles", typeof(Profile), isCollection:true)]
     public ICollection<Profile> Profiles { get; set; } = [];
 
     /// <summary>
     /// Collection of <see cref="Vendor"/> linked to this <see cref="Account"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Vendors", typeof(Vendor), isCollection:true)]
     public ICollection<Vendor> Vendors { get; set; } = [];
 
     #endregion
@@ -76,10 +76,10 @@ public class Account
 
         etBuilder.Link<Account, Contact>(
                 nameof(Contact),
-                Required: true,
-                Index: true,
-                Auto: true,
-                Deletion: DeleteBehavior.Cascade
+                isRequired: true,
+                isIndex: true,
+                isAutoLoaded: true,
+                deleteBehavior: DeleteBehavior.Cascade
             );
 
         etBuilder

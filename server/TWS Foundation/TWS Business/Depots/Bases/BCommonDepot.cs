@@ -10,8 +10,6 @@ using CSM_Database_Core.Depots.Models;
 using CSM_Database_Core.Entities.Abstractions.Bases;
 using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
-using CSM_Foundation.Core.Utils;
-
 using CSM_Foundation_Core.Abstractions.Interfaces;
 
 using CSM_Security.Abstractions;
@@ -328,7 +326,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         entity.Internal = default;
         entity.External = default;
 
-        entity = DatabaseUtils.SanitizeEntity(_db, entity);
+        entity = await DatabaseUtils.SanitizeEntity(_db, entity);
 
         await _dbSet.AddAsync(entity);
         _disposer?.Push(entity);
@@ -336,7 +334,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         if (internalRelation != null) {
             internalRelation.EvaluateWrite();
 
-            internalRelation = DatabaseUtils.SanitizeEntity(_db, internalRelation);
+            internalRelation = await DatabaseUtils.SanitizeEntity(_db, internalRelation);
             internalRelation.Bridge = entity;
             internalRelation.Timestamp = DateTime.UtcNow;
 
@@ -348,7 +346,7 @@ public class BCommonDepot<TDatabase, TInternal, TExternal, TCommon>
         } else {
             externalRelation!.EvaluateWrite();
 
-            externalRelation = DatabaseUtils.SanitizeEntity(_db, externalRelation);
+            externalRelation = await DatabaseUtils.SanitizeEntity(_db, externalRelation);
             externalRelation.Timestamp = DateTime.UtcNow;
             externalRelation.Bridge = entity;
 

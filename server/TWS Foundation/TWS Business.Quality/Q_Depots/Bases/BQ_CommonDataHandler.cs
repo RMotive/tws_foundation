@@ -6,7 +6,7 @@ using CSM_Database_Testing.Abstractions.Bases;
 using CSM_Database_Testing.Disposing;
 using CSM_Database_Testing.Disposing.Abstractions.Bases;
 
-using CSM_Foundation.Core.Utils;
+using CSM_Foundation_Core.Core.Utils;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -91,12 +91,12 @@ public class BQ_CommonDataHandler
 
     #region Storing
 
-    protected TEntity2 Store<TEntity2>(TEntity2 Entity)
+    protected async Task<TEntity2> Store<TEntity2>(TEntity2 Entity)
         where TEntity2 : class, IEntity {
 
         DbContext database = GetDatabase(Entity.Database);
 
-        Entity = DatabaseUtils.SanitizeEntity(database, Entity);
+        Entity = await DatabaseUtils.SanitizeEntity(database, Entity);
         database.Set<TEntity2>().Add(Entity);
         database.SaveChanges();
         Disposer.Push(Entity);
@@ -130,14 +130,14 @@ public class BQ_CommonDataHandler
         toStore.Internal = default;
         toStore.External = default;
 
-        toStore = DatabaseUtils.SanitizeEntity(database, toStore);
+        toStore = await DatabaseUtils.SanitizeEntity(database, toStore);
 
         await database.AddAsync(toStore);
         Disposer.Push(toStore);
 
         if (internalRelation != null) {
 
-            internalRelation = DatabaseUtils.SanitizeEntity(database, internalRelation);
+            internalRelation = await DatabaseUtils.SanitizeEntity(database, internalRelation);
             internalRelation.Bridge = toStore;
             internalRelation.Timestamp = DateTime.UtcNow;
 
@@ -149,7 +149,7 @@ public class BQ_CommonDataHandler
             return toStore;
         }
 
-        externalRelation = DatabaseUtils.SanitizeEntity(database, externalRelation);
+        externalRelation = await DatabaseUtils.SanitizeEntity(database, externalRelation);
         externalRelation!.Timestamp = DateTime.UtcNow;
         externalRelation.Bridge = toStore;
 
@@ -180,12 +180,12 @@ public class BQ_CommonDataHandler
             entity.Internal = null;
             entity.External = null;
 
-            entity = DatabaseUtils.SanitizeEntity(database, entity);
+            entity = await DatabaseUtils.SanitizeEntity(database, entity);
             database.Set<TCommon>().Add(entity);
             Disposer.Push(entity);
 
             if (internalRelation != null) {
-                internalRelation = DatabaseUtils.SanitizeEntity(database, internalRelation);
+                internalRelation = await DatabaseUtils.SanitizeEntity(database, internalRelation);
                 internalRelation.Bridge = entity;
                 internalRelation.Timestamp = DateTime.UtcNow;
 
@@ -200,7 +200,7 @@ public class BQ_CommonDataHandler
 
             externalRelation!.EvaluateWrite();
 
-            externalRelation = DatabaseUtils.SanitizeEntity(database, externalRelation);
+            externalRelation = await DatabaseUtils.SanitizeEntity(database, externalRelation);
             externalRelation.Timestamp = DateTime.UtcNow;
             externalRelation.Bridge = entity;
 

@@ -57,7 +57,7 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Identification", typeof(Identification))]
     public Identification Identification { get; set; } = default!;
 
     /// <summary>
@@ -66,7 +66,7 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -75,25 +75,25 @@ public class Employee
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Dates", typeof(Employee_Dates))]
     public Employee_Dates Dates { get; set; } = default!;
 
     /// <summary>
     ///     Approaching contact information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Approach", typeof(Approach))]
     public Approach? Approach { get; set; }
 
     /// <summary>
     ///     Address information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Address", typeof(Address))]
     public Address? Address { get; set; }
 
     /// <summary>
     ///     <see cref="Drivers.Driver"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Driver", typeof(Driver))]
     public Driver? Driver { get; set; }
 
     /// <summary>
@@ -109,6 +109,7 @@ public class Employee
     /// <summary>
     ///     <see cref="YardLog"/> dependants from this <see cref="YardLog"/>.
     /// </summary>
+    [EntityDependency("Yardlogs", typeof(YardLog), isCollection:true)]
     public ICollection<YardLog> Yardlogs { get; set; } = [];
 
     #endregion

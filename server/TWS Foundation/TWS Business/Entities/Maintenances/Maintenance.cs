@@ -1,4 +1,5 @@
-﻿using CSM_Database_Core.Core.Extensions;
+﻿using CSM_Database_Core.Core.Attributes;
+using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -37,6 +38,7 @@ public class Maintenance
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -46,11 +48,13 @@ public class Maintenance
     /// <summary>
     ///     <see cref="Trailer"/> dependants from this <see cref="Maintenance"/>
     /// </summary>
+    [EntityDependency("Trailers", typeof(Trailer), isCollection:true)]
     public ICollection<Trailer> Trailers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck"/> dependants from this <see cref="Maintenance"/>
     /// </summary>
+    [EntityDependency("Trucks", typeof(Truck), isCollection:true)]
     public ICollection<Truck> Trucks { get; set; } = [];
 
     #endregion
@@ -58,6 +62,7 @@ public class Maintenance
     /// <summary>
     ///     History entries.
     /// </summary>
+    [EntityDependency("History", typeof(Maintenance_History), isCollection:true)]
     public ICollection<Maintenance_History> History { get; set; } = [];
 
 

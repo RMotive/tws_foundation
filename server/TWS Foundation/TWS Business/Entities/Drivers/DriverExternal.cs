@@ -22,7 +22,7 @@ public partial class DriverExternal
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Identification", typeof(Identification))]
     public Identification Identification { get; set; } = default!;
 
     #endregion

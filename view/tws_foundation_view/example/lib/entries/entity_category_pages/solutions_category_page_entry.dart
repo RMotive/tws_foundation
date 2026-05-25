@@ -43,6 +43,7 @@ final class SolutionsCategoryPageEntry extends PackageLandingEntryBase<LandingTh
     return CategoryLayout(
       pages: <ICategoryLayoutPage>[
         categoryPage,
+        PermitsCategoryPage(),
       ],
       routingData: routeData,
       page: categoryPage.composePage(buildContext, routeData),

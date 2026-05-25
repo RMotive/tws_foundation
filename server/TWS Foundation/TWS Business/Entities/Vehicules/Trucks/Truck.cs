@@ -41,7 +41,7 @@ public class Truck
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Carrier", typeof(Carrier))]
     public Carrier Carrier { get; set; } = default!;
 
     /// <summary>
@@ -50,31 +50,31 @@ public class Truck
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Model", typeof(VehiculeModel))]
     public VehiculeModel Model { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Vehicules.SCT"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("SCT", typeof(SCT))]
     public SCT? SCT { get; set; }
 
     /// <summary>
     ///     <see cref="Maintenances.Maintenance"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Maintenance", typeof(Maintenance))]
     public Maintenance? Maintenance { get; set; }
 
     /// <summary>
     ///     <see cref="Insurances.Insurance"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Insurance", typeof(Insurance))]
     public Insurance? Insurance { get; set; }
 
     /// <summary>
     ///     <see cref="Plate"/>s referencing this <see cref="Truck"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Plates", typeof(Plate), isCollection:true)]
     public ICollection<Plate> Plates { get; set; } = [];
 
     #endregion
@@ -84,11 +84,13 @@ public class Truck
     /// <summary>
     ///     <see cref="YardLog"/>s referencing this <see cref="Truck"/>
     /// </summary>
+    [EntityDependency("YardLogs", typeof(YardLog), isCollection:true)]
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck"/> history entries.
     /// </summary>
+    [EntityDependency("History", typeof(Truck_History), isCollection:true)]
     public ICollection<Truck_History> History { get; set; } = [];
 
     #endregion

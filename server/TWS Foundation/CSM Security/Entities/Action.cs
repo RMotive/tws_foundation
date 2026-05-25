@@ -26,7 +26,7 @@ public class Action
     /// <summary>
     ///     <see cref="Permit"/> dependats from this <see cref="Action"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Permits", typeof(Permit), isCollection:true)]
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion

@@ -55,7 +55,7 @@ public class Waypoint
     ///     Auto included relation.
     /// </remarks>
     /// 
-    [EntityRelation]
+    [EntityDependant("Location", typeof(Location))]
     public Location Location { get; set; } = default!;
 
     #endregion 

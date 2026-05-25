@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
     <ProjectReference Include="..\CSM Security\CSM Security.csproj" />
     <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
   </ItemGroup>
@@ -21,7 +20,10 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="CSM.Database.Core" Version="4.4.0" />
+    <PackageReference Include="CSM.Foundation.Core" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.2" />
+	<PackageReference Include="xunit.v3.extensibility.core" Version="3.2.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
 using CSM_Database_Core.Core.Extensions;
 
 using CSM_Foundation.Database;
@@ -54,6 +55,7 @@ public class Approach_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -63,6 +65,7 @@ public class Approach_History
     /// <summary>
     ///     <see cref="Carrier_History"/> entries dependants from this <see cref="Approach_History"/>.
     /// </summary>
+    [EntityDependency("CarriersHistories", typeof(Carrier_History), isCollection:true)]
     public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     #endregion

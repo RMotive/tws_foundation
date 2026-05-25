@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSM_Database_Core.Core.Attributes;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Bases;
@@ -19,16 +21,19 @@ public class Situation
     /// <summary>
     ///     <see cref="Driver_Common"/> dependants from this <see cref="Situation"/>
     /// </summary>
+    [EntityDependency("Drivers", typeof(Driver_Common), isCollection:true)]
     public ICollection<Driver_Common> Drivers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck_Common"/> dependants form this <see cref="Situation"/>.
     /// </summary>
+    [EntityDependency("Trucks", typeof(Truck_Common), isCollection:true)]
     public ICollection<Truck_Common> Trucks { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Trailer_Common"/> dependants from this <see cref="Situation"/>.
     /// </summary>
+    [EntityDependency("Trailers", typeof(Trailer_Common), isCollection:true)]
     public ICollection<Trailer_Common> Trailers { get; set; } = [];
 
     #endregion

@@ -47,7 +47,7 @@ public class Insurance
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -57,6 +57,7 @@ public class Insurance
     /// <summary>
     ///     <see cref="Truck"/> dependants from this <see cref="Insurance"/>
     /// </summary>
+    [EntityDependency("Trucks", typeof(Truck), isCollection:true)]
     public ICollection<Truck> Trucks { get; set; } = [];
 
     #endregion
@@ -64,6 +65,7 @@ public class Insurance
     /// <summary>
     ///     History entries.
     /// </summary>
+    [EntityDependency("History", typeof(Insurance_History), isCollection:true)]
     public ICollection<Insurance_History> History { get; set; } = [];
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

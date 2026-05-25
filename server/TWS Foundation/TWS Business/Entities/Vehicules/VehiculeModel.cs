@@ -34,7 +34,7 @@ public class VehiculeModel
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -43,7 +43,7 @@ public class VehiculeModel
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Manufacturer", typeof(Manufacturer))]
     public Manufacturer Manufacturer { get; set; } = default!;
 
     #endregion
@@ -53,16 +53,19 @@ public class VehiculeModel
     /// <summary>
     ///     <see cref="Trailer"/> dependents from this <see cref="VehiculeModel"/>
     /// </summary>
+    [EntityDependency("Trailers", typeof(Trailer), isCollection:true)]
     public ICollection<Trailer> Trailers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck"/> dependents from this <see cref="VehiculeModel"/>
     /// </summary>
+    [EntityDependency("Trucks", typeof(Truck), isCollection:true)]
     public ICollection<Truck> Trucks { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck_History"/> dependants from this <see cref="VehiculeModel"/>.
     /// </summary>
+    [EntityDependency("TrucksHistories", typeof(Truck_History), isCollection:true)]
     public ICollection<Truck_History> TrucksHistories { get; set; } = [];
 
     #endregion

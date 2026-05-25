@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSM_Database_Core.Core.Attributes;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TWS_Business.Entities.Vehicules.Trailers;
@@ -18,7 +20,7 @@ public class LoadType
     /// <summary>
     ///     <see cref="YardLog"/> dependants from this <see cref="LoadType"/>.
     /// </summary>
-
+    [EntityDependency("YardLogs", typeof(YardLog), isCollection:true)]
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
     #endregion

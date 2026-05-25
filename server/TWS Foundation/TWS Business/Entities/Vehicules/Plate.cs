@@ -53,7 +53,7 @@ public class Plate
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -63,13 +63,13 @@ public class Plate
     /// <summary>
     ///     <see cref="Trucks.Truck"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Truck", typeof(Truck))]
     public Truck? Truck { get; set; }
 
     /// <summary>
     ///     <see cref="Trailers.Trailer"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Trailer", typeof(Trailer))]
     public Trailer? Trailer { get; set; }
 
     #endregion
@@ -77,6 +77,7 @@ public class Plate
     /// <summary>
     ///     etBuilder history entries.
     /// </summary>
+    [EntityDependency("History", typeof(Plate_History), isCollection:true)]
     public ICollection<Plate_History> History { get; set; } = [];
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

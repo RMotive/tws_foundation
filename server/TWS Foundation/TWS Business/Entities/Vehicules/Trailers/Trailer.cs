@@ -19,19 +19,19 @@ public class Trailer
     /// <summary>
     ///     <see cref="Vehicules.SCT"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("SCT", typeof(SCT))]
     public SCT? SCT { get; set; }
 
     /// <summary>
     ///     <see cref="VehiculeModel"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Model", typeof(VehiculeModel))]
     public VehiculeModel? Model { get; set; }
 
     /// <summary>
     ///     <see cref="Maintenances.Maintenance"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Maintenance", typeof(Maintenance))]
     public Maintenance? Maintenance { get; set; }
 
     /// <summary>
@@ -40,13 +40,13 @@ public class Trailer
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Carrier", typeof(Carrier))]
     public Carrier Carrier { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Plate"/>s information. 
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Plates", typeof(Plate), isCollection:true)]
     public ICollection<Plate> Plates { get; set; } = [];
 
     #endregion
@@ -56,6 +56,7 @@ public class Trailer
     /// <summary>
     ///     <see cref="YardLog"/>s dependants from this <see cref="Trailer"/>.
     /// </summary>
+    [EntityDependency("YardLogs", typeof(YardLog), isCollection:true)]
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
     #endregion

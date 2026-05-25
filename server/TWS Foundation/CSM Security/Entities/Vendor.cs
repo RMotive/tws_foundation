@@ -35,7 +35,7 @@ public class Vendor : CatalogEntity {
     /// <summary>
     ///    Collection of <see cref="Account"/> linked to this <see cref="Vendor"/>.
     /// </summary> 
-    [EntityRelation]
+    [EntityDependency("Accounts", typeof(Account), isCollection:true)]
     public ICollection<Account> Accounts { get; set; } = [];
 
     #endregion

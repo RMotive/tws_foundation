@@ -23,7 +23,7 @@ public class Location
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -32,18 +32,19 @@ public class Location
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Address", typeof(Address))]
     public Address Address { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Resource"/> Location image information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Resource", typeof(Resource))]
     public Resource? Resource { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Waypoint"/> dependant from this <see cref="Waypoint"/>.
     /// </summary>
+    [EntityDependant("Waypoint", typeof(Waypoint))]
     public Waypoint? Waypoint { get; set; }
 
 
@@ -54,21 +55,21 @@ public class Location
     /// <summary>
     ///     <see cref="Section"/>s referencing this <see cref="Location"/>
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Sections", typeof(Section), isCollection:true)]
 
     public ICollection<Section> Sections { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Truck_Common"/>s referencing this <see cref="Location"/>
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Trucks", typeof(Truck_Common), isCollection:true)]
 
     public ICollection<Truck_Common> Trucks { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Trailer_Common"/>s referencing this <see cref="Location"/>
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Trailers", typeof(Trailer_Common), isCollection:true)]
 
     public ICollection<Trailer_Common> Trailers { get; set; } = [];
 

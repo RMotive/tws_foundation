@@ -1,8 +1,10 @@
 ﻿using CSM_Database_Core.Depots.Abstractions.Interfaces;
 using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
-using CSM_Database_Testing.Abstractions.Bases;
 using CSM_Database_Testing.Disposing.Abstractions.Bases;
+using CSM_Database_Testing.Disposing.Abstractions.Interfaces;
+using CSM_Database_Testing.Managers;
+
 
 namespace TWS_Business.Quality.Q_Depots;
 
@@ -16,7 +18,7 @@ namespace TWS_Business.Quality.Q_Depots;
 ///     Type of the depot based on test.    
 /// </typeparam>
 public abstract class BQ_Business<TEntity, TDepot>
-    : TestingDepotBase<TEntity, TDepot, Database>
+    : TestingStoreManager
     where TEntity : class, IEntity, new()
     where TDepot : class, IDepot<TEntity> {
 
@@ -29,5 +31,5 @@ public abstract class BQ_Business<TEntity, TDepot>
     /// <param name="Factories">
     ///     Collateral used databases factories to be used.
     /// </param>
-    protected BQ_Business(DatabaseFactory? Database = null, params DatabaseFactory[] Factories) : base(Database, Factories) { }
+    protected BQ_Business(ITestingDisposer disposer, params DatabaseFactory[] Factories) : base(disposer, Factories) { }
 }

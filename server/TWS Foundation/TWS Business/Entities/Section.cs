@@ -36,7 +36,7 @@ public class Section
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
@@ -45,13 +45,13 @@ public class Section
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Yard", typeof(Location))]
     public Location Yard { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Resource"/> Section image information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Resource", typeof(Resource))]
     public Resource? Resource { get; set; }
 
     #endregion
@@ -61,7 +61,7 @@ public class Section
     /// <summary>
     ///     <see cref="YardLog"/> dependants from this <see cref="Section"/>
     /// </summary>
-   
+    [EntityDependency("YardLogs", typeof(YardLog), isCollection:true)]
     public ICollection<YardLog> YardLogs { get; set; } = [];
 
     #endregion
@@ -85,13 +85,13 @@ public class Section
 
         etBuilder.Link<Section, Status>(
                 nameof(Status),
-                Required: true,
-                Auto: true
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.Link<Section, Location>(
                 nameof(Yard),
-                Required: true,
-                Auto: true
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.Link<Section, Resource>(nameof(Resource));
 

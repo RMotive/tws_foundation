@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database;
-using CSM_Foundation.Database.Entity;
-using CSM_Security.Abstractions;
+﻿using CSM_Security.Abstractions;
 
 using CSM_Database_Core.Core.Attributes;
 
@@ -33,7 +31,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Solution", typeof(Solution))]
     public Solution Solution { get; set; } = default!;
 
     /// <summary>
@@ -42,7 +40,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Feature", typeof(Feature))]
     public Feature Feature { get; set; } = default!;
 
     /// <summary>
@@ -51,7 +49,7 @@ public class Permit
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Action", typeof(Action))]
     public Action Action { get; set; } = default!;
 
     #endregion
@@ -61,13 +59,13 @@ public class Permit
     /// <summary>
     ///     <see cref="Profile"/> dependants from this <see cref="Permit"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Profiles", typeof(Profile), isCollection:true)]
     public ICollection<Profile> Profiles { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Account"/> dependants from this <see cref="Permit"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Accounts", typeof(Account), isCollection:true)]
     public ICollection<Account> Accounts { get; set; } = [];
 
     #endregion
@@ -76,18 +74,18 @@ public class Permit
 
         etBuilder.Link<Permit, Solution>(
                 nameof(Solution),
-                Required: true,
-                Auto: true
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.Link<Permit, Feature>(
                 nameof(Feature),
-                Required: true,
-                Auto: true
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.Link<Permit, Action>(
                 nameof(Action),
-                Required: true,
-                Auto: true
+                isRequired: true,
+                isAutoLoaded: true
             );
         etBuilder.HasIndex("ActionShadow", "SolutionShadow", "FeatureShadow");
     }

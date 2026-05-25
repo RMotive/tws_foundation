@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
-
-using CSM_Security.Abstractions;
+﻿using CSM_Security.Abstractions;
 
 using CSM_Database_Core.Core.Attributes;
 
@@ -19,14 +17,14 @@ public class Profile
     /// <summary>
     ///     <see cref="Permit"/> related to this <see cref="Profile"/>.
     /// </summary>
-    [EntityRelation]
-    public ICollection<Permit> Permits { get; set; } = default!;
+    [EntityDependency("Permits", typeof(Permit), isCollection:true)]
+    public ICollection<Permit> Permits { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Account"/> related to this <see cref="Profile"/>.
     /// </summary>
-    [EntityRelation]
-    public ICollection<Account> Accounts { get; set; } = default!;
+    [EntityDependency("Accounts", typeof(Account), isCollection:true)]
+    public ICollection<Account> Accounts { get; set; } = [];
 
     #endregion
 

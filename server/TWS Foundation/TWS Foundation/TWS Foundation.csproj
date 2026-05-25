@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>TWS_Foundation</RootNamespace>
+	<StartupObject>TWS_Foundation.Program</StartupObject>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSM Foundation\CSM Foundation.csproj" />
+    <PackageReference Include="CSM.Database.Core" Version="4.4.0" />
+    <PackageReference Include="CSM.Foundation.Core" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CSM Security\CSM Security.csproj" />
     <ProjectReference Include="..\TWS Business\TWS Business.csproj" />
     <ProjectReference Include="..\TWS Customer\TWS Customer.csproj" />

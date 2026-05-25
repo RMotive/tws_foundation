@@ -90,7 +90,7 @@ public class Driver
     /// <summary>
     ///     <see cref="Employees.Employee"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Employee", typeof(Employee))]
     public Employee Employee { get; set; } = default!;
 
     #endregion

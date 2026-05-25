@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
 using CSM_Database_Core.Core.Extensions;
 
 using CSM_Foundation.Database;
@@ -46,6 +47,7 @@ public class Insurance_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -55,6 +57,7 @@ public class Insurance_History
     /// <summary>
     ///     <see cref="Truck_History"/> history entries referencing this <see cref="Insurance_History"/>.
     /// </summary>
+    [EntityDependency("TrucksHistories", typeof(Truck_History), isCollection:true)]
     public ICollection<Truck_History> TrucksHistories { get; set; } = [];
 
     #endregion

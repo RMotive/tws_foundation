@@ -1,6 +1,4 @@
-﻿using CSM_Foundation.Database.Entity;
-
-using CSM_Security.Abstractions;
+﻿using CSM_Security.Abstractions;
 
 using CSM_Database_Core.Core.Attributes;
 
@@ -29,7 +27,7 @@ public class Feature
     /// <summary>
     ///     <see cref="Permit"/> dependants from this <see cref="Feature"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Permits", typeof(Permit), isCollection:true)]
     public ICollection<Permit> Permits { get; set; } = [];
 
     #endregion

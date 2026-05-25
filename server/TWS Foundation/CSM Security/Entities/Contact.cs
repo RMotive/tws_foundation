@@ -2,6 +2,8 @@
 
 using CSM_Security.Abstractions;
 
+using CSM_Database_Core.Core.Attributes;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CSM_Security.Entities;
@@ -55,6 +57,7 @@ public class Contact
     /// <summary>
     ///     <see cref="Entities.Account"/> dependant from this <see cref="Contact"/>.
     /// </summary>
+    [EntityDependant("Account", typeof(Account))]
     public Account? Account { get; set; }
 
     #endregion

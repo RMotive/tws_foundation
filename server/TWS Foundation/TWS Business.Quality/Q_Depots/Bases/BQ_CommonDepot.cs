@@ -12,8 +12,6 @@ using CSM_Database_Core.Entities.Abstractions.Interfaces;
 
 using CSM_Database_Testing.Disposing.Abstractions.Bases;
 
-using CSM_Foundation.Database.Utilitites;
-
 using TWS_Business.Bases;
 using TWS_Business.Depots.Bases;
 
@@ -58,11 +56,11 @@ public abstract class BQ_CommonDepot<TCommon, TInternalEdge, TExternalEdge, TDep
         : base(
             [
                 ..Factories,
-                () => Database?.Invoke() ?? DatabaseUtilities.Q_Construct<TDatabase>(Sign)
+                () => Database?.Invoke() ??  DatabaseUtilities.Q_Construct(Sign) //TODO: csm foundation database no ha sido exportado como package de csm_foundation_core.
             ] 
         ) {
-
-        this.Database = (TDatabase)(Database?.Invoke() ?? DatabaseUtilities.Q_Construct<TDatabase>(Sign));
+        
+        this.Database = (TDatabase)(Database?.Invoke() ?? DatabaseUtils.<TDatabase>(Sign));
         Depot = (TDepot)Activator.CreateInstance(typeof(TDepot), this.Database, null)!;
 
         PropertyInfo[] entityProperties = typeof(TCommon).GetProperties();

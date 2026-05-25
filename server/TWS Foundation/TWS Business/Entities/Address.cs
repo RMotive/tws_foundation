@@ -72,25 +72,27 @@ public class Address
     /// <summary>
     ///     <see cref="Employee"/> dependants from this <see cref="Address"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Employees", typeof(Employee), isCollection:true)]
 
     public ICollection<Employee> Employees { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Location"/> dependants from this <see cref="Address"/>.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Locations", typeof(Location), isCollection:true)]
 
     public ICollection<Location> Locations { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Carrier"/> dependants from this <see cref="Address"/>.
     /// </summary>
+    [EntityDependency("Carriers", typeof(Carrier), isCollection:true)]
     public ICollection<Carrier> Carriers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Carrier_History"/> dependants from this <see cref="Address"/>.
     /// </summary>
+    [EntityDependency("CarriersHistories", typeof(Carrier_History), isCollection:true)]
     public ICollection<Carrier_History> CarriersHistories { get; set; } = [];
 
     #endregion

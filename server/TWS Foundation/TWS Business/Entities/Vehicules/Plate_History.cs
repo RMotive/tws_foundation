@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
 using CSM_Database_Core.Core.Extensions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -48,6 +49,7 @@ public class Plate_History
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion

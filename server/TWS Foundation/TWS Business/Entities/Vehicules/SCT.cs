@@ -48,7 +48,7 @@ public class SCT
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -58,11 +58,13 @@ public class SCT
     /// <summary>
     ///     <see cref="Truck"/> dependants from this <see cref="SCT"/>
     /// </summary>
+    [EntityDependency("Trucks", typeof(Truck), isCollection:true)]
     public ICollection<Truck> Trucks { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Trailer"/> dependants from this <see cref="SCT"/>
     /// </summary>
+    [EntityDependency("Trailers", typeof(Trailer), isCollection:true)]
     public ICollection<Trailer> Trailers { get; set; } = [];
 
     #endregion
@@ -70,6 +72,7 @@ public class SCT
     /// <summary>
     ///     History entries.
     /// </summary>
+    [EntityDependency("History", typeof(SCT_History), isCollection:true)]
     public ICollection<SCT_History> History { get; set; } = [];
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

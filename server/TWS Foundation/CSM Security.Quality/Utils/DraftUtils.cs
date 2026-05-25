@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
-using CSM_Foundation.Core.Extensions;
-using CSM_Foundation.Core.Utils;
+using CSM_Foundation_Core.Core.Extensions;
+using CSM_Foundation_Core.Core.Utils;
 
 using CSM_Security.Entities;
 

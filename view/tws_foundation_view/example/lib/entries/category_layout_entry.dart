@@ -1,6 +1,8 @@
 import 'package:csm_view/csm_view.dart';
 import 'package:example/themes/landing_theme_b.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:tws_foundation_view/tws_foundation_view.dart';
 
 ///
 final class CategoryLayoutEntry extends PackageLandingEntryBase<LandingThemeB> {
@@ -23,39 +25,46 @@ final class CategoryLayoutEntry extends PackageLandingEntryBase<LandingThemeB> {
   @override
   Widget composeEntry(BuildContext buildContext, Size windowSize, LandingThemeB theme) {
     final RouteData entryRoute = RouteData('landing_page');
-
-    return CategoryLayout(
-      pages: <CategoryLayoutPage>[
-        CategoryLayoutPage(
-          routeData: entryRoute,
-          title: 'Landing Overview',
-          actions: <IActionsRibbonNode>[],
-          pageBuilder: (BuildContext ctx, RoutingData routeData) => _EntryPage(),
-          iconBuilder: (_, Color? foreColor) {
-            return Icon(
-              Icons.ac_unit_sharp,
-              color: foreColor,
-            );
-          },
-
-        ),
-      ],
-      routingData: RoutingData(
-        targetRoute: entryRoute,
-        absolutePath: '',
-      ),
-      page: _EntryPage(),
-    );
-  }
-}
-
-final class _EntryPage extends ViewPageBase {
-  @override
-  Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
-    return Center(
-      child: Text(
-        'Landing Category Layout Page',
+    return SizedBox(
+      height: 200,
+      width: double.maxFinite,
+      child: SvgPicture.asset(
+        FoundationAssets.yardSectionWestEmptyDryVan,
       ),
     );
   }
+  //   return CategoryLayout(
+  //     pages: <CategoryLayoutPage>[
+  //       CategoryLayoutPage(
+  //         routeData: entryRoute,
+  //         title: 'Landing Overview',
+  //         actions: <IActionsRibbonNode>[],
+  //         pageBuilder: (BuildContext ctx, RoutingData routeData) => _EntryPage(),
+  //         iconBuilder: (_, Color? foreColor) {
+  //           return Icon(
+  //             Icons.ac_unit_sharp,
+  //             color: foreColor,
+  //           );
+  //         },
+
+  //       ),
+  //     ],
+  //     routingData: RoutingData(
+  //       targetRoute: entryRoute,
+  //       absolutePath: '',
+  //     ),
+  //     page: _EntryPage(),
+  //   );
+  // }
 }
+
+// final class _EntryPage extends ViewPageBase {
+//   @override
+//   Widget compose(BuildContext buildContext, Size windowSize, Size pageSize) {
+//     return Center(
+//       child: Text(
+//         'Landing Category Layout Page',
+//       ),
+//     );
+//   }
+// }

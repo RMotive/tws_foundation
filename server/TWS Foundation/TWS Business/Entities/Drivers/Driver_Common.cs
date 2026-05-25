@@ -31,13 +31,13 @@ public class Driver_Common
     /// <summary>
     ///     <see cref="Entities.Status"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Entities.Situation"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Situation", typeof(Situation))]
     public Situation? Situation { get; set; } = default!;
 
     #endregion
@@ -47,6 +47,7 @@ public class Driver_Common
     /// <summary>
     ///     <see cref="YardLog"/> dependants from this <see cref="YardLog"/>.
     /// </summary>
+    [EntityDependency("Yardlogs", typeof(YardLog), isCollection:true)]
     public ICollection<YardLog> Yardlogs { get; set; } = [];
 
     #endregion

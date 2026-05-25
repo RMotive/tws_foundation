@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using CSM_Database_Core.Core.Attributes;
 using CSM_Database_Core.Core.Extensions;
 
 using CSM_Foundation.Database.Entity.Bases;
@@ -40,6 +41,7 @@ public class USDOT
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -49,6 +51,7 @@ public class USDOT
     /// <summary>
     ///     <see cref="Carrier"/> dependants from this <see cref="USDOT"/>
     /// </summary>
+    [EntityDependency("Carriers", typeof(Carrier), isCollection:true)]
     public virtual ICollection<Carrier> Carriers { get; set; } = [];
 
     #endregion
@@ -56,6 +59,7 @@ public class USDOT
     /// <summary>
     ///     History entries.
     /// </summary>
+    [EntityDependency("History", typeof(USDOT_History), isCollection:true)]
     public ICollection<USDOT_History> History { get; set; } = [];
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {
@@ -64,8 +68,8 @@ public class USDOT
 
         etBuilder.Link<USDOT, Status>(
                 nameof(Status),
-                Required: true,
-                Auto: true
+                isRequired: true,
+                isAutoLoaded: true
             );
     }
 }

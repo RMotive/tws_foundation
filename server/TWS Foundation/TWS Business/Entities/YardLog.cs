@@ -97,26 +97,26 @@ public class YardLog
     /// <summary>
     ///     <see cref="Vehicules.LoadType"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("LoadType", typeof(LoadType))]
     public LoadType LoadType { get; set; } = default!;
 
     /// <summary>
     ///     <see cref="Employee"/> guard information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Guard", typeof(Employee))]
     public Employee? Guard { get; set; }
 
     /// <summary>
     ///     <see cref="Entities.Section"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("Section", typeof(Section))]
     public Section? Section { get; set; }
 
     /// <summary>
     ///     <see cref="Driver_Common"/> information.
     /// </summary>
 
-    [EntityRelation, QualityDriverAdapterAttribute]
+    [EntityDependant("Driver", typeof(Driver_Common)), QualityDriverAdapterAttribute]
     public Driver_Common Driver { get; set; } = default!;
 
     /// <summary>
@@ -124,7 +124,7 @@ public class YardLog
     /// </summary>
     /// 
 
-    [EntityRelation, QualityTruckAdapterAttribute]
+    [EntityDependant("Truck", typeof(Truck_Common)), QualityTruckAdapterAttribute]
     public Truck_Common Truck { get; set; } = default!;
 
 
@@ -132,7 +132,7 @@ public class YardLog
     ///     <see cref="Trailer_Common"/> information.
     /// </summary>
 
-    [EntityRelation, QualityTrailerAdapterAttribute]
+    [EntityDependant("Trailer", typeof(Trailer_Common)), QualityTrailerAdapterAttribute]
     public Trailer_Common? Trailer { get; set; }
 
     #endregion
@@ -141,14 +141,14 @@ public class YardLog
     /// <summary>
     /// Collection of images resouces for <see cref="Truck"/>, <see cref="Trailer"/> and damages.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Resources", typeof(Resource), isCollection:true)]
     public ICollection<Resource> Resources { get; set; } = [];
 
     /// <summary>
     /// Collection of the vendors id linked to the account that creates this <see cref="YardLog"/>,
     /// This id belongs to the CSM Security module.
     /// </summary>
-    [EntityRelation]
+    [EntityDependency("Vendors", typeof(YardLogVendor), isCollection:true)]
     public ICollection<YardLogVendor> Vendors { get; set; } = [];
 
     #endregion

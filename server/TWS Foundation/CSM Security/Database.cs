@@ -3,12 +3,12 @@ using CSM_Database_Core.Abstractions.Interfaces;
 using CSM_Database_Core.Core.Models;
 using CSM_Database_Core.Core.Utils;
 
-using CSM_Foundation.Logging;
 
 using CSM_Security.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using CSM_Foundation_Core.Core.Utils;
 
 namespace CSM_Security;
 
@@ -16,7 +16,7 @@ namespace CSM_Security;
 internal class DatabaseDesignFactory
     : IDesignTimeDbContextFactory<Database> {
     public Database CreateDbContext(string[] args) {
-        Logger.Warning("Using native [CSM] design time database context factory");
+        ConsoleUtils.Warning("Using native [CSM] design time database context factory");
 
         ConnectionOptions connectionOptions = DatabaseUtils.GetConnectionOptions("CSMS");
 

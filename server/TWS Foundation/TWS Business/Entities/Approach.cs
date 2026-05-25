@@ -54,7 +54,7 @@ public class Approach
     /// <remarks>
     ///     Auto included relation.
     /// </remarks>
-    [EntityRelation]
+    [EntityDependant("Status", typeof(Status))]
     public Status Status { get; set; } = default!;
 
     #endregion
@@ -64,11 +64,13 @@ public class Approach
     /// <summary>
     ///     <see cref="Carrier"/> dependants from this <see cref="Approach"/>
     /// </summary>
+    [EntityDependency("Carriers", typeof(Carrier), isCollection:true)]
     public virtual ICollection<Carrier> Carriers { get; set; } = [];
 
     /// <summary>
     ///     <see cref="Employee"/> dependants from this <see cref="Approach"/>
     /// </summary>
+    [EntityDependency("Employees", typeof(Employee), isCollection:true)]
     public virtual ICollection<Employee> Employees { get; set; } = [];
 
     #endregion
@@ -76,6 +78,7 @@ public class Approach
     /// <summary>
     ///     History entries.
     /// </summary>
+    [EntityDependency("History", typeof(Approach_History), isCollection:true)]
     public ICollection<Approach_History> History { get; set; } = [];
 
     protected override void DesignEntity(EntityTypeBuilder etBuilder) {

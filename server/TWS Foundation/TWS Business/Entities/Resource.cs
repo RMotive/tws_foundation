@@ -32,7 +32,7 @@ public class Resource : BNamedEntity {
     /// <summary>
     ///     <see cref="YardLog"/> information.
     /// </summary>
-    [EntityRelation]
+    [EntityDependant("YardLog", typeof(YardLog))]
     public YardLog? YardLog { get; set; }
 
     #endregion

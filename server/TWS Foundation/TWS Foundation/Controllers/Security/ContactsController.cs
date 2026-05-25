@@ -8,11 +8,12 @@ using TWS_Customer.Features.Security;
 
 using TWS_Customer.Managers.Auth;
 
+using TWS_Foundation.Authentication;
+
 namespace TWS_Foundation.Controllers.Security;
 
 
-[ApiController]
-[Route("[Controller]/[Action]")]
+[ApiController, Route("[Controller]/[Action]"), Feature("Contacts")]
 public class ContactsController
     : ControllerBase {
 

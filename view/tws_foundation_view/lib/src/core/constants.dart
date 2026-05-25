@@ -88,6 +88,8 @@ final class FoundationAssets {
   ///
   static const String yardPlaceholderSvg = '$_businessPath/yard_placeholder.svg';
 
+  static const String yardSectionWestEmptyDryVan = '$_businessPath/yard_section_west_empty_dry_van_trailers.svg';
+
   //! --> Preview Assests
   ///
   static const String categoryPagePreview = '$_entriesPath/category_page_preview.png';
